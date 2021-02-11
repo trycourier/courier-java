@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.tejaskumthekar</groupId>
-    <artifactId>courier-java-sdk</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <groupId>com.courier</groupId>
+    <artifactId>courier-java</artifactId>
+    <version>1.0.0</version>
 
     <dependencies>
         <dependency>
@@ -26,5 +26,13 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
+
+    <distributionManagement>
+        <repository>
+            <id>courier</id>
+            <name>courier-java</name>
+            <url>https://maven.pkg.github.com/trycourier/courier-java</url>
+        </repository>
+    </distributionManagement>
 
 </project>
