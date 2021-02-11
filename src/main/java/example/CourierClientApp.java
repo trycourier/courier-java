@@ -21,7 +21,7 @@ public class CourierClientApp {
         SendRequestBody sendRequestBody = new SendRequestBody();
         sendRequestBody.setEvent("TEST_WELCOME");
         sendRequestBody.setRecipient(UUID.randomUUID().toString());
-        HashMap<String, String> profile = new HashMap<>();
+        HashMap<String, String> profile = new HashMap<String, String>();
         profile.put("phone_number", "+16147793748");
         sendRequestBody.setProfile(new Gson().toJson(profile));
 
@@ -95,7 +95,7 @@ public class CourierClientApp {
         snippetItem.setName("foo");
         snippetItem.setValue("bar");
         snippetItem.setFormat("handlebars");
-        ArrayList<SnippetItem> snippetItems = new ArrayList<>();
+        ArrayList<SnippetItem> snippetItems = new ArrayList<SnippetItem>();
         snippetItems.add(snippetItem);
         snippets.setItems(snippetItems);
         brandCreateBody.setSnippets(snippets);
@@ -134,9 +134,9 @@ public class CourierClientApp {
         // Assuming categoryId GG6QK23WS5MEXEQ7832W6ZVBKBS8 exists
         // Assuming notificationId WPK2HQ07FXMGT7MH8JVXEZEFZ2G8 exists
         Preference newPreference = new Preference();
-        HashMap<String, Object> categoriesMap = new HashMap<>();
+        HashMap<String, Object> categoriesMap = new HashMap<String, Object>();
         categoriesMap.put("GG6QK23WS5MEXEQ7832W6ZVBKBS8", new Object());
-        HashMap<String, Object> notificationsMap = new HashMap<>();
+        HashMap<String, Object> notificationsMap = new HashMap<String, Object>();
         notificationsMap.put("WPK2HQ07FXMGT7MH8JVXEZEFZ2G8", new Object());
         newPreference.setCategories(categoriesMap);
         newPreference.setNotifications(notificationsMap);
@@ -155,7 +155,7 @@ public class CourierClientApp {
         Profiles API
          */
         Profile myProfile = new Profile();
-        HashMap<String, String> details = new HashMap<>();
+        HashMap<String, String> details = new HashMap<String, String>();
         details.put("email", "foo@bar.com");
         details.put("phone_number", "123456789");
         myProfile.setProfile(details);
@@ -168,7 +168,7 @@ public class CourierClientApp {
         System.out.println(retrievedProfile);
 
         PatchRequestBody profilePatch = new PatchRequestBody();
-        List<PatchOperation> patchOps = new ArrayList<>();
+        List<PatchOperation> patchOps = new ArrayList<PatchOperation>();
         PatchOperation patchOperation = new PatchOperation();
         patchOperation.setOp("replace");
         patchOperation.setPath("/email");
@@ -180,7 +180,7 @@ public class CourierClientApp {
         System.out.println(patchResponseBody);
 
         Profile myUpdatedProfile = new Profile();
-        HashMap<String, String> updatedDetails = new HashMap<>();
+        HashMap<String, String> updatedDetails = new HashMap<String, String>();
         updatedDetails.put("email", "foo@bar.com");
         updatedDetails.put("phone_number", "123456789");
         myUpdatedProfile.setProfile(updatedDetails);
@@ -218,7 +218,7 @@ public class CourierClientApp {
         ListBulkSubscriptionUpdate bulkSubscriptionUpdate = new ListBulkSubscriptionUpdate();
         Recipient recipient = new Recipient();
         recipient.setRecipientId("5ed558d4-d2eb-4e0f-984a-81a0f04054b1");
-        List<Recipient> recipients = new ArrayList<>();
+        List<Recipient> recipients = new ArrayList<Recipient>();
         recipients.add(recipient);
         bulkSubscriptionUpdate.setRecipients(recipients);
         new ListsService()
