@@ -29,9 +29,9 @@
 
     <distributionManagement>
         <repository>
-            <id>courier</id>
-            <name>courier-java</name>
-            <url>https://maven.pkg.github.com/trycourier/courier-java</url>
+            <id>ossrh</id>
+            <name>Central Repository OSSRH</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
 
