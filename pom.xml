@@ -6,7 +6,32 @@
 
     <groupId>com.courier</groupId>
     <artifactId>courier-java</artifactId>
+    <name>courier-java</name>
+    <description>Java SDK for communicating with the Courier REST API. </description>
+    <url>https://www.courier.com</url>
     <version>1.0.0</version>
+
+    <scm>
+        <url>https://github.com/trycourier/courier-java</url>
+    </scm>
+
+    <developers>
+        <developer>
+            <id>trycourier</id>
+            <name>Courier</name>
+            <email>support@courier.com</email>
+            <organization>Trycourier.com, Inc.</organization>
+            <organizationUrl>https://www.courier.com</organizationUrl>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
     <build>
         <plugins>
