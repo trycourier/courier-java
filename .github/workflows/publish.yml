@@ -26,21 +26,3 @@ jobs:
           gpg_passphrase: ${{ secrets.GPG_PASSPHRASE }}
           nexus_username: ${{ secrets.OSSRH_USERNAME }}
           nexus_password: ${{ secrets.OSSRH_TOKEN }}
-
-      # - id: install-secret-key
-      #   name: Install gpg secret key
-      #   run: |
-      #     cat <(echo -e "${{ secrets.GPG_PRIVATE_KEY }}") | gpg --batch --import
-      #     gpg --list-secret-keys --keyid-format LONG
-
-      # - id: publish-to-central
-      #   name: Publish to Central Repository
-      #   env:
-      #     MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-      #     MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-      #   run: |
-      #     mvn \
-      #       --no-transfer-progress \
-      #       --batch-mode \
-      #       -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }} \
-      #       clean deploy
