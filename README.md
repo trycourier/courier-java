@@ -36,7 +36,7 @@ Following Environment variables are supported -
 * COURIER_AUTH_TOKEN
 * COURIER_BASE_URL
 * COURIER_AUTH_USERNAME
-* COURIER_AUTH_USERNAME
+* COURIER_AUTH_PASSWORD
 
 Please note: COURIER_BASE_URL defaults to https://api.courier.com/
 
