@@ -10,7 +10,7 @@ https://github.com/trycourier/courier-java
 
 ## Releasing New Versions
 
-a. Update the version in pom.xml
+a. Update the version in pom.xml and Courier.java (used to set User-Agent)
 
 b. Prepare the tag
 

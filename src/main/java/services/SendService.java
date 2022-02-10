@@ -1,5 +1,7 @@
 package services;
 
+import models.SendEnhancedRequestBody;
+import models.SendEnhancedResponseBody;
 import models.SendListRequestBody;
 import models.SendRequestBody;
 import models.SendResponseBody;
@@ -42,6 +44,28 @@ public class SendService {
                 sendListRequestBody,
                 Courier.getAuthorizationHeader(),
                 Courier.getUserAgent()
+        ).execute().body();
+    }
+
+    public SendEnhancedResponseBody sendEnhancedMessage(
+            SendEnhancedRequestBody sendEnhancedRequestBody
+    ) throws IOException {
+        return sendInterface.sendEnhanced(
+                sendEnhancedRequestBody,
+                Courier.getAuthorizationHeader(),
+                Courier.getUserAgent()
+        ).execute().body();
+    }
+
+    public SendEnhancedResponseBody sendIdempotentEnhancedMessage(
+            SendEnhancedRequestBody sendEnhancedRequestBody,
+            String idempotencyKey
+    ) throws IOException {
+        return sendInterface.sendEnhancedIdempotent(
+                sendEnhancedRequestBody,
+                Courier.getAuthorizationHeader(),
+                Courier.getUserAgent(),
+                idempotencyKey
         ).execute().body();
     }
 }

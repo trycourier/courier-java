@@ -39,6 +39,20 @@ public class CourierClientApp {
         SendResponseBody sendResponseBody2 = new SendService().sendToList(sendListRequestBody);
         System.out.println(sendResponseBody2);
 
+        // Enhanced Send
+        SendEnhancedRequestBody sendEnhancedRequestBody = new SendEnhancedRequestBody();
+        SendRequestMessage sendRequestMessage = new SendRequestMessage();
+        HashMap<String, String> to = new HashMap<String, String>();
+        to.put("email", "tejas@courier.com");
+
+        sendRequestMessage.setTo(to);
+        sendRequestMessage.setTemplate("my-template");
+        sendRequestMessage.setBrand_id("my-brand");
+        sendEnhancedRequestBody.setMessage(sendRequestMessage);
+
+        SendEnhancedResponseBody sendEnhancedResponseBody1 = new SendService().sendEnhancedMessage(sendEnhancedRequestBody);
+        System.out.println(sendEnhancedResponseBody1);
+
         /*
         Messages API
          */
