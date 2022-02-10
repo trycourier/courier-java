@@ -1,5 +1,7 @@
 package services;
 
+import models.SendEnhancedRequestBody;
+import models.SendEnhancedResponseBody;
 import models.SendListRequestBody;
 import models.SendRequestBody;
 import models.SendResponseBody;
@@ -29,5 +31,20 @@ public interface SendInterface {
             @Body SendListRequestBody sendListRequestBody,
             @Header("Authorization") String authorization,
             @Header("User-Agent") String userAgent
+    );
+
+    @POST("/send")
+    Call<SendEnhancedResponseBody> sendEnhanced(
+            @Body SendEnhancedRequestBody sendEnhancedRequestBody,
+            @Header("Authorization") String authorization,
+            @Header("User-Agent") String userAgent
+    );
+
+    @POST("/send")
+    Call<SendEnhancedResponseBody> sendEnhancedIdempotent(
+            @Body SendEnhancedRequestBody sendEnhancedRequestBody,
+            @Header("Authorization") String authorization,
+            @Header("User-Agent") String userAgent,
+            @Header("Idempotency-Key") String idempotencyKey
     );
 }
