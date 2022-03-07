@@ -76,11 +76,11 @@ public class CourierClientApp {
         toList.put("list_id", "tejas.list.test");
         toMap.add(toList);
 
-        HashMap<String, String> toPattern = new HashMap<>();
+        HashMap<String, String> toPattern = new HashMap<String, String>();
         toPattern.put("list_pattern", "tejas.list.*");
         toMap.add(toPattern);
 
-        HashMap<String, String> toEmail = new HashMap<>();
+        HashMap<String, String> toEmail = new HashMap<String, String>();
         toEmail.put("email", "tejas@courier.com");
         toMap.add(toEmail);
 
