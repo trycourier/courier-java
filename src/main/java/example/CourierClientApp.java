@@ -64,8 +64,8 @@ public class CourierClientApp {
         sendRequestMessage.setBrand_id("my-brand");
         sendEnhancedRequestBody.setMessage(sendRequestMessage);
 
-        SendEnhancedResponseBody sendEnhancedResponseBody1 = new SendService().sendEnhancedMessage(sendEnhancedRequestBody);
-        System.out.println(sendEnhancedResponseBody1);
+        SendEnhancedResponseBody sendEnhancedResponseBody2 = new SendService().sendEnhancedMessage(sendEnhancedRequestBody);
+        System.out.println(sendEnhancedResponseBody2);
 
         // Enhanced Send - list id, list pattern an user
         SendEnhancedRequestBody sendEnhancedRequestBody = new SendEnhancedRequestBody();
