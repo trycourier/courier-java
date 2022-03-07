@@ -54,6 +54,7 @@ public class CourierClientApp {
         System.out.println(sendEnhancedResponseBody1);
 
         // Enhanced Send - simple object
+        Gson gson = new Gson();
         SendEnhancedRequestBody sendEnhancedRequestBody = new SendEnhancedRequestBody();
         SendRequestMessage sendRequestMessage = new SendRequestMessage();
         HashMap<String, Object> toMap = gson.fromJson("{'email':'tejas@courier.com'}", HashMap.class);
