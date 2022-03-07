@@ -53,6 +53,45 @@ public class CourierClientApp {
         SendEnhancedResponseBody sendEnhancedResponseBody1 = new SendService().sendEnhancedMessage(sendEnhancedRequestBody);
         System.out.println(sendEnhancedResponseBody1);
 
+        // Enhanced Send - simple object
+        SendEnhancedRequestBody sendEnhancedRequestBody = new SendEnhancedRequestBody();
+        SendRequestMessage sendRequestMessage = new SendRequestMessage();
+        HashMap<String, Object> toMap = gson.fromJson("{'email':'tejas@courier.com'}", HashMap.class);
+        
+        sendRequestMessage.setTo(toMap);
+        sendRequestMessage.setTemplate("my-template");
+        sendRequestMessage.setBrand_id("my-brand");
+        sendEnhancedRequestBody.setMessage(sendRequestMessage);
+
+        SendEnhancedResponseBody sendEnhancedResponseBody1 = new SendService().sendEnhancedMessage(sendEnhancedRequestBody);
+        System.out.println(sendEnhancedResponseBody1);
+
+        // Enhanced Send - list id, list pattern an user
+        SendEnhancedRequestBody sendEnhancedRequestBody = new SendEnhancedRequestBody();
+        SendRequestMessage sendRequestMessage = new SendRequestMessage();
+
+        List<Object> toMap = new ArrayList<>();
+
+        HashMap<String, String> toList = new HashMap<>();
+        toList.put("list_id", "tejas.list.test");
+        toMap.add(toList);
+
+        HashMap<String, String> toPattern = new HashMap<>();
+        toPattern.put("list_pattern", "tejas.list.*");
+        toMap.add(toPattern);
+
+        HashMap<String, String> toEmail = new HashMap<>();
+        toEmail.put("email", "tejas@courier.com");
+        toMap.add(toEmail);
+
+        sendRequestMessage.setTo(toMap);
+        sendRequestMessage.setTemplate("my-template");
+        sendRequestMessage.setBrand_id("my-brand");
+        sendEnhancedRequestBody.setMessage(sendRequestMessage);
+
+        SendEnhancedResponseBody sendEnhancedResponseBody1 = new SendService().sendEnhancedMessage(sendEnhancedRequestBody);
+        System.out.println(sendEnhancedResponseBody1);
+
         /*
         Messages API
          */
