@@ -70,7 +70,7 @@ public class CourierClientApp {
         SendEnhancedRequestBody sendEnhancedRequestBody = new SendEnhancedRequestBody();
         SendRequestMessage sendRequestMessage = new SendRequestMessage();
 
-        List<Object> toMap = new ArrayList<>();
+        List<Object> toMap = new ArrayList<Object>();
 
         HashMap<String, String> toList = new HashMap<>();
         toList.put("list_id", "tejas.list.test");
