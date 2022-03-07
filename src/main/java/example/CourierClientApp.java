@@ -67,7 +67,7 @@ public class CourierClientApp {
         SendEnhancedResponseBody sendEnhancedResponseBody2 = new SendService().sendEnhancedMessage(sendEnhancedRequestBody);
         System.out.println(sendEnhancedResponseBody2);
 
-        // Enhanced Send - list id, list pattern an user
+        // Enhanced Send - list id, list pattern and user
         SendEnhancedRequestBody sendEnhancedRequestBody3 = new SendEnhancedRequestBody();
         SendRequestMessage sendRequestMessage3 = new SendRequestMessage();
 
