@@ -57,9 +57,9 @@ public class CourierClientApp {
         Gson gson = new Gson();
         SendEnhancedRequestBody sendEnhancedRequestBody2 = new SendEnhancedRequestBody();
         SendRequestMessage sendRequestMessage2 = new SendRequestMessage();
-        HashMap<String, Object> toMap = gson.fromJson("{'email':'tejas@courier.com'}", HashMap.class);
+        HashMap<String, Object> toMap1 = gson.fromJson("{'email':'tejas@courier.com'}", HashMap.class);
         
-        sendRequestMessage2.setTo(toMap);
+        sendRequestMessage2.setTo(toMap1);
         sendRequestMessage2.setTemplate("my-template");
         sendRequestMessage2.setBrand_id("my-brand");
         sendEnhancedRequestBody2.setMessage(sendRequestMessage2);
@@ -71,21 +71,21 @@ public class CourierClientApp {
         SendEnhancedRequestBody sendEnhancedRequestBody3 = new SendEnhancedRequestBody();
         SendRequestMessage sendRequestMessage3 = new SendRequestMessage();
 
-        List<Object> toMap = new ArrayList<Object>();
+        List<Object> toMap2 = new ArrayList<Object>();
 
         HashMap<String, String> toList = new HashMap<String, String>();
         toList.put("list_id", "tejas.list.test");
-        toMap.add(toList);
+        toMap2.add(toList);
 
         HashMap<String, String> toPattern = new HashMap<String, String>();
         toPattern.put("list_pattern", "tejas.list.*");
-        toMap.add(toPattern);
+        toMap2.add(toPattern);
 
         HashMap<String, String> toEmail = new HashMap<String, String>();
         toEmail.put("email", "tejas@courier.com");
-        toMap.add(toEmail);
+        toMap2.add(toEmail);
 
-        sendRequestMessage3.setTo(toMap);
+        sendRequestMessage3.setTo(toMap2);
         sendRequestMessage3.setTemplate("my-template");
         sendRequestMessage3.setBrand_id("my-brand");
         sendEnhancedRequestBody3.setMessage(sendRequestMessage);
