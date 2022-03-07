@@ -88,9 +88,9 @@ public class CourierClientApp {
         sendRequestMessage3.setTo(toMap2);
         sendRequestMessage3.setTemplate("my-template");
         sendRequestMessage3.setBrand_id("my-brand");
-        sendEnhancedRequestBody3.setMessage(sendRequestMessage);
+        sendEnhancedRequestBody3.setMessage(sendRequestMessage3);
 
-        SendEnhancedResponseBody sendEnhancedResponseBody3 = new SendService().sendEnhancedMessage(sendEnhancedRequestBody);
+        SendEnhancedResponseBody sendEnhancedResponseBody3 = new SendService().sendEnhancedMessage(sendEnhancedRequestBody3);
         System.out.println(sendEnhancedResponseBody3);
 
         /*
