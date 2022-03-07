@@ -72,7 +72,7 @@ public class CourierClientApp {
 
         List<Object> toMap = new ArrayList<Object>();
 
-        HashMap<String, String> toList = new HashMap<>();
+        HashMap<String, String> toList = new HashMap<String, String>();
         toList.put("list_id", "tejas.list.test");
         toMap.add(toList);
 
