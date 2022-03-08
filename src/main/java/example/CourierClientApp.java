@@ -40,18 +40,58 @@ public class CourierClientApp {
         System.out.println(sendResponseBody2);
 
         // Enhanced Send
-        SendEnhancedRequestBody sendEnhancedRequestBody = new SendEnhancedRequestBody();
-        SendRequestMessage sendRequestMessage = new SendRequestMessage();
+        SendEnhancedRequestBody sendEnhancedRequestBody1 = new SendEnhancedRequestBody();
+        SendRequestMessage sendRequestMessage1 = new SendRequestMessage();
         HashMap<String, String> to = new HashMap<String, String>();
         to.put("email", "tejas@courier.com");
 
-        sendRequestMessage.setTo(to);
-        sendRequestMessage.setTemplate("my-template");
-        sendRequestMessage.setBrand_id("my-brand");
-        sendEnhancedRequestBody.setMessage(sendRequestMessage);
+        sendRequestMessage1.setTo(to);
+        sendRequestMessage1.setTemplate("my-template");
+        sendRequestMessage1.setBrand_id("my-brand");
+        sendEnhancedRequestBody1.setMessage(sendRequestMessage1);
 
-        SendEnhancedResponseBody sendEnhancedResponseBody1 = new SendService().sendEnhancedMessage(sendEnhancedRequestBody);
+        SendEnhancedResponseBody sendEnhancedResponseBody1 = new SendService().sendEnhancedMessage(sendEnhancedRequestBody1);
         System.out.println(sendEnhancedResponseBody1);
+
+        // Enhanced Send - simple object
+        Gson gson = new Gson();
+        SendEnhancedRequestBody sendEnhancedRequestBody2 = new SendEnhancedRequestBody();
+        SendRequestMessage sendRequestMessage2 = new SendRequestMessage();
+        HashMap<String, Object> toMap1 = gson.fromJson("{'email':'tejas@courier.com'}", HashMap.class);
+        
+        sendRequestMessage2.setTo(toMap1);
+        sendRequestMessage2.setTemplate("my-template");
+        sendRequestMessage2.setBrand_id("my-brand");
+        sendEnhancedRequestBody2.setMessage(sendRequestMessage2);
+
+        SendEnhancedResponseBody sendEnhancedResponseBody2 = new SendService().sendEnhancedMessage(sendEnhancedRequestBody2);
+        System.out.println(sendEnhancedResponseBody2);
+
+        // Enhanced Send - list id, list pattern and user
+        SendEnhancedRequestBody sendEnhancedRequestBody3 = new SendEnhancedRequestBody();
+        SendRequestMessage sendRequestMessage3 = new SendRequestMessage();
+
+        List<Object> toMap2 = new ArrayList<Object>();
+
+        HashMap<String, String> toList = new HashMap<String, String>();
+        toList.put("list_id", "tejas.list.test");
+        toMap2.add(toList);
+
+        HashMap<String, String> toPattern = new HashMap<String, String>();
+        toPattern.put("list_pattern", "tejas.list.*");
+        toMap2.add(toPattern);
+
+        HashMap<String, String> toEmail = new HashMap<String, String>();
+        toEmail.put("email", "tejas@courier.com");
+        toMap2.add(toEmail);
+
+        sendRequestMessage3.setTo(toMap2);
+        sendRequestMessage3.setTemplate("my-template");
+        sendRequestMessage3.setBrand_id("my-brand");
+        sendEnhancedRequestBody3.setMessage(sendRequestMessage3);
+
+        SendEnhancedResponseBody sendEnhancedResponseBody3 = new SendService().sendEnhancedMessage(sendEnhancedRequestBody3);
+        System.out.println(sendEnhancedResponseBody3);
 
         /*
         Messages API
