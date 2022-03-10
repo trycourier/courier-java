@@ -43,19 +43,35 @@ Please note: COURIER_BASE_URL defaults to https://api.courier.com/
 ## Example
 
 Send API
-```
-// Gets AuthToken from the Environment
-Courier.init();
 
-SendRequestBody sendRequestBody = new SendRequestBody();
-sendRequestBody.setEvent("event");
-sendRequestBody.setRecipient(UUID.randomUUID().toString());
-HashMap<String, String> profile = new HashMap<>();
-profile.put("phone_number", "+11234567890");
-sendRequestBody.setProfile(new Gson().toJson(profile));
+```java
+import services.Courier;
+import services.SendService;
+import models.SendEnhancedRequestBody;
+import models.SendRequestMessage;
+import models.SendEnhancedResponseBody;
+import java.util.HashMap;
+import java.util.Map;
 
-SendResponseBody sendResponseBody = new SendService().send(sendRequestBody);
-System.out.println(sendResponseBody);
+class Main {
+  public static void main(String[] args) throws Exception {
+    Courier.init("<AUTH_TOKEN>");
+
+    SendEnhancedRequestBody sendEnhancedRequestBody = new SendEnhancedRequestBody();
+    SendRequestMessage sendRequestMessage = new SendRequestMessage();
+
+    HashMap<String, String> to = new HashMap<String, String>();
+    to.put("email", "example@example.com");
+
+    sendRequestMessage.setTo(to);
+    sendRequestMessage.setTemplate("<TEMPLATE_ID>");
+    
+    sendEnhancedRequestBody.setMessage(sendRequestMessage);
+
+    SendEnhancedResponseBody sendEnhancedResponseBody = new SendService().sendEnhancedMessage(sendEnhancedRequestBody);
+    System.out.println(sendEnhancedResponseBody);
+  }
+}
 ```
 
 Example usages for all the APIs can be found in `src/main/java/example/CourierClientApp.java`
