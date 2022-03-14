@@ -95,12 +95,12 @@ public class CourierClientApp {
 
 
         // Enhanced Send - metadata
-        Gson gson = new Gson();
+        Gson gsonMeta = new Gson();
         SendEnhancedRequestBody sendEnhancedRequestBodyMeta = new SendEnhancedRequestBody();
         SendRequestMessage sendRequestMessageMeta = new SendRequestMessage();
-        HashMap<String, Object> toMapMeta = gson.fromJson("{'email':'tejas@courier.com'}", HashMap.class);
+        HashMap<String, Object> toMapMeta = gsonMeta.fromJson("{'email':'tejas@courier.com'}", HashMap.class);
 
-        HashMap<String, Object> metadata = gson.fromJson("{'metadata':{'utm':{'source':'java'}}}", HashMap.class);
+        HashMap<String, Object> metadata = gsonMeta.fromJson("{'metadata':{'utm':{'source':'java'}}}", HashMap.class);
         sendRequestMessageMeta.setTo(toMapMeta);
         sendRequestMessageMeta.setTemplate("my-template");
         sendRequestMessageMeta.setBrand_id("my-brand");
