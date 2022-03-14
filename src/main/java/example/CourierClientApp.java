@@ -93,6 +93,23 @@ public class CourierClientApp {
         SendEnhancedResponseBody sendEnhancedResponseBody3 = new SendService().sendEnhancedMessage(sendEnhancedRequestBody3);
         System.out.println(sendEnhancedResponseBody3);
 
+
+        // Enhanced Send - metadata
+        Gson gson = new Gson();
+        SendEnhancedRequestBody sendEnhancedRequestBodyMeta = new SendEnhancedRequestBody();
+        SendRequestMessage sendRequestMessageMeta = new SendRequestMessage();
+        HashMap<String, Object> toMapMeta = gson.fromJson("{'email':'tejas@courier.com'}", HashMap.class);
+
+        HashMap<String, Object> metadata = gson.fromJson("{'metadata':{'utm':{'source':'java'}}}", HashMap.class);
+        sendRequestMessageMeta.setTo(toMapMeta);
+        sendRequestMessageMeta.setTemplate("my-template");
+        sendRequestMessageMeta.setBrand_id("my-brand");
+        sendRequestMessageMeta.setMetadata(metadata);
+        sendEnhancedRequestBodyMeta.setMessage(sendRequestMessageMeta);
+
+        SendEnhancedResponseBody sendEnhancedResponseBodyMeta = new SendService().sendEnhancedMessage(sendEnhancedRequestBodyMeta);
+        System.out.println(sendEnhancedResponseBodyMeta);
+
         /*
         Messages API
          */
