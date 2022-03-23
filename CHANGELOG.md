@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
 
+## [v1.2.0] - 2022-03-23
+- Add support for message timeout
+
 ## [v1.1.0] - 2022-02-10
 - Add support for enhanced Send API
 

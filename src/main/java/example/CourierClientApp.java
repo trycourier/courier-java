@@ -110,6 +110,22 @@ public class CourierClientApp {
         SendEnhancedResponseBody sendEnhancedResponseBodyMeta = new SendService().sendEnhancedMessage(sendEnhancedRequestBodyMeta);
         System.out.println(sendEnhancedResponseBodyMeta);
 
+        // Enhanced Send - timeout
+        Gson gsonTimeout = new Gson();
+        SendEnhancedRequestBody sendEnhancedRequestBodyTimeout = new SendEnhancedRequestBody();
+        SendRequestMessage sendRequestMessageTimeout = new SendRequestMessage();
+        HashMap<String, Object> toMapTimeout = gsonTimeout.fromJson("{'email':'tejas@courier.com'}", HashMap.class);
+
+        HashMap<String, Object> timeout = gsonTimeout.fromJson("{'message':3600000}", HashMap.class);
+        sendRequestMessageTimeout.setTo(toMapTimeout);
+        sendRequestMessageTimeout.setTemplate("my-template");
+        sendRequestMessageTimeout.setBrand_id("my-brand");
+        sendRequestMessageTimeout.setTimeout(timeout);
+        sendEnhancedRequestBodyTimeout.setMessage(sendRequestMessageTimeout);
+
+        SendEnhancedResponseBody sendEnhancedResponseBodyTimeout = new SendService().sendEnhancedMessage(sendEnhancedRequestBodyTimeout);
+        System.out.println(sendEnhancedResponseBodyTimeout);
+
         /*
         Messages API
          */

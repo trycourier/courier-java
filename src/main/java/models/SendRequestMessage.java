@@ -19,4 +19,5 @@ public class SendRequestMessage {
     private String template;
     private Object content;
     private Object metadata;
+    private Object timeout;
 }
