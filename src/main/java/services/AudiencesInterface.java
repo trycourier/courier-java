@@ -5,7 +5,7 @@ import retrofit2.Call;
 import retrofit2.http.*;
 
 public interface AudiencesInterface {
-        @GET("/dev/audiences/{audienceId}")
+        @GET("/audiences/{audienceId}")
         Call<Audience> getAudience(
                         @Path("audienceId") String audienceId,
                         @Header("Authorization") String authorization,
