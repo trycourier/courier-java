@@ -11,7 +11,7 @@ public interface AudiencesInterface {
                         @Header("Authorization") String authorization,
                         @Header("User-Agent") String userAgent);
 
-        @PUT("/dev/audiences/{audienceId}")
+        @PUT("/audiences/{audienceId}")
         Call<PutAudienceResponse> putAudience(
                         @Path("audienceId") String audienceId,
                         @Body PutAudienceBody audience,
