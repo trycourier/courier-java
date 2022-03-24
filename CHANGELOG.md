@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
 
+## [v1.3.0] - 2022-03-24
+- Add support for Audiences API
+
 ## [v1.2.0] - 2022-03-23
 - Add support for message timeout
 
