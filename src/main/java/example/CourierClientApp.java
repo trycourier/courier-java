@@ -45,6 +45,9 @@ public class CourierClientApp {
         HashMap<String, String> to = new HashMap<String, String>();
         to.put("email", "tejas@courier.com");
 
+        // If you want to send to audience, use this
+        // to.put("audience_id", "my-audience-id");
+
         sendRequestMessage1.setTo(to);
         sendRequestMessage1.setTemplate("my-template");
         sendRequestMessage1.setBrand_id("my-brand");
@@ -58,7 +61,7 @@ public class CourierClientApp {
         SendEnhancedRequestBody sendEnhancedRequestBody2 = new SendEnhancedRequestBody();
         SendRequestMessage sendRequestMessage2 = new SendRequestMessage();
         HashMap<String, Object> toMap1 = gson.fromJson("{'email':'tejas@courier.com'}", HashMap.class);
-        
+
         sendRequestMessage2.setTo(toMap1);
         sendRequestMessage2.setTemplate("my-template");
         sendRequestMessage2.setBrand_id("my-brand");
@@ -315,6 +318,31 @@ public class CourierClientApp {
                 .unsubscribeRecipientFromList("tejas.list.test", "5ed558d4-d2eb-4e0f-984a-81a0f04054b1");
 
         new ListsService()
-                .subscribeRecipientToList("tejas.list.test", "5ed558d4-d2eb-4e0f-984a-81a0f04054b1");
+                        .subscribeRecipientToList("tejas.list.test", "5ed558d4-d2eb-4e0f-984a-81a0f04054b1");
+
+        /*
+         * Audiences API
+         */
+        PutAudienceBody myAudience = new PutAudienceBody();
+        HashMap<String, Object> filter = new HashMap<String, Object>();
+        filter.put("operator", "EQ");
+        filter.put("value", "Software Engineer");
+        filter.put("path", "title");
+        myAudience.setFilter(filter);
+        myAudience.setId("my-software-engineer-java");
+        PutAudienceResponse response = new AudiencesService()
+                        .putAudience(myAudience);
+
+        System.out.println("Put Response" + response);
+
+        System.out.println("GetAudience" + new AudiencesService().getAudience("software-engineers-from-sf"));
+
+        String cursor = "";
+
+        System.out.println("GetAudienceMembers"
+                        + new AudiencesService().getAudienceMembers("software-engineers-from-sf", cursor));
+
+        System.out.println("GetAudiences"
+                        + new AudiencesService().getAudiences(cursor));
     }
 }
