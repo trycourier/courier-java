@@ -103,7 +103,7 @@ public class CourierClientApp {
         SendRequestMessage sendRequestMessageMeta = new SendRequestMessage();
         HashMap<String, Object> toMapMeta = gsonMeta.fromJson("{'email':'tejas@courier.com'}", HashMap.class);
 
-        HashMap<String, Object> metadata = gsonMeta.fromJson("{'metadata':{'utm':{'source':'java'}}, 'trace_id':'ravenclaw'}", HashMap.class);
+        HashMap<String, Object> metadata = gsonMeta.fromJson("{'utm':{'source':'java'}, 'tags': ['tag-1', 'tag-2'], 'trace_id': 'ravenclaw'}", HashMap.class);
         sendRequestMessageMeta.setTo(toMapMeta);
         sendRequestMessageMeta.setTemplate("my-template");
         sendRequestMessageMeta.setBrand_id("my-brand");
