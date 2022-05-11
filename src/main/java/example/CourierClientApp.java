@@ -129,6 +129,25 @@ public class CourierClientApp {
         SendEnhancedResponseBody sendEnhancedResponseBodyTimeout = new SendService().sendEnhancedMessage(sendEnhancedRequestBodyTimeout);
         System.out.println(sendEnhancedResponseBodyTimeout);
 
+        // Enhanced Send - metadata
+        Gson gsonGranulaMetadata = new Gson();
+        SendEnhancedRequestBody sendEnhancedRequestBodyGranularMeta = new SendEnhancedRequestBody();
+        SendRequestMessage sendRequestMessageGranularMeta = new SendRequestMessage();
+        HashMap<String, Object> toMapGranularMeta = gsonGranulaMetadata.fromJson("{'email':'tejas@courier.com'}", HashMap.class);
+
+        HashMap<String, Object> channels = gsonGranulaMetadata.fromJson("{'email':{'metadata':{'utm':{'source':'java'}}}}", HashMap.class);
+        HashMap<String, Object> providers = gsonGranulaMetadata.fromJson("{'sns':{'metadata':{'utm':{'medium':'sns'}}}}", HashMap.class);
+
+        sendRequestMessageGranularMeta.setTo(toMapGranularMeta);
+        sendRequestMessageGranularMeta.setTemplate("my-template");
+        sendRequestMessageGranularMeta.setBrand_id("my-brand");
+        sendRequestMessageGranularMeta.setChannels(channels);
+        sendRequestMessageGranularMeta.setProviders(providers);
+        sendEnhancedRequestBodyGranularMeta.setMessage(sendRequestMessageGranularMeta);
+
+        SendEnhancedResponseBody sendEnhancedResponseBodyGranularMeta = new SendService().sendEnhancedMessage(sendEnhancedRequestBodyGranularMeta);
+        System.out.println(sendEnhancedResponseBodyGranularMeta);
+
         /*
         Messages API
          */
