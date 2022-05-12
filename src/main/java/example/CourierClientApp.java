@@ -129,6 +129,17 @@ public class CourierClientApp {
         SendEnhancedResponseBody sendEnhancedResponseBodyTimeout = new SendService().sendEnhancedMessage(sendEnhancedRequestBodyTimeout);
         System.out.println(sendEnhancedResponseBodyTimeout);
 
+	// Event Routing
+	SendEventRoutingRequestBody sendEventRoutingRequestBody = new SendEventRoutingRequestBody();
+	SendEventRoutingRequestRecipient recipient1 = new SendEventRoutingRequestRecipient();
+ 	recipient1.recipient = "unique_recipient_id"
+	recipient1.data = new Gson().fromJson("{'eventName':'user-added', 'status: 'success'}")
+	recipient1.profile = new Gson().fromJson("{'email':'tejas@courier.com'}")	
+	sendEventRoutingRequestBody.recipients.add(recipient)
+	SendEventRoutingResponseBody sendEventRoutingResponse = new SendService().sendEventRouting("user-added", sendEventRoutingRequestBody)
+	System.out.println(sendEventRoutingResponse);
+
+
         /*
         Messages API
          */
