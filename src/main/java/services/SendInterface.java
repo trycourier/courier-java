@@ -1,13 +1,10 @@
 package services;
 
-import models.SendEnhancedRequestBody;
-import models.SendEnhancedResponseBody;
-import models.SendListRequestBody;
-import models.SendRequestBody;
-import models.SendResponseBody;
+import models.*;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Header;
+import retrofit2.http.Path;
 import retrofit2.http.POST;
 
 public interface SendInterface {
@@ -46,5 +43,13 @@ public interface SendInterface {
             @Header("Authorization") String authorization,
             @Header("User-Agent") String userAgent,
             @Header("Idempotency-Key") String idempotencyKey
+    );
+
+    @POST("/send/{event}/routing")
+    Call<SendEventRoutingResponseBody> sendEventRouting(
+            @Path("event") String event,
+            @Body SendEventRoutingRequestBody sendEventRoutingRequestBody,
+            @Header("Authorization") String authorization,
+            @Header("User-Agent") String userAgent
     );
 }
