@@ -28,6 +28,10 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
+  <properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
   <profiles>
     <!-- Deployment profile (required so these plugins are only used when deploying) -->
     <profile>
