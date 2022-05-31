@@ -5,6 +5,8 @@ import models.SendEnhancedResponseBody;
 import models.SendListRequestBody;
 import models.SendRequestBody;
 import models.SendResponseBody;
+import models.SendEventRoutingRequestBody;
+import models.SendEventRoutingResponseBody;
 
 import java.io.IOException;
 
@@ -66,6 +68,18 @@ public class SendService {
                 Courier.getAuthorizationHeader(),
                 Courier.getUserAgent(),
                 idempotencyKey
+        ).execute().body();
+    }
+
+    public SendEventRoutingResponseBody sendEventRouting(
+            String event,
+            SendEventRoutingRequestBody sendEventRoutingRequestBody
+    ) throws IOException {
+        return sendInterface.sendEventRouting(
+                event,
+                sendEventRoutingRequestBody,
+                Courier.getAuthorizationHeader(),
+                Courier.getUserAgent()
         ).execute().body();
     }
 }
