@@ -3,7 +3,8 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased][unreleased]
+## [v1.4.0] - 2022-05-31
+- Add support for /send/{event}/routing API
 
 ## [v1.3.0] - 2022-03-24
 - Add support for Audiences API
@@ -16,6 +17,3 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [v1.0.0] - 2021-02-12
 - Initial version of the API brought to life
-
-[unreleased]: https://github.com/trycourier/courier-java/compare/v1.1.0...HEAD
-[v1.1.0]: https://github.com/trycourier/courier-java/compare/v1.0.0...v1.1.0

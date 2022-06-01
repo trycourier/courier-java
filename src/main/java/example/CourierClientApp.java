@@ -148,6 +148,17 @@ public class CourierClientApp {
         SendEnhancedResponseBody sendEnhancedResponseBodyGranularMeta = new SendService().sendEnhancedMessage(sendEnhancedRequestBodyGranularMeta);
         System.out.println(sendEnhancedResponseBodyGranularMeta);
 
+        // Send Event Routing
+        SendEventRoutingRequestBody sendEventRoutingRequestBody = new SendEventRoutingRequestBody();
+        final SendEventRoutingRequestRecipient recipient1 = new SendEventRoutingRequestRecipient();
+        recipient1.setRecipient("tk001");
+        recipient1.setProfile(new Gson().fromJson("{'email':'tejas@courier.com'}", HashMap.class));
+        ArrayList<SendEventRoutingRequestRecipient> routingRecipients = new ArrayList<SendEventRoutingRequestRecipient>();
+        routingRecipients.add(recipient1);
+        sendEventRoutingRequestBody.setRecipients(routingRecipients);
+        SendEventRoutingResponseBody sendEventRoutingResponse = new SendService().sendEventRouting("foobar", sendEventRoutingRequestBody);
+        System.out.println(sendEventRoutingResponse);
+
         /*
         Messages API
          */
