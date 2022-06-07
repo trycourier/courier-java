@@ -119,7 +119,7 @@ public class CourierClientApp {
         SendRequestMessage sendRequestMessageTimeout = new SendRequestMessage();
         HashMap<String, Object> toMapTimeout = gsonTimeout.fromJson("{'email':'tejas@courier.com'}", HashMap.class);
 
-        HashMap<String, Object> timeout = gsonTimeout.fromJson("{'message':3600000}", HashMap.class);
+        HashMap<String, Object> timeout = gsonTimeout.fromJson("{'message':3600000, 'channel': {'email':43222}, 'provider': {'sendgrid': 1000}}", HashMap.class);
         sendRequestMessageTimeout.setTo(toMapTimeout);
         sendRequestMessageTimeout.setTemplate("my-template");
         sendRequestMessageTimeout.setBrand_id("my-brand");
