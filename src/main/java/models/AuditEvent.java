@@ -12,7 +12,6 @@ public class AuditEvent {
     public String source;
     public String timestamp;
     public String type;
-    public String workspaceId;
-    public Object actor;
-    public Object target;
+    public AuditEventActor actor;
+    public AuditEventTarget target;
 }
