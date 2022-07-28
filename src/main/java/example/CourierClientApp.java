@@ -374,5 +374,13 @@ public class CourierClientApp {
 
         System.out.println("GetAudiences"
                         + new AudiencesService().getAudiences(cursor));
+
+        /*
+         * Audit Events API
+         */
+        System.out.println("GetAuditEvent" + new AuditEventsService().getAuditEvent("my-audit-event"));
+
+        System.out.println("ListAuditEvents"
+                + new AuditEventsService().listAuditEvents(null));
     }
 }
