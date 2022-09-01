@@ -382,5 +382,48 @@ public class CourierClientApp {
 
         System.out.println("ListAuditEvents"
                 + new AuditEventsService().listAuditEvents(null));
+
+        /*
+         * Bulk API
+         */
+
+        // create job
+        BulkCreateJobRequestBody bulkCreateJobRequestBody = new BulkCreateJobRequestBody();
+
+        InboundBulkMessageApiV2 inboundBulkMessageApiV2 = new InboundBulkMessageApiV2();
+        inboundBulkMessageApiV2.setTemplate("KMPC7A1QNYMA0PNQ67KP9T23HDFK");
+        InboundBulkMessage inboundBulkMessage = new InboundBulkMessage();
+        inboundBulkMessage.setMessage(inboundBulkMessageApiV2);
+
+        bulkCreateJobRequestBody.setMessage(inboundBulkMessage);
+
+        BulkCreateJobResponseBody createJobResponseBody = new BulkService().createJob(bulkCreateJobRequestBody);
+        System.out.println("Create bulk job response" + createJobResponseBody);
+
+        // ingest users
+        BulkIngestUsersRequestBody bulkIngestUsersRequestBody = new BulkIngestUsersRequestBody();
+
+        BulkIngestUser bulkIngestUser1 = new BulkIngestUser();
+        HashMap<String, String> toBulkUser = new HashMap<String, String>();
+        toBulkUser.put("email", "tejas@courier.com");
+        bulkIngestUser1.setTo(toBulkUser);
+
+        List<BulkIngestUser> bulkIngestUsers = new ArrayList<BulkIngestUser>();
+        bulkIngestUsers.add(bulkIngestUser1);
+
+        bulkIngestUsersRequestBody.setUsers(bulkIngestUsers);
+        BulkIngestUsersResponseBody ingestUsersResponseBody = new BulkService().ingestUsers("1-63108ff3-5d96e476207a843dbfa982ea", bulkIngestUsersRequestBody);
+        System.out.println("Ingest bulk job users response" + ingestUsersResponseBody);
+
+        // get job
+        BulkGetJobResponseBody bulkJob = new BulkService().getJob("1-63108ff3-5d96e476207a843dbfa982ea");
+        System.out.println("Get bulk job response" + bulkJob);
+
+        // get job users
+        BulkJobUsers bulkJobUsers = new BulkService().getJobUsers("1-63108ff3-5d96e476207a843dbfa982ea", null);
+        System.out.println("Get bulk job users response" + bulkJobUsers);
+
+        // run job
+        new BulkService().runJob("1-63108ff3-5d96e476207a843dbfa982ea");
     }
 }

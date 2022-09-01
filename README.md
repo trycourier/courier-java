@@ -8,6 +8,9 @@ Courier Java SDK supporting:
 * Events API
 * Brands API
 * Lists API
+* Audiences API
+* Audit Events API
+* Bulk API
 
 ## Official Courier API docs
 
