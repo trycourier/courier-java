@@ -134,12 +134,12 @@ public class CourierClientApp {
         SendEnhancedRequestBody sendEnhancedRequestBodyExpiry = new SendEnhancedRequestBody();
         SendRequestMessage sendRequestMessageExpiry = new SendRequestMessage();
         HashMap<String, Object> toMapExpiry = gsonExpiry.fromJson("{'email':'tejas@courier.com'}", HashMap.class);
-        HashMap<String, Object> expiry = gsonExpiry.fromJson("{'expires_in':'P1H'}", HashMap.class);
+        HashMap<String, String> expiry = gsonExpiry.fromJson("{'expires_in':'P1H'}", HashMap.class);
 
-        sendEnhancedRequestBodyExpiry.setTo(toMapExpiry);
-        sendEnhancedRequestBodyExpiry.setExpiry(expiry);
-        sendEnhancedRequestBodyExpiry.setTemplate("my-template");
-        sendEnhancedRequestBodyExpiry.setMessage(sendRequestMessageExpiry);
+        sendRequestMessageExpiry.setTo(toMapExpiry);
+        sendRequestMessageExpiry.setExpiry(expiry);
+        sendRequestMessageExpiry.setTemplate("my-template");
+        sendRequestMessageExpiry.setMessage(sendRequestMessageExpiry);
 
         SendEnhancedResponseBody sendEnhancedResponseBodyExpiry = new SendService().sendEnhancedMessage(sendEnhancedRequestBodyExpiry);
         System.out.println(sendEnhancedResponseBodyExpiry);
