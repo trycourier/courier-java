@@ -139,7 +139,7 @@ public class CourierClientApp {
         sendRequestMessageExpiry.setTo(toMapExpiry);
         sendRequestMessageExpiry.setExpiry(expiry);
         sendRequestMessageExpiry.setTemplate("my-template");
-        sendRequestMessageExpiry.setMessage(sendRequestMessageExpiry);
+        sendEnhancedRequestBodyExpiry.setMessage(sendRequestMessageExpiry);
 
         SendEnhancedResponseBody sendEnhancedResponseBodyExpiry = new SendService().sendEnhancedMessage(sendEnhancedRequestBodyExpiry);
         System.out.println(sendEnhancedResponseBodyExpiry);
