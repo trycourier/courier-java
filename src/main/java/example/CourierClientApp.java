@@ -129,6 +129,21 @@ public class CourierClientApp {
         SendEnhancedResponseBody sendEnhancedResponseBodyTimeout = new SendService().sendEnhancedMessage(sendEnhancedRequestBodyTimeout);
         System.out.println(sendEnhancedResponseBodyTimeout);
 
+        // Enhanced Send - expiry
+        Gson gsonExpiry = new Gson();
+        SendEnhancedRequestBody sendEnhancedRequestBodyExpiry = new SendEnhancedRequestBody();
+        SendRequestMessage sendRequestMessageExpiry = new SendRequestMessage();
+        HashMap<String, Object> toMapExpiry = gsonExpiry.fromJson("{'email':'tejas@courier.com'}", HashMap.class);
+        HashMap<String, String> expiry = gsonExpiry.fromJson("{'expires_in':'P1H'}", HashMap.class);
+
+        sendRequestMessageExpiry.setTo(toMapExpiry);
+        sendRequestMessageExpiry.setExpiry(expiry);
+        sendRequestMessageExpiry.setTemplate("my-template");
+        sendEnhancedRequestBodyExpiry.setMessage(sendRequestMessageExpiry);
+
+        SendEnhancedResponseBody sendEnhancedResponseBodyExpiry = new SendService().sendEnhancedMessage(sendEnhancedRequestBodyExpiry);
+        System.out.println(sendEnhancedResponseBodyExpiry);
+
         // Enhanced Send - metadata
         Gson gsonGranulaMetadata = new Gson();
         SendEnhancedRequestBody sendEnhancedRequestBodyGranularMeta = new SendEnhancedRequestBody();
