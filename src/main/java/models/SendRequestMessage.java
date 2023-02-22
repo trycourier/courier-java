@@ -21,4 +21,5 @@ public class SendRequestMessage {
     private Object content;
     private Object metadata;
     private Object timeout;
+    private Object delay;
 }
