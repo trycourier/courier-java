@@ -174,6 +174,22 @@ public class CourierClientApp {
         SendEventRoutingResponseBody sendEventRoutingResponse = new SendService().sendEventRouting("foobar", sendEventRoutingRequestBody);
         System.out.println(sendEventRoutingResponse);
 
+        // Send with delay
+        Gson gsonDelay = new Gson();
+        SendEnhancedRequestBody sendEnhancedRequestBodyDelay = new SendEnhancedRequestBody();
+        SendRequestMessage sendRequestMessageDelay = new SendRequestMessage();
+        HashMap<String, Object> toMapDelay = gsonDelay.fromJson("{'email':'tejas@courier.com'}", HashMap.class);
+
+        HashMap<String, Object> delay = gsonDelay.fromJson("{'duration':30000}", HashMap.class);
+        sendRequestMessageDelay.setTo(toMapDelay);
+        sendRequestMessageDelay.setTemplate("my-template");
+        sendRequestMessageDelay.setBrand_id("my-brand");
+        sendRequestMessageDelay.setDelay(delay);
+        sendEnhancedRequestBodyDelay.setMessage(sendRequestMessageDelay);
+
+        SendEnhancedResponseBody sendEnhancedResponseBodyDelay = new SendService().sendEnhancedMessage(sendEnhancedRequestBodyDelay);
+        System.out.println(sendEnhancedResponseBodyDelay);
+
         /*
         Messages API
          */
