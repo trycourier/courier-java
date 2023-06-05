@@ -456,5 +456,16 @@ public class CourierClientApp {
 
         // run job
         new BulkService().runJob("1-63108ff3-5d96e476207a843dbfa982ea");
+
+        /**
+         * Auth tokens
+         */
+
+        // Create an auth token
+        CreateAuthTokenRequestBody createAuthTokenRequestBody = new CreateAuthTokenRequestBody();
+        createAuthTokenRequestBody.setScope("user_id:tejas read:user-tokens write:user-tokens");
+        createAuthTokenRequestBody.setExpires_in("2 days");
+        CreateAuthTokenResponseBody createAuthTokenResponseBody = new AuthTokenService().createToken(createAuthTokenRequestBody);
+        System.out.println("Create auth token response" + createAuthTokenResponseBody);
     }
 }
