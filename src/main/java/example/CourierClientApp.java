@@ -206,6 +206,10 @@ public class CourierClientApp {
                 );
         System.out.println(messages);
 
+        CancelMessageResponse cancelMessageResponse = new MessagesService()
+                .cancelMessage("1-60178fe6-575a25580d6d6a7f78b0e9c7");
+        System.out.println(cancelMessageResponse);
+
         MessageHistory messageHistory = new MessagesService()
                 .getMessageHistory(
                         "1-60178fe6-575a25580d6d6a7f78b0e9c7",
