@@ -1,5 +1,6 @@
 package services;
 
+import models.CancelMessageResponse;
 import models.Message;
 import models.MessageHistory;
 import models.Messages;
@@ -37,6 +38,14 @@ public class MessagesService {
             String messageId
     ) throws IOException {
         return messagesInterface.getMessage(
+                messageId,
+                Courier.getAuthorizationHeader(),
+                Courier.getUserAgent()
+        ).execute().body();
+    }
+
+     public CancelMessageResponse cancelMessage(String messageId) throws IOException {
+        return messagesInterface.cancelMessage(
                 messageId,
                 Courier.getAuthorizationHeader(),
                 Courier.getUserAgent()

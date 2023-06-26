@@ -1,11 +1,13 @@
 package services;
 
+import models.CancelMessageResponse;
 import models.Message;
 import models.MessageHistory;
 import models.Messages;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -24,6 +26,13 @@ public interface MessagesInterface {
 
     @GET("/messages/{messageId}")
     Call<Message> getMessage(
+            @Path("messageId") String messageId,
+            @Header("Authorization") String authorization,
+            @Header("User-Agent") String userAgent
+    );
+
+    @POST("/messages/{messageId}/cancel")
+    Call<CancelMessageResponse> cancelMessage(
             @Path("messageId") String messageId,
             @Header("Authorization") String authorization,
             @Header("User-Agent") String userAgent
