@@ -12,7 +12,7 @@ public class Courier {
     private static String password;
     private static String authorizationHeader;
     private static Retrofit retrofit;
-    private static String version = "1.9.0";
+    private static String version = "1.11.0";
 
     private Courier() {
     }
