@@ -11,6 +11,7 @@ Courier Java SDK supporting:
 * Audiences API
 * Audit Events API
 * Bulk API
+* Automations API
 
 ## Official Courier API docs
 

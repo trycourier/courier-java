@@ -471,5 +471,27 @@ public class CourierClientApp {
         createAuthTokenRequestBody.setExpires_in("2 days");
         CreateAuthTokenResponseBody createAuthTokenResponseBody = new AuthTokenService().createToken(createAuthTokenRequestBody);
         System.out.println("Create auth token response" + createAuthTokenResponseBody);
+
+        /**
+         Automations
+         */
+        // Run adhoc automation
+        AutomationAdhocRequestBody automationAdhocRequestBody = new AutomationAdhocRequestBody();
+        AdhocAutomation automation = new AdhocAutomation();
+        HashMap<String, Object> step = new HashMap<String, Object>();
+        step.put("action", "send");
+        step.put("recipient", "john-doe");
+        step.put("template", "my-template");
+        List<Object> steps = new ArrayList<Object>();
+        steps.add(step);
+        automation.setSteps(steps);
+        automationAdhocRequestBody.setAutomation(automation);
+        AutomationResponseBody automationResponseBody1 = new AutomationService().runAdhocAutomation(automationAdhocRequestBody);
+        System.out.println("Adhoc Automation run response" + automationResponseBody1);
+
+        // Run template automation
+        AutomationTemplateRequestBody automationTemplateRequestBody = new AutomationTemplateRequestBody();
+        AutomationResponseBody automationResponseBody2 = new AutomationService().runTemplatedAutomation("my-automation-template", automationTemplateRequestBody);
+        System.out.println("Template Automation run response" + automationResponseBody2);
     }
 }
