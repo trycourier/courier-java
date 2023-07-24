@@ -493,5 +493,29 @@ public class CourierClientApp {
         AutomationTemplateRequestBody automationTemplateRequestBody = new AutomationTemplateRequestBody();
         AutomationResponseBody automationResponseBody2 = new AutomationService().runTemplatedAutomation("my-automation-template", automationTemplateRequestBody);
         System.out.println("Template Automation run response" + automationResponseBody2);
+
+        /**
+         * Accounts
+         */
+        AccountRequestBody accountRequestBody = new AccountRequestBody();
+        accountRequestBody.setName("my-account");
+        // create account (updateAccount handles create)
+        new AccountsService().updateAccount("account-1", accountRequestBody);
+
+        // get created account
+        System.out.println("Account:" + new AccountsService().getAccount("account-1"));
+
+        // get all accounts
+        System.out.println("All Accounts:" + new AccountsService().getAccounts(null, null));
+
+        // update account
+        accountRequestBody.setBrand_id("my-brand-id");
+        new AccountsService().updateAccount("account-1", accountRequestBody);
+        // get updated account
+        System.out.println("Account:" + new AccountsService().getAccount("account-1"));
+
+        new AccountsService().deleteAccount("account-1");
+        // get deleted account
+        System.out.println("Account:" + new AccountsService().getAccount("account-1"));
     }
 }
