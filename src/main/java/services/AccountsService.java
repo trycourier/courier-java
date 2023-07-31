@@ -30,10 +30,10 @@ public class AccountsService {
         ).execute().body();
     }
 
-    public AccountsResponseBody getAccounts(String limit, String startingAfter) throws IOException {
+    public AccountsResponseBody getAccounts(String limit, String cursor) throws IOException {
         return accountsInterface.getAccounts(
                 limit,
-                startingAfter,
+                cursor,
                 Courier.getAuthorizationHeader(),
                 Courier.getUserAgent()
         ).execute().body();

@@ -11,5 +11,6 @@ import java.util.List;
 public class AccountsResponseBody {
     private List<models.Account> items;
     private Boolean has_more;
-    private String next_page;
+    private String next_url;
+    private String url;
 }

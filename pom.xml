@@ -8,7 +8,7 @@
   <name>courier-java</name>
   <description>Java SDK for communicating with the Courier REST API. </description>
   <url>https://www.courier.com</url>
-  <version>1.12.0</version>
+  <version>1.13.0</version>
   <scm>
     <url>https://github.com/trycourier/courier-java</url>
   </scm>

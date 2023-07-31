@@ -25,7 +25,7 @@ public interface AccountsInterface {
     @GET("/accounts")
     Call<AccountsResponseBody> getAccounts(
             @Query("limit") String limit,
-            @Query("starting_after") String starting_after,
+            @Query("cursor") String cursor,
             @Header("Authorization") String authorization,
             @Header("User-Agent") String userAgent
     );

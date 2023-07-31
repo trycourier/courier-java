@@ -3,6 +3,9 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v1.13.0] - 2023-07-31
+- Add pagination attributes for accounts API
+
 ## [v1.12.0] - 2023-07-24
 - Add support for Accounts API
 
