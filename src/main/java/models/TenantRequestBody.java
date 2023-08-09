@@ -7,9 +7,9 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class AccountRequestBody {
+public class TenantRequestBody {
     private String name;
-    private String parent_account_id;
+    private String parent_tenant_id;
     private Object default_preferences;
     private Object properties;
     private Object user_profile;
