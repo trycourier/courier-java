@@ -8,8 +8,8 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class AccountsResponseBody {
-    private List<models.Account> items;
+public class TenantsResponseBody {
+    private List<models.Tenant> items;
     private Boolean has_more;
     private String next_url;
     private String url;

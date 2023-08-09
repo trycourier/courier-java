@@ -495,27 +495,27 @@ public class CourierClientApp {
         System.out.println("Template Automation run response" + automationResponseBody2);
 
         /**
-         * Accounts
+         * Tenants
          */
-        AccountRequestBody accountRequestBody = new AccountRequestBody();
-        accountRequestBody.setName("my-account");
-        // create account (updateAccount handles create)
-        new AccountsService().updateAccount("account-1", accountRequestBody);
+        TenantRequestBody tenantRequestBody = new TenantRequestBody();
+        tenantRequestBody.setName("my-tenant");
+        // create tenant (updateTenant handles create)
+        new TenantsService().updateTenant("tenant-1", tenantRequestBody);
 
-        // get created account
-        System.out.println("Account:" + new AccountsService().getAccount("account-1"));
+        // get created tenant
+        System.out.println("Tenant:" + new TenantsService().getTenant("tenant-1"));
 
-        // get all accounts
-        System.out.println("All Accounts:" + new AccountsService().getAccounts(null, null));
+        // get all tenants
+        System.out.println("All Tenants:" + new TenantsService().getTenants(null, null));
 
-        // update account
-        accountRequestBody.setBrand_id("my-brand-id");
-        new AccountsService().updateAccount("account-1", accountRequestBody);
-        // get updated account
-        System.out.println("Account:" + new AccountsService().getAccount("account-1"));
+        // update tenant
+        tenantRequestBody.setBrand_id("my-brand-id");
+        new TenantsService().updateTenant("tenant-1", tenantRequestBody);
+        // get updated tenant
+        System.out.println("Tenant:" + new TenantsService().getTenant("tenant-1"));
 
-        new AccountsService().deleteAccount("account-1");
-        // get deleted account
-        System.out.println("Account:" + new AccountsService().getAccount("account-1"));
+        new TenantsService().deleteTenant("tenant-1");
+        // get deleted tenant
+        System.out.println("Tenant:" + new TenantsService().getTenant("tenant-1"));
     }
 }

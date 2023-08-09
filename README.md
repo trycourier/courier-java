@@ -12,7 +12,7 @@ Courier Java SDK supporting:
 * Audit Events API
 * Bulk API
 * Automations API
-* Accounts API
+* Tenants API
 
 ## Official Courier API docs
 

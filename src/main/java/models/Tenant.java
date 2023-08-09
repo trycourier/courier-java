@@ -7,10 +7,10 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class Account {
+public class Tenant {
     private String id;
     private String name;
-    private String parent_account_id;
+    private String parent_tenant_id;
     private Object default_preferences;
     private Object properties;
     private Object user_profile;
