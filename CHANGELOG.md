@@ -3,6 +3,9 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [v2.1.0] - 2023-08-24
+- Tenant ID via message context
+
 ## [v2.0.0] - 2023-08-09
 - Accounts -> Tenants
 
