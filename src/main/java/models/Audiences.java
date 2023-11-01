@@ -10,5 +10,5 @@ import java.util.List;
 @ToString
 public class Audiences {
   private Paging paging;
-  private List<models.Audience> results;
+  private List<models.Audience> items;
 }
