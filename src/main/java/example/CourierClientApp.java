@@ -494,6 +494,10 @@ public class CourierClientApp {
         AutomationResponseBody automationResponseBody2 = new AutomationService().runTemplatedAutomation("my-automation-template", automationTemplateRequestBody);
         System.out.println("Template Automation run response" + automationResponseBody2);
 
+        // Run template automation (idempotent)
+        AutomationResponseBody automationResponseBodyIdempotent = new AutomationService().runTemplatedAutomationIdempotent("my-automation-template", automationTemplateRequestBody, UUID.randomUUID().toString());
+        System.out.println("Template Automation run idempotent response" + automationResponseBodyIdempotent);
+
         /**
          * Tenants
          */
