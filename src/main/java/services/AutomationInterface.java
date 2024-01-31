@@ -24,4 +24,13 @@ public interface AutomationInterface {
             @Header("Authorization") String authorization,
             @Header("User-Agent") String userAgent
     );
+
+    @POST("/automations/{templateId}/invoke")
+    Call<AutomationResponseBody> runTemplatedAutomationIdempotent(
+            @Path("templateId") String templateId,
+            @Body AutomationTemplateRequestBody automationTemplateRequestBody,
+            @Header("Authorization") String authorization,
+            @Header("User-Agent") String userAgent,
+            @Header("Idempotency-Key") String idempotencyKey
+    );
 }
