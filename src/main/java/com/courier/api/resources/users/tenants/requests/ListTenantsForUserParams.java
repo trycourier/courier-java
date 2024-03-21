@@ -22,14 +22,14 @@ import java.util.Optional;
 public final class ListTenantsForUserParams {
     private final Optional<Integer> limit;
 
-    private final Optional<Integer> startingAfter;
+    private final Optional<String> cursor;
 
     private final Map<String, Object> additionalProperties;
 
     private ListTenantsForUserParams(
-            Optional<Integer> limit, Optional<Integer> startingAfter, Map<String, Object> additionalProperties) {
+            Optional<Integer> limit, Optional<String> cursor, Map<String, Object> additionalProperties) {
         this.limit = limit;
-        this.startingAfter = startingAfter;
+        this.cursor = cursor;
         this.additionalProperties = additionalProperties;
     }
 
@@ -43,11 +43,11 @@ public final class ListTenantsForUserParams {
     }
 
     /**
-     * @return Value of next_page from previous response
+     * @return Continue the pagination with the next cursor
      */
-    @JsonProperty("starting_after")
-    public Optional<Integer> getStartingAfter() {
-        return startingAfter;
+    @JsonProperty("cursor")
+    public Optional<String> getCursor() {
+        return cursor;
     }
 
     @java.lang.Override
@@ -62,12 +62,12 @@ public final class ListTenantsForUserParams {
     }
 
     private boolean equalTo(ListTenantsForUserParams other) {
-        return limit.equals(other.limit) && startingAfter.equals(other.startingAfter);
+        return limit.equals(other.limit) && cursor.equals(other.cursor);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.limit, this.startingAfter);
+        return Objects.hash(this.limit, this.cursor);
     }
 
     @java.lang.Override
@@ -83,7 +83,7 @@ public final class ListTenantsForUserParams {
     public static final class Builder {
         private Optional<Integer> limit = Optional.empty();
 
-        private Optional<Integer> startingAfter = Optional.empty();
+        private Optional<String> cursor = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -92,7 +92,7 @@ public final class ListTenantsForUserParams {
 
         public Builder from(ListTenantsForUserParams other) {
             limit(other.getLimit());
-            startingAfter(other.getStartingAfter());
+            cursor(other.getCursor());
             return this;
         }
 
@@ -107,19 +107,19 @@ public final class ListTenantsForUserParams {
             return this;
         }
 
-        @JsonSetter(value = "starting_after", nulls = Nulls.SKIP)
-        public Builder startingAfter(Optional<Integer> startingAfter) {
-            this.startingAfter = startingAfter;
+        @JsonSetter(value = "cursor", nulls = Nulls.SKIP)
+        public Builder cursor(Optional<String> cursor) {
+            this.cursor = cursor;
             return this;
         }
 
-        public Builder startingAfter(Integer startingAfter) {
-            this.startingAfter = Optional.of(startingAfter);
+        public Builder cursor(String cursor) {
+            this.cursor = Optional.of(cursor);
             return this;
         }
 
         public ListTenantsForUserParams build() {
-            return new ListTenantsForUserParams(limit, startingAfter, additionalProperties);
+            return new ListTenantsForUserParams(limit, cursor, additionalProperties);
         }
     }
 }
