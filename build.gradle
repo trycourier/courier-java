@@ -58,7 +58,7 @@ publishing {
                 url = 'https://buildwithfern.com'
                 licenses {
                     license {
-                        name = 'Optional[MIT]'
+                        name = 'MIT'
                     }
                 }
                 developers {
