@@ -8,6 +8,8 @@ import com.courier.api.core.ClientOptions;
 import com.courier.api.core.MediaTypes;
 import com.courier.api.core.ObjectMappers;
 import com.courier.api.core.RequestOptions;
+import com.courier.api.resources.tenants.requests.ListTenantParams;
+import com.courier.api.resources.tenants.requests.ListUsersForTenantParams;
 import com.courier.api.resources.tenants.requests.TenantCreateOrReplaceParams;
 import com.courier.api.resources.tenants.types.ListUsersForTenantResponse;
 import com.courier.api.resources.tenants.types.Tenant;
@@ -15,6 +17,7 @@ import com.courier.api.resources.tenants.types.TenantListResponse;
 import java.io.IOException;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
@@ -50,8 +53,11 @@ public class TenantsClient {
                 .addHeader("Content-Type", "application/json")
                 .build();
         try {
-            Response response =
-                    clientOptions.httpClient().newCall(okhttpRequest).execute();
+            OkHttpClient client = clientOptions.httpClient();
+            if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+                client = clientOptions.httpClientWithTimeout(requestOptions);
+            }
+            Response response = client.newCall(okhttpRequest).execute();
             if (response.isSuccessful()) {
                 return ObjectMappers.JSON_MAPPER.readValue(response.body().string(), Tenant.class);
             }
@@ -80,8 +86,11 @@ public class TenantsClient {
                 .addHeader("Content-Type", "application/json")
                 .build();
         try {
-            Response response =
-                    clientOptions.httpClient().newCall(okhttpRequest).execute();
+            OkHttpClient client = clientOptions.httpClient();
+            if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+                client = clientOptions.httpClientWithTimeout(requestOptions);
+            }
+            Response response = client.newCall(okhttpRequest).execute();
             if (response.isSuccessful()) {
                 return ObjectMappers.JSON_MAPPER.readValue(response.body().string(), Tenant.class);
             }
@@ -94,23 +103,35 @@ public class TenantsClient {
     }
 
     public TenantListResponse list() {
-        return list(null);
+        return list(ListTenantParams.builder().build());
     }
 
-    public TenantListResponse list(RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+    public TenantListResponse list(ListTenantParams request) {
+        return list(request, null);
+    }
+
+    public TenantListResponse list(ListTenantParams request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
-                .addPathSegments("tenants")
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .addPathSegments("tenants");
+        if (request.getLimit().isPresent()) {
+            httpUrl.addQueryParameter("limit", request.getLimit().get().toString());
+        }
+        if (request.getCursor().isPresent()) {
+            httpUrl.addQueryParameter("cursor", request.getCursor().get());
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
+                .addHeader("Content-Type", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
         try {
-            Response response =
-                    clientOptions.httpClient().newCall(okhttpRequest).execute();
+            OkHttpClient client = clientOptions.httpClient();
+            if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+                client = clientOptions.httpClientWithTimeout(requestOptions);
+            }
+            Response response = client.newCall(okhttpRequest).execute();
             if (response.isSuccessful()) {
                 return ObjectMappers.JSON_MAPPER.readValue(response.body().string(), TenantListResponse.class);
             }
@@ -138,8 +159,11 @@ public class TenantsClient {
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .build();
         try {
-            Response response =
-                    clientOptions.httpClient().newCall(okhttpRequest).execute();
+            OkHttpClient client = clientOptions.httpClient();
+            if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+                client = clientOptions.httpClientWithTimeout(requestOptions);
+            }
+            Response response = client.newCall(okhttpRequest).execute();
             if (response.isSuccessful()) {
                 return;
             }
@@ -152,25 +176,38 @@ public class TenantsClient {
     }
 
     public ListUsersForTenantResponse getUsersByTenant(String tenantId) {
-        return getUsersByTenant(tenantId, null);
+        return getUsersByTenant(tenantId, ListUsersForTenantParams.builder().build());
     }
 
-    public ListUsersForTenantResponse getUsersByTenant(String tenantId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+    public ListUsersForTenantResponse getUsersByTenant(String tenantId, ListUsersForTenantParams request) {
+        return getUsersByTenant(tenantId, request, null);
+    }
+
+    public ListUsersForTenantResponse getUsersByTenant(
+            String tenantId, ListUsersForTenantParams request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("tenants")
                 .addPathSegment(tenantId)
-                .addPathSegments("users")
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .addPathSegments("users");
+        if (request.getLimit().isPresent()) {
+            httpUrl.addQueryParameter("limit", request.getLimit().get().toString());
+        }
+        if (request.getCursor().isPresent()) {
+            httpUrl.addQueryParameter("cursor", request.getCursor().get());
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
+                .addHeader("Content-Type", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
         try {
-            Response response =
-                    clientOptions.httpClient().newCall(okhttpRequest).execute();
+            OkHttpClient client = clientOptions.httpClient();
+            if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+                client = clientOptions.httpClientWithTimeout(requestOptions);
+            }
+            Response response = client.newCall(okhttpRequest).execute();
             if (response.isSuccessful()) {
                 return ObjectMappers.JSON_MAPPER.readValue(response.body().string(), ListUsersForTenantResponse.class);
             }

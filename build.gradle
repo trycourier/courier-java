@@ -2,6 +2,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'com.diffplug.spotless' version '6.11.0'
+    id 'signing'
 }
 
 repositories {
@@ -35,6 +36,9 @@ java {
     withJavadocJar()
 }
 
+signing {
+    sign(publishing.publications)
+}
 test {
     useJUnitPlatform()
     testLogging {
@@ -46,7 +50,7 @@ publishing {
         maven(MavenPublication) {
             groupId = 'com.courier'
             artifactId = 'courier-java'
-            version = '3.0.0-beta0'
+            version = '3.0.0-beta1'
             from components.java
         }
     }

@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -21,7 +22,7 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonDeserialize(builder = ListUsersForTenantResponse.Builder.class)
 public final class ListUsersForTenantResponse {
-    private final Optional<UserTenantAssociation> items;
+    private final Optional<List<UserTenantAssociation>> items;
 
     private final boolean hasMore;
 
@@ -34,7 +35,7 @@ public final class ListUsersForTenantResponse {
     private final Map<String, Object> additionalProperties;
 
     private ListUsersForTenantResponse(
-            Optional<UserTenantAssociation> items,
+            Optional<List<UserTenantAssociation>> items,
             boolean hasMore,
             String url,
             Optional<String> nextUrl,
@@ -49,7 +50,7 @@ public final class ListUsersForTenantResponse {
     }
 
     @JsonProperty("items")
-    public Optional<UserTenantAssociation> getItems() {
+    public Optional<List<UserTenantAssociation>> getItems() {
         return items;
     }
 
@@ -141,9 +142,9 @@ public final class ListUsersForTenantResponse {
     public interface _FinalStage {
         ListUsersForTenantResponse build();
 
-        _FinalStage items(Optional<UserTenantAssociation> items);
+        _FinalStage items(Optional<List<UserTenantAssociation>> items);
 
-        _FinalStage items(UserTenantAssociation items);
+        _FinalStage items(List<UserTenantAssociation> items);
 
         _FinalStage nextUrl(Optional<String> nextUrl);
 
@@ -164,7 +165,7 @@ public final class ListUsersForTenantResponse {
 
         private Optional<String> nextUrl = Optional.empty();
 
-        private Optional<UserTenantAssociation> items = Optional.empty();
+        private Optional<List<UserTenantAssociation>> items = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -240,14 +241,14 @@ public final class ListUsersForTenantResponse {
         }
 
         @java.lang.Override
-        public _FinalStage items(UserTenantAssociation items) {
+        public _FinalStage items(List<UserTenantAssociation> items) {
             this.items = Optional.of(items);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "items", nulls = Nulls.SKIP)
-        public _FinalStage items(Optional<UserTenantAssociation> items) {
+        public _FinalStage items(Optional<List<UserTenantAssociation>> items) {
             this.items = items;
             return this;
         }

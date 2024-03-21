@@ -18,6 +18,8 @@ public enum MessageStatus {
 
     SENT("SENT"),
 
+    THROTTLED("THROTTLED"),
+
     UNDELIVERABLE("UNDELIVERABLE"),
 
     UNMAPPED("UNMAPPED"),

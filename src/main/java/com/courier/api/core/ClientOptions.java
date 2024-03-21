@@ -5,6 +5,7 @@ package com.courier.api.core;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import okhttp3.OkHttpClient;
 
@@ -29,7 +30,7 @@ public final class ClientOptions {
                 "X-Fern-SDK-Name",
                 "com.courier.fern:api-sdk",
                 "X-Fern-SDK-Version",
-                "3.0.0-beta0",
+                "3.0.0-beta1",
                 "X-Fern-Language",
                 "JAVA"));
         this.headerSuppliers = headerSuppliers;
@@ -63,8 +64,34 @@ public final class ClientOptions {
         return values;
     }
 
+    public OkHttpClient httpClientWithTimeout(IdempotentRequestOptions requestOptions) {
+        if (requestOptions == null) {
+            return this.httpClient;
+        }
+        return this.httpClient
+                .newBuilder()
+                .callTimeout(requestOptions.getTimeout().get(), requestOptions.getTimeoutTimeUnit())
+                .connectTimeout(0, TimeUnit.SECONDS)
+                .writeTimeout(0, TimeUnit.SECONDS)
+                .readTimeout(0, TimeUnit.SECONDS)
+                .build();
+    }
+
     public OkHttpClient httpClient() {
         return this.httpClient;
+    }
+
+    public OkHttpClient httpClientWithTimeout(RequestOptions requestOptions) {
+        if (requestOptions == null) {
+            return this.httpClient;
+        }
+        return this.httpClient
+                .newBuilder()
+                .callTimeout(requestOptions.getTimeout().get(), requestOptions.getTimeoutTimeUnit())
+                .connectTimeout(0, TimeUnit.SECONDS)
+                .writeTimeout(0, TimeUnit.SECONDS)
+                .readTimeout(0, TimeUnit.SECONDS)
+                .build();
     }
 
     public static Builder builder() {
