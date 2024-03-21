@@ -1,4 +1,4 @@
-# Write the key ring file
+# Write key ring file
 echo $MAVEN_SIGNATURE_SECRET_KEY > armored_key.asc
 gpg -o publish_key.gpg --dearmor armored_key.asc
 
