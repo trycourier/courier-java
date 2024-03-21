@@ -50,8 +50,24 @@ publishing {
         maven(MavenPublication) {
             groupId = 'com.courier'
             artifactId = 'courier-java'
-            version = '3.0.1'
+            version = '0.0.98'
             from components.java
+            pom {
+                name = 'courier'
+                description = 'The official SDK of courier'
+                url = 'https://buildwithfern.com'
+                developers {
+                    developer {
+                        name = 'courier'
+                        email = 'developers@courier.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git://github.com/trycourier/courier-java.git'
+                    developerConnection = 'scm:git:git://github.com/trycourier/courier-java.git'
+                    url = 'https://github.com/trycourier/courier-java'
+                }
+            }
         }
     }
     repositories {
