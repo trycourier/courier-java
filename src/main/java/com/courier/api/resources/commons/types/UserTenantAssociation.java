@@ -13,24 +13,31 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonDeserialize(builder = UserTenantAssociation.Builder.class)
 public final class UserTenantAssociation {
-    private final String userId;
+    private final Optional<String> userId;
+
+    private final Optional<String> type;
 
     private final String tenantId;
 
-    private final Map<String, Object> profile;
+    private final Optional<Map<String, Object>> profile;
 
     private final Map<String, Object> additionalProperties;
 
     private UserTenantAssociation(
-            String userId, String tenantId, Map<String, Object> profile, Map<String, Object> additionalProperties) {
+            Optional<String> userId,
+            Optional<String> type,
+            String tenantId,
+            Optional<Map<String, Object>> profile,
+            Map<String, Object> additionalProperties) {
         this.userId = userId;
+        this.type = type;
         this.tenantId = tenantId;
         this.profile = profile;
         this.additionalProperties = additionalProperties;
@@ -40,13 +47,13 @@ public final class UserTenantAssociation {
      * @return User ID for the assocation between tenant and user
      */
     @JsonProperty("user_id")
-    public String getUserId() {
+    public Optional<String> getUserId() {
         return userId;
     }
 
     @JsonProperty("type")
-    public String getType() {
-        return "user";
+    public Optional<String> getType() {
+        return type;
     }
 
     /**
@@ -57,8 +64,11 @@ public final class UserTenantAssociation {
         return tenantId;
     }
 
+    /**
+     * @return Additional metadata to be applied to a user profile when used in a tenant context
+     */
     @JsonProperty("profile")
-    public Map<String, Object> getProfile() {
+    public Optional<Map<String, Object>> getProfile() {
         return profile;
     }
 
@@ -74,12 +84,15 @@ public final class UserTenantAssociation {
     }
 
     private boolean equalTo(UserTenantAssociation other) {
-        return userId.equals(other.userId) && tenantId.equals(other.tenantId) && profile.equals(other.profile);
+        return userId.equals(other.userId)
+                && type.equals(other.type)
+                && tenantId.equals(other.tenantId)
+                && profile.equals(other.profile);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.userId, this.tenantId, this.profile);
+        return Objects.hash(this.userId, this.type, this.tenantId, this.profile);
     }
 
     @java.lang.Override
@@ -87,37 +100,41 @@ public final class UserTenantAssociation {
         return ObjectMappers.stringify(this);
     }
 
-    public static UserIdStage builder() {
+    public static TenantIdStage builder() {
         return new Builder();
-    }
-
-    public interface UserIdStage {
-        TenantIdStage userId(String userId);
-
-        Builder from(UserTenantAssociation other);
     }
 
     public interface TenantIdStage {
         _FinalStage tenantId(String tenantId);
+
+        Builder from(UserTenantAssociation other);
     }
 
     public interface _FinalStage {
         UserTenantAssociation build();
 
+        _FinalStage userId(Optional<String> userId);
+
+        _FinalStage userId(String userId);
+
+        _FinalStage type(Optional<String> type);
+
+        _FinalStage type(String type);
+
+        _FinalStage profile(Optional<Map<String, Object>> profile);
+
         _FinalStage profile(Map<String, Object> profile);
-
-        _FinalStage putAllProfile(Map<String, Object> profile);
-
-        _FinalStage profile(String key, Object value);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements UserIdStage, TenantIdStage, _FinalStage {
-        private String userId;
-
+    public static final class Builder implements TenantIdStage, _FinalStage {
         private String tenantId;
 
-        private Map<String, Object> profile = new LinkedHashMap<>();
+        private Optional<Map<String, Object>> profile = Optional.empty();
+
+        private Optional<String> type = Optional.empty();
+
+        private Optional<String> userId = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -127,19 +144,9 @@ public final class UserTenantAssociation {
         @java.lang.Override
         public Builder from(UserTenantAssociation other) {
             userId(other.getUserId());
+            type(other.getType());
             tenantId(other.getTenantId());
             profile(other.getProfile());
-            return this;
-        }
-
-        /**
-         * <p>User ID for the assocation between tenant and user</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("user_id")
-        public TenantIdStage userId(String userId) {
-            this.userId = userId;
             return this;
         }
 
@@ -154,29 +161,56 @@ public final class UserTenantAssociation {
             return this;
         }
 
+        /**
+         * <p>Additional metadata to be applied to a user profile when used in a tenant context</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
-        public _FinalStage profile(String key, Object value) {
-            this.profile.put(key, value);
-            return this;
-        }
-
-        @java.lang.Override
-        public _FinalStage putAllProfile(Map<String, Object> profile) {
-            this.profile.putAll(profile);
+        public _FinalStage profile(Map<String, Object> profile) {
+            this.profile = Optional.of(profile);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "profile", nulls = Nulls.SKIP)
-        public _FinalStage profile(Map<String, Object> profile) {
-            this.profile.clear();
-            this.profile.putAll(profile);
+        public _FinalStage profile(Optional<Map<String, Object>> profile) {
+            this.profile = profile;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage type(String type) {
+            this.type = Optional.of(type);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "type", nulls = Nulls.SKIP)
+        public _FinalStage type(Optional<String> type) {
+            this.type = type;
+            return this;
+        }
+
+        /**
+         * <p>User ID for the assocation between tenant and user</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage userId(String userId) {
+            this.userId = Optional.of(userId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "user_id", nulls = Nulls.SKIP)
+        public _FinalStage userId(Optional<String> userId) {
+            this.userId = userId;
             return this;
         }
 
         @java.lang.Override
         public UserTenantAssociation build() {
-            return new UserTenantAssociation(userId, tenantId, profile, additionalProperties);
+            return new UserTenantAssociation(userId, type, tenantId, profile, additionalProperties);
         }
     }
 }

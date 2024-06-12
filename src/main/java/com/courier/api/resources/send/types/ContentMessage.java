@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonDeserialize(builder = ContentMessage.Builder.class)
-public final class ContentMessage implements IBaseMessage {
+public final class ContentMessage implements IBaseMessage, IBaseMessageSendTo {
     private final Optional<Map<String, Object>> data;
 
     private final Optional<String> brandId;
@@ -40,9 +40,9 @@ public final class ContentMessage implements IBaseMessage {
 
     private final Optional<Expiry> expiry;
 
-    private final Content content;
+    private final Optional<MessageRecipient> to;
 
-    private final MessageRecipient to;
+    private final Content content;
 
     private final Map<String, Object> additionalProperties;
 
@@ -57,8 +57,8 @@ public final class ContentMessage implements IBaseMessage {
             Optional<Timeout> timeout,
             Optional<Delay> delay,
             Optional<Expiry> expiry,
+            Optional<MessageRecipient> to,
             Content content,
-            MessageRecipient to,
             Map<String, Object> additionalProperties) {
         this.data = data;
         this.brandId = brandId;
@@ -70,8 +70,8 @@ public final class ContentMessage implements IBaseMessage {
         this.timeout = timeout;
         this.delay = delay;
         this.expiry = expiry;
-        this.content = content;
         this.to = to;
+        this.content = content;
         this.additionalProperties = additionalProperties;
     }
 
@@ -162,20 +162,21 @@ public final class ContentMessage implements IBaseMessage {
     }
 
     /**
+     * @return The recipient or a list of recipients of the message
+     */
+    @JsonProperty("to")
+    @java.lang.Override
+    public Optional<MessageRecipient> getTo() {
+        return to;
+    }
+
+    /**
      * @return Describes the content of the message in a way that will work for email, push,
      * chat, or any channel. Either this or template must be specified.
      */
     @JsonProperty("content")
     public Content getContent() {
         return content;
-    }
-
-    /**
-     * @return The recipient or a list of recipients of the message
-     */
-    @JsonProperty("to")
-    public MessageRecipient getTo() {
-        return to;
     }
 
     @java.lang.Override
@@ -200,8 +201,8 @@ public final class ContentMessage implements IBaseMessage {
                 && timeout.equals(other.timeout)
                 && delay.equals(other.delay)
                 && expiry.equals(other.expiry)
-                && content.equals(other.content)
-                && to.equals(other.to);
+                && to.equals(other.to)
+                && content.equals(other.content);
     }
 
     @java.lang.Override
@@ -217,8 +218,8 @@ public final class ContentMessage implements IBaseMessage {
                 this.timeout,
                 this.delay,
                 this.expiry,
-                this.content,
-                this.to);
+                this.to,
+                this.content);
     }
 
     @java.lang.Override
@@ -231,13 +232,9 @@ public final class ContentMessage implements IBaseMessage {
     }
 
     public interface ContentStage {
-        ToStage content(Content content);
+        _FinalStage content(Content content);
 
         Builder from(ContentMessage other);
-    }
-
-    public interface ToStage {
-        _FinalStage to(MessageRecipient to);
     }
 
     public interface _FinalStage {
@@ -282,13 +279,17 @@ public final class ContentMessage implements IBaseMessage {
         _FinalStage expiry(Optional<Expiry> expiry);
 
         _FinalStage expiry(Expiry expiry);
+
+        _FinalStage to(Optional<MessageRecipient> to);
+
+        _FinalStage to(MessageRecipient to);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements ContentStage, ToStage, _FinalStage {
+    public static final class Builder implements ContentStage, _FinalStage {
         private Content content;
 
-        private MessageRecipient to;
+        private Optional<MessageRecipient> to = Optional.empty();
 
         private Optional<Expiry> expiry = Optional.empty();
 
@@ -327,8 +328,8 @@ public final class ContentMessage implements IBaseMessage {
             timeout(other.getTimeout());
             delay(other.getDelay());
             expiry(other.getExpiry());
-            content(other.getContent());
             to(other.getTo());
+            content(other.getContent());
             return this;
         }
 
@@ -339,7 +340,7 @@ public final class ContentMessage implements IBaseMessage {
          */
         @java.lang.Override
         @JsonSetter("content")
-        public ToStage content(Content content) {
+        public _FinalStage content(Content content) {
             this.content = content;
             return this;
         }
@@ -349,8 +350,14 @@ public final class ContentMessage implements IBaseMessage {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        @JsonSetter("to")
         public _FinalStage to(MessageRecipient to) {
+            this.to = Optional.of(to);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "to", nulls = Nulls.SKIP)
+        public _FinalStage to(Optional<MessageRecipient> to) {
             this.to = to;
             return this;
         }
@@ -532,8 +539,8 @@ public final class ContentMessage implements IBaseMessage {
                     timeout,
                     delay,
                     expiry,
-                    content,
                     to,
+                    content,
                     additionalProperties);
         }
     }

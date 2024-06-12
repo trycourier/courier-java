@@ -28,7 +28,7 @@ public final class Tenant {
 
     private final Optional<DefaultPreferences> defaultPreferences;
 
-    private final Optional<Object> properties;
+    private final Optional<Map<String, Object>> properties;
 
     private final Optional<Map<String, Object>> userProfile;
 
@@ -41,7 +41,7 @@ public final class Tenant {
             String name,
             Optional<String> parentTenantId,
             Optional<DefaultPreferences> defaultPreferences,
-            Optional<Object> properties,
+            Optional<Map<String, Object>> properties,
             Optional<Map<String, Object>> userProfile,
             Optional<String> brandId,
             Map<String, Object> additionalProperties) {
@@ -91,7 +91,7 @@ public final class Tenant {
      * @return Arbitrary properties accessible to a template.
      */
     @JsonProperty("properties")
-    public Optional<Object> getProperties() {
+    public Optional<Map<String, Object>> getProperties() {
         return properties;
     }
 
@@ -174,9 +174,9 @@ public final class Tenant {
 
         _FinalStage defaultPreferences(DefaultPreferences defaultPreferences);
 
-        _FinalStage properties(Optional<Object> properties);
+        _FinalStage properties(Optional<Map<String, Object>> properties);
 
-        _FinalStage properties(Object properties);
+        _FinalStage properties(Map<String, Object> properties);
 
         _FinalStage userProfile(Optional<Map<String, Object>> userProfile);
 
@@ -197,7 +197,7 @@ public final class Tenant {
 
         private Optional<Map<String, Object>> userProfile = Optional.empty();
 
-        private Optional<Object> properties = Optional.empty();
+        private Optional<Map<String, Object>> properties = Optional.empty();
 
         private Optional<DefaultPreferences> defaultPreferences = Optional.empty();
 
@@ -281,14 +281,14 @@ public final class Tenant {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage properties(Object properties) {
+        public _FinalStage properties(Map<String, Object> properties) {
             this.properties = Optional.of(properties);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "properties", nulls = Nulls.SKIP)
-        public _FinalStage properties(Optional<Object> properties) {
+        public _FinalStage properties(Optional<Map<String, Object>> properties) {
             this.properties = properties;
             return this;
         }

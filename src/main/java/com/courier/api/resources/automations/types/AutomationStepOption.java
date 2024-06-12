@@ -31,18 +31,26 @@ public final class AutomationStepOption {
 
     public <T> T visit(Visitor<T> visitor) {
         if (this.type == 0) {
-            return visitor.visit((AutomationCancelStep) this.value);
+            return visitor.visit((AutomationAddToDigestStep) this.value);
         } else if (this.type == 1) {
-            return visitor.visit((AutomationDelayStep) this.value);
+            return visitor.visit((AutomationAddToBatchStep) this.value);
         } else if (this.type == 2) {
-            return visitor.visit((AutomationInvokeStep) this.value);
+            return visitor.visit((AutomationThrottleStep) this.value);
         } else if (this.type == 3) {
-            return visitor.visit((AutomationSendStep) this.value);
+            return visitor.visit((AutomationCancelStep) this.value);
         } else if (this.type == 4) {
-            return visitor.visit((AutomationV2SendStep) this.value);
+            return visitor.visit((AutomationDelayStep) this.value);
         } else if (this.type == 5) {
-            return visitor.visit((AutomationSendListStep) this.value);
+            return visitor.visit((AutomationFetchDataStep) this.value);
         } else if (this.type == 6) {
+            return visitor.visit((AutomationInvokeStep) this.value);
+        } else if (this.type == 7) {
+            return visitor.visit((AutomationSendStep) this.value);
+        } else if (this.type == 8) {
+            return visitor.visit((AutomationV2SendStep) this.value);
+        } else if (this.type == 9) {
+            return visitor.visit((AutomationSendListStep) this.value);
+        } else if (this.type == 10) {
             return visitor.visit((AutomationUpdateProfileStep) this.value);
         }
         throw new IllegalStateException("Failed to visit value. This should never happen.");
@@ -68,38 +76,62 @@ public final class AutomationStepOption {
         return this.value.toString();
     }
 
-    public static AutomationStepOption of(AutomationCancelStep value) {
+    public static AutomationStepOption of(AutomationAddToDigestStep value) {
         return new AutomationStepOption(value, 0);
     }
 
-    public static AutomationStepOption of(AutomationDelayStep value) {
+    public static AutomationStepOption of(AutomationAddToBatchStep value) {
         return new AutomationStepOption(value, 1);
     }
 
-    public static AutomationStepOption of(AutomationInvokeStep value) {
+    public static AutomationStepOption of(AutomationThrottleStep value) {
         return new AutomationStepOption(value, 2);
     }
 
-    public static AutomationStepOption of(AutomationSendStep value) {
+    public static AutomationStepOption of(AutomationCancelStep value) {
         return new AutomationStepOption(value, 3);
     }
 
-    public static AutomationStepOption of(AutomationV2SendStep value) {
+    public static AutomationStepOption of(AutomationDelayStep value) {
         return new AutomationStepOption(value, 4);
     }
 
-    public static AutomationStepOption of(AutomationSendListStep value) {
+    public static AutomationStepOption of(AutomationFetchDataStep value) {
         return new AutomationStepOption(value, 5);
     }
 
-    public static AutomationStepOption of(AutomationUpdateProfileStep value) {
+    public static AutomationStepOption of(AutomationInvokeStep value) {
         return new AutomationStepOption(value, 6);
     }
 
+    public static AutomationStepOption of(AutomationSendStep value) {
+        return new AutomationStepOption(value, 7);
+    }
+
+    public static AutomationStepOption of(AutomationV2SendStep value) {
+        return new AutomationStepOption(value, 8);
+    }
+
+    public static AutomationStepOption of(AutomationSendListStep value) {
+        return new AutomationStepOption(value, 9);
+    }
+
+    public static AutomationStepOption of(AutomationUpdateProfileStep value) {
+        return new AutomationStepOption(value, 10);
+    }
+
     public interface Visitor<T> {
+        T visit(AutomationAddToDigestStep value);
+
+        T visit(AutomationAddToBatchStep value);
+
+        T visit(AutomationThrottleStep value);
+
         T visit(AutomationCancelStep value);
 
         T visit(AutomationDelayStep value);
+
+        T visit(AutomationFetchDataStep value);
 
         T visit(AutomationInvokeStep value);
 
@@ -121,11 +153,27 @@ public final class AutomationStepOption {
         public AutomationStepOption deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
             Object value = p.readValueAs(Object.class);
             try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, AutomationAddToDigestStep.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, AutomationAddToBatchStep.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, AutomationThrottleStep.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
                 return of(ObjectMappers.JSON_MAPPER.convertValue(value, AutomationCancelStep.class));
             } catch (IllegalArgumentException e) {
             }
             try {
                 return of(ObjectMappers.JSON_MAPPER.convertValue(value, AutomationDelayStep.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, AutomationFetchDataStep.class));
             } catch (IllegalArgumentException e) {
             }
             try {

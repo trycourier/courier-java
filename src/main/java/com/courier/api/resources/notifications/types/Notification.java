@@ -10,32 +10,59 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonDeserialize(builder = Notification.Builder.class)
 public final class Notification {
     private final long createdAt;
 
+    private final long updatedAt;
+
     private final String id;
 
     private final MessageRouting routing;
 
+    private final Optional<NotificationTag> tags;
+
+    private final Optional<String> title;
+
+    private final String topicId;
+
     private final Map<String, Object> additionalProperties;
 
-    private Notification(long createdAt, String id, MessageRouting routing, Map<String, Object> additionalProperties) {
+    private Notification(
+            long createdAt,
+            long updatedAt,
+            String id,
+            MessageRouting routing,
+            Optional<NotificationTag> tags,
+            Optional<String> title,
+            String topicId,
+            Map<String, Object> additionalProperties) {
         this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
         this.id = id;
         this.routing = routing;
+        this.tags = tags;
+        this.title = title;
+        this.topicId = topicId;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("created_at")
     public long getCreatedAt() {
         return createdAt;
+    }
+
+    @JsonProperty("updated_at")
+    public long getUpdatedAt() {
+        return updatedAt;
     }
 
     @JsonProperty("id")
@@ -46,6 +73,21 @@ public final class Notification {
     @JsonProperty("routing")
     public MessageRouting getRouting() {
         return routing;
+    }
+
+    @JsonProperty("tags")
+    public Optional<NotificationTag> getTags() {
+        return tags;
+    }
+
+    @JsonProperty("title")
+    public Optional<String> getTitle() {
+        return title;
+    }
+
+    @JsonProperty("topic_id")
+    public String getTopicId() {
+        return topicId;
     }
 
     @java.lang.Override
@@ -60,12 +102,18 @@ public final class Notification {
     }
 
     private boolean equalTo(Notification other) {
-        return createdAt == other.createdAt && id.equals(other.id) && routing.equals(other.routing);
+        return createdAt == other.createdAt
+                && updatedAt == other.updatedAt
+                && id.equals(other.id)
+                && routing.equals(other.routing)
+                && tags.equals(other.tags)
+                && title.equals(other.title)
+                && topicId.equals(other.topicId);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.createdAt, this.id, this.routing);
+        return Objects.hash(this.createdAt, this.updatedAt, this.id, this.routing, this.tags, this.title, this.topicId);
     }
 
     @java.lang.Override
@@ -78,9 +126,13 @@ public final class Notification {
     }
 
     public interface CreatedAtStage {
-        IdStage createdAt(long createdAt);
+        UpdatedAtStage createdAt(long createdAt);
 
         Builder from(Notification other);
+    }
+
+    public interface UpdatedAtStage {
+        IdStage updatedAt(long updatedAt);
     }
 
     public interface IdStage {
@@ -88,20 +140,41 @@ public final class Notification {
     }
 
     public interface RoutingStage {
-        _FinalStage routing(MessageRouting routing);
+        TopicIdStage routing(MessageRouting routing);
+    }
+
+    public interface TopicIdStage {
+        _FinalStage topicId(String topicId);
     }
 
     public interface _FinalStage {
         Notification build();
+
+        _FinalStage tags(Optional<NotificationTag> tags);
+
+        _FinalStage tags(NotificationTag tags);
+
+        _FinalStage title(Optional<String> title);
+
+        _FinalStage title(String title);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements CreatedAtStage, IdStage, RoutingStage, _FinalStage {
+    public static final class Builder
+            implements CreatedAtStage, UpdatedAtStage, IdStage, RoutingStage, TopicIdStage, _FinalStage {
         private long createdAt;
+
+        private long updatedAt;
 
         private String id;
 
         private MessageRouting routing;
+
+        private String topicId;
+
+        private Optional<String> title = Optional.empty();
+
+        private Optional<NotificationTag> tags = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -111,15 +184,26 @@ public final class Notification {
         @java.lang.Override
         public Builder from(Notification other) {
             createdAt(other.getCreatedAt());
+            updatedAt(other.getUpdatedAt());
             id(other.getId());
             routing(other.getRouting());
+            tags(other.getTags());
+            title(other.getTitle());
+            topicId(other.getTopicId());
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("created_at")
-        public IdStage createdAt(long createdAt) {
+        public UpdatedAtStage createdAt(long createdAt) {
             this.createdAt = createdAt;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("updated_at")
+        public IdStage updatedAt(long updatedAt) {
+            this.updatedAt = updatedAt;
             return this;
         }
 
@@ -132,14 +216,47 @@ public final class Notification {
 
         @java.lang.Override
         @JsonSetter("routing")
-        public _FinalStage routing(MessageRouting routing) {
+        public TopicIdStage routing(MessageRouting routing) {
             this.routing = routing;
             return this;
         }
 
         @java.lang.Override
+        @JsonSetter("topic_id")
+        public _FinalStage topicId(String topicId) {
+            this.topicId = topicId;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage title(String title) {
+            this.title = Optional.of(title);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "title", nulls = Nulls.SKIP)
+        public _FinalStage title(Optional<String> title) {
+            this.title = title;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage tags(NotificationTag tags) {
+            this.tags = Optional.of(tags);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "tags", nulls = Nulls.SKIP)
+        public _FinalStage tags(Optional<NotificationTag> tags) {
+            this.tags = tags;
+            return this;
+        }
+
+        @java.lang.Override
         public Notification build() {
-            return new Notification(createdAt, id, routing, additionalProperties);
+            return new Notification(createdAt, updatedAt, id, routing, tags, title, topicId, additionalProperties);
         }
     }
 }

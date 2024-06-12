@@ -68,14 +68,23 @@ public class MessagesClient {
         if (request.getNotification().isPresent()) {
             httpUrl.addQueryParameter("notification", request.getNotification().get());
         }
+        if (request.getProvider().isPresent()) {
+            httpUrl.addQueryParameter("provider", request.getProvider().get());
+        }
         if (request.getRecipient().isPresent()) {
             httpUrl.addQueryParameter("recipient", request.getRecipient().get());
         }
         if (request.getStatus().isPresent()) {
             httpUrl.addQueryParameter("status", request.getStatus().get());
         }
+        if (request.getTag().isPresent()) {
+            httpUrl.addQueryParameter("tag", request.getTag().get());
+        }
         if (request.getTags().isPresent()) {
             httpUrl.addQueryParameter("tags", request.getTags().get());
+        }
+        if (request.getTenantId().isPresent()) {
+            httpUrl.addQueryParameter("tenant_id", request.getTenantId().get());
         }
         if (request.getEnqueuedAfter().isPresent()) {
             httpUrl.addQueryParameter(

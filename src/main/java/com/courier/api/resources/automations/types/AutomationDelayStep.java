@@ -24,6 +24,8 @@ public final class AutomationDelayStep implements IAutomationStep {
 
     private final Optional<String> ref;
 
+    private final Optional<String> duration;
+
     private final Optional<String> until;
 
     private final Map<String, Object> additionalProperties;
@@ -31,10 +33,12 @@ public final class AutomationDelayStep implements IAutomationStep {
     private AutomationDelayStep(
             Optional<String> if_,
             Optional<String> ref,
+            Optional<String> duration,
             Optional<String> until,
             Map<String, Object> additionalProperties) {
         this.if_ = if_;
         this.ref = ref;
+        this.duration = duration;
         this.until = until;
         this.additionalProperties = additionalProperties;
     }
@@ -56,6 +60,17 @@ public final class AutomationDelayStep implements IAutomationStep {
         return "delay";
     }
 
+    /**
+     * @return The <a href="https://en.wikipedia.org/wiki/ISO_8601#Durations">ISO 8601 duration</a> string for how long to delay for
+     */
+    @JsonProperty("duration")
+    public Optional<String> getDuration() {
+        return duration;
+    }
+
+    /**
+     * @return The ISO 8601 timestamp for when the delay should end
+     */
     @JsonProperty("until")
     public Optional<String> getUntil() {
         return until;
@@ -73,12 +88,15 @@ public final class AutomationDelayStep implements IAutomationStep {
     }
 
     private boolean equalTo(AutomationDelayStep other) {
-        return if_.equals(other.if_) && ref.equals(other.ref) && until.equals(other.until);
+        return if_.equals(other.if_)
+                && ref.equals(other.ref)
+                && duration.equals(other.duration)
+                && until.equals(other.until);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.if_, this.ref, this.until);
+        return Objects.hash(this.if_, this.ref, this.duration, this.until);
     }
 
     @java.lang.Override
@@ -96,6 +114,8 @@ public final class AutomationDelayStep implements IAutomationStep {
 
         private Optional<String> ref = Optional.empty();
 
+        private Optional<String> duration = Optional.empty();
+
         private Optional<String> until = Optional.empty();
 
         @JsonAnySetter
@@ -106,6 +126,7 @@ public final class AutomationDelayStep implements IAutomationStep {
         public Builder from(AutomationDelayStep other) {
             if_(other.getIf());
             ref(other.getRef());
+            duration(other.getDuration());
             until(other.getUntil());
             return this;
         }
@@ -132,6 +153,17 @@ public final class AutomationDelayStep implements IAutomationStep {
             return this;
         }
 
+        @JsonSetter(value = "duration", nulls = Nulls.SKIP)
+        public Builder duration(Optional<String> duration) {
+            this.duration = duration;
+            return this;
+        }
+
+        public Builder duration(String duration) {
+            this.duration = Optional.of(duration);
+            return this;
+        }
+
         @JsonSetter(value = "until", nulls = Nulls.SKIP)
         public Builder until(Optional<String> until) {
             this.until = until;
@@ -144,7 +176,7 @@ public final class AutomationDelayStep implements IAutomationStep {
         }
 
         public AutomationDelayStep build() {
-            return new AutomationDelayStep(if_, ref, until, additionalProperties);
+            return new AutomationDelayStep(if_, ref, duration, until, additionalProperties);
         }
     }
 }

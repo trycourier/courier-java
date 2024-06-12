@@ -5,22 +5,16 @@ package com.courier.api.resources.automations.types;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum AutomationStepAction {
-    CANCEL("cancel"),
+public enum AutomationAddToBatchScope {
+    USER("user"),
 
-    DELAY("delay"),
+    GLOBAL("global"),
 
-    INVOKE("invoke"),
-
-    SEND("send"),
-
-    SEND_LIST("send-list"),
-
-    UPDATE_PROFILE("update-profile");
+    DYNAMIC("dynamic");
 
     private final String value;
 
-    AutomationStepAction(String value) {
+    AutomationAddToBatchScope(String value) {
         this.value = value;
     }
 

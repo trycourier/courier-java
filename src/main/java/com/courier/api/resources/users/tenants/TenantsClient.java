@@ -88,6 +88,16 @@ public class TenantsClient {
      * This profile will be merged with the user's main profile
      * when sending to the user with that tenant.</p>
      */
+    public void add(String userId, String tenantId) {
+        add(userId, tenantId, AddUserToSingleTenantsParams.builder().build());
+    }
+
+    /**
+     * This endpoint is used to add a single tenant.
+     * <p>A custom profile can also be supplied with the tenant.
+     * This profile will be merged with the user's main profile
+     * when sending to the user with that tenant.</p>
+     */
     public void add(String userId, String tenantId, AddUserToSingleTenantsParams request) {
         add(userId, tenantId, request, null);
     }

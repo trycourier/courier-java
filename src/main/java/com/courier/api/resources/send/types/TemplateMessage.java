@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonDeserialize(builder = TemplateMessage.Builder.class)
-public final class TemplateMessage implements IBaseMessage {
+public final class TemplateMessage implements IBaseMessage, IBaseMessageSendTo {
     private final Optional<Map<String, Object>> data;
 
     private final Optional<String> brandId;
@@ -40,9 +40,9 @@ public final class TemplateMessage implements IBaseMessage {
 
     private final Optional<Expiry> expiry;
 
-    private final String template;
+    private final Optional<MessageRecipient> to;
 
-    private final MessageRecipient to;
+    private final String template;
 
     private final Map<String, Object> additionalProperties;
 
@@ -57,8 +57,8 @@ public final class TemplateMessage implements IBaseMessage {
             Optional<Timeout> timeout,
             Optional<Delay> delay,
             Optional<Expiry> expiry,
+            Optional<MessageRecipient> to,
             String template,
-            MessageRecipient to,
             Map<String, Object> additionalProperties) {
         this.data = data;
         this.brandId = brandId;
@@ -70,8 +70,8 @@ public final class TemplateMessage implements IBaseMessage {
         this.timeout = timeout;
         this.delay = delay;
         this.expiry = expiry;
-        this.template = template;
         this.to = to;
+        this.template = template;
         this.additionalProperties = additionalProperties;
     }
 
@@ -162,20 +162,21 @@ public final class TemplateMessage implements IBaseMessage {
     }
 
     /**
+     * @return The recipient or a list of recipients of the message
+     */
+    @JsonProperty("to")
+    @java.lang.Override
+    public Optional<MessageRecipient> getTo() {
+        return to;
+    }
+
+    /**
      * @return The id of the notification template to be rendered and sent to the recipient(s).
      * This field or the content field must be supplied.
      */
     @JsonProperty("template")
     public String getTemplate() {
         return template;
-    }
-
-    /**
-     * @return The recipient or a list of recipients of the message
-     */
-    @JsonProperty("to")
-    public MessageRecipient getTo() {
-        return to;
     }
 
     @java.lang.Override
@@ -200,8 +201,8 @@ public final class TemplateMessage implements IBaseMessage {
                 && timeout.equals(other.timeout)
                 && delay.equals(other.delay)
                 && expiry.equals(other.expiry)
-                && template.equals(other.template)
-                && to.equals(other.to);
+                && to.equals(other.to)
+                && template.equals(other.template);
     }
 
     @java.lang.Override
@@ -217,8 +218,8 @@ public final class TemplateMessage implements IBaseMessage {
                 this.timeout,
                 this.delay,
                 this.expiry,
-                this.template,
-                this.to);
+                this.to,
+                this.template);
     }
 
     @java.lang.Override
@@ -231,13 +232,9 @@ public final class TemplateMessage implements IBaseMessage {
     }
 
     public interface TemplateStage {
-        ToStage template(String template);
+        _FinalStage template(String template);
 
         Builder from(TemplateMessage other);
-    }
-
-    public interface ToStage {
-        _FinalStage to(MessageRecipient to);
     }
 
     public interface _FinalStage {
@@ -282,13 +279,17 @@ public final class TemplateMessage implements IBaseMessage {
         _FinalStage expiry(Optional<Expiry> expiry);
 
         _FinalStage expiry(Expiry expiry);
+
+        _FinalStage to(Optional<MessageRecipient> to);
+
+        _FinalStage to(MessageRecipient to);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements TemplateStage, ToStage, _FinalStage {
+    public static final class Builder implements TemplateStage, _FinalStage {
         private String template;
 
-        private MessageRecipient to;
+        private Optional<MessageRecipient> to = Optional.empty();
 
         private Optional<Expiry> expiry = Optional.empty();
 
@@ -327,8 +328,8 @@ public final class TemplateMessage implements IBaseMessage {
             timeout(other.getTimeout());
             delay(other.getDelay());
             expiry(other.getExpiry());
-            template(other.getTemplate());
             to(other.getTo());
+            template(other.getTemplate());
             return this;
         }
 
@@ -339,7 +340,7 @@ public final class TemplateMessage implements IBaseMessage {
          */
         @java.lang.Override
         @JsonSetter("template")
-        public ToStage template(String template) {
+        public _FinalStage template(String template) {
             this.template = template;
             return this;
         }
@@ -349,8 +350,14 @@ public final class TemplateMessage implements IBaseMessage {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        @JsonSetter("to")
         public _FinalStage to(MessageRecipient to) {
+            this.to = Optional.of(to);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "to", nulls = Nulls.SKIP)
+        public _FinalStage to(Optional<MessageRecipient> to) {
             this.to = to;
             return this;
         }
@@ -532,8 +539,8 @@ public final class TemplateMessage implements IBaseMessage {
                     timeout,
                     delay,
                     expiry,
-                    template,
                     to,
+                    template,
                     additionalProperties);
         }
     }
