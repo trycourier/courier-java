@@ -9,14 +9,15 @@ import com.courier.api.core.IdempotentRequestOptions;
 import com.courier.api.core.MediaTypes;
 import com.courier.api.core.ObjectMappers;
 import com.courier.api.core.RequestOptions;
+import com.courier.api.resources.lists.requests.AddSubscribersToList;
 import com.courier.api.resources.lists.requests.GetAllListsRequest;
 import com.courier.api.resources.lists.requests.GetSubscriptionForListRequest;
 import com.courier.api.resources.lists.requests.SubscribeUserToListRequest;
+import com.courier.api.resources.lists.requests.SubscribeUsersToListRequest;
 import com.courier.api.resources.lists.types.List;
 import com.courier.api.resources.lists.types.ListGetAllResponse;
 import com.courier.api.resources.lists.types.ListGetSubscriptionsResponse;
 import com.courier.api.resources.lists.types.ListPutParams;
-import com.courier.api.resources.lists.types.PutSubscriptionsRecipient;
 import java.io.IOException;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
@@ -298,15 +299,14 @@ public class ListsClient {
     /**
      * Subscribes the users to the list, overwriting existing subscriptions. If the list does not exist, it will be automatically created.
      */
-    public void updateSubscribers(String listId, java.util.List<PutSubscriptionsRecipient> request) {
+    public void updateSubscribers(String listId, SubscribeUsersToListRequest request) {
         updateSubscribers(listId, request, null);
     }
 
     /**
      * Subscribes the users to the list, overwriting existing subscriptions. If the list does not exist, it will be automatically created.
      */
-    public void updateSubscribers(
-            String listId, java.util.List<PutSubscriptionsRecipient> request, RequestOptions requestOptions) {
+    public void updateSubscribers(String listId, SubscribeUsersToListRequest request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("lists")
@@ -346,15 +346,14 @@ public class ListsClient {
     /**
      * Subscribes additional users to the list, without modifying existing subscriptions. If the list does not exist, it will be automatically created.
      */
-    public void addSubscribers(String listId, java.util.List<PutSubscriptionsRecipient> request) {
+    public void addSubscribers(String listId, AddSubscribersToList request) {
         addSubscribers(listId, request, null);
     }
 
     /**
      * Subscribes additional users to the list, without modifying existing subscriptions. If the list does not exist, it will be automatically created.
      */
-    public void addSubscribers(
-            String listId, java.util.List<PutSubscriptionsRecipient> request, IdempotentRequestOptions requestOptions) {
+    public void addSubscribers(String listId, AddSubscribersToList request, IdempotentRequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("lists")

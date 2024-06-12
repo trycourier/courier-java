@@ -7,10 +7,12 @@ import com.courier.api.core.ObjectMappers;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Objects;
 
 @JsonDeserialize(using = Recipient.Deserializer.class)
@@ -42,6 +44,8 @@ public final class Recipient {
             return visitor.visit((SlackRecipient) this.value);
         } else if (this.type == 5) {
             return visitor.visit((MsTeamsRecipient) this.value);
+        } else if (this.type == 6) {
+            return visitor.visit((Map<String, Object>) this.value);
         }
         throw new IllegalStateException("Failed to visit value. This should never happen.");
     }
@@ -90,6 +94,10 @@ public final class Recipient {
         return new Recipient(value, 5);
     }
 
+    public static Recipient of(Map<String, Object> value) {
+        return new Recipient(value, 6);
+    }
+
     public interface Visitor<T> {
         T visit(AudienceRecipient value);
 
@@ -102,6 +110,8 @@ public final class Recipient {
         T visit(SlackRecipient value);
 
         T visit(MsTeamsRecipient value);
+
+        T visit(Map<String, Object> value);
     }
 
     static final class Deserializer extends StdDeserializer<Recipient> {
@@ -134,6 +144,10 @@ public final class Recipient {
             }
             try {
                 return of(ObjectMappers.JSON_MAPPER.convertValue(value, MsTeamsRecipient.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, new TypeReference<Map<String, Object>>() {}));
             } catch (IllegalArgumentException e) {
             }
             throw new JsonParseException(p, "Failed to deserialize");

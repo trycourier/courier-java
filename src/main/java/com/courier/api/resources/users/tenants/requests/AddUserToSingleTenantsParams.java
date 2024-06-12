@@ -4,33 +4,34 @@
 package com.courier.api.resources.users.tenants.requests;
 
 import com.courier.api.core.ObjectMappers;
-import com.courier.api.resources.users.tenants.types.AddUserToSingleTenantsParamsProfile;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonDeserialize(builder = AddUserToSingleTenantsParams.Builder.class)
 public final class AddUserToSingleTenantsParams {
-    private final AddUserToSingleTenantsParamsProfile profile;
+    private final Optional<Map<String, Object>> profile;
 
     private final Map<String, Object> additionalProperties;
 
     private AddUserToSingleTenantsParams(
-            AddUserToSingleTenantsParamsProfile profile, Map<String, Object> additionalProperties) {
+            Optional<Map<String, Object>> profile, Map<String, Object> additionalProperties) {
         this.profile = profile;
         this.additionalProperties = additionalProperties;
     }
 
     @JsonProperty("profile")
-    public AddUserToSingleTenantsParamsProfile getProfile() {
+    public Optional<Map<String, Object>> getProfile() {
         return profile;
     }
 
@@ -59,43 +60,35 @@ public final class AddUserToSingleTenantsParams {
         return ObjectMappers.stringify(this);
     }
 
-    public static ProfileStage builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public interface ProfileStage {
-        _FinalStage profile(AddUserToSingleTenantsParamsProfile profile);
-
-        Builder from(AddUserToSingleTenantsParams other);
-    }
-
-    public interface _FinalStage {
-        AddUserToSingleTenantsParams build();
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements ProfileStage, _FinalStage {
-        private AddUserToSingleTenantsParamsProfile profile;
+    public static final class Builder {
+        private Optional<Map<String, Object>> profile = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        @java.lang.Override
         public Builder from(AddUserToSingleTenantsParams other) {
             profile(other.getProfile());
             return this;
         }
 
-        @java.lang.Override
-        @JsonSetter("profile")
-        public _FinalStage profile(AddUserToSingleTenantsParamsProfile profile) {
+        @JsonSetter(value = "profile", nulls = Nulls.SKIP)
+        public Builder profile(Optional<Map<String, Object>> profile) {
             this.profile = profile;
             return this;
         }
 
-        @java.lang.Override
+        public Builder profile(Map<String, Object> profile) {
+            this.profile = Optional.of(profile);
+            return this;
+        }
+
         public AddUserToSingleTenantsParams build() {
             return new AddUserToSingleTenantsParams(profile, additionalProperties);
         }

@@ -20,28 +20,24 @@ import java.util.Objects;
 import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-@JsonDeserialize(builder = SubscriptionTopic.Builder.class)
-public final class SubscriptionTopic implements ISubscriptionTopicNew {
+@JsonDeserialize(builder = SubscriptionTopicNew.Builder.class)
+public final class SubscriptionTopicNew implements ISubscriptionTopicNew {
     private final SubscriptionTopicStatus status;
 
     private final Optional<Boolean> hasCustomRouting;
 
     private final Optional<List<ChannelClassification>> customRouting;
 
-    private final String id;
-
     private final Map<String, Object> additionalProperties;
 
-    private SubscriptionTopic(
+    private SubscriptionTopicNew(
             SubscriptionTopicStatus status,
             Optional<Boolean> hasCustomRouting,
             Optional<List<ChannelClassification>> customRouting,
-            String id,
             Map<String, Object> additionalProperties) {
         this.status = status;
         this.hasCustomRouting = hasCustomRouting;
         this.customRouting = customRouting;
-        this.id = id;
         this.additionalProperties = additionalProperties;
     }
 
@@ -69,18 +65,10 @@ public final class SubscriptionTopic implements ISubscriptionTopicNew {
         return customRouting;
     }
 
-    /**
-     * @return Topic ID
-     */
-    @JsonProperty("id")
-    public String getId() {
-        return id;
-    }
-
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof SubscriptionTopic && equalTo((SubscriptionTopic) other);
+        return other instanceof SubscriptionTopicNew && equalTo((SubscriptionTopicNew) other);
     }
 
     @JsonAnyGetter
@@ -88,16 +76,15 @@ public final class SubscriptionTopic implements ISubscriptionTopicNew {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(SubscriptionTopic other) {
+    private boolean equalTo(SubscriptionTopicNew other) {
         return status.equals(other.status)
                 && hasCustomRouting.equals(other.hasCustomRouting)
-                && customRouting.equals(other.customRouting)
-                && id.equals(other.id);
+                && customRouting.equals(other.customRouting);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.status, this.hasCustomRouting, this.customRouting, this.id);
+        return Objects.hash(this.status, this.hasCustomRouting, this.customRouting);
     }
 
     @java.lang.Override
@@ -110,17 +97,13 @@ public final class SubscriptionTopic implements ISubscriptionTopicNew {
     }
 
     public interface StatusStage {
-        IdStage status(SubscriptionTopicStatus status);
+        _FinalStage status(SubscriptionTopicStatus status);
 
-        Builder from(SubscriptionTopic other);
-    }
-
-    public interface IdStage {
-        _FinalStage id(String id);
+        Builder from(SubscriptionTopicNew other);
     }
 
     public interface _FinalStage {
-        SubscriptionTopic build();
+        SubscriptionTopicNew build();
 
         _FinalStage hasCustomRouting(Optional<Boolean> hasCustomRouting);
 
@@ -132,10 +115,8 @@ public final class SubscriptionTopic implements ISubscriptionTopicNew {
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements StatusStage, IdStage, _FinalStage {
+    public static final class Builder implements StatusStage, _FinalStage {
         private SubscriptionTopicStatus status;
-
-        private String id;
 
         private Optional<List<ChannelClassification>> customRouting = Optional.empty();
 
@@ -147,29 +128,17 @@ public final class SubscriptionTopic implements ISubscriptionTopicNew {
         private Builder() {}
 
         @java.lang.Override
-        public Builder from(SubscriptionTopic other) {
+        public Builder from(SubscriptionTopicNew other) {
             status(other.getStatus());
             hasCustomRouting(other.getHasCustomRouting());
             customRouting(other.getCustomRouting());
-            id(other.getId());
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("status")
-        public IdStage status(SubscriptionTopicStatus status) {
+        public _FinalStage status(SubscriptionTopicStatus status) {
             this.status = status;
-            return this;
-        }
-
-        /**
-         * <p>Topic ID</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("id")
-        public _FinalStage id(String id) {
-            this.id = id;
             return this;
         }
 
@@ -208,8 +177,8 @@ public final class SubscriptionTopic implements ISubscriptionTopicNew {
         }
 
         @java.lang.Override
-        public SubscriptionTopic build() {
-            return new SubscriptionTopic(status, hasCustomRouting, customRouting, id, additionalProperties);
+        public SubscriptionTopicNew build() {
+            return new SubscriptionTopicNew(status, hasCustomRouting, customRouting, additionalProperties);
         }
     }
 }

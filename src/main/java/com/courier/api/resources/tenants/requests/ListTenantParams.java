@@ -20,6 +20,8 @@ import java.util.Optional;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonDeserialize(builder = ListTenantParams.Builder.class)
 public final class ListTenantParams {
+    private final Optional<String> parentTenantId;
+
     private final Optional<Integer> limit;
 
     private final Optional<String> cursor;
@@ -27,14 +29,26 @@ public final class ListTenantParams {
     private final Map<String, Object> additionalProperties;
 
     private ListTenantParams(
-            Optional<Integer> limit, Optional<String> cursor, Map<String, Object> additionalProperties) {
+            Optional<String> parentTenantId,
+            Optional<Integer> limit,
+            Optional<String> cursor,
+            Map<String, Object> additionalProperties) {
+        this.parentTenantId = parentTenantId;
         this.limit = limit;
         this.cursor = cursor;
         this.additionalProperties = additionalProperties;
     }
 
     /**
-     * @return The number of accousnts to return
+     * @return Filter the list of tenants by parent_id
+     */
+    @JsonProperty("parent_tenant_id")
+    public Optional<String> getParentTenantId() {
+        return parentTenantId;
+    }
+
+    /**
+     * @return The number of tenants to return
      * (defaults to 20, maximum value of 100)
      */
     @JsonProperty("limit")
@@ -62,12 +76,12 @@ public final class ListTenantParams {
     }
 
     private boolean equalTo(ListTenantParams other) {
-        return limit.equals(other.limit) && cursor.equals(other.cursor);
+        return parentTenantId.equals(other.parentTenantId) && limit.equals(other.limit) && cursor.equals(other.cursor);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.limit, this.cursor);
+        return Objects.hash(this.parentTenantId, this.limit, this.cursor);
     }
 
     @java.lang.Override
@@ -81,6 +95,8 @@ public final class ListTenantParams {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<String> parentTenantId = Optional.empty();
+
         private Optional<Integer> limit = Optional.empty();
 
         private Optional<String> cursor = Optional.empty();
@@ -91,8 +107,20 @@ public final class ListTenantParams {
         private Builder() {}
 
         public Builder from(ListTenantParams other) {
+            parentTenantId(other.getParentTenantId());
             limit(other.getLimit());
             cursor(other.getCursor());
+            return this;
+        }
+
+        @JsonSetter(value = "parent_tenant_id", nulls = Nulls.SKIP)
+        public Builder parentTenantId(Optional<String> parentTenantId) {
+            this.parentTenantId = parentTenantId;
+            return this;
+        }
+
+        public Builder parentTenantId(String parentTenantId) {
+            this.parentTenantId = Optional.of(parentTenantId);
             return this;
         }
 
@@ -119,7 +147,7 @@ public final class ListTenantParams {
         }
 
         public ListTenantParams build() {
-            return new ListTenantParams(limit, cursor, additionalProperties);
+            return new ListTenantParams(parentTenantId, limit, cursor, additionalProperties);
         }
     }
 }

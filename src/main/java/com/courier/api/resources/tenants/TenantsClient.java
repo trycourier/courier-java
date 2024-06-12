@@ -12,6 +12,7 @@ import com.courier.api.resources.tenants.requests.ListTenantParams;
 import com.courier.api.resources.tenants.requests.ListUsersForTenantParams;
 import com.courier.api.resources.tenants.requests.TenantCreateOrReplaceParams;
 import com.courier.api.resources.tenants.types.ListUsersForTenantResponse;
+import com.courier.api.resources.tenants.types.SubscriptionTopicNew;
 import com.courier.api.resources.tenants.types.Tenant;
 import com.courier.api.resources.tenants.types.TenantListResponse;
 import java.io.IOException;
@@ -114,6 +115,10 @@ public class TenantsClient {
         HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("tenants");
+        if (request.getParentTenantId().isPresent()) {
+            httpUrl.addQueryParameter(
+                    "parent_tenant_id", request.getParentTenantId().get());
+        }
         if (request.getLimit().isPresent()) {
             httpUrl.addQueryParameter("limit", request.getLimit().get().toString());
         }
@@ -210,6 +215,84 @@ public class TenantsClient {
             Response response = client.newCall(okhttpRequest).execute();
             if (response.isSuccessful()) {
                 return ObjectMappers.JSON_MAPPER.readValue(response.body().string(), ListUsersForTenantResponse.class);
+            }
+            throw new ApiError(
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(response.body().string(), Object.class));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void createOrReplaceDefaultPreferencesForTopic(
+            String tenantId, String topicId, SubscriptionTopicNew request) {
+        createOrReplaceDefaultPreferencesForTopic(tenantId, topicId, request, null);
+    }
+
+    public void createOrReplaceDefaultPreferencesForTopic(
+            String tenantId, String topicId, SubscriptionTopicNew request, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("tenants")
+                .addPathSegment(tenantId)
+                .addPathSegments("default_preferences/items")
+                .addPathSegment(topicId)
+                .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("PUT", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .build();
+        try {
+            OkHttpClient client = clientOptions.httpClient();
+            if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+                client = clientOptions.httpClientWithTimeout(requestOptions);
+            }
+            Response response = client.newCall(okhttpRequest).execute();
+            if (response.isSuccessful()) {
+                return;
+            }
+            throw new ApiError(
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(response.body().string(), Object.class));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void removeDefaultPreferencesForTopic(String tenantId, String topicId) {
+        removeDefaultPreferencesForTopic(tenantId, topicId, null);
+    }
+
+    public void removeDefaultPreferencesForTopic(String tenantId, String topicId, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("tenants")
+                .addPathSegment(tenantId)
+                .addPathSegments("default_preferences/items")
+                .addPathSegment(topicId)
+                .build();
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("DELETE", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .build();
+        try {
+            OkHttpClient client = clientOptions.httpClient();
+            if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+                client = clientOptions.httpClientWithTimeout(requestOptions);
+            }
+            Response response = client.newCall(okhttpRequest).execute();
+            if (response.isSuccessful()) {
+                return;
             }
             throw new ApiError(
                     response.code(),
