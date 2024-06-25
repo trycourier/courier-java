@@ -5,9 +5,16 @@ package com.courier.api.resources.profiles.types;
 
 import com.courier.api.core.ObjectMappers;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.HashMap;
 import java.util.Map;
 
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonDeserialize(builder = MergeProfileResponse.Builder.class)
 public final class MergeProfileResponse {
     private final Map<String, Object> additionalProperties;
 
@@ -34,5 +41,25 @@ public final class MergeProfileResponse {
     @java.lang.Override
     public String toString() {
         return ObjectMappers.stringify(this);
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static final class Builder {
+        @JsonAnySetter
+        private Map<String, Object> additionalProperties = new HashMap<>();
+
+        private Builder() {}
+
+        public Builder from(MergeProfileResponse other) {
+            return this;
+        }
+
+        public MergeProfileResponse build() {
+            return new MergeProfileResponse(additionalProperties);
+        }
     }
 }

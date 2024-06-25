@@ -5,8 +5,15 @@ package com.courier.api.resources.send.types;
 
 import com.courier.api.core.ObjectMappers;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.HashMap;
 import java.util.Map;
 
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonDeserialize(builder = ListRecipientType.Builder.class)
 public final class ListRecipientType implements IListRecipientType {
     private final Map<String, Object> additionalProperties;
 
@@ -28,5 +35,25 @@ public final class ListRecipientType implements IListRecipientType {
     @java.lang.Override
     public String toString() {
         return ObjectMappers.stringify(this);
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static final class Builder {
+        @JsonAnySetter
+        private Map<String, Object> additionalProperties = new HashMap<>();
+
+        private Builder() {}
+
+        public Builder from(ListRecipientType other) {
+            return this;
+        }
+
+        public ListRecipientType build() {
+            return new ListRecipientType(additionalProperties);
+        }
     }
 }

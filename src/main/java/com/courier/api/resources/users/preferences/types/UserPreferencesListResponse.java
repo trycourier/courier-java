@@ -35,6 +35,9 @@ public final class UserPreferencesListResponse {
         this.additionalProperties = additionalProperties;
     }
 
+    /**
+     * @return Deprecated - Paging not implemented on this endpoint
+     */
     @JsonProperty("paging")
     public Paging getPaging() {
         return paging;
@@ -111,6 +114,10 @@ public final class UserPreferencesListResponse {
             return this;
         }
 
+        /**
+         * <p>Deprecated - Paging not implemented on this endpoint</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
         @java.lang.Override
         @JsonSetter("paging")
         public _FinalStage paging(Paging paging) {

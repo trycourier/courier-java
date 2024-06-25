@@ -3,8 +3,9 @@
  */
 package com.courier.api;
 
-import com.courier.api.core.ApiError;
 import com.courier.api.core.ClientOptions;
+import com.courier.api.core.CourierApiApiError;
+import com.courier.api.core.CourierApiError;
 import com.courier.api.core.IdempotentRequestOptions;
 import com.courier.api.core.MediaTypes;
 import com.courier.api.core.ObjectMappers;
@@ -16,6 +17,7 @@ import com.courier.api.resources.authtokens.AuthTokensClient;
 import com.courier.api.resources.automations.AutomationsClient;
 import com.courier.api.resources.brands.BrandsClient;
 import com.courier.api.resources.bulk.BulkClient;
+import com.courier.api.resources.inbound.InboundClient;
 import com.courier.api.resources.lists.ListsClient;
 import com.courier.api.resources.messages.MessagesClient;
 import com.courier.api.resources.notifications.NotificationsClient;
@@ -25,6 +27,7 @@ import com.courier.api.resources.tenants.TenantsClient;
 import com.courier.api.resources.translations.TranslationsClient;
 import com.courier.api.resources.users.UsersClient;
 import com.courier.api.types.SendMessageResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.util.function.Supplier;
 import okhttp3.Headers;
@@ -33,6 +36,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 public class Courier {
     protected final ClientOptions clientOptions;
@@ -48,6 +52,8 @@ public class Courier {
     protected final Supplier<BrandsClient> brandsClient;
 
     protected final Supplier<BulkClient> bulkClient;
+
+    protected final Supplier<InboundClient> inboundClient;
 
     protected final Supplier<ListsClient> listsClient;
 
@@ -73,6 +79,7 @@ public class Courier {
         this.automationsClient = Suppliers.memoize(() -> new AutomationsClient(clientOptions));
         this.brandsClient = Suppliers.memoize(() -> new BrandsClient(clientOptions));
         this.bulkClient = Suppliers.memoize(() -> new BulkClient(clientOptions));
+        this.inboundClient = Suppliers.memoize(() -> new InboundClient(clientOptions));
         this.listsClient = Suppliers.memoize(() -> new ListsClient(clientOptions));
         this.messagesClient = Suppliers.memoize(() -> new MessagesClient(clientOptions));
         this.notificationsClient = Suppliers.memoize(() -> new NotificationsClient(clientOptions));
@@ -102,8 +109,8 @@ public class Courier {
         try {
             body = RequestBody.create(
                     ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (JsonProcessingException e) {
+            throw new CourierApiError("Failed to serialize request", e);
         }
         Request okhttpRequest = new Request.Builder()
                 .url(httpUrl)
@@ -111,20 +118,22 @@ public class Courier {
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
                 .addHeader("Content-Type", "application/json")
                 .build();
-        try {
-            OkHttpClient client = clientOptions.httpClient();
-            if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-                client = clientOptions.httpClientWithTimeout(requestOptions);
-            }
-            Response response = client.newCall(okhttpRequest).execute();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(response.body().string(), SendMessageResponse.class);
+                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), SendMessageResponse.class);
             }
-            throw new ApiError(
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            throw new CourierApiApiError(
+                    "Error with status code " + response.code(),
                     response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(response.body().string(), Object.class));
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CourierApiError("Network error executing HTTP request", e);
         }
     }
 
@@ -150,6 +159,10 @@ public class Courier {
 
     public BulkClient bulk() {
         return this.bulkClient.get();
+    }
+
+    public InboundClient inbound() {
+        return this.inboundClient.get();
     }
 
     public ListsClient lists() {
