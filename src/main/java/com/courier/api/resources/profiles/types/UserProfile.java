@@ -72,7 +72,7 @@ public final class UserProfile {
 
     private final String facebookPsid;
 
-    private final String firebaseToken;
+    private final UserProfileFirebaseToken firebaseToken;
 
     private final Intercom intercom;
 
@@ -110,7 +110,7 @@ public final class UserProfile {
             Discord discord,
             Expo expo,
             String facebookPsid,
-            String firebaseToken,
+            UserProfileFirebaseToken firebaseToken,
             Intercom intercom,
             Slack slack,
             MsTeams msTeams,
@@ -288,7 +288,7 @@ public final class UserProfile {
     }
 
     @JsonProperty("firebaseToken")
-    public String getFirebaseToken() {
+    public UserProfileFirebaseToken getFirebaseToken() {
         return firebaseToken;
     }
 
@@ -508,7 +508,7 @@ public final class UserProfile {
     }
 
     public interface FirebaseTokenStage {
-        IntercomStage firebaseToken(String firebaseToken);
+        IntercomStage firebaseToken(UserProfileFirebaseToken firebaseToken);
     }
 
     public interface IntercomStage {
@@ -615,7 +615,7 @@ public final class UserProfile {
 
         private String facebookPsid;
 
-        private String firebaseToken;
+        private UserProfileFirebaseToken firebaseToken;
 
         private Intercom intercom;
 
@@ -859,7 +859,7 @@ public final class UserProfile {
 
         @java.lang.Override
         @JsonSetter("firebaseToken")
-        public IntercomStage firebaseToken(String firebaseToken) {
+        public IntercomStage firebaseToken(UserProfileFirebaseToken firebaseToken) {
             this.firebaseToken = firebaseToken;
             return this;
         }

@@ -31,7 +31,7 @@ public final class Channel {
 
     private final Optional<Timeouts> timeouts;
 
-    private final Optional<Override> override;
+    private final Optional<Map<String, Object>> override;
 
     private final Optional<ChannelMetadata> metadata;
 
@@ -43,7 +43,7 @@ public final class Channel {
             Optional<RoutingMethod> routingMethod,
             Optional<String> if_,
             Optional<Timeouts> timeouts,
-            Optional<Override> override,
+            Optional<Map<String, Object>> override,
             Optional<ChannelMetadata> metadata,
             Map<String, Object> additionalProperties) {
         this.brandId = brandId;
@@ -103,7 +103,7 @@ public final class Channel {
      * @return Channel specific overrides.
      */
     @JsonProperty("override")
-    public Optional<Override> getOverride() {
+    public Optional<Map<String, Object>> getOverride() {
         return override;
     }
 
@@ -166,7 +166,7 @@ public final class Channel {
 
         private Optional<Timeouts> timeouts = Optional.empty();
 
-        private Optional<Override> override = Optional.empty();
+        private Optional<Map<String, Object>> override = Optional.empty();
 
         private Optional<ChannelMetadata> metadata = Optional.empty();
 
@@ -242,12 +242,12 @@ public final class Channel {
         }
 
         @JsonSetter(value = "override", nulls = Nulls.SKIP)
-        public Builder override(Optional<Override> override) {
+        public Builder override(Optional<Map<String, Object>> override) {
             this.override = override;
             return this;
         }
 
-        public Builder override(Override override) {
+        public Builder override(Map<String, Object> override) {
             this.override = Optional.of(override);
             return this;
         }
