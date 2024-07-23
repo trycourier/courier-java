@@ -21,7 +21,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonDeserialize(builder = NotificationTemplates.Builder.class)
 public final class NotificationTemplates {
-    private final int createdAt;
+    private final long createdAt;
 
     private final String id;
 
@@ -31,17 +31,17 @@ public final class NotificationTemplates {
 
     private final String title;
 
-    private final int updatedAt;
+    private final long updatedAt;
 
     private final Map<String, Object> additionalProperties;
 
     private NotificationTemplates(
-            int createdAt,
+            long createdAt,
             String id,
             RoutingStrategy routing,
             List<Tag> tags,
             String title,
-            int updatedAt,
+            long updatedAt,
             Map<String, Object> additionalProperties) {
         this.createdAt = createdAt;
         this.id = id;
@@ -56,7 +56,7 @@ public final class NotificationTemplates {
      * @return A UTC timestamp at which notification was created. This is stored as a millisecond representation of the Unix epoch (the time passed since January 1, 1970).
      */
     @JsonProperty("created_at")
-    public int getCreatedAt() {
+    public long getCreatedAt() {
         return createdAt;
     }
 
@@ -96,7 +96,7 @@ public final class NotificationTemplates {
      * @return A UTC timestamp at which notification was updated. This is stored as a millisecond representation of the Unix epoch (the time passed since January 1, 1970).
      */
     @JsonProperty("updated_at")
-    public int getUpdatedAt() {
+    public long getUpdatedAt() {
         return updatedAt;
     }
 
@@ -135,7 +135,7 @@ public final class NotificationTemplates {
     }
 
     public interface CreatedAtStage {
-        IdStage createdAt(int createdAt);
+        IdStage createdAt(long createdAt);
 
         Builder from(NotificationTemplates other);
     }
@@ -153,7 +153,7 @@ public final class NotificationTemplates {
     }
 
     public interface UpdatedAtStage {
-        _FinalStage updatedAt(int updatedAt);
+        _FinalStage updatedAt(long updatedAt);
     }
 
     public interface _FinalStage {
@@ -169,7 +169,7 @@ public final class NotificationTemplates {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
             implements CreatedAtStage, IdStage, RoutingStage, TitleStage, UpdatedAtStage, _FinalStage {
-        private int createdAt;
+        private long createdAt;
 
         private String id;
 
@@ -177,7 +177,7 @@ public final class NotificationTemplates {
 
         private String title;
 
-        private int updatedAt;
+        private long updatedAt;
 
         private List<Tag> tags = new ArrayList<>();
 
@@ -203,7 +203,7 @@ public final class NotificationTemplates {
          */
         @java.lang.Override
         @JsonSetter("created_at")
-        public IdStage createdAt(int createdAt) {
+        public IdStage createdAt(long createdAt) {
             this.createdAt = createdAt;
             return this;
         }
@@ -247,7 +247,7 @@ public final class NotificationTemplates {
          */
         @java.lang.Override
         @JsonSetter("updated_at")
-        public _FinalStage updatedAt(int updatedAt) {
+        public _FinalStage updatedAt(long updatedAt) {
             this.updatedAt = updatedAt;
             return this;
         }

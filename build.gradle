@@ -50,7 +50,7 @@ publishing {
         maven(MavenPublication) {
             groupId = 'com.courier'
             artifactId = 'courier-java'
-            version = '3.2.0'
+            version = '3.2.1'
             from components.java
             pom {
                 name = 'courier'

@@ -24,15 +24,15 @@ public final class MessageDetails {
 
     private final MessageStatus status;
 
-    private final int enqueued;
+    private final long enqueued;
 
-    private final int sent;
+    private final long sent;
 
-    private final int delivered;
+    private final long delivered;
 
-    private final int opened;
+    private final long opened;
 
-    private final int clicked;
+    private final long clicked;
 
     private final String recipient;
 
@@ -49,11 +49,11 @@ public final class MessageDetails {
     private MessageDetails(
             String id,
             MessageStatus status,
-            int enqueued,
-            int sent,
-            int delivered,
-            int opened,
-            int clicked,
+            long enqueued,
+            long sent,
+            long delivered,
+            long opened,
+            long clicked,
             String recipient,
             String event,
             String notification,
@@ -95,7 +95,7 @@ public final class MessageDetails {
      * @return A UTC timestamp at which Courier received the message request. Stored as a millisecond representation of the Unix epoch.
      */
     @JsonProperty("enqueued")
-    public int getEnqueued() {
+    public long getEnqueued() {
         return enqueued;
     }
 
@@ -103,7 +103,7 @@ public final class MessageDetails {
      * @return A UTC timestamp at which Courier passed the message to the Integration provider. Stored as a millisecond representation of the Unix epoch.
      */
     @JsonProperty("sent")
-    public int getSent() {
+    public long getSent() {
         return sent;
     }
 
@@ -111,7 +111,7 @@ public final class MessageDetails {
      * @return A UTC timestamp at which the Integration provider delivered the message. Stored as a millisecond representation of the Unix epoch.
      */
     @JsonProperty("delivered")
-    public int getDelivered() {
+    public long getDelivered() {
         return delivered;
     }
 
@@ -119,7 +119,7 @@ public final class MessageDetails {
      * @return A UTC timestamp at which the recipient opened a message for the first time. Stored as a millisecond representation of the Unix epoch.
      */
     @JsonProperty("opened")
-    public int getOpened() {
+    public long getOpened() {
         return opened;
     }
 
@@ -127,7 +127,7 @@ public final class MessageDetails {
      * @return A UTC timestamp at which the recipient clicked on a tracked link for the first time. Stored as a millisecond representation of the Unix epoch.
      */
     @JsonProperty("clicked")
-    public int getClicked() {
+    public long getClicked() {
         return clicked;
     }
 
@@ -234,23 +234,23 @@ public final class MessageDetails {
     }
 
     public interface EnqueuedStage {
-        SentStage enqueued(int enqueued);
+        SentStage enqueued(long enqueued);
     }
 
     public interface SentStage {
-        DeliveredStage sent(int sent);
+        DeliveredStage sent(long sent);
     }
 
     public interface DeliveredStage {
-        OpenedStage delivered(int delivered);
+        OpenedStage delivered(long delivered);
     }
 
     public interface OpenedStage {
-        ClickedStage opened(int opened);
+        ClickedStage opened(long opened);
     }
 
     public interface ClickedStage {
-        RecipientStage clicked(int clicked);
+        RecipientStage clicked(long clicked);
     }
 
     public interface RecipientStage {
@@ -294,15 +294,15 @@ public final class MessageDetails {
 
         private MessageStatus status;
 
-        private int enqueued;
+        private long enqueued;
 
-        private int sent;
+        private long sent;
 
-        private int delivered;
+        private long delivered;
 
-        private int opened;
+        private long opened;
 
-        private int clicked;
+        private long clicked;
 
         private String recipient;
 
@@ -364,7 +364,7 @@ public final class MessageDetails {
          */
         @java.lang.Override
         @JsonSetter("enqueued")
-        public SentStage enqueued(int enqueued) {
+        public SentStage enqueued(long enqueued) {
             this.enqueued = enqueued;
             return this;
         }
@@ -375,7 +375,7 @@ public final class MessageDetails {
          */
         @java.lang.Override
         @JsonSetter("sent")
-        public DeliveredStage sent(int sent) {
+        public DeliveredStage sent(long sent) {
             this.sent = sent;
             return this;
         }
@@ -386,7 +386,7 @@ public final class MessageDetails {
          */
         @java.lang.Override
         @JsonSetter("delivered")
-        public OpenedStage delivered(int delivered) {
+        public OpenedStage delivered(long delivered) {
             this.delivered = delivered;
             return this;
         }
@@ -397,7 +397,7 @@ public final class MessageDetails {
          */
         @java.lang.Override
         @JsonSetter("opened")
-        public ClickedStage opened(int opened) {
+        public ClickedStage opened(long opened) {
             this.opened = opened;
             return this;
         }
@@ -408,7 +408,7 @@ public final class MessageDetails {
          */
         @java.lang.Override
         @JsonSetter("clicked")
-        public RecipientStage clicked(int clicked) {
+        public RecipientStage clicked(long clicked) {
             this.clicked = clicked;
             return this;
         }
