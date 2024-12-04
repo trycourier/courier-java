@@ -47,6 +47,9 @@ public class NotificationsClient {
         if (request.getCursor().isPresent()) {
             httpUrl.addQueryParameter("cursor", request.getCursor().get());
         }
+        if (request.getNotes().isPresent()) {
+            httpUrl.addQueryParameter("notes", request.getNotes().get().toString());
+        }
         Request.Builder _requestBuilder = new Request.Builder()
                 .url(httpUrl.build())
                 .method("GET", null)

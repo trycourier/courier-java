@@ -30,6 +30,8 @@ public final class TemplateMessage implements IBaseMessage, IBaseMessageSendTo {
 
     private final Optional<MessageMetadata> metadata;
 
+    private final Optional<MessagePreferences> preferences;
+
     private final Optional<Map<String, MessageProvidersType>> providers;
 
     private final Optional<Routing> routing;
@@ -52,6 +54,7 @@ public final class TemplateMessage implements IBaseMessage, IBaseMessageSendTo {
             Optional<Map<String, Channel>> channels,
             Optional<MessageContext> context,
             Optional<MessageMetadata> metadata,
+            Optional<MessagePreferences> preferences,
             Optional<Map<String, MessageProvidersType>> providers,
             Optional<Routing> routing,
             Optional<Timeout> timeout,
@@ -65,6 +68,7 @@ public final class TemplateMessage implements IBaseMessage, IBaseMessageSendTo {
         this.channels = channels;
         this.context = context;
         this.metadata = metadata;
+        this.preferences = preferences;
         this.providers = providers;
         this.routing = routing;
         this.timeout = timeout;
@@ -118,6 +122,12 @@ public final class TemplateMessage implements IBaseMessage, IBaseMessageSendTo {
         return metadata;
     }
 
+    @JsonProperty("preferences")
+    @java.lang.Override
+    public Optional<MessagePreferences> getPreferences() {
+        return preferences;
+    }
+
     /**
      * @return An object whose keys are valid provider identifiers which map to an object.
      */
@@ -143,7 +153,7 @@ public final class TemplateMessage implements IBaseMessage, IBaseMessageSendTo {
     }
 
     /**
-     * @return Defines the time to wait before delivering the message.
+     * @return Defines the time to wait before delivering the message. You can specify one of the following options. Duration with the number of milliseconds to delay. Until with an ISO 8601 timestamp that specifies when it should be delivered. Until with an OpenStreetMap opening_hours-like format that specifies the <a href="https://www.courier.com/docs/platform/sending/failover/#delivery-window">Delivery Window</a> (e.g., 'Mo-Fr 08:00-18:00pm')
      */
     @JsonProperty("delay")
     @java.lang.Override
@@ -196,6 +206,7 @@ public final class TemplateMessage implements IBaseMessage, IBaseMessageSendTo {
                 && channels.equals(other.channels)
                 && context.equals(other.context)
                 && metadata.equals(other.metadata)
+                && preferences.equals(other.preferences)
                 && providers.equals(other.providers)
                 && routing.equals(other.routing)
                 && timeout.equals(other.timeout)
@@ -213,6 +224,7 @@ public final class TemplateMessage implements IBaseMessage, IBaseMessageSendTo {
                 this.channels,
                 this.context,
                 this.metadata,
+                this.preferences,
                 this.providers,
                 this.routing,
                 this.timeout,
@@ -260,6 +272,10 @@ public final class TemplateMessage implements IBaseMessage, IBaseMessageSendTo {
 
         _FinalStage metadata(MessageMetadata metadata);
 
+        _FinalStage preferences(Optional<MessagePreferences> preferences);
+
+        _FinalStage preferences(MessagePreferences preferences);
+
         _FinalStage providers(Optional<Map<String, MessageProvidersType>> providers);
 
         _FinalStage providers(Map<String, MessageProvidersType> providers);
@@ -301,6 +317,8 @@ public final class TemplateMessage implements IBaseMessage, IBaseMessageSendTo {
 
         private Optional<Map<String, MessageProvidersType>> providers = Optional.empty();
 
+        private Optional<MessagePreferences> preferences = Optional.empty();
+
         private Optional<MessageMetadata> metadata = Optional.empty();
 
         private Optional<MessageContext> context = Optional.empty();
@@ -323,6 +341,7 @@ public final class TemplateMessage implements IBaseMessage, IBaseMessageSendTo {
             channels(other.getChannels());
             context(other.getContext());
             metadata(other.getMetadata());
+            preferences(other.getPreferences());
             providers(other.getProviders());
             routing(other.getRouting());
             timeout(other.getTimeout());
@@ -381,7 +400,7 @@ public final class TemplateMessage implements IBaseMessage, IBaseMessageSendTo {
         }
 
         /**
-         * <p>Defines the time to wait before delivering the message.</p>
+         * <p>Defines the time to wait before delivering the message. You can specify one of the following options. Duration with the number of milliseconds to delay. Until with an ISO 8601 timestamp that specifies when it should be delivered. Until with an OpenStreetMap opening_hours-like format that specifies the <a href="https://www.courier.com/docs/platform/sending/failover/#delivery-window">Delivery Window</a> (e.g., 'Mo-Fr 08:00-18:00pm')</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -441,6 +460,19 @@ public final class TemplateMessage implements IBaseMessage, IBaseMessageSendTo {
         @JsonSetter(value = "providers", nulls = Nulls.SKIP)
         public _FinalStage providers(Optional<Map<String, MessageProvidersType>> providers) {
             this.providers = providers;
+            return this;
+        }
+
+        @java.lang.Override
+        public _FinalStage preferences(MessagePreferences preferences) {
+            this.preferences = Optional.of(preferences);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "preferences", nulls = Nulls.SKIP)
+        public _FinalStage preferences(Optional<MessagePreferences> preferences) {
+            this.preferences = preferences;
             return this;
         }
 
@@ -534,6 +566,7 @@ public final class TemplateMessage implements IBaseMessage, IBaseMessageSendTo {
                     channels,
                     context,
                     metadata,
+                    preferences,
                     providers,
                     routing,
                     timeout,

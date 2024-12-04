@@ -13,12 +13,16 @@ import com.courier.api.resources.commons.errors.CourierApiBadRequestError;
 import com.courier.api.resources.commons.errors.CourierApiNotFoundError;
 import com.courier.api.resources.commons.types.BadRequest;
 import com.courier.api.resources.commons.types.NotFound;
+import com.courier.api.resources.users.preferences.requests.UserPreferencesParams;
+import com.courier.api.resources.users.preferences.requests.UserPreferencesTopicParams;
 import com.courier.api.resources.users.preferences.requests.UserPreferencesUpdateParams;
 import com.courier.api.resources.users.preferences.types.UserPreferencesGetResponse;
 import com.courier.api.resources.users.preferences.types.UserPreferencesListResponse;
 import com.courier.api.resources.users.preferences.types.UserPreferencesUpdateResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -38,25 +42,35 @@ public class PreferencesClient {
      * Fetch all user preferences.
      */
     public UserPreferencesListResponse list(String userId) {
-        return list(userId, null);
+        return list(userId, UserPreferencesParams.builder().build());
     }
 
     /**
      * Fetch all user preferences.
      */
-    public UserPreferencesListResponse list(String userId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+    public UserPreferencesListResponse list(String userId, UserPreferencesParams request) {
+        return list(userId, request, null);
+    }
+
+    /**
+     * Fetch all user preferences.
+     */
+    public UserPreferencesListResponse list(
+            String userId, UserPreferencesParams request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("users")
                 .addPathSegment(userId)
-                .addPathSegments("preferences")
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .addPathSegments("preferences");
+        if (request.getTenantId().isPresent()) {
+            httpUrl.addQueryParameter("tenant_id", request.getTenantId().get());
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
+                .addHeader("Content-Type", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
             client = clientOptions.httpClientWithTimeout(requestOptions);
@@ -88,26 +102,36 @@ public class PreferencesClient {
      * Fetch user preferences for a specific subscription topic.
      */
     public UserPreferencesGetResponse get(String userId, String topicId) {
-        return get(userId, topicId, null);
+        return get(userId, topicId, UserPreferencesTopicParams.builder().build());
     }
 
     /**
      * Fetch user preferences for a specific subscription topic.
      */
-    public UserPreferencesGetResponse get(String userId, String topicId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+    public UserPreferencesGetResponse get(String userId, String topicId, UserPreferencesTopicParams request) {
+        return get(userId, topicId, request, null);
+    }
+
+    /**
+     * Fetch user preferences for a specific subscription topic.
+     */
+    public UserPreferencesGetResponse get(
+            String userId, String topicId, UserPreferencesTopicParams request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("users")
                 .addPathSegment(userId)
                 .addPathSegments("preferences")
-                .addPathSegment(topicId)
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .addPathSegment(topicId);
+        if (request.getTenantId().isPresent()) {
+            httpUrl.addQueryParameter("tenant_id", request.getTenantId().get());
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
+                .addHeader("Content-Type", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
             client = clientOptions.httpClientWithTimeout(requestOptions);
@@ -147,26 +171,30 @@ public class PreferencesClient {
      */
     public UserPreferencesUpdateResponse update(
             String userId, String topicId, UserPreferencesUpdateParams request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("users")
                 .addPathSegment(userId)
                 .addPathSegments("preferences")
-                .addPathSegment(topicId)
-                .build();
+                .addPathSegment(topicId);
+        if (request.getTenantId().isPresent()) {
+            httpUrl.addQueryParameter("tenant_id", request.getTenantId().get());
+        }
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("topic", request.getTopic());
         RequestBody body;
         try {
             body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
-        } catch (JsonProcessingException e) {
-            throw new CourierApiError("Failed to serialize request", e);
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(properties), MediaTypes.APPLICATION_JSON);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
                 .method("PUT", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
+                .addHeader("Content-Type", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
             client = clientOptions.httpClientWithTimeout(requestOptions);

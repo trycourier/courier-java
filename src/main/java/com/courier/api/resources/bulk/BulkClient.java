@@ -11,6 +11,7 @@ import com.courier.api.core.MediaTypes;
 import com.courier.api.core.ObjectMappers;
 import com.courier.api.core.RequestOptions;
 import com.courier.api.resources.bulk.requests.BulkCreateJobParams;
+import com.courier.api.resources.bulk.requests.BulkGetUsersParams;
 import com.courier.api.resources.bulk.types.BulkCreateJobResponse;
 import com.courier.api.resources.bulk.types.BulkGetJobResponse;
 import com.courier.api.resources.bulk.types.BulkGetJobUsersResponse;
@@ -233,25 +234,34 @@ public class BulkClient {
      * Get Bulk Job Users
      */
     public BulkGetJobUsersResponse getUsers(String jobId) {
-        return getUsers(jobId, null);
+        return getUsers(jobId, BulkGetUsersParams.builder().build());
     }
 
     /**
      * Get Bulk Job Users
      */
-    public BulkGetJobUsersResponse getUsers(String jobId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+    public BulkGetJobUsersResponse getUsers(String jobId, BulkGetUsersParams request) {
+        return getUsers(jobId, request, null);
+    }
+
+    /**
+     * Get Bulk Job Users
+     */
+    public BulkGetJobUsersResponse getUsers(String jobId, BulkGetUsersParams request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("bulk")
                 .addPathSegment(jobId)
-                .addPathSegments("users")
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
+                .addPathSegments("users");
+        if (request.getCursor().isPresent()) {
+            httpUrl.addQueryParameter("cursor", request.getCursor().get());
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
                 .method("GET", null)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
+                .addHeader("Content-Type", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
             client = clientOptions.httpClientWithTimeout(requestOptions);

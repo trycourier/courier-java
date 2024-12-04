@@ -34,6 +34,8 @@ public final class Notification {
 
     private final String topicId;
 
+    private final String note;
+
     private final Map<String, Object> additionalProperties;
 
     private Notification(
@@ -44,6 +46,7 @@ public final class Notification {
             Optional<NotificationTag> tags,
             Optional<String> title,
             String topicId,
+            String note,
             Map<String, Object> additionalProperties) {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -52,6 +55,7 @@ public final class Notification {
         this.tags = tags;
         this.title = title;
         this.topicId = topicId;
+        this.note = note;
         this.additionalProperties = additionalProperties;
     }
 
@@ -90,6 +94,11 @@ public final class Notification {
         return topicId;
     }
 
+    @JsonProperty("note")
+    public String getNote() {
+        return note;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -108,12 +117,14 @@ public final class Notification {
                 && routing.equals(other.routing)
                 && tags.equals(other.tags)
                 && title.equals(other.title)
-                && topicId.equals(other.topicId);
+                && topicId.equals(other.topicId)
+                && note.equals(other.note);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.createdAt, this.updatedAt, this.id, this.routing, this.tags, this.title, this.topicId);
+        return Objects.hash(
+                this.createdAt, this.updatedAt, this.id, this.routing, this.tags, this.title, this.topicId, this.note);
     }
 
     @java.lang.Override
@@ -144,7 +155,11 @@ public final class Notification {
     }
 
     public interface TopicIdStage {
-        _FinalStage topicId(String topicId);
+        NoteStage topicId(String topicId);
+    }
+
+    public interface NoteStage {
+        _FinalStage note(String note);
     }
 
     public interface _FinalStage {
@@ -161,7 +176,7 @@ public final class Notification {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder
-            implements CreatedAtStage, UpdatedAtStage, IdStage, RoutingStage, TopicIdStage, _FinalStage {
+            implements CreatedAtStage, UpdatedAtStage, IdStage, RoutingStage, TopicIdStage, NoteStage, _FinalStage {
         private long createdAt;
 
         private long updatedAt;
@@ -171,6 +186,8 @@ public final class Notification {
         private MessageRouting routing;
 
         private String topicId;
+
+        private String note;
 
         private Optional<String> title = Optional.empty();
 
@@ -190,6 +207,7 @@ public final class Notification {
             tags(other.getTags());
             title(other.getTitle());
             topicId(other.getTopicId());
+            note(other.getNote());
             return this;
         }
 
@@ -223,8 +241,15 @@ public final class Notification {
 
         @java.lang.Override
         @JsonSetter("topic_id")
-        public _FinalStage topicId(String topicId) {
+        public NoteStage topicId(String topicId) {
             this.topicId = topicId;
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter("note")
+        public _FinalStage note(String note) {
+            this.note = note;
             return this;
         }
 
@@ -256,7 +281,8 @@ public final class Notification {
 
         @java.lang.Override
         public Notification build() {
-            return new Notification(createdAt, updatedAt, id, routing, tags, title, topicId, additionalProperties);
+            return new Notification(
+                    createdAt, updatedAt, id, routing, tags, title, topicId, note, additionalProperties);
         }
     }
 }

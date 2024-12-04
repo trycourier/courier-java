@@ -22,8 +22,10 @@ import com.courier.api.resources.profiles.types.ProfileGetResponse;
 import com.courier.api.resources.profiles.types.ReplaceProfileResponse;
 import com.courier.api.resources.profiles.types.SubscribeToListsRequest;
 import com.courier.api.resources.profiles.types.SubscribeToListsResponse;
+import com.courier.api.resources.profiles.types.UserProfilePatch;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
+import java.util.List;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -198,6 +200,48 @@ public class ProfilesClient {
             } catch (JsonProcessingException ignored) {
                 // unable to map error response, throwing generic error
             }
+            throw new CourierApiApiError(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
+        } catch (IOException e) {
+            throw new CourierApiError("Network error executing HTTP request", e);
+        }
+    }
+
+    public void mergeProfile(String userId, List<UserProfilePatch> request) {
+        mergeProfile(userId, request, null);
+    }
+
+    public void mergeProfile(String userId, List<UserProfilePatch> request, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("profiles")
+                .addPathSegment(userId)
+                .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new CourierApiError("Failed to serialize request", e);
+        }
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("PATCH", body)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return;
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             throw new CourierApiApiError(
                     "Error with status code " + response.code(),
                     response.code(),

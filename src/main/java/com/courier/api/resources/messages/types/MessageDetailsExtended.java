@@ -13,13 +13,14 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-@JsonDeserialize(builder = MessageDetails.Builder.class)
-public final class MessageDetails implements IMessageDetails {
+@JsonDeserialize(builder = MessageDetailsExtended.Builder.class)
+public final class MessageDetailsExtended implements IMessageDetails {
     private final String id;
 
     private final MessageStatus status;
@@ -44,9 +45,11 @@ public final class MessageDetails implements IMessageDetails {
 
     private final Optional<Reason> reason;
 
+    private final Optional<List<Map<String, Object>>> providers;
+
     private final Map<String, Object> additionalProperties;
 
-    private MessageDetails(
+    private MessageDetailsExtended(
             String id,
             MessageStatus status,
             long enqueued,
@@ -59,6 +62,7 @@ public final class MessageDetails implements IMessageDetails {
             String notification,
             Optional<String> error,
             Optional<Reason> reason,
+            Optional<List<Map<String, Object>>> providers,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.status = status;
@@ -72,6 +76,7 @@ public final class MessageDetails implements IMessageDetails {
         this.notification = notification;
         this.error = error;
         this.reason = reason;
+        this.providers = providers;
         this.additionalProperties = additionalProperties;
     }
 
@@ -183,10 +188,15 @@ public final class MessageDetails implements IMessageDetails {
         return reason;
     }
 
+    @JsonProperty("providers")
+    public Optional<List<Map<String, Object>>> getProviders() {
+        return providers;
+    }
+
     @java.lang.Override
     public boolean equals(Object other) {
         if (this == other) return true;
-        return other instanceof MessageDetails && equalTo((MessageDetails) other);
+        return other instanceof MessageDetailsExtended && equalTo((MessageDetailsExtended) other);
     }
 
     @JsonAnyGetter
@@ -194,7 +204,7 @@ public final class MessageDetails implements IMessageDetails {
         return this.additionalProperties;
     }
 
-    private boolean equalTo(MessageDetails other) {
+    private boolean equalTo(MessageDetailsExtended other) {
         return id.equals(other.id)
                 && status.equals(other.status)
                 && enqueued == other.enqueued
@@ -206,7 +216,8 @@ public final class MessageDetails implements IMessageDetails {
                 && event.equals(other.event)
                 && notification.equals(other.notification)
                 && error.equals(other.error)
-                && reason.equals(other.reason);
+                && reason.equals(other.reason)
+                && providers.equals(other.providers);
     }
 
     @java.lang.Override
@@ -223,7 +234,8 @@ public final class MessageDetails implements IMessageDetails {
                 this.event,
                 this.notification,
                 this.error,
-                this.reason);
+                this.reason,
+                this.providers);
     }
 
     @java.lang.Override
@@ -238,7 +250,7 @@ public final class MessageDetails implements IMessageDetails {
     public interface IdStage {
         StatusStage id(String id);
 
-        Builder from(MessageDetails other);
+        Builder from(MessageDetailsExtended other);
     }
 
     public interface StatusStage {
@@ -278,7 +290,7 @@ public final class MessageDetails implements IMessageDetails {
     }
 
     public interface _FinalStage {
-        MessageDetails build();
+        MessageDetailsExtended build();
 
         _FinalStage error(Optional<String> error);
 
@@ -287,6 +299,10 @@ public final class MessageDetails implements IMessageDetails {
         _FinalStage reason(Optional<Reason> reason);
 
         _FinalStage reason(Reason reason);
+
+        _FinalStage providers(Optional<List<Map<String, Object>>> providers);
+
+        _FinalStage providers(List<Map<String, Object>> providers);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -322,6 +338,8 @@ public final class MessageDetails implements IMessageDetails {
 
         private String notification;
 
+        private Optional<List<Map<String, Object>>> providers = Optional.empty();
+
         private Optional<Reason> reason = Optional.empty();
 
         private Optional<String> error = Optional.empty();
@@ -332,7 +350,7 @@ public final class MessageDetails implements IMessageDetails {
         private Builder() {}
 
         @java.lang.Override
-        public Builder from(MessageDetails other) {
+        public Builder from(MessageDetailsExtended other) {
             id(other.getId());
             status(other.getStatus());
             enqueued(other.getEnqueued());
@@ -345,6 +363,7 @@ public final class MessageDetails implements IMessageDetails {
             notification(other.getNotification());
             error(other.getError());
             reason(other.getReason());
+            providers(other.getProviders());
             return this;
         }
 
@@ -458,6 +477,19 @@ public final class MessageDetails implements IMessageDetails {
             return this;
         }
 
+        @java.lang.Override
+        public _FinalStage providers(List<Map<String, Object>> providers) {
+            this.providers = Optional.of(providers);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "providers", nulls = Nulls.SKIP)
+        public _FinalStage providers(Optional<List<Map<String, Object>>> providers) {
+            this.providers = providers;
+            return this;
+        }
+
         /**
          * <p>The reason for the current status of the message.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
@@ -493,8 +525,8 @@ public final class MessageDetails implements IMessageDetails {
         }
 
         @java.lang.Override
-        public MessageDetails build() {
-            return new MessageDetails(
+        public MessageDetailsExtended build() {
+            return new MessageDetailsExtended(
                     id,
                     status,
                     enqueued,
@@ -507,6 +539,7 @@ public final class MessageDetails implements IMessageDetails {
                     notification,
                     error,
                     reason,
+                    providers,
                     additionalProperties);
         }
     }

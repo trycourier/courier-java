@@ -6,17 +6,27 @@ package com.courier.api.resources.messages.types;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum MessageStatus {
+    CANCELED("CANCELED"),
+
     CLICKED("CLICKED"),
+
+    DELAYED("DELAYED"),
 
     DELIVERED("DELIVERED"),
 
+    DIGESTED("DIGESTED"),
+
     ENQUEUED("ENQUEUED"),
+
+    FILTERED("FILTERED"),
 
     OPENED("OPENED"),
 
-    CANCELED("CANCELED"),
+    ROUTED("ROUTED"),
 
     SENT("SENT"),
+
+    SIMULATED("SIMULATED"),
 
     THROTTLED("THROTTLED"),
 

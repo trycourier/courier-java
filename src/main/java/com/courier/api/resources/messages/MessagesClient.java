@@ -17,6 +17,7 @@ import com.courier.api.resources.messages.requests.GetMessageHistoryRequest;
 import com.courier.api.resources.messages.requests.ListMessagesRequest;
 import com.courier.api.resources.messages.types.ListMessagesResponse;
 import com.courier.api.resources.messages.types.MessageDetails;
+import com.courier.api.resources.messages.types.MessageDetailsExtended;
 import com.courier.api.resources.messages.types.MessageHistoryResponse;
 import com.courier.api.resources.messages.types.RenderOutputResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -128,14 +129,14 @@ public class MessagesClient {
     /**
      * Fetch the status of a message you've previously sent.
      */
-    public MessageDetails get(String messageId) {
+    public MessageDetailsExtended get(String messageId) {
         return get(messageId, null);
     }
 
     /**
      * Fetch the status of a message you've previously sent.
      */
-    public MessageDetails get(String messageId, RequestOptions requestOptions) {
+    public MessageDetailsExtended get(String messageId, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("messages")
@@ -154,7 +155,7 @@ public class MessagesClient {
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), MessageDetails.class);
+                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), MessageDetailsExtended.class);
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             try {

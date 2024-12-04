@@ -30,6 +30,8 @@ public final class BaseMessage implements IBaseMessage {
 
     private final Optional<MessageMetadata> metadata;
 
+    private final Optional<MessagePreferences> preferences;
+
     private final Optional<Map<String, MessageProvidersType>> providers;
 
     private final Optional<Routing> routing;
@@ -48,6 +50,7 @@ public final class BaseMessage implements IBaseMessage {
             Optional<Map<String, Channel>> channels,
             Optional<MessageContext> context,
             Optional<MessageMetadata> metadata,
+            Optional<MessagePreferences> preferences,
             Optional<Map<String, MessageProvidersType>> providers,
             Optional<Routing> routing,
             Optional<Timeout> timeout,
@@ -59,6 +62,7 @@ public final class BaseMessage implements IBaseMessage {
         this.channels = channels;
         this.context = context;
         this.metadata = metadata;
+        this.preferences = preferences;
         this.providers = providers;
         this.routing = routing;
         this.timeout = timeout;
@@ -110,6 +114,12 @@ public final class BaseMessage implements IBaseMessage {
         return metadata;
     }
 
+    @JsonProperty("preferences")
+    @java.lang.Override
+    public Optional<MessagePreferences> getPreferences() {
+        return preferences;
+    }
+
     /**
      * @return An object whose keys are valid provider identifiers which map to an object.
      */
@@ -135,7 +145,7 @@ public final class BaseMessage implements IBaseMessage {
     }
 
     /**
-     * @return Defines the time to wait before delivering the message.
+     * @return Defines the time to wait before delivering the message. You can specify one of the following options. Duration with the number of milliseconds to delay. Until with an ISO 8601 timestamp that specifies when it should be delivered. Until with an OpenStreetMap opening_hours-like format that specifies the <a href="https://www.courier.com/docs/platform/sending/failover/#delivery-window">Delivery Window</a> (e.g., 'Mo-Fr 08:00-18:00pm')
      */
     @JsonProperty("delay")
     @java.lang.Override
@@ -170,6 +180,7 @@ public final class BaseMessage implements IBaseMessage {
                 && channels.equals(other.channels)
                 && context.equals(other.context)
                 && metadata.equals(other.metadata)
+                && preferences.equals(other.preferences)
                 && providers.equals(other.providers)
                 && routing.equals(other.routing)
                 && timeout.equals(other.timeout)
@@ -185,6 +196,7 @@ public final class BaseMessage implements IBaseMessage {
                 this.channels,
                 this.context,
                 this.metadata,
+                this.preferences,
                 this.providers,
                 this.routing,
                 this.timeout,
@@ -213,6 +225,8 @@ public final class BaseMessage implements IBaseMessage {
 
         private Optional<MessageMetadata> metadata = Optional.empty();
 
+        private Optional<MessagePreferences> preferences = Optional.empty();
+
         private Optional<Map<String, MessageProvidersType>> providers = Optional.empty();
 
         private Optional<Routing> routing = Optional.empty();
@@ -234,6 +248,7 @@ public final class BaseMessage implements IBaseMessage {
             channels(other.getChannels());
             context(other.getContext());
             metadata(other.getMetadata());
+            preferences(other.getPreferences());
             providers(other.getProviders());
             routing(other.getRouting());
             timeout(other.getTimeout());
@@ -294,6 +309,17 @@ public final class BaseMessage implements IBaseMessage {
 
         public Builder metadata(MessageMetadata metadata) {
             this.metadata = Optional.of(metadata);
+            return this;
+        }
+
+        @JsonSetter(value = "preferences", nulls = Nulls.SKIP)
+        public Builder preferences(Optional<MessagePreferences> preferences) {
+            this.preferences = preferences;
+            return this;
+        }
+
+        public Builder preferences(MessagePreferences preferences) {
+            this.preferences = Optional.of(preferences);
             return this;
         }
 
@@ -359,6 +385,7 @@ public final class BaseMessage implements IBaseMessage {
                     channels,
                     context,
                     metadata,
+                    preferences,
                     providers,
                     routing,
                     timeout,

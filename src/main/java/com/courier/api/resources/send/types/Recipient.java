@@ -46,6 +46,10 @@ public final class Recipient {
             return visitor.visit((MsTeamsRecipient) this.value);
         } else if (this.type == 6) {
             return visitor.visit((Map<String, Object>) this.value);
+        } else if (this.type == 7) {
+            return visitor.visit((PagerdutyRecipient) this.value);
+        } else if (this.type == 8) {
+            return visitor.visit((WebhookRecipient) this.value);
         }
         throw new IllegalStateException("Failed to visit value. This should never happen.");
     }
@@ -98,6 +102,14 @@ public final class Recipient {
         return new Recipient(value, 6);
     }
 
+    public static Recipient of(PagerdutyRecipient value) {
+        return new Recipient(value, 7);
+    }
+
+    public static Recipient of(WebhookRecipient value) {
+        return new Recipient(value, 8);
+    }
+
     public interface Visitor<T> {
         T visit(AudienceRecipient value);
 
@@ -112,6 +124,10 @@ public final class Recipient {
         T visit(MsTeamsRecipient value);
 
         T visit(Map<String, Object> value);
+
+        T visit(PagerdutyRecipient value);
+
+        T visit(WebhookRecipient value);
     }
 
     static final class Deserializer extends StdDeserializer<Recipient> {
@@ -148,6 +164,14 @@ public final class Recipient {
             }
             try {
                 return of(ObjectMappers.JSON_MAPPER.convertValue(value, new TypeReference<Map<String, Object>>() {}));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, PagerdutyRecipient.class));
+            } catch (IllegalArgumentException e) {
+            }
+            try {
+                return of(ObjectMappers.JSON_MAPPER.convertValue(value, WebhookRecipient.class));
             } catch (IllegalArgumentException e) {
             }
             throw new JsonParseException(p, "Failed to deserialize");

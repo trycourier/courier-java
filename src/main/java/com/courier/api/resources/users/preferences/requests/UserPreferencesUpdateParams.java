@@ -11,21 +11,35 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonDeserialize(builder = UserPreferencesUpdateParams.Builder.class)
 public final class UserPreferencesUpdateParams {
+    private final Optional<String> tenantId;
+
     private final TopicPreferenceUpdate topic;
 
     private final Map<String, Object> additionalProperties;
 
-    private UserPreferencesUpdateParams(TopicPreferenceUpdate topic, Map<String, Object> additionalProperties) {
+    private UserPreferencesUpdateParams(
+            Optional<String> tenantId, TopicPreferenceUpdate topic, Map<String, Object> additionalProperties) {
+        this.tenantId = tenantId;
         this.topic = topic;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return Update the preferences of a user for this specific tenant context.
+     */
+    @JsonProperty("tenant_id")
+    public Optional<String> getTenantId() {
+        return tenantId;
     }
 
     @JsonProperty("topic")
@@ -45,12 +59,12 @@ public final class UserPreferencesUpdateParams {
     }
 
     private boolean equalTo(UserPreferencesUpdateParams other) {
-        return topic.equals(other.topic);
+        return tenantId.equals(other.tenantId) && topic.equals(other.topic);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.topic);
+        return Objects.hash(this.tenantId, this.topic);
     }
 
     @java.lang.Override
@@ -70,11 +84,17 @@ public final class UserPreferencesUpdateParams {
 
     public interface _FinalStage {
         UserPreferencesUpdateParams build();
+
+        _FinalStage tenantId(Optional<String> tenantId);
+
+        _FinalStage tenantId(String tenantId);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements TopicStage, _FinalStage {
         private TopicPreferenceUpdate topic;
+
+        private Optional<String> tenantId = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -83,6 +103,7 @@ public final class UserPreferencesUpdateParams {
 
         @java.lang.Override
         public Builder from(UserPreferencesUpdateParams other) {
+            tenantId(other.getTenantId());
             topic(other.getTopic());
             return this;
         }
@@ -94,9 +115,26 @@ public final class UserPreferencesUpdateParams {
             return this;
         }
 
+        /**
+         * <p>Update the preferences of a user for this specific tenant context.</p>
+         * @return Reference to {@code this} so that method calls can be chained together.
+         */
+        @java.lang.Override
+        public _FinalStage tenantId(String tenantId) {
+            this.tenantId = Optional.of(tenantId);
+            return this;
+        }
+
+        @java.lang.Override
+        @JsonSetter(value = "tenant_id", nulls = Nulls.SKIP)
+        public _FinalStage tenantId(Optional<String> tenantId) {
+            this.tenantId = tenantId;
+            return this;
+        }
+
         @java.lang.Override
         public UserPreferencesUpdateParams build() {
-            return new UserPreferencesUpdateParams(topic, additionalProperties);
+            return new UserPreferencesUpdateParams(tenantId, topic, additionalProperties);
         }
     }
 }

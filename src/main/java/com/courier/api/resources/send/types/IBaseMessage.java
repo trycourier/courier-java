@@ -17,6 +17,8 @@ public interface IBaseMessage {
 
     Optional<MessageMetadata> getMetadata();
 
+    Optional<MessagePreferences> getPreferences();
+
     Optional<Map<String, MessageProvidersType>> getProviders();
 
     Optional<Routing> getRouting();

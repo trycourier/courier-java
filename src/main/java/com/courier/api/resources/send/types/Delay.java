@@ -10,20 +10,25 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @JsonDeserialize(builder = Delay.Builder.class)
 public final class Delay {
-    private final int duration;
+    private final Optional<Integer> duration;
+
+    private final Optional<String> until;
 
     private final Map<String, Object> additionalProperties;
 
-    private Delay(int duration, Map<String, Object> additionalProperties) {
+    private Delay(Optional<Integer> duration, Optional<String> until, Map<String, Object> additionalProperties) {
         this.duration = duration;
+        this.until = until;
         this.additionalProperties = additionalProperties;
     }
 
@@ -31,8 +36,16 @@ public final class Delay {
      * @return The duration of the delay in milliseconds.
      */
     @JsonProperty("duration")
-    public int getDuration() {
+    public Optional<Integer> getDuration() {
         return duration;
+    }
+
+    /**
+     * @return An ISO 8601 timestamp that specifies when it should be delivered or an OpenStreetMap opening_hours-like format that specifies the <a href="https://www.courier.com/docs/platform/sending/failover/#delivery-window">Delivery Window</a> (e.g., 'Mo-Fr 08:00-18:00pm')
+     */
+    @JsonProperty("until")
+    public Optional<String> getUntil() {
+        return until;
     }
 
     @java.lang.Override
@@ -47,12 +60,12 @@ public final class Delay {
     }
 
     private boolean equalTo(Delay other) {
-        return duration == other.duration;
+        return duration.equals(other.duration) && until.equals(other.until);
     }
 
     @java.lang.Override
     public int hashCode() {
-        return Objects.hash(this.duration);
+        return Objects.hash(this.duration, this.until);
     }
 
     @java.lang.Override
@@ -60,49 +73,51 @@ public final class Delay {
         return ObjectMappers.stringify(this);
     }
 
-    public static DurationStage builder() {
+    public static Builder builder() {
         return new Builder();
     }
 
-    public interface DurationStage {
-        _FinalStage duration(int duration);
-
-        Builder from(Delay other);
-    }
-
-    public interface _FinalStage {
-        Delay build();
-    }
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static final class Builder implements DurationStage, _FinalStage {
-        private int duration;
+    public static final class Builder {
+        private Optional<Integer> duration = Optional.empty();
+
+        private Optional<String> until = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
 
         private Builder() {}
 
-        @java.lang.Override
         public Builder from(Delay other) {
             duration(other.getDuration());
+            until(other.getUntil());
             return this;
         }
 
-        /**
-         * <p>The duration of the delay in milliseconds.</p>
-         * @return Reference to {@code this} so that method calls can be chained together.
-         */
-        @java.lang.Override
-        @JsonSetter("duration")
-        public _FinalStage duration(int duration) {
+        @JsonSetter(value = "duration", nulls = Nulls.SKIP)
+        public Builder duration(Optional<Integer> duration) {
             this.duration = duration;
             return this;
         }
 
-        @java.lang.Override
+        public Builder duration(Integer duration) {
+            this.duration = Optional.of(duration);
+            return this;
+        }
+
+        @JsonSetter(value = "until", nulls = Nulls.SKIP)
+        public Builder until(Optional<String> until) {
+            this.until = until;
+            return this;
+        }
+
+        public Builder until(String until) {
+            this.until = Optional.of(until);
+            return this;
+        }
+
         public Delay build() {
-            return new Delay(duration, additionalProperties);
+            return new Delay(duration, until, additionalProperties);
         }
     }
 }
