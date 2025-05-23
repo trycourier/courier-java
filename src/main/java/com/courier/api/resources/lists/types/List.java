@@ -24,17 +24,17 @@ public final class List {
 
     private final String name;
 
-    private final Optional<Integer> created;
+    private final Optional<String> created;
 
-    private final Optional<Integer> updated;
+    private final Optional<String> updated;
 
     private final Map<String, Object> additionalProperties;
 
     private List(
             String id,
             String name,
-            Optional<Integer> created,
-            Optional<Integer> updated,
+            Optional<String> created,
+            Optional<String> updated,
             Map<String, Object> additionalProperties) {
         this.id = id;
         this.name = name;
@@ -54,12 +54,12 @@ public final class List {
     }
 
     @JsonProperty("created")
-    public Optional<Integer> getCreated() {
+    public Optional<String> getCreated() {
         return created;
     }
 
     @JsonProperty("updated")
-    public Optional<Integer> getUpdated() {
+    public Optional<String> getUpdated() {
         return updated;
     }
 
@@ -108,13 +108,13 @@ public final class List {
     public interface _FinalStage {
         List build();
 
-        _FinalStage created(Optional<Integer> created);
+        _FinalStage created(Optional<String> created);
 
-        _FinalStage created(Integer created);
+        _FinalStage created(String created);
 
-        _FinalStage updated(Optional<Integer> updated);
+        _FinalStage updated(Optional<String> updated);
 
-        _FinalStage updated(Integer updated);
+        _FinalStage updated(String updated);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -123,9 +123,9 @@ public final class List {
 
         private String name;
 
-        private Optional<Integer> updated = Optional.empty();
+        private Optional<String> updated = Optional.empty();
 
-        private Optional<Integer> created = Optional.empty();
+        private Optional<String> created = Optional.empty();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -156,27 +156,27 @@ public final class List {
         }
 
         @java.lang.Override
-        public _FinalStage updated(Integer updated) {
+        public _FinalStage updated(String updated) {
             this.updated = Optional.of(updated);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "updated", nulls = Nulls.SKIP)
-        public _FinalStage updated(Optional<Integer> updated) {
+        public _FinalStage updated(Optional<String> updated) {
             this.updated = updated;
             return this;
         }
 
         @java.lang.Override
-        public _FinalStage created(Integer created) {
+        public _FinalStage created(String created) {
             this.created = Optional.of(created);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "created", nulls = Nulls.SKIP)
-        public _FinalStage created(Optional<Integer> created) {
+        public _FinalStage created(Optional<String> created) {
             this.created = created;
             return this;
         }

@@ -17,6 +17,7 @@ import com.courier.api.resources.commons.types.NotFound;
 import com.courier.api.resources.lists.requests.AddSubscribersToList;
 import com.courier.api.resources.lists.requests.GetAllListsRequest;
 import com.courier.api.resources.lists.requests.GetSubscriptionForListRequest;
+import com.courier.api.resources.lists.requests.RestoreListRequest;
 import com.courier.api.resources.lists.requests.SubscribeUserToListRequest;
 import com.courier.api.resources.lists.requests.SubscribeUsersToListRequest;
 import com.courier.api.resources.lists.types.List;
@@ -152,14 +153,14 @@ public class ListsClient {
     /**
      * Create or replace an existing list with the supplied values.
      */
-    public List update(String listId, ListPutParams request) {
-        return update(listId, request, null);
+    public void update(String listId, ListPutParams request) {
+        update(listId, request, null);
     }
 
     /**
      * Create or replace an existing list with the supplied values.
      */
-    public List update(String listId, ListPutParams request, RequestOptions requestOptions) {
+    public void update(String listId, ListPutParams request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("lists")
@@ -185,7 +186,7 @@ public class ListsClient {
         try (Response response = client.newCall(okhttpRequest).execute()) {
             ResponseBody responseBody = response.body();
             if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), List.class);
+                return;
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
             throw new CourierApiApiError(
@@ -241,23 +242,38 @@ public class ListsClient {
      * Restore a previously deleted list.
      */
     public void restore(String listId) {
-        restore(listId, null);
+        restore(listId, RestoreListRequest.builder().build());
     }
 
     /**
      * Restore a previously deleted list.
      */
-    public void restore(String listId, RequestOptions requestOptions) {
+    public void restore(String listId, RestoreListRequest request) {
+        restore(listId, request, null);
+    }
+
+    /**
+     * Restore a previously deleted list.
+     */
+    public void restore(String listId, RestoreListRequest request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("lists")
                 .addPathSegment(listId)
                 .addPathSegments("restore")
                 .build();
+        RequestBody body;
+        try {
+            body = RequestBody.create(
+                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
+        } catch (JsonProcessingException e) {
+            throw new CourierApiError("Failed to serialize request", e);
+        }
         Request okhttpRequest = new Request.Builder()
                 .url(httpUrl)
-                .method("PUT", null)
+                .method("PUT", body)
                 .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
                 .build();
         OkHttpClient client = clientOptions.httpClient();
         if (requestOptions != null && requestOptions.getTimeout().isPresent()) {

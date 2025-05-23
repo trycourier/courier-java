@@ -19,13 +19,12 @@ import com.courier.api.resources.profiles.types.DeleteListSubscriptionResponse;
 import com.courier.api.resources.profiles.types.GetListSubscriptionsResponse;
 import com.courier.api.resources.profiles.types.MergeProfileResponse;
 import com.courier.api.resources.profiles.types.ProfileGetResponse;
+import com.courier.api.resources.profiles.types.ProfileUpdateRequest;
 import com.courier.api.resources.profiles.types.ReplaceProfileResponse;
 import com.courier.api.resources.profiles.types.SubscribeToListsRequest;
 import com.courier.api.resources.profiles.types.SubscribeToListsResponse;
-import com.courier.api.resources.profiles.types.UserProfilePatch;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
-import java.util.List;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -209,11 +208,11 @@ public class ProfilesClient {
         }
     }
 
-    public void mergeProfile(String userId, List<UserProfilePatch> request) {
+    public void mergeProfile(String userId, ProfileUpdateRequest request) {
         mergeProfile(userId, request, null);
     }
 
-    public void mergeProfile(String userId, List<UserProfilePatch> request, RequestOptions requestOptions) {
+    public void mergeProfile(String userId, ProfileUpdateRequest request, RequestOptions requestOptions) {
         HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
                 .newBuilder()
                 .addPathSegments("profiles")
