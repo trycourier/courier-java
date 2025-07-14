@@ -6,11 +6,17 @@ package com.courier.api.resources.messages.types;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum Reason {
+    BOUNCED("BOUNCED"),
+
+    FAILED("FAILED"),
+
     FILTERED("FILTERED"),
 
     NO_CHANNELS("NO_CHANNELS"),
 
     NO_PROVIDERS("NO_PROVIDERS"),
+
+    OPT_IN_REQUIRED("OPT_IN_REQUIRED"),
 
     PROVIDER_ERROR("PROVIDER_ERROR"),
 
