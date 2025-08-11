@@ -11,9 +11,12 @@ import com.courier.api.core.ObjectMappers;
 import com.courier.api.core.RequestOptions;
 import com.courier.api.resources.commons.errors.CourierApiBadRequestError;
 import com.courier.api.resources.commons.types.BadRequest;
+import com.courier.api.resources.tenants.requests.GetTemplateListByTenantParams;
 import com.courier.api.resources.tenants.requests.ListTenantParams;
 import com.courier.api.resources.tenants.requests.ListUsersForTenantParams;
 import com.courier.api.resources.tenants.requests.TenantCreateOrReplaceParams;
+import com.courier.api.resources.tenants.types.GetTemplateByTenantResponse;
+import com.courier.api.resources.tenants.types.ListTemplatesByTenantResponse;
 import com.courier.api.resources.tenants.types.ListUsersForTenantResponse;
 import com.courier.api.resources.tenants.types.SubscriptionTopicNew;
 import com.courier.api.resources.tenants.types.Tenant;
@@ -336,6 +339,108 @@ public class TenantsClient {
                 return;
             }
             String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            throw new CourierApiApiError(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
+        } catch (IOException e) {
+            throw new CourierApiError("Network error executing HTTP request", e);
+        }
+    }
+
+    public GetTemplateByTenantResponse getTemplateByTenant(String tenantId, String templateId) {
+        return getTemplateByTenant(tenantId, templateId, null);
+    }
+
+    public GetTemplateByTenantResponse getTemplateByTenant(
+            String tenantId, String templateId, RequestOptions requestOptions) {
+        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("tenants")
+                .addPathSegment(tenantId)
+                .addPathSegments("templates")
+                .addPathSegment(templateId)
+                .build();
+        Request okhttpRequest = new Request.Builder()
+                .url(httpUrl)
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json")
+                .build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetTemplateByTenantResponse.class);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                if (response.code() == 400) {
+                    throw new CourierApiBadRequestError(
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, BadRequest.class));
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
+            throw new CourierApiApiError(
+                    "Error with status code " + response.code(),
+                    response.code(),
+                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
+        } catch (IOException e) {
+            throw new CourierApiError("Network error executing HTTP request", e);
+        }
+    }
+
+    public ListTemplatesByTenantResponse getTemplateListByTenant(String tenantId) {
+        return getTemplateListByTenant(
+                tenantId, GetTemplateListByTenantParams.builder().build());
+    }
+
+    public ListTemplatesByTenantResponse getTemplateListByTenant(
+            String tenantId, GetTemplateListByTenantParams request) {
+        return getTemplateListByTenant(tenantId, request, null);
+    }
+
+    public ListTemplatesByTenantResponse getTemplateListByTenant(
+            String tenantId, GetTemplateListByTenantParams request, RequestOptions requestOptions) {
+        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
+                .newBuilder()
+                .addPathSegments("tenants")
+                .addPathSegment(tenantId)
+                .addPathSegments("templates");
+        if (request.getLimit().isPresent()) {
+            httpUrl.addQueryParameter("limit", request.getLimit().get().toString());
+        }
+        if (request.getCursor().isPresent()) {
+            httpUrl.addQueryParameter("cursor", request.getCursor().get());
+        }
+        Request.Builder _requestBuilder = new Request.Builder()
+                .url(httpUrl.build())
+                .method("GET", null)
+                .headers(Headers.of(clientOptions.headers(requestOptions)))
+                .addHeader("Content-Type", "application/json");
+        Request okhttpRequest = _requestBuilder.build();
+        OkHttpClient client = clientOptions.httpClient();
+        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
+            client = clientOptions.httpClientWithTimeout(requestOptions);
+        }
+        try (Response response = client.newCall(okhttpRequest).execute()) {
+            ResponseBody responseBody = response.body();
+            if (response.isSuccessful()) {
+                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ListTemplatesByTenantResponse.class);
+            }
+            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
+            try {
+                if (response.code() == 400) {
+                    throw new CourierApiBadRequestError(
+                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, BadRequest.class));
+                }
+            } catch (JsonProcessingException ignored) {
+                // unable to map error response, throwing generic error
+            }
             throw new CourierApiApiError(
                     "Error with status code " + response.code(),
                     response.code(),
