@@ -87,6 +87,7 @@ public final class Channel {
     /**
      * @return A JavaScript conditional expression to determine if the message should
      * be sent through the channel. Has access to the data and profile object.
+     * Only applies when a custom routing strategy is defined.
      * For example, <code>data.name === profile.name</code>
      */
     @JsonProperty("if")

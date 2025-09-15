@@ -52,9 +52,10 @@ public final class MessageProvidersType {
     }
 
     /**
-     * @return A JavaScript conditional expression to determine if the message should be sent
-     * through the channel. Has access to the data and profile object. For example,
-     * <code>data.name === profile.name</code>
+     * @return A JavaScript conditional expression to determine if the message should
+     * be sent through the provider. Has access to the data and profile object.
+     * Only applies when a custom routing strategy is defined.
+     * For example, <code>data.name === profile.name</code>
      */
     @JsonProperty("if")
     public Optional<String> getIf() {

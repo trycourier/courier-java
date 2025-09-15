@@ -4,6 +4,7 @@
 package com.courier.api.resources.send.types;
 
 import com.courier.api.core.ObjectMappers;
+import com.courier.api.resources.notifications.types.MessageRoutingChannel;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -23,11 +24,12 @@ import java.util.Objects;
 public final class Routing {
     private final RoutingMethod method;
 
-    private final List<RoutingChannel> channels;
+    private final List<MessageRoutingChannel> channels;
 
     private final Map<String, Object> additionalProperties;
 
-    private Routing(RoutingMethod method, List<RoutingChannel> channels, Map<String, Object> additionalProperties) {
+    private Routing(
+            RoutingMethod method, List<MessageRoutingChannel> channels, Map<String, Object> additionalProperties) {
         this.method = method;
         this.channels = channels;
         this.additionalProperties = additionalProperties;
@@ -44,7 +46,7 @@ public final class Routing {
      * delivery strategies.
      */
     @JsonProperty("channels")
-    public List<RoutingChannel> getChannels() {
+    public List<MessageRoutingChannel> getChannels() {
         return channels;
     }
 
@@ -86,18 +88,18 @@ public final class Routing {
     public interface _FinalStage {
         Routing build();
 
-        _FinalStage channels(List<RoutingChannel> channels);
+        _FinalStage channels(List<MessageRoutingChannel> channels);
 
-        _FinalStage addChannels(RoutingChannel channels);
+        _FinalStage addChannels(MessageRoutingChannel channels);
 
-        _FinalStage addAllChannels(List<RoutingChannel> channels);
+        _FinalStage addAllChannels(List<MessageRoutingChannel> channels);
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder implements MethodStage, _FinalStage {
         private RoutingMethod method;
 
-        private List<RoutingChannel> channels = new ArrayList<>();
+        private List<MessageRoutingChannel> channels = new ArrayList<>();
 
         @JsonAnySetter
         private Map<String, Object> additionalProperties = new HashMap<>();
@@ -125,7 +127,7 @@ public final class Routing {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage addAllChannels(List<RoutingChannel> channels) {
+        public _FinalStage addAllChannels(List<MessageRoutingChannel> channels) {
             this.channels.addAll(channels);
             return this;
         }
@@ -137,14 +139,14 @@ public final class Routing {
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
-        public _FinalStage addChannels(RoutingChannel channels) {
+        public _FinalStage addChannels(MessageRoutingChannel channels) {
             this.channels.add(channels);
             return this;
         }
 
         @java.lang.Override
         @JsonSetter(value = "channels", nulls = Nulls.SKIP)
-        public _FinalStage channels(List<RoutingChannel> channels) {
+        public _FinalStage channels(List<MessageRoutingChannel> channels) {
             this.channels.clear();
             this.channels.addAll(channels);
             return this;
