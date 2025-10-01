@@ -1,65 +1,85 @@
-name: ci
-
-on: [push]
+name: CI
+on:
+  push:
+    branches-ignore:
+      - 'generated'
+      - 'codegen/**'
+      - 'integrated/**'
+      - 'stl-preview-head/**'
+      - 'stl-preview-base/**'
+  pull_request:
+    branches-ignore:
+      - 'stl-preview-head/**'
+      - 'stl-preview-base/**'
 
 jobs:
-  compile:
-    runs-on: ubuntu-latest
+  lint:
+    timeout-minutes: 15
+    name: lint
+    runs-on: ${{ github.repository == 'stainless-sdks/courier-java' && 'depot-ubuntu-24.04' || 'ubuntu-latest' }}
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.fork
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up Java
-        id: setup-jre
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v4
         with:
-          java-version: "11"
-          architecture: x64
+          distribution: temurin
+          java-version: |
+            8
+            21
+          cache: gradle
 
-      - name: Compile
-        run: ./gradlew compileJava
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Run lints
+        run: ./scripts/lint
+
+  build:
+    timeout-minutes: 15
+    name: build
+    runs-on: ${{ github.repository == 'stainless-sdks/courier-java' && 'depot-ubuntu-24.04' || 'ubuntu-latest' }}
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.fork
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: |
+            8
+            21
+          cache: gradle
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build SDK
+        run: ./scripts/build
 
   test:
-    needs: [ compile ]
-    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    name: test
+    runs-on: ${{ github.repository == 'stainless-sdks/courier-java' && 'depot-ubuntu-24.04' || 'ubuntu-latest' }}
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.fork
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up Java
-        id: setup-jre
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v4
         with:
-          java-version: "11"
-          architecture: x64
+          distribution: temurin
+          java-version: |
+            8
+            21
+          cache: gradle
 
-      - name: Test
-        run: ./gradlew test
-  publish:
-    needs: [ compile, test ]
-    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
-    runs-on: ubuntu-latest
+      - name: Set up Gradle
+        uses: gradle/gradle-build-action@v2
 
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-
-      - name: Set up Java
-        id: setup-jre
-        uses: actions/setup-java@v1
-        with:
-          java-version: "11"
-          architecture: x64
-
-      - name: Publish to maven
-        run: |
-          ./.publish/prepare.sh
-          ./gradlew  publish
-        env:
-          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
-          MAVEN_PUBLISH_REGISTRY_URL: "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-          MAVEN_SIGNATURE_KID: ${{ secrets.MAVEN_SIGNATURE_KID }}
-          MAVEN_SIGNATURE_SECRET_KEY: ${{ secrets.MAVEN_SIGNATURE_SECRET_KEY }}
-          MAVEN_SIGNATURE_PASSWORD: ${{ secrets.MAVEN_SIGNATURE_PASSWORD }}
+      - name: Run tests
+        run: ./scripts/test

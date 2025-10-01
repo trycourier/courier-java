@@ -1,24 +1,7 @@
-*.class
-.project
+.prism.log
 .gradle
-?
-.classpath
-.checkstyle
-.settings
-.node
-build
-
-# IntelliJ
-*.iml
-*.ipr
-*.iws
-.idea/
-out/
-
-# Eclipse/IntelliJ APT
-generated_src/
-generated_testSrc/
-generated/
-
-bin
-build
+.idea
+.kotlin
+build/
+codegen.log
+kls_database.db
