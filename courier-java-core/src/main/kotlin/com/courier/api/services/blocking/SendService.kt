@@ -5,8 +5,8 @@ package com.courier.api.services.blocking
 import com.courier.api.core.ClientOptions
 import com.courier.api.core.RequestOptions
 import com.courier.api.core.http.HttpResponseFor
-import com.courier.api.models.send.SendSendMessageParams
-import com.courier.api.models.send.SendSendMessageResponse
+import com.courier.api.models.send.SendMessageParams
+import com.courier.api.models.send.SendMessageResponse
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
@@ -25,14 +25,14 @@ interface SendService {
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): SendService
 
     /** Use the send API to send a message to one or more recipients. */
-    fun sendMessage(params: SendSendMessageParams): SendSendMessageResponse =
-        sendMessage(params, RequestOptions.none())
+    fun message(params: SendMessageParams): SendMessageResponse =
+        message(params, RequestOptions.none())
 
-    /** @see sendMessage */
-    fun sendMessage(
-        params: SendSendMessageParams,
+    /** @see message */
+    fun message(
+        params: SendMessageParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): SendSendMessageResponse
+    ): SendMessageResponse
 
     /** A view of [SendService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -46,17 +46,17 @@ interface SendService {
 
         /**
          * Returns a raw HTTP response for `post /send`, but is otherwise the same as
-         * [SendService.sendMessage].
+         * [SendService.message].
          */
         @MustBeClosed
-        fun sendMessage(params: SendSendMessageParams): HttpResponseFor<SendSendMessageResponse> =
-            sendMessage(params, RequestOptions.none())
+        fun message(params: SendMessageParams): HttpResponseFor<SendMessageResponse> =
+            message(params, RequestOptions.none())
 
-        /** @see sendMessage */
+        /** @see message */
         @MustBeClosed
-        fun sendMessage(
-            params: SendSendMessageParams,
+        fun message(
+            params: SendMessageParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<SendSendMessageResponse>
+        ): HttpResponseFor<SendMessageResponse>
     }
 }

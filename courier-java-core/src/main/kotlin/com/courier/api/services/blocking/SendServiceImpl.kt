@@ -15,8 +15,8 @@ import com.courier.api.core.http.HttpResponseFor
 import com.courier.api.core.http.json
 import com.courier.api.core.http.parseable
 import com.courier.api.core.prepare
-import com.courier.api.models.send.SendSendMessageParams
-import com.courier.api.models.send.SendSendMessageResponse
+import com.courier.api.models.send.SendMessageParams
+import com.courier.api.models.send.SendMessageResponse
 import java.util.function.Consumer
 
 class SendServiceImpl internal constructor(private val clientOptions: ClientOptions) : SendService {
@@ -30,12 +30,12 @@ class SendServiceImpl internal constructor(private val clientOptions: ClientOpti
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): SendService =
         SendServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
-    override fun sendMessage(
-        params: SendSendMessageParams,
+    override fun message(
+        params: SendMessageParams,
         requestOptions: RequestOptions,
-    ): SendSendMessageResponse =
+    ): SendMessageResponse =
         // post /send
-        withRawResponse().sendMessage(params, requestOptions).parse()
+        withRawResponse().message(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         SendService.WithRawResponse {
@@ -50,13 +50,13 @@ class SendServiceImpl internal constructor(private val clientOptions: ClientOpti
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
-        private val sendMessageHandler: Handler<SendSendMessageResponse> =
-            jsonHandler<SendSendMessageResponse>(clientOptions.jsonMapper)
+        private val messageHandler: Handler<SendMessageResponse> =
+            jsonHandler<SendMessageResponse>(clientOptions.jsonMapper)
 
-        override fun sendMessage(
-            params: SendSendMessageParams,
+        override fun message(
+            params: SendMessageParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<SendSendMessageResponse> {
+        ): HttpResponseFor<SendMessageResponse> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -69,7 +69,7 @@ class SendServiceImpl internal constructor(private val clientOptions: ClientOpti
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return errorHandler.handle(response).parseable {
                 response
-                    .use { sendMessageHandler.handle(it) }
+                    .use { messageHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()

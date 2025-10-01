@@ -20,7 +20,7 @@ import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
 /** Use the send API to send a message to one or more recipients. */
-class SendSendMessageParams
+class SendMessageParams
 private constructor(
     private val body: Body,
     private val additionalHeaders: Headers,
@@ -55,7 +55,7 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [SendSendMessageParams].
+         * Returns a mutable builder for constructing an instance of [SendMessageParams].
          *
          * The following fields are required:
          * ```java
@@ -65,7 +65,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [SendSendMessageParams]. */
+    /** A builder for [SendMessageParams]. */
     class Builder internal constructor() {
 
         private var body: Body.Builder = Body.builder()
@@ -73,10 +73,10 @@ private constructor(
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(sendSendMessageParams: SendSendMessageParams) = apply {
-            body = sendSendMessageParams.body.toBuilder()
-            additionalHeaders = sendSendMessageParams.additionalHeaders.toBuilder()
-            additionalQueryParams = sendSendMessageParams.additionalQueryParams.toBuilder()
+        internal fun from(sendMessageParams: SendMessageParams) = apply {
+            body = sendMessageParams.body.toBuilder()
+            additionalHeaders = sendMessageParams.additionalHeaders.toBuilder()
+            additionalQueryParams = sendMessageParams.additionalQueryParams.toBuilder()
         }
 
         /**
@@ -223,7 +223,7 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [SendSendMessageParams].
+         * Returns an immutable instance of [SendMessageParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
@@ -234,8 +234,8 @@ private constructor(
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): SendSendMessageParams =
-            SendSendMessageParams(
+        fun build(): SendMessageParams =
+            SendMessageParams(
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -416,7 +416,7 @@ private constructor(
             return true
         }
 
-        return other is SendSendMessageParams &&
+        return other is SendMessageParams &&
             body == other.body &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
@@ -425,5 +425,5 @@ private constructor(
     override fun hashCode(): Int = Objects.hash(body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "SendSendMessageParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "SendMessageParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

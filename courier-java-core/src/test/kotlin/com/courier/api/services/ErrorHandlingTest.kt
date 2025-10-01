@@ -23,7 +23,7 @@ import com.courier.api.models.send.ElementalNode
 import com.courier.api.models.send.Message
 import com.courier.api.models.send.MessageContext
 import com.courier.api.models.send.RoutingMethod
-import com.courier.api.models.send.SendSendMessageParams
+import com.courier.api.models.send.SendMessageParams
 import com.courier.api.models.send.Utm
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.post
@@ -67,7 +67,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage400() {
+    fun sendMessage400() {
         val sendService = client.send()
         stubFor(
             post(anyUrl())
@@ -78,8 +78,8 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<BadRequestException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
                             Message.ContentMessage.builder()
                                 .brandId("brand_id")
@@ -299,7 +299,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage400WithRawResponse() {
+    fun sendMessage400WithRawResponse() {
         val sendService = client.send().withRawResponse()
         stubFor(
             post(anyUrl())
@@ -310,8 +310,8 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<BadRequestException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
                             Message.ContentMessage.builder()
                                 .brandId("brand_id")
@@ -531,7 +531,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage401() {
+    fun sendMessage401() {
         val sendService = client.send()
         stubFor(
             post(anyUrl())
@@ -542,8 +542,8 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<UnauthorizedException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
                             Message.ContentMessage.builder()
                                 .brandId("brand_id")
@@ -763,7 +763,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage401WithRawResponse() {
+    fun sendMessage401WithRawResponse() {
         val sendService = client.send().withRawResponse()
         stubFor(
             post(anyUrl())
@@ -774,8 +774,8 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<UnauthorizedException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
                             Message.ContentMessage.builder()
                                 .brandId("brand_id")
@@ -995,7 +995,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage403() {
+    fun sendMessage403() {
         val sendService = client.send()
         stubFor(
             post(anyUrl())
@@ -1006,8 +1006,8 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<PermissionDeniedException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
                             Message.ContentMessage.builder()
                                 .brandId("brand_id")
@@ -1227,7 +1227,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage403WithRawResponse() {
+    fun sendMessage403WithRawResponse() {
         val sendService = client.send().withRawResponse()
         stubFor(
             post(anyUrl())
@@ -1238,8 +1238,8 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<PermissionDeniedException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
                             Message.ContentMessage.builder()
                                 .brandId("brand_id")
@@ -1459,7 +1459,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage404() {
+    fun sendMessage404() {
         val sendService = client.send()
         stubFor(
             post(anyUrl())
@@ -1470,8 +1470,8 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<NotFoundException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
                             Message.ContentMessage.builder()
                                 .brandId("brand_id")
@@ -1691,7 +1691,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage404WithRawResponse() {
+    fun sendMessage404WithRawResponse() {
         val sendService = client.send().withRawResponse()
         stubFor(
             post(anyUrl())
@@ -1702,8 +1702,8 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<NotFoundException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
                             Message.ContentMessage.builder()
                                 .brandId("brand_id")
@@ -1923,7 +1923,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage422() {
+    fun sendMessage422() {
         val sendService = client.send()
         stubFor(
             post(anyUrl())
@@ -1934,8 +1934,8 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<UnprocessableEntityException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
                             Message.ContentMessage.builder()
                                 .brandId("brand_id")
@@ -2155,7 +2155,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage422WithRawResponse() {
+    fun sendMessage422WithRawResponse() {
         val sendService = client.send().withRawResponse()
         stubFor(
             post(anyUrl())
@@ -2166,8 +2166,8 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<UnprocessableEntityException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
                             Message.ContentMessage.builder()
                                 .brandId("brand_id")
@@ -2387,7 +2387,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage429() {
+    fun sendMessage429() {
         val sendService = client.send()
         stubFor(
             post(anyUrl())
@@ -2398,8 +2398,8 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<RateLimitException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
                             Message.ContentMessage.builder()
                                 .brandId("brand_id")
@@ -2619,7 +2619,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage429WithRawResponse() {
+    fun sendMessage429WithRawResponse() {
         val sendService = client.send().withRawResponse()
         stubFor(
             post(anyUrl())
@@ -2630,8 +2630,8 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<RateLimitException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
                             Message.ContentMessage.builder()
                                 .brandId("brand_id")
@@ -2851,7 +2851,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage500() {
+    fun sendMessage500() {
         val sendService = client.send()
         stubFor(
             post(anyUrl())
@@ -2862,8 +2862,8 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<InternalServerException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
                             Message.ContentMessage.builder()
                                 .brandId("brand_id")
@@ -3083,7 +3083,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage500WithRawResponse() {
+    fun sendMessage500WithRawResponse() {
         val sendService = client.send().withRawResponse()
         stubFor(
             post(anyUrl())
@@ -3094,8 +3094,8 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<InternalServerException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
                             Message.ContentMessage.builder()
                                 .brandId("brand_id")
@@ -3315,7 +3315,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage999() {
+    fun sendMessage999() {
         val sendService = client.send()
         stubFor(
             post(anyUrl())
@@ -3326,8 +3326,8 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<UnexpectedStatusCodeException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
                             Message.ContentMessage.builder()
                                 .brandId("brand_id")
@@ -3547,7 +3547,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage999WithRawResponse() {
+    fun sendMessage999WithRawResponse() {
         val sendService = client.send().withRawResponse()
         stubFor(
             post(anyUrl())
@@ -3558,8 +3558,8 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<UnexpectedStatusCodeException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
                             Message.ContentMessage.builder()
                                 .brandId("brand_id")
@@ -3779,7 +3779,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessageInvalidJsonBody() {
+    fun sendMessageInvalidJsonBody() {
         val sendService = client.send()
         stubFor(
             post(anyUrl())
@@ -3788,8 +3788,8 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<CourierException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
                             Message.ContentMessage.builder()
                                 .brandId("brand_id")

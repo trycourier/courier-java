@@ -12,7 +12,7 @@ import com.courier.api.models.send.ElementalNode
 import com.courier.api.models.send.Message
 import com.courier.api.models.send.MessageContext
 import com.courier.api.models.send.RoutingMethod
-import com.courier.api.models.send.SendSendMessageParams
+import com.courier.api.models.send.SendMessageParams
 import com.courier.api.models.send.Utm
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -23,7 +23,7 @@ internal class SendServiceAsyncTest {
 
     @Disabled("Prism tests are disabled")
     @Test
-    fun sendMessage() {
+    fun message() {
         val client =
             CourierOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
@@ -32,8 +32,8 @@ internal class SendServiceAsyncTest {
         val sendServiceAsync = client.send()
 
         val responseFuture =
-            sendServiceAsync.sendMessage(
-                SendSendMessageParams.builder()
+            sendServiceAsync.message(
+                SendMessageParams.builder()
                     .message(
                         Message.ContentMessage.builder()
                             .brandId("brand_id")
