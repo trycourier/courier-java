@@ -6,11 +6,11 @@ import com.courier.api.core.JsonValue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-internal class SendSendMessageParamsTest {
+internal class SendMessageParamsTest {
 
     @Test
     fun create() {
-        SendSendMessageParams.builder()
+        SendMessageParams.builder()
             .message(
                 Message.ContentMessage.builder()
                     .brandId("brand_id")
@@ -208,7 +208,7 @@ internal class SendSendMessageParamsTest {
     @Test
     fun body() {
         val params =
-            SendSendMessageParams.builder()
+            SendMessageParams.builder()
                 .message(
                     Message.ContentMessage.builder()
                         .brandId("brand_id")
@@ -609,7 +609,7 @@ internal class SendSendMessageParamsTest {
     @Test
     fun bodyWithoutOptionalFields() {
         val params =
-            SendSendMessageParams.builder()
+            SendMessageParams.builder()
                 .message(
                     Message.ContentMessage.builder()
                         .content(

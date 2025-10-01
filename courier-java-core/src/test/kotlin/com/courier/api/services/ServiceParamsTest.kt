@@ -12,7 +12,7 @@ import com.courier.api.models.send.ElementalNode
 import com.courier.api.models.send.Message
 import com.courier.api.models.send.MessageContext
 import com.courier.api.models.send.RoutingMethod
-import com.courier.api.models.send.SendSendMessageParams
+import com.courier.api.models.send.SendMessageParams
 import com.courier.api.models.send.Utm
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.equalTo
@@ -46,12 +46,12 @@ internal class ServiceParamsTest {
 
     @Disabled("Prism tests are disabled")
     @Test
-    fun sendMessage() {
+    fun message() {
         val sendService = client.send()
         stubFor(post(anyUrl()).willReturn(ok("{}")))
 
-        sendService.sendMessage(
-            SendSendMessageParams.builder()
+        sendService.message(
+            SendMessageParams.builder()
                 .message(
                     Message.ContentMessage.builder()
                         .brandId("brand_id")
