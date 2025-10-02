@@ -18,7 +18,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-class TokenRetrieveSingleResponse
+class TokenRetrieveResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val providerKey: JsonField<UserToken.ProviderKey>,
@@ -202,7 +202,7 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [TokenRetrieveSingleResponse].
+         * Returns a mutable builder for constructing an instance of [TokenRetrieveResponse].
          *
          * The following fields are required:
          * ```java
@@ -212,7 +212,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [TokenRetrieveSingleResponse]. */
+    /** A builder for [TokenRetrieveResponse]. */
     class Builder internal constructor() {
 
         private var providerKey: JsonField<UserToken.ProviderKey>? = null
@@ -226,16 +226,16 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(tokenRetrieveSingleResponse: TokenRetrieveSingleResponse) = apply {
-            providerKey = tokenRetrieveSingleResponse.providerKey
-            token = tokenRetrieveSingleResponse.token
-            device = tokenRetrieveSingleResponse.device
-            expiryDate = tokenRetrieveSingleResponse.expiryDate
-            properties = tokenRetrieveSingleResponse.properties
-            tracking = tokenRetrieveSingleResponse.tracking
-            status = tokenRetrieveSingleResponse.status
-            statusReason = tokenRetrieveSingleResponse.statusReason
-            additionalProperties = tokenRetrieveSingleResponse.additionalProperties.toMutableMap()
+        internal fun from(tokenRetrieveResponse: TokenRetrieveResponse) = apply {
+            providerKey = tokenRetrieveResponse.providerKey
+            token = tokenRetrieveResponse.token
+            device = tokenRetrieveResponse.device
+            expiryDate = tokenRetrieveResponse.expiryDate
+            properties = tokenRetrieveResponse.properties
+            tracking = tokenRetrieveResponse.tracking
+            status = tokenRetrieveResponse.status
+            statusReason = tokenRetrieveResponse.statusReason
+            additionalProperties = tokenRetrieveResponse.additionalProperties.toMutableMap()
         }
 
         fun providerKey(providerKey: UserToken.ProviderKey) = providerKey(JsonField.of(providerKey))
@@ -376,7 +376,7 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [TokenRetrieveSingleResponse].
+         * Returns an immutable instance of [TokenRetrieveResponse].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
@@ -387,8 +387,8 @@ private constructor(
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): TokenRetrieveSingleResponse =
-            TokenRetrieveSingleResponse(
+        fun build(): TokenRetrieveResponse =
+            TokenRetrieveResponse(
                 checkRequired("providerKey", providerKey),
                 token,
                 device,
@@ -403,7 +403,7 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): TokenRetrieveSingleResponse = apply {
+    fun validate(): TokenRetrieveResponse = apply {
         if (validated) {
             return@apply
         }
@@ -583,7 +583,7 @@ private constructor(
             return true
         }
 
-        return other is TokenRetrieveSingleResponse &&
+        return other is TokenRetrieveResponse &&
             providerKey == other.providerKey &&
             token == other.token &&
             device == other.device &&
@@ -612,5 +612,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "TokenRetrieveSingleResponse{providerKey=$providerKey, token=$token, device=$device, expiryDate=$expiryDate, properties=$properties, tracking=$tracking, status=$status, statusReason=$statusReason, additionalProperties=$additionalProperties}"
+        "TokenRetrieveResponse{providerKey=$providerKey, token=$token, device=$device, expiryDate=$expiryDate, properties=$properties, tracking=$tracking, status=$status, statusReason=$statusReason, additionalProperties=$additionalProperties}"
 }

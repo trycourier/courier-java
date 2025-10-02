@@ -6,9 +6,9 @@ import com.courier.api.core.ClientOptions
 import com.courier.api.core.RequestOptions
 import com.courier.api.core.http.HttpResponseFor
 import com.courier.api.models.messages.MessageCancelParams
+import com.courier.api.models.messages.MessageContentParams
+import com.courier.api.models.messages.MessageContentResponse
 import com.courier.api.models.messages.MessageDetails
-import com.courier.api.models.messages.MessageGetContentParams
-import com.courier.api.models.messages.MessageGetContentResponse
 import com.courier.api.models.messages.MessageHistoryParams
 import com.courier.api.models.messages.MessageHistoryResponse
 import com.courier.api.models.messages.MessageListParams
@@ -116,36 +116,36 @@ interface MessageService {
         cancel(messageId, MessageCancelParams.none(), requestOptions)
 
     /** Get message content */
-    fun getContent(messageId: String): MessageGetContentResponse =
-        getContent(messageId, MessageGetContentParams.none())
+    fun content(messageId: String): MessageContentResponse =
+        content(messageId, MessageContentParams.none())
 
-    /** @see getContent */
-    fun getContent(
+    /** @see content */
+    fun content(
         messageId: String,
-        params: MessageGetContentParams = MessageGetContentParams.none(),
+        params: MessageContentParams = MessageContentParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): MessageGetContentResponse =
-        getContent(params.toBuilder().messageId(messageId).build(), requestOptions)
+    ): MessageContentResponse =
+        content(params.toBuilder().messageId(messageId).build(), requestOptions)
 
-    /** @see getContent */
-    fun getContent(
+    /** @see content */
+    fun content(
         messageId: String,
-        params: MessageGetContentParams = MessageGetContentParams.none(),
-    ): MessageGetContentResponse = getContent(messageId, params, RequestOptions.none())
+        params: MessageContentParams = MessageContentParams.none(),
+    ): MessageContentResponse = content(messageId, params, RequestOptions.none())
 
-    /** @see getContent */
-    fun getContent(
-        params: MessageGetContentParams,
+    /** @see content */
+    fun content(
+        params: MessageContentParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): MessageGetContentResponse
+    ): MessageContentResponse
 
-    /** @see getContent */
-    fun getContent(params: MessageGetContentParams): MessageGetContentResponse =
-        getContent(params, RequestOptions.none())
+    /** @see content */
+    fun content(params: MessageContentParams): MessageContentResponse =
+        content(params, RequestOptions.none())
 
-    /** @see getContent */
-    fun getContent(messageId: String, requestOptions: RequestOptions): MessageGetContentResponse =
-        getContent(messageId, MessageGetContentParams.none(), requestOptions)
+    /** @see content */
+    fun content(messageId: String, requestOptions: RequestOptions): MessageContentResponse =
+        content(messageId, MessageContentParams.none(), requestOptions)
 
     /** Fetch the array of events of a message you've previously sent. */
     fun history(messageId: String): MessageHistoryResponse =
@@ -305,49 +305,48 @@ interface MessageService {
 
         /**
          * Returns a raw HTTP response for `get /messages/{message_id}/output`, but is otherwise the
-         * same as [MessageService.getContent].
+         * same as [MessageService.content].
          */
         @MustBeClosed
-        fun getContent(messageId: String): HttpResponseFor<MessageGetContentResponse> =
-            getContent(messageId, MessageGetContentParams.none())
+        fun content(messageId: String): HttpResponseFor<MessageContentResponse> =
+            content(messageId, MessageContentParams.none())
 
-        /** @see getContent */
+        /** @see content */
         @MustBeClosed
-        fun getContent(
+        fun content(
             messageId: String,
-            params: MessageGetContentParams = MessageGetContentParams.none(),
+            params: MessageContentParams = MessageContentParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MessageGetContentResponse> =
-            getContent(params.toBuilder().messageId(messageId).build(), requestOptions)
+        ): HttpResponseFor<MessageContentResponse> =
+            content(params.toBuilder().messageId(messageId).build(), requestOptions)
 
-        /** @see getContent */
+        /** @see content */
         @MustBeClosed
-        fun getContent(
+        fun content(
             messageId: String,
-            params: MessageGetContentParams = MessageGetContentParams.none(),
-        ): HttpResponseFor<MessageGetContentResponse> =
-            getContent(messageId, params, RequestOptions.none())
+            params: MessageContentParams = MessageContentParams.none(),
+        ): HttpResponseFor<MessageContentResponse> =
+            content(messageId, params, RequestOptions.none())
 
-        /** @see getContent */
+        /** @see content */
         @MustBeClosed
-        fun getContent(
-            params: MessageGetContentParams,
+        fun content(
+            params: MessageContentParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MessageGetContentResponse>
+        ): HttpResponseFor<MessageContentResponse>
 
-        /** @see getContent */
+        /** @see content */
         @MustBeClosed
-        fun getContent(
-            params: MessageGetContentParams
-        ): HttpResponseFor<MessageGetContentResponse> = getContent(params, RequestOptions.none())
+        fun content(params: MessageContentParams): HttpResponseFor<MessageContentResponse> =
+            content(params, RequestOptions.none())
 
-        /** @see getContent */
+        /** @see content */
         @MustBeClosed
-        fun getContent(
+        fun content(
             messageId: String,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<MessageGetContentResponse> =
-            getContent(messageId, MessageGetContentParams.none(), requestOptions)
+        ): HttpResponseFor<MessageContentResponse> =
+            content(messageId, MessageContentParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /messages/{message_id}/history`, but is otherwise

@@ -15,6 +15,7 @@ import com.courier.api.models.tenants.TenantListUsersResponse
 import com.courier.api.models.tenants.TenantRetrieveParams
 import com.courier.api.models.tenants.TenantUpdateParams
 import com.courier.api.services.blocking.tenants.DefaultPreferenceService
+import com.courier.api.services.blocking.tenants.TemplateService
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
@@ -33,6 +34,8 @@ interface TenantService {
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): TenantService
 
     fun defaultPreferences(): DefaultPreferenceService
+
+    fun templates(): TemplateService
 
     /** Get a Tenant */
     fun retrieve(tenantId: String): Tenant = retrieve(tenantId, TenantRetrieveParams.none())
@@ -167,6 +170,8 @@ interface TenantService {
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): TenantService.WithRawResponse
 
         fun defaultPreferences(): DefaultPreferenceService.WithRawResponse
+
+        fun templates(): TemplateService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `get /tenants/{tenant_id}`, but is otherwise the same as

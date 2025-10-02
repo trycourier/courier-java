@@ -5,6 +5,8 @@ package com.courier.api.models.send
 import com.courier.api.core.JsonValue
 import com.courier.api.core.jsonMapper
 import com.courier.api.errors.CourierInvalidDataException
+import com.courier.api.models.tenants.templates.ElementalContent
+import com.courier.api.models.tenants.templates.ElementalNode
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -63,7 +65,7 @@ internal class MessageTest {
                         .addTag("string")
                         .traceId("trace_id")
                         .utm(
-                            Utm.builder()
+                            BaseMessage.Metadata.Utm.builder()
                                 .campaign("campaign")
                                 .content("content")
                                 .medium("medium")
@@ -105,46 +107,8 @@ internal class MessageTest {
                 )
                 .routing(
                     BaseMessage.Routing.builder()
-                        .addChannel(
-                            BaseMessage.Routing.Channel.RoutingStrategyChannel.builder()
-                                .channel("channel")
-                                .config(
-                                    BaseMessage.Routing.Channel.RoutingStrategyChannel.Config
-                                        .builder()
-                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
-                                        .build()
-                                )
-                                .if_("if")
-                                .method(RoutingMethod.ALL)
-                                .providers(
-                                    BaseMessage.Routing.Channel.RoutingStrategyChannel.Providers
-                                        .builder()
-                                        .putAdditionalProperty(
-                                            "foo",
-                                            JsonValue.from(
-                                                mapOf(
-                                                    "if" to "if",
-                                                    "metadata" to
-                                                        mapOf(
-                                                            "utm" to
-                                                                mapOf(
-                                                                    "campaign" to "campaign",
-                                                                    "content" to "content",
-                                                                    "medium" to "medium",
-                                                                    "source" to "source",
-                                                                    "term" to "term",
-                                                                )
-                                                        ),
-                                                    "override" to mapOf("foo" to "bar"),
-                                                    "timeouts" to 0,
-                                                )
-                                            ),
-                                        )
-                                        .build()
-                                )
-                                .build()
-                        )
-                        .method(RoutingMethod.ALL)
+                        .addChannel("string")
+                        .method(BaseMessage.Routing.Method.ALL)
                         .build()
                 )
                 .timeout(
@@ -184,7 +148,7 @@ internal class MessageTest {
                         .build()
                 )
                 .content(
-                    Content.ElementalContent.builder()
+                    ElementalContent.builder()
                         .addElement(
                             ElementalNode.UnionMember0.builder()
                                 .addChannel("string")
@@ -260,7 +224,7 @@ internal class MessageTest {
                             .addTag("string")
                             .traceId("trace_id")
                             .utm(
-                                Utm.builder()
+                                BaseMessage.Metadata.Utm.builder()
                                     .campaign("campaign")
                                     .content("content")
                                     .medium("medium")
@@ -302,46 +266,8 @@ internal class MessageTest {
                     )
                     .routing(
                         BaseMessage.Routing.builder()
-                            .addChannel(
-                                BaseMessage.Routing.Channel.RoutingStrategyChannel.builder()
-                                    .channel("channel")
-                                    .config(
-                                        BaseMessage.Routing.Channel.RoutingStrategyChannel.Config
-                                            .builder()
-                                            .putAdditionalProperty("foo", JsonValue.from("bar"))
-                                            .build()
-                                    )
-                                    .if_("if")
-                                    .method(RoutingMethod.ALL)
-                                    .providers(
-                                        BaseMessage.Routing.Channel.RoutingStrategyChannel.Providers
-                                            .builder()
-                                            .putAdditionalProperty(
-                                                "foo",
-                                                JsonValue.from(
-                                                    mapOf(
-                                                        "if" to "if",
-                                                        "metadata" to
-                                                            mapOf(
-                                                                "utm" to
-                                                                    mapOf(
-                                                                        "campaign" to "campaign",
-                                                                        "content" to "content",
-                                                                        "medium" to "medium",
-                                                                        "source" to "source",
-                                                                        "term" to "term",
-                                                                    )
-                                                            ),
-                                                        "override" to mapOf("foo" to "bar"),
-                                                        "timeouts" to 0,
-                                                    )
-                                                ),
-                                            )
-                                            .build()
-                                    )
-                                    .build()
-                            )
-                            .method(RoutingMethod.ALL)
+                            .addChannel("string")
+                            .method(BaseMessage.Routing.Method.ALL)
                             .build()
                     )
                     .timeout(
@@ -385,7 +311,7 @@ internal class MessageTest {
                             .build()
                     )
                     .content(
-                        Content.ElementalContent.builder()
+                        ElementalContent.builder()
                             .addElement(
                                 ElementalNode.UnionMember0.builder()
                                     .addChannel("string")
@@ -457,7 +383,7 @@ internal class MessageTest {
                         .addTag("string")
                         .traceId("trace_id")
                         .utm(
-                            Utm.builder()
+                            BaseMessage.Metadata.Utm.builder()
                                 .campaign("campaign")
                                 .content("content")
                                 .medium("medium")
@@ -499,46 +425,8 @@ internal class MessageTest {
                 )
                 .routing(
                     BaseMessage.Routing.builder()
-                        .addChannel(
-                            BaseMessage.Routing.Channel.RoutingStrategyChannel.builder()
-                                .channel("channel")
-                                .config(
-                                    BaseMessage.Routing.Channel.RoutingStrategyChannel.Config
-                                        .builder()
-                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
-                                        .build()
-                                )
-                                .if_("if")
-                                .method(RoutingMethod.ALL)
-                                .providers(
-                                    BaseMessage.Routing.Channel.RoutingStrategyChannel.Providers
-                                        .builder()
-                                        .putAdditionalProperty(
-                                            "foo",
-                                            JsonValue.from(
-                                                mapOf(
-                                                    "if" to "if",
-                                                    "metadata" to
-                                                        mapOf(
-                                                            "utm" to
-                                                                mapOf(
-                                                                    "campaign" to "campaign",
-                                                                    "content" to "content",
-                                                                    "medium" to "medium",
-                                                                    "source" to "source",
-                                                                    "term" to "term",
-                                                                )
-                                                        ),
-                                                    "override" to mapOf("foo" to "bar"),
-                                                    "timeouts" to 0,
-                                                )
-                                            ),
-                                        )
-                                        .build()
-                                )
-                                .build()
-                        )
-                        .method(RoutingMethod.ALL)
+                        .addChannel("string")
+                        .method(BaseMessage.Routing.Method.ALL)
                         .build()
                 )
                 .timeout(
@@ -640,7 +528,7 @@ internal class MessageTest {
                             .addTag("string")
                             .traceId("trace_id")
                             .utm(
-                                Utm.builder()
+                                BaseMessage.Metadata.Utm.builder()
                                     .campaign("campaign")
                                     .content("content")
                                     .medium("medium")
@@ -682,46 +570,8 @@ internal class MessageTest {
                     )
                     .routing(
                         BaseMessage.Routing.builder()
-                            .addChannel(
-                                BaseMessage.Routing.Channel.RoutingStrategyChannel.builder()
-                                    .channel("channel")
-                                    .config(
-                                        BaseMessage.Routing.Channel.RoutingStrategyChannel.Config
-                                            .builder()
-                                            .putAdditionalProperty("foo", JsonValue.from("bar"))
-                                            .build()
-                                    )
-                                    .if_("if")
-                                    .method(RoutingMethod.ALL)
-                                    .providers(
-                                        BaseMessage.Routing.Channel.RoutingStrategyChannel.Providers
-                                            .builder()
-                                            .putAdditionalProperty(
-                                                "foo",
-                                                JsonValue.from(
-                                                    mapOf(
-                                                        "if" to "if",
-                                                        "metadata" to
-                                                            mapOf(
-                                                                "utm" to
-                                                                    mapOf(
-                                                                        "campaign" to "campaign",
-                                                                        "content" to "content",
-                                                                        "medium" to "medium",
-                                                                        "source" to "source",
-                                                                        "term" to "term",
-                                                                    )
-                                                            ),
-                                                        "override" to mapOf("foo" to "bar"),
-                                                        "timeouts" to 0,
-                                                    )
-                                                ),
-                                            )
-                                            .build()
-                                    )
-                                    .build()
-                            )
-                            .method(RoutingMethod.ALL)
+                            .addChannel("string")
+                            .method(BaseMessage.Routing.Method.ALL)
                             .build()
                     )
                     .timeout(

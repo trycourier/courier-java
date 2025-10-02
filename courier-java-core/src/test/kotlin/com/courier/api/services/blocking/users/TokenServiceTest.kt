@@ -7,7 +7,7 @@ import com.courier.api.client.okhttp.CourierOkHttpClient
 import com.courier.api.core.JsonValue
 import com.courier.api.models.users.tokens.TokenAddSingleParams
 import com.courier.api.models.users.tokens.TokenDeleteParams
-import com.courier.api.models.users.tokens.TokenRetrieveSingleParams
+import com.courier.api.models.users.tokens.TokenRetrieveParams
 import com.courier.api.models.users.tokens.TokenUpdateParams
 import com.courier.api.models.users.tokens.UserToken
 import org.junit.jupiter.api.Disabled
@@ -16,6 +16,24 @@ import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
 internal class TokenServiceTest {
+
+    @Disabled("Prism tests are disabled")
+    @Test
+    fun retrieve() {
+        val client =
+            CourierOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .apiKey("My API Key")
+                .build()
+        val tokenService = client.users().tokens()
+
+        val token =
+            tokenService.retrieve(
+                TokenRetrieveParams.builder().userId("user_id").token("token").build()
+            )
+
+        token.validate()
+    }
 
     @Disabled("Prism tests are disabled")
     @Test
@@ -121,23 +139,5 @@ internal class TokenServiceTest {
                 )
                 .build()
         )
-    }
-
-    @Disabled("Prism tests are disabled")
-    @Test
-    fun retrieveSingle() {
-        val client =
-            CourierOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
-        val tokenService = client.users().tokens()
-
-        val response =
-            tokenService.retrieveSingle(
-                TokenRetrieveSingleParams.builder().userId("user_id").token("token").build()
-            )
-
-        response.validate()
     }
 }

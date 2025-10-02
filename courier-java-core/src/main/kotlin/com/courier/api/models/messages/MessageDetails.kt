@@ -810,11 +810,17 @@ private constructor(
 
         companion object {
 
+            @JvmField val BOUNCED = of("BOUNCED")
+
+            @JvmField val FAILED = of("FAILED")
+
             @JvmField val FILTERED = of("FILTERED")
 
             @JvmField val NO_CHANNELS = of("NO_CHANNELS")
 
             @JvmField val NO_PROVIDERS = of("NO_PROVIDERS")
+
+            @JvmField val OPT_IN_REQUIRED = of("OPT_IN_REQUIRED")
 
             @JvmField val PROVIDER_ERROR = of("PROVIDER_ERROR")
 
@@ -827,9 +833,12 @@ private constructor(
 
         /** An enum containing [Reason]'s known values. */
         enum class Known {
+            BOUNCED,
+            FAILED,
             FILTERED,
             NO_CHANNELS,
             NO_PROVIDERS,
+            OPT_IN_REQUIRED,
             PROVIDER_ERROR,
             UNPUBLISHED,
             UNSUBSCRIBED,
@@ -845,9 +854,12 @@ private constructor(
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
+            BOUNCED,
+            FAILED,
             FILTERED,
             NO_CHANNELS,
             NO_PROVIDERS,
+            OPT_IN_REQUIRED,
             PROVIDER_ERROR,
             UNPUBLISHED,
             UNSUBSCRIBED,
@@ -864,9 +876,12 @@ private constructor(
          */
         fun value(): Value =
             when (this) {
+                BOUNCED -> Value.BOUNCED
+                FAILED -> Value.FAILED
                 FILTERED -> Value.FILTERED
                 NO_CHANNELS -> Value.NO_CHANNELS
                 NO_PROVIDERS -> Value.NO_PROVIDERS
+                OPT_IN_REQUIRED -> Value.OPT_IN_REQUIRED
                 PROVIDER_ERROR -> Value.PROVIDER_ERROR
                 UNPUBLISHED -> Value.UNPUBLISHED
                 UNSUBSCRIBED -> Value.UNSUBSCRIBED
@@ -884,9 +899,12 @@ private constructor(
          */
         fun known(): Known =
             when (this) {
+                BOUNCED -> Known.BOUNCED
+                FAILED -> Known.FAILED
                 FILTERED -> Known.FILTERED
                 NO_CHANNELS -> Known.NO_CHANNELS
                 NO_PROVIDERS -> Known.NO_PROVIDERS
+                OPT_IN_REQUIRED -> Known.OPT_IN_REQUIRED
                 PROVIDER_ERROR -> Known.PROVIDER_ERROR
                 UNPUBLISHED -> Known.UNPUBLISHED
                 UNSUBSCRIBED -> Known.UNSUBSCRIBED

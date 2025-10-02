@@ -17,9 +17,9 @@ import com.courier.api.core.http.json
 import com.courier.api.core.http.parseable
 import com.courier.api.core.prepareAsync
 import com.courier.api.models.messages.MessageCancelParams
+import com.courier.api.models.messages.MessageContentParams
+import com.courier.api.models.messages.MessageContentResponse
 import com.courier.api.models.messages.MessageDetails
-import com.courier.api.models.messages.MessageGetContentParams
-import com.courier.api.models.messages.MessageGetContentResponse
 import com.courier.api.models.messages.MessageHistoryParams
 import com.courier.api.models.messages.MessageHistoryResponse
 import com.courier.api.models.messages.MessageListParams
@@ -63,12 +63,12 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
         // post /messages/{message_id}/cancel
         withRawResponse().cancel(params, requestOptions).thenApply { it.parse() }
 
-    override fun getContent(
-        params: MessageGetContentParams,
+    override fun content(
+        params: MessageContentParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<MessageGetContentResponse> =
+    ): CompletableFuture<MessageContentResponse> =
         // get /messages/{message_id}/output
-        withRawResponse().getContent(params, requestOptions).thenApply { it.parse() }
+        withRawResponse().content(params, requestOptions).thenApply { it.parse() }
 
     override fun history(
         params: MessageHistoryParams,
@@ -187,13 +187,13 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
                 }
         }
 
-        private val getContentHandler: Handler<MessageGetContentResponse> =
-            jsonHandler<MessageGetContentResponse>(clientOptions.jsonMapper)
+        private val contentHandler: Handler<MessageContentResponse> =
+            jsonHandler<MessageContentResponse>(clientOptions.jsonMapper)
 
-        override fun getContent(
-            params: MessageGetContentParams,
+        override fun content(
+            params: MessageContentParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<MessageGetContentResponse>> {
+        ): CompletableFuture<HttpResponseFor<MessageContentResponse>> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("messageId", params.messageId().getOrNull())
@@ -210,7 +210,7 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
                 .thenApply { response ->
                     errorHandler.handle(response).parseable {
                         response
-                            .use { getContentHandler.handle(it) }
+                            .use { contentHandler.handle(it) }
                             .also {
                                 if (requestOptions.responseValidation!!) {
                                     it.validate()

@@ -18,7 +18,7 @@ import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
-class MessageGetContentResponse
+class MessageContentResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val results: JsonField<List<Result>>,
@@ -60,7 +60,7 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [MessageGetContentResponse].
+         * Returns a mutable builder for constructing an instance of [MessageContentResponse].
          *
          * The following fields are required:
          * ```java
@@ -70,16 +70,16 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [MessageGetContentResponse]. */
+    /** A builder for [MessageContentResponse]. */
     class Builder internal constructor() {
 
         private var results: JsonField<MutableList<Result>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(messageGetContentResponse: MessageGetContentResponse) = apply {
-            results = messageGetContentResponse.results.map { it.toMutableList() }
-            additionalProperties = messageGetContentResponse.additionalProperties.toMutableMap()
+        internal fun from(messageContentResponse: MessageContentResponse) = apply {
+            results = messageContentResponse.results.map { it.toMutableList() }
+            additionalProperties = messageContentResponse.additionalProperties.toMutableMap()
         }
 
         /** An array of render output of a previously sent message. */
@@ -128,7 +128,7 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [MessageGetContentResponse].
+         * Returns an immutable instance of [MessageContentResponse].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
@@ -139,8 +139,8 @@ private constructor(
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): MessageGetContentResponse =
-            MessageGetContentResponse(
+        fun build(): MessageContentResponse =
+            MessageContentResponse(
                 checkRequired("results", results).map { it.toImmutable() },
                 additionalProperties.toMutableMap(),
             )
@@ -148,7 +148,7 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): MessageGetContentResponse = apply {
+    fun validate(): MessageContentResponse = apply {
         if (validated) {
             return@apply
         }
@@ -1001,7 +1001,7 @@ private constructor(
             return true
         }
 
-        return other is MessageGetContentResponse &&
+        return other is MessageContentResponse &&
             results == other.results &&
             additionalProperties == other.additionalProperties
     }
@@ -1011,5 +1011,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "MessageGetContentResponse{results=$results, additionalProperties=$additionalProperties}"
+        "MessageContentResponse{results=$results, additionalProperties=$additionalProperties}"
 }

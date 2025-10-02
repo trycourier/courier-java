@@ -8,12 +8,12 @@ import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-internal class TokenRetrieveSingleResponseTest {
+internal class TokenRetrieveResponseTest {
 
     @Test
     fun create() {
-        val tokenRetrieveSingleResponse =
-            TokenRetrieveSingleResponse.builder()
+        val tokenRetrieveResponse =
+            TokenRetrieveResponse.builder()
                 .providerKey(UserToken.ProviderKey.FIREBASE_FCM)
                 .token("token")
                 .device(
@@ -36,14 +36,14 @@ internal class TokenRetrieveSingleResponseTest {
                         .osVersion("os_version")
                         .build()
                 )
-                .status(TokenRetrieveSingleResponse.Status.ACTIVE)
+                .status(TokenRetrieveResponse.Status.ACTIVE)
                 .statusReason("status_reason")
                 .build()
 
-        assertThat(tokenRetrieveSingleResponse.providerKey())
+        assertThat(tokenRetrieveResponse.providerKey())
             .isEqualTo(UserToken.ProviderKey.FIREBASE_FCM)
-        assertThat(tokenRetrieveSingleResponse.token()).contains("token")
-        assertThat(tokenRetrieveSingleResponse.device())
+        assertThat(tokenRetrieveResponse.token()).contains("token")
+        assertThat(tokenRetrieveResponse.device())
             .contains(
                 UserToken.Device.builder()
                     .adId("ad_id")
@@ -54,11 +54,11 @@ internal class TokenRetrieveSingleResponseTest {
                     .platform("platform")
                     .build()
             )
-        assertThat(tokenRetrieveSingleResponse.expiryDate())
+        assertThat(tokenRetrieveResponse.expiryDate())
             .contains(UserToken.ExpiryDate.ofString("string"))
-        assertThat(tokenRetrieveSingleResponse._properties())
+        assertThat(tokenRetrieveResponse._properties())
             .isEqualTo(JsonValue.from(mapOf<String, Any>()))
-        assertThat(tokenRetrieveSingleResponse.tracking())
+        assertThat(tokenRetrieveResponse.tracking())
             .contains(
                 UserToken.Tracking.builder()
                     .ip("ip")
@@ -67,16 +67,15 @@ internal class TokenRetrieveSingleResponseTest {
                     .osVersion("os_version")
                     .build()
             )
-        assertThat(tokenRetrieveSingleResponse.status())
-            .contains(TokenRetrieveSingleResponse.Status.ACTIVE)
-        assertThat(tokenRetrieveSingleResponse.statusReason()).contains("status_reason")
+        assertThat(tokenRetrieveResponse.status()).contains(TokenRetrieveResponse.Status.ACTIVE)
+        assertThat(tokenRetrieveResponse.statusReason()).contains("status_reason")
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val tokenRetrieveSingleResponse =
-            TokenRetrieveSingleResponse.builder()
+        val tokenRetrieveResponse =
+            TokenRetrieveResponse.builder()
                 .providerKey(UserToken.ProviderKey.FIREBASE_FCM)
                 .token("token")
                 .device(
@@ -99,16 +98,16 @@ internal class TokenRetrieveSingleResponseTest {
                         .osVersion("os_version")
                         .build()
                 )
-                .status(TokenRetrieveSingleResponse.Status.ACTIVE)
+                .status(TokenRetrieveResponse.Status.ACTIVE)
                 .statusReason("status_reason")
                 .build()
 
-        val roundtrippedTokenRetrieveSingleResponse =
+        val roundtrippedTokenRetrieveResponse =
             jsonMapper.readValue(
-                jsonMapper.writeValueAsString(tokenRetrieveSingleResponse),
-                jacksonTypeRef<TokenRetrieveSingleResponse>(),
+                jsonMapper.writeValueAsString(tokenRetrieveResponse),
+                jacksonTypeRef<TokenRetrieveResponse>(),
             )
 
-        assertThat(roundtrippedTokenRetrieveSingleResponse).isEqualTo(tokenRetrieveSingleResponse)
+        assertThat(roundtrippedTokenRetrieveResponse).isEqualTo(tokenRetrieveResponse)
     }
 }

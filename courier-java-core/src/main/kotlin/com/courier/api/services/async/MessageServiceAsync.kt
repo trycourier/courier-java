@@ -6,9 +6,9 @@ import com.courier.api.core.ClientOptions
 import com.courier.api.core.RequestOptions
 import com.courier.api.core.http.HttpResponseFor
 import com.courier.api.models.messages.MessageCancelParams
+import com.courier.api.models.messages.MessageContentParams
+import com.courier.api.models.messages.MessageContentResponse
 import com.courier.api.models.messages.MessageDetails
-import com.courier.api.models.messages.MessageGetContentParams
-import com.courier.api.models.messages.MessageGetContentResponse
 import com.courier.api.models.messages.MessageHistoryParams
 import com.courier.api.models.messages.MessageHistoryResponse
 import com.courier.api.models.messages.MessageListParams
@@ -127,40 +127,39 @@ interface MessageServiceAsync {
         cancel(messageId, MessageCancelParams.none(), requestOptions)
 
     /** Get message content */
-    fun getContent(messageId: String): CompletableFuture<MessageGetContentResponse> =
-        getContent(messageId, MessageGetContentParams.none())
+    fun content(messageId: String): CompletableFuture<MessageContentResponse> =
+        content(messageId, MessageContentParams.none())
 
-    /** @see getContent */
-    fun getContent(
+    /** @see content */
+    fun content(
         messageId: String,
-        params: MessageGetContentParams = MessageGetContentParams.none(),
+        params: MessageContentParams = MessageContentParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<MessageGetContentResponse> =
-        getContent(params.toBuilder().messageId(messageId).build(), requestOptions)
+    ): CompletableFuture<MessageContentResponse> =
+        content(params.toBuilder().messageId(messageId).build(), requestOptions)
 
-    /** @see getContent */
-    fun getContent(
+    /** @see content */
+    fun content(
         messageId: String,
-        params: MessageGetContentParams = MessageGetContentParams.none(),
-    ): CompletableFuture<MessageGetContentResponse> =
-        getContent(messageId, params, RequestOptions.none())
+        params: MessageContentParams = MessageContentParams.none(),
+    ): CompletableFuture<MessageContentResponse> = content(messageId, params, RequestOptions.none())
 
-    /** @see getContent */
-    fun getContent(
-        params: MessageGetContentParams,
+    /** @see content */
+    fun content(
+        params: MessageContentParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<MessageGetContentResponse>
+    ): CompletableFuture<MessageContentResponse>
 
-    /** @see getContent */
-    fun getContent(params: MessageGetContentParams): CompletableFuture<MessageGetContentResponse> =
-        getContent(params, RequestOptions.none())
+    /** @see content */
+    fun content(params: MessageContentParams): CompletableFuture<MessageContentResponse> =
+        content(params, RequestOptions.none())
 
-    /** @see getContent */
-    fun getContent(
+    /** @see content */
+    fun content(
         messageId: String,
         requestOptions: RequestOptions,
-    ): CompletableFuture<MessageGetContentResponse> =
-        getContent(messageId, MessageGetContentParams.none(), requestOptions)
+    ): CompletableFuture<MessageContentResponse> =
+        content(messageId, MessageContentParams.none(), requestOptions)
 
     /** Fetch the array of events of a message you've previously sent. */
     fun history(messageId: String): CompletableFuture<MessageHistoryResponse> =
@@ -322,46 +321,44 @@ interface MessageServiceAsync {
 
         /**
          * Returns a raw HTTP response for `get /messages/{message_id}/output`, but is otherwise the
-         * same as [MessageServiceAsync.getContent].
+         * same as [MessageServiceAsync.content].
          */
-        fun getContent(
-            messageId: String
-        ): CompletableFuture<HttpResponseFor<MessageGetContentResponse>> =
-            getContent(messageId, MessageGetContentParams.none())
+        fun content(messageId: String): CompletableFuture<HttpResponseFor<MessageContentResponse>> =
+            content(messageId, MessageContentParams.none())
 
-        /** @see getContent */
-        fun getContent(
+        /** @see content */
+        fun content(
             messageId: String,
-            params: MessageGetContentParams = MessageGetContentParams.none(),
+            params: MessageContentParams = MessageContentParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<MessageGetContentResponse>> =
-            getContent(params.toBuilder().messageId(messageId).build(), requestOptions)
+        ): CompletableFuture<HttpResponseFor<MessageContentResponse>> =
+            content(params.toBuilder().messageId(messageId).build(), requestOptions)
 
-        /** @see getContent */
-        fun getContent(
+        /** @see content */
+        fun content(
             messageId: String,
-            params: MessageGetContentParams = MessageGetContentParams.none(),
-        ): CompletableFuture<HttpResponseFor<MessageGetContentResponse>> =
-            getContent(messageId, params, RequestOptions.none())
+            params: MessageContentParams = MessageContentParams.none(),
+        ): CompletableFuture<HttpResponseFor<MessageContentResponse>> =
+            content(messageId, params, RequestOptions.none())
 
-        /** @see getContent */
-        fun getContent(
-            params: MessageGetContentParams,
+        /** @see content */
+        fun content(
+            params: MessageContentParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<MessageGetContentResponse>>
+        ): CompletableFuture<HttpResponseFor<MessageContentResponse>>
 
-        /** @see getContent */
-        fun getContent(
-            params: MessageGetContentParams
-        ): CompletableFuture<HttpResponseFor<MessageGetContentResponse>> =
-            getContent(params, RequestOptions.none())
+        /** @see content */
+        fun content(
+            params: MessageContentParams
+        ): CompletableFuture<HttpResponseFor<MessageContentResponse>> =
+            content(params, RequestOptions.none())
 
-        /** @see getContent */
-        fun getContent(
+        /** @see content */
+        fun content(
             messageId: String,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<MessageGetContentResponse>> =
-            getContent(messageId, MessageGetContentParams.none(), requestOptions)
+        ): CompletableFuture<HttpResponseFor<MessageContentResponse>> =
+            content(messageId, MessageContentParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /messages/{message_id}/history`, but is otherwise

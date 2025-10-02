@@ -58,9 +58,9 @@ class ListServiceAsyncImpl internal constructor(private val clientOptions: Clien
     override fun update(
         params: ListUpdateParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<List> =
+    ): CompletableFuture<Void?> =
         // put /lists/{list_id}
-        withRawResponse().update(params, requestOptions).thenApply { it.parse() }
+        withRawResponse().update(params, requestOptions).thenAccept {}
 
     override fun list(
         params: ListListParams,
@@ -134,12 +134,12 @@ class ListServiceAsyncImpl internal constructor(private val clientOptions: Clien
                 }
         }
 
-        private val updateHandler: Handler<List> = jsonHandler<List>(clientOptions.jsonMapper)
+        private val updateHandler: Handler<Void?> = emptyHandler()
 
         override fun update(
             params: ListUpdateParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<List>> {
+        ): CompletableFuture<HttpResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("listId", params.listId().getOrNull())
@@ -156,13 +156,7 @@ class ListServiceAsyncImpl internal constructor(private val clientOptions: Clien
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
                     errorHandler.handle(response).parseable {
-                        response
-                            .use { updateHandler.handle(it) }
-                            .also {
-                                if (requestOptions.responseValidation!!) {
-                                    it.validate()
-                                }
-                            }
+                        response.use { updateHandler.handle(it) }
                     }
                 }
         }
@@ -238,7 +232,7 @@ class ListServiceAsyncImpl internal constructor(private val clientOptions: Clien
                     .method(HttpMethod.PUT)
                     .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("lists", params._pathParam(0), "restore")
-                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))

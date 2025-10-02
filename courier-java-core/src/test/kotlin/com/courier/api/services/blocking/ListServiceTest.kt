@@ -6,6 +6,7 @@ import com.courier.api.TestServerExtension
 import com.courier.api.client.okhttp.CourierOkHttpClient
 import com.courier.api.core.JsonValue
 import com.courier.api.models.lists.ListListParams
+import com.courier.api.models.lists.ListRestoreParams
 import com.courier.api.models.lists.ListUpdateParams
 import com.courier.api.models.lists.subscriptions.RecipientPreferences
 import org.junit.jupiter.api.Disabled
@@ -40,61 +41,52 @@ internal class ListServiceTest {
                 .build()
         val listService = client.lists()
 
-        val list =
-            listService.update(
-                ListUpdateParams.builder()
-                    .listId("list_id")
-                    .name("name")
-                    .preferences(
-                        RecipientPreferences.builder()
-                            .categories(
-                                RecipientPreferences.Categories.builder()
-                                    .putAdditionalProperty(
-                                        "foo",
-                                        JsonValue.from(
-                                            mapOf(
-                                                "status" to "OPTED_IN",
-                                                "channel_preferences" to
-                                                    listOf(mapOf("channel" to "direct_message")),
-                                                "rules" to
-                                                    listOf(
-                                                        mapOf(
-                                                            "until" to "until",
-                                                            "start" to "start",
-                                                        )
-                                                    ),
-                                            )
-                                        ),
-                                    )
-                                    .build()
-                            )
-                            .notifications(
-                                RecipientPreferences.Notifications.builder()
-                                    .putAdditionalProperty(
-                                        "foo",
-                                        JsonValue.from(
-                                            mapOf(
-                                                "status" to "OPTED_IN",
-                                                "channel_preferences" to
-                                                    listOf(mapOf("channel" to "direct_message")),
-                                                "rules" to
-                                                    listOf(
-                                                        mapOf(
-                                                            "until" to "until",
-                                                            "start" to "start",
-                                                        )
-                                                    ),
-                                            )
-                                        ),
-                                    )
-                                    .build()
-                            )
-                            .build()
-                    )
-                    .build()
-            )
-
-        list.validate()
+        listService.update(
+            ListUpdateParams.builder()
+                .listId("list_id")
+                .name("name")
+                .preferences(
+                    RecipientPreferences.builder()
+                        .categories(
+                            RecipientPreferences.Categories.builder()
+                                .putAdditionalProperty(
+                                    "foo",
+                                    JsonValue.from(
+                                        mapOf(
+                                            "status" to "OPTED_IN",
+                                            "channel_preferences" to
+                                                listOf(mapOf("channel" to "direct_message")),
+                                            "rules" to
+                                                listOf(
+                                                    mapOf("until" to "until", "start" to "start")
+                                                ),
+                                        )
+                                    ),
+                                )
+                                .build()
+                        )
+                        .notifications(
+                            RecipientPreferences.Notifications.builder()
+                                .putAdditionalProperty(
+                                    "foo",
+                                    JsonValue.from(
+                                        mapOf(
+                                            "status" to "OPTED_IN",
+                                            "channel_preferences" to
+                                                listOf(mapOf("channel" to "direct_message")),
+                                            "rules" to
+                                                listOf(
+                                                    mapOf("until" to "until", "start" to "start")
+                                                ),
+                                        )
+                                    ),
+                                )
+                                .build()
+                        )
+                        .build()
+                )
+                .build()
+        )
     }
 
     @Disabled("Prism tests are disabled")
@@ -136,6 +128,11 @@ internal class ListServiceTest {
                 .build()
         val listService = client.lists()
 
-        listService.restore("list_id")
+        listService.restore(
+            ListRestoreParams.builder()
+                .listId("list_id")
+                .body(JsonValue.from(mapOf<String, Any>()))
+                .build()
+        )
     }
 }

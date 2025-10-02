@@ -10,8 +10,8 @@ import com.courier.api.models.users.tokens.TokenAddMultipleParams
 import com.courier.api.models.users.tokens.TokenAddSingleParams
 import com.courier.api.models.users.tokens.TokenDeleteParams
 import com.courier.api.models.users.tokens.TokenListParams
-import com.courier.api.models.users.tokens.TokenRetrieveSingleParams
-import com.courier.api.models.users.tokens.TokenRetrieveSingleResponse
+import com.courier.api.models.users.tokens.TokenRetrieveParams
+import com.courier.api.models.users.tokens.TokenRetrieveResponse
 import com.courier.api.models.users.tokens.TokenUpdateParams
 import com.courier.api.models.users.tokens.UserToken
 import com.google.errorprone.annotations.MustBeClosed
@@ -30,6 +30,27 @@ interface TokenService {
      * The original service is not modified.
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): TokenService
+
+    /** Get single token available for a `:token` */
+    fun retrieve(token: String, params: TokenRetrieveParams): TokenRetrieveResponse =
+        retrieve(token, params, RequestOptions.none())
+
+    /** @see retrieve */
+    fun retrieve(
+        token: String,
+        params: TokenRetrieveParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): TokenRetrieveResponse = retrieve(params.toBuilder().token(token).build(), requestOptions)
+
+    /** @see retrieve */
+    fun retrieve(params: TokenRetrieveParams): TokenRetrieveResponse =
+        retrieve(params, RequestOptions.none())
+
+    /** @see retrieve */
+    fun retrieve(
+        params: TokenRetrieveParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): TokenRetrieveResponse
 
     /** Apply a JSON Patch (RFC 6902) to the specified token. */
     fun update(token: String, params: TokenUpdateParams) =
@@ -141,30 +162,6 @@ interface TokenService {
         requestOptions: RequestOptions = RequestOptions.none(),
     )
 
-    /** Get single token available for a `:token` */
-    fun retrieveSingle(
-        token: String,
-        params: TokenRetrieveSingleParams,
-    ): TokenRetrieveSingleResponse = retrieveSingle(token, params, RequestOptions.none())
-
-    /** @see retrieveSingle */
-    fun retrieveSingle(
-        token: String,
-        params: TokenRetrieveSingleParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): TokenRetrieveSingleResponse =
-        retrieveSingle(params.toBuilder().token(token).build(), requestOptions)
-
-    /** @see retrieveSingle */
-    fun retrieveSingle(params: TokenRetrieveSingleParams): TokenRetrieveSingleResponse =
-        retrieveSingle(params, RequestOptions.none())
-
-    /** @see retrieveSingle */
-    fun retrieveSingle(
-        params: TokenRetrieveSingleParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): TokenRetrieveSingleResponse
-
     /** A view of [TokenService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
 
@@ -174,6 +171,37 @@ interface TokenService {
          * The original service is not modified.
          */
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): TokenService.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `get /users/{user_id}/tokens/{token}`, but is otherwise
+         * the same as [TokenService.retrieve].
+         */
+        @MustBeClosed
+        fun retrieve(
+            token: String,
+            params: TokenRetrieveParams,
+        ): HttpResponseFor<TokenRetrieveResponse> = retrieve(token, params, RequestOptions.none())
+
+        /** @see retrieve */
+        @MustBeClosed
+        fun retrieve(
+            token: String,
+            params: TokenRetrieveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<TokenRetrieveResponse> =
+            retrieve(params.toBuilder().token(token).build(), requestOptions)
+
+        /** @see retrieve */
+        @MustBeClosed
+        fun retrieve(params: TokenRetrieveParams): HttpResponseFor<TokenRetrieveResponse> =
+            retrieve(params, RequestOptions.none())
+
+        /** @see retrieve */
+        @MustBeClosed
+        fun retrieve(
+            params: TokenRetrieveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<TokenRetrieveResponse>
 
         /**
          * Returns a raw HTTP response for `patch /users/{user_id}/tokens/{token}`, but is otherwise
@@ -337,39 +365,5 @@ interface TokenService {
             params: TokenAddSingleParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse
-
-        /**
-         * Returns a raw HTTP response for `get /users/{user_id}/tokens/{token}`, but is otherwise
-         * the same as [TokenService.retrieveSingle].
-         */
-        @MustBeClosed
-        fun retrieveSingle(
-            token: String,
-            params: TokenRetrieveSingleParams,
-        ): HttpResponseFor<TokenRetrieveSingleResponse> =
-            retrieveSingle(token, params, RequestOptions.none())
-
-        /** @see retrieveSingle */
-        @MustBeClosed
-        fun retrieveSingle(
-            token: String,
-            params: TokenRetrieveSingleParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<TokenRetrieveSingleResponse> =
-            retrieveSingle(params.toBuilder().token(token).build(), requestOptions)
-
-        /** @see retrieveSingle */
-        @MustBeClosed
-        fun retrieveSingle(
-            params: TokenRetrieveSingleParams
-        ): HttpResponseFor<TokenRetrieveSingleResponse> =
-            retrieveSingle(params, RequestOptions.none())
-
-        /** @see retrieveSingle */
-        @MustBeClosed
-        fun retrieveSingle(
-            params: TokenRetrieveSingleParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<TokenRetrieveSingleResponse>
     }
 }

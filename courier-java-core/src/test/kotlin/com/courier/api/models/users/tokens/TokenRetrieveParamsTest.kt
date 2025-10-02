@@ -5,16 +5,16 @@ package com.courier.api.models.users.tokens
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-internal class TokenRetrieveSingleParamsTest {
+internal class TokenRetrieveParamsTest {
 
     @Test
     fun create() {
-        TokenRetrieveSingleParams.builder().userId("user_id").token("token").build()
+        TokenRetrieveParams.builder().userId("user_id").token("token").build()
     }
 
     @Test
     fun pathParams() {
-        val params = TokenRetrieveSingleParams.builder().userId("user_id").token("token").build()
+        val params = TokenRetrieveParams.builder().userId("user_id").token("token").build()
 
         assertThat(params._pathParam(0)).isEqualTo("user_id")
         assertThat(params._pathParam(1)).isEqualTo("token")

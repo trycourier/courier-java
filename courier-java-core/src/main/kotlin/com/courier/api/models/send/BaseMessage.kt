@@ -15,6 +15,8 @@ import com.courier.api.core.checkRequired
 import com.courier.api.core.getOrThrow
 import com.courier.api.core.toImmutable
 import com.courier.api.errors.CourierInvalidDataException
+import com.courier.api.models.notifications.MessageRouting
+import com.courier.api.models.notifications.MessageRoutingChannel
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -1655,6 +1657,311 @@ private constructor(
                 (if (traceId.asKnown().isPresent) 1 else 0) +
                 (utm.asKnown().getOrNull()?.validity() ?: 0)
 
+        /**
+         * Identify the campaign that refers traffic to a specific website, and attributes the
+         * browser's website session.
+         */
+        class Utm
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
+            private val campaign: JsonField<String>,
+            private val content: JsonField<String>,
+            private val medium: JsonField<String>,
+            private val source: JsonField<String>,
+            private val term: JsonField<String>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("campaign")
+                @ExcludeMissing
+                campaign: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("content")
+                @ExcludeMissing
+                content: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("medium")
+                @ExcludeMissing
+                medium: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("source")
+                @ExcludeMissing
+                source: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("term") @ExcludeMissing term: JsonField<String> = JsonMissing.of(),
+            ) : this(campaign, content, medium, source, term, mutableMapOf())
+
+            /**
+             * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
+            fun campaign(): Optional<String> = campaign.getOptional("campaign")
+
+            /**
+             * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
+            fun content(): Optional<String> = content.getOptional("content")
+
+            /**
+             * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
+            fun medium(): Optional<String> = medium.getOptional("medium")
+
+            /**
+             * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
+            fun source(): Optional<String> = source.getOptional("source")
+
+            /**
+             * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
+            fun term(): Optional<String> = term.getOptional("term")
+
+            /**
+             * Returns the raw JSON value of [campaign].
+             *
+             * Unlike [campaign], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("campaign") @ExcludeMissing fun _campaign(): JsonField<String> = campaign
+
+            /**
+             * Returns the raw JSON value of [content].
+             *
+             * Unlike [content], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("content") @ExcludeMissing fun _content(): JsonField<String> = content
+
+            /**
+             * Returns the raw JSON value of [medium].
+             *
+             * Unlike [medium], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("medium") @ExcludeMissing fun _medium(): JsonField<String> = medium
+
+            /**
+             * Returns the raw JSON value of [source].
+             *
+             * Unlike [source], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("source") @ExcludeMissing fun _source(): JsonField<String> = source
+
+            /**
+             * Returns the raw JSON value of [term].
+             *
+             * Unlike [term], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("term") @ExcludeMissing fun _term(): JsonField<String> = term
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /** Returns a mutable builder for constructing an instance of [Utm]. */
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [Utm]. */
+            class Builder internal constructor() {
+
+                private var campaign: JsonField<String> = JsonMissing.of()
+                private var content: JsonField<String> = JsonMissing.of()
+                private var medium: JsonField<String> = JsonMissing.of()
+                private var source: JsonField<String> = JsonMissing.of()
+                private var term: JsonField<String> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(utm: Utm) = apply {
+                    campaign = utm.campaign
+                    content = utm.content
+                    medium = utm.medium
+                    source = utm.source
+                    term = utm.term
+                    additionalProperties = utm.additionalProperties.toMutableMap()
+                }
+
+                fun campaign(campaign: String?) = campaign(JsonField.ofNullable(campaign))
+
+                /** Alias for calling [Builder.campaign] with `campaign.orElse(null)`. */
+                fun campaign(campaign: Optional<String>) = campaign(campaign.getOrNull())
+
+                /**
+                 * Sets [Builder.campaign] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.campaign] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun campaign(campaign: JsonField<String>) = apply { this.campaign = campaign }
+
+                fun content(content: String?) = content(JsonField.ofNullable(content))
+
+                /** Alias for calling [Builder.content] with `content.orElse(null)`. */
+                fun content(content: Optional<String>) = content(content.getOrNull())
+
+                /**
+                 * Sets [Builder.content] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.content] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun content(content: JsonField<String>) = apply { this.content = content }
+
+                fun medium(medium: String?) = medium(JsonField.ofNullable(medium))
+
+                /** Alias for calling [Builder.medium] with `medium.orElse(null)`. */
+                fun medium(medium: Optional<String>) = medium(medium.getOrNull())
+
+                /**
+                 * Sets [Builder.medium] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.medium] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun medium(medium: JsonField<String>) = apply { this.medium = medium }
+
+                fun source(source: String?) = source(JsonField.ofNullable(source))
+
+                /** Alias for calling [Builder.source] with `source.orElse(null)`. */
+                fun source(source: Optional<String>) = source(source.getOrNull())
+
+                /**
+                 * Sets [Builder.source] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.source] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun source(source: JsonField<String>) = apply { this.source = source }
+
+                fun term(term: String?) = term(JsonField.ofNullable(term))
+
+                /** Alias for calling [Builder.term] with `term.orElse(null)`. */
+                fun term(term: Optional<String>) = term(term.getOrNull())
+
+                /**
+                 * Sets [Builder.term] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.term] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
+                fun term(term: JsonField<String>) = apply { this.term = term }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Utm].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
+                fun build(): Utm =
+                    Utm(
+                        campaign,
+                        content,
+                        medium,
+                        source,
+                        term,
+                        additionalProperties.toMutableMap(),
+                    )
+            }
+
+            private var validated: Boolean = false
+
+            fun validate(): Utm = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                campaign()
+                content()
+                medium()
+                source()
+                term()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: CourierInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (campaign.asKnown().isPresent) 1 else 0) +
+                    (if (content.asKnown().isPresent) 1 else 0) +
+                    (if (medium.asKnown().isPresent) 1 else 0) +
+                    (if (source.asKnown().isPresent) 1 else 0) +
+                    (if (term.asKnown().isPresent) 1 else 0)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Utm &&
+                    campaign == other.campaign &&
+                    content == other.content &&
+                    medium == other.medium &&
+                    source == other.source &&
+                    term == other.term &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy {
+                Objects.hash(campaign, content, medium, source, term, additionalProperties)
+            }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "Utm{campaign=$campaign, content=$content, medium=$medium, source=$source, term=$term, additionalProperties=$additionalProperties}"
+        }
+
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
@@ -1960,8 +2267,8 @@ private constructor(
     class Routing
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
-        private val channels: JsonField<List<Channel>>,
-        private val method: JsonField<RoutingMethod>,
+        private val channels: JsonField<List<MessageRoutingChannel>>,
+        private val method: JsonField<Method>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -1969,10 +2276,8 @@ private constructor(
         private constructor(
             @JsonProperty("channels")
             @ExcludeMissing
-            channels: JsonField<List<Channel>> = JsonMissing.of(),
-            @JsonProperty("method")
-            @ExcludeMissing
-            method: JsonField<RoutingMethod> = JsonMissing.of(),
+            channels: JsonField<List<MessageRoutingChannel>> = JsonMissing.of(),
+            @JsonProperty("method") @ExcludeMissing method: JsonField<Method> = JsonMissing.of(),
         ) : this(channels, method, mutableMapOf())
 
         /**
@@ -1983,13 +2288,13 @@ private constructor(
          * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun channels(): List<Channel> = channels.getRequired("channels")
+        fun channels(): List<MessageRoutingChannel> = channels.getRequired("channels")
 
         /**
          * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun method(): RoutingMethod = method.getRequired("method")
+        fun method(): Method = method.getRequired("method")
 
         /**
          * Returns the raw JSON value of [channels].
@@ -1998,14 +2303,14 @@ private constructor(
          */
         @JsonProperty("channels")
         @ExcludeMissing
-        fun _channels(): JsonField<List<Channel>> = channels
+        fun _channels(): JsonField<List<MessageRoutingChannel>> = channels
 
         /**
          * Returns the raw JSON value of [method].
          *
          * Unlike [method], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("method") @ExcludeMissing fun _method(): JsonField<RoutingMethod> = method
+        @JsonProperty("method") @ExcludeMissing fun _method(): JsonField<Method> = method
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -2036,8 +2341,8 @@ private constructor(
         /** A builder for [Routing]. */
         class Builder internal constructor() {
 
-            private var channels: JsonField<MutableList<Channel>>? = null
-            private var method: JsonField<RoutingMethod>? = null
+            private var channels: JsonField<MutableList<MessageRoutingChannel>>? = null
+            private var method: JsonField<Method>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -2052,55 +2357,51 @@ private constructor(
              * define sub-routing methods, which can be useful for defining advanced push
              * notification delivery strategies.
              */
-            fun channels(channels: List<Channel>) = channels(JsonField.of(channels))
+            fun channels(channels: List<MessageRoutingChannel>) = channels(JsonField.of(channels))
 
             /**
              * Sets [Builder.channels] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.channels] with a well-typed `List<Channel>` value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.channels] with a well-typed
+             * `List<MessageRoutingChannel>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
              */
-            fun channels(channels: JsonField<List<Channel>>) = apply {
+            fun channels(channels: JsonField<List<MessageRoutingChannel>>) = apply {
                 this.channels = channels.map { it.toMutableList() }
             }
 
             /**
-             * Adds a single [Channel] to [channels].
+             * Adds a single [MessageRoutingChannel] to [channels].
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
-            fun addChannel(channel: Channel) = apply {
+            fun addChannel(channel: MessageRoutingChannel) = apply {
                 channels =
                     (channels ?: JsonField.of(mutableListOf())).also {
                         checkKnown("channels", it).add(channel)
                     }
             }
 
-            /** Alias for calling [addChannel] with `Channel.ofRoutingStrategy(routingStrategy)`. */
-            fun addChannel(routingStrategy: Channel.RoutingStrategyChannel) =
-                addChannel(Channel.ofRoutingStrategy(routingStrategy))
+            /** Alias for calling [addChannel] with `MessageRoutingChannel.ofString(string)`. */
+            fun addChannel(string: String) = addChannel(MessageRoutingChannel.ofString(string))
 
             /**
              * Alias for calling [addChannel] with
-             * `Channel.ofRoutingStrategyProvider(routingStrategyProvider)`.
+             * `MessageRoutingChannel.ofMessageRouting(messageRouting)`.
              */
-            fun addChannel(routingStrategyProvider: Channel.RoutingStrategyProvider) =
-                addChannel(Channel.ofRoutingStrategyProvider(routingStrategyProvider))
+            fun addChannel(messageRouting: MessageRouting) =
+                addChannel(MessageRoutingChannel.ofMessageRouting(messageRouting))
 
-            /** Alias for calling [addChannel] with `Channel.ofString(string)`. */
-            fun addChannel(string: String) = addChannel(Channel.ofString(string))
-
-            fun method(method: RoutingMethod) = method(JsonField.of(method))
+            fun method(method: Method) = method(JsonField.of(method))
 
             /**
              * Sets [Builder.method] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.method] with a well-typed [RoutingMethod] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.method] with a well-typed [Method] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun method(method: JsonField<RoutingMethod>) = apply { this.method = method }
+            fun method(method: JsonField<Method>) = apply { this.method = method }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -2173,71 +2474,103 @@ private constructor(
             (channels.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
                 (method.asKnown().getOrNull()?.validity() ?: 0)
 
-        @JsonDeserialize(using = Channel.Deserializer::class)
-        @JsonSerialize(using = Channel.Serializer::class)
-        class Channel
-        private constructor(
-            private val routingStrategy: RoutingStrategyChannel? = null,
-            private val routingStrategyProvider: RoutingStrategyProvider? = null,
-            private val string: String? = null,
-            private val _json: JsonValue? = null,
-        ) {
+        class Method @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
-            fun routingStrategy(): Optional<RoutingStrategyChannel> =
-                Optional.ofNullable(routingStrategy)
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
-            fun routingStrategyProvider(): Optional<RoutingStrategyProvider> =
-                Optional.ofNullable(routingStrategyProvider)
+            companion object {
 
-            fun string(): Optional<String> = Optional.ofNullable(string)
+                @JvmField val ALL = of("all")
 
-            fun isRoutingStrategy(): Boolean = routingStrategy != null
+                @JvmField val SINGLE = of("single")
 
-            fun isRoutingStrategyProvider(): Boolean = routingStrategyProvider != null
+                @JvmStatic fun of(value: String) = Method(JsonField.of(value))
+            }
 
-            fun isString(): Boolean = string != null
+            /** An enum containing [Method]'s known values. */
+            enum class Known {
+                ALL,
+                SINGLE,
+            }
 
-            fun asRoutingStrategy(): RoutingStrategyChannel =
-                routingStrategy.getOrThrow("routingStrategy")
+            /**
+             * An enum containing [Method]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [Method] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                ALL,
+                SINGLE,
+                /**
+                 * An enum member indicating that [Method] was instantiated with an unknown value.
+                 */
+                _UNKNOWN,
+            }
 
-            fun asRoutingStrategyProvider(): RoutingStrategyProvider =
-                routingStrategyProvider.getOrThrow("routingStrategyProvider")
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    ALL -> Value.ALL
+                    SINGLE -> Value.SINGLE
+                    else -> Value._UNKNOWN
+                }
 
-            fun asString(): String = string.getOrThrow("string")
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws CourierInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    ALL -> Known.ALL
+                    SINGLE -> Known.SINGLE
+                    else -> throw CourierInvalidDataException("Unknown Method: $value")
+                }
 
-            fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
-
-            fun <T> accept(visitor: Visitor<T>): T =
-                when {
-                    routingStrategy != null -> visitor.visitRoutingStrategy(routingStrategy)
-                    routingStrategyProvider != null ->
-                        visitor.visitRoutingStrategyProvider(routingStrategyProvider)
-                    string != null -> visitor.visitString(string)
-                    else -> visitor.unknown(_json)
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws CourierInvalidDataException if this class instance's value does not have the
+             *   expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    CourierInvalidDataException("Value is not a String")
                 }
 
             private var validated: Boolean = false
 
-            fun validate(): Channel = apply {
+            fun validate(): Method = apply {
                 if (validated) {
                     return@apply
                 }
 
-                accept(
-                    object : Visitor<Unit> {
-                        override fun visitRoutingStrategy(routingStrategy: RoutingStrategyChannel) {
-                            routingStrategy.validate()
-                        }
-
-                        override fun visitRoutingStrategyProvider(
-                            routingStrategyProvider: RoutingStrategyProvider
-                        ) {
-                            routingStrategyProvider.validate()
-                        }
-
-                        override fun visitString(string: String) {}
-                    }
-                )
+                known()
                 validated = true
             }
 
@@ -2255,1211 +2588,19 @@ private constructor(
              *
              * Used for best match union deserialization.
              */
-            @JvmSynthetic
-            internal fun validity(): Int =
-                accept(
-                    object : Visitor<Int> {
-                        override fun visitRoutingStrategy(routingStrategy: RoutingStrategyChannel) =
-                            routingStrategy.validity()
-
-                        override fun visitRoutingStrategyProvider(
-                            routingStrategyProvider: RoutingStrategyProvider
-                        ) = routingStrategyProvider.validity()
-
-                        override fun visitString(string: String) = 1
-
-                        override fun unknown(json: JsonValue?) = 0
-                    }
-                )
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
                     return true
                 }
 
-                return other is Channel &&
-                    routingStrategy == other.routingStrategy &&
-                    routingStrategyProvider == other.routingStrategyProvider &&
-                    string == other.string
+                return other is Method && value == other.value
             }
 
-            override fun hashCode(): Int =
-                Objects.hash(routingStrategy, routingStrategyProvider, string)
+            override fun hashCode() = value.hashCode()
 
-            override fun toString(): String =
-                when {
-                    routingStrategy != null -> "Channel{routingStrategy=$routingStrategy}"
-                    routingStrategyProvider != null ->
-                        "Channel{routingStrategyProvider=$routingStrategyProvider}"
-                    string != null -> "Channel{string=$string}"
-                    _json != null -> "Channel{_unknown=$_json}"
-                    else -> throw IllegalStateException("Invalid Channel")
-                }
-
-            companion object {
-
-                @JvmStatic
-                fun ofRoutingStrategy(routingStrategy: RoutingStrategyChannel) =
-                    Channel(routingStrategy = routingStrategy)
-
-                @JvmStatic
-                fun ofRoutingStrategyProvider(routingStrategyProvider: RoutingStrategyProvider) =
-                    Channel(routingStrategyProvider = routingStrategyProvider)
-
-                @JvmStatic fun ofString(string: String) = Channel(string = string)
-            }
-
-            /**
-             * An interface that defines how to map each variant of [Channel] to a value of type
-             * [T].
-             */
-            interface Visitor<out T> {
-
-                fun visitRoutingStrategy(routingStrategy: RoutingStrategyChannel): T
-
-                fun visitRoutingStrategyProvider(
-                    routingStrategyProvider: RoutingStrategyProvider
-                ): T
-
-                fun visitString(string: String): T
-
-                /**
-                 * Maps an unknown variant of [Channel] to a value of type [T].
-                 *
-                 * An instance of [Channel] can contain an unknown variant if it was deserialized
-                 * from data that doesn't match any known variant. For example, if the SDK is on an
-                 * older version than the API, then the API may respond with new variants that the
-                 * SDK is unaware of.
-                 *
-                 * @throws CourierInvalidDataException in the default implementation.
-                 */
-                fun unknown(json: JsonValue?): T {
-                    throw CourierInvalidDataException("Unknown Channel: $json")
-                }
-            }
-
-            internal class Deserializer : BaseDeserializer<Channel>(Channel::class) {
-
-                override fun ObjectCodec.deserialize(node: JsonNode): Channel {
-                    val json = JsonValue.fromJsonNode(node)
-
-                    val bestMatches =
-                        sequenceOf(
-                                tryDeserialize(node, jacksonTypeRef<RoutingStrategyChannel>())
-                                    ?.let { Channel(routingStrategy = it, _json = json) },
-                                tryDeserialize(node, jacksonTypeRef<RoutingStrategyProvider>())
-                                    ?.let { Channel(routingStrategyProvider = it, _json = json) },
-                                tryDeserialize(node, jacksonTypeRef<String>())?.let {
-                                    Channel(string = it, _json = json)
-                                },
-                            )
-                            .filterNotNull()
-                            .allMaxBy { it.validity() }
-                            .toList()
-                    return when (bestMatches.size) {
-                        // This can happen if what we're deserializing is completely incompatible
-                        // with all the possible variants (e.g. deserializing from array).
-                        0 -> Channel(_json = json)
-                        1 -> bestMatches.single()
-                        // If there's more than one match with the highest validity, then use the
-                        // first completely valid match, or simply the first match if none are
-                        // completely valid.
-                        else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
-                    }
-                }
-            }
-
-            internal class Serializer : BaseSerializer<Channel>(Channel::class) {
-
-                override fun serialize(
-                    value: Channel,
-                    generator: JsonGenerator,
-                    provider: SerializerProvider,
-                ) {
-                    when {
-                        value.routingStrategy != null ->
-                            generator.writeObject(value.routingStrategy)
-                        value.routingStrategyProvider != null ->
-                            generator.writeObject(value.routingStrategyProvider)
-                        value.string != null -> generator.writeObject(value.string)
-                        value._json != null -> generator.writeObject(value._json)
-                        else -> throw IllegalStateException("Invalid Channel")
-                    }
-                }
-            }
-
-            class RoutingStrategyChannel
-            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-            private constructor(
-                private val channel: JsonField<String>,
-                private val config: JsonField<Config>,
-                private val if_: JsonField<String>,
-                private val method: JsonField<RoutingMethod>,
-                private val providers: JsonField<Providers>,
-                private val additionalProperties: MutableMap<String, JsonValue>,
-            ) {
-
-                @JsonCreator
-                private constructor(
-                    @JsonProperty("channel")
-                    @ExcludeMissing
-                    channel: JsonField<String> = JsonMissing.of(),
-                    @JsonProperty("config")
-                    @ExcludeMissing
-                    config: JsonField<Config> = JsonMissing.of(),
-                    @JsonProperty("if") @ExcludeMissing if_: JsonField<String> = JsonMissing.of(),
-                    @JsonProperty("method")
-                    @ExcludeMissing
-                    method: JsonField<RoutingMethod> = JsonMissing.of(),
-                    @JsonProperty("providers")
-                    @ExcludeMissing
-                    providers: JsonField<Providers> = JsonMissing.of(),
-                ) : this(channel, config, if_, method, providers, mutableMapOf())
-
-                /**
-                 * @throws CourierInvalidDataException if the JSON field has an unexpected type or
-                 *   is unexpectedly missing or null (e.g. if the server responded with an
-                 *   unexpected value).
-                 */
-                fun channel(): String = channel.getRequired("channel")
-
-                /**
-                 * @throws CourierInvalidDataException if the JSON field has an unexpected type
-                 *   (e.g. if the server responded with an unexpected value).
-                 */
-                fun config(): Optional<Config> = config.getOptional("config")
-
-                /**
-                 * @throws CourierInvalidDataException if the JSON field has an unexpected type
-                 *   (e.g. if the server responded with an unexpected value).
-                 */
-                fun if_(): Optional<String> = if_.getOptional("if")
-
-                /**
-                 * @throws CourierInvalidDataException if the JSON field has an unexpected type
-                 *   (e.g. if the server responded with an unexpected value).
-                 */
-                fun method(): Optional<RoutingMethod> = method.getOptional("method")
-
-                /**
-                 * @throws CourierInvalidDataException if the JSON field has an unexpected type
-                 *   (e.g. if the server responded with an unexpected value).
-                 */
-                fun providers(): Optional<Providers> = providers.getOptional("providers")
-
-                /**
-                 * Returns the raw JSON value of [channel].
-                 *
-                 * Unlike [channel], this method doesn't throw if the JSON field has an unexpected
-                 * type.
-                 */
-                @JsonProperty("channel") @ExcludeMissing fun _channel(): JsonField<String> = channel
-
-                /**
-                 * Returns the raw JSON value of [config].
-                 *
-                 * Unlike [config], this method doesn't throw if the JSON field has an unexpected
-                 * type.
-                 */
-                @JsonProperty("config") @ExcludeMissing fun _config(): JsonField<Config> = config
-
-                /**
-                 * Returns the raw JSON value of [if_].
-                 *
-                 * Unlike [if_], this method doesn't throw if the JSON field has an unexpected type.
-                 */
-                @JsonProperty("if") @ExcludeMissing fun _if_(): JsonField<String> = if_
-
-                /**
-                 * Returns the raw JSON value of [method].
-                 *
-                 * Unlike [method], this method doesn't throw if the JSON field has an unexpected
-                 * type.
-                 */
-                @JsonProperty("method")
-                @ExcludeMissing
-                fun _method(): JsonField<RoutingMethod> = method
-
-                /**
-                 * Returns the raw JSON value of [providers].
-                 *
-                 * Unlike [providers], this method doesn't throw if the JSON field has an unexpected
-                 * type.
-                 */
-                @JsonProperty("providers")
-                @ExcludeMissing
-                fun _providers(): JsonField<Providers> = providers
-
-                @JsonAnySetter
-                private fun putAdditionalProperty(key: String, value: JsonValue) {
-                    additionalProperties.put(key, value)
-                }
-
-                @JsonAnyGetter
-                @ExcludeMissing
-                fun _additionalProperties(): Map<String, JsonValue> =
-                    Collections.unmodifiableMap(additionalProperties)
-
-                fun toBuilder() = Builder().from(this)
-
-                companion object {
-
-                    /**
-                     * Returns a mutable builder for constructing an instance of
-                     * [RoutingStrategyChannel].
-                     *
-                     * The following fields are required:
-                     * ```java
-                     * .channel()
-                     * ```
-                     */
-                    @JvmStatic fun builder() = Builder()
-                }
-
-                /** A builder for [RoutingStrategyChannel]. */
-                class Builder internal constructor() {
-
-                    private var channel: JsonField<String>? = null
-                    private var config: JsonField<Config> = JsonMissing.of()
-                    private var if_: JsonField<String> = JsonMissing.of()
-                    private var method: JsonField<RoutingMethod> = JsonMissing.of()
-                    private var providers: JsonField<Providers> = JsonMissing.of()
-                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                    @JvmSynthetic
-                    internal fun from(routingStrategyChannel: RoutingStrategyChannel) = apply {
-                        channel = routingStrategyChannel.channel
-                        config = routingStrategyChannel.config
-                        if_ = routingStrategyChannel.if_
-                        method = routingStrategyChannel.method
-                        providers = routingStrategyChannel.providers
-                        additionalProperties =
-                            routingStrategyChannel.additionalProperties.toMutableMap()
-                    }
-
-                    fun channel(channel: String) = channel(JsonField.of(channel))
-
-                    /**
-                     * Sets [Builder.channel] to an arbitrary JSON value.
-                     *
-                     * You should usually call [Builder.channel] with a well-typed [String] value
-                     * instead. This method is primarily for setting the field to an undocumented or
-                     * not yet supported value.
-                     */
-                    fun channel(channel: JsonField<String>) = apply { this.channel = channel }
-
-                    fun config(config: Config?) = config(JsonField.ofNullable(config))
-
-                    /** Alias for calling [Builder.config] with `config.orElse(null)`. */
-                    fun config(config: Optional<Config>) = config(config.getOrNull())
-
-                    /**
-                     * Sets [Builder.config] to an arbitrary JSON value.
-                     *
-                     * You should usually call [Builder.config] with a well-typed [Config] value
-                     * instead. This method is primarily for setting the field to an undocumented or
-                     * not yet supported value.
-                     */
-                    fun config(config: JsonField<Config>) = apply { this.config = config }
-
-                    fun if_(if_: String?) = if_(JsonField.ofNullable(if_))
-
-                    /** Alias for calling [Builder.if_] with `if_.orElse(null)`. */
-                    fun if_(if_: Optional<String>) = if_(if_.getOrNull())
-
-                    /**
-                     * Sets [Builder.if_] to an arbitrary JSON value.
-                     *
-                     * You should usually call [Builder.if_] with a well-typed [String] value
-                     * instead. This method is primarily for setting the field to an undocumented or
-                     * not yet supported value.
-                     */
-                    fun if_(if_: JsonField<String>) = apply { this.if_ = if_ }
-
-                    fun method(method: RoutingMethod?) = method(JsonField.ofNullable(method))
-
-                    /** Alias for calling [Builder.method] with `method.orElse(null)`. */
-                    fun method(method: Optional<RoutingMethod>) = method(method.getOrNull())
-
-                    /**
-                     * Sets [Builder.method] to an arbitrary JSON value.
-                     *
-                     * You should usually call [Builder.method] with a well-typed [RoutingMethod]
-                     * value instead. This method is primarily for setting the field to an
-                     * undocumented or not yet supported value.
-                     */
-                    fun method(method: JsonField<RoutingMethod>) = apply { this.method = method }
-
-                    fun providers(providers: Providers?) =
-                        providers(JsonField.ofNullable(providers))
-
-                    /** Alias for calling [Builder.providers] with `providers.orElse(null)`. */
-                    fun providers(providers: Optional<Providers>) = providers(providers.getOrNull())
-
-                    /**
-                     * Sets [Builder.providers] to an arbitrary JSON value.
-                     *
-                     * You should usually call [Builder.providers] with a well-typed [Providers]
-                     * value instead. This method is primarily for setting the field to an
-                     * undocumented or not yet supported value.
-                     */
-                    fun providers(providers: JsonField<Providers>) = apply {
-                        this.providers = providers
-                    }
-
-                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.clear()
-                        putAllAdditionalProperties(additionalProperties)
-                    }
-
-                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                        additionalProperties.put(key, value)
-                    }
-
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                        apply {
-                            this.additionalProperties.putAll(additionalProperties)
-                        }
-
-                    fun removeAdditionalProperty(key: String) = apply {
-                        additionalProperties.remove(key)
-                    }
-
-                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                        keys.forEach(::removeAdditionalProperty)
-                    }
-
-                    /**
-                     * Returns an immutable instance of [RoutingStrategyChannel].
-                     *
-                     * Further updates to this [Builder] will not mutate the returned instance.
-                     *
-                     * The following fields are required:
-                     * ```java
-                     * .channel()
-                     * ```
-                     *
-                     * @throws IllegalStateException if any required field is unset.
-                     */
-                    fun build(): RoutingStrategyChannel =
-                        RoutingStrategyChannel(
-                            checkRequired("channel", channel),
-                            config,
-                            if_,
-                            method,
-                            providers,
-                            additionalProperties.toMutableMap(),
-                        )
-                }
-
-                private var validated: Boolean = false
-
-                fun validate(): RoutingStrategyChannel = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    channel()
-                    config().ifPresent { it.validate() }
-                    if_()
-                    method().ifPresent { it.validate() }
-                    providers().ifPresent { it.validate() }
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: CourierInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic
-                internal fun validity(): Int =
-                    (if (channel.asKnown().isPresent) 1 else 0) +
-                        (config.asKnown().getOrNull()?.validity() ?: 0) +
-                        (if (if_.asKnown().isPresent) 1 else 0) +
-                        (method.asKnown().getOrNull()?.validity() ?: 0) +
-                        (providers.asKnown().getOrNull()?.validity() ?: 0)
-
-                class Config
-                @JsonCreator
-                private constructor(
-                    @com.fasterxml.jackson.annotation.JsonValue
-                    private val additionalProperties: Map<String, JsonValue>
-                ) {
-
-                    @JsonAnyGetter
-                    @ExcludeMissing
-                    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-                    fun toBuilder() = Builder().from(this)
-
-                    companion object {
-
-                        /** Returns a mutable builder for constructing an instance of [Config]. */
-                        @JvmStatic fun builder() = Builder()
-                    }
-
-                    /** A builder for [Config]. */
-                    class Builder internal constructor() {
-
-                        private var additionalProperties: MutableMap<String, JsonValue> =
-                            mutableMapOf()
-
-                        @JvmSynthetic
-                        internal fun from(config: Config) = apply {
-                            additionalProperties = config.additionalProperties.toMutableMap()
-                        }
-
-                        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                            apply {
-                                this.additionalProperties.clear()
-                                putAllAdditionalProperties(additionalProperties)
-                            }
-
-                        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                            additionalProperties.put(key, value)
-                        }
-
-                        fun putAllAdditionalProperties(
-                            additionalProperties: Map<String, JsonValue>
-                        ) = apply { this.additionalProperties.putAll(additionalProperties) }
-
-                        fun removeAdditionalProperty(key: String) = apply {
-                            additionalProperties.remove(key)
-                        }
-
-                        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                            keys.forEach(::removeAdditionalProperty)
-                        }
-
-                        /**
-                         * Returns an immutable instance of [Config].
-                         *
-                         * Further updates to this [Builder] will not mutate the returned instance.
-                         */
-                        fun build(): Config = Config(additionalProperties.toImmutable())
-                    }
-
-                    private var validated: Boolean = false
-
-                    fun validate(): Config = apply {
-                        if (validated) {
-                            return@apply
-                        }
-
-                        validated = true
-                    }
-
-                    fun isValid(): Boolean =
-                        try {
-                            validate()
-                            true
-                        } catch (e: CourierInvalidDataException) {
-                            false
-                        }
-
-                    /**
-                     * Returns a score indicating how many valid values are contained in this object
-                     * recursively.
-                     *
-                     * Used for best match union deserialization.
-                     */
-                    @JvmSynthetic
-                    internal fun validity(): Int =
-                        additionalProperties.count { (_, value) ->
-                            !value.isNull() && !value.isMissing()
-                        }
-
-                    override fun equals(other: Any?): Boolean {
-                        if (this === other) {
-                            return true
-                        }
-
-                        return other is Config && additionalProperties == other.additionalProperties
-                    }
-
-                    private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-
-                    override fun hashCode(): Int = hashCode
-
-                    override fun toString() = "Config{additionalProperties=$additionalProperties}"
-                }
-
-                class Providers
-                @JsonCreator
-                private constructor(
-                    @com.fasterxml.jackson.annotation.JsonValue
-                    private val additionalProperties: Map<String, JsonValue>
-                ) {
-
-                    @JsonAnyGetter
-                    @ExcludeMissing
-                    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-                    fun toBuilder() = Builder().from(this)
-
-                    companion object {
-
-                        /**
-                         * Returns a mutable builder for constructing an instance of [Providers].
-                         */
-                        @JvmStatic fun builder() = Builder()
-                    }
-
-                    /** A builder for [Providers]. */
-                    class Builder internal constructor() {
-
-                        private var additionalProperties: MutableMap<String, JsonValue> =
-                            mutableMapOf()
-
-                        @JvmSynthetic
-                        internal fun from(providers: Providers) = apply {
-                            additionalProperties = providers.additionalProperties.toMutableMap()
-                        }
-
-                        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                            apply {
-                                this.additionalProperties.clear()
-                                putAllAdditionalProperties(additionalProperties)
-                            }
-
-                        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                            additionalProperties.put(key, value)
-                        }
-
-                        fun putAllAdditionalProperties(
-                            additionalProperties: Map<String, JsonValue>
-                        ) = apply { this.additionalProperties.putAll(additionalProperties) }
-
-                        fun removeAdditionalProperty(key: String) = apply {
-                            additionalProperties.remove(key)
-                        }
-
-                        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                            keys.forEach(::removeAdditionalProperty)
-                        }
-
-                        /**
-                         * Returns an immutable instance of [Providers].
-                         *
-                         * Further updates to this [Builder] will not mutate the returned instance.
-                         */
-                        fun build(): Providers = Providers(additionalProperties.toImmutable())
-                    }
-
-                    private var validated: Boolean = false
-
-                    fun validate(): Providers = apply {
-                        if (validated) {
-                            return@apply
-                        }
-
-                        validated = true
-                    }
-
-                    fun isValid(): Boolean =
-                        try {
-                            validate()
-                            true
-                        } catch (e: CourierInvalidDataException) {
-                            false
-                        }
-
-                    /**
-                     * Returns a score indicating how many valid values are contained in this object
-                     * recursively.
-                     *
-                     * Used for best match union deserialization.
-                     */
-                    @JvmSynthetic
-                    internal fun validity(): Int =
-                        additionalProperties.count { (_, value) ->
-                            !value.isNull() && !value.isMissing()
-                        }
-
-                    override fun equals(other: Any?): Boolean {
-                        if (this === other) {
-                            return true
-                        }
-
-                        return other is Providers &&
-                            additionalProperties == other.additionalProperties
-                    }
-
-                    private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-
-                    override fun hashCode(): Int = hashCode
-
-                    override fun toString() =
-                        "Providers{additionalProperties=$additionalProperties}"
-                }
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is RoutingStrategyChannel &&
-                        channel == other.channel &&
-                        config == other.config &&
-                        if_ == other.if_ &&
-                        method == other.method &&
-                        providers == other.providers &&
-                        additionalProperties == other.additionalProperties
-                }
-
-                private val hashCode: Int by lazy {
-                    Objects.hash(channel, config, if_, method, providers, additionalProperties)
-                }
-
-                override fun hashCode(): Int = hashCode
-
-                override fun toString() =
-                    "RoutingStrategyChannel{channel=$channel, config=$config, if_=$if_, method=$method, providers=$providers, additionalProperties=$additionalProperties}"
-            }
-
-            class RoutingStrategyProvider
-            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-            private constructor(
-                private val metadata: JsonField<Metadata>,
-                private val name: JsonField<String>,
-                private val config: JsonField<Config>,
-                private val if_: JsonField<String>,
-                private val additionalProperties: MutableMap<String, JsonValue>,
-            ) {
-
-                @JsonCreator
-                private constructor(
-                    @JsonProperty("metadata")
-                    @ExcludeMissing
-                    metadata: JsonField<Metadata> = JsonMissing.of(),
-                    @JsonProperty("name")
-                    @ExcludeMissing
-                    name: JsonField<String> = JsonMissing.of(),
-                    @JsonProperty("config")
-                    @ExcludeMissing
-                    config: JsonField<Config> = JsonMissing.of(),
-                    @JsonProperty("if") @ExcludeMissing if_: JsonField<String> = JsonMissing.of(),
-                ) : this(metadata, name, config, if_, mutableMapOf())
-
-                /**
-                 * @throws CourierInvalidDataException if the JSON field has an unexpected type or
-                 *   is unexpectedly missing or null (e.g. if the server responded with an
-                 *   unexpected value).
-                 */
-                fun metadata(): Metadata = metadata.getRequired("metadata")
-
-                /**
-                 * @throws CourierInvalidDataException if the JSON field has an unexpected type or
-                 *   is unexpectedly missing or null (e.g. if the server responded with an
-                 *   unexpected value).
-                 */
-                fun name(): String = name.getRequired("name")
-
-                /**
-                 * @throws CourierInvalidDataException if the JSON field has an unexpected type
-                 *   (e.g. if the server responded with an unexpected value).
-                 */
-                fun config(): Optional<Config> = config.getOptional("config")
-
-                /**
-                 * @throws CourierInvalidDataException if the JSON field has an unexpected type
-                 *   (e.g. if the server responded with an unexpected value).
-                 */
-                fun if_(): Optional<String> = if_.getOptional("if")
-
-                /**
-                 * Returns the raw JSON value of [metadata].
-                 *
-                 * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected
-                 * type.
-                 */
-                @JsonProperty("metadata")
-                @ExcludeMissing
-                fun _metadata(): JsonField<Metadata> = metadata
-
-                /**
-                 * Returns the raw JSON value of [name].
-                 *
-                 * Unlike [name], this method doesn't throw if the JSON field has an unexpected
-                 * type.
-                 */
-                @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
-
-                /**
-                 * Returns the raw JSON value of [config].
-                 *
-                 * Unlike [config], this method doesn't throw if the JSON field has an unexpected
-                 * type.
-                 */
-                @JsonProperty("config") @ExcludeMissing fun _config(): JsonField<Config> = config
-
-                /**
-                 * Returns the raw JSON value of [if_].
-                 *
-                 * Unlike [if_], this method doesn't throw if the JSON field has an unexpected type.
-                 */
-                @JsonProperty("if") @ExcludeMissing fun _if_(): JsonField<String> = if_
-
-                @JsonAnySetter
-                private fun putAdditionalProperty(key: String, value: JsonValue) {
-                    additionalProperties.put(key, value)
-                }
-
-                @JsonAnyGetter
-                @ExcludeMissing
-                fun _additionalProperties(): Map<String, JsonValue> =
-                    Collections.unmodifiableMap(additionalProperties)
-
-                fun toBuilder() = Builder().from(this)
-
-                companion object {
-
-                    /**
-                     * Returns a mutable builder for constructing an instance of
-                     * [RoutingStrategyProvider].
-                     *
-                     * The following fields are required:
-                     * ```java
-                     * .metadata()
-                     * .name()
-                     * ```
-                     */
-                    @JvmStatic fun builder() = Builder()
-                }
-
-                /** A builder for [RoutingStrategyProvider]. */
-                class Builder internal constructor() {
-
-                    private var metadata: JsonField<Metadata>? = null
-                    private var name: JsonField<String>? = null
-                    private var config: JsonField<Config> = JsonMissing.of()
-                    private var if_: JsonField<String> = JsonMissing.of()
-                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                    @JvmSynthetic
-                    internal fun from(routingStrategyProvider: RoutingStrategyProvider) = apply {
-                        metadata = routingStrategyProvider.metadata
-                        name = routingStrategyProvider.name
-                        config = routingStrategyProvider.config
-                        if_ = routingStrategyProvider.if_
-                        additionalProperties =
-                            routingStrategyProvider.additionalProperties.toMutableMap()
-                    }
-
-                    fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
-
-                    /**
-                     * Sets [Builder.metadata] to an arbitrary JSON value.
-                     *
-                     * You should usually call [Builder.metadata] with a well-typed [Metadata] value
-                     * instead. This method is primarily for setting the field to an undocumented or
-                     * not yet supported value.
-                     */
-                    fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
-
-                    fun name(name: String) = name(JsonField.of(name))
-
-                    /**
-                     * Sets [Builder.name] to an arbitrary JSON value.
-                     *
-                     * You should usually call [Builder.name] with a well-typed [String] value
-                     * instead. This method is primarily for setting the field to an undocumented or
-                     * not yet supported value.
-                     */
-                    fun name(name: JsonField<String>) = apply { this.name = name }
-
-                    fun config(config: Config?) = config(JsonField.ofNullable(config))
-
-                    /** Alias for calling [Builder.config] with `config.orElse(null)`. */
-                    fun config(config: Optional<Config>) = config(config.getOrNull())
-
-                    /**
-                     * Sets [Builder.config] to an arbitrary JSON value.
-                     *
-                     * You should usually call [Builder.config] with a well-typed [Config] value
-                     * instead. This method is primarily for setting the field to an undocumented or
-                     * not yet supported value.
-                     */
-                    fun config(config: JsonField<Config>) = apply { this.config = config }
-
-                    fun if_(if_: String?) = if_(JsonField.ofNullable(if_))
-
-                    /** Alias for calling [Builder.if_] with `if_.orElse(null)`. */
-                    fun if_(if_: Optional<String>) = if_(if_.getOrNull())
-
-                    /**
-                     * Sets [Builder.if_] to an arbitrary JSON value.
-                     *
-                     * You should usually call [Builder.if_] with a well-typed [String] value
-                     * instead. This method is primarily for setting the field to an undocumented or
-                     * not yet supported value.
-                     */
-                    fun if_(if_: JsonField<String>) = apply { this.if_ = if_ }
-
-                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.clear()
-                        putAllAdditionalProperties(additionalProperties)
-                    }
-
-                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                        additionalProperties.put(key, value)
-                    }
-
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                        apply {
-                            this.additionalProperties.putAll(additionalProperties)
-                        }
-
-                    fun removeAdditionalProperty(key: String) = apply {
-                        additionalProperties.remove(key)
-                    }
-
-                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                        keys.forEach(::removeAdditionalProperty)
-                    }
-
-                    /**
-                     * Returns an immutable instance of [RoutingStrategyProvider].
-                     *
-                     * Further updates to this [Builder] will not mutate the returned instance.
-                     *
-                     * The following fields are required:
-                     * ```java
-                     * .metadata()
-                     * .name()
-                     * ```
-                     *
-                     * @throws IllegalStateException if any required field is unset.
-                     */
-                    fun build(): RoutingStrategyProvider =
-                        RoutingStrategyProvider(
-                            checkRequired("metadata", metadata),
-                            checkRequired("name", name),
-                            config,
-                            if_,
-                            additionalProperties.toMutableMap(),
-                        )
-                }
-
-                private var validated: Boolean = false
-
-                fun validate(): RoutingStrategyProvider = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    metadata().validate()
-                    name()
-                    config().ifPresent { it.validate() }
-                    if_()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: CourierInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic
-                internal fun validity(): Int =
-                    (metadata.asKnown().getOrNull()?.validity() ?: 0) +
-                        (if (name.asKnown().isPresent) 1 else 0) +
-                        (config.asKnown().getOrNull()?.validity() ?: 0) +
-                        (if (if_.asKnown().isPresent) 1 else 0)
-
-                class Metadata
-                @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-                private constructor(
-                    private val utm: JsonField<Utm>,
-                    private val additionalProperties: MutableMap<String, JsonValue>,
-                ) {
-
-                    @JsonCreator
-                    private constructor(
-                        @JsonProperty("utm") @ExcludeMissing utm: JsonField<Utm> = JsonMissing.of()
-                    ) : this(utm, mutableMapOf())
-
-                    /**
-                     * @throws CourierInvalidDataException if the JSON field has an unexpected type
-                     *   (e.g. if the server responded with an unexpected value).
-                     */
-                    fun utm(): Optional<Utm> = utm.getOptional("utm")
-
-                    /**
-                     * Returns the raw JSON value of [utm].
-                     *
-                     * Unlike [utm], this method doesn't throw if the JSON field has an unexpected
-                     * type.
-                     */
-                    @JsonProperty("utm") @ExcludeMissing fun _utm(): JsonField<Utm> = utm
-
-                    @JsonAnySetter
-                    private fun putAdditionalProperty(key: String, value: JsonValue) {
-                        additionalProperties.put(key, value)
-                    }
-
-                    @JsonAnyGetter
-                    @ExcludeMissing
-                    fun _additionalProperties(): Map<String, JsonValue> =
-                        Collections.unmodifiableMap(additionalProperties)
-
-                    fun toBuilder() = Builder().from(this)
-
-                    companion object {
-
-                        /** Returns a mutable builder for constructing an instance of [Metadata]. */
-                        @JvmStatic fun builder() = Builder()
-                    }
-
-                    /** A builder for [Metadata]. */
-                    class Builder internal constructor() {
-
-                        private var utm: JsonField<Utm> = JsonMissing.of()
-                        private var additionalProperties: MutableMap<String, JsonValue> =
-                            mutableMapOf()
-
-                        @JvmSynthetic
-                        internal fun from(metadata: Metadata) = apply {
-                            utm = metadata.utm
-                            additionalProperties = metadata.additionalProperties.toMutableMap()
-                        }
-
-                        fun utm(utm: Utm?) = utm(JsonField.ofNullable(utm))
-
-                        /** Alias for calling [Builder.utm] with `utm.orElse(null)`. */
-                        fun utm(utm: Optional<Utm>) = utm(utm.getOrNull())
-
-                        /**
-                         * Sets [Builder.utm] to an arbitrary JSON value.
-                         *
-                         * You should usually call [Builder.utm] with a well-typed [Utm] value
-                         * instead. This method is primarily for setting the field to an
-                         * undocumented or not yet supported value.
-                         */
-                        fun utm(utm: JsonField<Utm>) = apply { this.utm = utm }
-
-                        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                            apply {
-                                this.additionalProperties.clear()
-                                putAllAdditionalProperties(additionalProperties)
-                            }
-
-                        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                            additionalProperties.put(key, value)
-                        }
-
-                        fun putAllAdditionalProperties(
-                            additionalProperties: Map<String, JsonValue>
-                        ) = apply { this.additionalProperties.putAll(additionalProperties) }
-
-                        fun removeAdditionalProperty(key: String) = apply {
-                            additionalProperties.remove(key)
-                        }
-
-                        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                            keys.forEach(::removeAdditionalProperty)
-                        }
-
-                        /**
-                         * Returns an immutable instance of [Metadata].
-                         *
-                         * Further updates to this [Builder] will not mutate the returned instance.
-                         */
-                        fun build(): Metadata = Metadata(utm, additionalProperties.toMutableMap())
-                    }
-
-                    private var validated: Boolean = false
-
-                    fun validate(): Metadata = apply {
-                        if (validated) {
-                            return@apply
-                        }
-
-                        utm().ifPresent { it.validate() }
-                        validated = true
-                    }
-
-                    fun isValid(): Boolean =
-                        try {
-                            validate()
-                            true
-                        } catch (e: CourierInvalidDataException) {
-                            false
-                        }
-
-                    /**
-                     * Returns a score indicating how many valid values are contained in this object
-                     * recursively.
-                     *
-                     * Used for best match union deserialization.
-                     */
-                    @JvmSynthetic
-                    internal fun validity(): Int = (utm.asKnown().getOrNull()?.validity() ?: 0)
-
-                    override fun equals(other: Any?): Boolean {
-                        if (this === other) {
-                            return true
-                        }
-
-                        return other is Metadata &&
-                            utm == other.utm &&
-                            additionalProperties == other.additionalProperties
-                    }
-
-                    private val hashCode: Int by lazy { Objects.hash(utm, additionalProperties) }
-
-                    override fun hashCode(): Int = hashCode
-
-                    override fun toString() =
-                        "Metadata{utm=$utm, additionalProperties=$additionalProperties}"
-                }
-
-                class Config
-                @JsonCreator
-                private constructor(
-                    @com.fasterxml.jackson.annotation.JsonValue
-                    private val additionalProperties: Map<String, JsonValue>
-                ) {
-
-                    @JsonAnyGetter
-                    @ExcludeMissing
-                    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-                    fun toBuilder() = Builder().from(this)
-
-                    companion object {
-
-                        /** Returns a mutable builder for constructing an instance of [Config]. */
-                        @JvmStatic fun builder() = Builder()
-                    }
-
-                    /** A builder for [Config]. */
-                    class Builder internal constructor() {
-
-                        private var additionalProperties: MutableMap<String, JsonValue> =
-                            mutableMapOf()
-
-                        @JvmSynthetic
-                        internal fun from(config: Config) = apply {
-                            additionalProperties = config.additionalProperties.toMutableMap()
-                        }
-
-                        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                            apply {
-                                this.additionalProperties.clear()
-                                putAllAdditionalProperties(additionalProperties)
-                            }
-
-                        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                            additionalProperties.put(key, value)
-                        }
-
-                        fun putAllAdditionalProperties(
-                            additionalProperties: Map<String, JsonValue>
-                        ) = apply { this.additionalProperties.putAll(additionalProperties) }
-
-                        fun removeAdditionalProperty(key: String) = apply {
-                            additionalProperties.remove(key)
-                        }
-
-                        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                            keys.forEach(::removeAdditionalProperty)
-                        }
-
-                        /**
-                         * Returns an immutable instance of [Config].
-                         *
-                         * Further updates to this [Builder] will not mutate the returned instance.
-                         */
-                        fun build(): Config = Config(additionalProperties.toImmutable())
-                    }
-
-                    private var validated: Boolean = false
-
-                    fun validate(): Config = apply {
-                        if (validated) {
-                            return@apply
-                        }
-
-                        validated = true
-                    }
-
-                    fun isValid(): Boolean =
-                        try {
-                            validate()
-                            true
-                        } catch (e: CourierInvalidDataException) {
-                            false
-                        }
-
-                    /**
-                     * Returns a score indicating how many valid values are contained in this object
-                     * recursively.
-                     *
-                     * Used for best match union deserialization.
-                     */
-                    @JvmSynthetic
-                    internal fun validity(): Int =
-                        additionalProperties.count { (_, value) ->
-                            !value.isNull() && !value.isMissing()
-                        }
-
-                    override fun equals(other: Any?): Boolean {
-                        if (this === other) {
-                            return true
-                        }
-
-                        return other is Config && additionalProperties == other.additionalProperties
-                    }
-
-                    private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-
-                    override fun hashCode(): Int = hashCode
-
-                    override fun toString() = "Config{additionalProperties=$additionalProperties}"
-                }
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is RoutingStrategyProvider &&
-                        metadata == other.metadata &&
-                        name == other.name &&
-                        config == other.config &&
-                        if_ == other.if_ &&
-                        additionalProperties == other.additionalProperties
-                }
-
-                private val hashCode: Int by lazy {
-                    Objects.hash(metadata, name, config, if_, additionalProperties)
-                }
-
-                override fun hashCode(): Int = hashCode
-
-                override fun toString() =
-                    "RoutingStrategyProvider{metadata=$metadata, name=$name, config=$config, if_=$if_, additionalProperties=$additionalProperties}"
-            }
+            override fun toString() = value.toString()
         }
 
         override fun equals(other: Any?): Boolean {

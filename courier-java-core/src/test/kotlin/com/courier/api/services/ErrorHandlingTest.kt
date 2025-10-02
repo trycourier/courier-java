@@ -19,12 +19,9 @@ import com.courier.api.errors.UnprocessableEntityException
 import com.courier.api.models.send.BaseMessage
 import com.courier.api.models.send.BaseMessageSendTo
 import com.courier.api.models.send.Content
-import com.courier.api.models.send.ElementalNode
 import com.courier.api.models.send.Message
 import com.courier.api.models.send.MessageContext
-import com.courier.api.models.send.RoutingMethod
 import com.courier.api.models.send.SendMessageParams
-import com.courier.api.models.send.Utm
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.status
@@ -115,7 +112,7 @@ internal class ErrorHandlingTest {
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
                                     BaseMessage.Data.builder()
-                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
@@ -133,7 +130,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            Utm.builder()
+                                            BaseMessage.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -175,59 +172,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     BaseMessage.Routing.builder()
-                                        .addChannel(
-                                            BaseMessage.Routing.Channel.RoutingStrategyChannel
-                                                .builder()
-                                                .channel("channel")
-                                                .config(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Config
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from("bar"),
-                                                        )
-                                                        .build()
-                                                )
-                                                .if_("if")
-                                                .method(RoutingMethod.ALL)
-                                                .providers(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Providers
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from(
-                                                                mapOf(
-                                                                    "if" to "if",
-                                                                    "metadata" to
-                                                                        mapOf(
-                                                                            "utm" to
-                                                                                mapOf(
-                                                                                    "campaign" to
-                                                                                        "campaign",
-                                                                                    "content" to
-                                                                                        "content",
-                                                                                    "medium" to
-                                                                                        "medium",
-                                                                                    "source" to
-                                                                                        "source",
-                                                                                    "term" to "term",
-                                                                                )
-                                                                        ),
-                                                                    "override" to
-                                                                        mapOf("foo" to "bar"),
-                                                                    "timeouts" to 0,
-                                                                )
-                                                            ),
-                                                        )
-                                                        .build()
-                                                )
-                                                .build()
-                                        )
-                                        .method(RoutingMethod.ALL)
+                                        .addChannel("email")
+                                        .method(BaseMessage.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
@@ -248,43 +194,33 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    BaseMessageSendTo.To.AudienceRecipient.builder()
-                                        .audienceId("audience_id")
+                                    BaseMessageSendTo.To.UnionMember1.builder()
                                         .data(
-                                            BaseMessageSendTo.To.AudienceRecipient.Data.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
                                         .addFilter(
-                                            BaseMessageSendTo.To.AudienceRecipient.Filter.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Filter.builder()
                                                 .operator(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
+                                                    BaseMessageSendTo.To.UnionMember1.Filter
                                                         .Operator
                                                         .MEMBER_OF
                                                 )
                                                 .path(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
-                                                        .Path
+                                                    BaseMessageSendTo.To.UnionMember1.Filter.Path
                                                         .ACCOUNT_ID
                                                 )
                                                 .value("value")
                                                 .build()
                                         )
+                                        .listId("list_id")
                                         .build()
                                 )
                                 .content(
-                                    Content.ElementalContent.builder()
-                                        .addElement(
-                                            ElementalNode.UnionMember0.builder()
-                                                .addChannel("string")
-                                                .if_("if")
-                                                .loop("loop")
-                                                .ref("ref")
-                                                .type(ElementalNode.UnionMember0.Type.TEXT)
-                                                .build()
-                                        )
-                                        .version("version")
-                                        .brand(JsonValue.from(mapOf<String, Any>()))
+                                    Content.ElementalContentSugar.builder()
+                                        .body("Thanks for signing up, {{name}}")
+                                        .title("Welcome!")
                                         .build()
                                 )
                                 .build()
@@ -347,7 +283,7 @@ internal class ErrorHandlingTest {
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
                                     BaseMessage.Data.builder()
-                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
@@ -365,7 +301,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            Utm.builder()
+                                            BaseMessage.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -407,59 +343,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     BaseMessage.Routing.builder()
-                                        .addChannel(
-                                            BaseMessage.Routing.Channel.RoutingStrategyChannel
-                                                .builder()
-                                                .channel("channel")
-                                                .config(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Config
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from("bar"),
-                                                        )
-                                                        .build()
-                                                )
-                                                .if_("if")
-                                                .method(RoutingMethod.ALL)
-                                                .providers(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Providers
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from(
-                                                                mapOf(
-                                                                    "if" to "if",
-                                                                    "metadata" to
-                                                                        mapOf(
-                                                                            "utm" to
-                                                                                mapOf(
-                                                                                    "campaign" to
-                                                                                        "campaign",
-                                                                                    "content" to
-                                                                                        "content",
-                                                                                    "medium" to
-                                                                                        "medium",
-                                                                                    "source" to
-                                                                                        "source",
-                                                                                    "term" to "term",
-                                                                                )
-                                                                        ),
-                                                                    "override" to
-                                                                        mapOf("foo" to "bar"),
-                                                                    "timeouts" to 0,
-                                                                )
-                                                            ),
-                                                        )
-                                                        .build()
-                                                )
-                                                .build()
-                                        )
-                                        .method(RoutingMethod.ALL)
+                                        .addChannel("email")
+                                        .method(BaseMessage.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
@@ -480,43 +365,33 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    BaseMessageSendTo.To.AudienceRecipient.builder()
-                                        .audienceId("audience_id")
+                                    BaseMessageSendTo.To.UnionMember1.builder()
                                         .data(
-                                            BaseMessageSendTo.To.AudienceRecipient.Data.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
                                         .addFilter(
-                                            BaseMessageSendTo.To.AudienceRecipient.Filter.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Filter.builder()
                                                 .operator(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
+                                                    BaseMessageSendTo.To.UnionMember1.Filter
                                                         .Operator
                                                         .MEMBER_OF
                                                 )
                                                 .path(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
-                                                        .Path
+                                                    BaseMessageSendTo.To.UnionMember1.Filter.Path
                                                         .ACCOUNT_ID
                                                 )
                                                 .value("value")
                                                 .build()
                                         )
+                                        .listId("list_id")
                                         .build()
                                 )
                                 .content(
-                                    Content.ElementalContent.builder()
-                                        .addElement(
-                                            ElementalNode.UnionMember0.builder()
-                                                .addChannel("string")
-                                                .if_("if")
-                                                .loop("loop")
-                                                .ref("ref")
-                                                .type(ElementalNode.UnionMember0.Type.TEXT)
-                                                .build()
-                                        )
-                                        .version("version")
-                                        .brand(JsonValue.from(mapOf<String, Any>()))
+                                    Content.ElementalContentSugar.builder()
+                                        .body("Thanks for signing up, {{name}}")
+                                        .title("Welcome!")
                                         .build()
                                 )
                                 .build()
@@ -579,7 +454,7 @@ internal class ErrorHandlingTest {
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
                                     BaseMessage.Data.builder()
-                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
@@ -597,7 +472,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            Utm.builder()
+                                            BaseMessage.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -639,59 +514,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     BaseMessage.Routing.builder()
-                                        .addChannel(
-                                            BaseMessage.Routing.Channel.RoutingStrategyChannel
-                                                .builder()
-                                                .channel("channel")
-                                                .config(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Config
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from("bar"),
-                                                        )
-                                                        .build()
-                                                )
-                                                .if_("if")
-                                                .method(RoutingMethod.ALL)
-                                                .providers(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Providers
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from(
-                                                                mapOf(
-                                                                    "if" to "if",
-                                                                    "metadata" to
-                                                                        mapOf(
-                                                                            "utm" to
-                                                                                mapOf(
-                                                                                    "campaign" to
-                                                                                        "campaign",
-                                                                                    "content" to
-                                                                                        "content",
-                                                                                    "medium" to
-                                                                                        "medium",
-                                                                                    "source" to
-                                                                                        "source",
-                                                                                    "term" to "term",
-                                                                                )
-                                                                        ),
-                                                                    "override" to
-                                                                        mapOf("foo" to "bar"),
-                                                                    "timeouts" to 0,
-                                                                )
-                                                            ),
-                                                        )
-                                                        .build()
-                                                )
-                                                .build()
-                                        )
-                                        .method(RoutingMethod.ALL)
+                                        .addChannel("email")
+                                        .method(BaseMessage.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
@@ -712,43 +536,33 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    BaseMessageSendTo.To.AudienceRecipient.builder()
-                                        .audienceId("audience_id")
+                                    BaseMessageSendTo.To.UnionMember1.builder()
                                         .data(
-                                            BaseMessageSendTo.To.AudienceRecipient.Data.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
                                         .addFilter(
-                                            BaseMessageSendTo.To.AudienceRecipient.Filter.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Filter.builder()
                                                 .operator(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
+                                                    BaseMessageSendTo.To.UnionMember1.Filter
                                                         .Operator
                                                         .MEMBER_OF
                                                 )
                                                 .path(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
-                                                        .Path
+                                                    BaseMessageSendTo.To.UnionMember1.Filter.Path
                                                         .ACCOUNT_ID
                                                 )
                                                 .value("value")
                                                 .build()
                                         )
+                                        .listId("list_id")
                                         .build()
                                 )
                                 .content(
-                                    Content.ElementalContent.builder()
-                                        .addElement(
-                                            ElementalNode.UnionMember0.builder()
-                                                .addChannel("string")
-                                                .if_("if")
-                                                .loop("loop")
-                                                .ref("ref")
-                                                .type(ElementalNode.UnionMember0.Type.TEXT)
-                                                .build()
-                                        )
-                                        .version("version")
-                                        .brand(JsonValue.from(mapOf<String, Any>()))
+                                    Content.ElementalContentSugar.builder()
+                                        .body("Thanks for signing up, {{name}}")
+                                        .title("Welcome!")
                                         .build()
                                 )
                                 .build()
@@ -811,7 +625,7 @@ internal class ErrorHandlingTest {
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
                                     BaseMessage.Data.builder()
-                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
@@ -829,7 +643,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            Utm.builder()
+                                            BaseMessage.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -871,59 +685,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     BaseMessage.Routing.builder()
-                                        .addChannel(
-                                            BaseMessage.Routing.Channel.RoutingStrategyChannel
-                                                .builder()
-                                                .channel("channel")
-                                                .config(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Config
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from("bar"),
-                                                        )
-                                                        .build()
-                                                )
-                                                .if_("if")
-                                                .method(RoutingMethod.ALL)
-                                                .providers(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Providers
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from(
-                                                                mapOf(
-                                                                    "if" to "if",
-                                                                    "metadata" to
-                                                                        mapOf(
-                                                                            "utm" to
-                                                                                mapOf(
-                                                                                    "campaign" to
-                                                                                        "campaign",
-                                                                                    "content" to
-                                                                                        "content",
-                                                                                    "medium" to
-                                                                                        "medium",
-                                                                                    "source" to
-                                                                                        "source",
-                                                                                    "term" to "term",
-                                                                                )
-                                                                        ),
-                                                                    "override" to
-                                                                        mapOf("foo" to "bar"),
-                                                                    "timeouts" to 0,
-                                                                )
-                                                            ),
-                                                        )
-                                                        .build()
-                                                )
-                                                .build()
-                                        )
-                                        .method(RoutingMethod.ALL)
+                                        .addChannel("email")
+                                        .method(BaseMessage.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
@@ -944,43 +707,33 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    BaseMessageSendTo.To.AudienceRecipient.builder()
-                                        .audienceId("audience_id")
+                                    BaseMessageSendTo.To.UnionMember1.builder()
                                         .data(
-                                            BaseMessageSendTo.To.AudienceRecipient.Data.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
                                         .addFilter(
-                                            BaseMessageSendTo.To.AudienceRecipient.Filter.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Filter.builder()
                                                 .operator(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
+                                                    BaseMessageSendTo.To.UnionMember1.Filter
                                                         .Operator
                                                         .MEMBER_OF
                                                 )
                                                 .path(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
-                                                        .Path
+                                                    BaseMessageSendTo.To.UnionMember1.Filter.Path
                                                         .ACCOUNT_ID
                                                 )
                                                 .value("value")
                                                 .build()
                                         )
+                                        .listId("list_id")
                                         .build()
                                 )
                                 .content(
-                                    Content.ElementalContent.builder()
-                                        .addElement(
-                                            ElementalNode.UnionMember0.builder()
-                                                .addChannel("string")
-                                                .if_("if")
-                                                .loop("loop")
-                                                .ref("ref")
-                                                .type(ElementalNode.UnionMember0.Type.TEXT)
-                                                .build()
-                                        )
-                                        .version("version")
-                                        .brand(JsonValue.from(mapOf<String, Any>()))
+                                    Content.ElementalContentSugar.builder()
+                                        .body("Thanks for signing up, {{name}}")
+                                        .title("Welcome!")
                                         .build()
                                 )
                                 .build()
@@ -1043,7 +796,7 @@ internal class ErrorHandlingTest {
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
                                     BaseMessage.Data.builder()
-                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
@@ -1061,7 +814,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            Utm.builder()
+                                            BaseMessage.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -1103,59 +856,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     BaseMessage.Routing.builder()
-                                        .addChannel(
-                                            BaseMessage.Routing.Channel.RoutingStrategyChannel
-                                                .builder()
-                                                .channel("channel")
-                                                .config(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Config
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from("bar"),
-                                                        )
-                                                        .build()
-                                                )
-                                                .if_("if")
-                                                .method(RoutingMethod.ALL)
-                                                .providers(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Providers
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from(
-                                                                mapOf(
-                                                                    "if" to "if",
-                                                                    "metadata" to
-                                                                        mapOf(
-                                                                            "utm" to
-                                                                                mapOf(
-                                                                                    "campaign" to
-                                                                                        "campaign",
-                                                                                    "content" to
-                                                                                        "content",
-                                                                                    "medium" to
-                                                                                        "medium",
-                                                                                    "source" to
-                                                                                        "source",
-                                                                                    "term" to "term",
-                                                                                )
-                                                                        ),
-                                                                    "override" to
-                                                                        mapOf("foo" to "bar"),
-                                                                    "timeouts" to 0,
-                                                                )
-                                                            ),
-                                                        )
-                                                        .build()
-                                                )
-                                                .build()
-                                        )
-                                        .method(RoutingMethod.ALL)
+                                        .addChannel("email")
+                                        .method(BaseMessage.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
@@ -1176,43 +878,33 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    BaseMessageSendTo.To.AudienceRecipient.builder()
-                                        .audienceId("audience_id")
+                                    BaseMessageSendTo.To.UnionMember1.builder()
                                         .data(
-                                            BaseMessageSendTo.To.AudienceRecipient.Data.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
                                         .addFilter(
-                                            BaseMessageSendTo.To.AudienceRecipient.Filter.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Filter.builder()
                                                 .operator(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
+                                                    BaseMessageSendTo.To.UnionMember1.Filter
                                                         .Operator
                                                         .MEMBER_OF
                                                 )
                                                 .path(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
-                                                        .Path
+                                                    BaseMessageSendTo.To.UnionMember1.Filter.Path
                                                         .ACCOUNT_ID
                                                 )
                                                 .value("value")
                                                 .build()
                                         )
+                                        .listId("list_id")
                                         .build()
                                 )
                                 .content(
-                                    Content.ElementalContent.builder()
-                                        .addElement(
-                                            ElementalNode.UnionMember0.builder()
-                                                .addChannel("string")
-                                                .if_("if")
-                                                .loop("loop")
-                                                .ref("ref")
-                                                .type(ElementalNode.UnionMember0.Type.TEXT)
-                                                .build()
-                                        )
-                                        .version("version")
-                                        .brand(JsonValue.from(mapOf<String, Any>()))
+                                    Content.ElementalContentSugar.builder()
+                                        .body("Thanks for signing up, {{name}}")
+                                        .title("Welcome!")
                                         .build()
                                 )
                                 .build()
@@ -1275,7 +967,7 @@ internal class ErrorHandlingTest {
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
                                     BaseMessage.Data.builder()
-                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
@@ -1293,7 +985,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            Utm.builder()
+                                            BaseMessage.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -1335,59 +1027,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     BaseMessage.Routing.builder()
-                                        .addChannel(
-                                            BaseMessage.Routing.Channel.RoutingStrategyChannel
-                                                .builder()
-                                                .channel("channel")
-                                                .config(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Config
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from("bar"),
-                                                        )
-                                                        .build()
-                                                )
-                                                .if_("if")
-                                                .method(RoutingMethod.ALL)
-                                                .providers(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Providers
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from(
-                                                                mapOf(
-                                                                    "if" to "if",
-                                                                    "metadata" to
-                                                                        mapOf(
-                                                                            "utm" to
-                                                                                mapOf(
-                                                                                    "campaign" to
-                                                                                        "campaign",
-                                                                                    "content" to
-                                                                                        "content",
-                                                                                    "medium" to
-                                                                                        "medium",
-                                                                                    "source" to
-                                                                                        "source",
-                                                                                    "term" to "term",
-                                                                                )
-                                                                        ),
-                                                                    "override" to
-                                                                        mapOf("foo" to "bar"),
-                                                                    "timeouts" to 0,
-                                                                )
-                                                            ),
-                                                        )
-                                                        .build()
-                                                )
-                                                .build()
-                                        )
-                                        .method(RoutingMethod.ALL)
+                                        .addChannel("email")
+                                        .method(BaseMessage.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
@@ -1408,43 +1049,33 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    BaseMessageSendTo.To.AudienceRecipient.builder()
-                                        .audienceId("audience_id")
+                                    BaseMessageSendTo.To.UnionMember1.builder()
                                         .data(
-                                            BaseMessageSendTo.To.AudienceRecipient.Data.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
                                         .addFilter(
-                                            BaseMessageSendTo.To.AudienceRecipient.Filter.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Filter.builder()
                                                 .operator(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
+                                                    BaseMessageSendTo.To.UnionMember1.Filter
                                                         .Operator
                                                         .MEMBER_OF
                                                 )
                                                 .path(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
-                                                        .Path
+                                                    BaseMessageSendTo.To.UnionMember1.Filter.Path
                                                         .ACCOUNT_ID
                                                 )
                                                 .value("value")
                                                 .build()
                                         )
+                                        .listId("list_id")
                                         .build()
                                 )
                                 .content(
-                                    Content.ElementalContent.builder()
-                                        .addElement(
-                                            ElementalNode.UnionMember0.builder()
-                                                .addChannel("string")
-                                                .if_("if")
-                                                .loop("loop")
-                                                .ref("ref")
-                                                .type(ElementalNode.UnionMember0.Type.TEXT)
-                                                .build()
-                                        )
-                                        .version("version")
-                                        .brand(JsonValue.from(mapOf<String, Any>()))
+                                    Content.ElementalContentSugar.builder()
+                                        .body("Thanks for signing up, {{name}}")
+                                        .title("Welcome!")
                                         .build()
                                 )
                                 .build()
@@ -1507,7 +1138,7 @@ internal class ErrorHandlingTest {
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
                                     BaseMessage.Data.builder()
-                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
@@ -1525,7 +1156,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            Utm.builder()
+                                            BaseMessage.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -1567,59 +1198,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     BaseMessage.Routing.builder()
-                                        .addChannel(
-                                            BaseMessage.Routing.Channel.RoutingStrategyChannel
-                                                .builder()
-                                                .channel("channel")
-                                                .config(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Config
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from("bar"),
-                                                        )
-                                                        .build()
-                                                )
-                                                .if_("if")
-                                                .method(RoutingMethod.ALL)
-                                                .providers(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Providers
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from(
-                                                                mapOf(
-                                                                    "if" to "if",
-                                                                    "metadata" to
-                                                                        mapOf(
-                                                                            "utm" to
-                                                                                mapOf(
-                                                                                    "campaign" to
-                                                                                        "campaign",
-                                                                                    "content" to
-                                                                                        "content",
-                                                                                    "medium" to
-                                                                                        "medium",
-                                                                                    "source" to
-                                                                                        "source",
-                                                                                    "term" to "term",
-                                                                                )
-                                                                        ),
-                                                                    "override" to
-                                                                        mapOf("foo" to "bar"),
-                                                                    "timeouts" to 0,
-                                                                )
-                                                            ),
-                                                        )
-                                                        .build()
-                                                )
-                                                .build()
-                                        )
-                                        .method(RoutingMethod.ALL)
+                                        .addChannel("email")
+                                        .method(BaseMessage.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
@@ -1640,43 +1220,33 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    BaseMessageSendTo.To.AudienceRecipient.builder()
-                                        .audienceId("audience_id")
+                                    BaseMessageSendTo.To.UnionMember1.builder()
                                         .data(
-                                            BaseMessageSendTo.To.AudienceRecipient.Data.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
                                         .addFilter(
-                                            BaseMessageSendTo.To.AudienceRecipient.Filter.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Filter.builder()
                                                 .operator(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
+                                                    BaseMessageSendTo.To.UnionMember1.Filter
                                                         .Operator
                                                         .MEMBER_OF
                                                 )
                                                 .path(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
-                                                        .Path
+                                                    BaseMessageSendTo.To.UnionMember1.Filter.Path
                                                         .ACCOUNT_ID
                                                 )
                                                 .value("value")
                                                 .build()
                                         )
+                                        .listId("list_id")
                                         .build()
                                 )
                                 .content(
-                                    Content.ElementalContent.builder()
-                                        .addElement(
-                                            ElementalNode.UnionMember0.builder()
-                                                .addChannel("string")
-                                                .if_("if")
-                                                .loop("loop")
-                                                .ref("ref")
-                                                .type(ElementalNode.UnionMember0.Type.TEXT)
-                                                .build()
-                                        )
-                                        .version("version")
-                                        .brand(JsonValue.from(mapOf<String, Any>()))
+                                    Content.ElementalContentSugar.builder()
+                                        .body("Thanks for signing up, {{name}}")
+                                        .title("Welcome!")
                                         .build()
                                 )
                                 .build()
@@ -1739,7 +1309,7 @@ internal class ErrorHandlingTest {
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
                                     BaseMessage.Data.builder()
-                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
@@ -1757,7 +1327,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            Utm.builder()
+                                            BaseMessage.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -1799,59 +1369,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     BaseMessage.Routing.builder()
-                                        .addChannel(
-                                            BaseMessage.Routing.Channel.RoutingStrategyChannel
-                                                .builder()
-                                                .channel("channel")
-                                                .config(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Config
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from("bar"),
-                                                        )
-                                                        .build()
-                                                )
-                                                .if_("if")
-                                                .method(RoutingMethod.ALL)
-                                                .providers(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Providers
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from(
-                                                                mapOf(
-                                                                    "if" to "if",
-                                                                    "metadata" to
-                                                                        mapOf(
-                                                                            "utm" to
-                                                                                mapOf(
-                                                                                    "campaign" to
-                                                                                        "campaign",
-                                                                                    "content" to
-                                                                                        "content",
-                                                                                    "medium" to
-                                                                                        "medium",
-                                                                                    "source" to
-                                                                                        "source",
-                                                                                    "term" to "term",
-                                                                                )
-                                                                        ),
-                                                                    "override" to
-                                                                        mapOf("foo" to "bar"),
-                                                                    "timeouts" to 0,
-                                                                )
-                                                            ),
-                                                        )
-                                                        .build()
-                                                )
-                                                .build()
-                                        )
-                                        .method(RoutingMethod.ALL)
+                                        .addChannel("email")
+                                        .method(BaseMessage.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
@@ -1872,43 +1391,33 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    BaseMessageSendTo.To.AudienceRecipient.builder()
-                                        .audienceId("audience_id")
+                                    BaseMessageSendTo.To.UnionMember1.builder()
                                         .data(
-                                            BaseMessageSendTo.To.AudienceRecipient.Data.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
                                         .addFilter(
-                                            BaseMessageSendTo.To.AudienceRecipient.Filter.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Filter.builder()
                                                 .operator(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
+                                                    BaseMessageSendTo.To.UnionMember1.Filter
                                                         .Operator
                                                         .MEMBER_OF
                                                 )
                                                 .path(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
-                                                        .Path
+                                                    BaseMessageSendTo.To.UnionMember1.Filter.Path
                                                         .ACCOUNT_ID
                                                 )
                                                 .value("value")
                                                 .build()
                                         )
+                                        .listId("list_id")
                                         .build()
                                 )
                                 .content(
-                                    Content.ElementalContent.builder()
-                                        .addElement(
-                                            ElementalNode.UnionMember0.builder()
-                                                .addChannel("string")
-                                                .if_("if")
-                                                .loop("loop")
-                                                .ref("ref")
-                                                .type(ElementalNode.UnionMember0.Type.TEXT)
-                                                .build()
-                                        )
-                                        .version("version")
-                                        .brand(JsonValue.from(mapOf<String, Any>()))
+                                    Content.ElementalContentSugar.builder()
+                                        .body("Thanks for signing up, {{name}}")
+                                        .title("Welcome!")
                                         .build()
                                 )
                                 .build()
@@ -1971,7 +1480,7 @@ internal class ErrorHandlingTest {
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
                                     BaseMessage.Data.builder()
-                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
@@ -1989,7 +1498,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            Utm.builder()
+                                            BaseMessage.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -2031,59 +1540,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     BaseMessage.Routing.builder()
-                                        .addChannel(
-                                            BaseMessage.Routing.Channel.RoutingStrategyChannel
-                                                .builder()
-                                                .channel("channel")
-                                                .config(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Config
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from("bar"),
-                                                        )
-                                                        .build()
-                                                )
-                                                .if_("if")
-                                                .method(RoutingMethod.ALL)
-                                                .providers(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Providers
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from(
-                                                                mapOf(
-                                                                    "if" to "if",
-                                                                    "metadata" to
-                                                                        mapOf(
-                                                                            "utm" to
-                                                                                mapOf(
-                                                                                    "campaign" to
-                                                                                        "campaign",
-                                                                                    "content" to
-                                                                                        "content",
-                                                                                    "medium" to
-                                                                                        "medium",
-                                                                                    "source" to
-                                                                                        "source",
-                                                                                    "term" to "term",
-                                                                                )
-                                                                        ),
-                                                                    "override" to
-                                                                        mapOf("foo" to "bar"),
-                                                                    "timeouts" to 0,
-                                                                )
-                                                            ),
-                                                        )
-                                                        .build()
-                                                )
-                                                .build()
-                                        )
-                                        .method(RoutingMethod.ALL)
+                                        .addChannel("email")
+                                        .method(BaseMessage.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
@@ -2104,43 +1562,33 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    BaseMessageSendTo.To.AudienceRecipient.builder()
-                                        .audienceId("audience_id")
+                                    BaseMessageSendTo.To.UnionMember1.builder()
                                         .data(
-                                            BaseMessageSendTo.To.AudienceRecipient.Data.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
                                         .addFilter(
-                                            BaseMessageSendTo.To.AudienceRecipient.Filter.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Filter.builder()
                                                 .operator(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
+                                                    BaseMessageSendTo.To.UnionMember1.Filter
                                                         .Operator
                                                         .MEMBER_OF
                                                 )
                                                 .path(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
-                                                        .Path
+                                                    BaseMessageSendTo.To.UnionMember1.Filter.Path
                                                         .ACCOUNT_ID
                                                 )
                                                 .value("value")
                                                 .build()
                                         )
+                                        .listId("list_id")
                                         .build()
                                 )
                                 .content(
-                                    Content.ElementalContent.builder()
-                                        .addElement(
-                                            ElementalNode.UnionMember0.builder()
-                                                .addChannel("string")
-                                                .if_("if")
-                                                .loop("loop")
-                                                .ref("ref")
-                                                .type(ElementalNode.UnionMember0.Type.TEXT)
-                                                .build()
-                                        )
-                                        .version("version")
-                                        .brand(JsonValue.from(mapOf<String, Any>()))
+                                    Content.ElementalContentSugar.builder()
+                                        .body("Thanks for signing up, {{name}}")
+                                        .title("Welcome!")
                                         .build()
                                 )
                                 .build()
@@ -2203,7 +1651,7 @@ internal class ErrorHandlingTest {
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
                                     BaseMessage.Data.builder()
-                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
@@ -2221,7 +1669,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            Utm.builder()
+                                            BaseMessage.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -2263,59 +1711,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     BaseMessage.Routing.builder()
-                                        .addChannel(
-                                            BaseMessage.Routing.Channel.RoutingStrategyChannel
-                                                .builder()
-                                                .channel("channel")
-                                                .config(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Config
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from("bar"),
-                                                        )
-                                                        .build()
-                                                )
-                                                .if_("if")
-                                                .method(RoutingMethod.ALL)
-                                                .providers(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Providers
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from(
-                                                                mapOf(
-                                                                    "if" to "if",
-                                                                    "metadata" to
-                                                                        mapOf(
-                                                                            "utm" to
-                                                                                mapOf(
-                                                                                    "campaign" to
-                                                                                        "campaign",
-                                                                                    "content" to
-                                                                                        "content",
-                                                                                    "medium" to
-                                                                                        "medium",
-                                                                                    "source" to
-                                                                                        "source",
-                                                                                    "term" to "term",
-                                                                                )
-                                                                        ),
-                                                                    "override" to
-                                                                        mapOf("foo" to "bar"),
-                                                                    "timeouts" to 0,
-                                                                )
-                                                            ),
-                                                        )
-                                                        .build()
-                                                )
-                                                .build()
-                                        )
-                                        .method(RoutingMethod.ALL)
+                                        .addChannel("email")
+                                        .method(BaseMessage.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
@@ -2336,43 +1733,33 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    BaseMessageSendTo.To.AudienceRecipient.builder()
-                                        .audienceId("audience_id")
+                                    BaseMessageSendTo.To.UnionMember1.builder()
                                         .data(
-                                            BaseMessageSendTo.To.AudienceRecipient.Data.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
                                         .addFilter(
-                                            BaseMessageSendTo.To.AudienceRecipient.Filter.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Filter.builder()
                                                 .operator(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
+                                                    BaseMessageSendTo.To.UnionMember1.Filter
                                                         .Operator
                                                         .MEMBER_OF
                                                 )
                                                 .path(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
-                                                        .Path
+                                                    BaseMessageSendTo.To.UnionMember1.Filter.Path
                                                         .ACCOUNT_ID
                                                 )
                                                 .value("value")
                                                 .build()
                                         )
+                                        .listId("list_id")
                                         .build()
                                 )
                                 .content(
-                                    Content.ElementalContent.builder()
-                                        .addElement(
-                                            ElementalNode.UnionMember0.builder()
-                                                .addChannel("string")
-                                                .if_("if")
-                                                .loop("loop")
-                                                .ref("ref")
-                                                .type(ElementalNode.UnionMember0.Type.TEXT)
-                                                .build()
-                                        )
-                                        .version("version")
-                                        .brand(JsonValue.from(mapOf<String, Any>()))
+                                    Content.ElementalContentSugar.builder()
+                                        .body("Thanks for signing up, {{name}}")
+                                        .title("Welcome!")
                                         .build()
                                 )
                                 .build()
@@ -2435,7 +1822,7 @@ internal class ErrorHandlingTest {
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
                                     BaseMessage.Data.builder()
-                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
@@ -2453,7 +1840,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            Utm.builder()
+                                            BaseMessage.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -2495,59 +1882,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     BaseMessage.Routing.builder()
-                                        .addChannel(
-                                            BaseMessage.Routing.Channel.RoutingStrategyChannel
-                                                .builder()
-                                                .channel("channel")
-                                                .config(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Config
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from("bar"),
-                                                        )
-                                                        .build()
-                                                )
-                                                .if_("if")
-                                                .method(RoutingMethod.ALL)
-                                                .providers(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Providers
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from(
-                                                                mapOf(
-                                                                    "if" to "if",
-                                                                    "metadata" to
-                                                                        mapOf(
-                                                                            "utm" to
-                                                                                mapOf(
-                                                                                    "campaign" to
-                                                                                        "campaign",
-                                                                                    "content" to
-                                                                                        "content",
-                                                                                    "medium" to
-                                                                                        "medium",
-                                                                                    "source" to
-                                                                                        "source",
-                                                                                    "term" to "term",
-                                                                                )
-                                                                        ),
-                                                                    "override" to
-                                                                        mapOf("foo" to "bar"),
-                                                                    "timeouts" to 0,
-                                                                )
-                                                            ),
-                                                        )
-                                                        .build()
-                                                )
-                                                .build()
-                                        )
-                                        .method(RoutingMethod.ALL)
+                                        .addChannel("email")
+                                        .method(BaseMessage.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
@@ -2568,43 +1904,33 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    BaseMessageSendTo.To.AudienceRecipient.builder()
-                                        .audienceId("audience_id")
+                                    BaseMessageSendTo.To.UnionMember1.builder()
                                         .data(
-                                            BaseMessageSendTo.To.AudienceRecipient.Data.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
                                         .addFilter(
-                                            BaseMessageSendTo.To.AudienceRecipient.Filter.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Filter.builder()
                                                 .operator(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
+                                                    BaseMessageSendTo.To.UnionMember1.Filter
                                                         .Operator
                                                         .MEMBER_OF
                                                 )
                                                 .path(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
-                                                        .Path
+                                                    BaseMessageSendTo.To.UnionMember1.Filter.Path
                                                         .ACCOUNT_ID
                                                 )
                                                 .value("value")
                                                 .build()
                                         )
+                                        .listId("list_id")
                                         .build()
                                 )
                                 .content(
-                                    Content.ElementalContent.builder()
-                                        .addElement(
-                                            ElementalNode.UnionMember0.builder()
-                                                .addChannel("string")
-                                                .if_("if")
-                                                .loop("loop")
-                                                .ref("ref")
-                                                .type(ElementalNode.UnionMember0.Type.TEXT)
-                                                .build()
-                                        )
-                                        .version("version")
-                                        .brand(JsonValue.from(mapOf<String, Any>()))
+                                    Content.ElementalContentSugar.builder()
+                                        .body("Thanks for signing up, {{name}}")
+                                        .title("Welcome!")
                                         .build()
                                 )
                                 .build()
@@ -2667,7 +1993,7 @@ internal class ErrorHandlingTest {
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
                                     BaseMessage.Data.builder()
-                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
@@ -2685,7 +2011,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            Utm.builder()
+                                            BaseMessage.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -2727,59 +2053,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     BaseMessage.Routing.builder()
-                                        .addChannel(
-                                            BaseMessage.Routing.Channel.RoutingStrategyChannel
-                                                .builder()
-                                                .channel("channel")
-                                                .config(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Config
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from("bar"),
-                                                        )
-                                                        .build()
-                                                )
-                                                .if_("if")
-                                                .method(RoutingMethod.ALL)
-                                                .providers(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Providers
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from(
-                                                                mapOf(
-                                                                    "if" to "if",
-                                                                    "metadata" to
-                                                                        mapOf(
-                                                                            "utm" to
-                                                                                mapOf(
-                                                                                    "campaign" to
-                                                                                        "campaign",
-                                                                                    "content" to
-                                                                                        "content",
-                                                                                    "medium" to
-                                                                                        "medium",
-                                                                                    "source" to
-                                                                                        "source",
-                                                                                    "term" to "term",
-                                                                                )
-                                                                        ),
-                                                                    "override" to
-                                                                        mapOf("foo" to "bar"),
-                                                                    "timeouts" to 0,
-                                                                )
-                                                            ),
-                                                        )
-                                                        .build()
-                                                )
-                                                .build()
-                                        )
-                                        .method(RoutingMethod.ALL)
+                                        .addChannel("email")
+                                        .method(BaseMessage.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
@@ -2800,43 +2075,33 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    BaseMessageSendTo.To.AudienceRecipient.builder()
-                                        .audienceId("audience_id")
+                                    BaseMessageSendTo.To.UnionMember1.builder()
                                         .data(
-                                            BaseMessageSendTo.To.AudienceRecipient.Data.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
                                         .addFilter(
-                                            BaseMessageSendTo.To.AudienceRecipient.Filter.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Filter.builder()
                                                 .operator(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
+                                                    BaseMessageSendTo.To.UnionMember1.Filter
                                                         .Operator
                                                         .MEMBER_OF
                                                 )
                                                 .path(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
-                                                        .Path
+                                                    BaseMessageSendTo.To.UnionMember1.Filter.Path
                                                         .ACCOUNT_ID
                                                 )
                                                 .value("value")
                                                 .build()
                                         )
+                                        .listId("list_id")
                                         .build()
                                 )
                                 .content(
-                                    Content.ElementalContent.builder()
-                                        .addElement(
-                                            ElementalNode.UnionMember0.builder()
-                                                .addChannel("string")
-                                                .if_("if")
-                                                .loop("loop")
-                                                .ref("ref")
-                                                .type(ElementalNode.UnionMember0.Type.TEXT)
-                                                .build()
-                                        )
-                                        .version("version")
-                                        .brand(JsonValue.from(mapOf<String, Any>()))
+                                    Content.ElementalContentSugar.builder()
+                                        .body("Thanks for signing up, {{name}}")
+                                        .title("Welcome!")
                                         .build()
                                 )
                                 .build()
@@ -2899,7 +2164,7 @@ internal class ErrorHandlingTest {
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
                                     BaseMessage.Data.builder()
-                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
@@ -2917,7 +2182,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            Utm.builder()
+                                            BaseMessage.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -2959,59 +2224,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     BaseMessage.Routing.builder()
-                                        .addChannel(
-                                            BaseMessage.Routing.Channel.RoutingStrategyChannel
-                                                .builder()
-                                                .channel("channel")
-                                                .config(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Config
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from("bar"),
-                                                        )
-                                                        .build()
-                                                )
-                                                .if_("if")
-                                                .method(RoutingMethod.ALL)
-                                                .providers(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Providers
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from(
-                                                                mapOf(
-                                                                    "if" to "if",
-                                                                    "metadata" to
-                                                                        mapOf(
-                                                                            "utm" to
-                                                                                mapOf(
-                                                                                    "campaign" to
-                                                                                        "campaign",
-                                                                                    "content" to
-                                                                                        "content",
-                                                                                    "medium" to
-                                                                                        "medium",
-                                                                                    "source" to
-                                                                                        "source",
-                                                                                    "term" to "term",
-                                                                                )
-                                                                        ),
-                                                                    "override" to
-                                                                        mapOf("foo" to "bar"),
-                                                                    "timeouts" to 0,
-                                                                )
-                                                            ),
-                                                        )
-                                                        .build()
-                                                )
-                                                .build()
-                                        )
-                                        .method(RoutingMethod.ALL)
+                                        .addChannel("email")
+                                        .method(BaseMessage.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
@@ -3032,43 +2246,33 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    BaseMessageSendTo.To.AudienceRecipient.builder()
-                                        .audienceId("audience_id")
+                                    BaseMessageSendTo.To.UnionMember1.builder()
                                         .data(
-                                            BaseMessageSendTo.To.AudienceRecipient.Data.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
                                         .addFilter(
-                                            BaseMessageSendTo.To.AudienceRecipient.Filter.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Filter.builder()
                                                 .operator(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
+                                                    BaseMessageSendTo.To.UnionMember1.Filter
                                                         .Operator
                                                         .MEMBER_OF
                                                 )
                                                 .path(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
-                                                        .Path
+                                                    BaseMessageSendTo.To.UnionMember1.Filter.Path
                                                         .ACCOUNT_ID
                                                 )
                                                 .value("value")
                                                 .build()
                                         )
+                                        .listId("list_id")
                                         .build()
                                 )
                                 .content(
-                                    Content.ElementalContent.builder()
-                                        .addElement(
-                                            ElementalNode.UnionMember0.builder()
-                                                .addChannel("string")
-                                                .if_("if")
-                                                .loop("loop")
-                                                .ref("ref")
-                                                .type(ElementalNode.UnionMember0.Type.TEXT)
-                                                .build()
-                                        )
-                                        .version("version")
-                                        .brand(JsonValue.from(mapOf<String, Any>()))
+                                    Content.ElementalContentSugar.builder()
+                                        .body("Thanks for signing up, {{name}}")
+                                        .title("Welcome!")
                                         .build()
                                 )
                                 .build()
@@ -3131,7 +2335,7 @@ internal class ErrorHandlingTest {
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
                                     BaseMessage.Data.builder()
-                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
@@ -3149,7 +2353,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            Utm.builder()
+                                            BaseMessage.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -3191,59 +2395,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     BaseMessage.Routing.builder()
-                                        .addChannel(
-                                            BaseMessage.Routing.Channel.RoutingStrategyChannel
-                                                .builder()
-                                                .channel("channel")
-                                                .config(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Config
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from("bar"),
-                                                        )
-                                                        .build()
-                                                )
-                                                .if_("if")
-                                                .method(RoutingMethod.ALL)
-                                                .providers(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Providers
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from(
-                                                                mapOf(
-                                                                    "if" to "if",
-                                                                    "metadata" to
-                                                                        mapOf(
-                                                                            "utm" to
-                                                                                mapOf(
-                                                                                    "campaign" to
-                                                                                        "campaign",
-                                                                                    "content" to
-                                                                                        "content",
-                                                                                    "medium" to
-                                                                                        "medium",
-                                                                                    "source" to
-                                                                                        "source",
-                                                                                    "term" to "term",
-                                                                                )
-                                                                        ),
-                                                                    "override" to
-                                                                        mapOf("foo" to "bar"),
-                                                                    "timeouts" to 0,
-                                                                )
-                                                            ),
-                                                        )
-                                                        .build()
-                                                )
-                                                .build()
-                                        )
-                                        .method(RoutingMethod.ALL)
+                                        .addChannel("email")
+                                        .method(BaseMessage.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
@@ -3264,43 +2417,33 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    BaseMessageSendTo.To.AudienceRecipient.builder()
-                                        .audienceId("audience_id")
+                                    BaseMessageSendTo.To.UnionMember1.builder()
                                         .data(
-                                            BaseMessageSendTo.To.AudienceRecipient.Data.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
                                         .addFilter(
-                                            BaseMessageSendTo.To.AudienceRecipient.Filter.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Filter.builder()
                                                 .operator(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
+                                                    BaseMessageSendTo.To.UnionMember1.Filter
                                                         .Operator
                                                         .MEMBER_OF
                                                 )
                                                 .path(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
-                                                        .Path
+                                                    BaseMessageSendTo.To.UnionMember1.Filter.Path
                                                         .ACCOUNT_ID
                                                 )
                                                 .value("value")
                                                 .build()
                                         )
+                                        .listId("list_id")
                                         .build()
                                 )
                                 .content(
-                                    Content.ElementalContent.builder()
-                                        .addElement(
-                                            ElementalNode.UnionMember0.builder()
-                                                .addChannel("string")
-                                                .if_("if")
-                                                .loop("loop")
-                                                .ref("ref")
-                                                .type(ElementalNode.UnionMember0.Type.TEXT)
-                                                .build()
-                                        )
-                                        .version("version")
-                                        .brand(JsonValue.from(mapOf<String, Any>()))
+                                    Content.ElementalContentSugar.builder()
+                                        .body("Thanks for signing up, {{name}}")
+                                        .title("Welcome!")
                                         .build()
                                 )
                                 .build()
@@ -3363,7 +2506,7 @@ internal class ErrorHandlingTest {
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
                                     BaseMessage.Data.builder()
-                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
@@ -3381,7 +2524,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            Utm.builder()
+                                            BaseMessage.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -3423,59 +2566,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     BaseMessage.Routing.builder()
-                                        .addChannel(
-                                            BaseMessage.Routing.Channel.RoutingStrategyChannel
-                                                .builder()
-                                                .channel("channel")
-                                                .config(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Config
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from("bar"),
-                                                        )
-                                                        .build()
-                                                )
-                                                .if_("if")
-                                                .method(RoutingMethod.ALL)
-                                                .providers(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Providers
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from(
-                                                                mapOf(
-                                                                    "if" to "if",
-                                                                    "metadata" to
-                                                                        mapOf(
-                                                                            "utm" to
-                                                                                mapOf(
-                                                                                    "campaign" to
-                                                                                        "campaign",
-                                                                                    "content" to
-                                                                                        "content",
-                                                                                    "medium" to
-                                                                                        "medium",
-                                                                                    "source" to
-                                                                                        "source",
-                                                                                    "term" to "term",
-                                                                                )
-                                                                        ),
-                                                                    "override" to
-                                                                        mapOf("foo" to "bar"),
-                                                                    "timeouts" to 0,
-                                                                )
-                                                            ),
-                                                        )
-                                                        .build()
-                                                )
-                                                .build()
-                                        )
-                                        .method(RoutingMethod.ALL)
+                                        .addChannel("email")
+                                        .method(BaseMessage.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
@@ -3496,43 +2588,33 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    BaseMessageSendTo.To.AudienceRecipient.builder()
-                                        .audienceId("audience_id")
+                                    BaseMessageSendTo.To.UnionMember1.builder()
                                         .data(
-                                            BaseMessageSendTo.To.AudienceRecipient.Data.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
                                         .addFilter(
-                                            BaseMessageSendTo.To.AudienceRecipient.Filter.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Filter.builder()
                                                 .operator(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
+                                                    BaseMessageSendTo.To.UnionMember1.Filter
                                                         .Operator
                                                         .MEMBER_OF
                                                 )
                                                 .path(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
-                                                        .Path
+                                                    BaseMessageSendTo.To.UnionMember1.Filter.Path
                                                         .ACCOUNT_ID
                                                 )
                                                 .value("value")
                                                 .build()
                                         )
+                                        .listId("list_id")
                                         .build()
                                 )
                                 .content(
-                                    Content.ElementalContent.builder()
-                                        .addElement(
-                                            ElementalNode.UnionMember0.builder()
-                                                .addChannel("string")
-                                                .if_("if")
-                                                .loop("loop")
-                                                .ref("ref")
-                                                .type(ElementalNode.UnionMember0.Type.TEXT)
-                                                .build()
-                                        )
-                                        .version("version")
-                                        .brand(JsonValue.from(mapOf<String, Any>()))
+                                    Content.ElementalContentSugar.builder()
+                                        .body("Thanks for signing up, {{name}}")
+                                        .title("Welcome!")
                                         .build()
                                 )
                                 .build()
@@ -3595,7 +2677,7 @@ internal class ErrorHandlingTest {
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
                                     BaseMessage.Data.builder()
-                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
@@ -3613,7 +2695,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            Utm.builder()
+                                            BaseMessage.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -3655,59 +2737,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     BaseMessage.Routing.builder()
-                                        .addChannel(
-                                            BaseMessage.Routing.Channel.RoutingStrategyChannel
-                                                .builder()
-                                                .channel("channel")
-                                                .config(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Config
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from("bar"),
-                                                        )
-                                                        .build()
-                                                )
-                                                .if_("if")
-                                                .method(RoutingMethod.ALL)
-                                                .providers(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Providers
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from(
-                                                                mapOf(
-                                                                    "if" to "if",
-                                                                    "metadata" to
-                                                                        mapOf(
-                                                                            "utm" to
-                                                                                mapOf(
-                                                                                    "campaign" to
-                                                                                        "campaign",
-                                                                                    "content" to
-                                                                                        "content",
-                                                                                    "medium" to
-                                                                                        "medium",
-                                                                                    "source" to
-                                                                                        "source",
-                                                                                    "term" to "term",
-                                                                                )
-                                                                        ),
-                                                                    "override" to
-                                                                        mapOf("foo" to "bar"),
-                                                                    "timeouts" to 0,
-                                                                )
-                                                            ),
-                                                        )
-                                                        .build()
-                                                )
-                                                .build()
-                                        )
-                                        .method(RoutingMethod.ALL)
+                                        .addChannel("email")
+                                        .method(BaseMessage.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
@@ -3728,43 +2759,33 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    BaseMessageSendTo.To.AudienceRecipient.builder()
-                                        .audienceId("audience_id")
+                                    BaseMessageSendTo.To.UnionMember1.builder()
                                         .data(
-                                            BaseMessageSendTo.To.AudienceRecipient.Data.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
                                         .addFilter(
-                                            BaseMessageSendTo.To.AudienceRecipient.Filter.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Filter.builder()
                                                 .operator(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
+                                                    BaseMessageSendTo.To.UnionMember1.Filter
                                                         .Operator
                                                         .MEMBER_OF
                                                 )
                                                 .path(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
-                                                        .Path
+                                                    BaseMessageSendTo.To.UnionMember1.Filter.Path
                                                         .ACCOUNT_ID
                                                 )
                                                 .value("value")
                                                 .build()
                                         )
+                                        .listId("list_id")
                                         .build()
                                 )
                                 .content(
-                                    Content.ElementalContent.builder()
-                                        .addElement(
-                                            ElementalNode.UnionMember0.builder()
-                                                .addChannel("string")
-                                                .if_("if")
-                                                .loop("loop")
-                                                .ref("ref")
-                                                .type(ElementalNode.UnionMember0.Type.TEXT)
-                                                .build()
-                                        )
-                                        .version("version")
-                                        .brand(JsonValue.from(mapOf<String, Any>()))
+                                    Content.ElementalContentSugar.builder()
+                                        .body("Thanks for signing up, {{name}}")
+                                        .title("Welcome!")
                                         .build()
                                 )
                                 .build()
@@ -3825,7 +2846,7 @@ internal class ErrorHandlingTest {
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
                                     BaseMessage.Data.builder()
-                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
@@ -3843,7 +2864,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            Utm.builder()
+                                            BaseMessage.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -3885,59 +2906,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     BaseMessage.Routing.builder()
-                                        .addChannel(
-                                            BaseMessage.Routing.Channel.RoutingStrategyChannel
-                                                .builder()
-                                                .channel("channel")
-                                                .config(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Config
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from("bar"),
-                                                        )
-                                                        .build()
-                                                )
-                                                .if_("if")
-                                                .method(RoutingMethod.ALL)
-                                                .providers(
-                                                    BaseMessage.Routing.Channel
-                                                        .RoutingStrategyChannel
-                                                        .Providers
-                                                        .builder()
-                                                        .putAdditionalProperty(
-                                                            "foo",
-                                                            JsonValue.from(
-                                                                mapOf(
-                                                                    "if" to "if",
-                                                                    "metadata" to
-                                                                        mapOf(
-                                                                            "utm" to
-                                                                                mapOf(
-                                                                                    "campaign" to
-                                                                                        "campaign",
-                                                                                    "content" to
-                                                                                        "content",
-                                                                                    "medium" to
-                                                                                        "medium",
-                                                                                    "source" to
-                                                                                        "source",
-                                                                                    "term" to "term",
-                                                                                )
-                                                                        ),
-                                                                    "override" to
-                                                                        mapOf("foo" to "bar"),
-                                                                    "timeouts" to 0,
-                                                                )
-                                                            ),
-                                                        )
-                                                        .build()
-                                                )
-                                                .build()
-                                        )
-                                        .method(RoutingMethod.ALL)
+                                        .addChannel("email")
+                                        .method(BaseMessage.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
@@ -3958,43 +2928,33 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    BaseMessageSendTo.To.AudienceRecipient.builder()
-                                        .audienceId("audience_id")
+                                    BaseMessageSendTo.To.UnionMember1.builder()
                                         .data(
-                                            BaseMessageSendTo.To.AudienceRecipient.Data.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
                                         .addFilter(
-                                            BaseMessageSendTo.To.AudienceRecipient.Filter.builder()
+                                            BaseMessageSendTo.To.UnionMember1.Filter.builder()
                                                 .operator(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
+                                                    BaseMessageSendTo.To.UnionMember1.Filter
                                                         .Operator
                                                         .MEMBER_OF
                                                 )
                                                 .path(
-                                                    BaseMessageSendTo.To.AudienceRecipient.Filter
-                                                        .Path
+                                                    BaseMessageSendTo.To.UnionMember1.Filter.Path
                                                         .ACCOUNT_ID
                                                 )
                                                 .value("value")
                                                 .build()
                                         )
+                                        .listId("list_id")
                                         .build()
                                 )
                                 .content(
-                                    Content.ElementalContent.builder()
-                                        .addElement(
-                                            ElementalNode.UnionMember0.builder()
-                                                .addChannel("string")
-                                                .if_("if")
-                                                .loop("loop")
-                                                .ref("ref")
-                                                .type(ElementalNode.UnionMember0.Type.TEXT)
-                                                .build()
-                                        )
-                                        .version("version")
-                                        .brand(JsonValue.from(mapOf<String, Any>()))
+                                    Content.ElementalContentSugar.builder()
+                                        .body("Thanks for signing up, {{name}}")
+                                        .title("Welcome!")
                                         .build()
                                 )
                                 .build()

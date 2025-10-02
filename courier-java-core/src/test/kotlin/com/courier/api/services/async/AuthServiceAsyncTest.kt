@@ -24,10 +24,7 @@ internal class AuthServiceAsyncTest {
 
         val responseFuture =
             authServiceAsync.issueToken(
-                AuthIssueTokenParams.builder()
-                    .expiresIn("expires_in")
-                    .scope(AuthIssueTokenParams.Scope.READ_PREFERENCES)
-                    .build()
+                AuthIssueTokenParams.builder().expiresIn("expires_in").scope("scope").build()
             )
 
         val response = responseFuture.get()

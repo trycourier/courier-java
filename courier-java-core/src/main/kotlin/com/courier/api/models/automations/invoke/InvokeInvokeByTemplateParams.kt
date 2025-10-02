@@ -1,19 +1,18 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.api.models.automations
+package com.courier.api.models.automations.invoke
 
 import com.courier.api.core.JsonValue
 import com.courier.api.core.Params
 import com.courier.api.core.checkRequired
 import com.courier.api.core.http.Headers
 import com.courier.api.core.http.QueryParams
-import com.courier.api.models.automations.invoke.AutomationInvokeParams
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** Invoke an automation run from an automation template. */
-class AutomationInvokeByTemplateParams
+class InvokeInvokeByTemplateParams
 private constructor(
     private val templateId: String?,
     private val automationInvokeParams: AutomationInvokeParams,
@@ -39,8 +38,7 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of
-         * [AutomationInvokeByTemplateParams].
+         * Returns a mutable builder for constructing an instance of [InvokeInvokeByTemplateParams].
          *
          * The following fields are required:
          * ```java
@@ -50,7 +48,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [AutomationInvokeByTemplateParams]. */
+    /** A builder for [InvokeInvokeByTemplateParams]. */
     class Builder internal constructor() {
 
         private var templateId: String? = null
@@ -59,14 +57,12 @@ private constructor(
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(automationInvokeByTemplateParams: AutomationInvokeByTemplateParams) =
-            apply {
-                templateId = automationInvokeByTemplateParams.templateId
-                automationInvokeParams = automationInvokeByTemplateParams.automationInvokeParams
-                additionalHeaders = automationInvokeByTemplateParams.additionalHeaders.toBuilder()
-                additionalQueryParams =
-                    automationInvokeByTemplateParams.additionalQueryParams.toBuilder()
-            }
+        internal fun from(invokeInvokeByTemplateParams: InvokeInvokeByTemplateParams) = apply {
+            templateId = invokeInvokeByTemplateParams.templateId
+            automationInvokeParams = invokeInvokeByTemplateParams.automationInvokeParams
+            additionalHeaders = invokeInvokeByTemplateParams.additionalHeaders.toBuilder()
+            additionalQueryParams = invokeInvokeByTemplateParams.additionalQueryParams.toBuilder()
+        }
 
         fun templateId(templateId: String?) = apply { this.templateId = templateId }
 
@@ -176,7 +172,7 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [AutomationInvokeByTemplateParams].
+         * Returns an immutable instance of [InvokeInvokeByTemplateParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
@@ -187,8 +183,8 @@ private constructor(
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): AutomationInvokeByTemplateParams =
-            AutomationInvokeByTemplateParams(
+        fun build(): InvokeInvokeByTemplateParams =
+            InvokeInvokeByTemplateParams(
                 templateId,
                 checkRequired("automationInvokeParams", automationInvokeParams),
                 additionalHeaders.build(),
@@ -213,7 +209,7 @@ private constructor(
             return true
         }
 
-        return other is AutomationInvokeByTemplateParams &&
+        return other is InvokeInvokeByTemplateParams &&
             templateId == other.templateId &&
             automationInvokeParams == other.automationInvokeParams &&
             additionalHeaders == other.additionalHeaders &&
@@ -224,5 +220,5 @@ private constructor(
         Objects.hash(templateId, automationInvokeParams, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "AutomationInvokeByTemplateParams{templateId=$templateId, automationInvokeParams=$automationInvokeParams, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "InvokeInvokeByTemplateParams{templateId=$templateId, automationInvokeParams=$automationInvokeParams, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

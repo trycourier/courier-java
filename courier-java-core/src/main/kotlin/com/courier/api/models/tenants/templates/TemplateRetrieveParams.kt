@@ -1,23 +1,27 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.api.models.messages
+package com.courier.api.models.tenants.templates
 
 import com.courier.api.core.Params
+import com.courier.api.core.checkRequired
 import com.courier.api.core.http.Headers
 import com.courier.api.core.http.QueryParams
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Get message content */
-class MessageGetContentParams
+/** Get a Template in Tenant */
+class TemplateRetrieveParams
 private constructor(
-    private val messageId: String?,
+    private val tenantId: String,
+    private val templateId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun messageId(): Optional<String> = Optional.ofNullable(messageId)
+    fun tenantId(): String = tenantId
+
+    fun templateId(): Optional<String> = Optional.ofNullable(templateId)
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -29,30 +33,39 @@ private constructor(
 
     companion object {
 
-        @JvmStatic fun none(): MessageGetContentParams = builder().build()
-
-        /** Returns a mutable builder for constructing an instance of [MessageGetContentParams]. */
+        /**
+         * Returns a mutable builder for constructing an instance of [TemplateRetrieveParams].
+         *
+         * The following fields are required:
+         * ```java
+         * .tenantId()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [MessageGetContentParams]. */
+    /** A builder for [TemplateRetrieveParams]. */
     class Builder internal constructor() {
 
-        private var messageId: String? = null
+        private var tenantId: String? = null
+        private var templateId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(messageGetContentParams: MessageGetContentParams) = apply {
-            messageId = messageGetContentParams.messageId
-            additionalHeaders = messageGetContentParams.additionalHeaders.toBuilder()
-            additionalQueryParams = messageGetContentParams.additionalQueryParams.toBuilder()
+        internal fun from(templateRetrieveParams: TemplateRetrieveParams) = apply {
+            tenantId = templateRetrieveParams.tenantId
+            templateId = templateRetrieveParams.templateId
+            additionalHeaders = templateRetrieveParams.additionalHeaders.toBuilder()
+            additionalQueryParams = templateRetrieveParams.additionalQueryParams.toBuilder()
         }
 
-        fun messageId(messageId: String?) = apply { this.messageId = messageId }
+        fun tenantId(tenantId: String) = apply { this.tenantId = tenantId }
 
-        /** Alias for calling [Builder.messageId] with `messageId.orElse(null)`. */
-        fun messageId(messageId: Optional<String>) = messageId(messageId.getOrNull())
+        fun templateId(templateId: String?) = apply { this.templateId = templateId }
+
+        /** Alias for calling [Builder.templateId] with `templateId.orElse(null)`. */
+        fun templateId(templateId: Optional<String>) = templateId(templateId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -153,13 +166,21 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [MessageGetContentParams].
+         * Returns an immutable instance of [TemplateRetrieveParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .tenantId()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): MessageGetContentParams =
-            MessageGetContentParams(
-                messageId,
+        fun build(): TemplateRetrieveParams =
+            TemplateRetrieveParams(
+                checkRequired("tenantId", tenantId),
+                templateId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -167,7 +188,8 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> messageId ?: ""
+            0 -> tenantId
+            1 -> templateId ?: ""
             else -> ""
         }
 
@@ -180,14 +202,16 @@ private constructor(
             return true
         }
 
-        return other is MessageGetContentParams &&
-            messageId == other.messageId &&
+        return other is TemplateRetrieveParams &&
+            tenantId == other.tenantId &&
+            templateId == other.templateId &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = Objects.hash(messageId, additionalHeaders, additionalQueryParams)
+    override fun hashCode(): Int =
+        Objects.hash(tenantId, templateId, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "MessageGetContentParams{messageId=$messageId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "TemplateRetrieveParams{tenantId=$tenantId, templateId=$templateId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

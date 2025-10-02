@@ -61,7 +61,7 @@ interface ListService {
         retrieve(listId, ListRetrieveParams.none(), requestOptions)
 
     /** Create or replace an existing list with the supplied values. */
-    fun update(listId: String, params: ListUpdateParams): List =
+    fun update(listId: String, params: ListUpdateParams) =
         update(listId, params, RequestOptions.none())
 
     /** @see update */
@@ -69,16 +69,13 @@ interface ListService {
         listId: String,
         params: ListUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): List = update(params.toBuilder().listId(listId).build(), requestOptions)
+    ) = update(params.toBuilder().listId(listId).build(), requestOptions)
 
     /** @see update */
-    fun update(params: ListUpdateParams): List = update(params, RequestOptions.none())
+    fun update(params: ListUpdateParams) = update(params, RequestOptions.none())
 
     /** @see update */
-    fun update(
-        params: ListUpdateParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): List
+    fun update(params: ListUpdateParams, requestOptions: RequestOptions = RequestOptions.none())
 
     /** Returns all of the lists, with the ability to filter based on a pattern. */
     fun list(): ListListResponse = list(ListListParams.none())
@@ -122,28 +119,21 @@ interface ListService {
         delete(listId, ListDeleteParams.none(), requestOptions)
 
     /** Restore a previously deleted list. */
-    fun restore(listId: String) = restore(listId, ListRestoreParams.none())
+    fun restore(listId: String, params: ListRestoreParams) =
+        restore(listId, params, RequestOptions.none())
 
     /** @see restore */
     fun restore(
         listId: String,
-        params: ListRestoreParams = ListRestoreParams.none(),
+        params: ListRestoreParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ) = restore(params.toBuilder().listId(listId).build(), requestOptions)
-
-    /** @see restore */
-    fun restore(listId: String, params: ListRestoreParams = ListRestoreParams.none()) =
-        restore(listId, params, RequestOptions.none())
-
-    /** @see restore */
-    fun restore(params: ListRestoreParams, requestOptions: RequestOptions = RequestOptions.none())
 
     /** @see restore */
     fun restore(params: ListRestoreParams) = restore(params, RequestOptions.none())
 
     /** @see restore */
-    fun restore(listId: String, requestOptions: RequestOptions) =
-        restore(listId, ListRestoreParams.none(), requestOptions)
+    fun restore(params: ListRestoreParams, requestOptions: RequestOptions = RequestOptions.none())
 
     /** A view of [ListService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -203,7 +193,7 @@ interface ListService {
          * [ListService.update].
          */
         @MustBeClosed
-        fun update(listId: String, params: ListUpdateParams): HttpResponseFor<List> =
+        fun update(listId: String, params: ListUpdateParams): HttpResponse =
             update(listId, params, RequestOptions.none())
 
         /** @see update */
@@ -212,19 +202,18 @@ interface ListService {
             listId: String,
             params: ListUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<List> = update(params.toBuilder().listId(listId).build(), requestOptions)
+        ): HttpResponse = update(params.toBuilder().listId(listId).build(), requestOptions)
 
         /** @see update */
         @MustBeClosed
-        fun update(params: ListUpdateParams): HttpResponseFor<List> =
-            update(params, RequestOptions.none())
+        fun update(params: ListUpdateParams): HttpResponse = update(params, RequestOptions.none())
 
         /** @see update */
         @MustBeClosed
         fun update(
             params: ListUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<List>
+        ): HttpResponse
 
         /**
          * Returns a raw HTTP response for `get /lists`, but is otherwise the same as
@@ -293,29 +282,16 @@ interface ListService {
          * as [ListService.restore].
          */
         @MustBeClosed
-        fun restore(listId: String): HttpResponse = restore(listId, ListRestoreParams.none())
+        fun restore(listId: String, params: ListRestoreParams): HttpResponse =
+            restore(listId, params, RequestOptions.none())
 
         /** @see restore */
         @MustBeClosed
         fun restore(
             listId: String,
-            params: ListRestoreParams = ListRestoreParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponse = restore(params.toBuilder().listId(listId).build(), requestOptions)
-
-        /** @see restore */
-        @MustBeClosed
-        fun restore(
-            listId: String,
-            params: ListRestoreParams = ListRestoreParams.none(),
-        ): HttpResponse = restore(listId, params, RequestOptions.none())
-
-        /** @see restore */
-        @MustBeClosed
-        fun restore(
             params: ListRestoreParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponse
+        ): HttpResponse = restore(params.toBuilder().listId(listId).build(), requestOptions)
 
         /** @see restore */
         @MustBeClosed
@@ -324,7 +300,9 @@ interface ListService {
 
         /** @see restore */
         @MustBeClosed
-        fun restore(listId: String, requestOptions: RequestOptions): HttpResponse =
-            restore(listId, ListRestoreParams.none(), requestOptions)
+        fun restore(
+            params: ListRestoreParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse
     }
 }

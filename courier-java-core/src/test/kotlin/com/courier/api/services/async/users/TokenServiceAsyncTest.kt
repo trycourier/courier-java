@@ -7,7 +7,7 @@ import com.courier.api.client.okhttp.CourierOkHttpClientAsync
 import com.courier.api.core.JsonValue
 import com.courier.api.models.users.tokens.TokenAddSingleParams
 import com.courier.api.models.users.tokens.TokenDeleteParams
-import com.courier.api.models.users.tokens.TokenRetrieveSingleParams
+import com.courier.api.models.users.tokens.TokenRetrieveParams
 import com.courier.api.models.users.tokens.TokenUpdateParams
 import com.courier.api.models.users.tokens.UserToken
 import org.junit.jupiter.api.Disabled
@@ -16,6 +16,25 @@ import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
 internal class TokenServiceAsyncTest {
+
+    @Disabled("Prism tests are disabled")
+    @Test
+    fun retrieve() {
+        val client =
+            CourierOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .apiKey("My API Key")
+                .build()
+        val tokenServiceAsync = client.users().tokens()
+
+        val tokenFuture =
+            tokenServiceAsync.retrieve(
+                TokenRetrieveParams.builder().userId("user_id").token("token").build()
+            )
+
+        val token = tokenFuture.get()
+        token.validate()
+    }
 
     @Disabled("Prism tests are disabled")
     @Test
@@ -139,24 +158,5 @@ internal class TokenServiceAsyncTest {
             )
 
         val response = future.get()
-    }
-
-    @Disabled("Prism tests are disabled")
-    @Test
-    fun retrieveSingle() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
-        val tokenServiceAsync = client.users().tokens()
-
-        val responseFuture =
-            tokenServiceAsync.retrieveSingle(
-                TokenRetrieveSingleParams.builder().userId("user_id").token("token").build()
-            )
-
-        val response = responseFuture.get()
-        response.validate()
     }
 }

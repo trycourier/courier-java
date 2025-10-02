@@ -6,6 +6,7 @@ import com.courier.api.TestServerExtension
 import com.courier.api.client.okhttp.CourierOkHttpClientAsync
 import com.courier.api.core.JsonValue
 import com.courier.api.models.lists.ListListParams
+import com.courier.api.models.lists.ListRestoreParams
 import com.courier.api.models.lists.ListUpdateParams
 import com.courier.api.models.lists.subscriptions.RecipientPreferences
 import org.junit.jupiter.api.Disabled
@@ -41,7 +42,7 @@ internal class ListServiceAsyncTest {
                 .build()
         val listServiceAsync = client.lists()
 
-        val listFuture =
+        val future =
             listServiceAsync.update(
                 ListUpdateParams.builder()
                     .listId("list_id")
@@ -95,8 +96,7 @@ internal class ListServiceAsyncTest {
                     .build()
             )
 
-        val list = listFuture.get()
-        list.validate()
+        val response = future.get()
     }
 
     @Disabled("Prism tests are disabled")
@@ -143,7 +143,13 @@ internal class ListServiceAsyncTest {
                 .build()
         val listServiceAsync = client.lists()
 
-        val future = listServiceAsync.restore("list_id")
+        val future =
+            listServiceAsync.restore(
+                ListRestoreParams.builder()
+                    .listId("list_id")
+                    .body(JsonValue.from(mapOf<String, Any>()))
+                    .build()
+            )
 
         val response = future.get()
     }

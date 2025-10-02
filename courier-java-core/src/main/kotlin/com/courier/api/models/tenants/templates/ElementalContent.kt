@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.api.models.send
+package com.courier.api.models.tenants.templates
 
 import com.courier.api.core.ExcludeMissing
 import com.courier.api.core.JsonField
@@ -16,17 +16,14 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Collections
 import java.util.Objects
-import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-class ElementalGroupNode
+class ElementalContent
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val elements: JsonField<List<ElementalNode>>,
-    private val channels: JsonField<List<String>>,
-    private val if_: JsonField<String>,
-    private val loop: JsonField<String>,
-    private val ref: JsonField<String>,
+    private val version: JsonField<String>,
+    private val brand: JsonValue,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -35,45 +32,25 @@ private constructor(
         @JsonProperty("elements")
         @ExcludeMissing
         elements: JsonField<List<ElementalNode>> = JsonMissing.of(),
-        @JsonProperty("channels")
-        @ExcludeMissing
-        channels: JsonField<List<String>> = JsonMissing.of(),
-        @JsonProperty("if") @ExcludeMissing if_: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("loop") @ExcludeMissing loop: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("ref") @ExcludeMissing ref: JsonField<String> = JsonMissing.of(),
-    ) : this(elements, channels, if_, loop, ref, mutableMapOf())
+        @JsonProperty("version") @ExcludeMissing version: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("brand") @ExcludeMissing brand: JsonValue = JsonMissing.of(),
+    ) : this(elements, version, brand, mutableMapOf())
 
     /**
-     * Sub elements to render.
-     *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun elements(): List<ElementalNode> = elements.getRequired("elements")
 
     /**
-     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
+     * For example, "2022-01-01"
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun channels(): Optional<List<String>> = channels.getOptional("channels")
+    fun version(): String = version.getRequired("version")
 
-    /**
-     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
-    fun if_(): Optional<String> = if_.getOptional("if")
-
-    /**
-     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
-    fun loop(): Optional<String> = loop.getOptional("loop")
-
-    /**
-     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
-    fun ref(): Optional<String> = ref.getOptional("ref")
+    @JsonProperty("brand") @ExcludeMissing fun _brand(): JsonValue = brand
 
     /**
      * Returns the raw JSON value of [elements].
@@ -85,32 +62,11 @@ private constructor(
     fun _elements(): JsonField<List<ElementalNode>> = elements
 
     /**
-     * Returns the raw JSON value of [channels].
+     * Returns the raw JSON value of [version].
      *
-     * Unlike [channels], this method doesn't throw if the JSON field has an unexpected type.
+     * Unlike [version], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("channels") @ExcludeMissing fun _channels(): JsonField<List<String>> = channels
-
-    /**
-     * Returns the raw JSON value of [if_].
-     *
-     * Unlike [if_], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("if") @ExcludeMissing fun _if_(): JsonField<String> = if_
-
-    /**
-     * Returns the raw JSON value of [loop].
-     *
-     * Unlike [loop], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("loop") @ExcludeMissing fun _loop(): JsonField<String> = loop
-
-    /**
-     * Returns the raw JSON value of [ref].
-     *
-     * Unlike [ref], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("ref") @ExcludeMissing fun _ref(): JsonField<String> = ref
+    @JsonProperty("version") @ExcludeMissing fun _version(): JsonField<String> = version
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -127,37 +83,33 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [ElementalGroupNode].
+         * Returns a mutable builder for constructing an instance of [ElementalContent].
          *
          * The following fields are required:
          * ```java
          * .elements()
+         * .version()
          * ```
          */
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [ElementalGroupNode]. */
+    /** A builder for [ElementalContent]. */
     class Builder internal constructor() {
 
         private var elements: JsonField<MutableList<ElementalNode>>? = null
-        private var channels: JsonField<MutableList<String>>? = null
-        private var if_: JsonField<String> = JsonMissing.of()
-        private var loop: JsonField<String> = JsonMissing.of()
-        private var ref: JsonField<String> = JsonMissing.of()
+        private var version: JsonField<String>? = null
+        private var brand: JsonValue = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(elementalGroupNode: ElementalGroupNode) = apply {
-            elements = elementalGroupNode.elements.map { it.toMutableList() }
-            channels = elementalGroupNode.channels.map { it.toMutableList() }
-            if_ = elementalGroupNode.if_
-            loop = elementalGroupNode.loop
-            ref = elementalGroupNode.ref
-            additionalProperties = elementalGroupNode.additionalProperties.toMutableMap()
+        internal fun from(elementalContent: ElementalContent) = apply {
+            elements = elementalContent.elements.map { it.toMutableList() }
+            version = elementalContent.version
+            brand = elementalContent.brand
+            additionalProperties = elementalContent.additionalProperties.toMutableMap()
         }
 
-        /** Sub elements to render. */
         fun elements(elements: List<ElementalNode>) = elements(JsonField.of(elements))
 
         /**
@@ -215,72 +167,18 @@ private constructor(
         fun addElement(unionMember7: ElementalNode.UnionMember7) =
             addElement(ElementalNode.ofUnionMember7(unionMember7))
 
-        fun channels(channels: List<String>?) = channels(JsonField.ofNullable(channels))
-
-        /** Alias for calling [Builder.channels] with `channels.orElse(null)`. */
-        fun channels(channels: Optional<List<String>>) = channels(channels.getOrNull())
+        /** For example, "2022-01-01" */
+        fun version(version: String) = version(JsonField.of(version))
 
         /**
-         * Sets [Builder.channels] to an arbitrary JSON value.
+         * Sets [Builder.version] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.channels] with a well-typed `List<String>` value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun channels(channels: JsonField<List<String>>) = apply {
-            this.channels = channels.map { it.toMutableList() }
-        }
-
-        /**
-         * Adds a single [String] to [channels].
-         *
-         * @throws IllegalStateException if the field was previously set to a non-list.
-         */
-        fun addChannel(channel: String) = apply {
-            channels =
-                (channels ?: JsonField.of(mutableListOf())).also {
-                    checkKnown("channels", it).add(channel)
-                }
-        }
-
-        fun if_(if_: String?) = if_(JsonField.ofNullable(if_))
-
-        /** Alias for calling [Builder.if_] with `if_.orElse(null)`. */
-        fun if_(if_: Optional<String>) = if_(if_.getOrNull())
-
-        /**
-         * Sets [Builder.if_] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.if_] with a well-typed [String] value instead. This
+         * You should usually call [Builder.version] with a well-typed [String] value instead. This
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun if_(if_: JsonField<String>) = apply { this.if_ = if_ }
+        fun version(version: JsonField<String>) = apply { this.version = version }
 
-        fun loop(loop: String?) = loop(JsonField.ofNullable(loop))
-
-        /** Alias for calling [Builder.loop] with `loop.orElse(null)`. */
-        fun loop(loop: Optional<String>) = loop(loop.getOrNull())
-
-        /**
-         * Sets [Builder.loop] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.loop] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun loop(loop: JsonField<String>) = apply { this.loop = loop }
-
-        fun ref(ref: String?) = ref(JsonField.ofNullable(ref))
-
-        /** Alias for calling [Builder.ref] with `ref.orElse(null)`. */
-        fun ref(ref: Optional<String>) = ref(ref.getOrNull())
-
-        /**
-         * Sets [Builder.ref] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.ref] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun ref(ref: JsonField<String>) = apply { this.ref = ref }
+        fun brand(brand: JsonValue) = apply { this.brand = brand }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -302,40 +200,36 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [ElementalGroupNode].
+         * Returns an immutable instance of [ElementalContent].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
          * ```java
          * .elements()
+         * .version()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): ElementalGroupNode =
-            ElementalGroupNode(
+        fun build(): ElementalContent =
+            ElementalContent(
                 checkRequired("elements", elements).map { it.toImmutable() },
-                (channels ?: JsonMissing.of()).map { it.toImmutable() },
-                if_,
-                loop,
-                ref,
+                checkRequired("version", version),
+                brand,
                 additionalProperties.toMutableMap(),
             )
     }
 
     private var validated: Boolean = false
 
-    fun validate(): ElementalGroupNode = apply {
+    fun validate(): ElementalContent = apply {
         if (validated) {
             return@apply
         }
 
         elements().forEach { it.validate() }
-        channels()
-        if_()
-        loop()
-        ref()
+        version()
         validated = true
     }
 
@@ -355,31 +249,26 @@ private constructor(
     @JvmSynthetic
     internal fun validity(): Int =
         (elements.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
-            (channels.asKnown().getOrNull()?.size ?: 0) +
-            (if (if_.asKnown().isPresent) 1 else 0) +
-            (if (loop.asKnown().isPresent) 1 else 0) +
-            (if (ref.asKnown().isPresent) 1 else 0)
+            (if (version.asKnown().isPresent) 1 else 0)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return other is ElementalGroupNode &&
+        return other is ElementalContent &&
             elements == other.elements &&
-            channels == other.channels &&
-            if_ == other.if_ &&
-            loop == other.loop &&
-            ref == other.ref &&
+            version == other.version &&
+            brand == other.brand &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(elements, channels, if_, loop, ref, additionalProperties)
+        Objects.hash(elements, version, brand, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ElementalGroupNode{elements=$elements, channels=$channels, if_=$if_, loop=$loop, ref=$ref, additionalProperties=$additionalProperties}"
+        "ElementalContent{elements=$elements, version=$version, brand=$brand, additionalProperties=$additionalProperties}"
 }

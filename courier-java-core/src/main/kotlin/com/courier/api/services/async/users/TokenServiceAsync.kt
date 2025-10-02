@@ -10,8 +10,8 @@ import com.courier.api.models.users.tokens.TokenAddMultipleParams
 import com.courier.api.models.users.tokens.TokenAddSingleParams
 import com.courier.api.models.users.tokens.TokenDeleteParams
 import com.courier.api.models.users.tokens.TokenListParams
-import com.courier.api.models.users.tokens.TokenRetrieveSingleParams
-import com.courier.api.models.users.tokens.TokenRetrieveSingleResponse
+import com.courier.api.models.users.tokens.TokenRetrieveParams
+import com.courier.api.models.users.tokens.TokenRetrieveResponse
 import com.courier.api.models.users.tokens.TokenUpdateParams
 import com.courier.api.models.users.tokens.UserToken
 import java.util.concurrent.CompletableFuture
@@ -30,6 +30,30 @@ interface TokenServiceAsync {
      * The original service is not modified.
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): TokenServiceAsync
+
+    /** Get single token available for a `:token` */
+    fun retrieve(
+        token: String,
+        params: TokenRetrieveParams,
+    ): CompletableFuture<TokenRetrieveResponse> = retrieve(token, params, RequestOptions.none())
+
+    /** @see retrieve */
+    fun retrieve(
+        token: String,
+        params: TokenRetrieveParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<TokenRetrieveResponse> =
+        retrieve(params.toBuilder().token(token).build(), requestOptions)
+
+    /** @see retrieve */
+    fun retrieve(params: TokenRetrieveParams): CompletableFuture<TokenRetrieveResponse> =
+        retrieve(params, RequestOptions.none())
+
+    /** @see retrieve */
+    fun retrieve(
+        params: TokenRetrieveParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<TokenRetrieveResponse>
 
     /** Apply a JSON Patch (RFC 6902) to the specified token. */
     fun update(token: String, params: TokenUpdateParams): CompletableFuture<Void?> =
@@ -159,33 +183,6 @@ interface TokenServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Void?>
 
-    /** Get single token available for a `:token` */
-    fun retrieveSingle(
-        token: String,
-        params: TokenRetrieveSingleParams,
-    ): CompletableFuture<TokenRetrieveSingleResponse> =
-        retrieveSingle(token, params, RequestOptions.none())
-
-    /** @see retrieveSingle */
-    fun retrieveSingle(
-        token: String,
-        params: TokenRetrieveSingleParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<TokenRetrieveSingleResponse> =
-        retrieveSingle(params.toBuilder().token(token).build(), requestOptions)
-
-    /** @see retrieveSingle */
-    fun retrieveSingle(
-        params: TokenRetrieveSingleParams
-    ): CompletableFuture<TokenRetrieveSingleResponse> =
-        retrieveSingle(params, RequestOptions.none())
-
-    /** @see retrieveSingle */
-    fun retrieveSingle(
-        params: TokenRetrieveSingleParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<TokenRetrieveSingleResponse>
-
     /** A view of [TokenServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
 
@@ -197,6 +194,36 @@ interface TokenServiceAsync {
         fun withOptions(
             modifier: Consumer<ClientOptions.Builder>
         ): TokenServiceAsync.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `get /users/{user_id}/tokens/{token}`, but is otherwise
+         * the same as [TokenServiceAsync.retrieve].
+         */
+        fun retrieve(
+            token: String,
+            params: TokenRetrieveParams,
+        ): CompletableFuture<HttpResponseFor<TokenRetrieveResponse>> =
+            retrieve(token, params, RequestOptions.none())
+
+        /** @see retrieve */
+        fun retrieve(
+            token: String,
+            params: TokenRetrieveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<TokenRetrieveResponse>> =
+            retrieve(params.toBuilder().token(token).build(), requestOptions)
+
+        /** @see retrieve */
+        fun retrieve(
+            params: TokenRetrieveParams
+        ): CompletableFuture<HttpResponseFor<TokenRetrieveResponse>> =
+            retrieve(params, RequestOptions.none())
+
+        /** @see retrieve */
+        fun retrieve(
+            params: TokenRetrieveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<TokenRetrieveResponse>>
 
         /**
          * Returns a raw HTTP response for `patch /users/{user_id}/tokens/{token}`, but is otherwise
@@ -351,35 +378,5 @@ interface TokenServiceAsync {
             params: TokenAddSingleParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponse>
-
-        /**
-         * Returns a raw HTTP response for `get /users/{user_id}/tokens/{token}`, but is otherwise
-         * the same as [TokenServiceAsync.retrieveSingle].
-         */
-        fun retrieveSingle(
-            token: String,
-            params: TokenRetrieveSingleParams,
-        ): CompletableFuture<HttpResponseFor<TokenRetrieveSingleResponse>> =
-            retrieveSingle(token, params, RequestOptions.none())
-
-        /** @see retrieveSingle */
-        fun retrieveSingle(
-            token: String,
-            params: TokenRetrieveSingleParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<TokenRetrieveSingleResponse>> =
-            retrieveSingle(params.toBuilder().token(token).build(), requestOptions)
-
-        /** @see retrieveSingle */
-        fun retrieveSingle(
-            params: TokenRetrieveSingleParams
-        ): CompletableFuture<HttpResponseFor<TokenRetrieveSingleResponse>> =
-            retrieveSingle(params, RequestOptions.none())
-
-        /** @see retrieveSingle */
-        fun retrieveSingle(
-            params: TokenRetrieveSingleParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<TokenRetrieveSingleResponse>>
     }
 }

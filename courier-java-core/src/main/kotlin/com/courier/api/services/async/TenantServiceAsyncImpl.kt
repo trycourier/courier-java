@@ -27,6 +27,8 @@ import com.courier.api.models.tenants.TenantRetrieveParams
 import com.courier.api.models.tenants.TenantUpdateParams
 import com.courier.api.services.async.tenants.DefaultPreferenceServiceAsync
 import com.courier.api.services.async.tenants.DefaultPreferenceServiceAsyncImpl
+import com.courier.api.services.async.tenants.TemplateServiceAsync
+import com.courier.api.services.async.tenants.TemplateServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
@@ -42,12 +44,16 @@ class TenantServiceAsyncImpl internal constructor(private val clientOptions: Cli
         DefaultPreferenceServiceAsyncImpl(clientOptions)
     }
 
+    private val templates: TemplateServiceAsync by lazy { TemplateServiceAsyncImpl(clientOptions) }
+
     override fun withRawResponse(): TenantServiceAsync.WithRawResponse = withRawResponse
 
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): TenantServiceAsync =
         TenantServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun defaultPreferences(): DefaultPreferenceServiceAsync = defaultPreferences
+
+    override fun templates(): TemplateServiceAsync = templates
 
     override fun retrieve(
         params: TenantRetrieveParams,
@@ -94,6 +100,10 @@ class TenantServiceAsyncImpl internal constructor(private val clientOptions: Cli
             DefaultPreferenceServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val templates: TemplateServiceAsync.WithRawResponse by lazy {
+            TemplateServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun withOptions(
             modifier: Consumer<ClientOptions.Builder>
         ): TenantServiceAsync.WithRawResponse =
@@ -103,6 +113,8 @@ class TenantServiceAsyncImpl internal constructor(private val clientOptions: Cli
 
         override fun defaultPreferences(): DefaultPreferenceServiceAsync.WithRawResponse =
             defaultPreferences
+
+        override fun templates(): TemplateServiceAsync.WithRawResponse = templates
 
         private val retrieveHandler: Handler<Tenant> = jsonHandler<Tenant>(clientOptions.jsonMapper)
 
