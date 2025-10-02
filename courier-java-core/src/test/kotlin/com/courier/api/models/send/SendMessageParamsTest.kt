@@ -188,12 +188,12 @@ internal class SendMessageParamsTest {
                     .content(
                         Content.ElementalContent.builder()
                             .addElement(
-                                Content.ElementalContent.Element.UnionMember0.builder()
+                                ElementalNode.UnionMember0.builder()
                                     .addChannel("string")
                                     .if_("if")
                                     .loop("loop")
                                     .ref("ref")
-                                    .type(Content.ElementalContent.Element.UnionMember0.Type.TEXT)
+                                    .type(ElementalNode.UnionMember0.Type.TEXT)
                                     .build()
                             )
                             .version("version")
@@ -389,14 +389,12 @@ internal class SendMessageParamsTest {
                         .content(
                             Content.ElementalContent.builder()
                                 .addElement(
-                                    Content.ElementalContent.Element.UnionMember0.builder()
+                                    ElementalNode.UnionMember0.builder()
                                         .addChannel("string")
                                         .if_("if")
                                         .loop("loop")
                                         .ref("ref")
-                                        .type(
-                                            Content.ElementalContent.Element.UnionMember0.Type.TEXT
-                                        )
+                                        .type(ElementalNode.UnionMember0.Type.TEXT)
                                         .build()
                                 )
                                 .version("version")
@@ -591,14 +589,12 @@ internal class SendMessageParamsTest {
                         .content(
                             Content.ElementalContent.builder()
                                 .addElement(
-                                    Content.ElementalContent.Element.UnionMember0.builder()
+                                    ElementalNode.UnionMember0.builder()
                                         .addChannel("string")
                                         .if_("if")
                                         .loop("loop")
                                         .ref("ref")
-                                        .type(
-                                            Content.ElementalContent.Element.UnionMember0.Type.TEXT
-                                        )
+                                        .type(ElementalNode.UnionMember0.Type.TEXT)
                                         .build()
                                 )
                                 .version("version")
@@ -618,9 +614,7 @@ internal class SendMessageParamsTest {
                     Message.ContentMessage.builder()
                         .content(
                             Content.ElementalContent.builder()
-                                .addElement(
-                                    Content.ElementalContent.Element.UnionMember0.builder().build()
-                                )
+                                .addElement(ElementalNode.UnionMember0.builder().build())
                                 .version("version")
                                 .build()
                         )
@@ -636,9 +630,7 @@ internal class SendMessageParamsTest {
                     Message.ContentMessage.builder()
                         .content(
                             Content.ElementalContent.builder()
-                                .addElement(
-                                    Content.ElementalContent.Element.UnionMember0.builder().build()
-                                )
+                                .addElement(ElementalNode.UnionMember0.builder().build())
                                 .version("version")
                                 .build()
                         )
