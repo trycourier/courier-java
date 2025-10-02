@@ -48,8 +48,9 @@ This library requires Java 8 or later.
 ```java
 import com.courier.api.client.CourierClient;
 import com.courier.api.client.okhttp.CourierOkHttpClient;
-import com.courier.api.models.send.Content;
-import com.courier.api.models.send.ElementalNode;
+import com.courier.api.core.JsonValue;
+import com.courier.api.models.send.BaseMessage;
+import com.courier.api.models.send.BaseMessageSendTo;
 import com.courier.api.models.send.Message;
 import com.courier.api.models.send.SendMessageParams;
 import com.courier.api.models.send.SendMessageResponse;
@@ -59,10 +60,11 @@ import com.courier.api.models.send.SendMessageResponse;
 CourierClient client = CourierOkHttpClient.fromEnv();
 
 SendMessageParams params = SendMessageParams.builder()
-    .message(Message.ContentMessage.builder()
-        .content(Content.ElementalContent.builder()
-            .addElement(ElementalNode.UnionMember0.builder().build())
-            .version("version")
+    .message(Message.TemplateMessage.builder()
+        .to(BaseMessageSendTo.To.UnionMember1.builder().build())
+        .template("your_template")
+        .data(BaseMessage.Data.builder()
+            .putAdditionalProperty("foo", JsonValue.from("bar"))
             .build())
         .build())
     .build();
@@ -156,8 +158,9 @@ The default client is synchronous. To switch to asynchronous execution, call the
 ```java
 import com.courier.api.client.CourierClient;
 import com.courier.api.client.okhttp.CourierOkHttpClient;
-import com.courier.api.models.send.Content;
-import com.courier.api.models.send.ElementalNode;
+import com.courier.api.core.JsonValue;
+import com.courier.api.models.send.BaseMessage;
+import com.courier.api.models.send.BaseMessageSendTo;
 import com.courier.api.models.send.Message;
 import com.courier.api.models.send.SendMessageParams;
 import com.courier.api.models.send.SendMessageResponse;
@@ -168,10 +171,11 @@ import java.util.concurrent.CompletableFuture;
 CourierClient client = CourierOkHttpClient.fromEnv();
 
 SendMessageParams params = SendMessageParams.builder()
-    .message(Message.ContentMessage.builder()
-        .content(Content.ElementalContent.builder()
-            .addElement(ElementalNode.UnionMember0.builder().build())
-            .version("version")
+    .message(Message.TemplateMessage.builder()
+        .to(BaseMessageSendTo.To.UnionMember1.builder().build())
+        .template("your_template")
+        .data(BaseMessage.Data.builder()
+            .putAdditionalProperty("foo", JsonValue.from("bar"))
             .build())
         .build())
     .build();
@@ -183,8 +187,9 @@ Or create an asynchronous client from the beginning:
 ```java
 import com.courier.api.client.CourierClientAsync;
 import com.courier.api.client.okhttp.CourierOkHttpClientAsync;
-import com.courier.api.models.send.Content;
-import com.courier.api.models.send.ElementalNode;
+import com.courier.api.core.JsonValue;
+import com.courier.api.models.send.BaseMessage;
+import com.courier.api.models.send.BaseMessageSendTo;
 import com.courier.api.models.send.Message;
 import com.courier.api.models.send.SendMessageParams;
 import com.courier.api.models.send.SendMessageResponse;
@@ -195,10 +200,11 @@ import java.util.concurrent.CompletableFuture;
 CourierClientAsync client = CourierOkHttpClientAsync.fromEnv();
 
 SendMessageParams params = SendMessageParams.builder()
-    .message(Message.ContentMessage.builder()
-        .content(Content.ElementalContent.builder()
-            .addElement(ElementalNode.UnionMember0.builder().build())
-            .version("version")
+    .message(Message.TemplateMessage.builder()
+        .to(BaseMessageSendTo.To.UnionMember1.builder().build())
+        .template("your_template")
+        .data(BaseMessage.Data.builder()
+            .putAdditionalProperty("foo", JsonValue.from("bar"))
             .build())
         .build())
     .build();
@@ -214,19 +220,21 @@ The SDK defines methods that deserialize responses into instances of Java classe
 To access this data, prefix any HTTP method call on a client or service with `withRawResponse()`:
 
 ```java
+import com.courier.api.core.JsonValue;
 import com.courier.api.core.http.Headers;
 import com.courier.api.core.http.HttpResponseFor;
-import com.courier.api.models.send.Content;
-import com.courier.api.models.send.ElementalNode;
+import com.courier.api.models.send.BaseMessage;
+import com.courier.api.models.send.BaseMessageSendTo;
 import com.courier.api.models.send.Message;
 import com.courier.api.models.send.SendMessageParams;
 import com.courier.api.models.send.SendMessageResponse;
 
 SendMessageParams params = SendMessageParams.builder()
-    .message(Message.ContentMessage.builder()
-        .content(Content.ElementalContent.builder()
-            .addElement(ElementalNode.UnionMember0.builder().build())
-            .version("version")
+    .message(Message.TemplateMessage.builder()
+        .to(BaseMessageSendTo.To.UnionMember1.builder().build())
+        .template("your_template")
+        .data(BaseMessage.Data.builder()
+            .putAdditionalProperty("foo", JsonValue.from("bar"))
             .build())
         .build())
     .build();
