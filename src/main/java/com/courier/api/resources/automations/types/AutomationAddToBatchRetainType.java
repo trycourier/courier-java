@@ -3,26 +3,104 @@
  */
 package com.courier.api.resources.automations.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum AutomationAddToBatchRetainType {
-    FIRST("first"),
+public final class AutomationAddToBatchRetainType {
+    public static final AutomationAddToBatchRetainType LAST = new AutomationAddToBatchRetainType(Value.LAST, "last");
 
-    LAST("last"),
+    public static final AutomationAddToBatchRetainType LOWEST =
+            new AutomationAddToBatchRetainType(Value.LOWEST, "lowest");
 
-    HIGHEST("highest"),
+    public static final AutomationAddToBatchRetainType HIGHEST =
+            new AutomationAddToBatchRetainType(Value.HIGHEST, "highest");
 
-    LOWEST("lowest");
+    public static final AutomationAddToBatchRetainType FIRST = new AutomationAddToBatchRetainType(Value.FIRST, "first");
 
-    private final String value;
+    private final Value value;
 
-    AutomationAddToBatchRetainType(String value) {
+    private final String string;
+
+    AutomationAddToBatchRetainType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof AutomationAddToBatchRetainType
+                        && this.string.equals(((AutomationAddToBatchRetainType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case LAST:
+                return visitor.visitLast();
+            case LOWEST:
+                return visitor.visitLowest();
+            case HIGHEST:
+                return visitor.visitHighest();
+            case FIRST:
+                return visitor.visitFirst();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static AutomationAddToBatchRetainType valueOf(String value) {
+        switch (value) {
+            case "last":
+                return LAST;
+            case "lowest":
+                return LOWEST;
+            case "highest":
+                return HIGHEST;
+            case "first":
+                return FIRST;
+            default:
+                return new AutomationAddToBatchRetainType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        FIRST,
+
+        LAST,
+
+        HIGHEST,
+
+        LOWEST,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitFirst();
+
+        T visitLast();
+
+        T visitHighest();
+
+        T visitLowest();
+
+        T visitUnknown(String unknownType);
     }
 }

@@ -15,8 +15,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = TenantTemplateDataNoContent.Builder.class)
 public final class TenantTemplateDataNoContent {
     private final MessageRouting routing;
@@ -63,7 +64,7 @@ public final class TenantTemplateDataNoContent {
     }
 
     public interface RoutingStage {
-        _FinalStage routing(MessageRouting routing);
+        _FinalStage routing(@NotNull MessageRouting routing);
 
         Builder from(TenantTemplateDataNoContent other);
     }
@@ -89,8 +90,8 @@ public final class TenantTemplateDataNoContent {
 
         @java.lang.Override
         @JsonSetter("routing")
-        public _FinalStage routing(MessageRouting routing) {
-            this.routing = routing;
+        public _FinalStage routing(@NotNull MessageRouting routing) {
+            this.routing = Objects.requireNonNull(routing, "routing must not be null");
             return this;
         }
 

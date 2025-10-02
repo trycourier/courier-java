@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Tag.Builder.class)
 public final class Tag {
     private final List<TagData> data;
@@ -81,7 +81,9 @@ public final class Tag {
         @JsonSetter(value = "data", nulls = Nulls.SKIP)
         public Builder data(List<TagData> data) {
             this.data.clear();
-            this.data.addAll(data);
+            if (data != null) {
+                this.data.addAll(data);
+            }
             return this;
         }
 
@@ -91,7 +93,9 @@ public final class Tag {
         }
 
         public Builder addAllData(List<TagData> data) {
-            this.data.addAll(data);
+            if (data != null) {
+                this.data.addAll(data);
+            }
             return this;
         }
 

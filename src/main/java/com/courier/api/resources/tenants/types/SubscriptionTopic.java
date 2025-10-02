@@ -18,8 +18,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SubscriptionTopic.Builder.class)
 public final class SubscriptionTopic implements ISubscriptionTopicNew {
     private final SubscriptionTopicStatus status;
@@ -110,22 +111,31 @@ public final class SubscriptionTopic implements ISubscriptionTopicNew {
     }
 
     public interface StatusStage {
-        IdStage status(SubscriptionTopicStatus status);
+        IdStage status(@NotNull SubscriptionTopicStatus status);
 
         Builder from(SubscriptionTopic other);
     }
 
     public interface IdStage {
-        _FinalStage id(String id);
+        /**
+         * <p>Topic ID</p>
+         */
+        _FinalStage id(@NotNull String id);
     }
 
     public interface _FinalStage {
         SubscriptionTopic build();
 
+        /**
+         * <p>Override channel routing with custom preferences. This will override any template prefernces that are set, but a user can still customize their preferences</p>
+         */
         _FinalStage hasCustomRouting(Optional<Boolean> hasCustomRouting);
 
         _FinalStage hasCustomRouting(Boolean hasCustomRouting);
 
+        /**
+         * <p>The default channels to send to this tenant when has_custom_routing is enabled</p>
+         */
         _FinalStage customRouting(Optional<List<ChannelClassification>> customRouting);
 
         _FinalStage customRouting(List<ChannelClassification> customRouting);
@@ -157,19 +167,20 @@ public final class SubscriptionTopic implements ISubscriptionTopicNew {
 
         @java.lang.Override
         @JsonSetter("status")
-        public IdStage status(SubscriptionTopicStatus status) {
-            this.status = status;
+        public IdStage status(@NotNull SubscriptionTopicStatus status) {
+            this.status = Objects.requireNonNull(status, "status must not be null");
             return this;
         }
 
         /**
          * <p>Topic ID</p>
+         * <p>Topic ID</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("id")
-        public _FinalStage id(String id) {
-            this.id = id;
+        public _FinalStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
@@ -179,10 +190,13 @@ public final class SubscriptionTopic implements ISubscriptionTopicNew {
          */
         @java.lang.Override
         public _FinalStage customRouting(List<ChannelClassification> customRouting) {
-            this.customRouting = Optional.of(customRouting);
+            this.customRouting = Optional.ofNullable(customRouting);
             return this;
         }
 
+        /**
+         * <p>The default channels to send to this tenant when has_custom_routing is enabled</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "custom_routing", nulls = Nulls.SKIP)
         public _FinalStage customRouting(Optional<List<ChannelClassification>> customRouting) {
@@ -196,10 +210,13 @@ public final class SubscriptionTopic implements ISubscriptionTopicNew {
          */
         @java.lang.Override
         public _FinalStage hasCustomRouting(Boolean hasCustomRouting) {
-            this.hasCustomRouting = Optional.of(hasCustomRouting);
+            this.hasCustomRouting = Optional.ofNullable(hasCustomRouting);
             return this;
         }
 
+        /**
+         * <p>Override channel routing with custom preferences. This will override any template prefernces that are set, but a user can still customize their preferences</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "has_custom_routing", nulls = Nulls.SKIP)
         public _FinalStage hasCustomRouting(Optional<Boolean> hasCustomRouting) {

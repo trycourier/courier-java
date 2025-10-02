@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ElementalContentSugar.Builder.class)
 public final class ElementalContentSugar {
     private final String title;
@@ -76,13 +77,19 @@ public final class ElementalContentSugar {
     }
 
     public interface TitleStage {
-        BodyStage title(String title);
+        /**
+         * <p>The title to be displayed by supported channels i.e. push, email (as subject)</p>
+         */
+        BodyStage title(@NotNull String title);
 
         Builder from(ElementalContentSugar other);
     }
 
     public interface BodyStage {
-        _FinalStage body(String body);
+        /**
+         * <p>The text content displayed in the notification.</p>
+         */
+        _FinalStage body(@NotNull String body);
     }
 
     public interface _FinalStage {
@@ -109,23 +116,25 @@ public final class ElementalContentSugar {
 
         /**
          * <p>The title to be displayed by supported channels i.e. push, email (as subject)</p>
+         * <p>The title to be displayed by supported channels i.e. push, email (as subject)</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("title")
-        public BodyStage title(String title) {
-            this.title = title;
+        public BodyStage title(@NotNull String title) {
+            this.title = Objects.requireNonNull(title, "title must not be null");
             return this;
         }
 
         /**
          * <p>The text content displayed in the notification.</p>
+         * <p>The text content displayed in the notification.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("body")
-        public _FinalStage body(String body) {
-            this.body = body;
+        public _FinalStage body(@NotNull String body) {
+            this.body = Objects.requireNonNull(body, "body must not be null");
             return this;
         }
 

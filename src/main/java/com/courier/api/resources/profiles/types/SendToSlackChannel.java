@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SendToSlackChannel.Builder.class)
 public final class SendToSlackChannel implements ISlackBaseProperties {
     private final String accessToken;
@@ -71,13 +72,13 @@ public final class SendToSlackChannel implements ISlackBaseProperties {
     }
 
     public interface AccessTokenStage {
-        ChannelStage accessToken(String accessToken);
+        ChannelStage accessToken(@NotNull String accessToken);
 
         Builder from(SendToSlackChannel other);
     }
 
     public interface ChannelStage {
-        _FinalStage channel(String channel);
+        _FinalStage channel(@NotNull String channel);
     }
 
     public interface _FinalStage {
@@ -104,15 +105,15 @@ public final class SendToSlackChannel implements ISlackBaseProperties {
 
         @java.lang.Override
         @JsonSetter("access_token")
-        public ChannelStage accessToken(String accessToken) {
-            this.accessToken = accessToken;
+        public ChannelStage accessToken(@NotNull String accessToken) {
+            this.accessToken = Objects.requireNonNull(accessToken, "accessToken must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("channel")
-        public _FinalStage channel(String channel) {
-            this.channel = channel;
+        public _FinalStage channel(@NotNull String channel) {
+            this.channel = Objects.requireNonNull(channel, "channel must not be null");
             return this;
         }
 

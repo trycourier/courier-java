@@ -16,8 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = WebhookAuthentication.Builder.class)
 public final class WebhookAuthentication {
     private final WebhookAuthMode mode;
@@ -108,7 +109,10 @@ public final class WebhookAuthentication {
     }
 
     public interface ModeStage {
-        _FinalStage mode(WebhookAuthMode mode);
+        /**
+         * <p>The authentication mode to use. Defaults to 'none' if not specified.</p>
+         */
+        _FinalStage mode(@NotNull WebhookAuthMode mode);
 
         Builder from(WebhookAuthentication other);
     }
@@ -116,14 +120,23 @@ public final class WebhookAuthentication {
     public interface _FinalStage {
         WebhookAuthentication build();
 
+        /**
+         * <p>Username for basic authentication.</p>
+         */
         _FinalStage username(Optional<String> username);
 
         _FinalStage username(String username);
 
+        /**
+         * <p>Password for basic authentication.</p>
+         */
         _FinalStage password(Optional<String> password);
 
         _FinalStage password(String password);
 
+        /**
+         * <p>Token for bearer authentication.</p>
+         */
         _FinalStage token(Optional<String> token);
 
         _FinalStage token(String token);
@@ -155,12 +168,13 @@ public final class WebhookAuthentication {
 
         /**
          * <p>The authentication mode to use. Defaults to 'none' if not specified.</p>
+         * <p>The authentication mode to use. Defaults to 'none' if not specified.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("mode")
-        public _FinalStage mode(WebhookAuthMode mode) {
-            this.mode = mode;
+        public _FinalStage mode(@NotNull WebhookAuthMode mode) {
+            this.mode = Objects.requireNonNull(mode, "mode must not be null");
             return this;
         }
 
@@ -170,10 +184,13 @@ public final class WebhookAuthentication {
          */
         @java.lang.Override
         public _FinalStage token(String token) {
-            this.token = Optional.of(token);
+            this.token = Optional.ofNullable(token);
             return this;
         }
 
+        /**
+         * <p>Token for bearer authentication.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "token", nulls = Nulls.SKIP)
         public _FinalStage token(Optional<String> token) {
@@ -187,10 +204,13 @@ public final class WebhookAuthentication {
          */
         @java.lang.Override
         public _FinalStage password(String password) {
-            this.password = Optional.of(password);
+            this.password = Optional.ofNullable(password);
             return this;
         }
 
+        /**
+         * <p>Password for basic authentication.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "password", nulls = Nulls.SKIP)
         public _FinalStage password(Optional<String> password) {
@@ -204,10 +224,13 @@ public final class WebhookAuthentication {
          */
         @java.lang.Override
         public _FinalStage username(String username) {
-            this.username = Optional.of(username);
+            this.username = Optional.ofNullable(username);
             return this;
         }
 
+        /**
+         * <p>Username for basic authentication.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "username", nulls = Nulls.SKIP)
         public _FinalStage username(Optional<String> username) {

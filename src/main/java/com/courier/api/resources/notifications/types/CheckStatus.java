@@ -3,24 +3,90 @@
  */
 package com.courier.api.resources.notifications.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum CheckStatus {
-    RESOLVED("RESOLVED"),
+public final class CheckStatus {
+    public static final CheckStatus RESOLVED = new CheckStatus(Value.RESOLVED, "RESOLVED");
 
-    FAILED("FAILED"),
+    public static final CheckStatus FAILED = new CheckStatus(Value.FAILED, "FAILED");
 
-    PENDING("PENDING");
+    public static final CheckStatus PENDING = new CheckStatus(Value.PENDING, "PENDING");
 
-    private final String value;
+    private final Value value;
 
-    CheckStatus(String value) {
+    private final String string;
+
+    CheckStatus(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other) || (other instanceof CheckStatus && this.string.equals(((CheckStatus) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case RESOLVED:
+                return visitor.visitResolved();
+            case FAILED:
+                return visitor.visitFailed();
+            case PENDING:
+                return visitor.visitPending();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static CheckStatus valueOf(String value) {
+        switch (value) {
+            case "RESOLVED":
+                return RESOLVED;
+            case "FAILED":
+                return FAILED;
+            case "PENDING":
+                return PENDING;
+            default:
+                return new CheckStatus(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        RESOLVED,
+
+        FAILED,
+
+        PENDING,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitResolved();
+
+        T visitFailed();
+
+        T visitPending();
+
+        T visitUnknown(String unknownType);
     }
 }

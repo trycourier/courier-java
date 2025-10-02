@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Timeouts.Builder.class)
 public final class Timeouts {
     private final Optional<Integer> provider;
@@ -95,7 +95,7 @@ public final class Timeouts {
         }
 
         public Builder provider(Integer provider) {
-            this.provider = Optional.of(provider);
+            this.provider = Optional.ofNullable(provider);
             return this;
         }
 
@@ -106,7 +106,7 @@ public final class Timeouts {
         }
 
         public Builder channel(Integer channel) {
-            this.channel = Optional.of(channel);
+            this.channel = Optional.ofNullable(channel);
             return this;
         }
 

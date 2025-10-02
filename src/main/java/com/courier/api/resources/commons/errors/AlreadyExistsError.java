@@ -3,17 +3,23 @@
  */
 package com.courier.api.resources.commons.errors;
 
-import com.courier.api.core.CourierApiApiError;
+import com.courier.api.core.CourierApiException;
 import com.courier.api.resources.commons.types.AlreadyExists;
+import okhttp3.Response;
 
-public final class CourierApiAlreadyExistsError extends CourierApiApiError {
+public final class AlreadyExistsError extends CourierApiException {
     /**
      * The body of the response that triggered the exception.
      */
     private final AlreadyExists body;
 
-    public CourierApiAlreadyExistsError(AlreadyExists body) {
+    public AlreadyExistsError(AlreadyExists body) {
         super("AlreadyExistsError", 409, body);
+        this.body = body;
+    }
+
+    public AlreadyExistsError(AlreadyExists body, Response rawResponse) {
+        super("AlreadyExistsError", 409, body, rawResponse);
         this.body = body;
     }
 

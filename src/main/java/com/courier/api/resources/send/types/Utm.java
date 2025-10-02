@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Utm.Builder.class)
 public final class Utm {
     private final Optional<String> source;
@@ -138,7 +138,7 @@ public final class Utm {
         }
 
         public Builder source(String source) {
-            this.source = Optional.of(source);
+            this.source = Optional.ofNullable(source);
             return this;
         }
 
@@ -149,7 +149,7 @@ public final class Utm {
         }
 
         public Builder medium(String medium) {
-            this.medium = Optional.of(medium);
+            this.medium = Optional.ofNullable(medium);
             return this;
         }
 
@@ -160,7 +160,7 @@ public final class Utm {
         }
 
         public Builder campaign(String campaign) {
-            this.campaign = Optional.of(campaign);
+            this.campaign = Optional.ofNullable(campaign);
             return this;
         }
 
@@ -171,7 +171,7 @@ public final class Utm {
         }
 
         public Builder term(String term) {
-            this.term = Optional.of(term);
+            this.term = Optional.ofNullable(term);
             return this;
         }
 
@@ -182,7 +182,7 @@ public final class Utm {
         }
 
         public Builder content(String content) {
-            this.content = Optional.of(content);
+            this.content = Optional.ofNullable(content);
             return this;
         }
 

@@ -17,8 +17,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListSubscriptionRecipient.Builder.class)
 public final class ListSubscriptionRecipient {
     private final String recipientId;
@@ -87,7 +88,7 @@ public final class ListSubscriptionRecipient {
     }
 
     public interface RecipientIdStage {
-        _FinalStage recipientId(String recipientId);
+        _FinalStage recipientId(@NotNull String recipientId);
 
         Builder from(ListSubscriptionRecipient other);
     }
@@ -127,14 +128,14 @@ public final class ListSubscriptionRecipient {
 
         @java.lang.Override
         @JsonSetter("recipientId")
-        public _FinalStage recipientId(String recipientId) {
-            this.recipientId = recipientId;
+        public _FinalStage recipientId(@NotNull String recipientId) {
+            this.recipientId = Objects.requireNonNull(recipientId, "recipientId must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage preferences(RecipientPreferences preferences) {
-            this.preferences = Optional.of(preferences);
+            this.preferences = Optional.ofNullable(preferences);
             return this;
         }
 
@@ -147,7 +148,7 @@ public final class ListSubscriptionRecipient {
 
         @java.lang.Override
         public _FinalStage created(String created) {
-            this.created = Optional.of(created);
+            this.created = Optional.ofNullable(created);
             return this;
         }
 

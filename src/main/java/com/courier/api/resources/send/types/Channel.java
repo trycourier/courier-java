@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Channel.Builder.class)
 public final class Channel {
     private final Optional<String> brandId;
@@ -187,6 +187,10 @@ public final class Channel {
             return this;
         }
 
+        /**
+         * <p>Id of the brand that should be used for rendering the message.
+         * If not specified, the brand configured as default brand will be used.</p>
+         */
         @JsonSetter(value = "brand_id", nulls = Nulls.SKIP)
         public Builder brandId(Optional<String> brandId) {
             this.brandId = brandId;
@@ -194,10 +198,14 @@ public final class Channel {
         }
 
         public Builder brandId(String brandId) {
-            this.brandId = Optional.of(brandId);
+            this.brandId = Optional.ofNullable(brandId);
             return this;
         }
 
+        /**
+         * <p>A list of providers enabled for this channel. Courier will select
+         * one provider to send through unless routing_method is set to all.</p>
+         */
         @JsonSetter(value = "providers", nulls = Nulls.SKIP)
         public Builder providers(Optional<List<String>> providers) {
             this.providers = providers;
@@ -205,10 +213,15 @@ public final class Channel {
         }
 
         public Builder providers(List<String> providers) {
-            this.providers = Optional.of(providers);
+            this.providers = Optional.ofNullable(providers);
             return this;
         }
 
+        /**
+         * <p>The method for selecting the providers to send the message with.
+         * Single will send to one of the available providers for this channel,
+         * all will send the message through all channels. Defaults to <code>single</code>.</p>
+         */
         @JsonSetter(value = "routing_method", nulls = Nulls.SKIP)
         public Builder routingMethod(Optional<RoutingMethod> routingMethod) {
             this.routingMethod = routingMethod;
@@ -216,10 +229,16 @@ public final class Channel {
         }
 
         public Builder routingMethod(RoutingMethod routingMethod) {
-            this.routingMethod = Optional.of(routingMethod);
+            this.routingMethod = Optional.ofNullable(routingMethod);
             return this;
         }
 
+        /**
+         * <p>A JavaScript conditional expression to determine if the message should
+         * be sent through the channel. Has access to the data and profile object.
+         * Only applies when a custom routing strategy is defined.
+         * For example, <code>data.name === profile.name</code></p>
+         */
         @JsonSetter(value = "if", nulls = Nulls.SKIP)
         public Builder if_(Optional<String> if_) {
             this.if_ = if_;
@@ -227,7 +246,7 @@ public final class Channel {
         }
 
         public Builder if_(String if_) {
-            this.if_ = Optional.of(if_);
+            this.if_ = Optional.ofNullable(if_);
             return this;
         }
 
@@ -238,10 +257,13 @@ public final class Channel {
         }
 
         public Builder timeouts(Timeouts timeouts) {
-            this.timeouts = Optional.of(timeouts);
+            this.timeouts = Optional.ofNullable(timeouts);
             return this;
         }
 
+        /**
+         * <p>Channel specific overrides.</p>
+         */
         @JsonSetter(value = "override", nulls = Nulls.SKIP)
         public Builder override(Optional<Map<String, Object>> override) {
             this.override = override;
@@ -249,7 +271,7 @@ public final class Channel {
         }
 
         public Builder override(Map<String, Object> override) {
-            this.override = Optional.of(override);
+            this.override = Optional.ofNullable(override);
             return this;
         }
 
@@ -260,7 +282,7 @@ public final class Channel {
         }
 
         public Builder metadata(ChannelMetadata metadata) {
-            this.metadata = Optional.of(metadata);
+            this.metadata = Optional.ofNullable(metadata);
             return this;
         }
 

@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Automation.Builder.class)
 public final class Automation {
     private final Optional<String> cancelationToken;
@@ -100,14 +100,16 @@ public final class Automation {
         }
 
         public Builder cancelationToken(String cancelationToken) {
-            this.cancelationToken = Optional.of(cancelationToken);
+            this.cancelationToken = Optional.ofNullable(cancelationToken);
             return this;
         }
 
         @JsonSetter(value = "steps", nulls = Nulls.SKIP)
         public Builder steps(List<AutomationStepOption> steps) {
             this.steps.clear();
-            this.steps.addAll(steps);
+            if (steps != null) {
+                this.steps.addAll(steps);
+            }
             return this;
         }
 
@@ -117,7 +119,9 @@ public final class Automation {
         }
 
         public Builder addAllSteps(List<AutomationStepOption> steps) {
-            this.steps.addAll(steps);
+            if (steps != null) {
+                this.steps.addAll(steps);
+            }
             return this;
         }
 

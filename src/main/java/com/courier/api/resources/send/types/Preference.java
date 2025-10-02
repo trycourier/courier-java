@@ -20,8 +20,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Preference.Builder.class)
 public final class Preference {
     private final PreferenceStatus status;
@@ -100,7 +101,7 @@ public final class Preference {
     }
 
     public interface StatusStage {
-        _FinalStage status(PreferenceStatus status);
+        _FinalStage status(@NotNull PreferenceStatus status);
 
         Builder from(Preference other);
     }
@@ -147,14 +148,14 @@ public final class Preference {
 
         @java.lang.Override
         @JsonSetter("status")
-        public _FinalStage status(PreferenceStatus status) {
-            this.status = status;
+        public _FinalStage status(@NotNull PreferenceStatus status) {
+            this.status = Objects.requireNonNull(status, "status must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage source(ChannelSource source) {
-            this.source = Optional.of(source);
+            this.source = Optional.ofNullable(source);
             return this;
         }
 
@@ -167,7 +168,7 @@ public final class Preference {
 
         @java.lang.Override
         public _FinalStage channelPreferences(List<ChannelPreference> channelPreferences) {
-            this.channelPreferences = Optional.of(channelPreferences);
+            this.channelPreferences = Optional.ofNullable(channelPreferences);
             return this;
         }
 
@@ -180,7 +181,7 @@ public final class Preference {
 
         @java.lang.Override
         public _FinalStage rules(List<Rule> rules) {
-            this.rules = Optional.of(rules);
+            this.rules = Optional.ofNullable(rules);
             return this;
         }
 

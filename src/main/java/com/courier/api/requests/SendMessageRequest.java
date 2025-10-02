@@ -15,8 +15,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SendMessageRequest.Builder.class)
 public final class SendMessageRequest {
     private final Message message;
@@ -66,7 +67,10 @@ public final class SendMessageRequest {
     }
 
     public interface MessageStage {
-        _FinalStage message(Message message);
+        /**
+         * <p>Defines the message to be delivered</p>
+         */
+        _FinalStage message(@NotNull Message message);
 
         Builder from(SendMessageRequest other);
     }
@@ -92,12 +96,13 @@ public final class SendMessageRequest {
 
         /**
          * <p>Defines the message to be delivered</p>
+         * <p>Defines the message to be delivered</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("message")
-        public _FinalStage message(Message message) {
-            this.message = message;
+        public _FinalStage message(@NotNull Message message) {
+            this.message = Objects.requireNonNull(message, "message must not be null");
             return this;
         }
 

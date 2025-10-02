@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListTenantParams.Builder.class)
 public final class ListTenantParams {
     private final Optional<String> parentTenantId;
@@ -113,6 +113,9 @@ public final class ListTenantParams {
             return this;
         }
 
+        /**
+         * <p>Filter the list of tenants by parent_id</p>
+         */
         @JsonSetter(value = "parent_tenant_id", nulls = Nulls.SKIP)
         public Builder parentTenantId(Optional<String> parentTenantId) {
             this.parentTenantId = parentTenantId;
@@ -120,10 +123,14 @@ public final class ListTenantParams {
         }
 
         public Builder parentTenantId(String parentTenantId) {
-            this.parentTenantId = Optional.of(parentTenantId);
+            this.parentTenantId = Optional.ofNullable(parentTenantId);
             return this;
         }
 
+        /**
+         * <p>The number of tenants to return
+         * (defaults to 20, maximum value of 100)</p>
+         */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
         public Builder limit(Optional<Integer> limit) {
             this.limit = limit;
@@ -131,10 +138,13 @@ public final class ListTenantParams {
         }
 
         public Builder limit(Integer limit) {
-            this.limit = Optional.of(limit);
+            this.limit = Optional.ofNullable(limit);
             return this;
         }
 
+        /**
+         * <p>Continue the pagination with the next cursor</p>
+         */
         @JsonSetter(value = "cursor", nulls = Nulls.SKIP)
         public Builder cursor(Optional<String> cursor) {
             this.cursor = cursor;
@@ -142,7 +152,7 @@ public final class ListTenantParams {
         }
 
         public Builder cursor(String cursor) {
-            this.cursor = Optional.of(cursor);
+            this.cursor = Optional.ofNullable(cursor);
             return this;
         }
 

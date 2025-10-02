@@ -17,8 +17,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AirshipProfile.Builder.class)
 public final class AirshipProfile {
     private final AirshipProfileAudience audience;
@@ -74,7 +75,7 @@ public final class AirshipProfile {
     }
 
     public interface AudienceStage {
-        _FinalStage audience(AirshipProfileAudience audience);
+        _FinalStage audience(@NotNull AirshipProfileAudience audience);
 
         Builder from(AirshipProfile other);
     }
@@ -109,14 +110,16 @@ public final class AirshipProfile {
 
         @java.lang.Override
         @JsonSetter("audience")
-        public _FinalStage audience(AirshipProfileAudience audience) {
-            this.audience = audience;
+        public _FinalStage audience(@NotNull AirshipProfileAudience audience) {
+            this.audience = Objects.requireNonNull(audience, "audience must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage addAllDeviceTypes(List<Object> deviceTypes) {
-            this.deviceTypes.addAll(deviceTypes);
+            if (deviceTypes != null) {
+                this.deviceTypes.addAll(deviceTypes);
+            }
             return this;
         }
 
@@ -130,7 +133,9 @@ public final class AirshipProfile {
         @JsonSetter(value = "device_types", nulls = Nulls.SKIP)
         public _FinalStage deviceTypes(List<Object> deviceTypes) {
             this.deviceTypes.clear();
-            this.deviceTypes.addAll(deviceTypes);
+            if (deviceTypes != null) {
+                this.deviceTypes.addAll(deviceTypes);
+            }
             return this;
         }
 

@@ -4,10 +4,6 @@
 package com.courier.api.resources.notifications;
 
 import com.courier.api.core.ClientOptions;
-import com.courier.api.core.CourierApiApiError;
-import com.courier.api.core.CourierApiError;
-import com.courier.api.core.MediaTypes;
-import com.courier.api.core.ObjectMappers;
 import com.courier.api.core.RequestOptions;
 import com.courier.api.resources.notifications.requests.NotificationListParams;
 import com.courier.api.resources.notifications.requests.SubmissionChecksReplaceParams;
@@ -15,256 +11,80 @@ import com.courier.api.resources.notifications.types.NotificationGetContentRespo
 import com.courier.api.resources.notifications.types.NotificationListResponse;
 import com.courier.api.resources.notifications.types.SubmissionChecksGetResponse;
 import com.courier.api.resources.notifications.types.SubmissionChecksReplaceResponse;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import java.io.IOException;
-import okhttp3.Headers;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 public class NotificationsClient {
     protected final ClientOptions clientOptions;
 
+    private final RawNotificationsClient rawClient;
+
     public NotificationsClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
+        this.rawClient = new RawNotificationsClient(clientOptions);
+    }
+
+    /**
+     * Get responses with HTTP metadata like headers
+     */
+    public RawNotificationsClient withRawResponse() {
+        return this.rawClient;
     }
 
     public NotificationListResponse list() {
-        return list(NotificationListParams.builder().build());
+        return this.rawClient.list().body();
     }
 
     public NotificationListResponse list(NotificationListParams request) {
-        return list(request, null);
+        return this.rawClient.list(request).body();
     }
 
     public NotificationListResponse list(NotificationListParams request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("notifications");
-        if (request.getCursor().isPresent()) {
-            httpUrl.addQueryParameter("cursor", request.getCursor().get());
-        }
-        if (request.getNotes().isPresent()) {
-            httpUrl.addQueryParameter("notes", request.getNotes().get().toString());
-        }
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json");
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), NotificationListResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        return this.rawClient.list(request, requestOptions).body();
     }
 
     public NotificationGetContentResponse getContent(String id) {
-        return getContent(id, null);
+        return this.rawClient.getContent(id).body();
     }
 
     public NotificationGetContentResponse getContent(String id, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("notifications")
-                .addPathSegment(id)
-                .addPathSegments("content")
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), NotificationGetContentResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        return this.rawClient.getContent(id, requestOptions).body();
     }
 
     public NotificationGetContentResponse getDraftContent(String id) {
-        return getDraftContent(id, null);
+        return this.rawClient.getDraftContent(id).body();
     }
 
     public NotificationGetContentResponse getDraftContent(String id, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("notifications")
-                .addPathSegment(id)
-                .addPathSegments("draft/content")
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), NotificationGetContentResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        return this.rawClient.getDraftContent(id, requestOptions).body();
     }
 
     public SubmissionChecksGetResponse getSubmissionChecks(String id, String submissionId) {
-        return getSubmissionChecks(id, submissionId, null);
+        return this.rawClient.getSubmissionChecks(id, submissionId).body();
     }
 
     public SubmissionChecksGetResponse getSubmissionChecks(
             String id, String submissionId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("notifications")
-                .addPathSegment(id)
-                .addPathSegment(submissionId)
-                .addPathSegments("checks")
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), SubmissionChecksGetResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        return this.rawClient
+                .getSubmissionChecks(id, submissionId, requestOptions)
+                .body();
     }
 
     public SubmissionChecksReplaceResponse replaceSubmissionChecks(
             String id, String submissionId, SubmissionChecksReplaceParams request) {
-        return replaceSubmissionChecks(id, submissionId, request, null);
+        return this.rawClient.replaceSubmissionChecks(id, submissionId, request).body();
     }
 
     public SubmissionChecksReplaceResponse replaceSubmissionChecks(
             String id, String submissionId, SubmissionChecksReplaceParams request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("notifications")
-                .addPathSegment(id)
-                .addPathSegment(submissionId)
-                .addPathSegments("checks")
-                .build();
-        RequestBody body;
-        try {
-            body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
-        } catch (JsonProcessingException e) {
-            throw new CourierApiError("Failed to serialize request", e);
-        }
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("PUT", body)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(
-                        responseBody.string(), SubmissionChecksReplaceResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        return this.rawClient
+                .replaceSubmissionChecks(id, submissionId, request, requestOptions)
+                .body();
     }
 
     public void cancelSubmission(String id, String submissionId) {
-        cancelSubmission(id, submissionId, null);
+        this.rawClient.cancelSubmission(id, submissionId).body();
     }
 
     public void cancelSubmission(String id, String submissionId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("notifications")
-                .addPathSegment(id)
-                .addPathSegment(submissionId)
-                .addPathSegments("checks")
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("DELETE", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return;
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        this.rawClient.cancelSubmission(id, submissionId, requestOptions).body();
     }
 }

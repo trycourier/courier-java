@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = WidgetBackground.Builder.class)
 public final class WidgetBackground {
     private final Optional<String> topColor;
@@ -96,7 +96,7 @@ public final class WidgetBackground {
         }
 
         public Builder topColor(String topColor) {
-            this.topColor = Optional.of(topColor);
+            this.topColor = Optional.ofNullable(topColor);
             return this;
         }
 
@@ -107,7 +107,7 @@ public final class WidgetBackground {
         }
 
         public Builder bottomColor(String bottomColor) {
-            this.bottomColor = Optional.of(bottomColor);
+            this.bottomColor = Optional.ofNullable(bottomColor);
             return this;
         }
 

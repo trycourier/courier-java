@@ -4,11 +4,7 @@
 package com.courier.api;
 
 import com.courier.api.core.ClientOptions;
-import com.courier.api.core.CourierApiApiError;
-import com.courier.api.core.CourierApiError;
 import com.courier.api.core.IdempotentRequestOptions;
-import com.courier.api.core.MediaTypes;
-import com.courier.api.core.ObjectMappers;
 import com.courier.api.core.Suppliers;
 import com.courier.api.requests.SendMessageRequest;
 import com.courier.api.resources.audiences.AudiencesClient;
@@ -27,19 +23,12 @@ import com.courier.api.resources.tenants.TenantsClient;
 import com.courier.api.resources.translations.TranslationsClient;
 import com.courier.api.resources.users.UsersClient;
 import com.courier.api.types.SendMessageResponse;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import java.io.IOException;
 import java.util.function.Supplier;
-import okhttp3.Headers;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 public class Courier {
     protected final ClientOptions clientOptions;
+
+    private final RawCourier rawClient;
 
     protected final Supplier<AudiencesClient> audiencesClient;
 
@@ -73,6 +62,7 @@ public class Courier {
 
     public Courier(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
+        this.rawClient = new RawCourier(clientOptions);
         this.audiencesClient = Suppliers.memoize(() -> new AudiencesClient(clientOptions));
         this.auditEventsClient = Suppliers.memoize(() -> new AuditEventsClient(clientOptions));
         this.authTokensClient = Suppliers.memoize(() -> new AuthTokensClient(clientOptions));
@@ -91,50 +81,24 @@ public class Courier {
     }
 
     /**
+     * Get responses with HTTP metadata like headers
+     */
+    public RawCourier withRawResponse() {
+        return this.rawClient;
+    }
+
+    /**
      * Use the send API to send a message to one or more recipients.
      */
     public SendMessageResponse send(SendMessageRequest request) {
-        return send(request, null);
+        return this.rawClient.send(request).body();
     }
 
     /**
      * Use the send API to send a message to one or more recipients.
      */
     public SendMessageResponse send(SendMessageRequest request, IdempotentRequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("send")
-                .build();
-        RequestBody body;
-        try {
-            body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
-        } catch (JsonProcessingException e) {
-            throw new CourierApiError("Failed to serialize request", e);
-        }
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("POST", body)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), SendMessageResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        return this.rawClient.send(request, requestOptions).body();
     }
 
     public AudiencesClient audiences() {

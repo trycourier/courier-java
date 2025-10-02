@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SubmissionChecksGetResponse.Builder.class)
 public final class SubmissionChecksGetResponse {
     private final List<Check> checks;
@@ -81,7 +81,9 @@ public final class SubmissionChecksGetResponse {
         @JsonSetter(value = "checks", nulls = Nulls.SKIP)
         public Builder checks(List<Check> checks) {
             this.checks.clear();
-            this.checks.addAll(checks);
+            if (checks != null) {
+                this.checks.addAll(checks);
+            }
             return this;
         }
 
@@ -91,7 +93,9 @@ public final class SubmissionChecksGetResponse {
         }
 
         public Builder addAllChecks(List<Check> checks) {
-            this.checks.addAll(checks);
+            if (checks != null) {
+                this.checks.addAll(checks);
+            }
             return this;
         }
 

@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AutomationDelayStep.Builder.class)
 public final class AutomationDelayStep implements IAutomationStep {
     private final Optional<String> if_;
@@ -138,7 +138,7 @@ public final class AutomationDelayStep implements IAutomationStep {
         }
 
         public Builder if_(String if_) {
-            this.if_ = Optional.of(if_);
+            this.if_ = Optional.ofNullable(if_);
             return this;
         }
 
@@ -149,10 +149,13 @@ public final class AutomationDelayStep implements IAutomationStep {
         }
 
         public Builder ref(String ref) {
-            this.ref = Optional.of(ref);
+            this.ref = Optional.ofNullable(ref);
             return this;
         }
 
+        /**
+         * <p>The <a href="https://en.wikipedia.org/wiki/ISO_8601#Durations">ISO 8601 duration</a> string for how long to delay for</p>
+         */
         @JsonSetter(value = "duration", nulls = Nulls.SKIP)
         public Builder duration(Optional<String> duration) {
             this.duration = duration;
@@ -160,10 +163,13 @@ public final class AutomationDelayStep implements IAutomationStep {
         }
 
         public Builder duration(String duration) {
-            this.duration = Optional.of(duration);
+            this.duration = Optional.ofNullable(duration);
             return this;
         }
 
+        /**
+         * <p>The ISO 8601 timestamp for when the delay should end</p>
+         */
         @JsonSetter(value = "until", nulls = Nulls.SKIP)
         public Builder until(Optional<String> until) {
             this.until = until;
@@ -171,7 +177,7 @@ public final class AutomationDelayStep implements IAutomationStep {
         }
 
         public Builder until(String until) {
-            this.until = Optional.of(until);
+            this.until = Optional.ofNullable(until);
             return this;
         }
 

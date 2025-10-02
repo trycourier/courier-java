@@ -16,8 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AutomationSendListStep.Builder.class)
 public final class AutomationSendListStep implements IAutomationStep {
     private final Optional<String> if_;
@@ -133,7 +134,7 @@ public final class AutomationSendListStep implements IAutomationStep {
     }
 
     public interface ListStage {
-        _FinalStage list(String list);
+        _FinalStage list(@NotNull String list);
 
         Builder from(AutomationSendListStep other);
     }
@@ -201,14 +202,14 @@ public final class AutomationSendListStep implements IAutomationStep {
 
         @java.lang.Override
         @JsonSetter("list")
-        public _FinalStage list(String list) {
-            this.list = list;
+        public _FinalStage list(@NotNull String list) {
+            this.list = Objects.requireNonNull(list, "list must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage template(String template) {
-            this.template = Optional.of(template);
+            this.template = Optional.ofNullable(template);
             return this;
         }
 
@@ -221,7 +222,7 @@ public final class AutomationSendListStep implements IAutomationStep {
 
         @java.lang.Override
         public _FinalStage override(Map<String, Object> override) {
-            this.override = Optional.of(override);
+            this.override = Optional.ofNullable(override);
             return this;
         }
 
@@ -234,7 +235,7 @@ public final class AutomationSendListStep implements IAutomationStep {
 
         @java.lang.Override
         public _FinalStage data(Map<String, Object> data) {
-            this.data = Optional.of(data);
+            this.data = Optional.ofNullable(data);
             return this;
         }
 
@@ -247,7 +248,7 @@ public final class AutomationSendListStep implements IAutomationStep {
 
         @java.lang.Override
         public _FinalStage brand(String brand) {
-            this.brand = Optional.of(brand);
+            this.brand = Optional.ofNullable(brand);
             return this;
         }
 
@@ -260,7 +261,7 @@ public final class AutomationSendListStep implements IAutomationStep {
 
         @java.lang.Override
         public _FinalStage ref(String ref) {
-            this.ref = Optional.of(ref);
+            this.ref = Optional.ofNullable(ref);
             return this;
         }
 
@@ -273,7 +274,7 @@ public final class AutomationSendListStep implements IAutomationStep {
 
         @java.lang.Override
         public _FinalStage if_(String if_) {
-            this.if_ = Optional.of(if_);
+            this.if_ = Optional.ofNullable(if_);
             return this;
         }
 

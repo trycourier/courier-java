@@ -16,8 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = EmailHeader.Builder.class)
 public final class EmailHeader {
     private final Optional<Boolean> inheritDefault;
@@ -86,7 +87,7 @@ public final class EmailHeader {
     }
 
     public interface LogoStage {
-        _FinalStage logo(Logo logo);
+        _FinalStage logo(@NotNull Logo logo);
 
         Builder from(EmailHeader other);
     }
@@ -126,14 +127,14 @@ public final class EmailHeader {
 
         @java.lang.Override
         @JsonSetter("logo")
-        public _FinalStage logo(Logo logo) {
-            this.logo = logo;
+        public _FinalStage logo(@NotNull Logo logo) {
+            this.logo = Objects.requireNonNull(logo, "logo must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage barColor(String barColor) {
-            this.barColor = Optional.of(barColor);
+            this.barColor = Optional.ofNullable(barColor);
             return this;
         }
 
@@ -146,7 +147,7 @@ public final class EmailHeader {
 
         @java.lang.Override
         public _FinalStage inheritDefault(Boolean inheritDefault) {
-            this.inheritDefault = Optional.of(inheritDefault);
+            this.inheritDefault = Optional.ofNullable(inheritDefault);
             return this;
         }
 

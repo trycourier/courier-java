@@ -16,8 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Notification.Builder.class)
 public final class Notification {
     private final long createdAt;
@@ -147,19 +148,19 @@ public final class Notification {
     }
 
     public interface IdStage {
-        RoutingStage id(String id);
+        RoutingStage id(@NotNull String id);
     }
 
     public interface RoutingStage {
-        TopicIdStage routing(MessageRouting routing);
+        TopicIdStage routing(@NotNull MessageRouting routing);
     }
 
     public interface TopicIdStage {
-        NoteStage topicId(String topicId);
+        NoteStage topicId(@NotNull String topicId);
     }
 
     public interface NoteStage {
-        _FinalStage note(String note);
+        _FinalStage note(@NotNull String note);
     }
 
     public interface _FinalStage {
@@ -227,35 +228,35 @@ public final class Notification {
 
         @java.lang.Override
         @JsonSetter("id")
-        public RoutingStage id(String id) {
-            this.id = id;
+        public RoutingStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("routing")
-        public TopicIdStage routing(MessageRouting routing) {
-            this.routing = routing;
+        public TopicIdStage routing(@NotNull MessageRouting routing) {
+            this.routing = Objects.requireNonNull(routing, "routing must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("topic_id")
-        public NoteStage topicId(String topicId) {
-            this.topicId = topicId;
+        public NoteStage topicId(@NotNull String topicId) {
+            this.topicId = Objects.requireNonNull(topicId, "topicId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("note")
-        public _FinalStage note(String note) {
-            this.note = note;
+        public _FinalStage note(@NotNull String note) {
+            this.note = Objects.requireNonNull(note, "note must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage title(String title) {
-            this.title = Optional.of(title);
+            this.title = Optional.ofNullable(title);
             return this;
         }
 
@@ -268,7 +269,7 @@ public final class Notification {
 
         @java.lang.Override
         public _FinalStage tags(NotificationTag tags) {
-            this.tags = Optional.of(tags);
+            this.tags = Optional.ofNullable(tags);
             return this;
         }
 

@@ -16,8 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AutomationInvokeStep.Builder.class)
 public final class AutomationInvokeStep implements IAutomationStep {
     private final Optional<String> if_;
@@ -88,7 +89,7 @@ public final class AutomationInvokeStep implements IAutomationStep {
     }
 
     public interface TemplateStage {
-        _FinalStage template(String template);
+        _FinalStage template(@NotNull String template);
 
         Builder from(AutomationInvokeStep other);
     }
@@ -128,14 +129,14 @@ public final class AutomationInvokeStep implements IAutomationStep {
 
         @java.lang.Override
         @JsonSetter("template")
-        public _FinalStage template(String template) {
-            this.template = template;
+        public _FinalStage template(@NotNull String template) {
+            this.template = Objects.requireNonNull(template, "template must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage ref(String ref) {
-            this.ref = Optional.of(ref);
+            this.ref = Optional.ofNullable(ref);
             return this;
         }
 
@@ -148,7 +149,7 @@ public final class AutomationInvokeStep implements IAutomationStep {
 
         @java.lang.Override
         public _FinalStage if_(String if_) {
-            this.if_ = Optional.of(if_);
+            this.if_ = Optional.ofNullable(if_);
             return this;
         }
 

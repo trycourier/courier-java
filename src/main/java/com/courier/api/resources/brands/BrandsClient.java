@@ -4,281 +4,99 @@
 package com.courier.api.resources.brands;
 
 import com.courier.api.core.ClientOptions;
-import com.courier.api.core.CourierApiApiError;
-import com.courier.api.core.CourierApiError;
 import com.courier.api.core.IdempotentRequestOptions;
-import com.courier.api.core.MediaTypes;
-import com.courier.api.core.ObjectMappers;
 import com.courier.api.core.RequestOptions;
 import com.courier.api.resources.brands.requests.BrandUpdateParameters;
 import com.courier.api.resources.brands.requests.ListBrandsRequest;
 import com.courier.api.resources.brands.types.Brand;
 import com.courier.api.resources.brands.types.BrandParameters;
 import com.courier.api.resources.brands.types.BrandsResponse;
-import com.courier.api.resources.commons.errors.CourierApiAlreadyExistsError;
-import com.courier.api.resources.commons.errors.CourierApiBadRequestError;
-import com.courier.api.resources.commons.errors.CourierApiConflictError;
-import com.courier.api.resources.commons.errors.CourierApiPaymentRequiredError;
-import com.courier.api.resources.commons.types.AlreadyExists;
-import com.courier.api.resources.commons.types.BadRequest;
-import com.courier.api.resources.commons.types.Conflict;
-import com.courier.api.resources.commons.types.PaymentRequired;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import java.io.IOException;
-import okhttp3.Headers;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 public class BrandsClient {
     protected final ClientOptions clientOptions;
 
+    private final RawBrandsClient rawClient;
+
     public BrandsClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
+        this.rawClient = new RawBrandsClient(clientOptions);
+    }
+
+    /**
+     * Get responses with HTTP metadata like headers
+     */
+    public RawBrandsClient withRawResponse() {
+        return this.rawClient;
     }
 
     public Brand create(BrandParameters request) {
-        return create(request, null);
+        return this.rawClient.create(request).body();
     }
 
     public Brand create(BrandParameters request, IdempotentRequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("brands")
-                .build();
-        RequestBody body;
-        try {
-            body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
-        } catch (JsonProcessingException e) {
-            throw new CourierApiError("Failed to serialize request", e);
-        }
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("POST", body)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Brand.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                switch (response.code()) {
-                    case 400:
-                        throw new CourierApiBadRequestError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, BadRequest.class));
-                    case 402:
-                        throw new CourierApiPaymentRequiredError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, PaymentRequired.class));
-                    case 409:
-                        throw new CourierApiAlreadyExistsError(
-                                ObjectMappers.JSON_MAPPER.readValue(responseBodyString, AlreadyExists.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        return this.rawClient.create(request, requestOptions).body();
     }
 
     /**
      * Fetch a specific brand by brand ID.
      */
     public Brand get(String brandId) {
-        return get(brandId, null);
+        return this.rawClient.get(brandId).body();
     }
 
     /**
      * Fetch a specific brand by brand ID.
      */
     public Brand get(String brandId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("brands")
-                .addPathSegment(brandId)
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Brand.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        return this.rawClient.get(brandId, requestOptions).body();
     }
 
     /**
      * Get the list of brands.
      */
     public BrandsResponse list() {
-        return list(ListBrandsRequest.builder().build());
+        return this.rawClient.list().body();
     }
 
     /**
      * Get the list of brands.
      */
     public BrandsResponse list(ListBrandsRequest request) {
-        return list(request, null);
+        return this.rawClient.list(request).body();
     }
 
     /**
      * Get the list of brands.
      */
     public BrandsResponse list(ListBrandsRequest request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("brands");
-        if (request.getCursor().isPresent()) {
-            httpUrl.addQueryParameter("cursor", request.getCursor().get());
-        }
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json");
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), BrandsResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        return this.rawClient.list(request, requestOptions).body();
     }
 
     /**
      * Delete a brand by brand ID.
      */
     public void delete(String brandId) {
-        delete(brandId, null);
+        this.rawClient.delete(brandId).body();
     }
 
     /**
      * Delete a brand by brand ID.
      */
     public void delete(String brandId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("brands")
-                .addPathSegment(brandId)
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("DELETE", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return;
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                if (response.code() == 409) {
-                    throw new CourierApiConflictError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Conflict.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        this.rawClient.delete(brandId, requestOptions).body();
     }
 
     /**
      * Replace an existing brand with the supplied values.
      */
     public Brand replace(String brandId, BrandUpdateParameters request) {
-        return replace(brandId, request, null);
+        return this.rawClient.replace(brandId, request).body();
     }
 
     /**
      * Replace an existing brand with the supplied values.
      */
     public Brand replace(String brandId, BrandUpdateParameters request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("brands")
-                .addPathSegment(brandId)
-                .build();
-        RequestBody body;
-        try {
-            body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
-        } catch (JsonProcessingException e) {
-            throw new CourierApiError("Failed to serialize request", e);
-        }
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("PUT", body)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Brand.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        return this.rawClient.replace(brandId, request, requestOptions).body();
     }
 }

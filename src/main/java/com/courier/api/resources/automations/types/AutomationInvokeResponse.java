@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AutomationInvokeResponse.Builder.class)
 public final class AutomationInvokeResponse {
     private final String runId;
@@ -62,7 +63,7 @@ public final class AutomationInvokeResponse {
     }
 
     public interface RunIdStage {
-        _FinalStage runId(String runId);
+        _FinalStage runId(@NotNull String runId);
 
         Builder from(AutomationInvokeResponse other);
     }
@@ -88,8 +89,8 @@ public final class AutomationInvokeResponse {
 
         @java.lang.Override
         @JsonSetter("runId")
-        public _FinalStage runId(String runId) {
-            this.runId = runId;
+        public _FinalStage runId(@NotNull String runId) {
+            this.runId = Objects.requireNonNull(runId, "runId must not be null");
             return this;
         }
 

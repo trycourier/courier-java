@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BulkIngestUsersResponse.Builder.class)
 public final class BulkIngestUsersResponse {
     private final int total;
@@ -114,7 +114,7 @@ public final class BulkIngestUsersResponse {
 
         @java.lang.Override
         public _FinalStage errors(List<BulkIngestError> errors) {
-            this.errors = Optional.of(errors);
+            this.errors = Optional.ofNullable(errors);
             return this;
         }
 

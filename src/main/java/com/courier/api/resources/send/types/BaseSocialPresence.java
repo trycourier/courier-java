@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BaseSocialPresence.Builder.class)
 public final class BaseSocialPresence {
     private final String url;
@@ -62,7 +63,7 @@ public final class BaseSocialPresence {
     }
 
     public interface UrlStage {
-        _FinalStage url(String url);
+        _FinalStage url(@NotNull String url);
 
         Builder from(BaseSocialPresence other);
     }
@@ -88,8 +89,8 @@ public final class BaseSocialPresence {
 
         @java.lang.Override
         @JsonSetter("url")
-        public _FinalStage url(String url) {
-            this.url = url;
+        public _FinalStage url(@NotNull String url) {
+            this.url = Objects.requireNonNull(url, "url must not be null");
             return this;
         }
 

@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = MessageHistoryResponse.Builder.class)
 public final class MessageHistoryResponse {
     private final List<Map<String, Object>> results;
@@ -81,7 +81,9 @@ public final class MessageHistoryResponse {
         @JsonSetter(value = "results", nulls = Nulls.SKIP)
         public Builder results(List<Map<String, Object>> results) {
             this.results.clear();
-            this.results.addAll(results);
+            if (results != null) {
+                this.results.addAll(results);
+            }
             return this;
         }
 
@@ -91,7 +93,9 @@ public final class MessageHistoryResponse {
         }
 
         public Builder addAllResults(List<Map<String, Object>> results) {
-            this.results.addAll(results);
+            if (results != null) {
+                this.results.addAll(results);
+            }
             return this;
         }
 

@@ -17,8 +17,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PutUserTokensOpts.Builder.class)
 public final class PutUserTokensOpts {
     private final String userId;
@@ -73,7 +74,7 @@ public final class PutUserTokensOpts {
     }
 
     public interface UserIdStage {
-        _FinalStage userId(String userId);
+        _FinalStage userId(@NotNull String userId);
 
         Builder from(PutUserTokensOpts other);
     }
@@ -108,14 +109,16 @@ public final class PutUserTokensOpts {
 
         @java.lang.Override
         @JsonSetter("user_id")
-        public _FinalStage userId(String userId) {
-            this.userId = userId;
+        public _FinalStage userId(@NotNull String userId) {
+            this.userId = Objects.requireNonNull(userId, "userId must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage addAllTokens(List<UserToken> tokens) {
-            this.tokens.addAll(tokens);
+            if (tokens != null) {
+                this.tokens.addAll(tokens);
+            }
             return this;
         }
 
@@ -129,7 +132,9 @@ public final class PutUserTokensOpts {
         @JsonSetter(value = "tokens", nulls = Nulls.SKIP)
         public _FinalStage tokens(List<UserToken> tokens) {
             this.tokens.clear();
-            this.tokens.addAll(tokens);
+            if (tokens != null) {
+                this.tokens.addAll(tokens);
+            }
             return this;
         }
 

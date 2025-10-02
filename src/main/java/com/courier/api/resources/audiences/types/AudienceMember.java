@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AudienceMember.Builder.class)
 public final class AudienceMember {
     private final String addedAt;
@@ -104,13 +105,13 @@ public final class AudienceMember {
     }
 
     public interface AddedAtStage {
-        AudienceIdStage addedAt(String addedAt);
+        AudienceIdStage addedAt(@NotNull String addedAt);
 
         Builder from(AudienceMember other);
     }
 
     public interface AudienceIdStage {
-        AudienceVersionStage audienceId(String audienceId);
+        AudienceVersionStage audienceId(@NotNull String audienceId);
     }
 
     public interface AudienceVersionStage {
@@ -118,11 +119,11 @@ public final class AudienceMember {
     }
 
     public interface MemberIdStage {
-        ReasonStage memberId(String memberId);
+        ReasonStage memberId(@NotNull String memberId);
     }
 
     public interface ReasonStage {
-        _FinalStage reason(String reason);
+        _FinalStage reason(@NotNull String reason);
     }
 
     public interface _FinalStage {
@@ -159,15 +160,15 @@ public final class AudienceMember {
 
         @java.lang.Override
         @JsonSetter("added_at")
-        public AudienceIdStage addedAt(String addedAt) {
-            this.addedAt = addedAt;
+        public AudienceIdStage addedAt(@NotNull String addedAt) {
+            this.addedAt = Objects.requireNonNull(addedAt, "addedAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("audience_id")
-        public AudienceVersionStage audienceId(String audienceId) {
-            this.audienceId = audienceId;
+        public AudienceVersionStage audienceId(@NotNull String audienceId) {
+            this.audienceId = Objects.requireNonNull(audienceId, "audienceId must not be null");
             return this;
         }
 
@@ -180,15 +181,15 @@ public final class AudienceMember {
 
         @java.lang.Override
         @JsonSetter("member_id")
-        public ReasonStage memberId(String memberId) {
-            this.memberId = memberId;
+        public ReasonStage memberId(@NotNull String memberId) {
+            this.memberId = Objects.requireNonNull(memberId, "memberId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("reason")
-        public _FinalStage reason(String reason) {
-            this.reason = reason;
+        public _FinalStage reason(@NotNull String reason) {
+            this.reason = Objects.requireNonNull(reason, "reason must not be null");
             return this;
         }
 

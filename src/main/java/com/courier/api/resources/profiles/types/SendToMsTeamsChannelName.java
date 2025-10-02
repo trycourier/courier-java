@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SendToMsTeamsChannelName.Builder.class)
 public final class SendToMsTeamsChannelName implements IMsTeamsBaseProperties {
     private final String tenantId;
@@ -96,21 +97,21 @@ public final class SendToMsTeamsChannelName implements IMsTeamsBaseProperties {
     }
 
     public interface TenantIdStage {
-        ServiceUrlStage tenantId(String tenantId);
+        ServiceUrlStage tenantId(@NotNull String tenantId);
 
         Builder from(SendToMsTeamsChannelName other);
     }
 
     public interface ServiceUrlStage {
-        ChannelNameStage serviceUrl(String serviceUrl);
+        ChannelNameStage serviceUrl(@NotNull String serviceUrl);
     }
 
     public interface ChannelNameStage {
-        TeamIdStage channelName(String channelName);
+        TeamIdStage channelName(@NotNull String channelName);
     }
 
     public interface TeamIdStage {
-        _FinalStage teamId(String teamId);
+        _FinalStage teamId(@NotNull String teamId);
     }
 
     public interface _FinalStage {
@@ -144,29 +145,29 @@ public final class SendToMsTeamsChannelName implements IMsTeamsBaseProperties {
 
         @java.lang.Override
         @JsonSetter("tenant_id")
-        public ServiceUrlStage tenantId(String tenantId) {
-            this.tenantId = tenantId;
+        public ServiceUrlStage tenantId(@NotNull String tenantId) {
+            this.tenantId = Objects.requireNonNull(tenantId, "tenantId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("service_url")
-        public ChannelNameStage serviceUrl(String serviceUrl) {
-            this.serviceUrl = serviceUrl;
+        public ChannelNameStage serviceUrl(@NotNull String serviceUrl) {
+            this.serviceUrl = Objects.requireNonNull(serviceUrl, "serviceUrl must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("channel_name")
-        public TeamIdStage channelName(String channelName) {
-            this.channelName = channelName;
+        public TeamIdStage channelName(@NotNull String channelName) {
+            this.channelName = Objects.requireNonNull(channelName, "channelName must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("team_id")
-        public _FinalStage teamId(String teamId) {
-            this.teamId = teamId;
+        public _FinalStage teamId(@NotNull String teamId) {
+            this.teamId = Objects.requireNonNull(teamId, "teamId must not be null");
             return this;
         }
 

@@ -3,17 +3,23 @@
  */
 package com.courier.api.resources.commons.errors;
 
-import com.courier.api.core.CourierApiApiError;
+import com.courier.api.core.CourierApiException;
 import com.courier.api.resources.commons.types.NotFound;
+import okhttp3.Response;
 
-public final class CourierApiNotFoundError extends CourierApiApiError {
+public final class NotFoundError extends CourierApiException {
     /**
      * The body of the response that triggered the exception.
      */
     private final NotFound body;
 
-    public CourierApiNotFoundError(NotFound body) {
+    public NotFoundError(NotFound body) {
         super("NotFoundError", 404, body);
+        this.body = body;
+    }
+
+    public NotFoundError(NotFound body, Response rawResponse) {
+        super("NotFoundError", 404, body, rawResponse);
         this.body = body;
     }
 

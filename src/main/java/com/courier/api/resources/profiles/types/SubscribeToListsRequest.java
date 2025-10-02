@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SubscribeToListsRequest.Builder.class)
 public final class SubscribeToListsRequest {
     private final List<SubscribeToListsRequestListObject> lists;
@@ -82,7 +82,9 @@ public final class SubscribeToListsRequest {
         @JsonSetter(value = "lists", nulls = Nulls.SKIP)
         public Builder lists(List<SubscribeToListsRequestListObject> lists) {
             this.lists.clear();
-            this.lists.addAll(lists);
+            if (lists != null) {
+                this.lists.addAll(lists);
+            }
             return this;
         }
 
@@ -92,7 +94,9 @@ public final class SubscribeToListsRequest {
         }
 
         public Builder addAllLists(List<SubscribeToListsRequestListObject> lists) {
-            this.lists.addAll(lists);
+            if (lists != null) {
+                this.lists.addAll(lists);
+            }
             return this;
         }
 

@@ -16,8 +16,9 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AddUserToSingleTenantsParamsProfile.Builder.class)
 public final class AddUserToSingleTenantsParamsProfile {
     private final String title;
@@ -119,26 +120,38 @@ public final class AddUserToSingleTenantsParamsProfile {
     }
 
     public interface TitleStage {
-        EmailStage title(String title);
+        EmailStage title(@NotNull String title);
 
         Builder from(AddUserToSingleTenantsParamsProfile other);
     }
 
     public interface EmailStage {
-        PhoneNumberStage email(String email);
+        /**
+         * <p>Email Address</p>
+         */
+        PhoneNumberStage email(@NotNull String email);
     }
 
     public interface PhoneNumberStage {
-        LocaleStage phoneNumber(String phoneNumber);
+        /**
+         * <p>A valid phone number</p>
+         */
+        LocaleStage phoneNumber(@NotNull String phoneNumber);
     }
 
     public interface LocaleStage {
-        _FinalStage locale(String locale);
+        /**
+         * <p>The user's preferred ISO 639-1 language code.</p>
+         */
+        _FinalStage locale(@NotNull String locale);
     }
 
     public interface _FinalStage {
         AddUserToSingleTenantsParamsProfile build();
 
+        /**
+         * <p>Additional provider specific fields may be specified.</p>
+         */
         _FinalStage additionalFields(Map<String, Object> additionalFields);
 
         _FinalStage putAllAdditionalFields(Map<String, Object> additionalFields);
@@ -175,41 +188,44 @@ public final class AddUserToSingleTenantsParamsProfile {
 
         @java.lang.Override
         @JsonSetter("title")
-        public EmailStage title(String title) {
-            this.title = title;
+        public EmailStage title(@NotNull String title) {
+            this.title = Objects.requireNonNull(title, "title must not be null");
             return this;
         }
 
         /**
          * <p>Email Address</p>
+         * <p>Email Address</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("email")
-        public PhoneNumberStage email(String email) {
-            this.email = email;
+        public PhoneNumberStage email(@NotNull String email) {
+            this.email = Objects.requireNonNull(email, "email must not be null");
             return this;
         }
 
         /**
          * <p>A valid phone number</p>
+         * <p>A valid phone number</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("phone_number")
-        public LocaleStage phoneNumber(String phoneNumber) {
-            this.phoneNumber = phoneNumber;
+        public LocaleStage phoneNumber(@NotNull String phoneNumber) {
+            this.phoneNumber = Objects.requireNonNull(phoneNumber, "phoneNumber must not be null");
             return this;
         }
 
         /**
          * <p>The user's preferred ISO 639-1 language code.</p>
+         * <p>The user's preferred ISO 639-1 language code.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("locale")
-        public _FinalStage locale(String locale) {
-            this.locale = locale;
+        public _FinalStage locale(@NotNull String locale) {
+            this.locale = Objects.requireNonNull(locale, "locale must not be null");
             return this;
         }
 
@@ -229,15 +245,22 @@ public final class AddUserToSingleTenantsParamsProfile {
          */
         @java.lang.Override
         public _FinalStage putAllAdditionalFields(Map<String, Object> additionalFields) {
-            this.additionalFields.putAll(additionalFields);
+            if (additionalFields != null) {
+                this.additionalFields.putAll(additionalFields);
+            }
             return this;
         }
 
+        /**
+         * <p>Additional provider specific fields may be specified.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "additional_fields", nulls = Nulls.SKIP)
         public _FinalStage additionalFields(Map<String, Object> additionalFields) {
             this.additionalFields.clear();
-            this.additionalFields.putAll(additionalFields);
+            if (additionalFields != null) {
+                this.additionalFields.putAll(additionalFields);
+            }
             return this;
         }
 

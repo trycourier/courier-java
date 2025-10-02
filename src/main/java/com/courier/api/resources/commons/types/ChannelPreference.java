@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ChannelPreference.Builder.class)
 public final class ChannelPreference {
     private final ChannelClassification channel;
@@ -62,7 +63,7 @@ public final class ChannelPreference {
     }
 
     public interface ChannelStage {
-        _FinalStage channel(ChannelClassification channel);
+        _FinalStage channel(@NotNull ChannelClassification channel);
 
         Builder from(ChannelPreference other);
     }
@@ -88,8 +89,8 @@ public final class ChannelPreference {
 
         @java.lang.Override
         @JsonSetter("channel")
-        public _FinalStage channel(ChannelClassification channel) {
-            this.channel = channel;
+        public _FinalStage channel(@NotNull ChannelClassification channel) {
+            this.channel = Objects.requireNonNull(channel, "channel must not be null");
             return this;
         }
 

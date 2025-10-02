@@ -18,8 +18,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BulkMessageUserResponse.Builder.class)
 public final class BulkMessageUserResponse implements IInboundBulkMessageUser {
     private final Optional<RecipientPreferences> preferences;
@@ -134,7 +135,7 @@ public final class BulkMessageUserResponse implements IInboundBulkMessageUser {
     }
 
     public interface StatusStage {
-        _FinalStage status(BulkJobUserStatus status);
+        _FinalStage status(@NotNull BulkJobUserStatus status);
 
         Builder from(BulkMessageUserResponse other);
     }
@@ -202,14 +203,14 @@ public final class BulkMessageUserResponse implements IInboundBulkMessageUser {
 
         @java.lang.Override
         @JsonSetter("status")
-        public _FinalStage status(BulkJobUserStatus status) {
-            this.status = status;
+        public _FinalStage status(@NotNull BulkJobUserStatus status) {
+            this.status = Objects.requireNonNull(status, "status must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage messageId(String messageId) {
-            this.messageId = Optional.of(messageId);
+            this.messageId = Optional.ofNullable(messageId);
             return this;
         }
 
@@ -222,7 +223,7 @@ public final class BulkMessageUserResponse implements IInboundBulkMessageUser {
 
         @java.lang.Override
         public _FinalStage to(UserRecipient to) {
-            this.to = Optional.of(to);
+            this.to = Optional.ofNullable(to);
             return this;
         }
 
@@ -235,7 +236,7 @@ public final class BulkMessageUserResponse implements IInboundBulkMessageUser {
 
         @java.lang.Override
         public _FinalStage data(Object data) {
-            this.data = Optional.of(data);
+            this.data = Optional.ofNullable(data);
             return this;
         }
 
@@ -248,7 +249,7 @@ public final class BulkMessageUserResponse implements IInboundBulkMessageUser {
 
         @java.lang.Override
         public _FinalStage recipient(String recipient) {
-            this.recipient = Optional.of(recipient);
+            this.recipient = Optional.ofNullable(recipient);
             return this;
         }
 
@@ -261,7 +262,7 @@ public final class BulkMessageUserResponse implements IInboundBulkMessageUser {
 
         @java.lang.Override
         public _FinalStage profile(Object profile) {
-            this.profile = Optional.of(profile);
+            this.profile = Optional.ofNullable(profile);
             return this;
         }
 
@@ -274,7 +275,7 @@ public final class BulkMessageUserResponse implements IInboundBulkMessageUser {
 
         @java.lang.Override
         public _FinalStage preferences(RecipientPreferences preferences) {
-            this.preferences = Optional.of(preferences);
+            this.preferences = Optional.ofNullable(preferences);
             return this;
         }
 

@@ -4,335 +4,104 @@
 package com.courier.api.resources.users.tokens;
 
 import com.courier.api.core.ClientOptions;
-import com.courier.api.core.CourierApiApiError;
-import com.courier.api.core.CourierApiError;
-import com.courier.api.core.MediaTypes;
-import com.courier.api.core.ObjectMappers;
 import com.courier.api.core.RequestOptions;
-import com.courier.api.resources.commons.errors.CourierApiBadRequestError;
-import com.courier.api.resources.commons.types.BadRequest;
 import com.courier.api.resources.users.tokens.types.GetUserTokenResponse;
 import com.courier.api.resources.users.tokens.types.PatchUserTokenOpts;
 import com.courier.api.resources.users.tokens.types.UserToken;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import java.io.IOException;
 import java.util.List;
-import okhttp3.Headers;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 public class TokensClient {
     protected final ClientOptions clientOptions;
 
+    private final RawTokensClient rawClient;
+
     public TokensClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
+        this.rawClient = new RawTokensClient(clientOptions);
+    }
+
+    /**
+     * Get responses with HTTP metadata like headers
+     */
+    public RawTokensClient withRawResponse() {
+        return this.rawClient;
     }
 
     /**
      * Adds multiple tokens to a user and overwrites matching existing tokens.
      */
     public void addMultiple(String userId) {
-        addMultiple(userId, null);
+        this.rawClient.addMultiple(userId).body();
     }
 
     /**
      * Adds multiple tokens to a user and overwrites matching existing tokens.
      */
     public void addMultiple(String userId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("users")
-                .addPathSegment(userId)
-                .addPathSegments("tokens")
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("PUT", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return;
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                if (response.code() == 400) {
-                    throw new CourierApiBadRequestError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, BadRequest.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        this.rawClient.addMultiple(userId, requestOptions).body();
     }
 
     /**
      * Adds a single token to a user and overwrites a matching existing token.
      */
     public void add(String userId, String token, UserToken request) {
-        add(userId, token, request, null);
+        this.rawClient.add(userId, token, request).body();
     }
 
     /**
      * Adds a single token to a user and overwrites a matching existing token.
      */
     public void add(String userId, String token, UserToken request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("users")
-                .addPathSegment(userId)
-                .addPathSegments("tokens")
-                .addPathSegment(token)
-                .build();
-        RequestBody body;
-        try {
-            body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
-        } catch (JsonProcessingException e) {
-            throw new CourierApiError("Failed to serialize request", e);
-        }
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("PUT", body)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return;
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                if (response.code() == 400) {
-                    throw new CourierApiBadRequestError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, BadRequest.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        this.rawClient.add(userId, token, request, requestOptions).body();
     }
 
     /**
      * Apply a JSON Patch (RFC 6902) to the specified token.
      */
     public void update(String userId, String token, PatchUserTokenOpts request) {
-        update(userId, token, request, null);
+        this.rawClient.update(userId, token, request).body();
     }
 
     /**
      * Apply a JSON Patch (RFC 6902) to the specified token.
      */
     public void update(String userId, String token, PatchUserTokenOpts request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("users")
-                .addPathSegment(userId)
-                .addPathSegments("tokens")
-                .addPathSegment(token)
-                .build();
-        RequestBody body;
-        try {
-            body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
-        } catch (JsonProcessingException e) {
-            throw new CourierApiError("Failed to serialize request", e);
-        }
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("PATCH", body)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return;
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                if (response.code() == 400) {
-                    throw new CourierApiBadRequestError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, BadRequest.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        this.rawClient.update(userId, token, request, requestOptions).body();
     }
 
     /**
      * Get single token available for a <code>:token</code>
      */
     public GetUserTokenResponse get(String userId, String token) {
-        return get(userId, token, null);
+        return this.rawClient.get(userId, token).body();
     }
 
     /**
      * Get single token available for a <code>:token</code>
      */
     public GetUserTokenResponse get(String userId, String token, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("users")
-                .addPathSegment(userId)
-                .addPathSegments("tokens")
-                .addPathSegment(token)
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetUserTokenResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                if (response.code() == 400) {
-                    throw new CourierApiBadRequestError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, BadRequest.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        return this.rawClient.get(userId, token, requestOptions).body();
     }
 
     /**
      * Gets all tokens available for a :user_id
      */
     public List<UserToken> list(String userId) {
-        return list(userId, null);
+        return this.rawClient.list(userId).body();
     }
 
     /**
      * Gets all tokens available for a :user_id
      */
     public List<UserToken> list(String userId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("users")
-                .addPathSegment(userId)
-                .addPathSegments("tokens")
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(
-                        responseBody.string(), new TypeReference<List<UserToken>>() {});
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                if (response.code() == 400) {
-                    throw new CourierApiBadRequestError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, BadRequest.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        return this.rawClient.list(userId, requestOptions).body();
     }
 
     public void delete(String userId, String token) {
-        delete(userId, token, null);
+        this.rawClient.delete(userId, token).body();
     }
 
     public void delete(String userId, String token, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("users")
-                .addPathSegment(userId)
-                .addPathSegments("tokens")
-                .addPathSegment(token)
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("DELETE", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return;
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        this.rawClient.delete(userId, token, requestOptions).body();
     }
 }

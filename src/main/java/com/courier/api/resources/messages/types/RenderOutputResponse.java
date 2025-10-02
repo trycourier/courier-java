@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = RenderOutputResponse.Builder.class)
 public final class RenderOutputResponse {
     private final List<RenderOutput> results;
@@ -81,10 +81,15 @@ public final class RenderOutputResponse {
             return this;
         }
 
+        /**
+         * <p>An array of render output of a previously sent message.</p>
+         */
         @JsonSetter(value = "results", nulls = Nulls.SKIP)
         public Builder results(List<RenderOutput> results) {
             this.results.clear();
-            this.results.addAll(results);
+            if (results != null) {
+                this.results.addAll(results);
+            }
             return this;
         }
 
@@ -94,7 +99,9 @@ public final class RenderOutputResponse {
         }
 
         public Builder addAllResults(List<RenderOutput> results) {
-            this.results.addAll(results);
+            if (results != null) {
+                this.results.addAll(results);
+            }
             return this;
         }
 

@@ -16,8 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UserTenantAssociation.Builder.class)
 public final class UserTenantAssociation {
     private final Optional<String> userId;
@@ -105,7 +106,10 @@ public final class UserTenantAssociation {
     }
 
     public interface TenantIdStage {
-        _FinalStage tenantId(String tenantId);
+        /**
+         * <p>Tenant ID for the assocation between tenant and user</p>
+         */
+        _FinalStage tenantId(@NotNull String tenantId);
 
         Builder from(UserTenantAssociation other);
     }
@@ -113,6 +117,9 @@ public final class UserTenantAssociation {
     public interface _FinalStage {
         UserTenantAssociation build();
 
+        /**
+         * <p>User ID for the assocation between tenant and user</p>
+         */
         _FinalStage userId(Optional<String> userId);
 
         _FinalStage userId(String userId);
@@ -121,6 +128,9 @@ public final class UserTenantAssociation {
 
         _FinalStage type(String type);
 
+        /**
+         * <p>Additional metadata to be applied to a user profile when used in a tenant context</p>
+         */
         _FinalStage profile(Optional<Map<String, Object>> profile);
 
         _FinalStage profile(Map<String, Object> profile);
@@ -152,12 +162,13 @@ public final class UserTenantAssociation {
 
         /**
          * <p>Tenant ID for the assocation between tenant and user</p>
+         * <p>Tenant ID for the assocation between tenant and user</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("tenant_id")
-        public _FinalStage tenantId(String tenantId) {
-            this.tenantId = tenantId;
+        public _FinalStage tenantId(@NotNull String tenantId) {
+            this.tenantId = Objects.requireNonNull(tenantId, "tenantId must not be null");
             return this;
         }
 
@@ -167,10 +178,13 @@ public final class UserTenantAssociation {
          */
         @java.lang.Override
         public _FinalStage profile(Map<String, Object> profile) {
-            this.profile = Optional.of(profile);
+            this.profile = Optional.ofNullable(profile);
             return this;
         }
 
+        /**
+         * <p>Additional metadata to be applied to a user profile when used in a tenant context</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "profile", nulls = Nulls.SKIP)
         public _FinalStage profile(Optional<Map<String, Object>> profile) {
@@ -180,7 +194,7 @@ public final class UserTenantAssociation {
 
         @java.lang.Override
         public _FinalStage type(String type) {
-            this.type = Optional.of(type);
+            this.type = Optional.ofNullable(type);
             return this;
         }
 
@@ -197,10 +211,13 @@ public final class UserTenantAssociation {
          */
         @java.lang.Override
         public _FinalStage userId(String userId) {
-            this.userId = Optional.of(userId);
+            this.userId = Optional.ofNullable(userId);
             return this;
         }
 
+        /**
+         * <p>User ID for the assocation between tenant and user</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "user_id", nulls = Nulls.SKIP)
         public _FinalStage userId(Optional<String> userId) {

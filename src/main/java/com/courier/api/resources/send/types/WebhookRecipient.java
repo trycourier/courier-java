@@ -15,8 +15,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = WebhookRecipient.Builder.class)
 public final class WebhookRecipient {
     private final WebhookProfile webhook;
@@ -63,7 +64,7 @@ public final class WebhookRecipient {
     }
 
     public interface WebhookStage {
-        _FinalStage webhook(WebhookProfile webhook);
+        _FinalStage webhook(@NotNull WebhookProfile webhook);
 
         Builder from(WebhookRecipient other);
     }
@@ -89,8 +90,8 @@ public final class WebhookRecipient {
 
         @java.lang.Override
         @JsonSetter("webhook")
-        public _FinalStage webhook(WebhookProfile webhook) {
-            this.webhook = webhook;
+        public _FinalStage webhook(@NotNull WebhookProfile webhook) {
+            this.webhook = Objects.requireNonNull(webhook, "webhook must not be null");
             return this;
         }
 

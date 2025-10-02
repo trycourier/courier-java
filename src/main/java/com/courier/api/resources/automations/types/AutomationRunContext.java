@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AutomationRunContext.Builder.class)
 public final class AutomationRunContext {
     private final Optional<String> brand;
@@ -138,7 +138,7 @@ public final class AutomationRunContext {
         }
 
         public Builder brand(String brand) {
-            this.brand = Optional.of(brand);
+            this.brand = Optional.ofNullable(brand);
             return this;
         }
 
@@ -149,7 +149,7 @@ public final class AutomationRunContext {
         }
 
         public Builder data(Object data) {
-            this.data = Optional.of(data);
+            this.data = Optional.ofNullable(data);
             return this;
         }
 
@@ -160,7 +160,7 @@ public final class AutomationRunContext {
         }
 
         public Builder profile(Object profile) {
-            this.profile = Optional.of(profile);
+            this.profile = Optional.ofNullable(profile);
             return this;
         }
 
@@ -171,7 +171,7 @@ public final class AutomationRunContext {
         }
 
         public Builder template(String template) {
-            this.template = Optional.of(template);
+            this.template = Optional.ofNullable(template);
             return this;
         }
 
@@ -182,7 +182,7 @@ public final class AutomationRunContext {
         }
 
         public Builder recipient(String recipient) {
-            this.recipient = Optional.of(recipient);
+            this.recipient = Optional.ofNullable(recipient);
             return this;
         }
 

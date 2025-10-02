@@ -3,26 +3,101 @@
  */
 package com.courier.api.resources.send.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum InAppPlacement {
-    TOP("top"),
+public final class InAppPlacement {
+    public static final InAppPlacement TOP = new InAppPlacement(Value.TOP, "top");
 
-    BOTTOM("bottom"),
+    public static final InAppPlacement BOTTOM = new InAppPlacement(Value.BOTTOM, "bottom");
 
-    LEFT("left"),
+    public static final InAppPlacement LEFT = new InAppPlacement(Value.LEFT, "left");
 
-    RIGHT("right");
+    public static final InAppPlacement RIGHT = new InAppPlacement(Value.RIGHT, "right");
 
-    private final String value;
+    private final Value value;
 
-    InAppPlacement(String value) {
+    private final String string;
+
+    InAppPlacement(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof InAppPlacement && this.string.equals(((InAppPlacement) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case TOP:
+                return visitor.visitTop();
+            case BOTTOM:
+                return visitor.visitBottom();
+            case LEFT:
+                return visitor.visitLeft();
+            case RIGHT:
+                return visitor.visitRight();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static InAppPlacement valueOf(String value) {
+        switch (value) {
+            case "top":
+                return TOP;
+            case "bottom":
+                return BOTTOM;
+            case "left":
+                return LEFT;
+            case "right":
+                return RIGHT;
+            default:
+                return new InAppPlacement(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        TOP,
+
+        BOTTOM,
+
+        LEFT,
+
+        RIGHT,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitTop();
+
+        T visitBottom();
+
+        T visitLeft();
+
+        T visitRight();
+
+        T visitUnknown(String unknownType);
     }
 }

@@ -3,22 +3,81 @@
  */
 package com.courier.api.resources.send.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum IActionButtonStyle {
-    BUTTON("button"),
+public final class IActionButtonStyle {
+    public static final IActionButtonStyle BUTTON = new IActionButtonStyle(Value.BUTTON, "button");
 
-    LINK("link");
+    public static final IActionButtonStyle LINK = new IActionButtonStyle(Value.LINK, "link");
 
-    private final String value;
+    private final Value value;
 
-    IActionButtonStyle(String value) {
+    private final String string;
+
+    IActionButtonStyle(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof IActionButtonStyle && this.string.equals(((IActionButtonStyle) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case BUTTON:
+                return visitor.visitButton();
+            case LINK:
+                return visitor.visitLink();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static IActionButtonStyle valueOf(String value) {
+        switch (value) {
+            case "button":
+                return BUTTON;
+            case "link":
+                return LINK;
+            default:
+                return new IActionButtonStyle(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        BUTTON,
+
+        LINK,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitButton();
+
+        T visitLink();
+
+        T visitUnknown(String unknownType);
     }
 }

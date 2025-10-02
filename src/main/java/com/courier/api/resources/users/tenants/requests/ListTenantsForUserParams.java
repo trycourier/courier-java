@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListTenantsForUserParams.Builder.class)
 public final class ListTenantsForUserParams {
     private final Optional<Integer> limit;
@@ -96,6 +96,10 @@ public final class ListTenantsForUserParams {
             return this;
         }
 
+        /**
+         * <p>The number of accounts to return
+         * (defaults to 20, maximum value of 100)</p>
+         */
         @JsonSetter(value = "limit", nulls = Nulls.SKIP)
         public Builder limit(Optional<Integer> limit) {
             this.limit = limit;
@@ -103,10 +107,13 @@ public final class ListTenantsForUserParams {
         }
 
         public Builder limit(Integer limit) {
-            this.limit = Optional.of(limit);
+            this.limit = Optional.ofNullable(limit);
             return this;
         }
 
+        /**
+         * <p>Continue the pagination with the next cursor</p>
+         */
         @JsonSetter(value = "cursor", nulls = Nulls.SKIP)
         public Builder cursor(Optional<String> cursor) {
             this.cursor = cursor;
@@ -114,7 +121,7 @@ public final class ListTenantsForUserParams {
         }
 
         public Builder cursor(String cursor) {
-            this.cursor = Optional.of(cursor);
+            this.cursor = Optional.ofNullable(cursor);
             return this;
         }
 

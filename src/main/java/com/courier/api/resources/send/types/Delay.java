@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Delay.Builder.class)
 public final class Delay {
     private final Optional<Integer> duration;
@@ -94,6 +94,9 @@ public final class Delay {
             return this;
         }
 
+        /**
+         * <p>The duration of the delay in milliseconds.</p>
+         */
         @JsonSetter(value = "duration", nulls = Nulls.SKIP)
         public Builder duration(Optional<Integer> duration) {
             this.duration = duration;
@@ -101,10 +104,13 @@ public final class Delay {
         }
 
         public Builder duration(Integer duration) {
-            this.duration = Optional.of(duration);
+            this.duration = Optional.ofNullable(duration);
             return this;
         }
 
+        /**
+         * <p>An ISO 8601 timestamp that specifies when it should be delivered or an OpenStreetMap opening_hours-like format that specifies the <a href="https://www.courier.com/docs/platform/sending/failover/#delivery-window">Delivery Window</a> (e.g., 'Mo-Fr 08:00-18:00pm')</p>
+         */
         @JsonSetter(value = "until", nulls = Nulls.SKIP)
         public Builder until(Optional<String> until) {
             this.until = until;
@@ -112,7 +118,7 @@ public final class Delay {
         }
 
         public Builder until(String until) {
-            this.until = Optional.of(until);
+            this.until = Optional.ofNullable(until);
             return this;
         }
 

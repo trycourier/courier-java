@@ -16,8 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = GetUserTokenResponse.Builder.class)
 public final class GetUserTokenResponse implements IUserToken {
     private final Optional<String> token;
@@ -168,7 +169,7 @@ public final class GetUserTokenResponse implements IUserToken {
     }
 
     public interface ProviderKeyStage {
-        _FinalStage providerKey(ProviderKey providerKey);
+        _FinalStage providerKey(@NotNull ProviderKey providerKey);
 
         Builder from(GetUserTokenResponse other);
     }
@@ -176,22 +177,37 @@ public final class GetUserTokenResponse implements IUserToken {
     public interface _FinalStage {
         GetUserTokenResponse build();
 
+        /**
+         * <p>Full body of the token. Must match token in URL.</p>
+         */
         _FinalStage token(Optional<String> token);
 
         _FinalStage token(String token);
 
+        /**
+         * <p>ISO 8601 formatted date the token expires. Defaults to 2 months. Set to false to disable expiration.</p>
+         */
         _FinalStage expiryDate(Optional<ExpiryDate> expiryDate);
 
         _FinalStage expiryDate(ExpiryDate expiryDate);
 
+        /**
+         * <p>Properties sent to the provider along with the token</p>
+         */
         _FinalStage properties(Optional<Object> properties);
 
         _FinalStage properties(Object properties);
 
+        /**
+         * <p>Information about the device the token is associated with.</p>
+         */
         _FinalStage device(Optional<Device> device);
 
         _FinalStage device(Device device);
 
+        /**
+         * <p>Information about the device the token is associated with.</p>
+         */
         _FinalStage tracking(Optional<Tracking> tracking);
 
         _FinalStage tracking(Tracking tracking);
@@ -200,6 +216,9 @@ public final class GetUserTokenResponse implements IUserToken {
 
         _FinalStage status(TokenStatus status);
 
+        /**
+         * <p>The reason for the token status.</p>
+         */
         _FinalStage statusReason(Optional<String> statusReason);
 
         _FinalStage statusReason(String statusReason);
@@ -243,8 +262,8 @@ public final class GetUserTokenResponse implements IUserToken {
 
         @java.lang.Override
         @JsonSetter("provider_key")
-        public _FinalStage providerKey(ProviderKey providerKey) {
-            this.providerKey = providerKey;
+        public _FinalStage providerKey(@NotNull ProviderKey providerKey) {
+            this.providerKey = Objects.requireNonNull(providerKey, "providerKey must not be null");
             return this;
         }
 
@@ -254,10 +273,13 @@ public final class GetUserTokenResponse implements IUserToken {
          */
         @java.lang.Override
         public _FinalStage statusReason(String statusReason) {
-            this.statusReason = Optional.of(statusReason);
+            this.statusReason = Optional.ofNullable(statusReason);
             return this;
         }
 
+        /**
+         * <p>The reason for the token status.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "status_reason", nulls = Nulls.SKIP)
         public _FinalStage statusReason(Optional<String> statusReason) {
@@ -267,7 +289,7 @@ public final class GetUserTokenResponse implements IUserToken {
 
         @java.lang.Override
         public _FinalStage status(TokenStatus status) {
-            this.status = Optional.of(status);
+            this.status = Optional.ofNullable(status);
             return this;
         }
 
@@ -284,10 +306,13 @@ public final class GetUserTokenResponse implements IUserToken {
          */
         @java.lang.Override
         public _FinalStage tracking(Tracking tracking) {
-            this.tracking = Optional.of(tracking);
+            this.tracking = Optional.ofNullable(tracking);
             return this;
         }
 
+        /**
+         * <p>Information about the device the token is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "tracking", nulls = Nulls.SKIP)
         public _FinalStage tracking(Optional<Tracking> tracking) {
@@ -301,10 +326,13 @@ public final class GetUserTokenResponse implements IUserToken {
          */
         @java.lang.Override
         public _FinalStage device(Device device) {
-            this.device = Optional.of(device);
+            this.device = Optional.ofNullable(device);
             return this;
         }
 
+        /**
+         * <p>Information about the device the token is associated with.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "device", nulls = Nulls.SKIP)
         public _FinalStage device(Optional<Device> device) {
@@ -318,10 +346,13 @@ public final class GetUserTokenResponse implements IUserToken {
          */
         @java.lang.Override
         public _FinalStage properties(Object properties) {
-            this.properties = Optional.of(properties);
+            this.properties = Optional.ofNullable(properties);
             return this;
         }
 
+        /**
+         * <p>Properties sent to the provider along with the token</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "properties", nulls = Nulls.SKIP)
         public _FinalStage properties(Optional<Object> properties) {
@@ -335,10 +366,13 @@ public final class GetUserTokenResponse implements IUserToken {
          */
         @java.lang.Override
         public _FinalStage expiryDate(ExpiryDate expiryDate) {
-            this.expiryDate = Optional.of(expiryDate);
+            this.expiryDate = Optional.ofNullable(expiryDate);
             return this;
         }
 
+        /**
+         * <p>ISO 8601 formatted date the token expires. Defaults to 2 months. Set to false to disable expiration.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "expiry_date", nulls = Nulls.SKIP)
         public _FinalStage expiryDate(Optional<ExpiryDate> expiryDate) {
@@ -352,10 +386,13 @@ public final class GetUserTokenResponse implements IUserToken {
          */
         @java.lang.Override
         public _FinalStage token(String token) {
-            this.token = Optional.of(token);
+            this.token = Optional.ofNullable(token);
             return this;
         }
 
+        /**
+         * <p>Full body of the token. Must match token in URL.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "token", nulls = Nulls.SKIP)
         public _FinalStage token(Optional<String> token) {

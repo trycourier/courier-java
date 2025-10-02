@@ -16,8 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BrandTemplateOverride.Builder.class)
 public final class BrandTemplateOverride implements IBrandTemplate {
     private final Optional<String> backgroundColor;
@@ -179,7 +180,7 @@ public final class BrandTemplateOverride implements IBrandTemplate {
     }
 
     public interface MjmlStage {
-        _FinalStage mjml(BrandTemplate mjml);
+        _FinalStage mjml(@NotNull BrandTemplate mjml);
     }
 
     public interface _FinalStage {
@@ -269,14 +270,14 @@ public final class BrandTemplateOverride implements IBrandTemplate {
 
         @java.lang.Override
         @JsonSetter("mjml")
-        public _FinalStage mjml(BrandTemplate mjml) {
-            this.mjml = mjml;
+        public _FinalStage mjml(@NotNull BrandTemplate mjml) {
+            this.mjml = Objects.requireNonNull(mjml, "mjml must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage footerFullWidth(Boolean footerFullWidth) {
-            this.footerFullWidth = Optional.of(footerFullWidth);
+            this.footerFullWidth = Optional.ofNullable(footerFullWidth);
             return this;
         }
 
@@ -289,7 +290,7 @@ public final class BrandTemplateOverride implements IBrandTemplate {
 
         @java.lang.Override
         public _FinalStage footerBackgroundColor(String footerBackgroundColor) {
-            this.footerBackgroundColor = Optional.of(footerBackgroundColor);
+            this.footerBackgroundColor = Optional.ofNullable(footerBackgroundColor);
             return this;
         }
 
@@ -302,7 +303,7 @@ public final class BrandTemplateOverride implements IBrandTemplate {
 
         @java.lang.Override
         public _FinalStage width(String width) {
-            this.width = Optional.of(width);
+            this.width = Optional.ofNullable(width);
             return this;
         }
 
@@ -315,7 +316,7 @@ public final class BrandTemplateOverride implements IBrandTemplate {
 
         @java.lang.Override
         public _FinalStage header(String header) {
-            this.header = Optional.of(header);
+            this.header = Optional.ofNullable(header);
             return this;
         }
 
@@ -328,7 +329,7 @@ public final class BrandTemplateOverride implements IBrandTemplate {
 
         @java.lang.Override
         public _FinalStage head(String head) {
-            this.head = Optional.of(head);
+            this.head = Optional.ofNullable(head);
             return this;
         }
 
@@ -341,7 +342,7 @@ public final class BrandTemplateOverride implements IBrandTemplate {
 
         @java.lang.Override
         public _FinalStage footer(String footer) {
-            this.footer = Optional.of(footer);
+            this.footer = Optional.ofNullable(footer);
             return this;
         }
 
@@ -354,7 +355,7 @@ public final class BrandTemplateOverride implements IBrandTemplate {
 
         @java.lang.Override
         public _FinalStage blocksBackgroundColor(String blocksBackgroundColor) {
-            this.blocksBackgroundColor = Optional.of(blocksBackgroundColor);
+            this.blocksBackgroundColor = Optional.ofNullable(blocksBackgroundColor);
             return this;
         }
 
@@ -367,7 +368,7 @@ public final class BrandTemplateOverride implements IBrandTemplate {
 
         @java.lang.Override
         public _FinalStage backgroundColor(String backgroundColor) {
-            this.backgroundColor = Optional.of(backgroundColor);
+            this.backgroundColor = Optional.ofNullable(backgroundColor);
             return this;
         }
 

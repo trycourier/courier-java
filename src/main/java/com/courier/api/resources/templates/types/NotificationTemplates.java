@@ -17,8 +17,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = NotificationTemplates.Builder.class)
 public final class NotificationTemplates {
     private final long createdAt;
@@ -135,30 +136,48 @@ public final class NotificationTemplates {
     }
 
     public interface CreatedAtStage {
+        /**
+         * <p>A UTC timestamp at which notification was created. This is stored as a millisecond representation of the Unix epoch (the time passed since January 1, 1970).</p>
+         */
         IdStage createdAt(long createdAt);
 
         Builder from(NotificationTemplates other);
     }
 
     public interface IdStage {
-        RoutingStage id(String id);
+        /**
+         * <p>A unique identifier associated with the notification.</p>
+         */
+        RoutingStage id(@NotNull String id);
     }
 
     public interface RoutingStage {
-        TitleStage routing(RoutingStrategy routing);
+        /**
+         * <p>Routing strategy used by this notification.</p>
+         */
+        TitleStage routing(@NotNull RoutingStrategy routing);
     }
 
     public interface TitleStage {
-        UpdatedAtStage title(String title);
+        /**
+         * <p>The title of the notification.</p>
+         */
+        UpdatedAtStage title(@NotNull String title);
     }
 
     public interface UpdatedAtStage {
+        /**
+         * <p>A UTC timestamp at which notification was updated. This is stored as a millisecond representation of the Unix epoch (the time passed since January 1, 1970).</p>
+         */
         _FinalStage updatedAt(long updatedAt);
     }
 
     public interface _FinalStage {
         NotificationTemplates build();
 
+        /**
+         * <p>A list of tags attached to the notification.</p>
+         */
         _FinalStage tags(List<Tag> tags);
 
         _FinalStage addTags(Tag tags);
@@ -199,6 +218,7 @@ public final class NotificationTemplates {
 
         /**
          * <p>A UTC timestamp at which notification was created. This is stored as a millisecond representation of the Unix epoch (the time passed since January 1, 1970).</p>
+         * <p>A UTC timestamp at which notification was created. This is stored as a millisecond representation of the Unix epoch (the time passed since January 1, 1970).</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -210,38 +230,42 @@ public final class NotificationTemplates {
 
         /**
          * <p>A unique identifier associated with the notification.</p>
+         * <p>A unique identifier associated with the notification.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("id")
-        public RoutingStage id(String id) {
-            this.id = id;
+        public RoutingStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         /**
          * <p>Routing strategy used by this notification.</p>
+         * <p>Routing strategy used by this notification.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("routing")
-        public TitleStage routing(RoutingStrategy routing) {
-            this.routing = routing;
+        public TitleStage routing(@NotNull RoutingStrategy routing) {
+            this.routing = Objects.requireNonNull(routing, "routing must not be null");
             return this;
         }
 
         /**
          * <p>The title of the notification.</p>
+         * <p>The title of the notification.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("title")
-        public UpdatedAtStage title(String title) {
-            this.title = title;
+        public UpdatedAtStage title(@NotNull String title) {
+            this.title = Objects.requireNonNull(title, "title must not be null");
             return this;
         }
 
         /**
+         * <p>A UTC timestamp at which notification was updated. This is stored as a millisecond representation of the Unix epoch (the time passed since January 1, 1970).</p>
          * <p>A UTC timestamp at which notification was updated. This is stored as a millisecond representation of the Unix epoch (the time passed since January 1, 1970).</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -258,7 +282,9 @@ public final class NotificationTemplates {
          */
         @java.lang.Override
         public _FinalStage addAllTags(List<Tag> tags) {
-            this.tags.addAll(tags);
+            if (tags != null) {
+                this.tags.addAll(tags);
+            }
             return this;
         }
 
@@ -272,11 +298,16 @@ public final class NotificationTemplates {
             return this;
         }
 
+        /**
+         * <p>A list of tags attached to the notification.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "tags", nulls = Nulls.SKIP)
         public _FinalStage tags(List<Tag> tags) {
             this.tags.clear();
-            this.tags.addAll(tags);
+            if (tags != null) {
+                this.tags.addAll(tags);
+            }
             return this;
         }
 

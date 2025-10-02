@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SendToMsTeamsChannelId.Builder.class)
 public final class SendToMsTeamsChannelId implements IMsTeamsBaseProperties {
     private final String tenantId;
@@ -83,17 +84,17 @@ public final class SendToMsTeamsChannelId implements IMsTeamsBaseProperties {
     }
 
     public interface TenantIdStage {
-        ServiceUrlStage tenantId(String tenantId);
+        ServiceUrlStage tenantId(@NotNull String tenantId);
 
         Builder from(SendToMsTeamsChannelId other);
     }
 
     public interface ServiceUrlStage {
-        ChannelIdStage serviceUrl(String serviceUrl);
+        ChannelIdStage serviceUrl(@NotNull String serviceUrl);
     }
 
     public interface ChannelIdStage {
-        _FinalStage channelId(String channelId);
+        _FinalStage channelId(@NotNull String channelId);
     }
 
     public interface _FinalStage {
@@ -123,22 +124,22 @@ public final class SendToMsTeamsChannelId implements IMsTeamsBaseProperties {
 
         @java.lang.Override
         @JsonSetter("tenant_id")
-        public ServiceUrlStage tenantId(String tenantId) {
-            this.tenantId = tenantId;
+        public ServiceUrlStage tenantId(@NotNull String tenantId) {
+            this.tenantId = Objects.requireNonNull(tenantId, "tenantId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("service_url")
-        public ChannelIdStage serviceUrl(String serviceUrl) {
-            this.serviceUrl = serviceUrl;
+        public ChannelIdStage serviceUrl(@NotNull String serviceUrl) {
+            this.serviceUrl = Objects.requireNonNull(serviceUrl, "serviceUrl must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("channel_id")
-        public _FinalStage channelId(String channelId) {
-            this.channelId = channelId;
+        public _FinalStage channelId(@NotNull String channelId) {
+            this.channelId = Objects.requireNonNull(channelId, "channelId must not be null");
             return this;
         }
 

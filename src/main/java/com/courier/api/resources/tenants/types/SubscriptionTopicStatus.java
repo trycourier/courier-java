@@ -3,24 +3,92 @@
  */
 package com.courier.api.resources.tenants.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum SubscriptionTopicStatus {
-    OPTED_OUT("OPTED_OUT"),
+public final class SubscriptionTopicStatus {
+    public static final SubscriptionTopicStatus OPTED_OUT = new SubscriptionTopicStatus(Value.OPTED_OUT, "OPTED_OUT");
 
-    OPTED_IN("OPTED_IN"),
+    public static final SubscriptionTopicStatus REQUIRED = new SubscriptionTopicStatus(Value.REQUIRED, "REQUIRED");
 
-    REQUIRED("REQUIRED");
+    public static final SubscriptionTopicStatus OPTED_IN = new SubscriptionTopicStatus(Value.OPTED_IN, "OPTED_IN");
 
-    private final String value;
+    private final Value value;
 
-    SubscriptionTopicStatus(String value) {
+    private final String string;
+
+    SubscriptionTopicStatus(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof SubscriptionTopicStatus
+                        && this.string.equals(((SubscriptionTopicStatus) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case OPTED_OUT:
+                return visitor.visitOptedOut();
+            case REQUIRED:
+                return visitor.visitRequired();
+            case OPTED_IN:
+                return visitor.visitOptedIn();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static SubscriptionTopicStatus valueOf(String value) {
+        switch (value) {
+            case "OPTED_OUT":
+                return OPTED_OUT;
+            case "REQUIRED":
+                return REQUIRED;
+            case "OPTED_IN":
+                return OPTED_IN;
+            default:
+                return new SubscriptionTopicStatus(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        OPTED_OUT,
+
+        OPTED_IN,
+
+        REQUIRED,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitOptedOut();
+
+        T visitOptedIn();
+
+        T visitRequired();
+
+        T visitUnknown(String unknownType);
     }
 }

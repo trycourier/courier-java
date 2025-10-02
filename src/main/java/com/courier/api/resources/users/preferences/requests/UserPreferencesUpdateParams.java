@@ -17,8 +17,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UserPreferencesUpdateParams.Builder.class)
 public final class UserPreferencesUpdateParams {
     private final Optional<String> tenantId;
@@ -77,7 +78,7 @@ public final class UserPreferencesUpdateParams {
     }
 
     public interface TopicStage {
-        _FinalStage topic(TopicPreferenceUpdate topic);
+        _FinalStage topic(@NotNull TopicPreferenceUpdate topic);
 
         Builder from(UserPreferencesUpdateParams other);
     }
@@ -85,6 +86,9 @@ public final class UserPreferencesUpdateParams {
     public interface _FinalStage {
         UserPreferencesUpdateParams build();
 
+        /**
+         * <p>Update the preferences of a user for this specific tenant context.</p>
+         */
         _FinalStage tenantId(Optional<String> tenantId);
 
         _FinalStage tenantId(String tenantId);
@@ -110,8 +114,8 @@ public final class UserPreferencesUpdateParams {
 
         @java.lang.Override
         @JsonSetter("topic")
-        public _FinalStage topic(TopicPreferenceUpdate topic) {
-            this.topic = topic;
+        public _FinalStage topic(@NotNull TopicPreferenceUpdate topic) {
+            this.topic = Objects.requireNonNull(topic, "topic must not be null");
             return this;
         }
 
@@ -121,10 +125,13 @@ public final class UserPreferencesUpdateParams {
          */
         @java.lang.Override
         public _FinalStage tenantId(String tenantId) {
-            this.tenantId = Optional.of(tenantId);
+            this.tenantId = Optional.ofNullable(tenantId);
             return this;
         }
 
+        /**
+         * <p>Update the preferences of a user for this specific tenant context.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "tenant_id", nulls = Nulls.SKIP)
         public _FinalStage tenantId(Optional<String> tenantId) {

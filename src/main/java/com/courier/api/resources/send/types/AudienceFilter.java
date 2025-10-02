@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AudienceFilter.Builder.class)
 public final class AudienceFilter {
     private final String value;
@@ -75,7 +76,7 @@ public final class AudienceFilter {
     }
 
     public interface ValueStage {
-        _FinalStage value(String value);
+        _FinalStage value(@NotNull String value);
 
         Builder from(AudienceFilter other);
     }
@@ -101,8 +102,8 @@ public final class AudienceFilter {
 
         @java.lang.Override
         @JsonSetter("value")
-        public _FinalStage value(String value) {
-            this.value = value;
+        public _FinalStage value(@NotNull String value) {
+            this.value = Objects.requireNonNull(value, "value must not be null");
             return this;
         }
 

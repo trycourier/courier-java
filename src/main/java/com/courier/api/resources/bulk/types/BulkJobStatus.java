@@ -3,26 +3,101 @@
  */
 package com.courier.api.resources.bulk.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum BulkJobStatus {
-    CREATED("CREATED"),
+public final class BulkJobStatus {
+    public static final BulkJobStatus PROCESSING = new BulkJobStatus(Value.PROCESSING, "PROCESSING");
 
-    PROCESSING("PROCESSING"),
+    public static final BulkJobStatus CREATED = new BulkJobStatus(Value.CREATED, "CREATED");
 
-    COMPLETED("COMPLETED"),
+    public static final BulkJobStatus COMPLETED = new BulkJobStatus(Value.COMPLETED, "COMPLETED");
 
-    ERROR("ERROR");
+    public static final BulkJobStatus ERROR = new BulkJobStatus(Value.ERROR, "ERROR");
 
-    private final String value;
+    private final Value value;
 
-    BulkJobStatus(String value) {
+    private final String string;
+
+    BulkJobStatus(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof BulkJobStatus && this.string.equals(((BulkJobStatus) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case PROCESSING:
+                return visitor.visitProcessing();
+            case CREATED:
+                return visitor.visitCreated();
+            case COMPLETED:
+                return visitor.visitCompleted();
+            case ERROR:
+                return visitor.visitError();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static BulkJobStatus valueOf(String value) {
+        switch (value) {
+            case "PROCESSING":
+                return PROCESSING;
+            case "CREATED":
+                return CREATED;
+            case "COMPLETED":
+                return COMPLETED;
+            case "ERROR":
+                return ERROR;
+            default:
+                return new BulkJobStatus(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        CREATED,
+
+        PROCESSING,
+
+        COMPLETED,
+
+        ERROR,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitCreated();
+
+        T visitProcessing();
+
+        T visitCompleted();
+
+        T visitError();
+
+        T visitUnknown(String unknownType);
     }
 }

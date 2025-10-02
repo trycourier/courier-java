@@ -4,52 +4,43 @@
 package com.courier.api.resources.users.preferences;
 
 import com.courier.api.core.ClientOptions;
-import com.courier.api.core.CourierApiApiError;
-import com.courier.api.core.CourierApiError;
-import com.courier.api.core.MediaTypes;
-import com.courier.api.core.ObjectMappers;
 import com.courier.api.core.RequestOptions;
-import com.courier.api.resources.commons.errors.CourierApiBadRequestError;
-import com.courier.api.resources.commons.errors.CourierApiNotFoundError;
-import com.courier.api.resources.commons.types.BadRequest;
-import com.courier.api.resources.commons.types.NotFound;
 import com.courier.api.resources.users.preferences.requests.UserPreferencesParams;
 import com.courier.api.resources.users.preferences.requests.UserPreferencesTopicParams;
 import com.courier.api.resources.users.preferences.requests.UserPreferencesUpdateParams;
 import com.courier.api.resources.users.preferences.types.UserPreferencesGetResponse;
 import com.courier.api.resources.users.preferences.types.UserPreferencesListResponse;
 import com.courier.api.resources.users.preferences.types.UserPreferencesUpdateResponse;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import okhttp3.Headers;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 public class PreferencesClient {
     protected final ClientOptions clientOptions;
 
+    private final RawPreferencesClient rawClient;
+
     public PreferencesClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
+        this.rawClient = new RawPreferencesClient(clientOptions);
+    }
+
+    /**
+     * Get responses with HTTP metadata like headers
+     */
+    public RawPreferencesClient withRawResponse() {
+        return this.rawClient;
     }
 
     /**
      * Fetch all user preferences.
      */
     public UserPreferencesListResponse list(String userId) {
-        return list(userId, UserPreferencesParams.builder().build());
+        return this.rawClient.list(userId).body();
     }
 
     /**
      * Fetch all user preferences.
      */
     public UserPreferencesListResponse list(String userId, UserPreferencesParams request) {
-        return list(userId, request, null);
+        return this.rawClient.list(userId, request).body();
     }
 
     /**
@@ -57,59 +48,21 @@ public class PreferencesClient {
      */
     public UserPreferencesListResponse list(
             String userId, UserPreferencesParams request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("users")
-                .addPathSegment(userId)
-                .addPathSegments("preferences");
-        if (request.getTenantId().isPresent()) {
-            httpUrl.addQueryParameter("tenant_id", request.getTenantId().get());
-        }
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json");
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), UserPreferencesListResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                if (response.code() == 400) {
-                    throw new CourierApiBadRequestError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, BadRequest.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        return this.rawClient.list(userId, request, requestOptions).body();
     }
 
     /**
      * Fetch user preferences for a specific subscription topic.
      */
     public UserPreferencesGetResponse get(String userId, String topicId) {
-        return get(userId, topicId, UserPreferencesTopicParams.builder().build());
+        return this.rawClient.get(userId, topicId).body();
     }
 
     /**
      * Fetch user preferences for a specific subscription topic.
      */
     public UserPreferencesGetResponse get(String userId, String topicId, UserPreferencesTopicParams request) {
-        return get(userId, topicId, request, null);
+        return this.rawClient.get(userId, topicId, request).body();
     }
 
     /**
@@ -117,53 +70,14 @@ public class PreferencesClient {
      */
     public UserPreferencesGetResponse get(
             String userId, String topicId, UserPreferencesTopicParams request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("users")
-                .addPathSegment(userId)
-                .addPathSegments("preferences")
-                .addPathSegment(topicId);
-        if (request.getTenantId().isPresent()) {
-            httpUrl.addQueryParameter("tenant_id", request.getTenantId().get());
-        }
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json");
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), UserPreferencesGetResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                if (response.code() == 404) {
-                    throw new CourierApiNotFoundError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, NotFound.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        return this.rawClient.get(userId, topicId, request, requestOptions).body();
     }
 
     /**
      * Update or Create user preferences for a specific subscription topic.
      */
     public UserPreferencesUpdateResponse update(String userId, String topicId, UserPreferencesUpdateParams request) {
-        return update(userId, topicId, request, null);
+        return this.rawClient.update(userId, topicId, request).body();
     }
 
     /**
@@ -171,54 +85,6 @@ public class PreferencesClient {
      */
     public UserPreferencesUpdateResponse update(
             String userId, String topicId, UserPreferencesUpdateParams request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("users")
-                .addPathSegment(userId)
-                .addPathSegments("preferences")
-                .addPathSegment(topicId);
-        if (request.getTenantId().isPresent()) {
-            httpUrl.addQueryParameter("tenant_id", request.getTenantId().get());
-        }
-        Map<String, Object> properties = new HashMap<>();
-        properties.put("topic", request.getTopic());
-        RequestBody body;
-        try {
-            body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(properties), MediaTypes.APPLICATION_JSON);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("PUT", body)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json");
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), UserPreferencesUpdateResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                if (response.code() == 400) {
-                    throw new CourierApiBadRequestError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, BadRequest.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        return this.rawClient.update(userId, topicId, request, requestOptions).body();
     }
 }

@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Metadata.Builder.class)
 public final class Metadata {
     private final Optional<Utm> utm;
@@ -84,7 +84,7 @@ public final class Metadata {
         }
 
         public Builder utm(Utm utm) {
-            this.utm = Optional.of(utm);
+            this.utm = Optional.ofNullable(utm);
             return this;
         }
 

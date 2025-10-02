@@ -16,8 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AuditEvent.Builder.class)
 public final class AuditEvent {
     private final Optional<Actor> actor;
@@ -116,21 +117,21 @@ public final class AuditEvent {
     }
 
     public interface AuditEventIdStage {
-        SourceStage auditEventId(String auditEventId);
+        SourceStage auditEventId(@NotNull String auditEventId);
 
         Builder from(AuditEvent other);
     }
 
     public interface SourceStage {
-        TimestampStage source(String source);
+        TimestampStage source(@NotNull String source);
     }
 
     public interface TimestampStage {
-        TypeStage timestamp(String timestamp);
+        TypeStage timestamp(@NotNull String timestamp);
     }
 
     public interface TypeStage {
-        _FinalStage type(String type);
+        _FinalStage type(@NotNull String type);
     }
 
     public interface _FinalStage {
@@ -178,35 +179,35 @@ public final class AuditEvent {
 
         @java.lang.Override
         @JsonSetter("auditEventId")
-        public SourceStage auditEventId(String auditEventId) {
-            this.auditEventId = auditEventId;
+        public SourceStage auditEventId(@NotNull String auditEventId) {
+            this.auditEventId = Objects.requireNonNull(auditEventId, "auditEventId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("source")
-        public TimestampStage source(String source) {
-            this.source = source;
+        public TimestampStage source(@NotNull String source) {
+            this.source = Objects.requireNonNull(source, "source must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("timestamp")
-        public TypeStage timestamp(String timestamp) {
-            this.timestamp = timestamp;
+        public TypeStage timestamp(@NotNull String timestamp) {
+            this.timestamp = Objects.requireNonNull(timestamp, "timestamp must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("type")
-        public _FinalStage type(String type) {
-            this.type = type;
+        public _FinalStage type(@NotNull String type) {
+            this.type = Objects.requireNonNull(type, "type must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage target(Target target) {
-            this.target = Optional.of(target);
+            this.target = Optional.ofNullable(target);
             return this;
         }
 
@@ -219,7 +220,7 @@ public final class AuditEvent {
 
         @java.lang.Override
         public _FinalStage actor(Actor actor) {
-            this.actor = Optional.of(actor);
+            this.actor = Optional.ofNullable(actor);
             return this;
         }
 

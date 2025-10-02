@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Tracking.Builder.class)
 public final class Tracking {
     private final Optional<String> osVersion;
@@ -130,6 +130,9 @@ public final class Tracking {
             return this;
         }
 
+        /**
+         * <p>The operating system version</p>
+         */
         @JsonSetter(value = "os_version", nulls = Nulls.SKIP)
         public Builder osVersion(Optional<String> osVersion) {
             this.osVersion = osVersion;
@@ -137,10 +140,13 @@ public final class Tracking {
         }
 
         public Builder osVersion(String osVersion) {
-            this.osVersion = Optional.of(osVersion);
+            this.osVersion = Optional.ofNullable(osVersion);
             return this;
         }
 
+        /**
+         * <p>The IP address of the device</p>
+         */
         @JsonSetter(value = "ip", nulls = Nulls.SKIP)
         public Builder ip(Optional<String> ip) {
             this.ip = ip;
@@ -148,10 +154,13 @@ public final class Tracking {
         }
 
         public Builder ip(String ip) {
-            this.ip = Optional.of(ip);
+            this.ip = Optional.ofNullable(ip);
             return this;
         }
 
+        /**
+         * <p>The latitude of the device</p>
+         */
         @JsonSetter(value = "lat", nulls = Nulls.SKIP)
         public Builder lat(Optional<String> lat) {
             this.lat = lat;
@@ -159,10 +168,13 @@ public final class Tracking {
         }
 
         public Builder lat(String lat) {
-            this.lat = Optional.of(lat);
+            this.lat = Optional.ofNullable(lat);
             return this;
         }
 
+        /**
+         * <p>The longitude of the device</p>
+         */
         @JsonSetter(value = "long", nulls = Nulls.SKIP)
         public Builder long_(Optional<String> long_) {
             this.long_ = long_;
@@ -170,7 +182,7 @@ public final class Tracking {
         }
 
         public Builder long_(String long_) {
-            this.long_ = Optional.of(long_);
+            this.long_ = Optional.ofNullable(long_);
             return this;
         }
 

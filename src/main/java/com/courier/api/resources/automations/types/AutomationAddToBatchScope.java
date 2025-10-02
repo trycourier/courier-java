@@ -3,24 +3,92 @@
  */
 package com.courier.api.resources.automations.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum AutomationAddToBatchScope {
-    USER("user"),
+public final class AutomationAddToBatchScope {
+    public static final AutomationAddToBatchScope GLOBAL = new AutomationAddToBatchScope(Value.GLOBAL, "global");
 
-    GLOBAL("global"),
+    public static final AutomationAddToBatchScope USER = new AutomationAddToBatchScope(Value.USER, "user");
 
-    DYNAMIC("dynamic");
+    public static final AutomationAddToBatchScope DYNAMIC = new AutomationAddToBatchScope(Value.DYNAMIC, "dynamic");
 
-    private final String value;
+    private final Value value;
 
-    AutomationAddToBatchScope(String value) {
+    private final String string;
+
+    AutomationAddToBatchScope(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof AutomationAddToBatchScope
+                        && this.string.equals(((AutomationAddToBatchScope) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case GLOBAL:
+                return visitor.visitGlobal();
+            case USER:
+                return visitor.visitUser();
+            case DYNAMIC:
+                return visitor.visitDynamic();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static AutomationAddToBatchScope valueOf(String value) {
+        switch (value) {
+            case "global":
+                return GLOBAL;
+            case "user":
+                return USER;
+            case "dynamic":
+                return DYNAMIC;
+            default:
+                return new AutomationAddToBatchScope(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        USER,
+
+        GLOBAL,
+
+        DYNAMIC,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitUser();
+
+        T visitGlobal();
+
+        T visitDynamic();
+
+        T visitUnknown(String unknownType);
     }
 }

@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AirshipProfileAudience.Builder.class)
 public final class AirshipProfileAudience {
     private final String namedUser;
@@ -62,7 +63,7 @@ public final class AirshipProfileAudience {
     }
 
     public interface NamedUserStage {
-        _FinalStage namedUser(String namedUser);
+        _FinalStage namedUser(@NotNull String namedUser);
 
         Builder from(AirshipProfileAudience other);
     }
@@ -88,8 +89,8 @@ public final class AirshipProfileAudience {
 
         @java.lang.Override
         @JsonSetter("named_user")
-        public _FinalStage namedUser(String namedUser) {
-            this.namedUser = namedUser;
+        public _FinalStage namedUser(@NotNull String namedUser) {
+            this.namedUser = Objects.requireNonNull(namedUser, "namedUser must not be null");
             return this;
         }
 

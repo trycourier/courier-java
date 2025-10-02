@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AccessorType.Builder.class)
 public final class AccessorType {
     private final String ref;
@@ -62,7 +63,7 @@ public final class AccessorType {
     }
 
     public interface RefStage {
-        _FinalStage ref(String ref);
+        _FinalStage ref(@NotNull String ref);
 
         Builder from(AccessorType other);
     }
@@ -88,8 +89,8 @@ public final class AccessorType {
 
         @java.lang.Override
         @JsonSetter("$ref")
-        public _FinalStage ref(String ref) {
-            this.ref = ref;
+        public _FinalStage ref(@NotNull String ref) {
+            this.ref = Objects.requireNonNull(ref, "ref must not be null");
             return this;
         }
 

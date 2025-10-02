@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AudienceUpdateParams.Builder.class)
 public final class AudienceUpdateParams {
     private final Optional<String> name;
@@ -110,6 +110,9 @@ public final class AudienceUpdateParams {
             return this;
         }
 
+        /**
+         * <p>The name of the audience</p>
+         */
         @JsonSetter(value = "name", nulls = Nulls.SKIP)
         public Builder name(Optional<String> name) {
             this.name = name;
@@ -117,10 +120,13 @@ public final class AudienceUpdateParams {
         }
 
         public Builder name(String name) {
-            this.name = Optional.of(name);
+            this.name = Optional.ofNullable(name);
             return this;
         }
 
+        /**
+         * <p>A description of the audience</p>
+         */
         @JsonSetter(value = "description", nulls = Nulls.SKIP)
         public Builder description(Optional<String> description) {
             this.description = description;
@@ -128,7 +134,7 @@ public final class AudienceUpdateParams {
         }
 
         public Builder description(String description) {
-            this.description = Optional.of(description);
+            this.description = Optional.ofNullable(description);
             return this;
         }
 
@@ -139,7 +145,7 @@ public final class AudienceUpdateParams {
         }
 
         public Builder filter(Filter filter) {
-            this.filter = Optional.of(filter);
+            this.filter = Optional.ofNullable(filter);
             return this;
         }
 

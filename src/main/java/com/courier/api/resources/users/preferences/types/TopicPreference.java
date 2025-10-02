@@ -19,8 +19,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = TopicPreference.Builder.class)
 public final class TopicPreference {
     private final Optional<List<ChannelClassification>> customRouting;
@@ -128,26 +129,29 @@ public final class TopicPreference {
     }
 
     public interface DefaultStatusStage {
-        StatusStage defaultStatus(PreferenceStatus defaultStatus);
+        StatusStage defaultStatus(@NotNull PreferenceStatus defaultStatus);
 
         Builder from(TopicPreference other);
     }
 
     public interface StatusStage {
-        TopicIdStage status(PreferenceStatus status);
+        TopicIdStage status(@NotNull PreferenceStatus status);
     }
 
     public interface TopicIdStage {
-        TopicNameStage topicId(String topicId);
+        TopicNameStage topicId(@NotNull String topicId);
     }
 
     public interface TopicNameStage {
-        _FinalStage topicName(String topicName);
+        _FinalStage topicName(@NotNull String topicName);
     }
 
     public interface _FinalStage {
         TopicPreference build();
 
+        /**
+         * <p>The Channels a user has chosen to receive notifications through for this topic</p>
+         */
         _FinalStage customRouting(Optional<List<ChannelClassification>> customRouting);
 
         _FinalStage customRouting(List<ChannelClassification> customRouting);
@@ -190,35 +194,35 @@ public final class TopicPreference {
 
         @java.lang.Override
         @JsonSetter("default_status")
-        public StatusStage defaultStatus(PreferenceStatus defaultStatus) {
-            this.defaultStatus = defaultStatus;
+        public StatusStage defaultStatus(@NotNull PreferenceStatus defaultStatus) {
+            this.defaultStatus = Objects.requireNonNull(defaultStatus, "defaultStatus must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("status")
-        public TopicIdStage status(PreferenceStatus status) {
-            this.status = status;
+        public TopicIdStage status(@NotNull PreferenceStatus status) {
+            this.status = Objects.requireNonNull(status, "status must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("topic_id")
-        public TopicNameStage topicId(String topicId) {
-            this.topicId = topicId;
+        public TopicNameStage topicId(@NotNull String topicId) {
+            this.topicId = Objects.requireNonNull(topicId, "topicId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("topic_name")
-        public _FinalStage topicName(String topicName) {
-            this.topicName = topicName;
+        public _FinalStage topicName(@NotNull String topicName) {
+            this.topicName = Objects.requireNonNull(topicName, "topicName must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage hasCustomRouting(Boolean hasCustomRouting) {
-            this.hasCustomRouting = Optional.of(hasCustomRouting);
+            this.hasCustomRouting = Optional.ofNullable(hasCustomRouting);
             return this;
         }
 
@@ -235,10 +239,13 @@ public final class TopicPreference {
          */
         @java.lang.Override
         public _FinalStage customRouting(List<ChannelClassification> customRouting) {
-            this.customRouting = Optional.of(customRouting);
+            this.customRouting = Optional.ofNullable(customRouting);
             return this;
         }
 
+        /**
+         * <p>The Channels a user has chosen to receive notifications through for this topic</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "custom_routing", nulls = Nulls.SKIP)
         public _FinalStage customRouting(Optional<List<ChannelClassification>> customRouting) {

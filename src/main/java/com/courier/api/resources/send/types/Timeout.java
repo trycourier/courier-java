@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Timeout.Builder.class)
 public final class Timeout {
     private final Optional<Map<String, Integer>> provider;
@@ -138,7 +138,7 @@ public final class Timeout {
         }
 
         public Builder provider(Map<String, Integer> provider) {
-            this.provider = Optional.of(provider);
+            this.provider = Optional.ofNullable(provider);
             return this;
         }
 
@@ -149,7 +149,7 @@ public final class Timeout {
         }
 
         public Builder channel(Map<String, Integer> channel) {
-            this.channel = Optional.of(channel);
+            this.channel = Optional.ofNullable(channel);
             return this;
         }
 
@@ -160,7 +160,7 @@ public final class Timeout {
         }
 
         public Builder message(Integer message) {
-            this.message = Optional.of(message);
+            this.message = Optional.ofNullable(message);
             return this;
         }
 
@@ -171,7 +171,7 @@ public final class Timeout {
         }
 
         public Builder escalation(Integer escalation) {
-            this.escalation = Optional.of(escalation);
+            this.escalation = Optional.ofNullable(escalation);
             return this;
         }
 
@@ -182,7 +182,7 @@ public final class Timeout {
         }
 
         public Builder criteria(Criteria criteria) {
-            this.criteria = Optional.of(criteria);
+            this.criteria = Optional.ofNullable(criteria);
             return this;
         }
 

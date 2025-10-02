@@ -18,8 +18,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = GetListSubscriptionsResponse.Builder.class)
 public final class GetListSubscriptionsResponse {
     private final Paging paging;
@@ -78,7 +79,7 @@ public final class GetListSubscriptionsResponse {
     }
 
     public interface PagingStage {
-        _FinalStage paging(Paging paging);
+        _FinalStage paging(@NotNull Paging paging);
 
         Builder from(GetListSubscriptionsResponse other);
     }
@@ -86,6 +87,9 @@ public final class GetListSubscriptionsResponse {
     public interface _FinalStage {
         GetListSubscriptionsResponse build();
 
+        /**
+         * <p>An array of lists</p>
+         */
         _FinalStage results(List<GetListSubscriptionsList> results);
 
         _FinalStage addResults(GetListSubscriptionsList results);
@@ -113,8 +117,8 @@ public final class GetListSubscriptionsResponse {
 
         @java.lang.Override
         @JsonSetter("paging")
-        public _FinalStage paging(Paging paging) {
-            this.paging = paging;
+        public _FinalStage paging(@NotNull Paging paging) {
+            this.paging = Objects.requireNonNull(paging, "paging must not be null");
             return this;
         }
 
@@ -124,7 +128,9 @@ public final class GetListSubscriptionsResponse {
          */
         @java.lang.Override
         public _FinalStage addAllResults(List<GetListSubscriptionsList> results) {
-            this.results.addAll(results);
+            if (results != null) {
+                this.results.addAll(results);
+            }
             return this;
         }
 
@@ -138,11 +144,16 @@ public final class GetListSubscriptionsResponse {
             return this;
         }
 
+        /**
+         * <p>An array of lists</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "results", nulls = Nulls.SKIP)
         public _FinalStage results(List<GetListSubscriptionsList> results) {
             this.results.clear();
-            this.results.addAll(results);
+            if (results != null) {
+                this.results.addAll(results);
+            }
             return this;
         }
 

@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Check.Builder.class)
 public final class Check implements IBaseCheck {
     private final String id;
@@ -86,13 +87,13 @@ public final class Check implements IBaseCheck {
     }
 
     public interface IdStage {
-        StatusStage id(String id);
+        StatusStage id(@NotNull String id);
 
         Builder from(Check other);
     }
 
     public interface StatusStage {
-        UpdatedStage status(CheckStatus status);
+        UpdatedStage status(@NotNull CheckStatus status);
     }
 
     public interface UpdatedStage {
@@ -126,15 +127,15 @@ public final class Check implements IBaseCheck {
 
         @java.lang.Override
         @JsonSetter("id")
-        public StatusStage id(String id) {
-            this.id = id;
+        public StatusStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("status")
-        public UpdatedStage status(CheckStatus status) {
-            this.status = status;
+        public UpdatedStage status(@NotNull CheckStatus status) {
+            this.status = Objects.requireNonNull(status, "status must not be null");
             return this;
         }
 

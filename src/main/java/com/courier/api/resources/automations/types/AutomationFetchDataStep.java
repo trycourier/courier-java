@@ -16,8 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AutomationFetchDataStep.Builder.class)
 public final class AutomationFetchDataStep implements IAutomationStep {
     private final Optional<String> if_;
@@ -124,13 +125,13 @@ public final class AutomationFetchDataStep implements IAutomationStep {
     }
 
     public interface WebhookStage {
-        MergeStrategyStage webhook(AutomationFetchDataWebhook webhook);
+        MergeStrategyStage webhook(@NotNull AutomationFetchDataWebhook webhook);
 
         Builder from(AutomationFetchDataStep other);
     }
 
     public interface MergeStrategyStage {
-        _FinalStage mergeStrategy(MergeAlgorithm mergeStrategy);
+        _FinalStage mergeStrategy(@NotNull MergeAlgorithm mergeStrategy);
     }
 
     public interface _FinalStage {
@@ -185,21 +186,21 @@ public final class AutomationFetchDataStep implements IAutomationStep {
 
         @java.lang.Override
         @JsonSetter("webhook")
-        public MergeStrategyStage webhook(AutomationFetchDataWebhook webhook) {
-            this.webhook = webhook;
+        public MergeStrategyStage webhook(@NotNull AutomationFetchDataWebhook webhook) {
+            this.webhook = Objects.requireNonNull(webhook, "webhook must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("merge_strategy")
-        public _FinalStage mergeStrategy(MergeAlgorithm mergeStrategy) {
-            this.mergeStrategy = mergeStrategy;
+        public _FinalStage mergeStrategy(@NotNull MergeAlgorithm mergeStrategy) {
+            this.mergeStrategy = Objects.requireNonNull(mergeStrategy, "mergeStrategy must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage idempotencyKey(String idempotencyKey) {
-            this.idempotencyKey = Optional.of(idempotencyKey);
+            this.idempotencyKey = Optional.ofNullable(idempotencyKey);
             return this;
         }
 
@@ -212,7 +213,7 @@ public final class AutomationFetchDataStep implements IAutomationStep {
 
         @java.lang.Override
         public _FinalStage idempotencyExpiry(String idempotencyExpiry) {
-            this.idempotencyExpiry = Optional.of(idempotencyExpiry);
+            this.idempotencyExpiry = Optional.ofNullable(idempotencyExpiry);
             return this;
         }
 
@@ -225,7 +226,7 @@ public final class AutomationFetchDataStep implements IAutomationStep {
 
         @java.lang.Override
         public _FinalStage ref(String ref) {
-            this.ref = Optional.of(ref);
+            this.ref = Optional.ofNullable(ref);
             return this;
         }
 
@@ -238,7 +239,7 @@ public final class AutomationFetchDataStep implements IAutomationStep {
 
         @java.lang.Override
         public _FinalStage if_(String if_) {
-            this.if_ = Optional.of(if_);
+            this.if_ = Optional.ofNullable(if_);
             return this;
         }
 

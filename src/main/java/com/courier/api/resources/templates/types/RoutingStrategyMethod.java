@@ -3,22 +3,82 @@
  */
 package com.courier.api.resources.templates.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum RoutingStrategyMethod {
-    ALL("all"),
+public final class RoutingStrategyMethod {
+    public static final RoutingStrategyMethod ALL = new RoutingStrategyMethod(Value.ALL, "all");
 
-    SINGLE("single");
+    public static final RoutingStrategyMethod SINGLE = new RoutingStrategyMethod(Value.SINGLE, "single");
 
-    private final String value;
+    private final Value value;
 
-    RoutingStrategyMethod(String value) {
+    private final String string;
+
+    RoutingStrategyMethod(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof RoutingStrategyMethod
+                        && this.string.equals(((RoutingStrategyMethod) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case ALL:
+                return visitor.visitAll();
+            case SINGLE:
+                return visitor.visitSingle();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static RoutingStrategyMethod valueOf(String value) {
+        switch (value) {
+            case "all":
+                return ALL;
+            case "single":
+                return SINGLE;
+            default:
+                return new RoutingStrategyMethod(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        ALL,
+
+        SINGLE,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitAll();
+
+        T visitSingle();
+
+        T visitUnknown(String unknownType);
     }
 }

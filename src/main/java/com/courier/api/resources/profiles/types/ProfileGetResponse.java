@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ProfileGetResponse.Builder.class)
 public final class ProfileGetResponse {
     private final Map<String, Object> profile;
@@ -96,12 +96,16 @@ public final class ProfileGetResponse {
         @JsonSetter(value = "profile", nulls = Nulls.SKIP)
         public Builder profile(Map<String, Object> profile) {
             this.profile.clear();
-            this.profile.putAll(profile);
+            if (profile != null) {
+                this.profile.putAll(profile);
+            }
             return this;
         }
 
         public Builder putAllProfile(Map<String, Object> profile) {
-            this.profile.putAll(profile);
+            if (profile != null) {
+                this.profile.putAll(profile);
+            }
             return this;
         }
 
@@ -117,7 +121,7 @@ public final class ProfileGetResponse {
         }
 
         public Builder preferences(RecipientPreferences preferences) {
-            this.preferences = Optional.of(preferences);
+            this.preferences = Optional.ofNullable(preferences);
             return this;
         }
 

@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SendMessageResponse.Builder.class)
 public final class SendMessageResponse {
     private final String requestId;
@@ -67,7 +68,12 @@ public final class SendMessageResponse {
     }
 
     public interface RequestIdStage {
-        _FinalStage requestId(String requestId);
+        /**
+         * <p>A successful call to <code>POST /send</code> returns a <code>202</code> status code along with a <code>requestId</code> in the response body.</p>
+         * <p>For send requests that have a single recipient, the <code>requestId</code> is assigned to the derived message as its message_id. Therefore the <code>requestId</code> can be supplied to the Message's API for single recipient messages.</p>
+         * <p>For send requests that have multiple recipients (accounts, audiences, lists, etc.), Courier assigns a unique id to each derived message as its <code>message_id</code>. Therefore the <code>requestId</code> cannot be supplied to the Message's API for single-recipient messages.</p>
+         */
+        _FinalStage requestId(@NotNull String requestId);
 
         Builder from(SendMessageResponse other);
     }
@@ -95,12 +101,15 @@ public final class SendMessageResponse {
          * <p>A successful call to <code>POST /send</code> returns a <code>202</code> status code along with a <code>requestId</code> in the response body.</p>
          * <p>For send requests that have a single recipient, the <code>requestId</code> is assigned to the derived message as its message_id. Therefore the <code>requestId</code> can be supplied to the Message's API for single recipient messages.</p>
          * <p>For send requests that have multiple recipients (accounts, audiences, lists, etc.), Courier assigns a unique id to each derived message as its <code>message_id</code>. Therefore the <code>requestId</code> cannot be supplied to the Message's API for single-recipient messages.</p>
+         * <p>A successful call to <code>POST /send</code> returns a <code>202</code> status code along with a <code>requestId</code> in the response body.</p>
+         * <p>For send requests that have a single recipient, the <code>requestId</code> is assigned to the derived message as its message_id. Therefore the <code>requestId</code> can be supplied to the Message's API for single recipient messages.</p>
+         * <p>For send requests that have multiple recipients (accounts, audiences, lists, etc.), Courier assigns a unique id to each derived message as its <code>message_id</code>. Therefore the <code>requestId</code> cannot be supplied to the Message's API for single-recipient messages.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("requestId")
-        public _FinalStage requestId(String requestId) {
-            this.requestId = requestId;
+        public _FinalStage requestId(@NotNull String requestId) {
+            this.requestId = Objects.requireNonNull(requestId, "requestId must not be null");
             return this;
         }
 

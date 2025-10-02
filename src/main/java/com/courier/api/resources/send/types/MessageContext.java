@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = MessageContext.Builder.class)
 public final class MessageContext {
     private final Optional<String> tenantId;
@@ -81,6 +81,10 @@ public final class MessageContext {
             return this;
         }
 
+        /**
+         * <p>An id of a tenant, see <a href="https://www.courier.com/docs/reference/tenants/">tenants api docs</a>.
+         * Will load brand, default preferences and any other base context data associated with this tenant.</p>
+         */
         @JsonSetter(value = "tenant_id", nulls = Nulls.SKIP)
         public Builder tenantId(Optional<String> tenantId) {
             this.tenantId = tenantId;
@@ -88,7 +92,7 @@ public final class MessageContext {
         }
 
         public Builder tenantId(String tenantId) {
-            this.tenantId = Optional.of(tenantId);
+            this.tenantId = Optional.ofNullable(tenantId);
             return this;
         }
 

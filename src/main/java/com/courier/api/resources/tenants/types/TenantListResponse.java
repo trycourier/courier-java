@@ -18,8 +18,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = TenantListResponse.Builder.class)
 public final class TenantListResponse {
     private final Optional<String> cursor;
@@ -132,28 +133,44 @@ public final class TenantListResponse {
     }
 
     public interface HasMoreStage {
+        /**
+         * <p>Set to true when there are more pages that can be retrieved.</p>
+         */
         UrlStage hasMore(boolean hasMore);
 
         Builder from(TenantListResponse other);
     }
 
     public interface UrlStage {
-        _FinalStage url(String url);
+        /**
+         * <p>A url that may be used to generate these results.</p>
+         */
+        _FinalStage url(@NotNull String url);
     }
 
     public interface _FinalStage {
         TenantListResponse build();
 
+        /**
+         * <p>A pointer to the next page of results. Defined only when has_more is set to true.</p>
+         */
         _FinalStage cursor(Optional<String> cursor);
 
         _FinalStage cursor(String cursor);
 
+        /**
+         * <p>An array of Tenants</p>
+         */
         _FinalStage items(List<Tenant> items);
 
         _FinalStage addItems(Tenant items);
 
         _FinalStage addAllItems(List<Tenant> items);
 
+        /**
+         * <p>A url that may be used to generate fetch the next set of results.
+         * Defined only when has_more is set to true</p>
+         */
         _FinalStage nextUrl(Optional<String> nextUrl);
 
         _FinalStage nextUrl(String nextUrl);
@@ -188,6 +205,7 @@ public final class TenantListResponse {
 
         /**
          * <p>Set to true when there are more pages that can be retrieved.</p>
+         * <p>Set to true when there are more pages that can be retrieved.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -199,12 +217,13 @@ public final class TenantListResponse {
 
         /**
          * <p>A url that may be used to generate these results.</p>
+         * <p>A url that may be used to generate these results.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("url")
-        public _FinalStage url(String url) {
-            this.url = url;
+        public _FinalStage url(@NotNull String url) {
+            this.url = Objects.requireNonNull(url, "url must not be null");
             return this;
         }
 
@@ -215,10 +234,14 @@ public final class TenantListResponse {
          */
         @java.lang.Override
         public _FinalStage nextUrl(String nextUrl) {
-            this.nextUrl = Optional.of(nextUrl);
+            this.nextUrl = Optional.ofNullable(nextUrl);
             return this;
         }
 
+        /**
+         * <p>A url that may be used to generate fetch the next set of results.
+         * Defined only when has_more is set to true</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "next_url", nulls = Nulls.SKIP)
         public _FinalStage nextUrl(Optional<String> nextUrl) {
@@ -232,7 +255,9 @@ public final class TenantListResponse {
          */
         @java.lang.Override
         public _FinalStage addAllItems(List<Tenant> items) {
-            this.items.addAll(items);
+            if (items != null) {
+                this.items.addAll(items);
+            }
             return this;
         }
 
@@ -246,11 +271,16 @@ public final class TenantListResponse {
             return this;
         }
 
+        /**
+         * <p>An array of Tenants</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "items", nulls = Nulls.SKIP)
         public _FinalStage items(List<Tenant> items) {
             this.items.clear();
-            this.items.addAll(items);
+            if (items != null) {
+                this.items.addAll(items);
+            }
             return this;
         }
 
@@ -260,10 +290,13 @@ public final class TenantListResponse {
          */
         @java.lang.Override
         public _FinalStage cursor(String cursor) {
-            this.cursor = Optional.of(cursor);
+            this.cursor = Optional.ofNullable(cursor);
             return this;
         }
 
+        /**
+         * <p>A pointer to the next page of results. Defined only when has_more is set to true.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "cursor", nulls = Nulls.SKIP)
         public _FinalStage cursor(Optional<String> cursor) {

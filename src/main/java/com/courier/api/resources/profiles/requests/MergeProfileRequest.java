@@ -17,7 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = MergeProfileRequest.Builder.class)
 public final class MergeProfileRequest {
     private final Map<String, Object> profile;
@@ -80,12 +80,16 @@ public final class MergeProfileRequest {
         @JsonSetter(value = "profile", nulls = Nulls.SKIP)
         public Builder profile(Map<String, Object> profile) {
             this.profile.clear();
-            this.profile.putAll(profile);
+            if (profile != null) {
+                this.profile.putAll(profile);
+            }
             return this;
         }
 
         public Builder putAllProfile(Map<String, Object> profile) {
-            this.profile.putAll(profile);
+            if (profile != null) {
+                this.profile.putAll(profile);
+            }
             return this;
         }
 

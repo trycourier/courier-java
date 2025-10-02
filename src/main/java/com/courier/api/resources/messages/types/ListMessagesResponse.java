@@ -18,8 +18,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListMessagesResponse.Builder.class)
 public final class ListMessagesResponse {
     private final Paging paging;
@@ -81,7 +82,10 @@ public final class ListMessagesResponse {
     }
 
     public interface PagingStage {
-        _FinalStage paging(Paging paging);
+        /**
+         * <p>Paging information for the result set.</p>
+         */
+        _FinalStage paging(@NotNull Paging paging);
 
         Builder from(ListMessagesResponse other);
     }
@@ -89,6 +93,9 @@ public final class ListMessagesResponse {
     public interface _FinalStage {
         ListMessagesResponse build();
 
+        /**
+         * <p>An array of messages with their details.</p>
+         */
         _FinalStage results(List<MessageDetails> results);
 
         _FinalStage addResults(MessageDetails results);
@@ -116,12 +123,13 @@ public final class ListMessagesResponse {
 
         /**
          * <p>Paging information for the result set.</p>
+         * <p>Paging information for the result set.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("paging")
-        public _FinalStage paging(Paging paging) {
-            this.paging = paging;
+        public _FinalStage paging(@NotNull Paging paging) {
+            this.paging = Objects.requireNonNull(paging, "paging must not be null");
             return this;
         }
 
@@ -131,7 +139,9 @@ public final class ListMessagesResponse {
          */
         @java.lang.Override
         public _FinalStage addAllResults(List<MessageDetails> results) {
-            this.results.addAll(results);
+            if (results != null) {
+                this.results.addAll(results);
+            }
             return this;
         }
 
@@ -145,11 +155,16 @@ public final class ListMessagesResponse {
             return this;
         }
 
+        /**
+         * <p>An array of messages with their details.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "results", nulls = Nulls.SKIP)
         public _FinalStage results(List<MessageDetails> results) {
             this.results.clear();
-            this.results.addAll(results);
+            if (results != null) {
+                this.results.addAll(results);
+            }
             return this;
         }
 

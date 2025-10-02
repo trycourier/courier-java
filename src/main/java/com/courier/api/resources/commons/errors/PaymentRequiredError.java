@@ -3,17 +3,23 @@
  */
 package com.courier.api.resources.commons.errors;
 
-import com.courier.api.core.CourierApiApiError;
+import com.courier.api.core.CourierApiException;
 import com.courier.api.resources.commons.types.PaymentRequired;
+import okhttp3.Response;
 
-public final class CourierApiPaymentRequiredError extends CourierApiApiError {
+public final class PaymentRequiredError extends CourierApiException {
     /**
      * The body of the response that triggered the exception.
      */
     private final PaymentRequired body;
 
-    public CourierApiPaymentRequiredError(PaymentRequired body) {
+    public PaymentRequiredError(PaymentRequired body) {
         super("PaymentRequiredError", 402, body);
+        this.body = body;
+    }
+
+    public PaymentRequiredError(PaymentRequired body, Response rawResponse) {
+        super("PaymentRequiredError", 402, body, rawResponse);
         this.body = body;
     }
 

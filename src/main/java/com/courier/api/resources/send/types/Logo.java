@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Logo.Builder.class)
 public final class Logo {
     private final Optional<String> href;
@@ -95,7 +95,7 @@ public final class Logo {
         }
 
         public Builder href(String href) {
-            this.href = Optional.of(href);
+            this.href = Optional.ofNullable(href);
             return this;
         }
 
@@ -106,7 +106,7 @@ public final class Logo {
         }
 
         public Builder image(String image) {
-            this.image = Optional.of(image);
+            this.image = Optional.ofNullable(image);
             return this;
         }
 

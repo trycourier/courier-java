@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BaseMessageSendTo.Builder.class)
 public final class BaseMessageSendTo implements IBaseMessageSendTo {
     private final Optional<MessageRecipient> to;
@@ -81,6 +81,9 @@ public final class BaseMessageSendTo implements IBaseMessageSendTo {
             return this;
         }
 
+        /**
+         * <p>The recipient or a list of recipients of the message</p>
+         */
         @JsonSetter(value = "to", nulls = Nulls.SKIP)
         public Builder to(Optional<MessageRecipient> to) {
             this.to = to;
@@ -88,7 +91,7 @@ public final class BaseMessageSendTo implements IBaseMessageSendTo {
         }
 
         public Builder to(MessageRecipient to) {
-            this.to = Optional.of(to);
+            this.to = Optional.ofNullable(to);
             return this;
         }
 

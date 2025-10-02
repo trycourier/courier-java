@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PatchUserTokenOpts.Builder.class)
 public final class PatchUserTokenOpts {
     private final List<PatchOperation> patch;
@@ -81,7 +81,9 @@ public final class PatchUserTokenOpts {
         @JsonSetter(value = "patch", nulls = Nulls.SKIP)
         public Builder patch(List<PatchOperation> patch) {
             this.patch.clear();
-            this.patch.addAll(patch);
+            if (patch != null) {
+                this.patch.addAll(patch);
+            }
             return this;
         }
 
@@ -91,7 +93,9 @@ public final class PatchUserTokenOpts {
         }
 
         public Builder addAllPatch(List<PatchOperation> patch) {
-            this.patch.addAll(patch);
+            if (patch != null) {
+                this.patch.addAll(patch);
+            }
             return this;
         }
 

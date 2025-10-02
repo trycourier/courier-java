@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = InboundBulkMessageV1.Builder.class)
 public final class InboundBulkMessageV1 implements IInboundBulkMessageV1 {
     private final Optional<String> brand;
@@ -149,6 +149,10 @@ public final class InboundBulkMessageV1 implements IInboundBulkMessageV1 {
             return this;
         }
 
+        /**
+         * <p>A unique identifier that represents the brand that should be used
+         * for rendering the notification.</p>
+         */
         @JsonSetter(value = "brand", nulls = Nulls.SKIP)
         public Builder brand(Optional<String> brand) {
             this.brand = brand;
@@ -156,10 +160,14 @@ public final class InboundBulkMessageV1 implements IInboundBulkMessageV1 {
         }
 
         public Builder brand(String brand) {
-            this.brand = Optional.of(brand);
+            this.brand = Optional.ofNullable(brand);
             return this;
         }
 
+        /**
+         * <p>JSON that includes any data you want to pass to a message template.
+         * The data will populate the corresponding template variables.</p>
+         */
         @JsonSetter(value = "data", nulls = Nulls.SKIP)
         public Builder data(Optional<Map<String, Object>> data) {
             this.data = data;
@@ -167,7 +175,7 @@ public final class InboundBulkMessageV1 implements IInboundBulkMessageV1 {
         }
 
         public Builder data(Map<String, Object> data) {
-            this.data = Optional.of(data);
+            this.data = Optional.ofNullable(data);
             return this;
         }
 
@@ -178,7 +186,7 @@ public final class InboundBulkMessageV1 implements IInboundBulkMessageV1 {
         }
 
         public Builder event(String event) {
-            this.event = Optional.of(event);
+            this.event = Optional.ofNullable(event);
             return this;
         }
 
@@ -189,10 +197,15 @@ public final class InboundBulkMessageV1 implements IInboundBulkMessageV1 {
         }
 
         public Builder locale(Map<String, Object> locale) {
-            this.locale = Optional.of(locale);
+            this.locale = Optional.ofNullable(locale);
             return this;
         }
 
+        /**
+         * <p>JSON that is merged into the request sent by Courier to the provider
+         * to override properties or to gain access to features in the provider
+         * API that are not natively supported by Courier.</p>
+         */
         @JsonSetter(value = "override", nulls = Nulls.SKIP)
         public Builder override(Optional<Object> override) {
             this.override = override;
@@ -200,7 +213,7 @@ public final class InboundBulkMessageV1 implements IInboundBulkMessageV1 {
         }
 
         public Builder override(Object override) {
-            this.override = Optional.of(override);
+            this.override = Optional.ofNullable(override);
             return this;
         }
 

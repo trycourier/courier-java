@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BaseMessage.Builder.class)
 public final class BaseMessage implements IBaseMessage {
     private final Optional<Map<String, Object>> data;
@@ -257,6 +257,10 @@ public final class BaseMessage implements IBaseMessage {
             return this;
         }
 
+        /**
+         * <p>An arbitrary object that includes any data you want to pass to the message.
+         * The data will populate the corresponding template or elements variables.</p>
+         */
         @JsonSetter(value = "data", nulls = Nulls.SKIP)
         public Builder data(Optional<Map<String, Object>> data) {
             this.data = data;
@@ -264,7 +268,7 @@ public final class BaseMessage implements IBaseMessage {
         }
 
         public Builder data(Map<String, Object> data) {
-            this.data = Optional.of(data);
+            this.data = Optional.ofNullable(data);
             return this;
         }
 
@@ -275,10 +279,13 @@ public final class BaseMessage implements IBaseMessage {
         }
 
         public Builder brandId(String brandId) {
-            this.brandId = Optional.of(brandId);
+            this.brandId = Optional.ofNullable(brandId);
             return this;
         }
 
+        /**
+         * <p>&quot;Define run-time configuration for one or more channels. If you don't specify channels, the default configuration for each channel will be used. Valid ChannelId's are: email, sms, push, inbox, direct_message, banner, and webhook.&quot;</p>
+         */
         @JsonSetter(value = "channels", nulls = Nulls.SKIP)
         public Builder channels(Optional<Map<String, Channel>> channels) {
             this.channels = channels;
@@ -286,10 +293,13 @@ public final class BaseMessage implements IBaseMessage {
         }
 
         public Builder channels(Map<String, Channel> channels) {
-            this.channels = Optional.of(channels);
+            this.channels = Optional.ofNullable(channels);
             return this;
         }
 
+        /**
+         * <p>Context to load with this recipient. Will override any context set on message.context.</p>
+         */
         @JsonSetter(value = "context", nulls = Nulls.SKIP)
         public Builder context(Optional<MessageContext> context) {
             this.context = context;
@@ -297,10 +307,13 @@ public final class BaseMessage implements IBaseMessage {
         }
 
         public Builder context(MessageContext context) {
-            this.context = Optional.of(context);
+            this.context = Optional.ofNullable(context);
             return this;
         }
 
+        /**
+         * <p>Metadata such as utm tracking attached with the notification through this channel.</p>
+         */
         @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
         public Builder metadata(Optional<MessageMetadata> metadata) {
             this.metadata = metadata;
@@ -308,7 +321,7 @@ public final class BaseMessage implements IBaseMessage {
         }
 
         public Builder metadata(MessageMetadata metadata) {
-            this.metadata = Optional.of(metadata);
+            this.metadata = Optional.ofNullable(metadata);
             return this;
         }
 
@@ -319,10 +332,13 @@ public final class BaseMessage implements IBaseMessage {
         }
 
         public Builder preferences(MessagePreferences preferences) {
-            this.preferences = Optional.of(preferences);
+            this.preferences = Optional.ofNullable(preferences);
             return this;
         }
 
+        /**
+         * <p>An object whose keys are valid provider identifiers which map to an object.</p>
+         */
         @JsonSetter(value = "providers", nulls = Nulls.SKIP)
         public Builder providers(Optional<Map<String, MessageProvidersType>> providers) {
             this.providers = providers;
@@ -330,7 +346,7 @@ public final class BaseMessage implements IBaseMessage {
         }
 
         public Builder providers(Map<String, MessageProvidersType> providers) {
-            this.providers = Optional.of(providers);
+            this.providers = Optional.ofNullable(providers);
             return this;
         }
 
@@ -341,10 +357,13 @@ public final class BaseMessage implements IBaseMessage {
         }
 
         public Builder routing(Routing routing) {
-            this.routing = Optional.of(routing);
+            this.routing = Optional.ofNullable(routing);
             return this;
         }
 
+        /**
+         * <p>Time in ms to attempt the channel before failing over to the next available channel.</p>
+         */
         @JsonSetter(value = "timeout", nulls = Nulls.SKIP)
         public Builder timeout(Optional<Timeout> timeout) {
             this.timeout = timeout;
@@ -352,10 +371,13 @@ public final class BaseMessage implements IBaseMessage {
         }
 
         public Builder timeout(Timeout timeout) {
-            this.timeout = Optional.of(timeout);
+            this.timeout = Optional.ofNullable(timeout);
             return this;
         }
 
+        /**
+         * <p>Defines the time to wait before delivering the message. You can specify one of the following options. Duration with the number of milliseconds to delay. Until with an ISO 8601 timestamp that specifies when it should be delivered. Until with an OpenStreetMap opening_hours-like format that specifies the <a href="https://www.courier.com/docs/platform/sending/failover/#delivery-window">Delivery Window</a> (e.g., 'Mo-Fr 08:00-18:00pm')</p>
+         */
         @JsonSetter(value = "delay", nulls = Nulls.SKIP)
         public Builder delay(Optional<Delay> delay) {
             this.delay = delay;
@@ -363,10 +385,14 @@ public final class BaseMessage implements IBaseMessage {
         }
 
         public Builder delay(Delay delay) {
-            this.delay = Optional.of(delay);
+            this.delay = Optional.ofNullable(delay);
             return this;
         }
 
+        /**
+         * <p>&quot;Expiry allows you to set an absolute or relative time in which a message expires.
+         * Note: This is only valid for the Courier Inbox channel as of 12-08-2022.&quot;</p>
+         */
         @JsonSetter(value = "expiry", nulls = Nulls.SKIP)
         public Builder expiry(Optional<Expiry> expiry) {
             this.expiry = expiry;
@@ -374,7 +400,7 @@ public final class BaseMessage implements IBaseMessage {
         }
 
         public Builder expiry(Expiry expiry) {
-            this.expiry = Optional.of(expiry);
+            this.expiry = Optional.ofNullable(expiry);
             return this;
         }
 

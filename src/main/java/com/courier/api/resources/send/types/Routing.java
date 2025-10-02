@@ -18,8 +18,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Routing.Builder.class)
 public final class Routing {
     private final RoutingMethod method;
@@ -80,7 +81,7 @@ public final class Routing {
     }
 
     public interface MethodStage {
-        _FinalStage method(RoutingMethod method);
+        _FinalStage method(@NotNull RoutingMethod method);
 
         Builder from(Routing other);
     }
@@ -88,6 +89,11 @@ public final class Routing {
     public interface _FinalStage {
         Routing build();
 
+        /**
+         * <p>A list of channels or providers to send the message through. Can also recursively define
+         * sub-routing methods, which can be useful for defining advanced push notification
+         * delivery strategies.</p>
+         */
         _FinalStage channels(List<MessageRoutingChannel> channels);
 
         _FinalStage addChannels(MessageRoutingChannel channels);
@@ -115,8 +121,8 @@ public final class Routing {
 
         @java.lang.Override
         @JsonSetter("method")
-        public _FinalStage method(RoutingMethod method) {
-            this.method = method;
+        public _FinalStage method(@NotNull RoutingMethod method) {
+            this.method = Objects.requireNonNull(method, "method must not be null");
             return this;
         }
 
@@ -128,7 +134,9 @@ public final class Routing {
          */
         @java.lang.Override
         public _FinalStage addAllChannels(List<MessageRoutingChannel> channels) {
-            this.channels.addAll(channels);
+            if (channels != null) {
+                this.channels.addAll(channels);
+            }
             return this;
         }
 
@@ -144,11 +152,18 @@ public final class Routing {
             return this;
         }
 
+        /**
+         * <p>A list of channels or providers to send the message through. Can also recursively define
+         * sub-routing methods, which can be useful for defining advanced push notification
+         * delivery strategies.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "channels", nulls = Nulls.SKIP)
         public _FinalStage channels(List<MessageRoutingChannel> channels) {
             this.channels.clear();
-            this.channels.addAll(channels);
+            if (channels != null) {
+                this.channels.addAll(channels);
+            }
             return this;
         }
 

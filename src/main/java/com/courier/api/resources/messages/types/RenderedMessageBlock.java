@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = RenderedMessageBlock.Builder.class)
 public final class RenderedMessageBlock {
     private final String type;
@@ -76,13 +77,19 @@ public final class RenderedMessageBlock {
     }
 
     public interface TypeStage {
-        TextStage type(String type);
+        /**
+         * <p>The block type of the rendered message block.</p>
+         */
+        TextStage type(@NotNull String type);
 
         Builder from(RenderedMessageBlock other);
     }
 
     public interface TextStage {
-        _FinalStage text(String text);
+        /**
+         * <p>The block text of the rendered message block.</p>
+         */
+        _FinalStage text(@NotNull String text);
     }
 
     public interface _FinalStage {
@@ -109,23 +116,25 @@ public final class RenderedMessageBlock {
 
         /**
          * <p>The block type of the rendered message block.</p>
+         * <p>The block type of the rendered message block.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("type")
-        public TextStage type(String type) {
-            this.type = type;
+        public TextStage type(@NotNull String type) {
+            this.type = Objects.requireNonNull(type, "type must not be null");
             return this;
         }
 
         /**
          * <p>The block text of the rendered message block.</p>
+         * <p>The block text of the rendered message block.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("text")
-        public _FinalStage text(String text) {
-            this.text = text;
+        public _FinalStage text(@NotNull String text) {
+            this.text = Objects.requireNonNull(text, "text must not be null");
             return this;
         }
 

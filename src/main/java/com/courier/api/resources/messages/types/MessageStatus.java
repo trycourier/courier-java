@@ -3,48 +3,211 @@
  */
 package com.courier.api.resources.messages.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum MessageStatus {
-    CANCELED("CANCELED"),
+public final class MessageStatus {
+    public static final MessageStatus THROTTLED = new MessageStatus(Value.THROTTLED, "THROTTLED");
 
-    CLICKED("CLICKED"),
+    public static final MessageStatus UNROUTABLE = new MessageStatus(Value.UNROUTABLE, "UNROUTABLE");
 
-    DELAYED("DELAYED"),
+    public static final MessageStatus DELIVERED = new MessageStatus(Value.DELIVERED, "DELIVERED");
 
-    DELIVERED("DELIVERED"),
+    public static final MessageStatus ENQUEUED = new MessageStatus(Value.ENQUEUED, "ENQUEUED");
 
-    DIGESTED("DIGESTED"),
+    public static final MessageStatus CLICKED = new MessageStatus(Value.CLICKED, "CLICKED");
 
-    ENQUEUED("ENQUEUED"),
+    public static final MessageStatus CANCELED = new MessageStatus(Value.CANCELED, "CANCELED");
 
-    FILTERED("FILTERED"),
+    public static final MessageStatus UNDELIVERABLE = new MessageStatus(Value.UNDELIVERABLE, "UNDELIVERABLE");
 
-    OPENED("OPENED"),
+    public static final MessageStatus SENT = new MessageStatus(Value.SENT, "SENT");
 
-    ROUTED("ROUTED"),
+    public static final MessageStatus DELAYED = new MessageStatus(Value.DELAYED, "DELAYED");
 
-    SENT("SENT"),
+    public static final MessageStatus UNMAPPED = new MessageStatus(Value.UNMAPPED, "UNMAPPED");
 
-    SIMULATED("SIMULATED"),
+    public static final MessageStatus ROUTED = new MessageStatus(Value.ROUTED, "ROUTED");
 
-    THROTTLED("THROTTLED"),
+    public static final MessageStatus OPENED = new MessageStatus(Value.OPENED, "OPENED");
 
-    UNDELIVERABLE("UNDELIVERABLE"),
+    public static final MessageStatus SIMULATED = new MessageStatus(Value.SIMULATED, "SIMULATED");
 
-    UNMAPPED("UNMAPPED"),
+    public static final MessageStatus DIGESTED = new MessageStatus(Value.DIGESTED, "DIGESTED");
 
-    UNROUTABLE("UNROUTABLE");
+    public static final MessageStatus FILTERED = new MessageStatus(Value.FILTERED, "FILTERED");
 
-    private final String value;
+    private final Value value;
 
-    MessageStatus(String value) {
+    private final String string;
+
+    MessageStatus(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof MessageStatus && this.string.equals(((MessageStatus) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case THROTTLED:
+                return visitor.visitThrottled();
+            case UNROUTABLE:
+                return visitor.visitUnroutable();
+            case DELIVERED:
+                return visitor.visitDelivered();
+            case ENQUEUED:
+                return visitor.visitEnqueued();
+            case CLICKED:
+                return visitor.visitClicked();
+            case CANCELED:
+                return visitor.visitCanceled();
+            case UNDELIVERABLE:
+                return visitor.visitUndeliverable();
+            case SENT:
+                return visitor.visitSent();
+            case DELAYED:
+                return visitor.visitDelayed();
+            case UNMAPPED:
+                return visitor.visitUnmapped();
+            case ROUTED:
+                return visitor.visitRouted();
+            case OPENED:
+                return visitor.visitOpened();
+            case SIMULATED:
+                return visitor.visitSimulated();
+            case DIGESTED:
+                return visitor.visitDigested();
+            case FILTERED:
+                return visitor.visitFiltered();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static MessageStatus valueOf(String value) {
+        switch (value) {
+            case "THROTTLED":
+                return THROTTLED;
+            case "UNROUTABLE":
+                return UNROUTABLE;
+            case "DELIVERED":
+                return DELIVERED;
+            case "ENQUEUED":
+                return ENQUEUED;
+            case "CLICKED":
+                return CLICKED;
+            case "CANCELED":
+                return CANCELED;
+            case "UNDELIVERABLE":
+                return UNDELIVERABLE;
+            case "SENT":
+                return SENT;
+            case "DELAYED":
+                return DELAYED;
+            case "UNMAPPED":
+                return UNMAPPED;
+            case "ROUTED":
+                return ROUTED;
+            case "OPENED":
+                return OPENED;
+            case "SIMULATED":
+                return SIMULATED;
+            case "DIGESTED":
+                return DIGESTED;
+            case "FILTERED":
+                return FILTERED;
+            default:
+                return new MessageStatus(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        CANCELED,
+
+        CLICKED,
+
+        DELAYED,
+
+        DELIVERED,
+
+        DIGESTED,
+
+        ENQUEUED,
+
+        FILTERED,
+
+        OPENED,
+
+        ROUTED,
+
+        SENT,
+
+        SIMULATED,
+
+        THROTTLED,
+
+        UNDELIVERABLE,
+
+        UNMAPPED,
+
+        UNROUTABLE,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitCanceled();
+
+        T visitClicked();
+
+        T visitDelayed();
+
+        T visitDelivered();
+
+        T visitDigested();
+
+        T visitEnqueued();
+
+        T visitFiltered();
+
+        T visitOpened();
+
+        T visitRouted();
+
+        T visitSent();
+
+        T visitSimulated();
+
+        T visitThrottled();
+
+        T visitUndeliverable();
+
+        T visitUnmapped();
+
+        T visitUnroutable();
+
+        T visitUnknown(String unknownType);
     }
 }

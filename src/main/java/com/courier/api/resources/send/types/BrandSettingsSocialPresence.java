@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BrandSettingsSocialPresence.Builder.class)
 public final class BrandSettingsSocialPresence {
     private final Optional<Boolean> inheritDefault;
@@ -152,7 +152,7 @@ public final class BrandSettingsSocialPresence {
         }
 
         public Builder inheritDefault(Boolean inheritDefault) {
-            this.inheritDefault = Optional.of(inheritDefault);
+            this.inheritDefault = Optional.ofNullable(inheritDefault);
             return this;
         }
 
@@ -163,7 +163,7 @@ public final class BrandSettingsSocialPresence {
         }
 
         public Builder facebook(BaseSocialPresence facebook) {
-            this.facebook = Optional.of(facebook);
+            this.facebook = Optional.ofNullable(facebook);
             return this;
         }
 
@@ -174,7 +174,7 @@ public final class BrandSettingsSocialPresence {
         }
 
         public Builder instagram(BaseSocialPresence instagram) {
-            this.instagram = Optional.of(instagram);
+            this.instagram = Optional.ofNullable(instagram);
             return this;
         }
 
@@ -185,7 +185,7 @@ public final class BrandSettingsSocialPresence {
         }
 
         public Builder linkedin(BaseSocialPresence linkedin) {
-            this.linkedin = Optional.of(linkedin);
+            this.linkedin = Optional.ofNullable(linkedin);
             return this;
         }
 
@@ -196,7 +196,7 @@ public final class BrandSettingsSocialPresence {
         }
 
         public Builder medium(BaseSocialPresence medium) {
-            this.medium = Optional.of(medium);
+            this.medium = Optional.ofNullable(medium);
             return this;
         }
 
@@ -207,7 +207,7 @@ public final class BrandSettingsSocialPresence {
         }
 
         public Builder twitter(BaseSocialPresence twitter) {
-            this.twitter = Optional.of(twitter);
+            this.twitter = Optional.ofNullable(twitter);
             return this;
         }
 

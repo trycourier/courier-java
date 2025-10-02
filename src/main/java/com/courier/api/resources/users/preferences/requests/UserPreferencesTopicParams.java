@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UserPreferencesTopicParams.Builder.class)
 public final class UserPreferencesTopicParams {
     private final Optional<String> tenantId;
@@ -80,6 +80,9 @@ public final class UserPreferencesTopicParams {
             return this;
         }
 
+        /**
+         * <p>Query the preferences of a user for this specific tenant context.</p>
+         */
         @JsonSetter(value = "tenant_id", nulls = Nulls.SKIP)
         public Builder tenantId(Optional<String> tenantId) {
             this.tenantId = tenantId;
@@ -87,7 +90,7 @@ public final class UserPreferencesTopicParams {
         }
 
         public Builder tenantId(String tenantId) {
-            this.tenantId = Optional.of(tenantId);
+            this.tenantId = Optional.ofNullable(tenantId);
             return this;
         }
 

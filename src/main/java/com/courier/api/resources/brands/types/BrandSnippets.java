@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BrandSnippets.Builder.class)
 public final class BrandSnippets {
     private final List<BrandSnippet> items;
@@ -81,7 +81,9 @@ public final class BrandSnippets {
         @JsonSetter(value = "items", nulls = Nulls.SKIP)
         public Builder items(List<BrandSnippet> items) {
             this.items.clear();
-            this.items.addAll(items);
+            if (items != null) {
+                this.items.addAll(items);
+            }
             return this;
         }
 
@@ -91,7 +93,9 @@ public final class BrandSnippets {
         }
 
         public Builder addAllItems(List<BrandSnippet> items) {
-            this.items.addAll(items);
+            if (items != null) {
+                this.items.addAll(items);
+            }
             return this;
         }
 

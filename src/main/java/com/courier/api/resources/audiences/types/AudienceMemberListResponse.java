@@ -18,8 +18,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AudienceMemberListResponse.Builder.class)
 public final class AudienceMemberListResponse {
     private final List<AudienceMember> items;
@@ -75,7 +76,7 @@ public final class AudienceMemberListResponse {
     }
 
     public interface PagingStage {
-        _FinalStage paging(Paging paging);
+        _FinalStage paging(@NotNull Paging paging);
 
         Builder from(AudienceMemberListResponse other);
     }
@@ -110,14 +111,16 @@ public final class AudienceMemberListResponse {
 
         @java.lang.Override
         @JsonSetter("paging")
-        public _FinalStage paging(Paging paging) {
-            this.paging = paging;
+        public _FinalStage paging(@NotNull Paging paging) {
+            this.paging = Objects.requireNonNull(paging, "paging must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage addAllItems(List<AudienceMember> items) {
-            this.items.addAll(items);
+            if (items != null) {
+                this.items.addAll(items);
+            }
             return this;
         }
 
@@ -131,7 +134,9 @@ public final class AudienceMemberListResponse {
         @JsonSetter(value = "items", nulls = Nulls.SKIP)
         public _FinalStage items(List<AudienceMember> items) {
             this.items.clear();
-            this.items.addAll(items);
+            if (items != null) {
+                this.items.addAll(items);
+            }
             return this;
         }
 

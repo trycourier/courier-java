@@ -3,24 +3,91 @@
  */
 package com.courier.api.resources.bulk.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum BulkJobUserStatus {
-    PENDING("PENDING"),
+public final class BulkJobUserStatus {
+    public static final BulkJobUserStatus ENQUEUED = new BulkJobUserStatus(Value.ENQUEUED, "ENQUEUED");
 
-    ENQUEUED("ENQUEUED"),
+    public static final BulkJobUserStatus PENDING = new BulkJobUserStatus(Value.PENDING, "PENDING");
 
-    ERROR("ERROR");
+    public static final BulkJobUserStatus ERROR = new BulkJobUserStatus(Value.ERROR, "ERROR");
 
-    private final String value;
+    private final Value value;
 
-    BulkJobUserStatus(String value) {
+    private final String string;
+
+    BulkJobUserStatus(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof BulkJobUserStatus && this.string.equals(((BulkJobUserStatus) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case ENQUEUED:
+                return visitor.visitEnqueued();
+            case PENDING:
+                return visitor.visitPending();
+            case ERROR:
+                return visitor.visitError();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static BulkJobUserStatus valueOf(String value) {
+        switch (value) {
+            case "ENQUEUED":
+                return ENQUEUED;
+            case "PENDING":
+                return PENDING;
+            case "ERROR":
+                return ERROR;
+            default:
+                return new BulkJobUserStatus(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        PENDING,
+
+        ENQUEUED,
+
+        ERROR,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitPending();
+
+        T visitEnqueued();
+
+        T visitError();
+
+        T visitUnknown(String unknownType);
     }
 }

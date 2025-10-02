@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BrandSettingsEmail.Builder.class)
 public final class BrandSettingsEmail {
     private final Optional<BrandTemplateOverride> templateOverride;
@@ -125,7 +125,7 @@ public final class BrandSettingsEmail {
         }
 
         public Builder templateOverride(BrandTemplateOverride templateOverride) {
-            this.templateOverride = Optional.of(templateOverride);
+            this.templateOverride = Optional.ofNullable(templateOverride);
             return this;
         }
 
@@ -136,7 +136,7 @@ public final class BrandSettingsEmail {
         }
 
         public Builder head(EmailHead head) {
-            this.head = Optional.of(head);
+            this.head = Optional.ofNullable(head);
             return this;
         }
 
@@ -147,7 +147,7 @@ public final class BrandSettingsEmail {
         }
 
         public Builder footer(EmailFooter footer) {
-            this.footer = Optional.of(footer);
+            this.footer = Optional.ofNullable(footer);
             return this;
         }
 
@@ -158,7 +158,7 @@ public final class BrandSettingsEmail {
         }
 
         public Builder header(EmailHeader header) {
-            this.header = Optional.of(header);
+            this.header = Optional.ofNullable(header);
             return this;
         }
 

@@ -3,17 +3,23 @@
  */
 package com.courier.api.resources.commons.errors;
 
-import com.courier.api.core.CourierApiApiError;
+import com.courier.api.core.CourierApiException;
 import com.courier.api.resources.commons.types.Conflict;
+import okhttp3.Response;
 
-public final class CourierApiConflictError extends CourierApiApiError {
+public final class ConflictError extends CourierApiException {
     /**
      * The body of the response that triggered the exception.
      */
     private final Conflict body;
 
-    public CourierApiConflictError(Conflict body) {
+    public ConflictError(Conflict body) {
         super("ConflictError", 409, body);
+        this.body = body;
+    }
+
+    public ConflictError(Conflict body, Response rawResponse) {
+        super("ConflictError", 409, body, rawResponse);
         this.body = body;
     }
 

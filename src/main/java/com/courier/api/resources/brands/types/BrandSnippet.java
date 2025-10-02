@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BrandSnippet.Builder.class)
 public final class BrandSnippet {
     private final String name;
@@ -75,13 +76,13 @@ public final class BrandSnippet {
     }
 
     public interface NameStage {
-        ValueStage name(String name);
+        ValueStage name(@NotNull String name);
 
         Builder from(BrandSnippet other);
     }
 
     public interface ValueStage {
-        _FinalStage value(String value);
+        _FinalStage value(@NotNull String value);
     }
 
     public interface _FinalStage {
@@ -108,15 +109,15 @@ public final class BrandSnippet {
 
         @java.lang.Override
         @JsonSetter("name")
-        public ValueStage name(String name) {
-            this.name = name;
+        public ValueStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("value")
-        public _FinalStage value(String value) {
-            this.value = value;
+        public _FinalStage value(@NotNull String value) {
+            this.value = Objects.requireNonNull(value, "value must not be null");
             return this;
         }
 

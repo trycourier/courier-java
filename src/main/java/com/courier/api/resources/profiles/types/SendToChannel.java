@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SendToChannel.Builder.class)
 public final class SendToChannel {
     private final String channelId;
@@ -62,7 +63,7 @@ public final class SendToChannel {
     }
 
     public interface ChannelIdStage {
-        _FinalStage channelId(String channelId);
+        _FinalStage channelId(@NotNull String channelId);
 
         Builder from(SendToChannel other);
     }
@@ -88,8 +89,8 @@ public final class SendToChannel {
 
         @java.lang.Override
         @JsonSetter("channel_id")
-        public _FinalStage channelId(String channelId) {
-            this.channelId = channelId;
+        public _FinalStage channelId(@NotNull String channelId) {
+            this.channelId = Objects.requireNonNull(channelId, "channelId must not be null");
             return this;
         }
 

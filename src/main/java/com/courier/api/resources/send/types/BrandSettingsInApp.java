@@ -17,8 +17,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BrandSettingsInApp.Builder.class)
 public final class BrandSettingsInApp {
     private final Optional<String> borderRadius;
@@ -145,21 +146,21 @@ public final class BrandSettingsInApp {
     }
 
     public interface WidgetBackgroundStage {
-        ColorsStage widgetBackground(WidgetBackground widgetBackground);
+        ColorsStage widgetBackground(@NotNull WidgetBackground widgetBackground);
 
         Builder from(BrandSettingsInApp other);
     }
 
     public interface ColorsStage {
-        IconsStage colors(BrandColors colors);
+        IconsStage colors(@NotNull BrandColors colors);
     }
 
     public interface IconsStage {
-        PreferencesStage icons(Icons icons);
+        PreferencesStage icons(@NotNull Icons icons);
     }
 
     public interface PreferencesStage {
-        _FinalStage preferences(Preferences preferences);
+        _FinalStage preferences(@NotNull Preferences preferences);
     }
 
     public interface _FinalStage {
@@ -221,35 +222,35 @@ public final class BrandSettingsInApp {
 
         @java.lang.Override
         @JsonSetter("widgetBackground")
-        public ColorsStage widgetBackground(WidgetBackground widgetBackground) {
-            this.widgetBackground = widgetBackground;
+        public ColorsStage widgetBackground(@NotNull WidgetBackground widgetBackground) {
+            this.widgetBackground = Objects.requireNonNull(widgetBackground, "widgetBackground must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("colors")
-        public IconsStage colors(BrandColors colors) {
-            this.colors = colors;
+        public IconsStage colors(@NotNull BrandColors colors) {
+            this.colors = Objects.requireNonNull(colors, "colors must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("icons")
-        public PreferencesStage icons(Icons icons) {
-            this.icons = icons;
+        public PreferencesStage icons(@NotNull Icons icons) {
+            this.icons = Objects.requireNonNull(icons, "icons must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("preferences")
-        public _FinalStage preferences(Preferences preferences) {
-            this.preferences = preferences;
+        public _FinalStage preferences(@NotNull Preferences preferences) {
+            this.preferences = Objects.requireNonNull(preferences, "preferences must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage placement(InAppPlacement placement) {
-            this.placement = Optional.of(placement);
+            this.placement = Optional.ofNullable(placement);
             return this;
         }
 
@@ -262,7 +263,7 @@ public final class BrandSettingsInApp {
 
         @java.lang.Override
         public _FinalStage fontFamily(String fontFamily) {
-            this.fontFamily = Optional.of(fontFamily);
+            this.fontFamily = Optional.ofNullable(fontFamily);
             return this;
         }
 
@@ -275,7 +276,7 @@ public final class BrandSettingsInApp {
 
         @java.lang.Override
         public _FinalStage disableMessageIcon(Boolean disableMessageIcon) {
-            this.disableMessageIcon = Optional.of(disableMessageIcon);
+            this.disableMessageIcon = Optional.ofNullable(disableMessageIcon);
             return this;
         }
 
@@ -288,7 +289,7 @@ public final class BrandSettingsInApp {
 
         @java.lang.Override
         public _FinalStage borderRadius(String borderRadius) {
-            this.borderRadius = Optional.of(borderRadius);
+            this.borderRadius = Optional.ofNullable(borderRadius);
             return this;
         }
 

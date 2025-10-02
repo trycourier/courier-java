@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = IProfilePreferences.Builder.class)
 public final class IProfilePreferences {
     private final Optional<Map<String, Preference>> categories;
@@ -113,19 +113,23 @@ public final class IProfilePreferences {
         }
 
         public Builder categories(Map<String, Preference> categories) {
-            this.categories = Optional.of(categories);
+            this.categories = Optional.ofNullable(categories);
             return this;
         }
 
         @JsonSetter(value = "notifications", nulls = Nulls.SKIP)
         public Builder notifications(Map<String, Preference> notifications) {
             this.notifications.clear();
-            this.notifications.putAll(notifications);
+            if (notifications != null) {
+                this.notifications.putAll(notifications);
+            }
             return this;
         }
 
         public Builder putAllNotifications(Map<String, Preference> notifications) {
-            this.notifications.putAll(notifications);
+            if (notifications != null) {
+                this.notifications.putAll(notifications);
+            }
             return this;
         }
 
@@ -141,7 +145,7 @@ public final class IProfilePreferences {
         }
 
         public Builder templateId(String templateId) {
-            this.templateId = Optional.of(templateId);
+            this.templateId = Optional.ofNullable(templateId);
             return this;
         }
 

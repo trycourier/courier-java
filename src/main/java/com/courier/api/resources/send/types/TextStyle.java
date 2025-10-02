@@ -3,26 +3,100 @@
  */
 package com.courier.api.resources.send.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum TextStyle {
-    TEXT("text"),
+public final class TextStyle {
+    public static final TextStyle SUBTEXT = new TextStyle(Value.SUBTEXT, "subtext");
 
-    H_1("h1"),
+    public static final TextStyle TEXT = new TextStyle(Value.TEXT, "text");
 
-    H_2("h2"),
+    public static final TextStyle H_1 = new TextStyle(Value.H_1, "h1");
 
-    SUBTEXT("subtext");
+    public static final TextStyle H_2 = new TextStyle(Value.H_2, "h2");
 
-    private final String value;
+    private final Value value;
 
-    TextStyle(String value) {
+    private final String string;
+
+    TextStyle(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other) || (other instanceof TextStyle && this.string.equals(((TextStyle) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case SUBTEXT:
+                return visitor.visitSubtext();
+            case TEXT:
+                return visitor.visitText();
+            case H_1:
+                return visitor.visitH1();
+            case H_2:
+                return visitor.visitH2();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static TextStyle valueOf(String value) {
+        switch (value) {
+            case "subtext":
+                return SUBTEXT;
+            case "text":
+                return TEXT;
+            case "h1":
+                return H_1;
+            case "h2":
+                return H_2;
+            default:
+                return new TextStyle(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        TEXT,
+
+        H_1,
+
+        H_2,
+
+        SUBTEXT,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitText();
+
+        T visitH1();
+
+        T visitH2();
+
+        T visitSubtext();
+
+        T visitUnknown(String unknownType);
     }
 }

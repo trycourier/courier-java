@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SubmissionChecksReplaceParams.Builder.class)
 public final class SubmissionChecksReplaceParams {
     private final List<BaseCheck> checks;
@@ -82,7 +82,9 @@ public final class SubmissionChecksReplaceParams {
         @JsonSetter(value = "checks", nulls = Nulls.SKIP)
         public Builder checks(List<BaseCheck> checks) {
             this.checks.clear();
-            this.checks.addAll(checks);
+            if (checks != null) {
+                this.checks.addAll(checks);
+            }
             return this;
         }
 
@@ -92,7 +94,9 @@ public final class SubmissionChecksReplaceParams {
         }
 
         public Builder addAllChecks(List<BaseCheck> checks) {
-            this.checks.addAll(checks);
+            if (checks != null) {
+                this.checks.addAll(checks);
+            }
             return this;
         }
 

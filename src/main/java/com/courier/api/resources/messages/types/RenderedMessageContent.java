@@ -17,8 +17,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = RenderedMessageContent.Builder.class)
 public final class RenderedMessageContent {
     private final String html;
@@ -135,30 +136,48 @@ public final class RenderedMessageContent {
     }
 
     public interface HtmlStage {
-        TitleStage html(String html);
+        /**
+         * <p>The html content of the rendered message.</p>
+         */
+        TitleStage html(@NotNull String html);
 
         Builder from(RenderedMessageContent other);
     }
 
     public interface TitleStage {
-        BodyStage title(String title);
+        /**
+         * <p>The title of the rendered message.</p>
+         */
+        BodyStage title(@NotNull String title);
     }
 
     public interface BodyStage {
-        SubjectStage body(String body);
+        /**
+         * <p>The body of the rendered message.</p>
+         */
+        SubjectStage body(@NotNull String body);
     }
 
     public interface SubjectStage {
-        TextStage subject(String subject);
+        /**
+         * <p>The subject of the rendered message.</p>
+         */
+        TextStage subject(@NotNull String subject);
     }
 
     public interface TextStage {
-        _FinalStage text(String text);
+        /**
+         * <p>The text of the rendered message.</p>
+         */
+        _FinalStage text(@NotNull String text);
     }
 
     public interface _FinalStage {
         RenderedMessageContent build();
 
+        /**
+         * <p>The blocks of the rendered message.</p>
+         */
         _FinalStage blocks(List<RenderedMessageBlock> blocks);
 
         _FinalStage addBlocks(RenderedMessageBlock blocks);
@@ -199,56 +218,61 @@ public final class RenderedMessageContent {
 
         /**
          * <p>The html content of the rendered message.</p>
+         * <p>The html content of the rendered message.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("html")
-        public TitleStage html(String html) {
-            this.html = html;
+        public TitleStage html(@NotNull String html) {
+            this.html = Objects.requireNonNull(html, "html must not be null");
             return this;
         }
 
         /**
          * <p>The title of the rendered message.</p>
+         * <p>The title of the rendered message.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("title")
-        public BodyStage title(String title) {
-            this.title = title;
+        public BodyStage title(@NotNull String title) {
+            this.title = Objects.requireNonNull(title, "title must not be null");
             return this;
         }
 
         /**
          * <p>The body of the rendered message.</p>
+         * <p>The body of the rendered message.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("body")
-        public SubjectStage body(String body) {
-            this.body = body;
+        public SubjectStage body(@NotNull String body) {
+            this.body = Objects.requireNonNull(body, "body must not be null");
             return this;
         }
 
         /**
          * <p>The subject of the rendered message.</p>
+         * <p>The subject of the rendered message.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("subject")
-        public TextStage subject(String subject) {
-            this.subject = subject;
+        public TextStage subject(@NotNull String subject) {
+            this.subject = Objects.requireNonNull(subject, "subject must not be null");
             return this;
         }
 
         /**
          * <p>The text of the rendered message.</p>
+         * <p>The text of the rendered message.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("text")
-        public _FinalStage text(String text) {
-            this.text = text;
+        public _FinalStage text(@NotNull String text) {
+            this.text = Objects.requireNonNull(text, "text must not be null");
             return this;
         }
 
@@ -258,7 +282,9 @@ public final class RenderedMessageContent {
          */
         @java.lang.Override
         public _FinalStage addAllBlocks(List<RenderedMessageBlock> blocks) {
-            this.blocks.addAll(blocks);
+            if (blocks != null) {
+                this.blocks.addAll(blocks);
+            }
             return this;
         }
 
@@ -272,11 +298,16 @@ public final class RenderedMessageContent {
             return this;
         }
 
+        /**
+         * <p>The blocks of the rendered message.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "blocks", nulls = Nulls.SKIP)
         public _FinalStage blocks(List<RenderedMessageBlock> blocks) {
             this.blocks.clear();
-            this.blocks.addAll(blocks);
+            if (blocks != null) {
+                this.blocks.addAll(blocks);
+            }
             return this;
         }
 

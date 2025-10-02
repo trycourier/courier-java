@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BulkIngestUsersParams.Builder.class)
 public final class BulkIngestUsersParams {
     private final List<InboundBulkMessageUser> users;
@@ -81,7 +81,9 @@ public final class BulkIngestUsersParams {
         @JsonSetter(value = "users", nulls = Nulls.SKIP)
         public Builder users(List<InboundBulkMessageUser> users) {
             this.users.clear();
-            this.users.addAll(users);
+            if (users != null) {
+                this.users.addAll(users);
+            }
             return this;
         }
 
@@ -91,7 +93,9 @@ public final class BulkIngestUsersParams {
         }
 
         public Builder addAllUsers(List<InboundBulkMessageUser> users) {
-            this.users.addAll(users);
+            if (users != null) {
+                this.users.addAll(users);
+            }
             return this;
         }
 

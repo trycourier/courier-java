@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = GetMessageHistoryRequest.Builder.class)
 public final class GetMessageHistoryRequest {
     private final Optional<String> type;
@@ -80,6 +80,9 @@ public final class GetMessageHistoryRequest {
             return this;
         }
 
+        /**
+         * <p>A supported Message History type that will filter the events returned.</p>
+         */
         @JsonSetter(value = "type", nulls = Nulls.SKIP)
         public Builder type(Optional<String> type) {
             this.type = type;
@@ -87,7 +90,7 @@ public final class GetMessageHistoryRequest {
         }
 
         public Builder type(String type) {
-            this.type = Optional.of(type);
+            this.type = Optional.ofNullable(type);
             return this;
         }
 

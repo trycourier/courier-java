@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AutomationThrottleOnThrottle.Builder.class)
 public final class AutomationThrottleOnThrottle {
     private final String nodeId;
@@ -65,7 +66,10 @@ public final class AutomationThrottleOnThrottle {
     }
 
     public interface NodeIdStage {
-        _FinalStage nodeId(String nodeId);
+        /**
+         * <p>The node to go to if the request is throttled</p>
+         */
+        _FinalStage nodeId(@NotNull String nodeId);
 
         Builder from(AutomationThrottleOnThrottle other);
     }
@@ -91,12 +95,13 @@ public final class AutomationThrottleOnThrottle {
 
         /**
          * <p>The node to go to if the request is throttled</p>
+         * <p>The node to go to if the request is throttled</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("$node_id")
-        public _FinalStage nodeId(String nodeId) {
-            this.nodeId = nodeId;
+        public _FinalStage nodeId(@NotNull String nodeId) {
+            this.nodeId = Objects.requireNonNull(nodeId, "nodeId must not be null");
             return this;
         }
 

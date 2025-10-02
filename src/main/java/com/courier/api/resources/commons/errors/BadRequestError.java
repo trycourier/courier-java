@@ -3,17 +3,23 @@
  */
 package com.courier.api.resources.commons.errors;
 
-import com.courier.api.core.CourierApiApiError;
+import com.courier.api.core.CourierApiException;
 import com.courier.api.resources.commons.types.BadRequest;
+import okhttp3.Response;
 
-public final class CourierApiBadRequestError extends CourierApiApiError {
+public final class BadRequestError extends CourierApiException {
     /**
      * The body of the response that triggered the exception.
      */
     private final BadRequest body;
 
-    public CourierApiBadRequestError(BadRequest body) {
+    public BadRequestError(BadRequest body) {
         super("BadRequestError", 400, body);
+        this.body = body;
+    }
+
+    public BadRequestError(BadRequest body, Response rawResponse) {
+        super("BadRequestError", 400, body, rawResponse);
         this.body = body;
     }
 

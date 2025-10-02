@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AddUserToSingleTenantsParams.Builder.class)
 public final class AddUserToSingleTenantsParams {
     private final Optional<Map<String, Object>> profile;
@@ -85,7 +85,7 @@ public final class AddUserToSingleTenantsParams {
         }
 
         public Builder profile(Map<String, Object> profile) {
-            this.profile = Optional.of(profile);
+            this.profile = Optional.ofNullable(profile);
             return this;
         }
 

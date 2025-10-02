@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = IssueTokenResponse.Builder.class)
 public final class IssueTokenResponse {
     private final Optional<String> token;
@@ -84,7 +84,7 @@ public final class IssueTokenResponse {
         }
 
         public Builder token(String token) {
-            this.token = Optional.of(token);
+            this.token = Optional.ofNullable(token);
             return this;
         }
 

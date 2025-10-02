@@ -3,44 +3,191 @@
  */
 package com.courier.api.resources.audiences.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum ComparisonOperator {
-    ENDS_WITH("ENDS_WITH"),
+public final class ComparisonOperator {
+    public static final ComparisonOperator LTE = new ComparisonOperator(Value.LTE, "LTE");
 
-    EQ("EQ"),
+    public static final ComparisonOperator LT = new ComparisonOperator(Value.LT, "LT");
 
-    EXISTS("EXISTS"),
+    public static final ComparisonOperator NEQ = new ComparisonOperator(Value.NEQ, "NEQ");
 
-    GT("GT"),
+    public static final ComparisonOperator GTE = new ComparisonOperator(Value.GTE, "GTE");
 
-    GTE("GTE"),
+    public static final ComparisonOperator GT = new ComparisonOperator(Value.GT, "GT");
 
-    INCLUDES("INCLUDES"),
+    public static final ComparisonOperator INCLUDES = new ComparisonOperator(Value.INCLUDES, "INCLUDES");
 
-    IS_AFTER("IS_AFTER"),
+    public static final ComparisonOperator IS_BEFORE = new ComparisonOperator(Value.IS_BEFORE, "IS_BEFORE");
 
-    IS_BEFORE("IS_BEFORE"),
+    public static final ComparisonOperator EQ = new ComparisonOperator(Value.EQ, "EQ");
 
-    LT("LT"),
+    public static final ComparisonOperator ENDS_WITH = new ComparisonOperator(Value.ENDS_WITH, "ENDS_WITH");
 
-    LTE("LTE"),
+    public static final ComparisonOperator EXISTS = new ComparisonOperator(Value.EXISTS, "EXISTS");
 
-    NEQ("NEQ"),
+    public static final ComparisonOperator OMIT = new ComparisonOperator(Value.OMIT, "OMIT");
 
-    OMIT("OMIT"),
+    public static final ComparisonOperator STARTS_WITH = new ComparisonOperator(Value.STARTS_WITH, "STARTS_WITH");
 
-    STARTS_WITH("STARTS_WITH");
+    public static final ComparisonOperator IS_AFTER = new ComparisonOperator(Value.IS_AFTER, "IS_AFTER");
 
-    private final String value;
+    private final Value value;
 
-    ComparisonOperator(String value) {
+    private final String string;
+
+    ComparisonOperator(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof ComparisonOperator && this.string.equals(((ComparisonOperator) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case LTE:
+                return visitor.visitLte();
+            case LT:
+                return visitor.visitLt();
+            case NEQ:
+                return visitor.visitNeq();
+            case GTE:
+                return visitor.visitGte();
+            case GT:
+                return visitor.visitGt();
+            case INCLUDES:
+                return visitor.visitIncludes();
+            case IS_BEFORE:
+                return visitor.visitIsBefore();
+            case EQ:
+                return visitor.visitEq();
+            case ENDS_WITH:
+                return visitor.visitEndsWith();
+            case EXISTS:
+                return visitor.visitExists();
+            case OMIT:
+                return visitor.visitOmit();
+            case STARTS_WITH:
+                return visitor.visitStartsWith();
+            case IS_AFTER:
+                return visitor.visitIsAfter();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static ComparisonOperator valueOf(String value) {
+        switch (value) {
+            case "LTE":
+                return LTE;
+            case "LT":
+                return LT;
+            case "NEQ":
+                return NEQ;
+            case "GTE":
+                return GTE;
+            case "GT":
+                return GT;
+            case "INCLUDES":
+                return INCLUDES;
+            case "IS_BEFORE":
+                return IS_BEFORE;
+            case "EQ":
+                return EQ;
+            case "ENDS_WITH":
+                return ENDS_WITH;
+            case "EXISTS":
+                return EXISTS;
+            case "OMIT":
+                return OMIT;
+            case "STARTS_WITH":
+                return STARTS_WITH;
+            case "IS_AFTER":
+                return IS_AFTER;
+            default:
+                return new ComparisonOperator(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        ENDS_WITH,
+
+        EQ,
+
+        EXISTS,
+
+        GT,
+
+        GTE,
+
+        INCLUDES,
+
+        IS_AFTER,
+
+        IS_BEFORE,
+
+        LT,
+
+        LTE,
+
+        NEQ,
+
+        OMIT,
+
+        STARTS_WITH,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitEndsWith();
+
+        T visitEq();
+
+        T visitExists();
+
+        T visitGt();
+
+        T visitGte();
+
+        T visitIncludes();
+
+        T visitIsAfter();
+
+        T visitIsBefore();
+
+        T visitLt();
+
+        T visitLte();
+
+        T visitNeq();
+
+        T visitOmit();
+
+        T visitStartsWith();
+
+        T visitUnknown(String unknownType);
     }
 }

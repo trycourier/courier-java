@@ -17,8 +17,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = MessageRouting.Builder.class)
 public final class MessageRouting {
     private final MessageRoutingMethod method;
@@ -76,7 +77,7 @@ public final class MessageRouting {
     }
 
     public interface MethodStage {
-        _FinalStage method(MessageRoutingMethod method);
+        _FinalStage method(@NotNull MessageRoutingMethod method);
 
         Builder from(MessageRouting other);
     }
@@ -111,14 +112,16 @@ public final class MessageRouting {
 
         @java.lang.Override
         @JsonSetter("method")
-        public _FinalStage method(MessageRoutingMethod method) {
-            this.method = method;
+        public _FinalStage method(@NotNull MessageRoutingMethod method) {
+            this.method = Objects.requireNonNull(method, "method must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage addAllChannels(List<MessageRoutingChannel> channels) {
-            this.channels.addAll(channels);
+            if (channels != null) {
+                this.channels.addAll(channels);
+            }
             return this;
         }
 
@@ -132,7 +135,9 @@ public final class MessageRouting {
         @JsonSetter(value = "channels", nulls = Nulls.SKIP)
         public _FinalStage channels(List<MessageRoutingChannel> channels) {
             this.channels.clear();
-            this.channels.addAll(channels);
+            if (channels != null) {
+                this.channels.addAll(channels);
+            }
             return this;
         }
 

@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ProfileGetParameters.Builder.class)
 public final class ProfileGetParameters {
     private final String recipientId;
@@ -62,7 +63,7 @@ public final class ProfileGetParameters {
     }
 
     public interface RecipientIdStage {
-        _FinalStage recipientId(String recipientId);
+        _FinalStage recipientId(@NotNull String recipientId);
 
         Builder from(ProfileGetParameters other);
     }
@@ -88,8 +89,8 @@ public final class ProfileGetParameters {
 
         @java.lang.Override
         @JsonSetter("recipientId")
-        public _FinalStage recipientId(String recipientId) {
-            this.recipientId = recipientId;
+        public _FinalStage recipientId(@NotNull String recipientId) {
+            this.recipientId = Objects.requireNonNull(recipientId, "recipientId must not be null");
             return this;
         }
 

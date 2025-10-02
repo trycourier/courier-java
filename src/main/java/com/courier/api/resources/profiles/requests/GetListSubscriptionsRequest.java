@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = GetListSubscriptionsRequest.Builder.class)
 public final class GetListSubscriptionsRequest {
     private final Optional<String> cursor;
@@ -80,6 +80,9 @@ public final class GetListSubscriptionsRequest {
             return this;
         }
 
+        /**
+         * <p>A unique identifier that allows for fetching the next set of message statuses.</p>
+         */
         @JsonSetter(value = "cursor", nulls = Nulls.SKIP)
         public Builder cursor(Optional<String> cursor) {
             this.cursor = cursor;
@@ -87,7 +90,7 @@ public final class GetListSubscriptionsRequest {
         }
 
         public Builder cursor(String cursor) {
-            this.cursor = Optional.of(cursor);
+            this.cursor = Optional.ofNullable(cursor);
             return this;
         }
 

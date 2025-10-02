@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = MessageProvidersType.Builder.class)
 public final class MessageProvidersType {
     private final Optional<Map<String, Object>> override;
@@ -127,6 +127,9 @@ public final class MessageProvidersType {
             return this;
         }
 
+        /**
+         * <p>Provider specific overrides.</p>
+         */
         @JsonSetter(value = "override", nulls = Nulls.SKIP)
         public Builder override(Optional<Map<String, Object>> override) {
             this.override = override;
@@ -134,10 +137,16 @@ public final class MessageProvidersType {
         }
 
         public Builder override(Map<String, Object> override) {
-            this.override = Optional.of(override);
+            this.override = Optional.ofNullable(override);
             return this;
         }
 
+        /**
+         * <p>A JavaScript conditional expression to determine if the message should
+         * be sent through the provider. Has access to the data and profile object.
+         * Only applies when a custom routing strategy is defined.
+         * For example, <code>data.name === profile.name</code></p>
+         */
         @JsonSetter(value = "if", nulls = Nulls.SKIP)
         public Builder if_(Optional<String> if_) {
             this.if_ = if_;
@@ -145,7 +154,7 @@ public final class MessageProvidersType {
         }
 
         public Builder if_(String if_) {
-            this.if_ = Optional.of(if_);
+            this.if_ = Optional.ofNullable(if_);
             return this;
         }
 
@@ -156,7 +165,7 @@ public final class MessageProvidersType {
         }
 
         public Builder timeouts(Integer timeouts) {
-            this.timeouts = Optional.of(timeouts);
+            this.timeouts = Optional.ofNullable(timeouts);
             return this;
         }
 
@@ -167,7 +176,7 @@ public final class MessageProvidersType {
         }
 
         public Builder metadata(Metadata metadata) {
-            this.metadata = Optional.of(metadata);
+            this.metadata = Optional.ofNullable(metadata);
             return this;
         }
 

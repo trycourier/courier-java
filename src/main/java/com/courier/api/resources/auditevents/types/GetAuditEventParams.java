@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = GetAuditEventParams.Builder.class)
 public final class GetAuditEventParams {
     private final String auditEventId;
@@ -62,7 +63,7 @@ public final class GetAuditEventParams {
     }
 
     public interface AuditEventIdStage {
-        _FinalStage auditEventId(String auditEventId);
+        _FinalStage auditEventId(@NotNull String auditEventId);
 
         Builder from(GetAuditEventParams other);
     }
@@ -88,8 +89,8 @@ public final class GetAuditEventParams {
 
         @java.lang.Override
         @JsonSetter("auditEventId")
-        public _FinalStage auditEventId(String auditEventId) {
-            this.auditEventId = auditEventId;
+        public _FinalStage auditEventId(@NotNull String auditEventId) {
+            this.auditEventId = Objects.requireNonNull(auditEventId, "auditEventId must not be null");
             return this;
         }
 

@@ -16,8 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AutomationFetchDataWebhook.Builder.class)
 public final class AutomationFetchDataWebhook {
     private final Optional<Map<String, Object>> body;
@@ -106,13 +107,13 @@ public final class AutomationFetchDataWebhook {
     }
 
     public interface MethodStage {
-        UrlStage method(AutomationFetchDataWebhookMethod method);
+        UrlStage method(@NotNull AutomationFetchDataWebhookMethod method);
 
         Builder from(AutomationFetchDataWebhook other);
     }
 
     public interface UrlStage {
-        _FinalStage url(String url);
+        _FinalStage url(@NotNull String url);
     }
 
     public interface _FinalStage {
@@ -160,21 +161,21 @@ public final class AutomationFetchDataWebhook {
 
         @java.lang.Override
         @JsonSetter("method")
-        public UrlStage method(AutomationFetchDataWebhookMethod method) {
-            this.method = method;
+        public UrlStage method(@NotNull AutomationFetchDataWebhookMethod method) {
+            this.method = Objects.requireNonNull(method, "method must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("url")
-        public _FinalStage url(String url) {
-            this.url = url;
+        public _FinalStage url(@NotNull String url) {
+            this.url = Objects.requireNonNull(url, "url must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage params(Map<String, Object> params) {
-            this.params = Optional.of(params);
+            this.params = Optional.ofNullable(params);
             return this;
         }
 
@@ -187,7 +188,7 @@ public final class AutomationFetchDataWebhook {
 
         @java.lang.Override
         public _FinalStage headers(Map<String, Object> headers) {
-            this.headers = Optional.of(headers);
+            this.headers = Optional.ofNullable(headers);
             return this;
         }
 
@@ -200,7 +201,7 @@ public final class AutomationFetchDataWebhook {
 
         @java.lang.Override
         public _FinalStage body(Map<String, Object> body) {
-            this.body = Optional.of(body);
+            this.body = Optional.ofNullable(body);
             return this;
         }
 

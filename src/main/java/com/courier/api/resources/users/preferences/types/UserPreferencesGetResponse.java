@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UserPreferencesGetResponse.Builder.class)
 public final class UserPreferencesGetResponse {
     private final TopicPreference topic;
@@ -62,7 +63,7 @@ public final class UserPreferencesGetResponse {
     }
 
     public interface TopicStage {
-        _FinalStage topic(TopicPreference topic);
+        _FinalStage topic(@NotNull TopicPreference topic);
 
         Builder from(UserPreferencesGetResponse other);
     }
@@ -88,8 +89,8 @@ public final class UserPreferencesGetResponse {
 
         @java.lang.Override
         @JsonSetter("topic")
-        public _FinalStage topic(TopicPreference topic) {
-            this.topic = topic;
+        public _FinalStage topic(@NotNull TopicPreference topic) {
+            this.topic = Objects.requireNonNull(topic, "topic must not be null");
             return this;
         }
 

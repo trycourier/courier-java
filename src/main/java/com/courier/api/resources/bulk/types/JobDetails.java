@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = JobDetails.Builder.class)
 public final class JobDetails {
     private final InboundBulkMessage definition;
@@ -104,7 +105,7 @@ public final class JobDetails {
     }
 
     public interface DefinitionStage {
-        EnqueuedStage definition(InboundBulkMessage definition);
+        EnqueuedStage definition(@NotNull InboundBulkMessage definition);
 
         Builder from(JobDetails other);
     }
@@ -122,7 +123,7 @@ public final class JobDetails {
     }
 
     public interface StatusStage {
-        _FinalStage status(BulkJobStatus status);
+        _FinalStage status(@NotNull BulkJobStatus status);
     }
 
     public interface _FinalStage {
@@ -159,8 +160,8 @@ public final class JobDetails {
 
         @java.lang.Override
         @JsonSetter("definition")
-        public EnqueuedStage definition(InboundBulkMessage definition) {
-            this.definition = definition;
+        public EnqueuedStage definition(@NotNull InboundBulkMessage definition) {
+            this.definition = Objects.requireNonNull(definition, "definition must not be null");
             return this;
         }
 
@@ -187,8 +188,8 @@ public final class JobDetails {
 
         @java.lang.Override
         @JsonSetter("status")
-        public _FinalStage status(BulkJobStatus status) {
-            this.status = status;
+        public _FinalStage status(@NotNull BulkJobStatus status) {
+            this.status = Objects.requireNonNull(status, "status must not be null");
             return this;
         }
 

@@ -16,8 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Brand.Builder.class)
 public final class Brand {
     private final int created;
@@ -162,34 +163,52 @@ public final class Brand {
     }
 
     public interface CreatedStage {
+        /**
+         * <p>The date/time of when the brand was created. Represented in milliseconds since Unix epoch.</p>
+         */
         NameStage created(int created);
 
         Builder from(Brand other);
     }
 
     public interface NameStage {
-        PublishedStage name(String name);
+        /**
+         * <p>Brand name</p>
+         */
+        PublishedStage name(@NotNull String name);
     }
 
     public interface PublishedStage {
+        /**
+         * <p>The date/time of when the brand was published. Represented in milliseconds since Unix epoch.</p>
+         */
         SettingsStage published(int published);
     }
 
     public interface SettingsStage {
-        UpdatedStage settings(BrandSettings settings);
+        UpdatedStage settings(@NotNull BrandSettings settings);
     }
 
     public interface UpdatedStage {
+        /**
+         * <p>The date/time of when the brand was updated. Represented in milliseconds since Unix epoch.</p>
+         */
         VersionStage updated(int updated);
     }
 
     public interface VersionStage {
-        _FinalStage version(String version);
+        /**
+         * <p>The version identifier for the brand</p>
+         */
+        _FinalStage version(@NotNull String version);
     }
 
     public interface _FinalStage {
         Brand build();
 
+        /**
+         * <p>Brand Identifier</p>
+         */
         _FinalStage id(Optional<String> id);
 
         _FinalStage id(String id);
@@ -238,6 +257,7 @@ public final class Brand {
 
         /**
          * <p>The date/time of when the brand was created. Represented in milliseconds since Unix epoch.</p>
+         * <p>The date/time of when the brand was created. Represented in milliseconds since Unix epoch.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -249,16 +269,18 @@ public final class Brand {
 
         /**
          * <p>Brand name</p>
+         * <p>Brand name</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("name")
-        public PublishedStage name(String name) {
-            this.name = name;
+        public PublishedStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 
         /**
+         * <p>The date/time of when the brand was published. Represented in milliseconds since Unix epoch.</p>
          * <p>The date/time of when the brand was published. Represented in milliseconds since Unix epoch.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -271,12 +293,13 @@ public final class Brand {
 
         @java.lang.Override
         @JsonSetter("settings")
-        public UpdatedStage settings(BrandSettings settings) {
-            this.settings = settings;
+        public UpdatedStage settings(@NotNull BrandSettings settings) {
+            this.settings = Objects.requireNonNull(settings, "settings must not be null");
             return this;
         }
 
         /**
+         * <p>The date/time of when the brand was updated. Represented in milliseconds since Unix epoch.</p>
          * <p>The date/time of when the brand was updated. Represented in milliseconds since Unix epoch.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -289,18 +312,19 @@ public final class Brand {
 
         /**
          * <p>The version identifier for the brand</p>
+         * <p>The version identifier for the brand</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("version")
-        public _FinalStage version(String version) {
-            this.version = version;
+        public _FinalStage version(@NotNull String version) {
+            this.version = Objects.requireNonNull(version, "version must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage snippets(BrandSnippets snippets) {
-            this.snippets = Optional.of(snippets);
+            this.snippets = Optional.ofNullable(snippets);
             return this;
         }
 
@@ -317,10 +341,13 @@ public final class Brand {
          */
         @java.lang.Override
         public _FinalStage id(String id) {
-            this.id = Optional.of(id);
+            this.id = Optional.ofNullable(id);
             return this;
         }
 
+        /**
+         * <p>Brand Identifier</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "id", nulls = Nulls.SKIP)
         public _FinalStage id(Optional<String> id) {

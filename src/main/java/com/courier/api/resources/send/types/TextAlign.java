@@ -3,24 +3,90 @@
  */
 package com.courier.api.resources.send.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum TextAlign {
-    LEFT("left"),
+public final class TextAlign {
+    public static final TextAlign LEFT = new TextAlign(Value.LEFT, "left");
 
-    CENTER("center"),
+    public static final TextAlign RIGHT = new TextAlign(Value.RIGHT, "right");
 
-    RIGHT("right");
+    public static final TextAlign CENTER = new TextAlign(Value.CENTER, "center");
 
-    private final String value;
+    private final Value value;
 
-    TextAlign(String value) {
+    private final String string;
+
+    TextAlign(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other) || (other instanceof TextAlign && this.string.equals(((TextAlign) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case LEFT:
+                return visitor.visitLeft();
+            case RIGHT:
+                return visitor.visitRight();
+            case CENTER:
+                return visitor.visitCenter();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static TextAlign valueOf(String value) {
+        switch (value) {
+            case "left":
+                return LEFT;
+            case "right":
+                return RIGHT;
+            case "center":
+                return CENTER;
+            default:
+                return new TextAlign(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        LEFT,
+
+        CENTER,
+
+        RIGHT,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitLeft();
+
+        T visitCenter();
+
+        T visitRight();
+
+        T visitUnknown(String unknownType);
     }
 }

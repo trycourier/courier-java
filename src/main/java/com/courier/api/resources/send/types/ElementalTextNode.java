@@ -17,8 +17,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ElementalTextNode.Builder.class)
 public final class ElementalTextNode implements IElementalBaseNode {
     private final Optional<List<String>> channels;
@@ -243,13 +244,20 @@ public final class ElementalTextNode implements IElementalBaseNode {
     }
 
     public interface ContentStage {
-        AlignStage content(String content);
+        /**
+         * <p>The text content displayed in the notification. Either this
+         * field must be specified, or the elements field</p>
+         */
+        AlignStage content(@NotNull String content);
 
         Builder from(ElementalTextNode other);
     }
 
     public interface AlignStage {
-        _FinalStage align(TextAlign align);
+        /**
+         * <p>Text alignment.</p>
+         */
+        _FinalStage align(@NotNull TextAlign align);
     }
 
     public interface _FinalStage {
@@ -271,30 +279,51 @@ public final class ElementalTextNode implements IElementalBaseNode {
 
         _FinalStage loop(String loop);
 
+        /**
+         * <p>Allows the text to be rendered as a heading level.</p>
+         */
         _FinalStage textStyle(Optional<TextStyle> textStyle);
 
         _FinalStage textStyle(TextStyle textStyle);
 
+        /**
+         * <p>Specifies the color of text. Can be any valid css color value</p>
+         */
         _FinalStage color(Optional<String> color);
 
         _FinalStage color(String color);
 
+        /**
+         * <p>Apply bold to the text</p>
+         */
         _FinalStage bold(Optional<String> bold);
 
         _FinalStage bold(String bold);
 
+        /**
+         * <p>Apply italics to the text</p>
+         */
         _FinalStage italic(Optional<String> italic);
 
         _FinalStage italic(String italic);
 
+        /**
+         * <p>Apply a strike through the text</p>
+         */
         _FinalStage strikethrough(Optional<String> strikethrough);
 
         _FinalStage strikethrough(String strikethrough);
 
+        /**
+         * <p>Apply an underline to the text</p>
+         */
         _FinalStage underline(Optional<String> underline);
 
         _FinalStage underline(String underline);
 
+        /**
+         * <p>Region specific content. See <a href="https://www.courier.com/docs/platform/content/elemental/locales/">locales docs</a> for more details.</p>
+         */
         _FinalStage locales(Optional<Map<String, Locale>> locales);
 
         _FinalStage locales(Map<String, Locale> locales);
@@ -361,29 +390,32 @@ public final class ElementalTextNode implements IElementalBaseNode {
         /**
          * <p>The text content displayed in the notification. Either this
          * field must be specified, or the elements field</p>
+         * <p>The text content displayed in the notification. Either this
+         * field must be specified, or the elements field</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("content")
-        public AlignStage content(String content) {
-            this.content = content;
+        public AlignStage content(@NotNull String content) {
+            this.content = Objects.requireNonNull(content, "content must not be null");
             return this;
         }
 
         /**
          * <p>Text alignment.</p>
+         * <p>Text alignment.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("align")
-        public _FinalStage align(TextAlign align) {
-            this.align = align;
+        public _FinalStage align(@NotNull TextAlign align) {
+            this.align = Objects.requireNonNull(align, "align must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage format(String format) {
-            this.format = Optional.of(format);
+            this.format = Optional.ofNullable(format);
             return this;
         }
 
@@ -400,10 +432,13 @@ public final class ElementalTextNode implements IElementalBaseNode {
          */
         @java.lang.Override
         public _FinalStage locales(Map<String, Locale> locales) {
-            this.locales = Optional.of(locales);
+            this.locales = Optional.ofNullable(locales);
             return this;
         }
 
+        /**
+         * <p>Region specific content. See <a href="https://www.courier.com/docs/platform/content/elemental/locales/">locales docs</a> for more details.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "locales", nulls = Nulls.SKIP)
         public _FinalStage locales(Optional<Map<String, Locale>> locales) {
@@ -417,10 +452,13 @@ public final class ElementalTextNode implements IElementalBaseNode {
          */
         @java.lang.Override
         public _FinalStage underline(String underline) {
-            this.underline = Optional.of(underline);
+            this.underline = Optional.ofNullable(underline);
             return this;
         }
 
+        /**
+         * <p>Apply an underline to the text</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "underline", nulls = Nulls.SKIP)
         public _FinalStage underline(Optional<String> underline) {
@@ -434,10 +472,13 @@ public final class ElementalTextNode implements IElementalBaseNode {
          */
         @java.lang.Override
         public _FinalStage strikethrough(String strikethrough) {
-            this.strikethrough = Optional.of(strikethrough);
+            this.strikethrough = Optional.ofNullable(strikethrough);
             return this;
         }
 
+        /**
+         * <p>Apply a strike through the text</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "strikethrough", nulls = Nulls.SKIP)
         public _FinalStage strikethrough(Optional<String> strikethrough) {
@@ -451,10 +492,13 @@ public final class ElementalTextNode implements IElementalBaseNode {
          */
         @java.lang.Override
         public _FinalStage italic(String italic) {
-            this.italic = Optional.of(italic);
+            this.italic = Optional.ofNullable(italic);
             return this;
         }
 
+        /**
+         * <p>Apply italics to the text</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "italic", nulls = Nulls.SKIP)
         public _FinalStage italic(Optional<String> italic) {
@@ -468,10 +512,13 @@ public final class ElementalTextNode implements IElementalBaseNode {
          */
         @java.lang.Override
         public _FinalStage bold(String bold) {
-            this.bold = Optional.of(bold);
+            this.bold = Optional.ofNullable(bold);
             return this;
         }
 
+        /**
+         * <p>Apply bold to the text</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "bold", nulls = Nulls.SKIP)
         public _FinalStage bold(Optional<String> bold) {
@@ -485,10 +532,13 @@ public final class ElementalTextNode implements IElementalBaseNode {
          */
         @java.lang.Override
         public _FinalStage color(String color) {
-            this.color = Optional.of(color);
+            this.color = Optional.ofNullable(color);
             return this;
         }
 
+        /**
+         * <p>Specifies the color of text. Can be any valid css color value</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "color", nulls = Nulls.SKIP)
         public _FinalStage color(Optional<String> color) {
@@ -502,10 +552,13 @@ public final class ElementalTextNode implements IElementalBaseNode {
          */
         @java.lang.Override
         public _FinalStage textStyle(TextStyle textStyle) {
-            this.textStyle = Optional.of(textStyle);
+            this.textStyle = Optional.ofNullable(textStyle);
             return this;
         }
 
+        /**
+         * <p>Allows the text to be rendered as a heading level.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "text_style", nulls = Nulls.SKIP)
         public _FinalStage textStyle(Optional<TextStyle> textStyle) {
@@ -515,7 +568,7 @@ public final class ElementalTextNode implements IElementalBaseNode {
 
         @java.lang.Override
         public _FinalStage loop(String loop) {
-            this.loop = Optional.of(loop);
+            this.loop = Optional.ofNullable(loop);
             return this;
         }
 
@@ -528,7 +581,7 @@ public final class ElementalTextNode implements IElementalBaseNode {
 
         @java.lang.Override
         public _FinalStage if_(String if_) {
-            this.if_ = Optional.of(if_);
+            this.if_ = Optional.ofNullable(if_);
             return this;
         }
 
@@ -541,7 +594,7 @@ public final class ElementalTextNode implements IElementalBaseNode {
 
         @java.lang.Override
         public _FinalStage ref(String ref) {
-            this.ref = Optional.of(ref);
+            this.ref = Optional.ofNullable(ref);
             return this;
         }
 
@@ -554,7 +607,7 @@ public final class ElementalTextNode implements IElementalBaseNode {
 
         @java.lang.Override
         public _FinalStage channels(List<String> channels) {
-            this.channels = Optional.of(channels);
+            this.channels = Optional.ofNullable(channels);
             return this;
         }
 

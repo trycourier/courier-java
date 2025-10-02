@@ -3,36 +3,150 @@
  */
 package com.courier.api.resources.notifications.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum BlockType {
-    ACTION("action"),
+public final class BlockType {
+    public static final BlockType DIVIDER = new BlockType(Value.DIVIDER, "divider");
 
-    DIVIDER("divider"),
+    public static final BlockType LIST = new BlockType(Value.LIST, "list");
 
-    IMAGE("image"),
+    public static final BlockType ACTION = new BlockType(Value.ACTION, "action");
 
-    JSONNET("jsonnet"),
+    public static final BlockType TEXT = new BlockType(Value.TEXT, "text");
 
-    LIST("list"),
+    public static final BlockType IMAGE = new BlockType(Value.IMAGE, "image");
 
-    MARKDOWN("markdown"),
+    public static final BlockType TEMPLATE = new BlockType(Value.TEMPLATE, "template");
 
-    QUOTE("quote"),
+    public static final BlockType MARKDOWN = new BlockType(Value.MARKDOWN, "markdown");
 
-    TEMPLATE("template"),
+    public static final BlockType JSONNET = new BlockType(Value.JSONNET, "jsonnet");
 
-    TEXT("text");
+    public static final BlockType QUOTE = new BlockType(Value.QUOTE, "quote");
 
-    private final String value;
+    private final Value value;
 
-    BlockType(String value) {
+    private final String string;
+
+    BlockType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other) || (other instanceof BlockType && this.string.equals(((BlockType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case DIVIDER:
+                return visitor.visitDivider();
+            case LIST:
+                return visitor.visitList();
+            case ACTION:
+                return visitor.visitAction();
+            case TEXT:
+                return visitor.visitText();
+            case IMAGE:
+                return visitor.visitImage();
+            case TEMPLATE:
+                return visitor.visitTemplate();
+            case MARKDOWN:
+                return visitor.visitMarkdown();
+            case JSONNET:
+                return visitor.visitJsonnet();
+            case QUOTE:
+                return visitor.visitQuote();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static BlockType valueOf(String value) {
+        switch (value) {
+            case "divider":
+                return DIVIDER;
+            case "list":
+                return LIST;
+            case "action":
+                return ACTION;
+            case "text":
+                return TEXT;
+            case "image":
+                return IMAGE;
+            case "template":
+                return TEMPLATE;
+            case "markdown":
+                return MARKDOWN;
+            case "jsonnet":
+                return JSONNET;
+            case "quote":
+                return QUOTE;
+            default:
+                return new BlockType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        ACTION,
+
+        DIVIDER,
+
+        IMAGE,
+
+        JSONNET,
+
+        LIST,
+
+        MARKDOWN,
+
+        QUOTE,
+
+        TEMPLATE,
+
+        TEXT,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitAction();
+
+        T visitDivider();
+
+        T visitImage();
+
+        T visitJsonnet();
+
+        T visitList();
+
+        T visitMarkdown();
+
+        T visitQuote();
+
+        T visitTemplate();
+
+        T visitText();
+
+        T visitUnknown(String unknownType);
     }
 }

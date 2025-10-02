@@ -17,8 +17,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ElementalImageNode.Builder.class)
 public final class ElementalImageNode implements IElementalBaseNode {
     private final Optional<List<String>> channels;
@@ -175,7 +176,10 @@ public final class ElementalImageNode implements IElementalBaseNode {
     }
 
     public interface SrcStage {
-        _FinalStage src(String src);
+        /**
+         * <p>The source of the image.</p>
+         */
+        _FinalStage src(@NotNull String src);
 
         Builder from(ElementalImageNode other);
     }
@@ -199,18 +203,30 @@ public final class ElementalImageNode implements IElementalBaseNode {
 
         _FinalStage loop(String loop);
 
+        /**
+         * <p>A URL to link to when the image is clicked.</p>
+         */
         _FinalStage href(Optional<String> href);
 
         _FinalStage href(String href);
 
+        /**
+         * <p>The alignment of the image.</p>
+         */
         _FinalStage align(Optional<IAlignment> align);
 
         _FinalStage align(IAlignment align);
 
+        /**
+         * <p>Alternate text for the image.</p>
+         */
         _FinalStage altText(Optional<String> altText);
 
         _FinalStage altText(String altText);
 
+        /**
+         * <p>CSS width properties to apply to the image. For example, 50px</p>
+         */
         _FinalStage width(Optional<String> width);
 
         _FinalStage width(String width);
@@ -257,12 +273,13 @@ public final class ElementalImageNode implements IElementalBaseNode {
 
         /**
          * <p>The source of the image.</p>
+         * <p>The source of the image.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("src")
-        public _FinalStage src(String src) {
-            this.src = src;
+        public _FinalStage src(@NotNull String src) {
+            this.src = Objects.requireNonNull(src, "src must not be null");
             return this;
         }
 
@@ -272,10 +289,13 @@ public final class ElementalImageNode implements IElementalBaseNode {
          */
         @java.lang.Override
         public _FinalStage width(String width) {
-            this.width = Optional.of(width);
+            this.width = Optional.ofNullable(width);
             return this;
         }
 
+        /**
+         * <p>CSS width properties to apply to the image. For example, 50px</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "width", nulls = Nulls.SKIP)
         public _FinalStage width(Optional<String> width) {
@@ -289,10 +309,13 @@ public final class ElementalImageNode implements IElementalBaseNode {
          */
         @java.lang.Override
         public _FinalStage altText(String altText) {
-            this.altText = Optional.of(altText);
+            this.altText = Optional.ofNullable(altText);
             return this;
         }
 
+        /**
+         * <p>Alternate text for the image.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "altText", nulls = Nulls.SKIP)
         public _FinalStage altText(Optional<String> altText) {
@@ -306,10 +329,13 @@ public final class ElementalImageNode implements IElementalBaseNode {
          */
         @java.lang.Override
         public _FinalStage align(IAlignment align) {
-            this.align = Optional.of(align);
+            this.align = Optional.ofNullable(align);
             return this;
         }
 
+        /**
+         * <p>The alignment of the image.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "align", nulls = Nulls.SKIP)
         public _FinalStage align(Optional<IAlignment> align) {
@@ -323,10 +349,13 @@ public final class ElementalImageNode implements IElementalBaseNode {
          */
         @java.lang.Override
         public _FinalStage href(String href) {
-            this.href = Optional.of(href);
+            this.href = Optional.ofNullable(href);
             return this;
         }
 
+        /**
+         * <p>A URL to link to when the image is clicked.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "href", nulls = Nulls.SKIP)
         public _FinalStage href(Optional<String> href) {
@@ -336,7 +365,7 @@ public final class ElementalImageNode implements IElementalBaseNode {
 
         @java.lang.Override
         public _FinalStage loop(String loop) {
-            this.loop = Optional.of(loop);
+            this.loop = Optional.ofNullable(loop);
             return this;
         }
 
@@ -349,7 +378,7 @@ public final class ElementalImageNode implements IElementalBaseNode {
 
         @java.lang.Override
         public _FinalStage if_(String if_) {
-            this.if_ = Optional.of(if_);
+            this.if_ = Optional.ofNullable(if_);
             return this;
         }
 
@@ -362,7 +391,7 @@ public final class ElementalImageNode implements IElementalBaseNode {
 
         @java.lang.Override
         public _FinalStage ref(String ref) {
-            this.ref = Optional.of(ref);
+            this.ref = Optional.ofNullable(ref);
             return this;
         }
 
@@ -375,7 +404,7 @@ public final class ElementalImageNode implements IElementalBaseNode {
 
         @java.lang.Override
         public _FinalStage channels(List<String> channels) {
-            this.channels = Optional.of(channels);
+            this.channels = Optional.ofNullable(channels);
             return this;
         }
 

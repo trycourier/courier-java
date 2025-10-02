@@ -29,6 +29,7 @@ public final class Operator {
         return this.value;
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T visit(Visitor<T> visitor) {
         if (this.type == 0) {
             return visitor.visit((ComparisonOperator) this.value);
@@ -78,15 +79,15 @@ public final class Operator {
         }
 
         @java.lang.Override
-        public Operator deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+        public Operator deserialize(JsonParser p, DeserializationContext context) throws IOException {
             Object value = p.readValueAs(Object.class);
             try {
                 return of(ObjectMappers.JSON_MAPPER.convertValue(value, ComparisonOperator.class));
-            } catch (IllegalArgumentException e) {
+            } catch (RuntimeException e) {
             }
             try {
                 return of(ObjectMappers.JSON_MAPPER.convertValue(value, LogicalOperator.class));
-            } catch (IllegalArgumentException e) {
+            } catch (RuntimeException e) {
             }
             throw new JsonParseException(p, "Failed to deserialize");
         }

@@ -3,30 +3,120 @@
  */
 package com.courier.api.resources.users.tokens.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum PatchOp {
-    REPLACE("replace"),
+public final class PatchOp {
+    public static final PatchOp ADD = new PatchOp(Value.ADD, "add");
 
-    ADD("add"),
+    public static final PatchOp REMOVE = new PatchOp(Value.REMOVE, "remove");
 
-    REMOVE("remove"),
+    public static final PatchOp TEST = new PatchOp(Value.TEST, "test");
 
-    COPY("copy"),
+    public static final PatchOp REPLACE = new PatchOp(Value.REPLACE, "replace");
 
-    MOVE("move"),
+    public static final PatchOp MOVE = new PatchOp(Value.MOVE, "move");
 
-    TEST("test");
+    public static final PatchOp COPY = new PatchOp(Value.COPY, "copy");
 
-    private final String value;
+    private final Value value;
 
-    PatchOp(String value) {
+    private final String string;
+
+    PatchOp(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other) || (other instanceof PatchOp && this.string.equals(((PatchOp) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case ADD:
+                return visitor.visitAdd();
+            case REMOVE:
+                return visitor.visitRemove();
+            case TEST:
+                return visitor.visitTest();
+            case REPLACE:
+                return visitor.visitReplace();
+            case MOVE:
+                return visitor.visitMove();
+            case COPY:
+                return visitor.visitCopy();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static PatchOp valueOf(String value) {
+        switch (value) {
+            case "add":
+                return ADD;
+            case "remove":
+                return REMOVE;
+            case "test":
+                return TEST;
+            case "replace":
+                return REPLACE;
+            case "move":
+                return MOVE;
+            case "copy":
+                return COPY;
+            default:
+                return new PatchOp(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        REPLACE,
+
+        ADD,
+
+        REMOVE,
+
+        COPY,
+
+        MOVE,
+
+        TEST,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitReplace();
+
+        T visitAdd();
+
+        T visitRemove();
+
+        T visitCopy();
+
+        T visitMove();
+
+        T visitTest();
+
+        T visitUnknown(String unknownType);
     }
 }

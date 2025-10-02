@@ -16,8 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AutomationAddToDigestStep.Builder.class)
 public final class AutomationAddToDigestStep implements IAutomationStep {
     private final Optional<String> if_;
@@ -94,7 +95,10 @@ public final class AutomationAddToDigestStep implements IAutomationStep {
     }
 
     public interface SubscriptionTopicIdStage {
-        _FinalStage subscriptionTopicId(String subscriptionTopicId);
+        /**
+         * <p>The subscription topic that has digests enabled</p>
+         */
+        _FinalStage subscriptionTopicId(@NotNull String subscriptionTopicId);
 
         Builder from(AutomationAddToDigestStep other);
     }
@@ -134,18 +138,20 @@ public final class AutomationAddToDigestStep implements IAutomationStep {
 
         /**
          * <p>The subscription topic that has digests enabled</p>
+         * <p>The subscription topic that has digests enabled</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("subscription_topic_id")
-        public _FinalStage subscriptionTopicId(String subscriptionTopicId) {
-            this.subscriptionTopicId = subscriptionTopicId;
+        public _FinalStage subscriptionTopicId(@NotNull String subscriptionTopicId) {
+            this.subscriptionTopicId =
+                    Objects.requireNonNull(subscriptionTopicId, "subscriptionTopicId must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage ref(String ref) {
-            this.ref = Optional.of(ref);
+            this.ref = Optional.ofNullable(ref);
             return this;
         }
 
@@ -158,7 +164,7 @@ public final class AutomationAddToDigestStep implements IAutomationStep {
 
         @java.lang.Override
         public _FinalStage if_(String if_) {
-            this.if_ = Optional.of(if_);
+            this.if_ = Optional.ofNullable(if_);
             return this;
         }
 
