@@ -21,8 +21,8 @@ import com.courier.api.models.users.tokens.TokenAddMultipleParams
 import com.courier.api.models.users.tokens.TokenAddSingleParams
 import com.courier.api.models.users.tokens.TokenDeleteParams
 import com.courier.api.models.users.tokens.TokenListParams
-import com.courier.api.models.users.tokens.TokenRetrieveSingleParams
-import com.courier.api.models.users.tokens.TokenRetrieveSingleResponse
+import com.courier.api.models.users.tokens.TokenRetrieveParams
+import com.courier.api.models.users.tokens.TokenRetrieveResponse
 import com.courier.api.models.users.tokens.TokenUpdateParams
 import com.courier.api.models.users.tokens.UserToken
 import java.util.concurrent.CompletableFuture
@@ -40,6 +40,13 @@ class TokenServiceAsyncImpl internal constructor(private val clientOptions: Clie
 
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): TokenServiceAsync =
         TokenServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
+    override fun retrieve(
+        params: TokenRetrieveParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<TokenRetrieveResponse> =
+        // get /users/{user_id}/tokens/{token}
+        withRawResponse().retrieve(params, requestOptions).thenApply { it.parse() }
 
     override fun update(
         params: TokenUpdateParams,
@@ -76,13 +83,6 @@ class TokenServiceAsyncImpl internal constructor(private val clientOptions: Clie
         // put /users/{user_id}/tokens/{token}
         withRawResponse().addSingle(params, requestOptions).thenAccept {}
 
-    override fun retrieveSingle(
-        params: TokenRetrieveSingleParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<TokenRetrieveSingleResponse> =
-        // get /users/{user_id}/tokens/{token}
-        withRawResponse().retrieveSingle(params, requestOptions).thenApply { it.parse() }
-
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         TokenServiceAsync.WithRawResponse {
 
@@ -95,6 +95,39 @@ class TokenServiceAsyncImpl internal constructor(private val clientOptions: Clie
             TokenServiceAsyncImpl.WithRawResponseImpl(
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
+
+        private val retrieveHandler: Handler<TokenRetrieveResponse> =
+            jsonHandler<TokenRetrieveResponse>(clientOptions.jsonMapper)
+
+        override fun retrieve(
+            params: TokenRetrieveParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<TokenRetrieveResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("token", params.token().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("users", params._pathParam(0), "tokens", params._pathParam(1))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { retrieveHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
 
         private val updateHandler: Handler<Void?> = emptyHandler()
 
@@ -233,39 +266,6 @@ class TokenServiceAsyncImpl internal constructor(private val clientOptions: Clie
                 .thenApply { response ->
                     errorHandler.handle(response).parseable {
                         response.use { addSingleHandler.handle(it) }
-                    }
-                }
-        }
-
-        private val retrieveSingleHandler: Handler<TokenRetrieveSingleResponse> =
-            jsonHandler<TokenRetrieveSingleResponse>(clientOptions.jsonMapper)
-
-        override fun retrieveSingle(
-            params: TokenRetrieveSingleParams,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<TokenRetrieveSingleResponse>> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
-            checkRequired("token", params.token().getOrNull())
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.GET)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("users", params._pathParam(0), "tokens", params._pathParam(1))
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            return request
-                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-                .thenApply { response ->
-                    errorHandler.handle(response).parseable {
-                        response
-                            .use { retrieveSingleHandler.handle(it) }
-                            .also {
-                                if (requestOptions.responseValidation!!) {
-                                    it.validate()
-                                }
-                            }
                     }
                 }
         }

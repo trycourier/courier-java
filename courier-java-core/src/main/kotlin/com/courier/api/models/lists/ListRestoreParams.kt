@@ -4,9 +4,9 @@ package com.courier.api.models.lists
 
 import com.courier.api.core.JsonValue
 import com.courier.api.core.Params
+import com.courier.api.core.checkRequired
 import com.courier.api.core.http.Headers
 import com.courier.api.core.http.QueryParams
-import com.courier.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
@@ -15,15 +15,14 @@ import kotlin.jvm.optionals.getOrNull
 class ListRestoreParams
 private constructor(
     private val listId: String?,
+    private val body: JsonValue,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
     fun listId(): Optional<String> = Optional.ofNullable(listId)
 
-    /** Additional body properties to send with the request. */
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    fun body(): JsonValue = body
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -35,9 +34,14 @@ private constructor(
 
     companion object {
 
-        @JvmStatic fun none(): ListRestoreParams = builder().build()
-
-        /** Returns a mutable builder for constructing an instance of [ListRestoreParams]. */
+        /**
+         * Returns a mutable builder for constructing an instance of [ListRestoreParams].
+         *
+         * The following fields are required:
+         * ```java
+         * .body()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -45,22 +49,24 @@ private constructor(
     class Builder internal constructor() {
 
         private var listId: String? = null
+        private var body: JsonValue? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(listRestoreParams: ListRestoreParams) = apply {
             listId = listRestoreParams.listId
+            body = listRestoreParams.body
             additionalHeaders = listRestoreParams.additionalHeaders.toBuilder()
             additionalQueryParams = listRestoreParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties = listRestoreParams.additionalBodyProperties.toMutableMap()
         }
 
         fun listId(listId: String?) = apply { this.listId = listId }
 
         /** Alias for calling [Builder.listId] with `listId.orElse(null)`. */
         fun listId(listId: Optional<String>) = listId(listId.getOrNull())
+
+        fun body(body: JsonValue) = apply { this.body = body }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -160,44 +166,28 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
-        }
-
         /**
          * Returns an immutable instance of [ListRestoreParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .body()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): ListRestoreParams =
             ListRestoreParams(
                 listId,
+                checkRequired("body", body),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
-    fun _body(): Optional<Map<String, JsonValue>> =
-        Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
+    fun _body(): JsonValue = body
 
     fun _pathParam(index: Int): String =
         when (index) {
@@ -216,14 +206,14 @@ private constructor(
 
         return other is ListRestoreParams &&
             listId == other.listId &&
+            body == other.body &&
             additionalHeaders == other.additionalHeaders &&
-            additionalQueryParams == other.additionalQueryParams &&
-            additionalBodyProperties == other.additionalBodyProperties
+            additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(listId, additionalHeaders, additionalQueryParams, additionalBodyProperties)
+        Objects.hash(listId, body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "ListRestoreParams{listId=$listId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "ListRestoreParams{listId=$listId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

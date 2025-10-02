@@ -11,18 +11,20 @@ internal class ListTest {
 
     @Test
     fun create() {
-        val list = List.builder().id("id").name("name").created(0L).updated(0L).build()
+        val list =
+            List.builder().id("id").name("name").created("created").updated("updated").build()
 
         assertThat(list.id()).isEqualTo("id")
         assertThat(list.name()).isEqualTo("name")
-        assertThat(list.created()).contains(0L)
-        assertThat(list.updated()).contains(0L)
+        assertThat(list.created()).contains("created")
+        assertThat(list.updated()).contains("updated")
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val list = List.builder().id("id").name("name").created(0L).updated(0L).build()
+        val list =
+            List.builder().id("id").name("name").created("created").updated("updated").build()
 
         val roundtrippedList =
             jsonMapper.readValue(jsonMapper.writeValueAsString(list), jacksonTypeRef<List>())

@@ -1,17 +1,16 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.api.models.automations
+package com.courier.api.models.automations.invoke
 
 import com.courier.api.core.JsonValue
-import com.courier.api.models.automations.invoke.AutomationInvokeParams
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-internal class AutomationInvokeAdHocParamsTest {
+internal class InvokeInvokeAdHocParamsTest {
 
     @Test
     fun create() {
-        AutomationInvokeAdHocParams.builder()
+        InvokeInvokeAdHocParams.builder()
             .brand("brand")
             .data(
                 AutomationInvokeParams.Data.builder()
@@ -22,15 +21,13 @@ internal class AutomationInvokeAdHocParamsTest {
             .recipient("recipient")
             .template("template")
             .automation(
-                AutomationInvokeAdHocParams.Automation.builder()
+                InvokeInvokeAdHocParams.Automation.builder()
                     .addStep(
-                        AutomationInvokeAdHocParams.Automation.Step.AutomationAddToDigestStep
-                            .builder()
+                        InvokeInvokeAdHocParams.Automation.Step.AutomationAddToDigestStep.builder()
                             .if_("if")
                             .ref("ref")
                             .action(
-                                AutomationInvokeAdHocParams.Automation.Step
-                                    .AutomationAddToDigestStep
+                                InvokeInvokeAdHocParams.Automation.Step.AutomationAddToDigestStep
                                     .Action
                                     .ADD_TO_DIGEST
                             )
@@ -46,7 +43,7 @@ internal class AutomationInvokeAdHocParamsTest {
     @Test
     fun body() {
         val params =
-            AutomationInvokeAdHocParams.builder()
+            InvokeInvokeAdHocParams.builder()
                 .brand("brand")
                 .data(
                     AutomationInvokeParams.Data.builder()
@@ -57,14 +54,14 @@ internal class AutomationInvokeAdHocParamsTest {
                 .recipient("recipient")
                 .template("template")
                 .automation(
-                    AutomationInvokeAdHocParams.Automation.builder()
+                    InvokeInvokeAdHocParams.Automation.builder()
                         .addStep(
-                            AutomationInvokeAdHocParams.Automation.Step.AutomationAddToDigestStep
+                            InvokeInvokeAdHocParams.Automation.Step.AutomationAddToDigestStep
                                 .builder()
                                 .if_("if")
                                 .ref("ref")
                                 .action(
-                                    AutomationInvokeAdHocParams.Automation.Step
+                                    InvokeInvokeAdHocParams.Automation.Step
                                         .AutomationAddToDigestStep
                                         .Action
                                         .ADD_TO_DIGEST
@@ -91,15 +88,13 @@ internal class AutomationInvokeAdHocParamsTest {
         assertThat(body.template()).contains("template")
         assertThat(body.automation())
             .isEqualTo(
-                AutomationInvokeAdHocParams.Automation.builder()
+                InvokeInvokeAdHocParams.Automation.builder()
                     .addStep(
-                        AutomationInvokeAdHocParams.Automation.Step.AutomationAddToDigestStep
-                            .builder()
+                        InvokeInvokeAdHocParams.Automation.Step.AutomationAddToDigestStep.builder()
                             .if_("if")
                             .ref("ref")
                             .action(
-                                AutomationInvokeAdHocParams.Automation.Step
-                                    .AutomationAddToDigestStep
+                                InvokeInvokeAdHocParams.Automation.Step.AutomationAddToDigestStep
                                     .Action
                                     .ADD_TO_DIGEST
                             )
@@ -114,14 +109,14 @@ internal class AutomationInvokeAdHocParamsTest {
     @Test
     fun bodyWithoutOptionalFields() {
         val params =
-            AutomationInvokeAdHocParams.builder()
+            InvokeInvokeAdHocParams.builder()
                 .automation(
-                    AutomationInvokeAdHocParams.Automation.builder()
+                    InvokeInvokeAdHocParams.Automation.builder()
                         .addStep(
-                            AutomationInvokeAdHocParams.Automation.Step.AutomationAddToDigestStep
+                            InvokeInvokeAdHocParams.Automation.Step.AutomationAddToDigestStep
                                 .builder()
                                 .action(
-                                    AutomationInvokeAdHocParams.Automation.Step
+                                    InvokeInvokeAdHocParams.Automation.Step
                                         .AutomationAddToDigestStep
                                         .Action
                                         .ADD_TO_DIGEST
@@ -137,13 +132,11 @@ internal class AutomationInvokeAdHocParamsTest {
 
         assertThat(body.automation())
             .isEqualTo(
-                AutomationInvokeAdHocParams.Automation.builder()
+                InvokeInvokeAdHocParams.Automation.builder()
                     .addStep(
-                        AutomationInvokeAdHocParams.Automation.Step.AutomationAddToDigestStep
-                            .builder()
+                        InvokeInvokeAdHocParams.Automation.Step.AutomationAddToDigestStep.builder()
                             .action(
-                                AutomationInvokeAdHocParams.Automation.Step
-                                    .AutomationAddToDigestStep
+                                InvokeInvokeAdHocParams.Automation.Step.AutomationAddToDigestStep
                                     .Action
                                     .ADD_TO_DIGEST
                             )

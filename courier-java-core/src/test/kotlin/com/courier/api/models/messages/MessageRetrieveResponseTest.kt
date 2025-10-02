@@ -26,7 +26,7 @@ internal class MessageRetrieveResponseTest {
                 .sent(0L)
                 .status(MessageDetails.Status.CANCELED)
                 .error("error")
-                .reason(MessageDetails.Reason.FILTERED)
+                .reason(MessageDetails.Reason.BOUNCED)
                 .addProvider(
                     MessageRetrieveResponse.Provider.builder()
                         .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -45,7 +45,7 @@ internal class MessageRetrieveResponseTest {
         assertThat(messageRetrieveResponse.sent()).isEqualTo(0L)
         assertThat(messageRetrieveResponse.status()).isEqualTo(MessageDetails.Status.CANCELED)
         assertThat(messageRetrieveResponse.error()).contains("error")
-        assertThat(messageRetrieveResponse.reason()).contains(MessageDetails.Reason.FILTERED)
+        assertThat(messageRetrieveResponse.reason()).contains(MessageDetails.Reason.BOUNCED)
         assertThat(messageRetrieveResponse.providers().getOrNull())
             .containsExactly(
                 MessageRetrieveResponse.Provider.builder()
@@ -70,7 +70,7 @@ internal class MessageRetrieveResponseTest {
                 .sent(0L)
                 .status(MessageDetails.Status.CANCELED)
                 .error("error")
-                .reason(MessageDetails.Reason.FILTERED)
+                .reason(MessageDetails.Reason.BOUNCED)
                 .addProvider(
                     MessageRetrieveResponse.Provider.builder()
                         .putAdditionalProperty("foo", JsonValue.from("bar"))

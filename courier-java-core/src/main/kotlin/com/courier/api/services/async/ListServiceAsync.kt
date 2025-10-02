@@ -65,7 +65,7 @@ interface ListServiceAsync {
         retrieve(listId, ListRetrieveParams.none(), requestOptions)
 
     /** Create or replace an existing list with the supplied values. */
-    fun update(listId: String, params: ListUpdateParams): CompletableFuture<List> =
+    fun update(listId: String, params: ListUpdateParams): CompletableFuture<Void?> =
         update(listId, params, RequestOptions.none())
 
     /** @see update */
@@ -73,17 +73,17 @@ interface ListServiceAsync {
         listId: String,
         params: ListUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<List> = update(params.toBuilder().listId(listId).build(), requestOptions)
+    ): CompletableFuture<Void?> = update(params.toBuilder().listId(listId).build(), requestOptions)
 
     /** @see update */
-    fun update(params: ListUpdateParams): CompletableFuture<List> =
+    fun update(params: ListUpdateParams): CompletableFuture<Void?> =
         update(params, RequestOptions.none())
 
     /** @see update */
     fun update(
         params: ListUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<List>
+    ): CompletableFuture<Void?>
 
     /** Returns all of the lists, with the ability to filter based on a pattern. */
     fun list(): CompletableFuture<ListListResponse> = list(ListListParams.none())
@@ -133,35 +133,25 @@ interface ListServiceAsync {
         delete(listId, ListDeleteParams.none(), requestOptions)
 
     /** Restore a previously deleted list. */
-    fun restore(listId: String): CompletableFuture<Void?> =
-        restore(listId, ListRestoreParams.none())
+    fun restore(listId: String, params: ListRestoreParams): CompletableFuture<Void?> =
+        restore(listId, params, RequestOptions.none())
 
     /** @see restore */
     fun restore(
         listId: String,
-        params: ListRestoreParams = ListRestoreParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<Void?> = restore(params.toBuilder().listId(listId).build(), requestOptions)
-
-    /** @see restore */
-    fun restore(
-        listId: String,
-        params: ListRestoreParams = ListRestoreParams.none(),
-    ): CompletableFuture<Void?> = restore(listId, params, RequestOptions.none())
-
-    /** @see restore */
-    fun restore(
         params: ListRestoreParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<Void?>
+    ): CompletableFuture<Void?> = restore(params.toBuilder().listId(listId).build(), requestOptions)
 
     /** @see restore */
     fun restore(params: ListRestoreParams): CompletableFuture<Void?> =
         restore(params, RequestOptions.none())
 
     /** @see restore */
-    fun restore(listId: String, requestOptions: RequestOptions): CompletableFuture<Void?> =
-        restore(listId, ListRestoreParams.none(), requestOptions)
+    fun restore(
+        params: ListRestoreParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Void?>
 
     /** A view of [ListServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -218,28 +208,26 @@ interface ListServiceAsync {
          * Returns a raw HTTP response for `put /lists/{list_id}`, but is otherwise the same as
          * [ListServiceAsync.update].
          */
-        fun update(
-            listId: String,
-            params: ListUpdateParams,
-        ): CompletableFuture<HttpResponseFor<List>> = update(listId, params, RequestOptions.none())
+        fun update(listId: String, params: ListUpdateParams): CompletableFuture<HttpResponse> =
+            update(listId, params, RequestOptions.none())
 
         /** @see update */
         fun update(
             listId: String,
             params: ListUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<List>> =
+        ): CompletableFuture<HttpResponse> =
             update(params.toBuilder().listId(listId).build(), requestOptions)
 
         /** @see update */
-        fun update(params: ListUpdateParams): CompletableFuture<HttpResponseFor<List>> =
+        fun update(params: ListUpdateParams): CompletableFuture<HttpResponse> =
             update(params, RequestOptions.none())
 
         /** @see update */
         fun update(
             params: ListUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<List>>
+        ): CompletableFuture<HttpResponse>
 
         /**
          * Returns a raw HTTP response for `get /lists`, but is otherwise the same as
@@ -307,28 +295,16 @@ interface ListServiceAsync {
          * Returns a raw HTTP response for `put /lists/{list_id}/restore`, but is otherwise the same
          * as [ListServiceAsync.restore].
          */
-        fun restore(listId: String): CompletableFuture<HttpResponse> =
-            restore(listId, ListRestoreParams.none())
+        fun restore(listId: String, params: ListRestoreParams): CompletableFuture<HttpResponse> =
+            restore(listId, params, RequestOptions.none())
 
         /** @see restore */
         fun restore(
             listId: String,
-            params: ListRestoreParams = ListRestoreParams.none(),
+            params: ListRestoreParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponse> =
             restore(params.toBuilder().listId(listId).build(), requestOptions)
-
-        /** @see restore */
-        fun restore(
-            listId: String,
-            params: ListRestoreParams = ListRestoreParams.none(),
-        ): CompletableFuture<HttpResponse> = restore(listId, params, RequestOptions.none())
-
-        /** @see restore */
-        fun restore(
-            params: ListRestoreParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponse>
 
         /** @see restore */
         fun restore(params: ListRestoreParams): CompletableFuture<HttpResponse> =
@@ -336,9 +312,8 @@ interface ListServiceAsync {
 
         /** @see restore */
         fun restore(
-            listId: String,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponse> =
-            restore(listId, ListRestoreParams.none(), requestOptions)
+            params: ListRestoreParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponse>
     }
 }

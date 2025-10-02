@@ -78,7 +78,7 @@ internal class MessageServiceTest {
 
     @Disabled("Prism tests are disabled")
     @Test
-    fun getContent() {
+    fun content() {
         val client =
             CourierOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
@@ -86,7 +86,7 @@ internal class MessageServiceTest {
                 .build()
         val messageService = client.messages()
 
-        val response = messageService.getContent("message_id")
+        val response = messageService.content("message_id")
 
         response.validate()
     }

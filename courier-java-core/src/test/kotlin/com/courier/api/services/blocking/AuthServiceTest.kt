@@ -24,10 +24,7 @@ internal class AuthServiceTest {
 
         val response =
             authService.issueToken(
-                AuthIssueTokenParams.builder()
-                    .expiresIn("expires_in")
-                    .scope(AuthIssueTokenParams.Scope.READ_PREFERENCES)
-                    .build()
+                AuthIssueTokenParams.builder().expiresIn("expires_in").scope("scope").build()
             )
 
         response.validate()

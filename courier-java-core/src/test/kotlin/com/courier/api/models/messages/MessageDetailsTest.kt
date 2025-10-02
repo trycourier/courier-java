@@ -24,7 +24,7 @@ internal class MessageDetailsTest {
                 .sent(0L)
                 .status(MessageDetails.Status.CANCELED)
                 .error("error")
-                .reason(MessageDetails.Reason.FILTERED)
+                .reason(MessageDetails.Reason.BOUNCED)
                 .build()
 
         assertThat(messageDetails.id()).isEqualTo("id")
@@ -38,7 +38,7 @@ internal class MessageDetailsTest {
         assertThat(messageDetails.sent()).isEqualTo(0L)
         assertThat(messageDetails.status()).isEqualTo(MessageDetails.Status.CANCELED)
         assertThat(messageDetails.error()).contains("error")
-        assertThat(messageDetails.reason()).contains(MessageDetails.Reason.FILTERED)
+        assertThat(messageDetails.reason()).contains(MessageDetails.Reason.BOUNCED)
     }
 
     @Test
@@ -57,7 +57,7 @@ internal class MessageDetailsTest {
                 .sent(0L)
                 .status(MessageDetails.Status.CANCELED)
                 .error("error")
-                .reason(MessageDetails.Reason.FILTERED)
+                .reason(MessageDetails.Reason.BOUNCED)
                 .build()
 
         val roundtrippedMessageDetails =

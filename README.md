@@ -467,10 +467,10 @@ To set undocumented parameters on _nested_ headers, query params, or body classe
 
 ```java
 import com.courier.api.core.JsonValue;
-import com.courier.api.models.automations.AutomationInvokeAdHocParams;
+import com.courier.api.models.automations.invoke.InvokeInvokeAdHocParams;
 
-AutomationInvokeAdHocParams params = AutomationInvokeAdHocParams.builder()
-    .automation(AutomationInvokeAdHocParams.Automation.builder()
+InvokeInvokeAdHocParams params = InvokeInvokeAdHocParams.builder()
+    .automation(InvokeInvokeAdHocParams.Automation.builder()
         .putAdditionalProperty("secretProperty", JsonValue.from("42"))
         .build())
     .build();

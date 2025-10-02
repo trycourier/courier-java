@@ -50,9 +50,10 @@ class ListServiceImpl internal constructor(private val clientOptions: ClientOpti
         // get /lists/{list_id}
         withRawResponse().retrieve(params, requestOptions).parse()
 
-    override fun update(params: ListUpdateParams, requestOptions: RequestOptions): List =
+    override fun update(params: ListUpdateParams, requestOptions: RequestOptions) {
         // put /lists/{list_id}
-        withRawResponse().update(params, requestOptions).parse()
+        withRawResponse().update(params, requestOptions)
+    }
 
     override fun list(params: ListListParams, requestOptions: RequestOptions): ListListResponse =
         // get /lists
@@ -116,12 +117,12 @@ class ListServiceImpl internal constructor(private val clientOptions: ClientOpti
             }
         }
 
-        private val updateHandler: Handler<List> = jsonHandler<List>(clientOptions.jsonMapper)
+        private val updateHandler: Handler<Void?> = emptyHandler()
 
         override fun update(
             params: ListUpdateParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<List> {
+        ): HttpResponse {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("listId", params.listId().getOrNull())
@@ -136,13 +137,7 @@ class ListServiceImpl internal constructor(private val clientOptions: ClientOpti
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return errorHandler.handle(response).parseable {
-                response
-                    .use { updateHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
+                response.use { updateHandler.handle(it) }
             }
         }
 
@@ -211,7 +206,7 @@ class ListServiceImpl internal constructor(private val clientOptions: ClientOpti
                     .method(HttpMethod.PUT)
                     .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("lists", params._pathParam(0), "restore")
-                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))

@@ -1,17 +1,16 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.api.models.automations
+package com.courier.api.models.automations.invoke
 
 import com.courier.api.core.JsonValue
-import com.courier.api.models.automations.invoke.AutomationInvokeParams
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-internal class AutomationInvokeByTemplateParamsTest {
+internal class InvokeInvokeByTemplateParamsTest {
 
     @Test
     fun create() {
-        AutomationInvokeByTemplateParams.builder()
+        InvokeInvokeByTemplateParams.builder()
             .templateId("templateId")
             .automationInvokeParams(
                 AutomationInvokeParams.builder()
@@ -32,7 +31,7 @@ internal class AutomationInvokeByTemplateParamsTest {
     @Test
     fun pathParams() {
         val params =
-            AutomationInvokeByTemplateParams.builder()
+            InvokeInvokeByTemplateParams.builder()
                 .templateId("templateId")
                 .automationInvokeParams(AutomationInvokeParams.builder().build())
                 .build()
@@ -45,7 +44,7 @@ internal class AutomationInvokeByTemplateParamsTest {
     @Test
     fun body() {
         val params =
-            AutomationInvokeByTemplateParams.builder()
+            InvokeInvokeByTemplateParams.builder()
                 .templateId("templateId")
                 .automationInvokeParams(
                     AutomationInvokeParams.builder()
@@ -83,7 +82,7 @@ internal class AutomationInvokeByTemplateParamsTest {
     @Test
     fun bodyWithoutOptionalFields() {
         val params =
-            AutomationInvokeByTemplateParams.builder()
+            InvokeInvokeByTemplateParams.builder()
                 .templateId("templateId")
                 .automationInvokeParams(AutomationInvokeParams.builder().build())
                 .build()

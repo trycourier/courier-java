@@ -1,19 +1,19 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.api.models.send
+package com.courier.api.models.tenants.templates
 
+import com.courier.api.core.JsonValue
 import com.courier.api.core.jsonMapper
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
-import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-internal class ElementalGroupNodeTest {
+internal class ElementalContentTest {
 
     @Test
     fun create() {
-        val elementalGroupNode =
-            ElementalGroupNode.builder()
+        val elementalContent =
+            ElementalContent.builder()
                 .addElement(
                     ElementalNode.UnionMember0.builder()
                         .addChannel("string")
@@ -23,13 +23,11 @@ internal class ElementalGroupNodeTest {
                         .type(ElementalNode.UnionMember0.Type.TEXT)
                         .build()
                 )
-                .addChannel("string")
-                .if_("if")
-                .loop("loop")
-                .ref("ref")
+                .version("version")
+                .brand(JsonValue.from(mapOf<String, Any>()))
                 .build()
 
-        assertThat(elementalGroupNode.elements())
+        assertThat(elementalContent.elements())
             .containsExactly(
                 ElementalNode.ofUnionMember0(
                     ElementalNode.UnionMember0.builder()
@@ -41,17 +39,15 @@ internal class ElementalGroupNodeTest {
                         .build()
                 )
             )
-        assertThat(elementalGroupNode.channels().getOrNull()).containsExactly("string")
-        assertThat(elementalGroupNode.if_()).contains("if")
-        assertThat(elementalGroupNode.loop()).contains("loop")
-        assertThat(elementalGroupNode.ref()).contains("ref")
+        assertThat(elementalContent.version()).isEqualTo("version")
+        assertThat(elementalContent._brand()).isEqualTo(JsonValue.from(mapOf<String, Any>()))
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val elementalGroupNode =
-            ElementalGroupNode.builder()
+        val elementalContent =
+            ElementalContent.builder()
                 .addElement(
                     ElementalNode.UnionMember0.builder()
                         .addChannel("string")
@@ -61,18 +57,16 @@ internal class ElementalGroupNodeTest {
                         .type(ElementalNode.UnionMember0.Type.TEXT)
                         .build()
                 )
-                .addChannel("string")
-                .if_("if")
-                .loop("loop")
-                .ref("ref")
+                .version("version")
+                .brand(JsonValue.from(mapOf<String, Any>()))
                 .build()
 
-        val roundtrippedElementalGroupNode =
+        val roundtrippedElementalContent =
             jsonMapper.readValue(
-                jsonMapper.writeValueAsString(elementalGroupNode),
-                jacksonTypeRef<ElementalGroupNode>(),
+                jsonMapper.writeValueAsString(elementalContent),
+                jacksonTypeRef<ElementalContent>(),
             )
 
-        assertThat(roundtrippedElementalGroupNode).isEqualTo(elementalGroupNode)
+        assertThat(roundtrippedElementalContent).isEqualTo(elementalContent)
     }
 }

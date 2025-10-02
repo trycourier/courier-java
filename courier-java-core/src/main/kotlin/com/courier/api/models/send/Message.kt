@@ -13,6 +13,7 @@ import com.courier.api.core.checkRequired
 import com.courier.api.core.getOrThrow
 import com.courier.api.errors.CourierInvalidDataException
 import com.courier.api.models.bulk.UserRecipient
+import com.courier.api.models.tenants.templates.ElementalContent
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -897,8 +898,7 @@ private constructor(
             fun content(content: JsonField<Content>) = apply { this.content = content }
 
             /** Alias for calling [content] with `Content.ofElemental(elemental)`. */
-            fun content(elemental: Content.ElementalContent) =
-                content(Content.ofElemental(elemental))
+            fun content(elemental: ElementalContent) = content(Content.ofElemental(elemental))
 
             /**
              * Alias for calling [content] with

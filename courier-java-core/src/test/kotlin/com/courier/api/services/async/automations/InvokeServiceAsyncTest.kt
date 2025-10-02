@@ -1,19 +1,19 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.api.services.async
+package com.courier.api.services.async.automations
 
 import com.courier.api.TestServerExtension
 import com.courier.api.client.okhttp.CourierOkHttpClientAsync
 import com.courier.api.core.JsonValue
-import com.courier.api.models.automations.AutomationInvokeAdHocParams
-import com.courier.api.models.automations.AutomationInvokeByTemplateParams
 import com.courier.api.models.automations.invoke.AutomationInvokeParams
+import com.courier.api.models.automations.invoke.InvokeInvokeAdHocParams
+import com.courier.api.models.automations.invoke.InvokeInvokeByTemplateParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-internal class AutomationServiceAsyncTest {
+internal class InvokeServiceAsyncTest {
 
     @Disabled("Prism tests are disabled")
     @Test
@@ -23,11 +23,11 @@ internal class AutomationServiceAsyncTest {
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val automationServiceAsync = client.automations()
+        val invokeServiceAsync = client.automations().invoke()
 
         val automationInvokeResponseFuture =
-            automationServiceAsync.invokeAdHoc(
-                AutomationInvokeAdHocParams.builder()
+            invokeServiceAsync.invokeAdHoc(
+                InvokeInvokeAdHocParams.builder()
                     .brand("brand")
                     .data(
                         AutomationInvokeParams.Data.builder()
@@ -38,15 +38,14 @@ internal class AutomationServiceAsyncTest {
                     .recipient("recipient")
                     .template("template")
                     .automation(
-                        AutomationInvokeAdHocParams.Automation.builder()
+                        InvokeInvokeAdHocParams.Automation.builder()
                             .addStep(
-                                AutomationInvokeAdHocParams.Automation.Step
-                                    .AutomationAddToDigestStep
+                                InvokeInvokeAdHocParams.Automation.Step.AutomationAddToDigestStep
                                     .builder()
                                     .if_("if")
                                     .ref("ref")
                                     .action(
-                                        AutomationInvokeAdHocParams.Automation.Step
+                                        InvokeInvokeAdHocParams.Automation.Step
                                             .AutomationAddToDigestStep
                                             .Action
                                             .ADD_TO_DIGEST
@@ -72,11 +71,11 @@ internal class AutomationServiceAsyncTest {
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val automationServiceAsync = client.automations()
+        val invokeServiceAsync = client.automations().invoke()
 
         val automationInvokeResponseFuture =
-            automationServiceAsync.invokeByTemplate(
-                AutomationInvokeByTemplateParams.builder()
+            invokeServiceAsync.invokeByTemplate(
+                InvokeInvokeByTemplateParams.builder()
                     .templateId("templateId")
                     .automationInvokeParams(
                         AutomationInvokeParams.builder()

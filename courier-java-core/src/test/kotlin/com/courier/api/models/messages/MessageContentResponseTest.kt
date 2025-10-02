@@ -7,20 +7,20 @@ import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-internal class MessageGetContentResponseTest {
+internal class MessageContentResponseTest {
 
     @Test
     fun create() {
-        val messageGetContentResponse =
-            MessageGetContentResponse.builder()
+        val messageContentResponse =
+            MessageContentResponse.builder()
                 .addResult(
-                    MessageGetContentResponse.Result.builder()
+                    MessageContentResponse.Result.builder()
                         .channel("channel")
                         .channelId("channel_id")
                         .content(
-                            MessageGetContentResponse.Result.Content.builder()
+                            MessageContentResponse.Result.Content.builder()
                                 .addBlock(
-                                    MessageGetContentResponse.Result.Content.Block.builder()
+                                    MessageContentResponse.Result.Content.Block.builder()
                                         .text("text")
                                         .type("type")
                                         .build()
@@ -36,15 +36,15 @@ internal class MessageGetContentResponseTest {
                 )
                 .build()
 
-        assertThat(messageGetContentResponse.results())
+        assertThat(messageContentResponse.results())
             .containsExactly(
-                MessageGetContentResponse.Result.builder()
+                MessageContentResponse.Result.builder()
                     .channel("channel")
                     .channelId("channel_id")
                     .content(
-                        MessageGetContentResponse.Result.Content.builder()
+                        MessageContentResponse.Result.Content.builder()
                             .addBlock(
-                                MessageGetContentResponse.Result.Content.Block.builder()
+                                MessageContentResponse.Result.Content.Block.builder()
                                     .text("text")
                                     .type("type")
                                     .build()
@@ -63,16 +63,16 @@ internal class MessageGetContentResponseTest {
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val messageGetContentResponse =
-            MessageGetContentResponse.builder()
+        val messageContentResponse =
+            MessageContentResponse.builder()
                 .addResult(
-                    MessageGetContentResponse.Result.builder()
+                    MessageContentResponse.Result.builder()
                         .channel("channel")
                         .channelId("channel_id")
                         .content(
-                            MessageGetContentResponse.Result.Content.builder()
+                            MessageContentResponse.Result.Content.builder()
                                 .addBlock(
-                                    MessageGetContentResponse.Result.Content.Block.builder()
+                                    MessageContentResponse.Result.Content.Block.builder()
                                         .text("text")
                                         .type("type")
                                         .build()
@@ -88,12 +88,12 @@ internal class MessageGetContentResponseTest {
                 )
                 .build()
 
-        val roundtrippedMessageGetContentResponse =
+        val roundtrippedMessageContentResponse =
             jsonMapper.readValue(
-                jsonMapper.writeValueAsString(messageGetContentResponse),
-                jacksonTypeRef<MessageGetContentResponse>(),
+                jsonMapper.writeValueAsString(messageContentResponse),
+                jacksonTypeRef<MessageContentResponse>(),
             )
 
-        assertThat(roundtrippedMessageGetContentResponse).isEqualTo(messageGetContentResponse)
+        assertThat(roundtrippedMessageContentResponse).isEqualTo(messageContentResponse)
     }
 }

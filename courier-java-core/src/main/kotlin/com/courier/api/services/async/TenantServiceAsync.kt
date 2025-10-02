@@ -15,6 +15,7 @@ import com.courier.api.models.tenants.TenantListUsersResponse
 import com.courier.api.models.tenants.TenantRetrieveParams
 import com.courier.api.models.tenants.TenantUpdateParams
 import com.courier.api.services.async.tenants.DefaultPreferenceServiceAsync
+import com.courier.api.services.async.tenants.TemplateServiceAsync
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
@@ -33,6 +34,8 @@ interface TenantServiceAsync {
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): TenantServiceAsync
 
     fun defaultPreferences(): DefaultPreferenceServiceAsync
+
+    fun templates(): TemplateServiceAsync
 
     /** Get a Tenant */
     fun retrieve(tenantId: String): CompletableFuture<Tenant> =
@@ -189,6 +192,8 @@ interface TenantServiceAsync {
         ): TenantServiceAsync.WithRawResponse
 
         fun defaultPreferences(): DefaultPreferenceServiceAsync.WithRawResponse
+
+        fun templates(): TemplateServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `get /tenants/{tenant_id}`, but is otherwise the same as

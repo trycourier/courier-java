@@ -81,7 +81,7 @@ internal class MessageServiceAsyncTest {
 
     @Disabled("Prism tests are disabled")
     @Test
-    fun getContent() {
+    fun content() {
         val client =
             CourierOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
@@ -89,7 +89,7 @@ internal class MessageServiceAsyncTest {
                 .build()
         val messageServiceAsync = client.messages()
 
-        val responseFuture = messageServiceAsync.getContent("message_id")
+        val responseFuture = messageServiceAsync.content("message_id")
 
         val response = responseFuture.get()
         response.validate()

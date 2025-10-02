@@ -14,12 +14,21 @@ internal class ListListResponseTest {
     fun create() {
         val listListResponse =
             ListListResponse.builder()
-                .addItem(List.builder().id("id").name("name").created(0L).updated(0L).build())
+                .addItem(
+                    List.builder()
+                        .id("id")
+                        .name("name")
+                        .created("created")
+                        .updated("updated")
+                        .build()
+                )
                 .paging(Paging.builder().more(true).cursor("cursor").build())
                 .build()
 
         assertThat(listListResponse.items())
-            .containsExactly(List.builder().id("id").name("name").created(0L).updated(0L).build())
+            .containsExactly(
+                List.builder().id("id").name("name").created("created").updated("updated").build()
+            )
         assertThat(listListResponse.paging())
             .isEqualTo(Paging.builder().more(true).cursor("cursor").build())
     }
@@ -29,7 +38,14 @@ internal class ListListResponseTest {
         val jsonMapper = jsonMapper()
         val listListResponse =
             ListListResponse.builder()
-                .addItem(List.builder().id("id").name("name").created(0L).updated(0L).build())
+                .addItem(
+                    List.builder()
+                        .id("id")
+                        .name("name")
+                        .created("created")
+                        .updated("updated")
+                        .build()
+                )
                 .paging(Paging.builder().more(true).cursor("cursor").build())
                 .build()
 

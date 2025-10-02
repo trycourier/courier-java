@@ -22,8 +22,8 @@ class List
 private constructor(
     private val id: JsonField<String>,
     private val name: JsonField<String>,
-    private val created: JsonField<Long>,
-    private val updated: JsonField<Long>,
+    private val created: JsonField<String>,
+    private val updated: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -31,8 +31,8 @@ private constructor(
     private constructor(
         @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
         @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("created") @ExcludeMissing created: JsonField<Long> = JsonMissing.of(),
-        @JsonProperty("updated") @ExcludeMissing updated: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("created") @ExcludeMissing created: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("updated") @ExcludeMissing updated: JsonField<String> = JsonMissing.of(),
     ) : this(id, name, created, updated, mutableMapOf())
 
     /**
@@ -51,13 +51,13 @@ private constructor(
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun created(): Optional<Long> = created.getOptional("created")
+    fun created(): Optional<String> = created.getOptional("created")
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun updated(): Optional<Long> = updated.getOptional("updated")
+    fun updated(): Optional<String> = updated.getOptional("updated")
 
     /**
      * Returns the raw JSON value of [id].
@@ -78,14 +78,14 @@ private constructor(
      *
      * Unlike [created], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("created") @ExcludeMissing fun _created(): JsonField<Long> = created
+    @JsonProperty("created") @ExcludeMissing fun _created(): JsonField<String> = created
 
     /**
      * Returns the raw JSON value of [updated].
      *
      * Unlike [updated], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("updated") @ExcludeMissing fun _updated(): JsonField<Long> = updated
+    @JsonProperty("updated") @ExcludeMissing fun _updated(): JsonField<String> = updated
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -118,8 +118,8 @@ private constructor(
 
         private var id: JsonField<String>? = null
         private var name: JsonField<String>? = null
-        private var created: JsonField<Long> = JsonMissing.of()
-        private var updated: JsonField<Long> = JsonMissing.of()
+        private var created: JsonField<String> = JsonMissing.of()
+        private var updated: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -151,45 +151,31 @@ private constructor(
          */
         fun name(name: JsonField<String>) = apply { this.name = name }
 
-        fun created(created: Long?) = created(JsonField.ofNullable(created))
-
-        /**
-         * Alias for [Builder.created].
-         *
-         * This unboxed primitive overload exists for backwards compatibility.
-         */
-        fun created(created: Long) = created(created as Long?)
+        fun created(created: String?) = created(JsonField.ofNullable(created))
 
         /** Alias for calling [Builder.created] with `created.orElse(null)`. */
-        fun created(created: Optional<Long>) = created(created.getOrNull())
+        fun created(created: Optional<String>) = created(created.getOrNull())
 
         /**
          * Sets [Builder.created] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.created] with a well-typed [Long] value instead. This
+         * You should usually call [Builder.created] with a well-typed [String] value instead. This
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun created(created: JsonField<Long>) = apply { this.created = created }
+        fun created(created: JsonField<String>) = apply { this.created = created }
 
-        fun updated(updated: Long?) = updated(JsonField.ofNullable(updated))
-
-        /**
-         * Alias for [Builder.updated].
-         *
-         * This unboxed primitive overload exists for backwards compatibility.
-         */
-        fun updated(updated: Long) = updated(updated as Long?)
+        fun updated(updated: String?) = updated(JsonField.ofNullable(updated))
 
         /** Alias for calling [Builder.updated] with `updated.orElse(null)`. */
-        fun updated(updated: Optional<Long>) = updated(updated.getOrNull())
+        fun updated(updated: Optional<String>) = updated(updated.getOrNull())
 
         /**
          * Sets [Builder.updated] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.updated] with a well-typed [Long] value instead. This
+         * You should usually call [Builder.updated] with a well-typed [String] value instead. This
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun updated(updated: JsonField<Long>) = apply { this.updated = updated }
+        fun updated(updated: JsonField<String>) = apply { this.updated = updated }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()

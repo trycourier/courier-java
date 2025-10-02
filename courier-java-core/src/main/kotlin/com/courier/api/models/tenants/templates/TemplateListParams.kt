@@ -1,27 +1,31 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.api.models.users.tokens
+package com.courier.api.models.tenants.templates
 
 import com.courier.api.core.Params
-import com.courier.api.core.checkRequired
 import com.courier.api.core.http.Headers
 import com.courier.api.core.http.QueryParams
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Get single token available for a `:token` */
-class TokenRetrieveSingleParams
+/** List Templates in Tenant */
+class TemplateListParams
 private constructor(
-    private val userId: String,
-    private val token: String?,
+    private val tenantId: String?,
+    private val cursor: String?,
+    private val limit: Long?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun userId(): String = userId
+    fun tenantId(): Optional<String> = Optional.ofNullable(tenantId)
 
-    fun token(): Optional<String> = Optional.ofNullable(token)
+    /** Continue the pagination with the next cursor */
+    fun cursor(): Optional<String> = Optional.ofNullable(cursor)
+
+    /** The number of templates to return (defaults to 20, maximum value of 100) */
+    fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -33,39 +37,53 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [TokenRetrieveSingleParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .userId()
-         * ```
-         */
+        @JvmStatic fun none(): TemplateListParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [TemplateListParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [TokenRetrieveSingleParams]. */
+    /** A builder for [TemplateListParams]. */
     class Builder internal constructor() {
 
-        private var userId: String? = null
-        private var token: String? = null
+        private var tenantId: String? = null
+        private var cursor: String? = null
+        private var limit: Long? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(tokenRetrieveSingleParams: TokenRetrieveSingleParams) = apply {
-            userId = tokenRetrieveSingleParams.userId
-            token = tokenRetrieveSingleParams.token
-            additionalHeaders = tokenRetrieveSingleParams.additionalHeaders.toBuilder()
-            additionalQueryParams = tokenRetrieveSingleParams.additionalQueryParams.toBuilder()
+        internal fun from(templateListParams: TemplateListParams) = apply {
+            tenantId = templateListParams.tenantId
+            cursor = templateListParams.cursor
+            limit = templateListParams.limit
+            additionalHeaders = templateListParams.additionalHeaders.toBuilder()
+            additionalQueryParams = templateListParams.additionalQueryParams.toBuilder()
         }
 
-        fun userId(userId: String) = apply { this.userId = userId }
+        fun tenantId(tenantId: String?) = apply { this.tenantId = tenantId }
 
-        fun token(token: String?) = apply { this.token = token }
+        /** Alias for calling [Builder.tenantId] with `tenantId.orElse(null)`. */
+        fun tenantId(tenantId: Optional<String>) = tenantId(tenantId.getOrNull())
 
-        /** Alias for calling [Builder.token] with `token.orElse(null)`. */
-        fun token(token: Optional<String>) = token(token.getOrNull())
+        /** Continue the pagination with the next cursor */
+        fun cursor(cursor: String?) = apply { this.cursor = cursor }
+
+        /** Alias for calling [Builder.cursor] with `cursor.orElse(null)`. */
+        fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
+
+        /** The number of templates to return (defaults to 20, maximum value of 100) */
+        fun limit(limit: Long?) = apply { this.limit = limit }
+
+        /**
+         * Alias for [Builder.limit].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun limit(limit: Long) = limit(limit as Long?)
+
+        /** Alias for calling [Builder.limit] with `limit.orElse(null)`. */
+        fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -166,21 +184,15 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [TokenRetrieveSingleParams].
+         * Returns an immutable instance of [TemplateListParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .userId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): TokenRetrieveSingleParams =
-            TokenRetrieveSingleParams(
-                checkRequired("userId", userId),
-                token,
+        fun build(): TemplateListParams =
+            TemplateListParams(
+                tenantId,
+                cursor,
+                limit,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -188,30 +200,37 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> userId
-            1 -> token ?: ""
+            0 -> tenantId ?: ""
             else -> ""
         }
 
     override fun _headers(): Headers = additionalHeaders
 
-    override fun _queryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                cursor?.let { put("cursor", it) }
+                limit?.let { put("limit", it.toString()) }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return other is TokenRetrieveSingleParams &&
-            userId == other.userId &&
-            token == other.token &&
+        return other is TemplateListParams &&
+            tenantId == other.tenantId &&
+            cursor == other.cursor &&
+            limit == other.limit &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(userId, token, additionalHeaders, additionalQueryParams)
+        Objects.hash(tenantId, cursor, limit, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "TokenRetrieveSingleParams{userId=$userId, token=$token, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "TemplateListParams{tenantId=$tenantId, cursor=$cursor, limit=$limit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

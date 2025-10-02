@@ -5,6 +5,8 @@ package com.courier.api.models.send
 import com.courier.api.core.JsonValue
 import com.courier.api.core.jsonMapper
 import com.courier.api.errors.CourierInvalidDataException
+import com.courier.api.models.tenants.templates.ElementalContent
+import com.courier.api.models.tenants.templates.ElementalNode
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -17,7 +19,7 @@ internal class ContentTest {
     @Test
     fun ofElemental() {
         val elemental =
-            Content.ElementalContent.builder()
+            ElementalContent.builder()
                 .addElement(
                     ElementalNode.UnionMember0.builder()
                         .addChannel("string")
@@ -42,7 +44,7 @@ internal class ContentTest {
         val jsonMapper = jsonMapper()
         val content =
             Content.ofElemental(
-                Content.ElementalContent.builder()
+                ElementalContent.builder()
                     .addElement(
                         ElementalNode.UnionMember0.builder()
                             .addChannel("string")

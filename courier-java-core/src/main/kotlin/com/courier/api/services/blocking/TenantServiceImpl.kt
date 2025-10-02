@@ -27,6 +27,8 @@ import com.courier.api.models.tenants.TenantRetrieveParams
 import com.courier.api.models.tenants.TenantUpdateParams
 import com.courier.api.services.blocking.tenants.DefaultPreferenceService
 import com.courier.api.services.blocking.tenants.DefaultPreferenceServiceImpl
+import com.courier.api.services.blocking.tenants.TemplateService
+import com.courier.api.services.blocking.tenants.TemplateServiceImpl
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
@@ -41,12 +43,16 @@ class TenantServiceImpl internal constructor(private val clientOptions: ClientOp
         DefaultPreferenceServiceImpl(clientOptions)
     }
 
+    private val templates: TemplateService by lazy { TemplateServiceImpl(clientOptions) }
+
     override fun withRawResponse(): TenantService.WithRawResponse = withRawResponse
 
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): TenantService =
         TenantServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun defaultPreferences(): DefaultPreferenceService = defaultPreferences
+
+    override fun templates(): TemplateService = templates
 
     override fun retrieve(params: TenantRetrieveParams, requestOptions: RequestOptions): Tenant =
         // get /tenants/{tenant_id}
@@ -85,6 +91,10 @@ class TenantServiceImpl internal constructor(private val clientOptions: ClientOp
             DefaultPreferenceServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val templates: TemplateService.WithRawResponse by lazy {
+            TemplateServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun withOptions(
             modifier: Consumer<ClientOptions.Builder>
         ): TenantService.WithRawResponse =
@@ -94,6 +104,8 @@ class TenantServiceImpl internal constructor(private val clientOptions: ClientOp
 
         override fun defaultPreferences(): DefaultPreferenceService.WithRawResponse =
             defaultPreferences
+
+        override fun templates(): TemplateService.WithRawResponse = templates
 
         private val retrieveHandler: Handler<Tenant> = jsonHandler<Tenant>(clientOptions.jsonMapper)
 

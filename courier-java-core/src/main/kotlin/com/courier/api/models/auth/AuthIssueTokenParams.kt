@@ -2,7 +2,6 @@
 
 package com.courier.api.models.auth
 
-import com.courier.api.core.Enum
 import com.courier.api.core.ExcludeMissing
 import com.courier.api.core.JsonField
 import com.courier.api.core.JsonMissing
@@ -18,7 +17,6 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Collections
 import java.util.Objects
-import kotlin.jvm.optionals.getOrNull
 
 /** Returns a new access token. */
 class AuthIssueTokenParams
@@ -38,7 +36,7 @@ private constructor(
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun scope(): Scope = body.scope()
+    fun scope(): String = body.scope()
 
     /**
      * Returns the raw JSON value of [expiresIn].
@@ -52,7 +50,7 @@ private constructor(
      *
      * Unlike [scope], this method doesn't throw if the JSON field has an unexpected type.
      */
-    fun _scope(): JsonField<Scope> = body._scope()
+    fun _scope(): JsonField<String> = body._scope()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -113,15 +111,15 @@ private constructor(
          */
         fun expiresIn(expiresIn: JsonField<String>) = apply { body.expiresIn(expiresIn) }
 
-        fun scope(scope: Scope) = apply { body.scope(scope) }
+        fun scope(scope: String) = apply { body.scope(scope) }
 
         /**
          * Sets [Builder.scope] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.scope] with a well-typed [Scope] value instead. This
+         * You should usually call [Builder.scope] with a well-typed [String] value instead. This
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun scope(scope: JsonField<Scope>) = apply { body.scope(scope) }
+        fun scope(scope: JsonField<String>) = apply { body.scope(scope) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
@@ -271,7 +269,7 @@ private constructor(
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val expiresIn: JsonField<String>,
-        private val scope: JsonField<Scope>,
+        private val scope: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -280,7 +278,7 @@ private constructor(
             @JsonProperty("expires_in")
             @ExcludeMissing
             expiresIn: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("scope") @ExcludeMissing scope: JsonField<Scope> = JsonMissing.of(),
+            @JsonProperty("scope") @ExcludeMissing scope: JsonField<String> = JsonMissing.of(),
         ) : this(expiresIn, scope, mutableMapOf())
 
         /**
@@ -293,7 +291,7 @@ private constructor(
          * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun scope(): Scope = scope.getRequired("scope")
+        fun scope(): String = scope.getRequired("scope")
 
         /**
          * Returns the raw JSON value of [expiresIn].
@@ -307,7 +305,7 @@ private constructor(
          *
          * Unlike [scope], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("scope") @ExcludeMissing fun _scope(): JsonField<Scope> = scope
+        @JsonProperty("scope") @ExcludeMissing fun _scope(): JsonField<String> = scope
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -339,7 +337,7 @@ private constructor(
         class Builder internal constructor() {
 
             private var expiresIn: JsonField<String>? = null
-            private var scope: JsonField<Scope>? = null
+            private var scope: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -360,16 +358,16 @@ private constructor(
              */
             fun expiresIn(expiresIn: JsonField<String>) = apply { this.expiresIn = expiresIn }
 
-            fun scope(scope: Scope) = scope(JsonField.of(scope))
+            fun scope(scope: String) = scope(JsonField.of(scope))
 
             /**
              * Sets [Builder.scope] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.scope] with a well-typed [Scope] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
+             * You should usually call [Builder.scope] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
-            fun scope(scope: JsonField<Scope>) = apply { this.scope = scope }
+            fun scope(scope: JsonField<String>) = apply { this.scope = scope }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -419,7 +417,7 @@ private constructor(
             }
 
             expiresIn()
-            scope().validate()
+            scope()
             validated = true
         }
 
@@ -440,7 +438,7 @@ private constructor(
         @JvmSynthetic
         internal fun validity(): Int =
             (if (expiresIn.asKnown().isPresent) 1 else 0) +
-                (scope.asKnown().getOrNull()?.validity() ?: 0)
+                (if (scope.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -459,203 +457,6 @@ private constructor(
 
         override fun toString() =
             "Body{expiresIn=$expiresIn, scope=$scope, additionalProperties=$additionalProperties}"
-    }
-
-    class Scope @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
-
-        /**
-         * Returns this class instance's raw value.
-         *
-         * This is usually only useful if this instance was deserialized from data that doesn't
-         * match any known member, and you want to know that value. For example, if the SDK is on an
-         * older version than the API, then the API may respond with new members that the SDK is
-         * unaware of.
-         */
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-        companion object {
-
-            @JvmField val READ_PREFERENCES = of("read:preferences")
-
-            @JvmField val WRITE_PREFERENCES = of("write:preferences")
-
-            @JvmField val READ_USER_TOKENS = of("read:user-tokens")
-
-            @JvmField val WRITE_USER_TOKENS = of("write:user-tokens")
-
-            @JvmField val READ_BRANDS = of("read:brands")
-
-            @JvmField val WRITE_BRANDS = of("write:brands")
-
-            @JvmField val READ_BRANDS_ID = of("read:brands{:id}")
-
-            @JvmField val WRITE_BRANDS_ID = of("write:brands{:id}")
-
-            @JvmField val WRITE_TRACK = of("write:track")
-
-            @JvmField val INBOX_READ_MESSAGES = of("inbox:read:messages")
-
-            @JvmField val INBOX_WRITE_MESSAGES = of("inbox:write:messages")
-
-            @JvmField val INBOX_WRITE_EVENT = of("inbox:write:event")
-
-            @JvmField val INBOX_WRITE_EVENTS = of("inbox:write:events")
-
-            @JvmField val USER_ID_YOUR_USER_ID = of("user_id:\$YOUR_USER_ID")
-
-            @JvmStatic fun of(value: String) = Scope(JsonField.of(value))
-        }
-
-        /** An enum containing [Scope]'s known values. */
-        enum class Known {
-            READ_PREFERENCES,
-            WRITE_PREFERENCES,
-            READ_USER_TOKENS,
-            WRITE_USER_TOKENS,
-            READ_BRANDS,
-            WRITE_BRANDS,
-            READ_BRANDS_ID,
-            WRITE_BRANDS_ID,
-            WRITE_TRACK,
-            INBOX_READ_MESSAGES,
-            INBOX_WRITE_MESSAGES,
-            INBOX_WRITE_EVENT,
-            INBOX_WRITE_EVENTS,
-            USER_ID_YOUR_USER_ID,
-        }
-
-        /**
-         * An enum containing [Scope]'s known values, as well as an [_UNKNOWN] member.
-         *
-         * An instance of [Scope] can contain an unknown value in a couple of cases:
-         * - It was deserialized from data that doesn't match any known member. For example, if the
-         *   SDK is on an older version than the API, then the API may respond with new members that
-         *   the SDK is unaware of.
-         * - It was constructed with an arbitrary value using the [of] method.
-         */
-        enum class Value {
-            READ_PREFERENCES,
-            WRITE_PREFERENCES,
-            READ_USER_TOKENS,
-            WRITE_USER_TOKENS,
-            READ_BRANDS,
-            WRITE_BRANDS,
-            READ_BRANDS_ID,
-            WRITE_BRANDS_ID,
-            WRITE_TRACK,
-            INBOX_READ_MESSAGES,
-            INBOX_WRITE_MESSAGES,
-            INBOX_WRITE_EVENT,
-            INBOX_WRITE_EVENTS,
-            USER_ID_YOUR_USER_ID,
-            /** An enum member indicating that [Scope] was instantiated with an unknown value. */
-            _UNKNOWN,
-        }
-
-        /**
-         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
-         * if the class was instantiated with an unknown value.
-         *
-         * Use the [known] method instead if you're certain the value is always known or if you want
-         * to throw for the unknown case.
-         */
-        fun value(): Value =
-            when (this) {
-                READ_PREFERENCES -> Value.READ_PREFERENCES
-                WRITE_PREFERENCES -> Value.WRITE_PREFERENCES
-                READ_USER_TOKENS -> Value.READ_USER_TOKENS
-                WRITE_USER_TOKENS -> Value.WRITE_USER_TOKENS
-                READ_BRANDS -> Value.READ_BRANDS
-                WRITE_BRANDS -> Value.WRITE_BRANDS
-                READ_BRANDS_ID -> Value.READ_BRANDS_ID
-                WRITE_BRANDS_ID -> Value.WRITE_BRANDS_ID
-                WRITE_TRACK -> Value.WRITE_TRACK
-                INBOX_READ_MESSAGES -> Value.INBOX_READ_MESSAGES
-                INBOX_WRITE_MESSAGES -> Value.INBOX_WRITE_MESSAGES
-                INBOX_WRITE_EVENT -> Value.INBOX_WRITE_EVENT
-                INBOX_WRITE_EVENTS -> Value.INBOX_WRITE_EVENTS
-                USER_ID_YOUR_USER_ID -> Value.USER_ID_YOUR_USER_ID
-                else -> Value._UNKNOWN
-            }
-
-        /**
-         * Returns an enum member corresponding to this class instance's value.
-         *
-         * Use the [value] method instead if you're uncertain the value is always known and don't
-         * want to throw for the unknown case.
-         *
-         * @throws CourierInvalidDataException if this class instance's value is a not a known
-         *   member.
-         */
-        fun known(): Known =
-            when (this) {
-                READ_PREFERENCES -> Known.READ_PREFERENCES
-                WRITE_PREFERENCES -> Known.WRITE_PREFERENCES
-                READ_USER_TOKENS -> Known.READ_USER_TOKENS
-                WRITE_USER_TOKENS -> Known.WRITE_USER_TOKENS
-                READ_BRANDS -> Known.READ_BRANDS
-                WRITE_BRANDS -> Known.WRITE_BRANDS
-                READ_BRANDS_ID -> Known.READ_BRANDS_ID
-                WRITE_BRANDS_ID -> Known.WRITE_BRANDS_ID
-                WRITE_TRACK -> Known.WRITE_TRACK
-                INBOX_READ_MESSAGES -> Known.INBOX_READ_MESSAGES
-                INBOX_WRITE_MESSAGES -> Known.INBOX_WRITE_MESSAGES
-                INBOX_WRITE_EVENT -> Known.INBOX_WRITE_EVENT
-                INBOX_WRITE_EVENTS -> Known.INBOX_WRITE_EVENTS
-                USER_ID_YOUR_USER_ID -> Known.USER_ID_YOUR_USER_ID
-                else -> throw CourierInvalidDataException("Unknown Scope: $value")
-            }
-
-        /**
-         * Returns this class instance's primitive wire representation.
-         *
-         * This differs from the [toString] method because that method is primarily for debugging
-         * and generally doesn't throw.
-         *
-         * @throws CourierInvalidDataException if this class instance's value does not have the
-         *   expected primitive type.
-         */
-        fun asString(): String =
-            _value().asString().orElseThrow { CourierInvalidDataException("Value is not a String") }
-
-        private var validated: Boolean = false
-
-        fun validate(): Scope = apply {
-            if (validated) {
-                return@apply
-            }
-
-            known()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: CourierInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Scope && value == other.value
-        }
-
-        override fun hashCode() = value.hashCode()
-
-        override fun toString() = value.toString()
     }
 
     override fun equals(other: Any?): Boolean {

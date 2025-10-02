@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.api.models.automations
+package com.courier.api.models.automations.invoke
 
 import com.courier.api.core.BaseDeserializer
 import com.courier.api.core.BaseSerializer
@@ -18,9 +18,6 @@ import com.courier.api.core.http.Headers
 import com.courier.api.core.http.QueryParams
 import com.courier.api.core.toImmutable
 import com.courier.api.errors.CourierInvalidDataException
-import com.courier.api.models.automations.invoke.AutomationInvokeParams
-import com.courier.api.models.automations.invoke.AutomationStep
-import com.courier.api.models.automations.invoke.MergeAlgorithm
 import com.courier.api.models.send.Message
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -43,7 +40,7 @@ import kotlin.jvm.optionals.getOrNull
  * steps. For information about what steps are available, checkout the ad hoc automation guide
  * [here](https://www.courier.com/docs/automations/steps/).
  */
-class AutomationInvokeAdHocParams
+class InvokeInvokeAdHocParams
 private constructor(
     private val body: Body,
     private val additionalHeaders: Headers,
@@ -130,7 +127,7 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [AutomationInvokeAdHocParams].
+         * Returns a mutable builder for constructing an instance of [InvokeInvokeAdHocParams].
          *
          * The following fields are required:
          * ```java
@@ -140,7 +137,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [AutomationInvokeAdHocParams]. */
+    /** A builder for [InvokeInvokeAdHocParams]. */
     class Builder internal constructor() {
 
         private var body: Body.Builder = Body.builder()
@@ -148,10 +145,10 @@ private constructor(
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(automationInvokeAdHocParams: AutomationInvokeAdHocParams) = apply {
-            body = automationInvokeAdHocParams.body.toBuilder()
-            additionalHeaders = automationInvokeAdHocParams.additionalHeaders.toBuilder()
-            additionalQueryParams = automationInvokeAdHocParams.additionalQueryParams.toBuilder()
+        internal fun from(invokeInvokeAdHocParams: InvokeInvokeAdHocParams) = apply {
+            body = invokeInvokeAdHocParams.body.toBuilder()
+            additionalHeaders = invokeInvokeAdHocParams.additionalHeaders.toBuilder()
+            additionalQueryParams = invokeInvokeAdHocParams.additionalQueryParams.toBuilder()
         }
 
         /**
@@ -353,7 +350,7 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [AutomationInvokeAdHocParams].
+         * Returns an immutable instance of [InvokeInvokeAdHocParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
@@ -364,8 +361,8 @@ private constructor(
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): AutomationInvokeAdHocParams =
-            AutomationInvokeAdHocParams(
+        fun build(): InvokeInvokeAdHocParams =
+            InvokeInvokeAdHocParams(
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -9447,7 +9444,7 @@ private constructor(
             return true
         }
 
-        return other is AutomationInvokeAdHocParams &&
+        return other is InvokeInvokeAdHocParams &&
             body == other.body &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
@@ -9456,5 +9453,5 @@ private constructor(
     override fun hashCode(): Int = Objects.hash(body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "AutomationInvokeAdHocParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "InvokeInvokeAdHocParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
