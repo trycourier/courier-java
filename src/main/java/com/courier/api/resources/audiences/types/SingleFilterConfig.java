@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SingleFilterConfig.Builder.class)
 public final class SingleFilterConfig implements IBaseFilterConfig {
     private final Operator operator;
@@ -88,17 +89,26 @@ public final class SingleFilterConfig implements IBaseFilterConfig {
     }
 
     public interface OperatorStage {
-        ValueStage operator(Operator operator);
+        /**
+         * <p>The operator to use for filtering</p>
+         */
+        ValueStage operator(@NotNull Operator operator);
 
         Builder from(SingleFilterConfig other);
     }
 
     public interface ValueStage {
-        PathStage value(String value);
+        /**
+         * <p>The value to use for filtering</p>
+         */
+        PathStage value(@NotNull String value);
     }
 
     public interface PathStage {
-        _FinalStage path(String path);
+        /**
+         * <p>The attribe name from profile whose value will be operated against the filter value</p>
+         */
+        _FinalStage path(@NotNull String path);
     }
 
     public interface _FinalStage {
@@ -128,34 +138,37 @@ public final class SingleFilterConfig implements IBaseFilterConfig {
 
         /**
          * <p>The operator to use for filtering</p>
+         * <p>The operator to use for filtering</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("operator")
-        public ValueStage operator(Operator operator) {
-            this.operator = operator;
+        public ValueStage operator(@NotNull Operator operator) {
+            this.operator = Objects.requireNonNull(operator, "operator must not be null");
             return this;
         }
 
         /**
          * <p>The value to use for filtering</p>
+         * <p>The value to use for filtering</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("value")
-        public PathStage value(String value) {
-            this.value = value;
+        public PathStage value(@NotNull String value) {
+            this.value = Objects.requireNonNull(value, "value must not be null");
             return this;
         }
 
         /**
          * <p>The attribe name from profile whose value will be operated against the filter value</p>
+         * <p>The attribe name from profile whose value will be operated against the filter value</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("path")
-        public _FinalStage path(String path) {
-            this.path = path;
+        public _FinalStage path(@NotNull String path) {
+            this.path = Objects.requireNonNull(path, "path must not be null");
             return this;
         }
 

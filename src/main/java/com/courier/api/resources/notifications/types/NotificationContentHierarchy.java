@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = NotificationContentHierarchy.Builder.class)
 public final class NotificationContentHierarchy {
     private final Optional<String> parent;
@@ -96,7 +96,7 @@ public final class NotificationContentHierarchy {
         }
 
         public Builder parent(String parent) {
-            this.parent = Optional.of(parent);
+            this.parent = Optional.ofNullable(parent);
             return this;
         }
 
@@ -107,7 +107,7 @@ public final class NotificationContentHierarchy {
         }
 
         public Builder children(String children) {
-            this.children = Optional.of(children);
+            this.children = Optional.ofNullable(children);
             return this;
         }
 

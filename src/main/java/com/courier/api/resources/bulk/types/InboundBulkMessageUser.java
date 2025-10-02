@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = InboundBulkMessageUser.Builder.class)
 public final class InboundBulkMessageUser implements IInboundBulkMessageUser {
     private final Optional<RecipientPreferences> preferences;
@@ -145,7 +145,7 @@ public final class InboundBulkMessageUser implements IInboundBulkMessageUser {
         }
 
         public Builder preferences(RecipientPreferences preferences) {
-            this.preferences = Optional.of(preferences);
+            this.preferences = Optional.ofNullable(preferences);
             return this;
         }
 
@@ -156,7 +156,7 @@ public final class InboundBulkMessageUser implements IInboundBulkMessageUser {
         }
 
         public Builder profile(Object profile) {
-            this.profile = Optional.of(profile);
+            this.profile = Optional.ofNullable(profile);
             return this;
         }
 
@@ -167,7 +167,7 @@ public final class InboundBulkMessageUser implements IInboundBulkMessageUser {
         }
 
         public Builder recipient(String recipient) {
-            this.recipient = Optional.of(recipient);
+            this.recipient = Optional.ofNullable(recipient);
             return this;
         }
 
@@ -178,7 +178,7 @@ public final class InboundBulkMessageUser implements IInboundBulkMessageUser {
         }
 
         public Builder data(Object data) {
-            this.data = Optional.of(data);
+            this.data = Optional.ofNullable(data);
             return this;
         }
 
@@ -189,7 +189,7 @@ public final class InboundBulkMessageUser implements IInboundBulkMessageUser {
         }
 
         public Builder to(UserRecipient to) {
-            this.to = Optional.of(to);
+            this.to = Optional.ofNullable(to);
             return this;
         }
 

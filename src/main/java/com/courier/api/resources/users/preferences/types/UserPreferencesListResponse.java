@@ -18,8 +18,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UserPreferencesListResponse.Builder.class)
 public final class UserPreferencesListResponse {
     private final Paging paging;
@@ -81,7 +82,10 @@ public final class UserPreferencesListResponse {
     }
 
     public interface PagingStage {
-        _FinalStage paging(Paging paging);
+        /**
+         * <p>Deprecated - Paging not implemented on this endpoint</p>
+         */
+        _FinalStage paging(@NotNull Paging paging);
 
         Builder from(UserPreferencesListResponse other);
     }
@@ -89,6 +93,9 @@ public final class UserPreferencesListResponse {
     public interface _FinalStage {
         UserPreferencesListResponse build();
 
+        /**
+         * <p>The Preferences associated with the user_id.</p>
+         */
         _FinalStage items(List<TopicPreference> items);
 
         _FinalStage addItems(TopicPreference items);
@@ -116,12 +123,13 @@ public final class UserPreferencesListResponse {
 
         /**
          * <p>Deprecated - Paging not implemented on this endpoint</p>
+         * <p>Deprecated - Paging not implemented on this endpoint</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("paging")
-        public _FinalStage paging(Paging paging) {
-            this.paging = paging;
+        public _FinalStage paging(@NotNull Paging paging) {
+            this.paging = Objects.requireNonNull(paging, "paging must not be null");
             return this;
         }
 
@@ -131,7 +139,9 @@ public final class UserPreferencesListResponse {
          */
         @java.lang.Override
         public _FinalStage addAllItems(List<TopicPreference> items) {
-            this.items.addAll(items);
+            if (items != null) {
+                this.items.addAll(items);
+            }
             return this;
         }
 
@@ -145,11 +155,16 @@ public final class UserPreferencesListResponse {
             return this;
         }
 
+        /**
+         * <p>The Preferences associated with the user_id.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "items", nulls = Nulls.SKIP)
         public _FinalStage items(List<TopicPreference> items) {
             this.items.clear();
-            this.items.addAll(items);
+            if (items != null) {
+                this.items.addAll(items);
+            }
             return this;
         }
 

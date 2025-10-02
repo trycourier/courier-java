@@ -16,8 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = WebhookProfile.Builder.class)
 public final class WebhookProfile {
     private final String url;
@@ -121,7 +122,10 @@ public final class WebhookProfile {
     }
 
     public interface UrlStage {
-        _FinalStage url(String url);
+        /**
+         * <p>The URL to send the webhook request to.</p>
+         */
+        _FinalStage url(@NotNull String url);
 
         Builder from(WebhookProfile other);
     }
@@ -129,18 +133,30 @@ public final class WebhookProfile {
     public interface _FinalStage {
         WebhookProfile build();
 
+        /**
+         * <p>The HTTP method to use for the webhook request. Defaults to POST if not specified.</p>
+         */
         _FinalStage method(Optional<WebhookMethod> method);
 
         _FinalStage method(WebhookMethod method);
 
+        /**
+         * <p>Custom headers to include in the webhook request.</p>
+         */
         _FinalStage headers(Optional<Map<String, String>> headers);
 
         _FinalStage headers(Map<String, String> headers);
 
+        /**
+         * <p>Authentication configuration for the webhook request.</p>
+         */
         _FinalStage authentication(Optional<WebhookAuthentication> authentication);
 
         _FinalStage authentication(WebhookAuthentication authentication);
 
+        /**
+         * <p>Specifies what profile information is included in the request payload. Defaults to 'limited' if not specified.</p>
+         */
         _FinalStage profile(Optional<WebhookProfileType> profile);
 
         _FinalStage profile(WebhookProfileType profile);
@@ -175,12 +191,13 @@ public final class WebhookProfile {
 
         /**
          * <p>The URL to send the webhook request to.</p>
+         * <p>The URL to send the webhook request to.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("url")
-        public _FinalStage url(String url) {
-            this.url = url;
+        public _FinalStage url(@NotNull String url) {
+            this.url = Objects.requireNonNull(url, "url must not be null");
             return this;
         }
 
@@ -190,10 +207,13 @@ public final class WebhookProfile {
          */
         @java.lang.Override
         public _FinalStage profile(WebhookProfileType profile) {
-            this.profile = Optional.of(profile);
+            this.profile = Optional.ofNullable(profile);
             return this;
         }
 
+        /**
+         * <p>Specifies what profile information is included in the request payload. Defaults to 'limited' if not specified.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "profile", nulls = Nulls.SKIP)
         public _FinalStage profile(Optional<WebhookProfileType> profile) {
@@ -207,10 +227,13 @@ public final class WebhookProfile {
          */
         @java.lang.Override
         public _FinalStage authentication(WebhookAuthentication authentication) {
-            this.authentication = Optional.of(authentication);
+            this.authentication = Optional.ofNullable(authentication);
             return this;
         }
 
+        /**
+         * <p>Authentication configuration for the webhook request.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "authentication", nulls = Nulls.SKIP)
         public _FinalStage authentication(Optional<WebhookAuthentication> authentication) {
@@ -224,10 +247,13 @@ public final class WebhookProfile {
          */
         @java.lang.Override
         public _FinalStage headers(Map<String, String> headers) {
-            this.headers = Optional.of(headers);
+            this.headers = Optional.ofNullable(headers);
             return this;
         }
 
+        /**
+         * <p>Custom headers to include in the webhook request.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "headers", nulls = Nulls.SKIP)
         public _FinalStage headers(Optional<Map<String, String>> headers) {
@@ -241,10 +267,13 @@ public final class WebhookProfile {
          */
         @java.lang.Override
         public _FinalStage method(WebhookMethod method) {
-            this.method = Optional.of(method);
+            this.method = Optional.ofNullable(method);
             return this;
         }
 
+        /**
+         * <p>The HTTP method to use for the webhook request. Defaults to POST if not specified.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "method", nulls = Nulls.SKIP)
         public _FinalStage method(Optional<WebhookMethod> method) {

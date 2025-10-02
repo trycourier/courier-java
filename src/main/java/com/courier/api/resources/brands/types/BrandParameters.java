@@ -16,8 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BrandParameters.Builder.class)
 public final class BrandParameters {
     private final Optional<String> id;
@@ -99,13 +100,16 @@ public final class BrandParameters {
     }
 
     public interface NameStage {
-        SettingsStage name(String name);
+        /**
+         * <p>The name of the brand.</p>
+         */
+        SettingsStage name(@NotNull String name);
 
         Builder from(BrandParameters other);
     }
 
     public interface SettingsStage {
-        _FinalStage settings(BrandSettings settings);
+        _FinalStage settings(@NotNull BrandSettings settings);
     }
 
     public interface _FinalStage {
@@ -146,25 +150,26 @@ public final class BrandParameters {
 
         /**
          * <p>The name of the brand.</p>
+         * <p>The name of the brand.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("name")
-        public SettingsStage name(String name) {
-            this.name = name;
+        public SettingsStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("settings")
-        public _FinalStage settings(BrandSettings settings) {
-            this.settings = settings;
+        public _FinalStage settings(@NotNull BrandSettings settings) {
+            this.settings = Objects.requireNonNull(settings, "settings must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage snippets(BrandSnippets snippets) {
-            this.snippets = Optional.of(snippets);
+            this.snippets = Optional.ofNullable(snippets);
             return this;
         }
 
@@ -177,7 +182,7 @@ public final class BrandParameters {
 
         @java.lang.Override
         public _FinalStage id(String id) {
-            this.id = Optional.of(id);
+            this.id = Optional.ofNullable(id);
             return this;
         }
 

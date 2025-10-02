@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SubscribeUserToListRequest.Builder.class)
 public final class SubscribeUserToListRequest {
     private final Optional<RecipientPreferences> preferences;
@@ -86,7 +86,7 @@ public final class SubscribeUserToListRequest {
         }
 
         public Builder preferences(RecipientPreferences preferences) {
-            this.preferences = Optional.of(preferences);
+            this.preferences = Optional.ofNullable(preferences);
             return this;
         }
 

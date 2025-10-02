@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Locale.Builder.class)
 public final class Locale {
     private final String content;
@@ -62,7 +63,7 @@ public final class Locale {
     }
 
     public interface ContentStage {
-        _FinalStage content(String content);
+        _FinalStage content(@NotNull String content);
 
         Builder from(Locale other);
     }
@@ -88,8 +89,8 @@ public final class Locale {
 
         @java.lang.Override
         @JsonSetter("content")
-        public _FinalStage content(String content) {
-            this.content = content;
+        public _FinalStage content(@NotNull String content) {
+            this.content = Objects.requireNonNull(content, "content must not be null");
             return this;
         }
 

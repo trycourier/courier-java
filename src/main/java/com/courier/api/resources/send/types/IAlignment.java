@@ -3,26 +3,100 @@
  */
 package com.courier.api.resources.send.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum IAlignment {
-    CENTER("center"),
+public final class IAlignment {
+    public static final IAlignment FULL = new IAlignment(Value.FULL, "full");
 
-    LEFT("left"),
+    public static final IAlignment LEFT = new IAlignment(Value.LEFT, "left");
 
-    RIGHT("right"),
+    public static final IAlignment RIGHT = new IAlignment(Value.RIGHT, "right");
 
-    FULL("full");
+    public static final IAlignment CENTER = new IAlignment(Value.CENTER, "center");
 
-    private final String value;
+    private final Value value;
 
-    IAlignment(String value) {
+    private final String string;
+
+    IAlignment(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other) || (other instanceof IAlignment && this.string.equals(((IAlignment) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case FULL:
+                return visitor.visitFull();
+            case LEFT:
+                return visitor.visitLeft();
+            case RIGHT:
+                return visitor.visitRight();
+            case CENTER:
+                return visitor.visitCenter();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static IAlignment valueOf(String value) {
+        switch (value) {
+            case "full":
+                return FULL;
+            case "left":
+                return LEFT;
+            case "right":
+                return RIGHT;
+            case "center":
+                return CENTER;
+            default:
+                return new IAlignment(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        CENTER,
+
+        LEFT,
+
+        RIGHT,
+
+        FULL,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitCenter();
+
+        T visitLeft();
+
+        T visitRight();
+
+        T visitFull();
+
+        T visitUnknown(String unknownType);
     }
 }

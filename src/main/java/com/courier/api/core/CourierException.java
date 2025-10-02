@@ -6,12 +6,12 @@ package com.courier.api.core;
 /**
  * This class serves as the base exception for all errors in the SDK.
  */
-public class CourierApiError extends RuntimeException {
-    public CourierApiError(String message) {
+public class CourierException extends RuntimeException {
+    public CourierException(String message) {
         super(message);
     }
 
-    public CourierApiError(String message, Exception e) {
+    public CourierException(String message, Exception e) {
         super(message, e);
     }
 }

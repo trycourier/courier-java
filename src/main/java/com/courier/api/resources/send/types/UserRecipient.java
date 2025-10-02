@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UserRecipient.Builder.class)
 public final class UserRecipient implements IUserRecipientType {
     private final Optional<String> accountId;
@@ -205,6 +205,9 @@ public final class UserRecipient implements IUserRecipientType {
             return this;
         }
 
+        /**
+         * <p>Use <code>tenant_id</code> instad.</p>
+         */
         @JsonSetter(value = "account_id", nulls = Nulls.SKIP)
         public Builder accountId(Optional<String> accountId) {
             this.accountId = accountId;
@@ -212,10 +215,13 @@ public final class UserRecipient implements IUserRecipientType {
         }
 
         public Builder accountId(String accountId) {
-            this.accountId = Optional.of(accountId);
+            this.accountId = Optional.ofNullable(accountId);
             return this;
         }
 
+        /**
+         * <p>Context information such as tenant_id to send the notification with.</p>
+         */
         @JsonSetter(value = "context", nulls = Nulls.SKIP)
         public Builder context(Optional<MessageContext> context) {
             this.context = context;
@@ -223,7 +229,7 @@ public final class UserRecipient implements IUserRecipientType {
         }
 
         public Builder context(MessageContext context) {
-            this.context = Optional.of(context);
+            this.context = Optional.ofNullable(context);
             return this;
         }
 
@@ -234,7 +240,7 @@ public final class UserRecipient implements IUserRecipientType {
         }
 
         public Builder data(Map<String, Object> data) {
-            this.data = Optional.of(data);
+            this.data = Optional.ofNullable(data);
             return this;
         }
 
@@ -245,10 +251,13 @@ public final class UserRecipient implements IUserRecipientType {
         }
 
         public Builder email(String email) {
-            this.email = Optional.of(email);
+            this.email = Optional.ofNullable(email);
             return this;
         }
 
+        /**
+         * <p>The user's preferred ISO 639-1 language code.</p>
+         */
         @JsonSetter(value = "locale", nulls = Nulls.SKIP)
         public Builder locale(Optional<String> locale) {
             this.locale = locale;
@@ -256,7 +265,7 @@ public final class UserRecipient implements IUserRecipientType {
         }
 
         public Builder locale(String locale) {
-            this.locale = Optional.of(locale);
+            this.locale = Optional.ofNullable(locale);
             return this;
         }
 
@@ -267,7 +276,7 @@ public final class UserRecipient implements IUserRecipientType {
         }
 
         public Builder userId(String userId) {
-            this.userId = Optional.of(userId);
+            this.userId = Optional.ofNullable(userId);
             return this;
         }
 
@@ -278,7 +287,7 @@ public final class UserRecipient implements IUserRecipientType {
         }
 
         public Builder phoneNumber(String phoneNumber) {
-            this.phoneNumber = Optional.of(phoneNumber);
+            this.phoneNumber = Optional.ofNullable(phoneNumber);
             return this;
         }
 
@@ -289,10 +298,14 @@ public final class UserRecipient implements IUserRecipientType {
         }
 
         public Builder preferences(IProfilePreferences preferences) {
-            this.preferences = Optional.of(preferences);
+            this.preferences = Optional.ofNullable(preferences);
             return this;
         }
 
+        /**
+         * <p>An id of a tenant, <a href="https://www.courier.com/docs/reference/tenants">see tenants api docs</a>.
+         * Will load brand, default preferences and any other base context data associated with this tenant.</p>
+         */
         @JsonSetter(value = "tenant_id", nulls = Nulls.SKIP)
         public Builder tenantId(Optional<String> tenantId) {
             this.tenantId = tenantId;
@@ -300,7 +313,7 @@ public final class UserRecipient implements IUserRecipientType {
         }
 
         public Builder tenantId(String tenantId) {
-            this.tenantId = Optional.of(tenantId);
+            this.tenantId = Optional.ofNullable(tenantId);
             return this;
         }
 

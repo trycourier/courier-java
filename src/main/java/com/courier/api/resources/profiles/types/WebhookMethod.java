@@ -3,22 +3,81 @@
  */
 package com.courier.api.resources.profiles.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum WebhookMethod {
-    POST("POST"),
+public final class WebhookMethod {
+    public static final WebhookMethod PUT = new WebhookMethod(Value.PUT, "PUT");
 
-    PUT("PUT");
+    public static final WebhookMethod POST = new WebhookMethod(Value.POST, "POST");
 
-    private final String value;
+    private final Value value;
 
-    WebhookMethod(String value) {
+    private final String string;
+
+    WebhookMethod(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof WebhookMethod && this.string.equals(((WebhookMethod) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case PUT:
+                return visitor.visitPut();
+            case POST:
+                return visitor.visitPost();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static WebhookMethod valueOf(String value) {
+        switch (value) {
+            case "PUT":
+                return PUT;
+            case "POST":
+                return POST;
+            default:
+                return new WebhookMethod(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        POST,
+
+        PUT,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitPost();
+
+        T visitPut();
+
+        T visitUnknown(String unknownType);
     }
 }

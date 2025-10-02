@@ -3,24 +3,91 @@
  */
 package com.courier.api.resources.profiles.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum WebhookAuthMode {
-    NONE("none"),
+public final class WebhookAuthMode {
+    public static final WebhookAuthMode BEARER = new WebhookAuthMode(Value.BEARER, "bearer");
 
-    BASIC("basic"),
+    public static final WebhookAuthMode BASIC = new WebhookAuthMode(Value.BASIC, "basic");
 
-    BEARER("bearer");
+    public static final WebhookAuthMode NONE = new WebhookAuthMode(Value.NONE, "none");
 
-    private final String value;
+    private final Value value;
 
-    WebhookAuthMode(String value) {
+    private final String string;
+
+    WebhookAuthMode(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof WebhookAuthMode && this.string.equals(((WebhookAuthMode) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case BEARER:
+                return visitor.visitBearer();
+            case BASIC:
+                return visitor.visitBasic();
+            case NONE:
+                return visitor.visitNone();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static WebhookAuthMode valueOf(String value) {
+        switch (value) {
+            case "bearer":
+                return BEARER;
+            case "basic":
+                return BASIC;
+            case "none":
+                return NONE;
+            default:
+                return new WebhookAuthMode(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        NONE,
+
+        BASIC,
+
+        BEARER,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitNone();
+
+        T visitBasic();
+
+        T visitBearer();
+
+        T visitUnknown(String unknownType);
     }
 }

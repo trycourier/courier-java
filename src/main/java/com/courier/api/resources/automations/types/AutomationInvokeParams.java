@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AutomationInvokeParams.Builder.class)
 public final class AutomationInvokeParams implements IAutomationInvokeParams {
     private final Optional<String> brand;
@@ -143,7 +143,7 @@ public final class AutomationInvokeParams implements IAutomationInvokeParams {
         }
 
         public Builder brand(String brand) {
-            this.brand = Optional.of(brand);
+            this.brand = Optional.ofNullable(brand);
             return this;
         }
 
@@ -154,7 +154,7 @@ public final class AutomationInvokeParams implements IAutomationInvokeParams {
         }
 
         public Builder data(Map<String, Object> data) {
-            this.data = Optional.of(data);
+            this.data = Optional.ofNullable(data);
             return this;
         }
 
@@ -165,7 +165,7 @@ public final class AutomationInvokeParams implements IAutomationInvokeParams {
         }
 
         public Builder profile(Object profile) {
-            this.profile = Optional.of(profile);
+            this.profile = Optional.ofNullable(profile);
             return this;
         }
 
@@ -176,7 +176,7 @@ public final class AutomationInvokeParams implements IAutomationInvokeParams {
         }
 
         public Builder recipient(String recipient) {
-            this.recipient = Optional.of(recipient);
+            this.recipient = Optional.ofNullable(recipient);
             return this;
         }
 
@@ -187,7 +187,7 @@ public final class AutomationInvokeParams implements IAutomationInvokeParams {
         }
 
         public Builder template(String template) {
-            this.template = Optional.of(template);
+            this.template = Optional.ofNullable(template);
             return this;
         }
 

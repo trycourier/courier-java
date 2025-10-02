@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = EmailFooter.Builder.class)
 public final class EmailFooter {
     private final Optional<Object> content;
@@ -96,7 +96,7 @@ public final class EmailFooter {
         }
 
         public Builder content(Object content) {
-            this.content = Optional.of(content);
+            this.content = Optional.ofNullable(content);
             return this;
         }
 
@@ -107,7 +107,7 @@ public final class EmailFooter {
         }
 
         public Builder inheritDefault(Boolean inheritDefault) {
-            this.inheritDefault = Optional.of(inheritDefault);
+            this.inheritDefault = Optional.ofNullable(inheritDefault);
             return this;
         }
 

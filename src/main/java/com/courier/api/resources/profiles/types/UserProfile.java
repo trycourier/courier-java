@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UserProfile.Builder.class)
 public final class UserProfile {
     private final Address address;
@@ -398,17 +399,17 @@ public final class UserProfile {
     }
 
     public interface AddressStage {
-        BirthdateStage address(Address address);
+        BirthdateStage address(@NotNull Address address);
 
         Builder from(UserProfile other);
     }
 
     public interface BirthdateStage {
-        EmailStage birthdate(String birthdate);
+        EmailStage birthdate(@NotNull String birthdate);
     }
 
     public interface EmailStage {
-        EmailVerifiedStage email(String email);
+        EmailVerifiedStage email(@NotNull String email);
     }
 
     public interface EmailVerifiedStage {
@@ -416,35 +417,35 @@ public final class UserProfile {
     }
 
     public interface FamilyNameStage {
-        GenderStage familyName(String familyName);
+        GenderStage familyName(@NotNull String familyName);
     }
 
     public interface GenderStage {
-        GivenNameStage gender(String gender);
+        GivenNameStage gender(@NotNull String gender);
     }
 
     public interface GivenNameStage {
-        LocaleStage givenName(String givenName);
+        LocaleStage givenName(@NotNull String givenName);
     }
 
     public interface LocaleStage {
-        MiddleNameStage locale(String locale);
+        MiddleNameStage locale(@NotNull String locale);
     }
 
     public interface MiddleNameStage {
-        NameStage middleName(String middleName);
+        NameStage middleName(@NotNull String middleName);
     }
 
     public interface NameStage {
-        NicknameStage name(String name);
+        NicknameStage name(@NotNull String name);
     }
 
     public interface NicknameStage {
-        PhoneNumberStage nickname(String nickname);
+        PhoneNumberStage nickname(@NotNull String nickname);
     }
 
     public interface PhoneNumberStage {
-        PhoneNumberVerifiedStage phoneNumber(String phoneNumber);
+        PhoneNumberVerifiedStage phoneNumber(@NotNull String phoneNumber);
     }
 
     public interface PhoneNumberVerifiedStage {
@@ -452,75 +453,78 @@ public final class UserProfile {
     }
 
     public interface PictureStage {
-        PreferredNameStage picture(String picture);
+        PreferredNameStage picture(@NotNull String picture);
     }
 
     public interface PreferredNameStage {
-        ProfileStage preferredName(String preferredName);
+        ProfileStage preferredName(@NotNull String preferredName);
     }
 
     public interface ProfileStage {
-        SubStage profile(String profile);
+        SubStage profile(@NotNull String profile);
     }
 
     public interface SubStage {
-        UpdatedAtStage sub(String sub);
+        UpdatedAtStage sub(@NotNull String sub);
     }
 
     public interface UpdatedAtStage {
-        WebsiteStage updatedAt(String updatedAt);
+        WebsiteStage updatedAt(@NotNull String updatedAt);
     }
 
     public interface WebsiteStage {
-        ZoneinfoStage website(String website);
+        ZoneinfoStage website(@NotNull String website);
     }
 
     public interface ZoneinfoStage {
-        CustomStage zoneinfo(String zoneinfo);
+        CustomStage zoneinfo(@NotNull String zoneinfo);
     }
 
     public interface CustomStage {
+        /**
+         * <p>A free form object. Due to a limitation of the API Explorer, you can only enter string key/values below, but this API accepts more complex object structures.</p>
+         */
         AirshipStage custom(Object custom);
     }
 
     public interface AirshipStage {
-        ApnStage airship(AirshipProfile airship);
+        ApnStage airship(@NotNull AirshipProfile airship);
     }
 
     public interface ApnStage {
-        TargetArnStage apn(String apn);
+        TargetArnStage apn(@NotNull String apn);
     }
 
     public interface TargetArnStage {
-        DiscordStage targetArn(String targetArn);
+        DiscordStage targetArn(@NotNull String targetArn);
     }
 
     public interface DiscordStage {
-        ExpoStage discord(Discord discord);
+        ExpoStage discord(@NotNull Discord discord);
     }
 
     public interface ExpoStage {
-        FacebookPsidStage expo(Expo expo);
+        FacebookPsidStage expo(@NotNull Expo expo);
     }
 
     public interface FacebookPsidStage {
-        FirebaseTokenStage facebookPsid(String facebookPsid);
+        FirebaseTokenStage facebookPsid(@NotNull String facebookPsid);
     }
 
     public interface FirebaseTokenStage {
-        IntercomStage firebaseToken(UserProfileFirebaseToken firebaseToken);
+        IntercomStage firebaseToken(@NotNull UserProfileFirebaseToken firebaseToken);
     }
 
     public interface IntercomStage {
-        SlackStage intercom(Intercom intercom);
+        SlackStage intercom(@NotNull Intercom intercom);
     }
 
     public interface SlackStage {
-        MsTeamsStage slack(Slack slack);
+        MsTeamsStage slack(@NotNull Slack slack);
     }
 
     public interface MsTeamsStage {
-        _FinalStage msTeams(MsTeams msTeams);
+        _FinalStage msTeams(@NotNull MsTeams msTeams);
     }
 
     public interface _FinalStage {
@@ -666,22 +670,22 @@ public final class UserProfile {
 
         @java.lang.Override
         @JsonSetter("address")
-        public BirthdateStage address(Address address) {
-            this.address = address;
+        public BirthdateStage address(@NotNull Address address) {
+            this.address = Objects.requireNonNull(address, "address must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("birthdate")
-        public EmailStage birthdate(String birthdate) {
-            this.birthdate = birthdate;
+        public EmailStage birthdate(@NotNull String birthdate) {
+            this.birthdate = Objects.requireNonNull(birthdate, "birthdate must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("email")
-        public EmailVerifiedStage email(String email) {
-            this.email = email;
+        public EmailVerifiedStage email(@NotNull String email) {
+            this.email = Objects.requireNonNull(email, "email must not be null");
             return this;
         }
 
@@ -694,57 +698,57 @@ public final class UserProfile {
 
         @java.lang.Override
         @JsonSetter("family_name")
-        public GenderStage familyName(String familyName) {
-            this.familyName = familyName;
+        public GenderStage familyName(@NotNull String familyName) {
+            this.familyName = Objects.requireNonNull(familyName, "familyName must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("gender")
-        public GivenNameStage gender(String gender) {
-            this.gender = gender;
+        public GivenNameStage gender(@NotNull String gender) {
+            this.gender = Objects.requireNonNull(gender, "gender must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("given_name")
-        public LocaleStage givenName(String givenName) {
-            this.givenName = givenName;
+        public LocaleStage givenName(@NotNull String givenName) {
+            this.givenName = Objects.requireNonNull(givenName, "givenName must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("locale")
-        public MiddleNameStage locale(String locale) {
-            this.locale = locale;
+        public MiddleNameStage locale(@NotNull String locale) {
+            this.locale = Objects.requireNonNull(locale, "locale must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("middle_name")
-        public NameStage middleName(String middleName) {
-            this.middleName = middleName;
+        public NameStage middleName(@NotNull String middleName) {
+            this.middleName = Objects.requireNonNull(middleName, "middleName must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("name")
-        public NicknameStage name(String name) {
-            this.name = name;
+        public NicknameStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("nickname")
-        public PhoneNumberStage nickname(String nickname) {
-            this.nickname = nickname;
+        public PhoneNumberStage nickname(@NotNull String nickname) {
+            this.nickname = Objects.requireNonNull(nickname, "nickname must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("phone_number")
-        public PhoneNumberVerifiedStage phoneNumber(String phoneNumber) {
-            this.phoneNumber = phoneNumber;
+        public PhoneNumberVerifiedStage phoneNumber(@NotNull String phoneNumber) {
+            this.phoneNumber = Objects.requireNonNull(phoneNumber, "phoneNumber must not be null");
             return this;
         }
 
@@ -757,54 +761,55 @@ public final class UserProfile {
 
         @java.lang.Override
         @JsonSetter("picture")
-        public PreferredNameStage picture(String picture) {
-            this.picture = picture;
+        public PreferredNameStage picture(@NotNull String picture) {
+            this.picture = Objects.requireNonNull(picture, "picture must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("preferred_name")
-        public ProfileStage preferredName(String preferredName) {
-            this.preferredName = preferredName;
+        public ProfileStage preferredName(@NotNull String preferredName) {
+            this.preferredName = Objects.requireNonNull(preferredName, "preferredName must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("profile")
-        public SubStage profile(String profile) {
-            this.profile = profile;
+        public SubStage profile(@NotNull String profile) {
+            this.profile = Objects.requireNonNull(profile, "profile must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("sub")
-        public UpdatedAtStage sub(String sub) {
-            this.sub = sub;
+        public UpdatedAtStage sub(@NotNull String sub) {
+            this.sub = Objects.requireNonNull(sub, "sub must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("updated_at")
-        public WebsiteStage updatedAt(String updatedAt) {
-            this.updatedAt = updatedAt;
+        public WebsiteStage updatedAt(@NotNull String updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("website")
-        public ZoneinfoStage website(String website) {
-            this.website = website;
+        public ZoneinfoStage website(@NotNull String website) {
+            this.website = Objects.requireNonNull(website, "website must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("zoneinfo")
-        public CustomStage zoneinfo(String zoneinfo) {
-            this.zoneinfo = zoneinfo;
+        public CustomStage zoneinfo(@NotNull String zoneinfo) {
+            this.zoneinfo = Objects.requireNonNull(zoneinfo, "zoneinfo must not be null");
             return this;
         }
 
         /**
+         * <p>A free form object. Due to a limitation of the API Explorer, you can only enter string key/values below, but this API accepts more complex object structures.</p>
          * <p>A free form object. Due to a limitation of the API Explorer, you can only enter string key/values below, but this API accepts more complex object structures.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -817,71 +822,71 @@ public final class UserProfile {
 
         @java.lang.Override
         @JsonSetter("airship")
-        public ApnStage airship(AirshipProfile airship) {
-            this.airship = airship;
+        public ApnStage airship(@NotNull AirshipProfile airship) {
+            this.airship = Objects.requireNonNull(airship, "airship must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("apn")
-        public TargetArnStage apn(String apn) {
-            this.apn = apn;
+        public TargetArnStage apn(@NotNull String apn) {
+            this.apn = Objects.requireNonNull(apn, "apn must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("target_arn")
-        public DiscordStage targetArn(String targetArn) {
-            this.targetArn = targetArn;
+        public DiscordStage targetArn(@NotNull String targetArn) {
+            this.targetArn = Objects.requireNonNull(targetArn, "targetArn must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("discord")
-        public ExpoStage discord(Discord discord) {
-            this.discord = discord;
+        public ExpoStage discord(@NotNull Discord discord) {
+            this.discord = Objects.requireNonNull(discord, "discord must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("expo")
-        public FacebookPsidStage expo(Expo expo) {
-            this.expo = expo;
+        public FacebookPsidStage expo(@NotNull Expo expo) {
+            this.expo = Objects.requireNonNull(expo, "expo must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("facebookPSID")
-        public FirebaseTokenStage facebookPsid(String facebookPsid) {
-            this.facebookPsid = facebookPsid;
+        public FirebaseTokenStage facebookPsid(@NotNull String facebookPsid) {
+            this.facebookPsid = Objects.requireNonNull(facebookPsid, "facebookPsid must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("firebaseToken")
-        public IntercomStage firebaseToken(UserProfileFirebaseToken firebaseToken) {
-            this.firebaseToken = firebaseToken;
+        public IntercomStage firebaseToken(@NotNull UserProfileFirebaseToken firebaseToken) {
+            this.firebaseToken = Objects.requireNonNull(firebaseToken, "firebaseToken must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("intercom")
-        public SlackStage intercom(Intercom intercom) {
-            this.intercom = intercom;
+        public SlackStage intercom(@NotNull Intercom intercom) {
+            this.intercom = Objects.requireNonNull(intercom, "intercom must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("slack")
-        public MsTeamsStage slack(Slack slack) {
-            this.slack = slack;
+        public MsTeamsStage slack(@NotNull Slack slack) {
+            this.slack = Objects.requireNonNull(slack, "slack must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("ms_teams")
-        public _FinalStage msTeams(MsTeams msTeams) {
-            this.msTeams = msTeams;
+        public _FinalStage msTeams(@NotNull MsTeams msTeams) {
+            this.msTeams = Objects.requireNonNull(msTeams, "msTeams must not be null");
             return this;
         }
 

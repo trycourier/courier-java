@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SendToSlackEmail.Builder.class)
 public final class SendToSlackEmail implements ISlackBaseProperties {
     private final String accessToken;
@@ -71,13 +72,13 @@ public final class SendToSlackEmail implements ISlackBaseProperties {
     }
 
     public interface AccessTokenStage {
-        EmailStage accessToken(String accessToken);
+        EmailStage accessToken(@NotNull String accessToken);
 
         Builder from(SendToSlackEmail other);
     }
 
     public interface EmailStage {
-        _FinalStage email(String email);
+        _FinalStage email(@NotNull String email);
     }
 
     public interface _FinalStage {
@@ -104,15 +105,15 @@ public final class SendToSlackEmail implements ISlackBaseProperties {
 
         @java.lang.Override
         @JsonSetter("access_token")
-        public EmailStage accessToken(String accessToken) {
-            this.accessToken = accessToken;
+        public EmailStage accessToken(@NotNull String accessToken) {
+            this.accessToken = Objects.requireNonNull(accessToken, "accessToken must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("email")
-        public _FinalStage email(String email) {
-            this.email = email;
+        public _FinalStage email(@NotNull String email) {
+            this.email = Objects.requireNonNull(email, "email must not be null");
             return this;
         }
 

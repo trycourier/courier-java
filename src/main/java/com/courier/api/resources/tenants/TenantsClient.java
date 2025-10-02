@@ -4,13 +4,7 @@
 package com.courier.api.resources.tenants;
 
 import com.courier.api.core.ClientOptions;
-import com.courier.api.core.CourierApiApiError;
-import com.courier.api.core.CourierApiError;
-import com.courier.api.core.MediaTypes;
-import com.courier.api.core.ObjectMappers;
 import com.courier.api.core.RequestOptions;
-import com.courier.api.resources.commons.errors.CourierApiBadRequestError;
-import com.courier.api.resources.commons.types.BadRequest;
 import com.courier.api.resources.tenants.requests.GetTemplateListByTenantParams;
 import com.courier.api.resources.tenants.requests.ListTenantParams;
 import com.courier.api.resources.tenants.requests.ListUsersForTenantParams;
@@ -21,432 +15,123 @@ import com.courier.api.resources.tenants.types.ListUsersForTenantResponse;
 import com.courier.api.resources.tenants.types.SubscriptionTopicNew;
 import com.courier.api.resources.tenants.types.Tenant;
 import com.courier.api.resources.tenants.types.TenantListResponse;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import java.io.IOException;
-import okhttp3.Headers;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 public class TenantsClient {
     protected final ClientOptions clientOptions;
 
+    private final RawTenantsClient rawClient;
+
     public TenantsClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
+        this.rawClient = new RawTenantsClient(clientOptions);
+    }
+
+    /**
+     * Get responses with HTTP metadata like headers
+     */
+    public RawTenantsClient withRawResponse() {
+        return this.rawClient;
     }
 
     public Tenant createOrReplace(String tenantId, TenantCreateOrReplaceParams request) {
-        return createOrReplace(tenantId, request, null);
+        return this.rawClient.createOrReplace(tenantId, request).body();
     }
 
     public Tenant createOrReplace(String tenantId, TenantCreateOrReplaceParams request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("tenants")
-                .addPathSegment(tenantId)
-                .build();
-        RequestBody body;
-        try {
-            body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
-        } catch (JsonProcessingException e) {
-            throw new CourierApiError("Failed to serialize request", e);
-        }
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("PUT", body)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Tenant.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                if (response.code() == 400) {
-                    throw new CourierApiBadRequestError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, BadRequest.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        return this.rawClient.createOrReplace(tenantId, request, requestOptions).body();
     }
 
     public Tenant get(String tenantId) {
-        return get(tenantId, null);
+        return this.rawClient.get(tenantId).body();
     }
 
     public Tenant get(String tenantId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("tenants")
-                .addPathSegment(tenantId)
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Tenant.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                if (response.code() == 400) {
-                    throw new CourierApiBadRequestError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, BadRequest.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        return this.rawClient.get(tenantId, requestOptions).body();
     }
 
     public TenantListResponse list() {
-        return list(ListTenantParams.builder().build());
+        return this.rawClient.list().body();
     }
 
     public TenantListResponse list(ListTenantParams request) {
-        return list(request, null);
+        return this.rawClient.list(request).body();
     }
 
     public TenantListResponse list(ListTenantParams request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("tenants");
-        if (request.getParentTenantId().isPresent()) {
-            httpUrl.addQueryParameter(
-                    "parent_tenant_id", request.getParentTenantId().get());
-        }
-        if (request.getLimit().isPresent()) {
-            httpUrl.addQueryParameter("limit", request.getLimit().get().toString());
-        }
-        if (request.getCursor().isPresent()) {
-            httpUrl.addQueryParameter("cursor", request.getCursor().get());
-        }
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json");
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), TenantListResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        return this.rawClient.list(request, requestOptions).body();
     }
 
     public void delete(String tenantId) {
-        delete(tenantId, null);
+        this.rawClient.delete(tenantId).body();
     }
 
     public void delete(String tenantId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("tenants")
-                .addPathSegment(tenantId)
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("DELETE", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return;
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        this.rawClient.delete(tenantId, requestOptions).body();
     }
 
     public ListUsersForTenantResponse getUsersByTenant(String tenantId) {
-        return getUsersByTenant(tenantId, ListUsersForTenantParams.builder().build());
+        return this.rawClient.getUsersByTenant(tenantId).body();
     }
 
     public ListUsersForTenantResponse getUsersByTenant(String tenantId, ListUsersForTenantParams request) {
-        return getUsersByTenant(tenantId, request, null);
+        return this.rawClient.getUsersByTenant(tenantId, request).body();
     }
 
     public ListUsersForTenantResponse getUsersByTenant(
             String tenantId, ListUsersForTenantParams request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("tenants")
-                .addPathSegment(tenantId)
-                .addPathSegments("users");
-        if (request.getLimit().isPresent()) {
-            httpUrl.addQueryParameter("limit", request.getLimit().get().toString());
-        }
-        if (request.getCursor().isPresent()) {
-            httpUrl.addQueryParameter("cursor", request.getCursor().get());
-        }
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json");
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ListUsersForTenantResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                if (response.code() == 400) {
-                    throw new CourierApiBadRequestError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, BadRequest.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        return this.rawClient
+                .getUsersByTenant(tenantId, request, requestOptions)
+                .body();
     }
 
     public void createOrReplaceDefaultPreferencesForTopic(
             String tenantId, String topicId, SubscriptionTopicNew request) {
-        createOrReplaceDefaultPreferencesForTopic(tenantId, topicId, request, null);
+        this.rawClient
+                .createOrReplaceDefaultPreferencesForTopic(tenantId, topicId, request)
+                .body();
     }
 
     public void createOrReplaceDefaultPreferencesForTopic(
             String tenantId, String topicId, SubscriptionTopicNew request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("tenants")
-                .addPathSegment(tenantId)
-                .addPathSegments("default_preferences/items")
-                .addPathSegment(topicId)
-                .build();
-        RequestBody body;
-        try {
-            body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
-        } catch (JsonProcessingException e) {
-            throw new CourierApiError("Failed to serialize request", e);
-        }
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("PUT", body)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return;
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        this.rawClient
+                .createOrReplaceDefaultPreferencesForTopic(tenantId, topicId, request, requestOptions)
+                .body();
     }
 
     public void removeDefaultPreferencesForTopic(String tenantId, String topicId) {
-        removeDefaultPreferencesForTopic(tenantId, topicId, null);
+        this.rawClient.removeDefaultPreferencesForTopic(tenantId, topicId).body();
     }
 
     public void removeDefaultPreferencesForTopic(String tenantId, String topicId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("tenants")
-                .addPathSegment(tenantId)
-                .addPathSegments("default_preferences/items")
-                .addPathSegment(topicId)
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("DELETE", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return;
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        this.rawClient
+                .removeDefaultPreferencesForTopic(tenantId, topicId, requestOptions)
+                .body();
     }
 
     public GetTemplateByTenantResponse getTemplateByTenant(String tenantId, String templateId) {
-        return getTemplateByTenant(tenantId, templateId, null);
+        return this.rawClient.getTemplateByTenant(tenantId, templateId).body();
     }
 
     public GetTemplateByTenantResponse getTemplateByTenant(
             String tenantId, String templateId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("tenants")
-                .addPathSegment(tenantId)
-                .addPathSegments("templates")
-                .addPathSegment(templateId)
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), GetTemplateByTenantResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                if (response.code() == 400) {
-                    throw new CourierApiBadRequestError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, BadRequest.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        return this.rawClient
+                .getTemplateByTenant(tenantId, templateId, requestOptions)
+                .body();
     }
 
     public ListTemplatesByTenantResponse getTemplateListByTenant(String tenantId) {
-        return getTemplateListByTenant(
-                tenantId, GetTemplateListByTenantParams.builder().build());
+        return this.rawClient.getTemplateListByTenant(tenantId).body();
     }
 
     public ListTemplatesByTenantResponse getTemplateListByTenant(
             String tenantId, GetTemplateListByTenantParams request) {
-        return getTemplateListByTenant(tenantId, request, null);
+        return this.rawClient.getTemplateListByTenant(tenantId, request).body();
     }
 
     public ListTemplatesByTenantResponse getTemplateListByTenant(
             String tenantId, GetTemplateListByTenantParams request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("tenants")
-                .addPathSegment(tenantId)
-                .addPathSegments("templates");
-        if (request.getLimit().isPresent()) {
-            httpUrl.addQueryParameter("limit", request.getLimit().get().toString());
-        }
-        if (request.getCursor().isPresent()) {
-            httpUrl.addQueryParameter("cursor", request.getCursor().get());
-        }
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json");
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), ListTemplatesByTenantResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                if (response.code() == 400) {
-                    throw new CourierApiBadRequestError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, BadRequest.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        return this.rawClient
+                .getTemplateListByTenant(tenantId, request, requestOptions)
+                .body();
     }
 }

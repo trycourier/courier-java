@@ -3,26 +3,101 @@
  */
 package com.courier.api.resources.automations.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum MergeAlgorithm {
-    REPLACE("replace"),
+public final class MergeAlgorithm {
+    public static final MergeAlgorithm SOFT_MERGE = new MergeAlgorithm(Value.SOFT_MERGE, "soft-merge");
 
-    NONE("none"),
+    public static final MergeAlgorithm REPLACE = new MergeAlgorithm(Value.REPLACE, "replace");
 
-    OVERWRITE("overwrite"),
+    public static final MergeAlgorithm NONE = new MergeAlgorithm(Value.NONE, "none");
 
-    SOFT_MERGE("soft-merge");
+    public static final MergeAlgorithm OVERWRITE = new MergeAlgorithm(Value.OVERWRITE, "overwrite");
 
-    private final String value;
+    private final Value value;
 
-    MergeAlgorithm(String value) {
+    private final String string;
+
+    MergeAlgorithm(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof MergeAlgorithm && this.string.equals(((MergeAlgorithm) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case SOFT_MERGE:
+                return visitor.visitSoftMerge();
+            case REPLACE:
+                return visitor.visitReplace();
+            case NONE:
+                return visitor.visitNone();
+            case OVERWRITE:
+                return visitor.visitOverwrite();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static MergeAlgorithm valueOf(String value) {
+        switch (value) {
+            case "soft-merge":
+                return SOFT_MERGE;
+            case "replace":
+                return REPLACE;
+            case "none":
+                return NONE;
+            case "overwrite":
+                return OVERWRITE;
+            default:
+                return new MergeAlgorithm(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        REPLACE,
+
+        NONE,
+
+        OVERWRITE,
+
+        SOFT_MERGE,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitReplace();
+
+        T visitNone();
+
+        T visitOverwrite();
+
+        T visitSoftMerge();
+
+        T visitUnknown(String unknownType);
     }
 }

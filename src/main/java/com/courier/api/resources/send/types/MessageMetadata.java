@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = MessageMetadata.Builder.class)
 public final class MessageMetadata {
     private final Optional<String> event;
@@ -131,6 +131,9 @@ public final class MessageMetadata {
             return this;
         }
 
+        /**
+         * <p>An arbitrary string to tracks the event that generated this request (e.g. 'signup').</p>
+         */
         @JsonSetter(value = "event", nulls = Nulls.SKIP)
         public Builder event(Optional<String> event) {
             this.event = event;
@@ -138,10 +141,13 @@ public final class MessageMetadata {
         }
 
         public Builder event(String event) {
-            this.event = Optional.of(event);
+            this.event = Optional.ofNullable(event);
             return this;
         }
 
+        /**
+         * <p>An array of up to 9 tags you wish to associate with this request (and corresponding messages) for later analysis. Individual tags cannot be more than 30 characters in length.</p>
+         */
         @JsonSetter(value = "tags", nulls = Nulls.SKIP)
         public Builder tags(Optional<List<String>> tags) {
             this.tags = tags;
@@ -149,10 +155,13 @@ public final class MessageMetadata {
         }
 
         public Builder tags(List<String> tags) {
-            this.tags = Optional.of(tags);
+            this.tags = Optional.ofNullable(tags);
             return this;
         }
 
+        /**
+         * <p>Identify the campaign that refers traffic to a specific website, and attributes the browser's website session.</p>
+         */
         @JsonSetter(value = "utm", nulls = Nulls.SKIP)
         public Builder utm(Optional<Utm> utm) {
             this.utm = utm;
@@ -160,10 +169,13 @@ public final class MessageMetadata {
         }
 
         public Builder utm(Utm utm) {
-            this.utm = Optional.of(utm);
+            this.utm = Optional.ofNullable(utm);
             return this;
         }
 
+        /**
+         * <p>A unique ID used to correlate this request to processing on your servers. Note: Courier does not verify the uniqueness of this ID.</p>
+         */
         @JsonSetter(value = "trace_id", nulls = Nulls.SKIP)
         public Builder traceId(Optional<String> traceId) {
             this.traceId = traceId;
@@ -171,7 +183,7 @@ public final class MessageMetadata {
         }
 
         public Builder traceId(String traceId) {
-            this.traceId = Optional.of(traceId);
+            this.traceId = Optional.ofNullable(traceId);
             return this;
         }
 

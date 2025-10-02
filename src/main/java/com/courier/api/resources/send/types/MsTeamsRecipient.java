@@ -15,8 +15,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = MsTeamsRecipient.Builder.class)
 public final class MsTeamsRecipient {
     private final MsTeams msTeams;
@@ -63,7 +64,7 @@ public final class MsTeamsRecipient {
     }
 
     public interface MsTeamsStage {
-        _FinalStage msTeams(MsTeams msTeams);
+        _FinalStage msTeams(@NotNull MsTeams msTeams);
 
         Builder from(MsTeamsRecipient other);
     }
@@ -89,8 +90,8 @@ public final class MsTeamsRecipient {
 
         @java.lang.Override
         @JsonSetter("ms_teams")
-        public _FinalStage msTeams(MsTeams msTeams) {
-            this.msTeams = msTeams;
+        public _FinalStage msTeams(@NotNull MsTeams msTeams) {
+            this.msTeams = Objects.requireNonNull(msTeams, "msTeams must not be null");
             return this;
         }
 

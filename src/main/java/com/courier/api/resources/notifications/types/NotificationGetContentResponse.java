@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = NotificationGetContentResponse.Builder.class)
 public final class NotificationGetContentResponse {
     private final Optional<List<NotificationBlock>> blocks;
@@ -111,7 +111,7 @@ public final class NotificationGetContentResponse {
         }
 
         public Builder blocks(List<NotificationBlock> blocks) {
-            this.blocks = Optional.of(blocks);
+            this.blocks = Optional.ofNullable(blocks);
             return this;
         }
 
@@ -122,7 +122,7 @@ public final class NotificationGetContentResponse {
         }
 
         public Builder channels(List<NotificationChannel> channels) {
-            this.channels = Optional.of(channels);
+            this.channels = Optional.ofNullable(channels);
             return this;
         }
 
@@ -133,7 +133,7 @@ public final class NotificationGetContentResponse {
         }
 
         public Builder checksum(String checksum) {
-            this.checksum = Optional.of(checksum);
+            this.checksum = Optional.ofNullable(checksum);
             return this;
         }
 

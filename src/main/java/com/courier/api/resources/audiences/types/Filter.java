@@ -29,6 +29,7 @@ public final class Filter {
         return this.value;
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T visit(Visitor<T> visitor) {
         if (this.type == 0) {
             return visitor.visit((SingleFilterConfig) this.value);
@@ -78,15 +79,15 @@ public final class Filter {
         }
 
         @java.lang.Override
-        public Filter deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+        public Filter deserialize(JsonParser p, DeserializationContext context) throws IOException {
             Object value = p.readValueAs(Object.class);
             try {
                 return of(ObjectMappers.JSON_MAPPER.convertValue(value, SingleFilterConfig.class));
-            } catch (IllegalArgumentException e) {
+            } catch (RuntimeException e) {
             }
             try {
                 return of(ObjectMappers.JSON_MAPPER.convertValue(value, NestedFilterConfig.class));
-            } catch (IllegalArgumentException e) {
+            } catch (RuntimeException e) {
             }
             throw new JsonParseException(p, "Failed to deserialize");
         }

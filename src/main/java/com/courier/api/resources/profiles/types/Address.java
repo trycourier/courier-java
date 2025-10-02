@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Address.Builder.class)
 public final class Address {
     private final String formatted;
@@ -115,29 +116,29 @@ public final class Address {
     }
 
     public interface FormattedStage {
-        StreetAddressStage formatted(String formatted);
+        StreetAddressStage formatted(@NotNull String formatted);
 
         Builder from(Address other);
     }
 
     public interface StreetAddressStage {
-        LocalityStage streetAddress(String streetAddress);
+        LocalityStage streetAddress(@NotNull String streetAddress);
     }
 
     public interface LocalityStage {
-        RegionStage locality(String locality);
+        RegionStage locality(@NotNull String locality);
     }
 
     public interface RegionStage {
-        PostalCodeStage region(String region);
+        PostalCodeStage region(@NotNull String region);
     }
 
     public interface PostalCodeStage {
-        CountryStage postalCode(String postalCode);
+        CountryStage postalCode(@NotNull String postalCode);
     }
 
     public interface CountryStage {
-        _FinalStage country(String country);
+        _FinalStage country(@NotNull String country);
     }
 
     public interface _FinalStage {
@@ -183,43 +184,43 @@ public final class Address {
 
         @java.lang.Override
         @JsonSetter("formatted")
-        public StreetAddressStage formatted(String formatted) {
-            this.formatted = formatted;
+        public StreetAddressStage formatted(@NotNull String formatted) {
+            this.formatted = Objects.requireNonNull(formatted, "formatted must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("street_address")
-        public LocalityStage streetAddress(String streetAddress) {
-            this.streetAddress = streetAddress;
+        public LocalityStage streetAddress(@NotNull String streetAddress) {
+            this.streetAddress = Objects.requireNonNull(streetAddress, "streetAddress must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("locality")
-        public RegionStage locality(String locality) {
-            this.locality = locality;
+        public RegionStage locality(@NotNull String locality) {
+            this.locality = Objects.requireNonNull(locality, "locality must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("region")
-        public PostalCodeStage region(String region) {
-            this.region = region;
+        public PostalCodeStage region(@NotNull String region) {
+            this.region = Objects.requireNonNull(region, "region must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("postal_code")
-        public CountryStage postalCode(String postalCode) {
-            this.postalCode = postalCode;
+        public CountryStage postalCode(@NotNull String postalCode) {
+            this.postalCode = Objects.requireNonNull(postalCode, "postalCode must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("country")
-        public _FinalStage country(String country) {
-            this.country = country;
+        public _FinalStage country(@NotNull String country) {
+            this.country = Objects.requireNonNull(country, "country must not be null");
             return this;
         }
 

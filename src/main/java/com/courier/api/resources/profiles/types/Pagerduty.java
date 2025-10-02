@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Pagerduty.Builder.class)
 public final class Pagerduty {
     private final Optional<String> routingKey;
@@ -125,7 +125,7 @@ public final class Pagerduty {
         }
 
         public Builder routingKey(String routingKey) {
-            this.routingKey = Optional.of(routingKey);
+            this.routingKey = Optional.ofNullable(routingKey);
             return this;
         }
 
@@ -136,7 +136,7 @@ public final class Pagerduty {
         }
 
         public Builder eventAction(String eventAction) {
-            this.eventAction = Optional.of(eventAction);
+            this.eventAction = Optional.ofNullable(eventAction);
             return this;
         }
 
@@ -147,7 +147,7 @@ public final class Pagerduty {
         }
 
         public Builder severity(String severity) {
-            this.severity = Optional.of(severity);
+            this.severity = Optional.ofNullable(severity);
             return this;
         }
 
@@ -158,7 +158,7 @@ public final class Pagerduty {
         }
 
         public Builder source(String source) {
-            this.source = Optional.of(source);
+            this.source = Optional.ofNullable(source);
             return this;
         }
 

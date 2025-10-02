@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SnoozeRule.Builder.class)
 public final class SnoozeRule {
     private final SnoozeRuleType type;
@@ -78,17 +79,17 @@ public final class SnoozeRule {
     }
 
     public interface TypeStage {
-        StartStage type(SnoozeRuleType type);
+        StartStage type(@NotNull SnoozeRuleType type);
 
         Builder from(SnoozeRule other);
     }
 
     public interface StartStage {
-        UntilStage start(String start);
+        UntilStage start(@NotNull String start);
     }
 
     public interface UntilStage {
-        _FinalStage until(String until);
+        _FinalStage until(@NotNull String until);
     }
 
     public interface _FinalStage {
@@ -118,22 +119,22 @@ public final class SnoozeRule {
 
         @java.lang.Override
         @JsonSetter("type")
-        public StartStage type(SnoozeRuleType type) {
-            this.type = type;
+        public StartStage type(@NotNull SnoozeRuleType type) {
+            this.type = Objects.requireNonNull(type, "type must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("start")
-        public UntilStage start(String start) {
-            this.start = start;
+        public UntilStage start(@NotNull String start) {
+            this.start = Objects.requireNonNull(start, "start must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("until")
-        public _FinalStage until(String until) {
-            this.until = until;
+        public _FinalStage until(@NotNull String until) {
+            this.until = Objects.requireNonNull(until, "until must not be null");
             return this;
         }
 

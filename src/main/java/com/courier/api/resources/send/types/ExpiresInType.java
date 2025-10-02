@@ -29,6 +29,7 @@ public final class ExpiresInType {
         return this.value;
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T visit(Visitor<T> visitor) {
         if (this.type == 0) {
             return visitor.visit((String) this.value);
@@ -78,11 +79,11 @@ public final class ExpiresInType {
         }
 
         @java.lang.Override
-        public ExpiresInType deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+        public ExpiresInType deserialize(JsonParser p, DeserializationContext context) throws IOException {
             Object value = p.readValueAs(Object.class);
             try {
                 return of(ObjectMappers.JSON_MAPPER.convertValue(value, String.class));
-            } catch (IllegalArgumentException e) {
+            } catch (RuntimeException e) {
             }
             if (value instanceof Integer) {
                 return of((Integer) value);

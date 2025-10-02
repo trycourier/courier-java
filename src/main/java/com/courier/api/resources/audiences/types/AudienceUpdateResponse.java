@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AudienceUpdateResponse.Builder.class)
 public final class AudienceUpdateResponse {
     private final Audience audience;
@@ -62,7 +63,7 @@ public final class AudienceUpdateResponse {
     }
 
     public interface AudienceStage {
-        _FinalStage audience(Audience audience);
+        _FinalStage audience(@NotNull Audience audience);
 
         Builder from(AudienceUpdateResponse other);
     }
@@ -88,8 +89,8 @@ public final class AudienceUpdateResponse {
 
         @java.lang.Override
         @JsonSetter("audience")
-        public _FinalStage audience(Audience audience) {
-            this.audience = audience;
+        public _FinalStage audience(@NotNull Audience audience) {
+            this.audience = Objects.requireNonNull(audience, "audience must not be null");
             return this;
         }
 

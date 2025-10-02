@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Audience.Builder.class)
 public final class Audience {
     private final String id;
@@ -123,29 +124,38 @@ public final class Audience {
     }
 
     public interface IdStage {
-        NameStage id(String id);
+        /**
+         * <p>A unique identifier representing the audience_id</p>
+         */
+        NameStage id(@NotNull String id);
 
         Builder from(Audience other);
     }
 
     public interface NameStage {
-        DescriptionStage name(String name);
+        /**
+         * <p>The name of the audience</p>
+         */
+        DescriptionStage name(@NotNull String name);
     }
 
     public interface DescriptionStage {
-        FilterStage description(String description);
+        /**
+         * <p>A description of the audience</p>
+         */
+        FilterStage description(@NotNull String description);
     }
 
     public interface FilterStage {
-        CreatedAtStage filter(Filter filter);
+        CreatedAtStage filter(@NotNull Filter filter);
     }
 
     public interface CreatedAtStage {
-        UpdatedAtStage createdAt(String createdAt);
+        UpdatedAtStage createdAt(@NotNull String createdAt);
     }
 
     public interface UpdatedAtStage {
-        _FinalStage updatedAt(String updatedAt);
+        _FinalStage updatedAt(@NotNull String updatedAt);
     }
 
     public interface _FinalStage {
@@ -185,55 +195,58 @@ public final class Audience {
 
         /**
          * <p>A unique identifier representing the audience_id</p>
+         * <p>A unique identifier representing the audience_id</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("id")
-        public NameStage id(String id) {
-            this.id = id;
+        public NameStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         /**
          * <p>The name of the audience</p>
+         * <p>The name of the audience</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("name")
-        public DescriptionStage name(String name) {
-            this.name = name;
+        public DescriptionStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 
         /**
          * <p>A description of the audience</p>
+         * <p>A description of the audience</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("description")
-        public FilterStage description(String description) {
-            this.description = description;
+        public FilterStage description(@NotNull String description) {
+            this.description = Objects.requireNonNull(description, "description must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("filter")
-        public CreatedAtStage filter(Filter filter) {
-            this.filter = filter;
+        public CreatedAtStage filter(@NotNull Filter filter) {
+            this.filter = Objects.requireNonNull(filter, "filter must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("created_at")
-        public UpdatedAtStage createdAt(String createdAt) {
-            this.createdAt = createdAt;
+        public UpdatedAtStage createdAt(@NotNull String createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("updated_at")
-        public _FinalStage updatedAt(String updatedAt) {
-            this.updatedAt = updatedAt;
+        public _FinalStage updatedAt(@NotNull String updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 

@@ -16,8 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = NotificationBlock.Builder.class)
 public final class NotificationBlock {
     private final Optional<String> alias;
@@ -126,13 +127,13 @@ public final class NotificationBlock {
     }
 
     public interface IdStage {
-        TypeStage id(String id);
+        TypeStage id(@NotNull String id);
 
         Builder from(NotificationBlock other);
     }
 
     public interface TypeStage {
-        _FinalStage type(BlockType type);
+        _FinalStage type(@NotNull BlockType type);
     }
 
     public interface _FinalStage {
@@ -194,21 +195,21 @@ public final class NotificationBlock {
 
         @java.lang.Override
         @JsonSetter("id")
-        public TypeStage id(String id) {
-            this.id = id;
+        public TypeStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("type")
-        public _FinalStage type(BlockType type) {
-            this.type = type;
+        public _FinalStage type(@NotNull BlockType type) {
+            this.type = Objects.requireNonNull(type, "type must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage checksum(String checksum) {
-            this.checksum = Optional.of(checksum);
+            this.checksum = Optional.ofNullable(checksum);
             return this;
         }
 
@@ -221,7 +222,7 @@ public final class NotificationBlock {
 
         @java.lang.Override
         public _FinalStage locales(Map<String, NotificationContent> locales) {
-            this.locales = Optional.of(locales);
+            this.locales = Optional.ofNullable(locales);
             return this;
         }
 
@@ -234,7 +235,7 @@ public final class NotificationBlock {
 
         @java.lang.Override
         public _FinalStage content(NotificationContent content) {
-            this.content = Optional.of(content);
+            this.content = Optional.ofNullable(content);
             return this;
         }
 
@@ -247,7 +248,7 @@ public final class NotificationBlock {
 
         @java.lang.Override
         public _FinalStage context(String context) {
-            this.context = Optional.of(context);
+            this.context = Optional.ofNullable(context);
             return this;
         }
 
@@ -260,7 +261,7 @@ public final class NotificationBlock {
 
         @java.lang.Override
         public _FinalStage alias(String alias) {
-            this.alias = Optional.of(alias);
+            this.alias = Optional.ofNullable(alias);
             return this;
         }
 

@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = NotificationListParams.Builder.class)
 public final class NotificationListParams {
     private final Optional<String> cursor;
@@ -99,10 +99,13 @@ public final class NotificationListParams {
         }
 
         public Builder cursor(String cursor) {
-            this.cursor = Optional.of(cursor);
+            this.cursor = Optional.ofNullable(cursor);
             return this;
         }
 
+        /**
+         * <p>Retrieve the notes from the Notification template settings.</p>
+         */
         @JsonSetter(value = "notes", nulls = Nulls.SKIP)
         public Builder notes(Optional<Boolean> notes) {
             this.notes = notes;
@@ -110,7 +113,7 @@ public final class NotificationListParams {
         }
 
         public Builder notes(Boolean notes) {
-            this.notes = Optional.of(notes);
+            this.notes = Optional.ofNullable(notes);
             return this;
         }
 

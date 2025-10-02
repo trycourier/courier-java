@@ -3,24 +3,91 @@
  */
 package com.courier.api.resources.send.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum ChannelSource {
-    SUBSCRIPTION("subscription"),
+public final class ChannelSource {
+    public static final ChannelSource RECIPIENT = new ChannelSource(Value.RECIPIENT, "recipient");
 
-    LIST("list"),
+    public static final ChannelSource LIST = new ChannelSource(Value.LIST, "list");
 
-    RECIPIENT("recipient");
+    public static final ChannelSource SUBSCRIPTION = new ChannelSource(Value.SUBSCRIPTION, "subscription");
 
-    private final String value;
+    private final Value value;
 
-    ChannelSource(String value) {
+    private final String string;
+
+    ChannelSource(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof ChannelSource && this.string.equals(((ChannelSource) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case RECIPIENT:
+                return visitor.visitRecipient();
+            case LIST:
+                return visitor.visitList();
+            case SUBSCRIPTION:
+                return visitor.visitSubscription();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static ChannelSource valueOf(String value) {
+        switch (value) {
+            case "recipient":
+                return RECIPIENT;
+            case "list":
+                return LIST;
+            case "subscription":
+                return SUBSCRIPTION;
+            default:
+                return new ChannelSource(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        SUBSCRIPTION,
+
+        LIST,
+
+        RECIPIENT,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitSubscription();
+
+        T visitList();
+
+        T visitRecipient();
+
+        T visitUnknown(String unknownType);
     }
 }

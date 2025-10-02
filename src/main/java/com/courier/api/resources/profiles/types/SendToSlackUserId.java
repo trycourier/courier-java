@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SendToSlackUserId.Builder.class)
 public final class SendToSlackUserId implements ISlackBaseProperties {
     private final String accessToken;
@@ -71,13 +72,13 @@ public final class SendToSlackUserId implements ISlackBaseProperties {
     }
 
     public interface AccessTokenStage {
-        UserIdStage accessToken(String accessToken);
+        UserIdStage accessToken(@NotNull String accessToken);
 
         Builder from(SendToSlackUserId other);
     }
 
     public interface UserIdStage {
-        _FinalStage userId(String userId);
+        _FinalStage userId(@NotNull String userId);
     }
 
     public interface _FinalStage {
@@ -104,15 +105,15 @@ public final class SendToSlackUserId implements ISlackBaseProperties {
 
         @java.lang.Override
         @JsonSetter("access_token")
-        public UserIdStage accessToken(String accessToken) {
-            this.accessToken = accessToken;
+        public UserIdStage accessToken(@NotNull String accessToken) {
+            this.accessToken = Objects.requireNonNull(accessToken, "accessToken must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("user_id")
-        public _FinalStage userId(String userId) {
-            this.userId = userId;
+        public _FinalStage userId(@NotNull String userId) {
+            this.userId = Objects.requireNonNull(userId, "userId must not be null");
             return this;
         }
 

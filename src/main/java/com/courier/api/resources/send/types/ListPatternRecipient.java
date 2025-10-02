@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListPatternRecipient.Builder.class)
 public final class ListPatternRecipient implements IListPatternRecipientType {
     private final Optional<String> listPattern;
@@ -98,7 +98,7 @@ public final class ListPatternRecipient implements IListPatternRecipientType {
         }
 
         public Builder listPattern(String listPattern) {
-            this.listPattern = Optional.of(listPattern);
+            this.listPattern = Optional.ofNullable(listPattern);
             return this;
         }
 
@@ -109,7 +109,7 @@ public final class ListPatternRecipient implements IListPatternRecipientType {
         }
 
         public Builder data(Map<String, Object> data) {
-            this.data = Optional.of(data);
+            this.data = Optional.ofNullable(data);
             return this;
         }
 

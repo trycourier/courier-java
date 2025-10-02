@@ -3,24 +3,91 @@
  */
 package com.courier.api.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum PreferenceStatus {
-    OPTED_IN("OPTED_IN"),
+public final class PreferenceStatus {
+    public static final PreferenceStatus OPTED_OUT = new PreferenceStatus(Value.OPTED_OUT, "OPTED_OUT");
 
-    OPTED_OUT("OPTED_OUT"),
+    public static final PreferenceStatus REQUIRED = new PreferenceStatus(Value.REQUIRED, "REQUIRED");
 
-    REQUIRED("REQUIRED");
+    public static final PreferenceStatus OPTED_IN = new PreferenceStatus(Value.OPTED_IN, "OPTED_IN");
 
-    private final String value;
+    private final Value value;
 
-    PreferenceStatus(String value) {
+    private final String string;
+
+    PreferenceStatus(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof PreferenceStatus && this.string.equals(((PreferenceStatus) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case OPTED_OUT:
+                return visitor.visitOptedOut();
+            case REQUIRED:
+                return visitor.visitRequired();
+            case OPTED_IN:
+                return visitor.visitOptedIn();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static PreferenceStatus valueOf(String value) {
+        switch (value) {
+            case "OPTED_OUT":
+                return OPTED_OUT;
+            case "REQUIRED":
+                return REQUIRED;
+            case "OPTED_IN":
+                return OPTED_IN;
+            default:
+                return new PreferenceStatus(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        OPTED_IN,
+
+        OPTED_OUT,
+
+        REQUIRED,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitOptedIn();
+
+        T visitOptedOut();
+
+        T visitRequired();
+
+        T visitUnknown(String unknownType);
     }
 }

@@ -18,8 +18,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BrandUpdateParameters.Builder.class)
 public final class BrandUpdateParameters {
     private final String name;
@@ -89,7 +90,10 @@ public final class BrandUpdateParameters {
     }
 
     public interface NameStage {
-        _FinalStage name(String name);
+        /**
+         * <p>The name of the brand.</p>
+         */
+        _FinalStage name(@NotNull String name);
 
         Builder from(BrandUpdateParameters other);
     }
@@ -129,18 +133,19 @@ public final class BrandUpdateParameters {
 
         /**
          * <p>The name of the brand.</p>
+         * <p>The name of the brand.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("name")
-        public _FinalStage name(String name) {
-            this.name = name;
+        public _FinalStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage snippets(BrandSnippets snippets) {
-            this.snippets = Optional.of(snippets);
+            this.snippets = Optional.ofNullable(snippets);
             return this;
         }
 
@@ -153,7 +158,7 @@ public final class BrandUpdateParameters {
 
         @java.lang.Override
         public _FinalStage settings(BrandSettings settings) {
-            this.settings = Optional.of(settings);
+            this.settings = Optional.ofNullable(settings);
             return this;
         }
 

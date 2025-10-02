@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SubscribeUsersToListRequest.Builder.class)
 public final class SubscribeUsersToListRequest {
     private final List<PutSubscriptionsRecipient> recipients;
@@ -83,7 +83,9 @@ public final class SubscribeUsersToListRequest {
         @JsonSetter(value = "recipients", nulls = Nulls.SKIP)
         public Builder recipients(List<PutSubscriptionsRecipient> recipients) {
             this.recipients.clear();
-            this.recipients.addAll(recipients);
+            if (recipients != null) {
+                this.recipients.addAll(recipients);
+            }
             return this;
         }
 
@@ -93,7 +95,9 @@ public final class SubscribeUsersToListRequest {
         }
 
         public Builder addAllRecipients(List<PutSubscriptionsRecipient> recipients) {
-            this.recipients.addAll(recipients);
+            if (recipients != null) {
+                this.recipients.addAll(recipients);
+            }
             return this;
         }
 

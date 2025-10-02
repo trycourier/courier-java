@@ -4,10 +4,6 @@
 package com.courier.api.resources.audiences;
 
 import com.courier.api.core.ClientOptions;
-import com.courier.api.core.CourierApiApiError;
-import com.courier.api.core.CourierApiError;
-import com.courier.api.core.MediaTypes;
-import com.courier.api.core.ObjectMappers;
 import com.courier.api.core.RequestOptions;
 import com.courier.api.resources.audiences.requests.AudienceMembersListParams;
 import com.courier.api.resources.audiences.requests.AudienceUpdateParams;
@@ -16,78 +12,50 @@ import com.courier.api.resources.audiences.types.Audience;
 import com.courier.api.resources.audiences.types.AudienceListResponse;
 import com.courier.api.resources.audiences.types.AudienceMemberListResponse;
 import com.courier.api.resources.audiences.types.AudienceUpdateResponse;
-import com.courier.api.resources.commons.errors.CourierApiBadRequestError;
-import com.courier.api.resources.commons.types.BadRequest;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import java.io.IOException;
-import okhttp3.Headers;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 public class AudiencesClient {
     protected final ClientOptions clientOptions;
 
+    private final RawAudiencesClient rawClient;
+
     public AudiencesClient(ClientOptions clientOptions) {
         this.clientOptions = clientOptions;
+        this.rawClient = new RawAudiencesClient(clientOptions);
+    }
+
+    /**
+     * Get responses with HTTP metadata like headers
+     */
+    public RawAudiencesClient withRawResponse() {
+        return this.rawClient;
     }
 
     /**
      * Returns the specified audience by id.
      */
     public Audience get(String audienceId) {
-        return get(audienceId, null);
+        return this.rawClient.get(audienceId).body();
     }
 
     /**
      * Returns the specified audience by id.
      */
     public Audience get(String audienceId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("audiences")
-                .addPathSegment(audienceId)
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), Audience.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        return this.rawClient.get(audienceId, requestOptions).body();
     }
 
     /**
      * Creates or updates audience.
      */
     public AudienceUpdateResponse update(String audienceId) {
-        return update(audienceId, AudienceUpdateParams.builder().build());
+        return this.rawClient.update(audienceId).body();
     }
 
     /**
      * Creates or updates audience.
      */
     public AudienceUpdateResponse update(String audienceId, AudienceUpdateParams request) {
-        return update(audienceId, request, null);
+        return this.rawClient.update(audienceId, request).body();
     }
 
     /**
@@ -95,95 +63,35 @@ public class AudiencesClient {
      */
     public AudienceUpdateResponse update(
             String audienceId, AudienceUpdateParams request, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("audiences")
-                .addPathSegment(audienceId)
-                .build();
-        RequestBody body;
-        try {
-            body = RequestBody.create(
-                    ObjectMappers.JSON_MAPPER.writeValueAsBytes(request), MediaTypes.APPLICATION_JSON);
-        } catch (JsonProcessingException e) {
-            throw new CourierApiError("Failed to serialize request", e);
-        }
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("PUT", body)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json")
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), AudienceUpdateResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        return this.rawClient.update(audienceId, request, requestOptions).body();
     }
 
     /**
      * Deletes the specified audience.
      */
     public void delete(String audienceId) {
-        delete(audienceId, null);
+        this.rawClient.delete(audienceId).body();
     }
 
     /**
      * Deletes the specified audience.
      */
     public void delete(String audienceId, RequestOptions requestOptions) {
-        HttpUrl httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("audiences")
-                .addPathSegment(audienceId)
-                .build();
-        Request okhttpRequest = new Request.Builder()
-                .url(httpUrl)
-                .method("DELETE", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return;
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        this.rawClient.delete(audienceId, requestOptions).body();
     }
 
     /**
      * Get list of members of an audience.
      */
     public AudienceMemberListResponse listMembers(String audienceId) {
-        return listMembers(audienceId, AudienceMembersListParams.builder().build());
+        return this.rawClient.listMembers(audienceId).body();
     }
 
     /**
      * Get list of members of an audience.
      */
     public AudienceMemberListResponse listMembers(String audienceId, AudienceMembersListParams request) {
-        return listMembers(audienceId, request, null);
+        return this.rawClient.listMembers(audienceId, request).body();
     }
 
     /**
@@ -191,101 +99,27 @@ public class AudiencesClient {
      */
     public AudienceMemberListResponse listMembers(
             String audienceId, AudienceMembersListParams request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("audiences")
-                .addPathSegment(audienceId)
-                .addPathSegments("members");
-        if (request.getCursor().isPresent()) {
-            httpUrl.addQueryParameter("cursor", request.getCursor().get());
-        }
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json");
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), AudienceMemberListResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                if (response.code() == 400) {
-                    throw new CourierApiBadRequestError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, BadRequest.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        return this.rawClient.listMembers(audienceId, request, requestOptions).body();
     }
 
     /**
      * Get the audiences associated with the authorization token.
      */
     public AudienceListResponse listAudiences() {
-        return listAudiences(AudiencesListParams.builder().build());
+        return this.rawClient.listAudiences().body();
     }
 
     /**
      * Get the audiences associated with the authorization token.
      */
     public AudienceListResponse listAudiences(AudiencesListParams request) {
-        return listAudiences(request, null);
+        return this.rawClient.listAudiences(request).body();
     }
 
     /**
      * Get the audiences associated with the authorization token.
      */
     public AudienceListResponse listAudiences(AudiencesListParams request, RequestOptions requestOptions) {
-        HttpUrl.Builder httpUrl = HttpUrl.parse(this.clientOptions.environment().getUrl())
-                .newBuilder()
-                .addPathSegments("audiences");
-        if (request.getCursor().isPresent()) {
-            httpUrl.addQueryParameter("cursor", request.getCursor().get());
-        }
-        Request.Builder _requestBuilder = new Request.Builder()
-                .url(httpUrl.build())
-                .method("GET", null)
-                .headers(Headers.of(clientOptions.headers(requestOptions)))
-                .addHeader("Content-Type", "application/json");
-        Request okhttpRequest = _requestBuilder.build();
-        OkHttpClient client = clientOptions.httpClient();
-        if (requestOptions != null && requestOptions.getTimeout().isPresent()) {
-            client = clientOptions.httpClientWithTimeout(requestOptions);
-        }
-        try (Response response = client.newCall(okhttpRequest).execute()) {
-            ResponseBody responseBody = response.body();
-            if (response.isSuccessful()) {
-                return ObjectMappers.JSON_MAPPER.readValue(responseBody.string(), AudienceListResponse.class);
-            }
-            String responseBodyString = responseBody != null ? responseBody.string() : "{}";
-            try {
-                if (response.code() == 400) {
-                    throw new CourierApiBadRequestError(
-                            ObjectMappers.JSON_MAPPER.readValue(responseBodyString, BadRequest.class));
-                }
-            } catch (JsonProcessingException ignored) {
-                // unable to map error response, throwing generic error
-            }
-            throw new CourierApiApiError(
-                    "Error with status code " + response.code(),
-                    response.code(),
-                    ObjectMappers.JSON_MAPPER.readValue(responseBodyString, Object.class));
-        } catch (IOException e) {
-            throw new CourierApiError("Network error executing HTTP request", e);
-        }
+        return this.rawClient.listAudiences(request, requestOptions).body();
     }
 }

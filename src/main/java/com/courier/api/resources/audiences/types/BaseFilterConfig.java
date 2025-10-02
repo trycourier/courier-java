@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BaseFilterConfig.Builder.class)
 public final class BaseFilterConfig implements IBaseFilterConfig {
     private final Operator operator;
@@ -66,7 +67,10 @@ public final class BaseFilterConfig implements IBaseFilterConfig {
     }
 
     public interface OperatorStage {
-        _FinalStage operator(Operator operator);
+        /**
+         * <p>The operator to use for filtering</p>
+         */
+        _FinalStage operator(@NotNull Operator operator);
 
         Builder from(BaseFilterConfig other);
     }
@@ -92,12 +96,13 @@ public final class BaseFilterConfig implements IBaseFilterConfig {
 
         /**
          * <p>The operator to use for filtering</p>
+         * <p>The operator to use for filtering</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("operator")
-        public _FinalStage operator(Operator operator) {
-            this.operator = operator;
+        public _FinalStage operator(@NotNull Operator operator) {
+            this.operator = Objects.requireNonNull(operator, "operator must not be null");
             return this;
         }
 

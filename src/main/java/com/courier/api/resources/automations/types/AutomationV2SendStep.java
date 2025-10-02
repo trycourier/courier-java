@@ -17,8 +17,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AutomationV2SendStep.Builder.class)
 public final class AutomationV2SendStep implements IAutomationStep {
     private final Optional<String> if_;
@@ -89,7 +90,7 @@ public final class AutomationV2SendStep implements IAutomationStep {
     }
 
     public interface MessageStage {
-        _FinalStage message(Message message);
+        _FinalStage message(@NotNull Message message);
 
         Builder from(AutomationV2SendStep other);
     }
@@ -129,14 +130,14 @@ public final class AutomationV2SendStep implements IAutomationStep {
 
         @java.lang.Override
         @JsonSetter("message")
-        public _FinalStage message(Message message) {
-            this.message = message;
+        public _FinalStage message(@NotNull Message message) {
+            this.message = Objects.requireNonNull(message, "message must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage ref(String ref) {
-            this.ref = Optional.of(ref);
+            this.ref = Optional.ofNullable(ref);
             return this;
         }
 
@@ -149,7 +150,7 @@ public final class AutomationV2SendStep implements IAutomationStep {
 
         @java.lang.Override
         public _FinalStage if_(String if_) {
-            this.if_ = Optional.of(if_);
+            this.if_ = Optional.ofNullable(if_);
             return this;
         }
 

@@ -3,36 +3,150 @@
  */
 package com.courier.api.resources.messages.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum Reason {
-    BOUNCED("BOUNCED"),
+public final class Reason {
+    public static final Reason NO_CHANNELS = new Reason(Value.NO_CHANNELS, "NO_CHANNELS");
 
-    FAILED("FAILED"),
+    public static final Reason FILTERED = new Reason(Value.FILTERED, "FILTERED");
 
-    FILTERED("FILTERED"),
+    public static final Reason PROVIDER_ERROR = new Reason(Value.PROVIDER_ERROR, "PROVIDER_ERROR");
 
-    NO_CHANNELS("NO_CHANNELS"),
+    public static final Reason BOUNCED = new Reason(Value.BOUNCED, "BOUNCED");
 
-    NO_PROVIDERS("NO_PROVIDERS"),
+    public static final Reason FAILED = new Reason(Value.FAILED, "FAILED");
 
-    OPT_IN_REQUIRED("OPT_IN_REQUIRED"),
+    public static final Reason NO_PROVIDERS = new Reason(Value.NO_PROVIDERS, "NO_PROVIDERS");
 
-    PROVIDER_ERROR("PROVIDER_ERROR"),
+    public static final Reason UNPUBLISHED = new Reason(Value.UNPUBLISHED, "UNPUBLISHED");
 
-    UNPUBLISHED("UNPUBLISHED"),
+    public static final Reason OPT_IN_REQUIRED = new Reason(Value.OPT_IN_REQUIRED, "OPT_IN_REQUIRED");
 
-    UNSUBSCRIBED("UNSUBSCRIBED");
+    public static final Reason UNSUBSCRIBED = new Reason(Value.UNSUBSCRIBED, "UNSUBSCRIBED");
 
-    private final String value;
+    private final Value value;
 
-    Reason(String value) {
+    private final String string;
+
+    Reason(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other) || (other instanceof Reason && this.string.equals(((Reason) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case NO_CHANNELS:
+                return visitor.visitNoChannels();
+            case FILTERED:
+                return visitor.visitFiltered();
+            case PROVIDER_ERROR:
+                return visitor.visitProviderError();
+            case BOUNCED:
+                return visitor.visitBounced();
+            case FAILED:
+                return visitor.visitFailed();
+            case NO_PROVIDERS:
+                return visitor.visitNoProviders();
+            case UNPUBLISHED:
+                return visitor.visitUnpublished();
+            case OPT_IN_REQUIRED:
+                return visitor.visitOptInRequired();
+            case UNSUBSCRIBED:
+                return visitor.visitUnsubscribed();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static Reason valueOf(String value) {
+        switch (value) {
+            case "NO_CHANNELS":
+                return NO_CHANNELS;
+            case "FILTERED":
+                return FILTERED;
+            case "PROVIDER_ERROR":
+                return PROVIDER_ERROR;
+            case "BOUNCED":
+                return BOUNCED;
+            case "FAILED":
+                return FAILED;
+            case "NO_PROVIDERS":
+                return NO_PROVIDERS;
+            case "UNPUBLISHED":
+                return UNPUBLISHED;
+            case "OPT_IN_REQUIRED":
+                return OPT_IN_REQUIRED;
+            case "UNSUBSCRIBED":
+                return UNSUBSCRIBED;
+            default:
+                return new Reason(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        BOUNCED,
+
+        FAILED,
+
+        FILTERED,
+
+        NO_CHANNELS,
+
+        NO_PROVIDERS,
+
+        OPT_IN_REQUIRED,
+
+        PROVIDER_ERROR,
+
+        UNPUBLISHED,
+
+        UNSUBSCRIBED,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitBounced();
+
+        T visitFailed();
+
+        T visitFiltered();
+
+        T visitNoChannels();
+
+        T visitNoProviders();
+
+        T visitOptInRequired();
+
+        T visitProviderError();
+
+        T visitUnpublished();
+
+        T visitUnsubscribed();
+
+        T visitUnknown(String unknownType);
     }
 }

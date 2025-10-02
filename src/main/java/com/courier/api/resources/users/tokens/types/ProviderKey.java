@@ -3,26 +3,100 @@
  */
 package com.courier.api.resources.users.tokens.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum ProviderKey {
-    FIREBASE_FCM("firebase-fcm"),
+public final class ProviderKey {
+    public static final ProviderKey EXPO = new ProviderKey(Value.EXPO, "expo");
 
-    APN("apn"),
+    public static final ProviderKey APN = new ProviderKey(Value.APN, "apn");
 
-    EXPO("expo"),
+    public static final ProviderKey ONESIGNAL = new ProviderKey(Value.ONESIGNAL, "onesignal");
 
-    ONESIGNAL("onesignal");
+    public static final ProviderKey FIREBASE_FCM = new ProviderKey(Value.FIREBASE_FCM, "firebase-fcm");
 
-    private final String value;
+    private final Value value;
 
-    ProviderKey(String value) {
+    private final String string;
+
+    ProviderKey(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other) || (other instanceof ProviderKey && this.string.equals(((ProviderKey) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case EXPO:
+                return visitor.visitExpo();
+            case APN:
+                return visitor.visitApn();
+            case ONESIGNAL:
+                return visitor.visitOnesignal();
+            case FIREBASE_FCM:
+                return visitor.visitFirebaseFcm();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static ProviderKey valueOf(String value) {
+        switch (value) {
+            case "expo":
+                return EXPO;
+            case "apn":
+                return APN;
+            case "onesignal":
+                return ONESIGNAL;
+            case "firebase-fcm":
+                return FIREBASE_FCM;
+            default:
+                return new ProviderKey(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        FIREBASE_FCM,
+
+        APN,
+
+        EXPO,
+
+        ONESIGNAL,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitFirebaseFcm();
+
+        T visitApn();
+
+        T visitExpo();
+
+        T visitOnesignal();
+
+        T visitUnknown(String unknownType);
     }
 }

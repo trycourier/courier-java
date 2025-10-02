@@ -16,8 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Expiry.Builder.class)
 public final class Expiry {
     private final Optional<String> expiresAt;
@@ -78,7 +79,10 @@ public final class Expiry {
     }
 
     public interface ExpiresInStage {
-        _FinalStage expiresIn(ExpiresInType expiresIn);
+        /**
+         * <p>A duration in the form of milliseconds or an ISO8601 Duration format (i.e. P1DT4H).</p>
+         */
+        _FinalStage expiresIn(@NotNull ExpiresInType expiresIn);
 
         Builder from(Expiry other);
     }
@@ -86,6 +90,9 @@ public final class Expiry {
     public interface _FinalStage {
         Expiry build();
 
+        /**
+         * <p>An epoch timestamp or ISO8601 timestamp with timezone <code>(YYYY-MM-DDThh:mm:ss.sTZD)</code> that describes the time in which a message expires.</p>
+         */
         _FinalStage expiresAt(Optional<String> expiresAt);
 
         _FinalStage expiresAt(String expiresAt);
@@ -111,12 +118,13 @@ public final class Expiry {
 
         /**
          * <p>A duration in the form of milliseconds or an ISO8601 Duration format (i.e. P1DT4H).</p>
+         * <p>A duration in the form of milliseconds or an ISO8601 Duration format (i.e. P1DT4H).</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("expires_in")
-        public _FinalStage expiresIn(ExpiresInType expiresIn) {
-            this.expiresIn = expiresIn;
+        public _FinalStage expiresIn(@NotNull ExpiresInType expiresIn) {
+            this.expiresIn = Objects.requireNonNull(expiresIn, "expiresIn must not be null");
             return this;
         }
 
@@ -126,10 +134,13 @@ public final class Expiry {
          */
         @java.lang.Override
         public _FinalStage expiresAt(String expiresAt) {
-            this.expiresAt = Optional.of(expiresAt);
+            this.expiresAt = Optional.ofNullable(expiresAt);
             return this;
         }
 
+        /**
+         * <p>An epoch timestamp or ISO8601 timestamp with timezone <code>(YYYY-MM-DDThh:mm:ss.sTZD)</code> that describes the time in which a message expires.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "expires_at", nulls = Nulls.SKIP)
         public _FinalStage expiresAt(Optional<String> expiresAt) {

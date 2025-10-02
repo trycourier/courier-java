@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = UserProfilePatch.Builder.class)
 public final class UserProfilePatch {
     private final String op;
@@ -87,17 +88,26 @@ public final class UserProfilePatch {
     }
 
     public interface OpStage {
-        PathStage op(String op);
+        /**
+         * <p>The operation to perform.</p>
+         */
+        PathStage op(@NotNull String op);
 
         Builder from(UserProfilePatch other);
     }
 
     public interface PathStage {
-        ValueStage path(String path);
+        /**
+         * <p>The JSON path specifying the part of the profile to operate on.</p>
+         */
+        ValueStage path(@NotNull String path);
     }
 
     public interface ValueStage {
-        _FinalStage value(String value);
+        /**
+         * <p>The value for the operation.</p>
+         */
+        _FinalStage value(@NotNull String value);
     }
 
     public interface _FinalStage {
@@ -127,34 +137,37 @@ public final class UserProfilePatch {
 
         /**
          * <p>The operation to perform.</p>
+         * <p>The operation to perform.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("op")
-        public PathStage op(String op) {
-            this.op = op;
+        public PathStage op(@NotNull String op) {
+            this.op = Objects.requireNonNull(op, "op must not be null");
             return this;
         }
 
         /**
          * <p>The JSON path specifying the part of the profile to operate on.</p>
+         * <p>The JSON path specifying the part of the profile to operate on.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("path")
-        public ValueStage path(String path) {
-            this.path = path;
+        public ValueStage path(@NotNull String path) {
+            this.path = Objects.requireNonNull(path, "path must not be null");
             return this;
         }
 
         /**
          * <p>The value for the operation.</p>
+         * <p>The value for the operation.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("value")
-        public _FinalStage value(String value) {
-            this.value = value;
+        public _FinalStage value(@NotNull String value) {
+            this.value = Objects.requireNonNull(value, "value must not be null");
             return this;
         }
 

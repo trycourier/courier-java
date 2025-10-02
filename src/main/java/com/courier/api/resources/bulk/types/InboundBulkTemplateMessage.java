@@ -26,8 +26,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = InboundBulkTemplateMessage.Builder.class)
 public final class InboundBulkTemplateMessage implements IBaseMessage {
     private final Optional<Map<String, Object>> data;
@@ -239,7 +240,11 @@ public final class InboundBulkTemplateMessage implements IBaseMessage {
     }
 
     public interface TemplateStage {
-        _FinalStage template(String template);
+        /**
+         * <p>The id of the notification template to be rendered and sent to the recipient(s).
+         * This field or the content field must be supplied.</p>
+         */
+        _FinalStage template(@NotNull String template);
 
         Builder from(InboundBulkTemplateMessage other);
     }
@@ -247,6 +252,10 @@ public final class InboundBulkTemplateMessage implements IBaseMessage {
     public interface _FinalStage {
         InboundBulkTemplateMessage build();
 
+        /**
+         * <p>An arbitrary object that includes any data you want to pass to the message.
+         * The data will populate the corresponding template or elements variables.</p>
+         */
         _FinalStage data(Optional<Map<String, Object>> data);
 
         _FinalStage data(Map<String, Object> data);
@@ -255,14 +264,23 @@ public final class InboundBulkTemplateMessage implements IBaseMessage {
 
         _FinalStage brandId(String brandId);
 
+        /**
+         * <p>&quot;Define run-time configuration for one or more channels. If you don't specify channels, the default configuration for each channel will be used. Valid ChannelId's are: email, sms, push, inbox, direct_message, banner, and webhook.&quot;</p>
+         */
         _FinalStage channels(Optional<Map<String, Channel>> channels);
 
         _FinalStage channels(Map<String, Channel> channels);
 
+        /**
+         * <p>Context to load with this recipient. Will override any context set on message.context.</p>
+         */
         _FinalStage context(Optional<MessageContext> context);
 
         _FinalStage context(MessageContext context);
 
+        /**
+         * <p>Metadata such as utm tracking attached with the notification through this channel.</p>
+         */
         _FinalStage metadata(Optional<MessageMetadata> metadata);
 
         _FinalStage metadata(MessageMetadata metadata);
@@ -271,6 +289,9 @@ public final class InboundBulkTemplateMessage implements IBaseMessage {
 
         _FinalStage preferences(MessagePreferences preferences);
 
+        /**
+         * <p>An object whose keys are valid provider identifiers which map to an object.</p>
+         */
         _FinalStage providers(Optional<Map<String, MessageProvidersType>> providers);
 
         _FinalStage providers(Map<String, MessageProvidersType> providers);
@@ -279,14 +300,24 @@ public final class InboundBulkTemplateMessage implements IBaseMessage {
 
         _FinalStage routing(Routing routing);
 
+        /**
+         * <p>Time in ms to attempt the channel before failing over to the next available channel.</p>
+         */
         _FinalStage timeout(Optional<Timeout> timeout);
 
         _FinalStage timeout(Timeout timeout);
 
+        /**
+         * <p>Defines the time to wait before delivering the message. You can specify one of the following options. Duration with the number of milliseconds to delay. Until with an ISO 8601 timestamp that specifies when it should be delivered. Until with an OpenStreetMap opening_hours-like format that specifies the <a href="https://www.courier.com/docs/platform/sending/failover/#delivery-window">Delivery Window</a> (e.g., 'Mo-Fr 08:00-18:00pm')</p>
+         */
         _FinalStage delay(Optional<Delay> delay);
 
         _FinalStage delay(Delay delay);
 
+        /**
+         * <p>&quot;Expiry allows you to set an absolute or relative time in which a message expires.
+         * Note: This is only valid for the Courier Inbox channel as of 12-08-2022.&quot;</p>
+         */
         _FinalStage expiry(Optional<Expiry> expiry);
 
         _FinalStage expiry(Expiry expiry);
@@ -343,12 +374,14 @@ public final class InboundBulkTemplateMessage implements IBaseMessage {
         /**
          * <p>The id of the notification template to be rendered and sent to the recipient(s).
          * This field or the content field must be supplied.</p>
+         * <p>The id of the notification template to be rendered and sent to the recipient(s).
+         * This field or the content field must be supplied.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("template")
-        public _FinalStage template(String template) {
-            this.template = template;
+        public _FinalStage template(@NotNull String template) {
+            this.template = Objects.requireNonNull(template, "template must not be null");
             return this;
         }
 
@@ -359,10 +392,14 @@ public final class InboundBulkTemplateMessage implements IBaseMessage {
          */
         @java.lang.Override
         public _FinalStage expiry(Expiry expiry) {
-            this.expiry = Optional.of(expiry);
+            this.expiry = Optional.ofNullable(expiry);
             return this;
         }
 
+        /**
+         * <p>&quot;Expiry allows you to set an absolute or relative time in which a message expires.
+         * Note: This is only valid for the Courier Inbox channel as of 12-08-2022.&quot;</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "expiry", nulls = Nulls.SKIP)
         public _FinalStage expiry(Optional<Expiry> expiry) {
@@ -376,10 +413,13 @@ public final class InboundBulkTemplateMessage implements IBaseMessage {
          */
         @java.lang.Override
         public _FinalStage delay(Delay delay) {
-            this.delay = Optional.of(delay);
+            this.delay = Optional.ofNullable(delay);
             return this;
         }
 
+        /**
+         * <p>Defines the time to wait before delivering the message. You can specify one of the following options. Duration with the number of milliseconds to delay. Until with an ISO 8601 timestamp that specifies when it should be delivered. Until with an OpenStreetMap opening_hours-like format that specifies the <a href="https://www.courier.com/docs/platform/sending/failover/#delivery-window">Delivery Window</a> (e.g., 'Mo-Fr 08:00-18:00pm')</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "delay", nulls = Nulls.SKIP)
         public _FinalStage delay(Optional<Delay> delay) {
@@ -393,10 +433,13 @@ public final class InboundBulkTemplateMessage implements IBaseMessage {
          */
         @java.lang.Override
         public _FinalStage timeout(Timeout timeout) {
-            this.timeout = Optional.of(timeout);
+            this.timeout = Optional.ofNullable(timeout);
             return this;
         }
 
+        /**
+         * <p>Time in ms to attempt the channel before failing over to the next available channel.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "timeout", nulls = Nulls.SKIP)
         public _FinalStage timeout(Optional<Timeout> timeout) {
@@ -406,7 +449,7 @@ public final class InboundBulkTemplateMessage implements IBaseMessage {
 
         @java.lang.Override
         public _FinalStage routing(Routing routing) {
-            this.routing = Optional.of(routing);
+            this.routing = Optional.ofNullable(routing);
             return this;
         }
 
@@ -423,10 +466,13 @@ public final class InboundBulkTemplateMessage implements IBaseMessage {
          */
         @java.lang.Override
         public _FinalStage providers(Map<String, MessageProvidersType> providers) {
-            this.providers = Optional.of(providers);
+            this.providers = Optional.ofNullable(providers);
             return this;
         }
 
+        /**
+         * <p>An object whose keys are valid provider identifiers which map to an object.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "providers", nulls = Nulls.SKIP)
         public _FinalStage providers(Optional<Map<String, MessageProvidersType>> providers) {
@@ -436,7 +482,7 @@ public final class InboundBulkTemplateMessage implements IBaseMessage {
 
         @java.lang.Override
         public _FinalStage preferences(MessagePreferences preferences) {
-            this.preferences = Optional.of(preferences);
+            this.preferences = Optional.ofNullable(preferences);
             return this;
         }
 
@@ -453,10 +499,13 @@ public final class InboundBulkTemplateMessage implements IBaseMessage {
          */
         @java.lang.Override
         public _FinalStage metadata(MessageMetadata metadata) {
-            this.metadata = Optional.of(metadata);
+            this.metadata = Optional.ofNullable(metadata);
             return this;
         }
 
+        /**
+         * <p>Metadata such as utm tracking attached with the notification through this channel.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "metadata", nulls = Nulls.SKIP)
         public _FinalStage metadata(Optional<MessageMetadata> metadata) {
@@ -470,10 +519,13 @@ public final class InboundBulkTemplateMessage implements IBaseMessage {
          */
         @java.lang.Override
         public _FinalStage context(MessageContext context) {
-            this.context = Optional.of(context);
+            this.context = Optional.ofNullable(context);
             return this;
         }
 
+        /**
+         * <p>Context to load with this recipient. Will override any context set on message.context.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "context", nulls = Nulls.SKIP)
         public _FinalStage context(Optional<MessageContext> context) {
@@ -487,10 +539,13 @@ public final class InboundBulkTemplateMessage implements IBaseMessage {
          */
         @java.lang.Override
         public _FinalStage channels(Map<String, Channel> channels) {
-            this.channels = Optional.of(channels);
+            this.channels = Optional.ofNullable(channels);
             return this;
         }
 
+        /**
+         * <p>&quot;Define run-time configuration for one or more channels. If you don't specify channels, the default configuration for each channel will be used. Valid ChannelId's are: email, sms, push, inbox, direct_message, banner, and webhook.&quot;</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "channels", nulls = Nulls.SKIP)
         public _FinalStage channels(Optional<Map<String, Channel>> channels) {
@@ -500,7 +555,7 @@ public final class InboundBulkTemplateMessage implements IBaseMessage {
 
         @java.lang.Override
         public _FinalStage brandId(String brandId) {
-            this.brandId = Optional.of(brandId);
+            this.brandId = Optional.ofNullable(brandId);
             return this;
         }
 
@@ -518,10 +573,14 @@ public final class InboundBulkTemplateMessage implements IBaseMessage {
          */
         @java.lang.Override
         public _FinalStage data(Map<String, Object> data) {
-            this.data = Optional.of(data);
+            this.data = Optional.ofNullable(data);
             return this;
         }
 
+        /**
+         * <p>An arbitrary object that includes any data you want to pass to the message.
+         * The data will populate the corresponding template or elements variables.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "data", nulls = Nulls.SKIP)
         public _FinalStage data(Optional<Map<String, Object>> data) {

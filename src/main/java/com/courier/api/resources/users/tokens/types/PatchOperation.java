@@ -16,8 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PatchOperation.Builder.class)
 public final class PatchOperation {
     private final String op;
@@ -89,18 +90,27 @@ public final class PatchOperation {
     }
 
     public interface OpStage {
-        PathStage op(String op);
+        /**
+         * <p>The operation to perform.</p>
+         */
+        PathStage op(@NotNull String op);
 
         Builder from(PatchOperation other);
     }
 
     public interface PathStage {
-        _FinalStage path(String path);
+        /**
+         * <p>The JSON path specifying the part of the profile to operate on.</p>
+         */
+        _FinalStage path(@NotNull String path);
     }
 
     public interface _FinalStage {
         PatchOperation build();
 
+        /**
+         * <p>The value for the operation.</p>
+         */
         _FinalStage value(Optional<String> value);
 
         _FinalStage value(String value);
@@ -129,23 +139,25 @@ public final class PatchOperation {
 
         /**
          * <p>The operation to perform.</p>
+         * <p>The operation to perform.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("op")
-        public PathStage op(String op) {
-            this.op = op;
+        public PathStage op(@NotNull String op) {
+            this.op = Objects.requireNonNull(op, "op must not be null");
             return this;
         }
 
         /**
          * <p>The JSON path specifying the part of the profile to operate on.</p>
+         * <p>The JSON path specifying the part of the profile to operate on.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("path")
-        public _FinalStage path(String path) {
-            this.path = path;
+        public _FinalStage path(@NotNull String path) {
+            this.path = Objects.requireNonNull(path, "path must not be null");
             return this;
         }
 
@@ -155,10 +167,13 @@ public final class PatchOperation {
          */
         @java.lang.Override
         public _FinalStage value(String value) {
-            this.value = Optional.of(value);
+            this.value = Optional.ofNullable(value);
             return this;
         }
 
+        /**
+         * <p>The value for the operation.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "value", nulls = Nulls.SKIP)
         public _FinalStage value(Optional<String> value) {

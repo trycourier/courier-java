@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AddUserToMultipleTenantsParams.Builder.class)
 public final class AddUserToMultipleTenantsParams {
     private final List<UserTenantAssociation> tenants;
@@ -83,7 +83,9 @@ public final class AddUserToMultipleTenantsParams {
         @JsonSetter(value = "tenants", nulls = Nulls.SKIP)
         public Builder tenants(List<UserTenantAssociation> tenants) {
             this.tenants.clear();
-            this.tenants.addAll(tenants);
+            if (tenants != null) {
+                this.tenants.addAll(tenants);
+            }
             return this;
         }
 
@@ -93,7 +95,9 @@ public final class AddUserToMultipleTenantsParams {
         }
 
         public Builder addAllTenants(List<UserTenantAssociation> tenants) {
-            this.tenants.addAll(tenants);
+            if (tenants != null) {
+                this.tenants.addAll(tenants);
+            }
             return this;
         }
 

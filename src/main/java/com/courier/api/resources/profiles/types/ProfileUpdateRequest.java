@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ProfileUpdateRequest.Builder.class)
 public final class ProfileUpdateRequest {
     private final List<UserProfilePatch> patch;
@@ -81,10 +81,15 @@ public final class ProfileUpdateRequest {
             return this;
         }
 
+        /**
+         * <p>List of patch operations to apply to the profile.</p>
+         */
         @JsonSetter(value = "patch", nulls = Nulls.SKIP)
         public Builder patch(List<UserProfilePatch> patch) {
             this.patch.clear();
-            this.patch.addAll(patch);
+            if (patch != null) {
+                this.patch.addAll(patch);
+            }
             return this;
         }
 
@@ -94,7 +99,9 @@ public final class ProfileUpdateRequest {
         }
 
         public Builder addAllPatch(List<UserProfilePatch> patch) {
-            this.patch.addAll(patch);
+            if (patch != null) {
+                this.patch.addAll(patch);
+            }
             return this;
         }
 

@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ElementalBaseNode.Builder.class)
 public final class ElementalBaseNode implements IElementalBaseNode {
     private final Optional<List<String>> channels;
@@ -130,7 +130,7 @@ public final class ElementalBaseNode implements IElementalBaseNode {
         }
 
         public Builder channels(List<String> channels) {
-            this.channels = Optional.of(channels);
+            this.channels = Optional.ofNullable(channels);
             return this;
         }
 
@@ -141,7 +141,7 @@ public final class ElementalBaseNode implements IElementalBaseNode {
         }
 
         public Builder ref(String ref) {
-            this.ref = Optional.of(ref);
+            this.ref = Optional.ofNullable(ref);
             return this;
         }
 
@@ -152,7 +152,7 @@ public final class ElementalBaseNode implements IElementalBaseNode {
         }
 
         public Builder if_(String if_) {
-            this.if_ = Optional.of(if_);
+            this.if_ = Optional.ofNullable(if_);
             return this;
         }
 
@@ -163,7 +163,7 @@ public final class ElementalBaseNode implements IElementalBaseNode {
         }
 
         public Builder loop(String loop) {
-            this.loop = Optional.of(loop);
+            this.loop = Optional.ofNullable(loop);
             return this;
         }
 

@@ -3,30 +3,123 @@
  */
 package com.courier.api.resources.commons.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum ChannelClassification {
-    DIRECT_MESSAGE("direct_message"),
+public final class ChannelClassification {
+    public static final ChannelClassification EMAIL = new ChannelClassification(Value.EMAIL, "email");
 
-    EMAIL("email"),
+    public static final ChannelClassification INBOX = new ChannelClassification(Value.INBOX, "inbox");
 
-    PUSH("push"),
+    public static final ChannelClassification WEBHOOK = new ChannelClassification(Value.WEBHOOK, "webhook");
 
-    SMS("sms"),
+    public static final ChannelClassification PUSH = new ChannelClassification(Value.PUSH, "push");
 
-    WEBHOOK("webhook"),
+    public static final ChannelClassification SMS = new ChannelClassification(Value.SMS, "sms");
 
-    INBOX("inbox");
+    public static final ChannelClassification DIRECT_MESSAGE =
+            new ChannelClassification(Value.DIRECT_MESSAGE, "direct_message");
 
-    private final String value;
+    private final Value value;
 
-    ChannelClassification(String value) {
+    private final String string;
+
+    ChannelClassification(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof ChannelClassification
+                        && this.string.equals(((ChannelClassification) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case EMAIL:
+                return visitor.visitEmail();
+            case INBOX:
+                return visitor.visitInbox();
+            case WEBHOOK:
+                return visitor.visitWebhook();
+            case PUSH:
+                return visitor.visitPush();
+            case SMS:
+                return visitor.visitSms();
+            case DIRECT_MESSAGE:
+                return visitor.visitDirectMessage();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static ChannelClassification valueOf(String value) {
+        switch (value) {
+            case "email":
+                return EMAIL;
+            case "inbox":
+                return INBOX;
+            case "webhook":
+                return WEBHOOK;
+            case "push":
+                return PUSH;
+            case "sms":
+                return SMS;
+            case "direct_message":
+                return DIRECT_MESSAGE;
+            default:
+                return new ChannelClassification(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        DIRECT_MESSAGE,
+
+        EMAIL,
+
+        PUSH,
+
+        SMS,
+
+        WEBHOOK,
+
+        INBOX,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitDirectMessage();
+
+        T visitEmail();
+
+        T visitPush();
+
+        T visitSms();
+
+        T visitWebhook();
+
+        T visitInbox();
+
+        T visitUnknown(String unknownType);
     }
 }

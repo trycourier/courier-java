@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BulkGetJobResponse.Builder.class)
 public final class BulkGetJobResponse {
     private final JobDetails job;
@@ -62,7 +63,7 @@ public final class BulkGetJobResponse {
     }
 
     public interface JobStage {
-        _FinalStage job(JobDetails job);
+        _FinalStage job(@NotNull JobDetails job);
 
         Builder from(BulkGetJobResponse other);
     }
@@ -88,8 +89,8 @@ public final class BulkGetJobResponse {
 
         @java.lang.Override
         @JsonSetter("job")
-        public _FinalStage job(JobDetails job) {
-            this.job = job;
+        public _FinalStage job(@NotNull JobDetails job) {
+            this.job = Objects.requireNonNull(job, "job must not be null");
             return this;
         }
 

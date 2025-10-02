@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = DefaultPreferences.Builder.class)
 public final class DefaultPreferences {
     private final Optional<List<SubscriptionTopic>> items;
@@ -85,7 +85,7 @@ public final class DefaultPreferences {
         }
 
         public Builder items(List<SubscriptionTopic> items) {
-            this.items = Optional.of(items);
+            this.items = Optional.ofNullable(items);
             return this;
         }
 

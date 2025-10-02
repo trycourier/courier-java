@@ -3,24 +3,90 @@
  */
 package com.courier.api.resources.send.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum RuleType {
-    SNOOZE("snooze"),
+public final class RuleType {
+    public static final RuleType STATUS = new RuleType(Value.STATUS, "status");
 
-    CHANNEL_PREFERENCES("channel_preferences"),
+    public static final RuleType SNOOZE = new RuleType(Value.SNOOZE, "snooze");
 
-    STATUS("status");
+    public static final RuleType CHANNEL_PREFERENCES = new RuleType(Value.CHANNEL_PREFERENCES, "channel_preferences");
 
-    private final String value;
+    private final Value value;
 
-    RuleType(String value) {
+    private final String string;
+
+    RuleType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other) || (other instanceof RuleType && this.string.equals(((RuleType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case STATUS:
+                return visitor.visitStatus();
+            case SNOOZE:
+                return visitor.visitSnooze();
+            case CHANNEL_PREFERENCES:
+                return visitor.visitChannelPreferences();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static RuleType valueOf(String value) {
+        switch (value) {
+            case "status":
+                return STATUS;
+            case "snooze":
+                return SNOOZE;
+            case "channel_preferences":
+                return CHANNEL_PREFERENCES;
+            default:
+                return new RuleType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        SNOOZE,
+
+        CHANNEL_PREFERENCES,
+
+        STATUS,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitSnooze();
+
+        T visitChannelPreferences();
+
+        T visitStatus();
+
+        T visitUnknown(String unknownType);
     }
 }

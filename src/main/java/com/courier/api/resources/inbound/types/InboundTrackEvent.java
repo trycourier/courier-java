@@ -17,8 +17,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = InboundTrackEvent.Builder.class)
 public final class InboundTrackEvent {
     private final String event;
@@ -111,13 +112,19 @@ public final class InboundTrackEvent {
     }
 
     public interface EventStage {
-        MessageIdStage event(String event);
+        /**
+         * <p>A descriptive name of the event. This name will appear as a trigger in the Courier Automation Trigger node.</p>
+         */
+        MessageIdStage event(@NotNull String event);
 
         Builder from(InboundTrackEvent other);
     }
 
     public interface MessageIdStage {
-        _FinalStage messageId(String messageId);
+        /**
+         * <p>A required unique identifier that will be used to de-duplicate requests. If not unique, will respond with 409 Conflict status</p>
+         */
+        _FinalStage messageId(@NotNull String messageId);
     }
 
     public interface _FinalStage {
@@ -129,6 +136,9 @@ public final class InboundTrackEvent {
 
         _FinalStage properties(String key, Object value);
 
+        /**
+         * <p>The user id assocatiated with the track</p>
+         */
         _FinalStage userId(Optional<String> userId);
 
         _FinalStage userId(String userId);
@@ -160,23 +170,25 @@ public final class InboundTrackEvent {
 
         /**
          * <p>A descriptive name of the event. This name will appear as a trigger in the Courier Automation Trigger node.</p>
+         * <p>A descriptive name of the event. This name will appear as a trigger in the Courier Automation Trigger node.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("event")
-        public MessageIdStage event(String event) {
-            this.event = event;
+        public MessageIdStage event(@NotNull String event) {
+            this.event = Objects.requireNonNull(event, "event must not be null");
             return this;
         }
 
         /**
          * <p>A required unique identifier that will be used to de-duplicate requests. If not unique, will respond with 409 Conflict status</p>
+         * <p>A required unique identifier that will be used to de-duplicate requests. If not unique, will respond with 409 Conflict status</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("messageId")
-        public _FinalStage messageId(String messageId) {
-            this.messageId = messageId;
+        public _FinalStage messageId(@NotNull String messageId) {
+            this.messageId = Objects.requireNonNull(messageId, "messageId must not be null");
             return this;
         }
 
@@ -186,10 +198,13 @@ public final class InboundTrackEvent {
          */
         @java.lang.Override
         public _FinalStage userId(String userId) {
-            this.userId = Optional.of(userId);
+            this.userId = Optional.ofNullable(userId);
             return this;
         }
 
+        /**
+         * <p>The user id assocatiated with the track</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "userId", nulls = Nulls.SKIP)
         public _FinalStage userId(Optional<String> userId) {
@@ -205,7 +220,9 @@ public final class InboundTrackEvent {
 
         @java.lang.Override
         public _FinalStage putAllProperties(Map<String, Object> properties) {
-            this.properties.putAll(properties);
+            if (properties != null) {
+                this.properties.putAll(properties);
+            }
             return this;
         }
 
@@ -213,7 +230,9 @@ public final class InboundTrackEvent {
         @JsonSetter(value = "properties", nulls = Nulls.SKIP)
         public _FinalStage properties(Map<String, Object> properties) {
             this.properties.clear();
-            this.properties.putAll(properties);
+            if (properties != null) {
+                this.properties.putAll(properties);
+            }
             return this;
         }
 

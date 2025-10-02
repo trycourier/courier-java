@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AutomationStep.Builder.class)
 public final class AutomationStep implements IAutomationStep {
     private final Optional<String> if_;
@@ -97,7 +97,7 @@ public final class AutomationStep implements IAutomationStep {
         }
 
         public Builder if_(String if_) {
-            this.if_ = Optional.of(if_);
+            this.if_ = Optional.ofNullable(if_);
             return this;
         }
 
@@ -108,7 +108,7 @@ public final class AutomationStep implements IAutomationStep {
         }
 
         public Builder ref(String ref) {
-            this.ref = Optional.of(ref);
+            this.ref = Optional.ofNullable(ref);
             return this;
         }
 

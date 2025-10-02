@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = MultipleTokens.Builder.class)
 public final class MultipleTokens {
     private final List<Token> tokens;
@@ -81,7 +81,9 @@ public final class MultipleTokens {
         @JsonSetter(value = "tokens", nulls = Nulls.SKIP)
         public Builder tokens(List<Token> tokens) {
             this.tokens.clear();
-            this.tokens.addAll(tokens);
+            if (tokens != null) {
+                this.tokens.addAll(tokens);
+            }
             return this;
         }
 
@@ -91,7 +93,9 @@ public final class MultipleTokens {
         }
 
         public Builder addAllTokens(List<Token> tokens) {
-            this.tokens.addAll(tokens);
+            if (tokens != null) {
+                this.tokens.addAll(tokens);
+            }
             return this;
         }
 

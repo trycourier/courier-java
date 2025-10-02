@@ -18,8 +18,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListTemplatesResponse.Builder.class)
 public final class ListTemplatesResponse {
     private final Paging paging;
@@ -78,7 +79,7 @@ public final class ListTemplatesResponse {
     }
 
     public interface PagingStage {
-        _FinalStage paging(Paging paging);
+        _FinalStage paging(@NotNull Paging paging);
 
         Builder from(ListTemplatesResponse other);
     }
@@ -86,6 +87,9 @@ public final class ListTemplatesResponse {
     public interface _FinalStage {
         ListTemplatesResponse build();
 
+        /**
+         * <p>An array of Notification Templates</p>
+         */
         _FinalStage results(List<NotificationTemplates> results);
 
         _FinalStage addResults(NotificationTemplates results);
@@ -113,8 +117,8 @@ public final class ListTemplatesResponse {
 
         @java.lang.Override
         @JsonSetter("paging")
-        public _FinalStage paging(Paging paging) {
-            this.paging = paging;
+        public _FinalStage paging(@NotNull Paging paging) {
+            this.paging = Objects.requireNonNull(paging, "paging must not be null");
             return this;
         }
 
@@ -124,7 +128,9 @@ public final class ListTemplatesResponse {
          */
         @java.lang.Override
         public _FinalStage addAllResults(List<NotificationTemplates> results) {
-            this.results.addAll(results);
+            if (results != null) {
+                this.results.addAll(results);
+            }
             return this;
         }
 
@@ -138,11 +144,16 @@ public final class ListTemplatesResponse {
             return this;
         }
 
+        /**
+         * <p>An array of Notification Templates</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "results", nulls = Nulls.SKIP)
         public _FinalStage results(List<NotificationTemplates> results) {
             this.results.clear();
-            this.results.addAll(results);
+            if (results != null) {
+                this.results.addAll(results);
+            }
             return this;
         }
 

@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = TrackAcceptedResponse.Builder.class)
 public final class TrackAcceptedResponse {
     private final String messageId;
@@ -65,7 +66,10 @@ public final class TrackAcceptedResponse {
     }
 
     public interface MessageIdStage {
-        _FinalStage messageId(String messageId);
+        /**
+         * <p>A successful call returns a <code>202</code> status code along with a <code>requestId</code> in the response body.</p>
+         */
+        _FinalStage messageId(@NotNull String messageId);
 
         Builder from(TrackAcceptedResponse other);
     }
@@ -91,12 +95,13 @@ public final class TrackAcceptedResponse {
 
         /**
          * <p>A successful call returns a <code>202</code> status code along with a <code>requestId</code> in the response body.</p>
+         * <p>A successful call returns a <code>202</code> status code along with a <code>requestId</code> in the response body.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("messageId")
-        public _FinalStage messageId(String messageId) {
-            this.messageId = messageId;
+        public _FinalStage messageId(@NotNull String messageId) {
+            this.messageId = Objects.requireNonNull(messageId, "messageId must not be null");
             return this;
         }
 

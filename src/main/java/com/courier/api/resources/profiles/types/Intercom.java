@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Intercom.Builder.class)
 public final class Intercom {
     private final String from;
@@ -70,13 +71,13 @@ public final class Intercom {
     }
 
     public interface FromStage {
-        ToStage from(String from);
+        ToStage from(@NotNull String from);
 
         Builder from(Intercom other);
     }
 
     public interface ToStage {
-        _FinalStage to(IntercomRecipient to);
+        _FinalStage to(@NotNull IntercomRecipient to);
     }
 
     public interface _FinalStage {
@@ -103,15 +104,15 @@ public final class Intercom {
 
         @java.lang.Override
         @JsonSetter("from")
-        public ToStage from(String from) {
-            this.from = from;
+        public ToStage from(@NotNull String from) {
+            this.from = Objects.requireNonNull(from, "from must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("to")
-        public _FinalStage to(IntercomRecipient to) {
-            this.to = to;
+        public _FinalStage to(@NotNull IntercomRecipient to) {
+            this.to = Objects.requireNonNull(to, "to must not be null");
             return this;
         }
 

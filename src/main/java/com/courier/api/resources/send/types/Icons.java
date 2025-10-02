@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Icons.Builder.class)
 public final class Icons {
     private final Optional<String> bell;
@@ -95,7 +95,7 @@ public final class Icons {
         }
 
         public Builder bell(String bell) {
-            this.bell = Optional.of(bell);
+            this.bell = Optional.ofNullable(bell);
             return this;
         }
 
@@ -106,7 +106,7 @@ public final class Icons {
         }
 
         public Builder message(String message) {
-            this.message = Optional.of(message);
+            this.message = Optional.ofNullable(message);
             return this;
         }
 

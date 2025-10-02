@@ -17,8 +17,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ElementalActionNode.Builder.class)
 public final class ElementalActionNode implements IElementalBaseNode {
     private final Optional<List<String>> channels;
@@ -203,13 +204,19 @@ public final class ElementalActionNode implements IElementalBaseNode {
     }
 
     public interface ContentStage {
-        HrefStage content(String content);
+        /**
+         * <p>The text content of the action shown to the user.</p>
+         */
+        HrefStage content(@NotNull String content);
 
         Builder from(ElementalActionNode other);
     }
 
     public interface HrefStage {
-        _FinalStage href(String href);
+        /**
+         * <p>The target URL of the action.</p>
+         */
+        _FinalStage href(@NotNull String href);
     }
 
     public interface _FinalStage {
@@ -231,22 +238,37 @@ public final class ElementalActionNode implements IElementalBaseNode {
 
         _FinalStage loop(String loop);
 
+        /**
+         * <p>A unique id used to identify the action when it is executed.</p>
+         */
         _FinalStage actionId(Optional<String> actionId);
 
         _FinalStage actionId(String actionId);
 
+        /**
+         * <p>The alignment of the action button. Defaults to &quot;center&quot;.</p>
+         */
         _FinalStage align(Optional<IAlignment> align);
 
         _FinalStage align(IAlignment align);
 
+        /**
+         * <p>The background color of the action button.</p>
+         */
         _FinalStage backgroundColor(Optional<String> backgroundColor);
 
         _FinalStage backgroundColor(String backgroundColor);
 
+        /**
+         * <p>Defaults to <code>button</code>.</p>
+         */
         _FinalStage style(Optional<IActionButtonStyle> style);
 
         _FinalStage style(IActionButtonStyle style);
 
+        /**
+         * <p>Region specific content. See <a href="https://www.courier.com/docs/platform/content/elemental/locales/">locales docs</a> for more details.</p>
+         */
         _FinalStage locales(Optional<Map<String, Locale>> locales);
 
         _FinalStage locales(Map<String, Locale> locales);
@@ -299,23 +321,25 @@ public final class ElementalActionNode implements IElementalBaseNode {
 
         /**
          * <p>The text content of the action shown to the user.</p>
+         * <p>The text content of the action shown to the user.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("content")
-        public HrefStage content(String content) {
-            this.content = content;
+        public HrefStage content(@NotNull String content) {
+            this.content = Objects.requireNonNull(content, "content must not be null");
             return this;
         }
 
         /**
          * <p>The target URL of the action.</p>
+         * <p>The target URL of the action.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("href")
-        public _FinalStage href(String href) {
-            this.href = href;
+        public _FinalStage href(@NotNull String href) {
+            this.href = Objects.requireNonNull(href, "href must not be null");
             return this;
         }
 
@@ -325,10 +349,13 @@ public final class ElementalActionNode implements IElementalBaseNode {
          */
         @java.lang.Override
         public _FinalStage locales(Map<String, Locale> locales) {
-            this.locales = Optional.of(locales);
+            this.locales = Optional.ofNullable(locales);
             return this;
         }
 
+        /**
+         * <p>Region specific content. See <a href="https://www.courier.com/docs/platform/content/elemental/locales/">locales docs</a> for more details.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "locales", nulls = Nulls.SKIP)
         public _FinalStage locales(Optional<Map<String, Locale>> locales) {
@@ -342,10 +369,13 @@ public final class ElementalActionNode implements IElementalBaseNode {
          */
         @java.lang.Override
         public _FinalStage style(IActionButtonStyle style) {
-            this.style = Optional.of(style);
+            this.style = Optional.ofNullable(style);
             return this;
         }
 
+        /**
+         * <p>Defaults to <code>button</code>.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "style", nulls = Nulls.SKIP)
         public _FinalStage style(Optional<IActionButtonStyle> style) {
@@ -359,10 +389,13 @@ public final class ElementalActionNode implements IElementalBaseNode {
          */
         @java.lang.Override
         public _FinalStage backgroundColor(String backgroundColor) {
-            this.backgroundColor = Optional.of(backgroundColor);
+            this.backgroundColor = Optional.ofNullable(backgroundColor);
             return this;
         }
 
+        /**
+         * <p>The background color of the action button.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "background_color", nulls = Nulls.SKIP)
         public _FinalStage backgroundColor(Optional<String> backgroundColor) {
@@ -376,10 +409,13 @@ public final class ElementalActionNode implements IElementalBaseNode {
          */
         @java.lang.Override
         public _FinalStage align(IAlignment align) {
-            this.align = Optional.of(align);
+            this.align = Optional.ofNullable(align);
             return this;
         }
 
+        /**
+         * <p>The alignment of the action button. Defaults to &quot;center&quot;.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "align", nulls = Nulls.SKIP)
         public _FinalStage align(Optional<IAlignment> align) {
@@ -393,10 +429,13 @@ public final class ElementalActionNode implements IElementalBaseNode {
          */
         @java.lang.Override
         public _FinalStage actionId(String actionId) {
-            this.actionId = Optional.of(actionId);
+            this.actionId = Optional.ofNullable(actionId);
             return this;
         }
 
+        /**
+         * <p>A unique id used to identify the action when it is executed.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "action_id", nulls = Nulls.SKIP)
         public _FinalStage actionId(Optional<String> actionId) {
@@ -406,7 +445,7 @@ public final class ElementalActionNode implements IElementalBaseNode {
 
         @java.lang.Override
         public _FinalStage loop(String loop) {
-            this.loop = Optional.of(loop);
+            this.loop = Optional.ofNullable(loop);
             return this;
         }
 
@@ -419,7 +458,7 @@ public final class ElementalActionNode implements IElementalBaseNode {
 
         @java.lang.Override
         public _FinalStage if_(String if_) {
-            this.if_ = Optional.of(if_);
+            this.if_ = Optional.ofNullable(if_);
             return this;
         }
 
@@ -432,7 +471,7 @@ public final class ElementalActionNode implements IElementalBaseNode {
 
         @java.lang.Override
         public _FinalStage ref(String ref) {
-            this.ref = Optional.of(ref);
+            this.ref = Optional.ofNullable(ref);
             return this;
         }
 
@@ -445,7 +484,7 @@ public final class ElementalActionNode implements IElementalBaseNode {
 
         @java.lang.Override
         public _FinalStage channels(List<String> channels) {
-            this.channels = Optional.of(channels);
+            this.channels = Optional.ofNullable(channels);
             return this;
         }
 

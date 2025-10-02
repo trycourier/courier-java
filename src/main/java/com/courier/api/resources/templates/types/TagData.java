@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = TagData.Builder.class)
 public final class TagData {
     private final String id;
@@ -76,13 +77,19 @@ public final class TagData {
     }
 
     public interface IdStage {
-        NameStage id(String id);
+        /**
+         * <p>A unique identifier of the tag.</p>
+         */
+        NameStage id(@NotNull String id);
 
         Builder from(TagData other);
     }
 
     public interface NameStage {
-        _FinalStage name(String name);
+        /**
+         * <p>Name of the tag.</p>
+         */
+        _FinalStage name(@NotNull String name);
     }
 
     public interface _FinalStage {
@@ -109,23 +116,25 @@ public final class TagData {
 
         /**
          * <p>A unique identifier of the tag.</p>
+         * <p>A unique identifier of the tag.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("id")
-        public NameStage id(String id) {
-            this.id = id;
+        public NameStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         /**
          * <p>Name of the tag.</p>
+         * <p>Name of the tag.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("name")
-        public _FinalStage name(String name) {
-            this.name = name;
+        public _FinalStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 

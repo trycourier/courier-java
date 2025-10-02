@@ -199,6 +199,7 @@ public final class ElementalNode {
     }
 
     @JsonTypeName("text")
+    @JsonIgnoreProperties("type")
     private static final class TextValue implements Value {
         @JsonUnwrapped
         private ElementalTextNode value;
@@ -237,6 +238,7 @@ public final class ElementalNode {
     }
 
     @JsonTypeName("meta")
+    @JsonIgnoreProperties("type")
     private static final class MetaValue implements Value {
         @JsonUnwrapped
         private ElementalMetaNode value;
@@ -275,6 +277,7 @@ public final class ElementalNode {
     }
 
     @JsonTypeName("channel")
+    @JsonIgnoreProperties("type")
     private static final class ChannelValue implements Value {
         @JsonUnwrapped
         private ElementalChannelNode value;
@@ -313,6 +316,7 @@ public final class ElementalNode {
     }
 
     @JsonTypeName("image")
+    @JsonIgnoreProperties("type")
     private static final class ImageValue implements Value {
         @JsonUnwrapped
         private ElementalImageNode value;
@@ -351,6 +355,7 @@ public final class ElementalNode {
     }
 
     @JsonTypeName("action")
+    @JsonIgnoreProperties("type")
     private static final class ActionValue implements Value {
         @JsonUnwrapped
         private ElementalActionNode value;
@@ -389,6 +394,7 @@ public final class ElementalNode {
     }
 
     @JsonTypeName("divider")
+    @JsonIgnoreProperties("type")
     private static final class DividerValue implements Value {
         @JsonUnwrapped
         private ElementalDividerNode value;
@@ -427,6 +433,7 @@ public final class ElementalNode {
     }
 
     @JsonTypeName("group")
+    @JsonIgnoreProperties("type")
     private static final class GroupValue implements Value {
         @JsonUnwrapped
         private ElementalGroupNode value;
@@ -465,6 +472,7 @@ public final class ElementalNode {
     }
 
     @JsonTypeName("quote")
+    @JsonIgnoreProperties("type")
     private static final class QuoteValue implements Value {
         @JsonUnwrapped
         private ElementalQuoteNode value;
@@ -502,6 +510,7 @@ public final class ElementalNode {
         }
     }
 
+    @JsonIgnoreProperties("type")
     private static final class _UnknownValue implements Value {
         private String type;
 

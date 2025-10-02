@@ -16,8 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AutomationAdHocInvokeParams.Builder.class)
 public final class AutomationAdHocInvokeParams implements IAutomationInvokeParams {
     private final Optional<String> brand;
@@ -121,7 +122,7 @@ public final class AutomationAdHocInvokeParams implements IAutomationInvokeParam
     }
 
     public interface AutomationStage {
-        _FinalStage automation(Automation automation);
+        _FinalStage automation(@NotNull Automation automation);
 
         Builder from(AutomationAdHocInvokeParams other);
     }
@@ -182,14 +183,14 @@ public final class AutomationAdHocInvokeParams implements IAutomationInvokeParam
 
         @java.lang.Override
         @JsonSetter("automation")
-        public _FinalStage automation(Automation automation) {
-            this.automation = automation;
+        public _FinalStage automation(@NotNull Automation automation) {
+            this.automation = Objects.requireNonNull(automation, "automation must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage template(String template) {
-            this.template = Optional.of(template);
+            this.template = Optional.ofNullable(template);
             return this;
         }
 
@@ -202,7 +203,7 @@ public final class AutomationAdHocInvokeParams implements IAutomationInvokeParam
 
         @java.lang.Override
         public _FinalStage recipient(String recipient) {
-            this.recipient = Optional.of(recipient);
+            this.recipient = Optional.ofNullable(recipient);
             return this;
         }
 
@@ -215,7 +216,7 @@ public final class AutomationAdHocInvokeParams implements IAutomationInvokeParam
 
         @java.lang.Override
         public _FinalStage profile(Object profile) {
-            this.profile = Optional.of(profile);
+            this.profile = Optional.ofNullable(profile);
             return this;
         }
 
@@ -228,7 +229,7 @@ public final class AutomationAdHocInvokeParams implements IAutomationInvokeParam
 
         @java.lang.Override
         public _FinalStage data(Map<String, Object> data) {
-            this.data = Optional.of(data);
+            this.data = Optional.ofNullable(data);
             return this;
         }
 
@@ -241,7 +242,7 @@ public final class AutomationAdHocInvokeParams implements IAutomationInvokeParam
 
         @java.lang.Override
         public _FinalStage brand(String brand) {
-            this.brand = Optional.of(brand);
+            this.brand = Optional.ofNullable(brand);
             return this;
         }
 

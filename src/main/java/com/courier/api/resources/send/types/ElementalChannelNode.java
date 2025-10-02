@@ -17,8 +17,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ElementalChannelNode.Builder.class)
 public final class ElementalChannelNode implements IElementalBaseNode {
     private final Optional<List<String>> channels;
@@ -143,7 +144,11 @@ public final class ElementalChannelNode implements IElementalBaseNode {
     }
 
     public interface ChannelStage {
-        _FinalStage channel(String channel);
+        /**
+         * <p>The channel the contents of this element should be applied to. Can be <code>email</code>,
+         * <code>push</code>, <code>direct_message</code>, <code>sms</code> or a provider such as slack</p>
+         */
+        _FinalStage channel(@NotNull String channel);
 
         Builder from(ElementalChannelNode other);
     }
@@ -167,10 +172,18 @@ public final class ElementalChannelNode implements IElementalBaseNode {
 
         _FinalStage loop(String loop);
 
+        /**
+         * <p>An array of elements to apply to the channel. If <code>raw</code> has not been
+         * specified, <code>elements</code> is <code>required</code>.</p>
+         */
         _FinalStage elements(Optional<List<ElementalNode>> elements);
 
         _FinalStage elements(List<ElementalNode> elements);
 
+        /**
+         * <p>Raw data to apply to the channel. If <code>elements</code> has not been
+         * specified, <code>raw</code> is <code>required</code>.</p>
+         */
         _FinalStage raw(Optional<Map<String, Object>> raw);
 
         _FinalStage raw(Map<String, Object> raw);
@@ -212,12 +225,14 @@ public final class ElementalChannelNode implements IElementalBaseNode {
         /**
          * <p>The channel the contents of this element should be applied to. Can be <code>email</code>,
          * <code>push</code>, <code>direct_message</code>, <code>sms</code> or a provider such as slack</p>
+         * <p>The channel the contents of this element should be applied to. Can be <code>email</code>,
+         * <code>push</code>, <code>direct_message</code>, <code>sms</code> or a provider such as slack</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("channel")
-        public _FinalStage channel(String channel) {
-            this.channel = channel;
+        public _FinalStage channel(@NotNull String channel) {
+            this.channel = Objects.requireNonNull(channel, "channel must not be null");
             return this;
         }
 
@@ -228,10 +243,14 @@ public final class ElementalChannelNode implements IElementalBaseNode {
          */
         @java.lang.Override
         public _FinalStage raw(Map<String, Object> raw) {
-            this.raw = Optional.of(raw);
+            this.raw = Optional.ofNullable(raw);
             return this;
         }
 
+        /**
+         * <p>Raw data to apply to the channel. If <code>elements</code> has not been
+         * specified, <code>raw</code> is <code>required</code>.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "raw", nulls = Nulls.SKIP)
         public _FinalStage raw(Optional<Map<String, Object>> raw) {
@@ -246,10 +265,14 @@ public final class ElementalChannelNode implements IElementalBaseNode {
          */
         @java.lang.Override
         public _FinalStage elements(List<ElementalNode> elements) {
-            this.elements = Optional.of(elements);
+            this.elements = Optional.ofNullable(elements);
             return this;
         }
 
+        /**
+         * <p>An array of elements to apply to the channel. If <code>raw</code> has not been
+         * specified, <code>elements</code> is <code>required</code>.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "elements", nulls = Nulls.SKIP)
         public _FinalStage elements(Optional<List<ElementalNode>> elements) {
@@ -259,7 +282,7 @@ public final class ElementalChannelNode implements IElementalBaseNode {
 
         @java.lang.Override
         public _FinalStage loop(String loop) {
-            this.loop = Optional.of(loop);
+            this.loop = Optional.ofNullable(loop);
             return this;
         }
 
@@ -272,7 +295,7 @@ public final class ElementalChannelNode implements IElementalBaseNode {
 
         @java.lang.Override
         public _FinalStage if_(String if_) {
-            this.if_ = Optional.of(if_);
+            this.if_ = Optional.ofNullable(if_);
             return this;
         }
 
@@ -285,7 +308,7 @@ public final class ElementalChannelNode implements IElementalBaseNode {
 
         @java.lang.Override
         public _FinalStage ref(String ref) {
-            this.ref = Optional.of(ref);
+            this.ref = Optional.ofNullable(ref);
             return this;
         }
 
@@ -298,7 +321,7 @@ public final class ElementalChannelNode implements IElementalBaseNode {
 
         @java.lang.Override
         public _FinalStage channels(List<String> channels) {
-            this.channels = Optional.of(channels);
+            this.channels = Optional.ofNullable(channels);
             return this;
         }
 

@@ -17,8 +17,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AudienceRecipient.Builder.class)
 public final class AudienceRecipient {
     private final String audienceId;
@@ -88,7 +89,10 @@ public final class AudienceRecipient {
     }
 
     public interface AudienceIdStage {
-        _FinalStage audienceId(String audienceId);
+        /**
+         * <p>A unique identifier associated with an Audience. A message will be sent to each user in the audience.</p>
+         */
+        _FinalStage audienceId(@NotNull String audienceId);
 
         Builder from(AudienceRecipient other);
     }
@@ -128,18 +132,19 @@ public final class AudienceRecipient {
 
         /**
          * <p>A unique identifier associated with an Audience. A message will be sent to each user in the audience.</p>
+         * <p>A unique identifier associated with an Audience. A message will be sent to each user in the audience.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("audience_id")
-        public _FinalStage audienceId(String audienceId) {
-            this.audienceId = audienceId;
+        public _FinalStage audienceId(@NotNull String audienceId) {
+            this.audienceId = Objects.requireNonNull(audienceId, "audienceId must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage filters(List<AudienceFilter> filters) {
-            this.filters = Optional.of(filters);
+            this.filters = Optional.ofNullable(filters);
             return this;
         }
 
@@ -152,7 +157,7 @@ public final class AudienceRecipient {
 
         @java.lang.Override
         public _FinalStage data(Map<String, Object> data) {
-            this.data = Optional.of(data);
+            this.data = Optional.ofNullable(data);
             return this;
         }
 

@@ -17,8 +17,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = NestedFilterConfig.Builder.class)
 public final class NestedFilterConfig implements IBaseFilterConfig {
     private final Operator operator;
@@ -77,7 +78,10 @@ public final class NestedFilterConfig implements IBaseFilterConfig {
     }
 
     public interface OperatorStage {
-        _FinalStage operator(Operator operator);
+        /**
+         * <p>The operator to use for filtering</p>
+         */
+        _FinalStage operator(@NotNull Operator operator);
 
         Builder from(NestedFilterConfig other);
     }
@@ -112,18 +116,21 @@ public final class NestedFilterConfig implements IBaseFilterConfig {
 
         /**
          * <p>The operator to use for filtering</p>
+         * <p>The operator to use for filtering</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("operator")
-        public _FinalStage operator(Operator operator) {
-            this.operator = operator;
+        public _FinalStage operator(@NotNull Operator operator) {
+            this.operator = Objects.requireNonNull(operator, "operator must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage addAllRules(List<FilterConfig> rules) {
-            this.rules.addAll(rules);
+            if (rules != null) {
+                this.rules.addAll(rules);
+            }
             return this;
         }
 
@@ -137,7 +144,9 @@ public final class NestedFilterConfig implements IBaseFilterConfig {
         @JsonSetter(value = "rules", nulls = Nulls.SKIP)
         public _FinalStage rules(List<FilterConfig> rules) {
             this.rules.clear();
-            this.rules.addAll(rules);
+            if (rules != null) {
+                this.rules.addAll(rules);
+            }
             return this;
         }
 

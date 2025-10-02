@@ -19,8 +19,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = TopicPreferenceUpdate.Builder.class)
 public final class TopicPreferenceUpdate {
     private final PreferenceStatus status;
@@ -92,7 +93,7 @@ public final class TopicPreferenceUpdate {
     }
 
     public interface StatusStage {
-        _FinalStage status(PreferenceStatus status);
+        _FinalStage status(@NotNull PreferenceStatus status);
 
         Builder from(TopicPreferenceUpdate other);
     }
@@ -100,6 +101,9 @@ public final class TopicPreferenceUpdate {
     public interface _FinalStage {
         TopicPreferenceUpdate build();
 
+        /**
+         * <p>The Channels a user has chosen to receive notifications through for this topic</p>
+         */
         _FinalStage customRouting(Optional<List<ChannelClassification>> customRouting);
 
         _FinalStage customRouting(List<ChannelClassification> customRouting);
@@ -132,14 +136,14 @@ public final class TopicPreferenceUpdate {
 
         @java.lang.Override
         @JsonSetter("status")
-        public _FinalStage status(PreferenceStatus status) {
-            this.status = status;
+        public _FinalStage status(@NotNull PreferenceStatus status) {
+            this.status = Objects.requireNonNull(status, "status must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage hasCustomRouting(Boolean hasCustomRouting) {
-            this.hasCustomRouting = Optional.of(hasCustomRouting);
+            this.hasCustomRouting = Optional.ofNullable(hasCustomRouting);
             return this;
         }
 
@@ -156,10 +160,13 @@ public final class TopicPreferenceUpdate {
          */
         @java.lang.Override
         public _FinalStage customRouting(List<ChannelClassification> customRouting) {
-            this.customRouting = Optional.of(customRouting);
+            this.customRouting = Optional.ofNullable(customRouting);
             return this;
         }
 
+        /**
+         * <p>The Channels a user has chosen to receive notifications through for this topic</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "custom_routing", nulls = Nulls.SKIP)
         public _FinalStage customRouting(Optional<List<ChannelClassification>> customRouting) {

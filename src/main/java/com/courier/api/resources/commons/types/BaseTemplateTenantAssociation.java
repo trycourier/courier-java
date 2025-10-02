@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BaseTemplateTenantAssociation.Builder.class)
 public final class BaseTemplateTenantAssociation implements IBaseTemplateTenantAssociation {
     private final String id;
@@ -124,25 +125,40 @@ public final class BaseTemplateTenantAssociation implements IBaseTemplateTenantA
     }
 
     public interface IdStage {
-        CreatedAtStage id(String id);
+        /**
+         * <p>The template's id</p>
+         */
+        CreatedAtStage id(@NotNull String id);
 
         Builder from(BaseTemplateTenantAssociation other);
     }
 
     public interface CreatedAtStage {
-        UpdatedAtStage createdAt(String createdAt);
+        /**
+         * <p>The timestamp at which the template was created</p>
+         */
+        UpdatedAtStage createdAt(@NotNull String createdAt);
     }
 
     public interface UpdatedAtStage {
-        PublishedAtStage updatedAt(String updatedAt);
+        /**
+         * <p>The timestamp at which the template was last updated</p>
+         */
+        PublishedAtStage updatedAt(@NotNull String updatedAt);
     }
 
     public interface PublishedAtStage {
-        VersionStage publishedAt(String publishedAt);
+        /**
+         * <p>The timestamp at which the template was published</p>
+         */
+        VersionStage publishedAt(@NotNull String publishedAt);
     }
 
     public interface VersionStage {
-        _FinalStage version(String version);
+        /**
+         * <p>The version of the template</p>
+         */
+        _FinalStage version(@NotNull String version);
     }
 
     public interface _FinalStage {
@@ -179,56 +195,61 @@ public final class BaseTemplateTenantAssociation implements IBaseTemplateTenantA
 
         /**
          * <p>The template's id</p>
+         * <p>The template's id</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("id")
-        public CreatedAtStage id(String id) {
-            this.id = id;
+        public CreatedAtStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         /**
          * <p>The timestamp at which the template was created</p>
+         * <p>The timestamp at which the template was created</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("created_at")
-        public UpdatedAtStage createdAt(String createdAt) {
-            this.createdAt = createdAt;
+        public UpdatedAtStage createdAt(@NotNull String createdAt) {
+            this.createdAt = Objects.requireNonNull(createdAt, "createdAt must not be null");
             return this;
         }
 
         /**
          * <p>The timestamp at which the template was last updated</p>
+         * <p>The timestamp at which the template was last updated</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("updated_at")
-        public PublishedAtStage updatedAt(String updatedAt) {
-            this.updatedAt = updatedAt;
+        public PublishedAtStage updatedAt(@NotNull String updatedAt) {
+            this.updatedAt = Objects.requireNonNull(updatedAt, "updatedAt must not be null");
             return this;
         }
 
         /**
          * <p>The timestamp at which the template was published</p>
+         * <p>The timestamp at which the template was published</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("published_at")
-        public VersionStage publishedAt(String publishedAt) {
-            this.publishedAt = publishedAt;
+        public VersionStage publishedAt(@NotNull String publishedAt) {
+            this.publishedAt = Objects.requireNonNull(publishedAt, "publishedAt must not be null");
             return this;
         }
 
         /**
          * <p>The version of the template</p>
+         * <p>The version of the template</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("version")
-        public _FinalStage version(String version) {
-            this.version = version;
+        public _FinalStage version(@NotNull String version) {
+            this.version = Objects.requireNonNull(version, "version must not be null");
             return this;
         }
 

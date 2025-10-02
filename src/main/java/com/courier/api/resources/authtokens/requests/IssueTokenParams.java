@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = IssueTokenParams.Builder.class)
 public final class IssueTokenParams {
     private final String scope;
@@ -70,13 +71,13 @@ public final class IssueTokenParams {
     }
 
     public interface ScopeStage {
-        ExpiresInStage scope(String scope);
+        ExpiresInStage scope(@NotNull String scope);
 
         Builder from(IssueTokenParams other);
     }
 
     public interface ExpiresInStage {
-        _FinalStage expiresIn(String expiresIn);
+        _FinalStage expiresIn(@NotNull String expiresIn);
     }
 
     public interface _FinalStage {
@@ -103,15 +104,15 @@ public final class IssueTokenParams {
 
         @java.lang.Override
         @JsonSetter("scope")
-        public ExpiresInStage scope(String scope) {
-            this.scope = scope;
+        public ExpiresInStage scope(@NotNull String scope) {
+            this.scope = Objects.requireNonNull(scope, "scope must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("expires_in")
-        public _FinalStage expiresIn(String expiresIn) {
-            this.expiresIn = expiresIn;
+        public _FinalStage expiresIn(@NotNull String expiresIn) {
+            this.expiresIn = Objects.requireNonNull(expiresIn, "expiresIn must not be null");
             return this;
         }
 

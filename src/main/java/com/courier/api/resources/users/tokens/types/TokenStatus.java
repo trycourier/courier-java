@@ -3,26 +3,100 @@
  */
 package com.courier.api.resources.users.tokens.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum TokenStatus {
-    ACTIVE("active"),
+public final class TokenStatus {
+    public static final TokenStatus REVOKED = new TokenStatus(Value.REVOKED, "revoked");
 
-    UNKNOWN("unknown"),
+    public static final TokenStatus FAILED = new TokenStatus(Value.FAILED, "failed");
 
-    FAILED("failed"),
+    public static final TokenStatus UNKNOWN = new TokenStatus(Value.UNKNOWN, "unknown");
 
-    REVOKED("revoked");
+    public static final TokenStatus ACTIVE = new TokenStatus(Value.ACTIVE, "active");
 
-    private final String value;
+    private final Value value;
 
-    TokenStatus(String value) {
+    private final String string;
+
+    TokenStatus(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other) || (other instanceof TokenStatus && this.string.equals(((TokenStatus) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case REVOKED:
+                return visitor.visitRevoked();
+            case FAILED:
+                return visitor.visitFailed();
+            case UNKNOWN:
+                return visitor.visitUnknown();
+            case ACTIVE:
+                return visitor.visitActive();
+            case _UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static TokenStatus valueOf(String value) {
+        switch (value) {
+            case "revoked":
+                return REVOKED;
+            case "failed":
+                return FAILED;
+            case "unknown":
+                return UNKNOWN;
+            case "active":
+                return ACTIVE;
+            default:
+                return new TokenStatus(Value._UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        ACTIVE,
+
+        UNKNOWN,
+
+        FAILED,
+
+        REVOKED,
+
+        _UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitActive();
+
+        T visitUnknown();
+
+        T visitFailed();
+
+        T visitRevoked();
+
+        T visitUnknown(String unknownType);
     }
 }

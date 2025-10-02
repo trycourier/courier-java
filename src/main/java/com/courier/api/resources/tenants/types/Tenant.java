@@ -16,8 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Tenant.Builder.class)
 public final class Tenant {
     private final String id;
@@ -154,34 +155,55 @@ public final class Tenant {
     }
 
     public interface IdStage {
-        NameStage id(String id);
+        /**
+         * <p>Id of the tenant.</p>
+         */
+        NameStage id(@NotNull String id);
 
         Builder from(Tenant other);
     }
 
     public interface NameStage {
-        _FinalStage name(String name);
+        /**
+         * <p>Name of the tenant.</p>
+         */
+        _FinalStage name(@NotNull String name);
     }
 
     public interface _FinalStage {
         Tenant build();
 
+        /**
+         * <p>Tenant's parent id (if any).</p>
+         */
         _FinalStage parentTenantId(Optional<String> parentTenantId);
 
         _FinalStage parentTenantId(String parentTenantId);
 
+        /**
+         * <p>Defines the preferences used for the account when the user hasn't specified their own.</p>
+         */
         _FinalStage defaultPreferences(Optional<DefaultPreferences> defaultPreferences);
 
         _FinalStage defaultPreferences(DefaultPreferences defaultPreferences);
 
+        /**
+         * <p>Arbitrary properties accessible to a template.</p>
+         */
         _FinalStage properties(Optional<Map<String, Object>> properties);
 
         _FinalStage properties(Map<String, Object> properties);
 
+        /**
+         * <p>A user profile object merged with user profile on send.</p>
+         */
         _FinalStage userProfile(Optional<Map<String, Object>> userProfile);
 
         _FinalStage userProfile(Map<String, Object> userProfile);
 
+        /**
+         * <p>Brand to be used for the account when one is not specified by the send call.</p>
+         */
         _FinalStage brandId(Optional<String> brandId);
 
         _FinalStage brandId(String brandId);
@@ -222,23 +244,25 @@ public final class Tenant {
 
         /**
          * <p>Id of the tenant.</p>
+         * <p>Id of the tenant.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("id")
-        public NameStage id(String id) {
-            this.id = id;
+        public NameStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         /**
          * <p>Name of the tenant.</p>
+         * <p>Name of the tenant.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("name")
-        public _FinalStage name(String name) {
-            this.name = name;
+        public _FinalStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 
@@ -248,10 +272,13 @@ public final class Tenant {
          */
         @java.lang.Override
         public _FinalStage brandId(String brandId) {
-            this.brandId = Optional.of(brandId);
+            this.brandId = Optional.ofNullable(brandId);
             return this;
         }
 
+        /**
+         * <p>Brand to be used for the account when one is not specified by the send call.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "brand_id", nulls = Nulls.SKIP)
         public _FinalStage brandId(Optional<String> brandId) {
@@ -265,10 +292,13 @@ public final class Tenant {
          */
         @java.lang.Override
         public _FinalStage userProfile(Map<String, Object> userProfile) {
-            this.userProfile = Optional.of(userProfile);
+            this.userProfile = Optional.ofNullable(userProfile);
             return this;
         }
 
+        /**
+         * <p>A user profile object merged with user profile on send.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "user_profile", nulls = Nulls.SKIP)
         public _FinalStage userProfile(Optional<Map<String, Object>> userProfile) {
@@ -282,10 +312,13 @@ public final class Tenant {
          */
         @java.lang.Override
         public _FinalStage properties(Map<String, Object> properties) {
-            this.properties = Optional.of(properties);
+            this.properties = Optional.ofNullable(properties);
             return this;
         }
 
+        /**
+         * <p>Arbitrary properties accessible to a template.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "properties", nulls = Nulls.SKIP)
         public _FinalStage properties(Optional<Map<String, Object>> properties) {
@@ -299,10 +332,13 @@ public final class Tenant {
          */
         @java.lang.Override
         public _FinalStage defaultPreferences(DefaultPreferences defaultPreferences) {
-            this.defaultPreferences = Optional.of(defaultPreferences);
+            this.defaultPreferences = Optional.ofNullable(defaultPreferences);
             return this;
         }
 
+        /**
+         * <p>Defines the preferences used for the account when the user hasn't specified their own.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "default_preferences", nulls = Nulls.SKIP)
         public _FinalStage defaultPreferences(Optional<DefaultPreferences> defaultPreferences) {
@@ -316,10 +352,13 @@ public final class Tenant {
          */
         @java.lang.Override
         public _FinalStage parentTenantId(String parentTenantId) {
-            this.parentTenantId = Optional.of(parentTenantId);
+            this.parentTenantId = Optional.ofNullable(parentTenantId);
             return this;
         }
 
+        /**
+         * <p>Tenant's parent id (if any).</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "parent_tenant_id", nulls = Nulls.SKIP)
         public _FinalStage parentTenantId(Optional<String> parentTenantId) {

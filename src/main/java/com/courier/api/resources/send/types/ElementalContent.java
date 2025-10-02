@@ -18,8 +18,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ElementalContent.Builder.class)
 public final class ElementalContent {
     private final String version;
@@ -89,7 +90,10 @@ public final class ElementalContent {
     }
 
     public interface VersionStage {
-        _FinalStage version(String version);
+        /**
+         * <p>For example, &quot;2022-01-01&quot;</p>
+         */
+        _FinalStage version(@NotNull String version);
 
         Builder from(ElementalContent other);
     }
@@ -131,18 +135,21 @@ public final class ElementalContent {
 
         /**
          * <p>For example, &quot;2022-01-01&quot;</p>
+         * <p>For example, &quot;2022-01-01&quot;</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("version")
-        public _FinalStage version(String version) {
-            this.version = version;
+        public _FinalStage version(@NotNull String version) {
+            this.version = Objects.requireNonNull(version, "version must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage addAllElements(List<ElementalNode> elements) {
-            this.elements.addAll(elements);
+            if (elements != null) {
+                this.elements.addAll(elements);
+            }
             return this;
         }
 
@@ -156,13 +163,15 @@ public final class ElementalContent {
         @JsonSetter(value = "elements", nulls = Nulls.SKIP)
         public _FinalStage elements(List<ElementalNode> elements) {
             this.elements.clear();
-            this.elements.addAll(elements);
+            if (elements != null) {
+                this.elements.addAll(elements);
+            }
             return this;
         }
 
         @java.lang.Override
         public _FinalStage brand(Object brand) {
-            this.brand = Optional.of(brand);
+            this.brand = Optional.ofNullable(brand);
             return this;
         }
 

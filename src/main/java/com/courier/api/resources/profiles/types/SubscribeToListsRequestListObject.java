@@ -17,8 +17,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SubscribeToListsRequestListObject.Builder.class)
 public final class SubscribeToListsRequestListObject {
     private final String listId;
@@ -74,7 +75,7 @@ public final class SubscribeToListsRequestListObject {
     }
 
     public interface ListIdStage {
-        _FinalStage listId(String listId);
+        _FinalStage listId(@NotNull String listId);
 
         Builder from(SubscribeToListsRequestListObject other);
     }
@@ -107,14 +108,14 @@ public final class SubscribeToListsRequestListObject {
 
         @java.lang.Override
         @JsonSetter("listId")
-        public _FinalStage listId(String listId) {
-            this.listId = listId;
+        public _FinalStage listId(@NotNull String listId) {
+            this.listId = Objects.requireNonNull(listId, "listId must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage preferences(RecipientPreferences preferences) {
-            this.preferences = Optional.of(preferences);
+            this.preferences = Optional.ofNullable(preferences);
             return this;
         }
 

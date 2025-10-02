@@ -16,8 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = NotificationChannel.Builder.class)
 public final class NotificationChannel {
     private final String id;
@@ -106,7 +107,7 @@ public final class NotificationChannel {
     }
 
     public interface IdStage {
-        _FinalStage id(String id);
+        _FinalStage id(@NotNull String id);
 
         Builder from(NotificationChannel other);
     }
@@ -160,14 +161,14 @@ public final class NotificationChannel {
 
         @java.lang.Override
         @JsonSetter("id")
-        public _FinalStage id(String id) {
-            this.id = id;
+        public _FinalStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage checksum(String checksum) {
-            this.checksum = Optional.of(checksum);
+            this.checksum = Optional.ofNullable(checksum);
             return this;
         }
 
@@ -180,7 +181,7 @@ public final class NotificationChannel {
 
         @java.lang.Override
         public _FinalStage locales(Map<String, NotificationChannelContent> locales) {
-            this.locales = Optional.of(locales);
+            this.locales = Optional.ofNullable(locales);
             return this;
         }
 
@@ -193,7 +194,7 @@ public final class NotificationChannel {
 
         @java.lang.Override
         public _FinalStage content(NotificationChannelContent content) {
-            this.content = Optional.of(content);
+            this.content = Optional.ofNullable(content);
             return this;
         }
 
@@ -206,7 +207,7 @@ public final class NotificationChannel {
 
         @java.lang.Override
         public _FinalStage type(String type) {
-            this.type = Optional.of(type);
+            this.type = Optional.ofNullable(type);
             return this;
         }
 

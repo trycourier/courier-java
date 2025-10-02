@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PutUserTokenOpts.Builder.class)
 public final class PutUserTokenOpts {
     private final String userId;
@@ -70,13 +71,13 @@ public final class PutUserTokenOpts {
     }
 
     public interface UserIdStage {
-        TokenStage userId(String userId);
+        TokenStage userId(@NotNull String userId);
 
         Builder from(PutUserTokenOpts other);
     }
 
     public interface TokenStage {
-        _FinalStage token(UserToken token);
+        _FinalStage token(@NotNull UserToken token);
     }
 
     public interface _FinalStage {
@@ -103,15 +104,15 @@ public final class PutUserTokenOpts {
 
         @java.lang.Override
         @JsonSetter("user_id")
-        public TokenStage userId(String userId) {
-            this.userId = userId;
+        public TokenStage userId(@NotNull String userId) {
+            this.userId = Objects.requireNonNull(userId, "userId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("token")
-        public _FinalStage token(UserToken token) {
-            this.token = token;
+        public _FinalStage token(@NotNull UserToken token) {
+            this.token = Objects.requireNonNull(token, "token must not be null");
             return this;
         }
 

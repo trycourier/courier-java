@@ -15,8 +15,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = PagerdutyRecipient.Builder.class)
 public final class PagerdutyRecipient {
     private final Pagerduty pagerduty;
@@ -63,7 +64,7 @@ public final class PagerdutyRecipient {
     }
 
     public interface PagerdutyStage {
-        _FinalStage pagerduty(Pagerduty pagerduty);
+        _FinalStage pagerduty(@NotNull Pagerduty pagerduty);
 
         Builder from(PagerdutyRecipient other);
     }
@@ -89,8 +90,8 @@ public final class PagerdutyRecipient {
 
         @java.lang.Override
         @JsonSetter("pagerduty")
-        public _FinalStage pagerduty(Pagerduty pagerduty) {
-            this.pagerduty = pagerduty;
+        public _FinalStage pagerduty(@NotNull Pagerduty pagerduty) {
+            this.pagerduty = Objects.requireNonNull(pagerduty, "pagerduty must not be null");
             return this;
         }
 

@@ -17,8 +17,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = MessageDetailsExtended.Builder.class)
 public final class MessageDetailsExtended implements IMessageDetails {
     private final String id;
@@ -248,54 +249,90 @@ public final class MessageDetailsExtended implements IMessageDetails {
     }
 
     public interface IdStage {
-        StatusStage id(String id);
+        /**
+         * <p>A unique identifier associated with the message you wish to retrieve (results from a send).</p>
+         */
+        StatusStage id(@NotNull String id);
 
         Builder from(MessageDetailsExtended other);
     }
 
     public interface StatusStage {
-        EnqueuedStage status(MessageStatus status);
+        /**
+         * <p>The current status of the message.</p>
+         */
+        EnqueuedStage status(@NotNull MessageStatus status);
     }
 
     public interface EnqueuedStage {
+        /**
+         * <p>A UTC timestamp at which Courier received the message request. Stored as a millisecond representation of the Unix epoch.</p>
+         */
         SentStage enqueued(long enqueued);
     }
 
     public interface SentStage {
+        /**
+         * <p>A UTC timestamp at which Courier passed the message to the Integration provider. Stored as a millisecond representation of the Unix epoch.</p>
+         */
         DeliveredStage sent(long sent);
     }
 
     public interface DeliveredStage {
+        /**
+         * <p>A UTC timestamp at which the Integration provider delivered the message. Stored as a millisecond representation of the Unix epoch.</p>
+         */
         OpenedStage delivered(long delivered);
     }
 
     public interface OpenedStage {
+        /**
+         * <p>A UTC timestamp at which the recipient opened a message for the first time. Stored as a millisecond representation of the Unix epoch.</p>
+         */
         ClickedStage opened(long opened);
     }
 
     public interface ClickedStage {
+        /**
+         * <p>A UTC timestamp at which the recipient clicked on a tracked link for the first time. Stored as a millisecond representation of the Unix epoch.</p>
+         */
         RecipientStage clicked(long clicked);
     }
 
     public interface RecipientStage {
-        EventStage recipient(String recipient);
+        /**
+         * <p>A unique identifier associated with the recipient of the delivered message.</p>
+         */
+        EventStage recipient(@NotNull String recipient);
     }
 
     public interface EventStage {
-        NotificationStage event(String event);
+        /**
+         * <p>A unique identifier associated with the event of the delivered message.</p>
+         */
+        NotificationStage event(@NotNull String event);
     }
 
     public interface NotificationStage {
-        _FinalStage notification(String notification);
+        /**
+         * <p>A unique identifier associated with the notification of the delivered message.</p>
+         */
+        _FinalStage notification(@NotNull String notification);
     }
 
     public interface _FinalStage {
         MessageDetailsExtended build();
 
+        /**
+         * <p>A message describing the error that occurred.</p>
+         */
         _FinalStage error(Optional<String> error);
 
         _FinalStage error(String error);
 
+        /**
+         * <p>The reason for the current status of the message.</p>
+         */
         _FinalStage reason(Optional<Reason> reason);
 
         _FinalStage reason(Reason reason);
@@ -369,27 +406,30 @@ public final class MessageDetailsExtended implements IMessageDetails {
 
         /**
          * <p>A unique identifier associated with the message you wish to retrieve (results from a send).</p>
+         * <p>A unique identifier associated with the message you wish to retrieve (results from a send).</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("id")
-        public StatusStage id(String id) {
-            this.id = id;
+        public StatusStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         /**
          * <p>The current status of the message.</p>
+         * <p>The current status of the message.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("status")
-        public EnqueuedStage status(MessageStatus status) {
-            this.status = status;
+        public EnqueuedStage status(@NotNull MessageStatus status) {
+            this.status = Objects.requireNonNull(status, "status must not be null");
             return this;
         }
 
         /**
+         * <p>A UTC timestamp at which Courier received the message request. Stored as a millisecond representation of the Unix epoch.</p>
          * <p>A UTC timestamp at which Courier received the message request. Stored as a millisecond representation of the Unix epoch.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -402,6 +442,7 @@ public final class MessageDetailsExtended implements IMessageDetails {
 
         /**
          * <p>A UTC timestamp at which Courier passed the message to the Integration provider. Stored as a millisecond representation of the Unix epoch.</p>
+         * <p>A UTC timestamp at which Courier passed the message to the Integration provider. Stored as a millisecond representation of the Unix epoch.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -412,6 +453,7 @@ public final class MessageDetailsExtended implements IMessageDetails {
         }
 
         /**
+         * <p>A UTC timestamp at which the Integration provider delivered the message. Stored as a millisecond representation of the Unix epoch.</p>
          * <p>A UTC timestamp at which the Integration provider delivered the message. Stored as a millisecond representation of the Unix epoch.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -424,6 +466,7 @@ public final class MessageDetailsExtended implements IMessageDetails {
 
         /**
          * <p>A UTC timestamp at which the recipient opened a message for the first time. Stored as a millisecond representation of the Unix epoch.</p>
+         * <p>A UTC timestamp at which the recipient opened a message for the first time. Stored as a millisecond representation of the Unix epoch.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -434,6 +477,7 @@ public final class MessageDetailsExtended implements IMessageDetails {
         }
 
         /**
+         * <p>A UTC timestamp at which the recipient clicked on a tracked link for the first time. Stored as a millisecond representation of the Unix epoch.</p>
          * <p>A UTC timestamp at which the recipient clicked on a tracked link for the first time. Stored as a millisecond representation of the Unix epoch.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
@@ -446,40 +490,43 @@ public final class MessageDetailsExtended implements IMessageDetails {
 
         /**
          * <p>A unique identifier associated with the recipient of the delivered message.</p>
+         * <p>A unique identifier associated with the recipient of the delivered message.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("recipient")
-        public EventStage recipient(String recipient) {
-            this.recipient = recipient;
+        public EventStage recipient(@NotNull String recipient) {
+            this.recipient = Objects.requireNonNull(recipient, "recipient must not be null");
             return this;
         }
 
         /**
          * <p>A unique identifier associated with the event of the delivered message.</p>
+         * <p>A unique identifier associated with the event of the delivered message.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("event")
-        public NotificationStage event(String event) {
-            this.event = event;
+        public NotificationStage event(@NotNull String event) {
+            this.event = Objects.requireNonNull(event, "event must not be null");
             return this;
         }
 
         /**
          * <p>A unique identifier associated with the notification of the delivered message.</p>
+         * <p>A unique identifier associated with the notification of the delivered message.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("notification")
-        public _FinalStage notification(String notification) {
-            this.notification = notification;
+        public _FinalStage notification(@NotNull String notification) {
+            this.notification = Objects.requireNonNull(notification, "notification must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage providers(List<Map<String, Object>> providers) {
-            this.providers = Optional.of(providers);
+            this.providers = Optional.ofNullable(providers);
             return this;
         }
 
@@ -496,10 +543,13 @@ public final class MessageDetailsExtended implements IMessageDetails {
          */
         @java.lang.Override
         public _FinalStage reason(Reason reason) {
-            this.reason = Optional.of(reason);
+            this.reason = Optional.ofNullable(reason);
             return this;
         }
 
+        /**
+         * <p>The reason for the current status of the message.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "reason", nulls = Nulls.SKIP)
         public _FinalStage reason(Optional<Reason> reason) {
@@ -513,10 +563,13 @@ public final class MessageDetailsExtended implements IMessageDetails {
          */
         @java.lang.Override
         public _FinalStage error(String error) {
-            this.error = Optional.of(error);
+            this.error = Optional.ofNullable(error);
             return this;
         }
 
+        /**
+         * <p>A message describing the error that occurred.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "error", nulls = Nulls.SKIP)
         public _FinalStage error(Optional<String> error) {

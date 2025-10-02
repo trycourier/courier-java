@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SlackBaseProperties.Builder.class)
 public final class SlackBaseProperties implements ISlackBaseProperties {
     private final String accessToken;
@@ -63,7 +64,7 @@ public final class SlackBaseProperties implements ISlackBaseProperties {
     }
 
     public interface AccessTokenStage {
-        _FinalStage accessToken(String accessToken);
+        _FinalStage accessToken(@NotNull String accessToken);
 
         Builder from(SlackBaseProperties other);
     }
@@ -89,8 +90,8 @@ public final class SlackBaseProperties implements ISlackBaseProperties {
 
         @java.lang.Override
         @JsonSetter("access_token")
-        public _FinalStage accessToken(String accessToken) {
-            this.accessToken = accessToken;
+        public _FinalStage accessToken(@NotNull String accessToken) {
+            this.accessToken = Objects.requireNonNull(accessToken, "accessToken must not be null");
             return this;
         }
 

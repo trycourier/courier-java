@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = MsTeamsBaseProperties.Builder.class)
 public final class MsTeamsBaseProperties implements IMsTeamsBaseProperties {
     private final String tenantId;
@@ -72,13 +73,13 @@ public final class MsTeamsBaseProperties implements IMsTeamsBaseProperties {
     }
 
     public interface TenantIdStage {
-        ServiceUrlStage tenantId(String tenantId);
+        ServiceUrlStage tenantId(@NotNull String tenantId);
 
         Builder from(MsTeamsBaseProperties other);
     }
 
     public interface ServiceUrlStage {
-        _FinalStage serviceUrl(String serviceUrl);
+        _FinalStage serviceUrl(@NotNull String serviceUrl);
     }
 
     public interface _FinalStage {
@@ -105,15 +106,15 @@ public final class MsTeamsBaseProperties implements IMsTeamsBaseProperties {
 
         @java.lang.Override
         @JsonSetter("tenant_id")
-        public ServiceUrlStage tenantId(String tenantId) {
-            this.tenantId = tenantId;
+        public ServiceUrlStage tenantId(@NotNull String tenantId) {
+            this.tenantId = Objects.requireNonNull(tenantId, "tenantId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("service_url")
-        public _FinalStage serviceUrl(String serviceUrl) {
-            this.serviceUrl = serviceUrl;
+        public _FinalStage serviceUrl(@NotNull String serviceUrl) {
+            this.serviceUrl = Objects.requireNonNull(serviceUrl, "serviceUrl must not be null");
             return this;
         }
 

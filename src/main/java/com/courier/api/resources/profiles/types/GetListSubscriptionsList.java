@@ -17,8 +17,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = GetListSubscriptionsList.Builder.class)
 public final class GetListSubscriptionsList {
     private final String id;
@@ -116,21 +117,30 @@ public final class GetListSubscriptionsList {
     }
 
     public interface IdStage {
-        NameStage id(String id);
+        NameStage id(@NotNull String id);
 
         Builder from(GetListSubscriptionsList other);
     }
 
     public interface NameStage {
-        CreatedStage name(String name);
+        /**
+         * <p>List name</p>
+         */
+        CreatedStage name(@NotNull String name);
     }
 
     public interface CreatedStage {
-        UpdatedStage created(String created);
+        /**
+         * <p>The date/time of when the list was created. Represented as a string in ISO format.</p>
+         */
+        UpdatedStage created(@NotNull String created);
     }
 
     public interface UpdatedStage {
-        _FinalStage updated(String updated);
+        /**
+         * <p>The date/time of when the list was updated. Represented as a string in ISO format.</p>
+         */
+        _FinalStage updated(@NotNull String updated);
     }
 
     public interface _FinalStage {
@@ -170,47 +180,50 @@ public final class GetListSubscriptionsList {
 
         @java.lang.Override
         @JsonSetter("id")
-        public NameStage id(String id) {
-            this.id = id;
+        public NameStage id(@NotNull String id) {
+            this.id = Objects.requireNonNull(id, "id must not be null");
             return this;
         }
 
         /**
          * <p>List name</p>
+         * <p>List name</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("name")
-        public CreatedStage name(String name) {
-            this.name = name;
+        public CreatedStage name(@NotNull String name) {
+            this.name = Objects.requireNonNull(name, "name must not be null");
             return this;
         }
 
         /**
          * <p>The date/time of when the list was created. Represented as a string in ISO format.</p>
+         * <p>The date/time of when the list was created. Represented as a string in ISO format.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("created")
-        public UpdatedStage created(String created) {
-            this.created = created;
+        public UpdatedStage created(@NotNull String created) {
+            this.created = Objects.requireNonNull(created, "created must not be null");
             return this;
         }
 
         /**
          * <p>The date/time of when the list was updated. Represented as a string in ISO format.</p>
+         * <p>The date/time of when the list was updated. Represented as a string in ISO format.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("updated")
-        public _FinalStage updated(String updated) {
-            this.updated = updated;
+        public _FinalStage updated(@NotNull String updated) {
+            this.updated = Objects.requireNonNull(updated, "updated must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage preferences(RecipientPreferences preferences) {
-            this.preferences = Optional.of(preferences);
+            this.preferences = Optional.ofNullable(preferences);
             return this;
         }
 

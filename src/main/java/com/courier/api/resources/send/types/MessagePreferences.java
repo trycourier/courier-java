@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = MessagePreferences.Builder.class)
 public final class MessagePreferences {
     private final String subscriptionTopicId;
@@ -65,7 +66,10 @@ public final class MessagePreferences {
     }
 
     public interface SubscriptionTopicIdStage {
-        _FinalStage subscriptionTopicId(String subscriptionTopicId);
+        /**
+         * <p>The ID of the subscription topic you want to apply to the message. If this is a templated message, it will override the subscription topic if already associated</p>
+         */
+        _FinalStage subscriptionTopicId(@NotNull String subscriptionTopicId);
 
         Builder from(MessagePreferences other);
     }
@@ -91,12 +95,14 @@ public final class MessagePreferences {
 
         /**
          * <p>The ID of the subscription topic you want to apply to the message. If this is a templated message, it will override the subscription topic if already associated</p>
+         * <p>The ID of the subscription topic you want to apply to the message. If this is a templated message, it will override the subscription topic if already associated</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("subscription_topic_id")
-        public _FinalStage subscriptionTopicId(String subscriptionTopicId) {
-            this.subscriptionTopicId = subscriptionTopicId;
+        public _FinalStage subscriptionTopicId(@NotNull String subscriptionTopicId) {
+            this.subscriptionTopicId =
+                    Objects.requireNonNull(subscriptionTopicId, "subscriptionTopicId must not be null");
             return this;
         }
 

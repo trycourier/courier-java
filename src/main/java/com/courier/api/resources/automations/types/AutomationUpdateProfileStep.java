@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AutomationUpdateProfileStep.Builder.class)
 public final class AutomationUpdateProfileStep {
     private final String recipientId;
@@ -84,7 +85,7 @@ public final class AutomationUpdateProfileStep {
     }
 
     public interface RecipientIdStage {
-        ProfileStage recipientId(String recipientId);
+        ProfileStage recipientId(@NotNull String recipientId);
 
         Builder from(AutomationUpdateProfileStep other);
     }
@@ -94,7 +95,7 @@ public final class AutomationUpdateProfileStep {
     }
 
     public interface MergeStage {
-        _FinalStage merge(MergeAlgorithm merge);
+        _FinalStage merge(@NotNull MergeAlgorithm merge);
     }
 
     public interface _FinalStage {
@@ -124,8 +125,8 @@ public final class AutomationUpdateProfileStep {
 
         @java.lang.Override
         @JsonSetter("recipient_id")
-        public ProfileStage recipientId(String recipientId) {
-            this.recipientId = recipientId;
+        public ProfileStage recipientId(@NotNull String recipientId) {
+            this.recipientId = Objects.requireNonNull(recipientId, "recipientId must not be null");
             return this;
         }
 
@@ -138,8 +139,8 @@ public final class AutomationUpdateProfileStep {
 
         @java.lang.Override
         @JsonSetter("merge")
-        public _FinalStage merge(MergeAlgorithm merge) {
-            this.merge = merge;
+        public _FinalStage merge(@NotNull MergeAlgorithm merge) {
+            this.merge = Objects.requireNonNull(merge, "merge must not be null");
             return this;
         }
 

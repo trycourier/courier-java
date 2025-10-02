@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Device.Builder.class)
 public final class Device {
     private final Optional<String> appId;
@@ -162,6 +162,9 @@ public final class Device {
             return this;
         }
 
+        /**
+         * <p>Id of the application the token is used for</p>
+         */
         @JsonSetter(value = "app_id", nulls = Nulls.SKIP)
         public Builder appId(Optional<String> appId) {
             this.appId = appId;
@@ -169,10 +172,13 @@ public final class Device {
         }
 
         public Builder appId(String appId) {
-            this.appId = Optional.of(appId);
+            this.appId = Optional.ofNullable(appId);
             return this;
         }
 
+        /**
+         * <p>Id of the advertising identifier</p>
+         */
         @JsonSetter(value = "ad_id", nulls = Nulls.SKIP)
         public Builder adId(Optional<String> adId) {
             this.adId = adId;
@@ -180,10 +186,13 @@ public final class Device {
         }
 
         public Builder adId(String adId) {
-            this.adId = Optional.of(adId);
+            this.adId = Optional.ofNullable(adId);
             return this;
         }
 
+        /**
+         * <p>Id of the device the token is associated with</p>
+         */
         @JsonSetter(value = "device_id", nulls = Nulls.SKIP)
         public Builder deviceId(Optional<String> deviceId) {
             this.deviceId = deviceId;
@@ -191,10 +200,13 @@ public final class Device {
         }
 
         public Builder deviceId(String deviceId) {
-            this.deviceId = Optional.of(deviceId);
+            this.deviceId = Optional.ofNullable(deviceId);
             return this;
         }
 
+        /**
+         * <p>The device platform i.e. android, ios, web</p>
+         */
         @JsonSetter(value = "platform", nulls = Nulls.SKIP)
         public Builder platform(Optional<String> platform) {
             this.platform = platform;
@@ -202,10 +214,13 @@ public final class Device {
         }
 
         public Builder platform(String platform) {
-            this.platform = Optional.of(platform);
+            this.platform = Optional.ofNullable(platform);
             return this;
         }
 
+        /**
+         * <p>The device manufacturer</p>
+         */
         @JsonSetter(value = "manufacturer", nulls = Nulls.SKIP)
         public Builder manufacturer(Optional<String> manufacturer) {
             this.manufacturer = manufacturer;
@@ -213,10 +228,13 @@ public final class Device {
         }
 
         public Builder manufacturer(String manufacturer) {
-            this.manufacturer = Optional.of(manufacturer);
+            this.manufacturer = Optional.ofNullable(manufacturer);
             return this;
         }
 
+        /**
+         * <p>The device model</p>
+         */
         @JsonSetter(value = "model", nulls = Nulls.SKIP)
         public Builder model(Optional<String> model) {
             this.model = model;
@@ -224,7 +242,7 @@ public final class Device {
         }
 
         public Builder model(String model) {
-            this.model = Optional.of(model);
+            this.model = Optional.ofNullable(model);
             return this;
         }
 

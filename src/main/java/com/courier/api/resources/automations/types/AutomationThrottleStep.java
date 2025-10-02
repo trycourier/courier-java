@@ -16,8 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AutomationThrottleStep.Builder.class)
 public final class AutomationThrottleStep implements IAutomationStep {
     private final Optional<String> if_;
@@ -151,21 +152,27 @@ public final class AutomationThrottleStep implements IAutomationStep {
     }
 
     public interface MaxAllowedStage {
+        /**
+         * <p>Maximum number of allowed notifications in that timeframe</p>
+         */
         PeriodStage maxAllowed(int maxAllowed);
 
         Builder from(AutomationThrottleStep other);
     }
 
     public interface PeriodStage {
-        ScopeStage period(String period);
+        /**
+         * <p>Defines the throttle period which corresponds to the max_allowed. Specified as an ISO 8601 duration, https://en.wikipedia.org/wiki/ISO_8601#Durations</p>
+         */
+        ScopeStage period(@NotNull String period);
     }
 
     public interface ScopeStage {
-        OnThrottleStage scope(AutomationThrottleScope scope);
+        OnThrottleStage scope(@NotNull AutomationThrottleScope scope);
     }
 
     public interface OnThrottleStage {
-        _FinalStage onThrottle(AutomationThrottleOnThrottle onThrottle);
+        _FinalStage onThrottle(@NotNull AutomationThrottleOnThrottle onThrottle);
     }
 
     public interface _FinalStage {
@@ -179,6 +186,9 @@ public final class AutomationThrottleStep implements IAutomationStep {
 
         _FinalStage ref(String ref);
 
+        /**
+         * <p>If using scope=dynamic, provide the reference (e.g., refs.data.throttle_key) to the how the throttle should be identified</p>
+         */
         _FinalStage throttleKey(Optional<String> throttleKey);
 
         _FinalStage throttleKey(String throttleKey);
@@ -220,6 +230,7 @@ public final class AutomationThrottleStep implements IAutomationStep {
 
         /**
          * <p>Maximum number of allowed notifications in that timeframe</p>
+         * <p>Maximum number of allowed notifications in that timeframe</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -231,26 +242,27 @@ public final class AutomationThrottleStep implements IAutomationStep {
 
         /**
          * <p>Defines the throttle period which corresponds to the max_allowed. Specified as an ISO 8601 duration, https://en.wikipedia.org/wiki/ISO_8601#Durations</p>
+         * <p>Defines the throttle period which corresponds to the max_allowed. Specified as an ISO 8601 duration, https://en.wikipedia.org/wiki/ISO_8601#Durations</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("period")
-        public ScopeStage period(String period) {
-            this.period = period;
+        public ScopeStage period(@NotNull String period) {
+            this.period = Objects.requireNonNull(period, "period must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("scope")
-        public OnThrottleStage scope(AutomationThrottleScope scope) {
-            this.scope = scope;
+        public OnThrottleStage scope(@NotNull AutomationThrottleScope scope) {
+            this.scope = Objects.requireNonNull(scope, "scope must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("on_throttle")
-        public _FinalStage onThrottle(AutomationThrottleOnThrottle onThrottle) {
-            this.onThrottle = onThrottle;
+        public _FinalStage onThrottle(@NotNull AutomationThrottleOnThrottle onThrottle) {
+            this.onThrottle = Objects.requireNonNull(onThrottle, "onThrottle must not be null");
             return this;
         }
 
@@ -260,10 +272,13 @@ public final class AutomationThrottleStep implements IAutomationStep {
          */
         @java.lang.Override
         public _FinalStage throttleKey(String throttleKey) {
-            this.throttleKey = Optional.of(throttleKey);
+            this.throttleKey = Optional.ofNullable(throttleKey);
             return this;
         }
 
+        /**
+         * <p>If using scope=dynamic, provide the reference (e.g., refs.data.throttle_key) to the how the throttle should be identified</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "throttle_key", nulls = Nulls.SKIP)
         public _FinalStage throttleKey(Optional<String> throttleKey) {
@@ -273,7 +288,7 @@ public final class AutomationThrottleStep implements IAutomationStep {
 
         @java.lang.Override
         public _FinalStage ref(String ref) {
-            this.ref = Optional.of(ref);
+            this.ref = Optional.ofNullable(ref);
             return this;
         }
 
@@ -286,7 +301,7 @@ public final class AutomationThrottleStep implements IAutomationStep {
 
         @java.lang.Override
         public _FinalStage if_(String if_) {
-            this.if_ = Optional.of(if_);
+            this.if_ = Optional.ofNullable(if_);
             return this;
         }
 

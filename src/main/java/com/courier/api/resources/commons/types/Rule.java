@@ -16,8 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Rule.Builder.class)
 public final class Rule {
     private final Optional<String> start;
@@ -72,7 +73,7 @@ public final class Rule {
     }
 
     public interface UntilStage {
-        _FinalStage until(String until);
+        _FinalStage until(@NotNull String until);
 
         Builder from(Rule other);
     }
@@ -105,14 +106,14 @@ public final class Rule {
 
         @java.lang.Override
         @JsonSetter("until")
-        public _FinalStage until(String until) {
-            this.until = until;
+        public _FinalStage until(@NotNull String until) {
+            this.until = Objects.requireNonNull(until, "until must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage start(String start) {
-            this.start = Optional.of(start);
+            this.start = Optional.ofNullable(start);
             return this;
         }
 

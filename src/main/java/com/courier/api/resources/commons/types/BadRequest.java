@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BadRequest.Builder.class)
 public final class BadRequest implements IBaseError {
     private final String message;
@@ -71,7 +72,10 @@ public final class BadRequest implements IBaseError {
     }
 
     public interface MessageStage {
-        _FinalStage message(String message);
+        /**
+         * <p>A message describing the error that occurred.</p>
+         */
+        _FinalStage message(@NotNull String message);
 
         Builder from(BadRequest other);
     }
@@ -97,12 +101,13 @@ public final class BadRequest implements IBaseError {
 
         /**
          * <p>A message describing the error that occurred.</p>
+         * <p>A message describing the error that occurred.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("message")
-        public _FinalStage message(String message) {
-            this.message = message;
+        public _FinalStage message(@NotNull String message) {
+            this.message = Objects.requireNonNull(message, "message must not be null");
             return this;
         }
 

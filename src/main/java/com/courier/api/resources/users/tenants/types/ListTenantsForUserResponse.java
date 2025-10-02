@@ -18,8 +18,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListTenantsForUserResponse.Builder.class)
 public final class ListTenantsForUserResponse {
     private final Optional<List<UserTenantAssociation>> items;
@@ -130,13 +131,19 @@ public final class ListTenantsForUserResponse {
     }
 
     public interface HasMoreStage {
+        /**
+         * <p>Set to true when there are more pages that can be retrieved.</p>
+         */
         UrlStage hasMore(boolean hasMore);
 
         Builder from(ListTenantsForUserResponse other);
     }
 
     public interface UrlStage {
-        _FinalStage url(String url);
+        /**
+         * <p>A url that may be used to generate these results.</p>
+         */
+        _FinalStage url(@NotNull String url);
     }
 
     public interface _FinalStage {
@@ -146,10 +153,18 @@ public final class ListTenantsForUserResponse {
 
         _FinalStage items(List<UserTenantAssociation> items);
 
+        /**
+         * <p>A url that may be used to generate fetch the next set of results.
+         * Defined only when <code>has_more</code> is set to true</p>
+         */
         _FinalStage nextUrl(Optional<String> nextUrl);
 
         _FinalStage nextUrl(String nextUrl);
 
+        /**
+         * <p>A pointer to the next page of results. Defined
+         * only when <code>has_more</code> is set to true</p>
+         */
         _FinalStage cursor(Optional<String> cursor);
 
         _FinalStage cursor(String cursor);
@@ -184,6 +199,7 @@ public final class ListTenantsForUserResponse {
 
         /**
          * <p>Set to true when there are more pages that can be retrieved.</p>
+         * <p>Set to true when there are more pages that can be retrieved.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
@@ -195,12 +211,13 @@ public final class ListTenantsForUserResponse {
 
         /**
          * <p>A url that may be used to generate these results.</p>
+         * <p>A url that may be used to generate these results.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("url")
-        public _FinalStage url(String url) {
-            this.url = url;
+        public _FinalStage url(@NotNull String url) {
+            this.url = Objects.requireNonNull(url, "url must not be null");
             return this;
         }
 
@@ -211,10 +228,14 @@ public final class ListTenantsForUserResponse {
          */
         @java.lang.Override
         public _FinalStage cursor(String cursor) {
-            this.cursor = Optional.of(cursor);
+            this.cursor = Optional.ofNullable(cursor);
             return this;
         }
 
+        /**
+         * <p>A pointer to the next page of results. Defined
+         * only when <code>has_more</code> is set to true</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "cursor", nulls = Nulls.SKIP)
         public _FinalStage cursor(Optional<String> cursor) {
@@ -229,10 +250,14 @@ public final class ListTenantsForUserResponse {
          */
         @java.lang.Override
         public _FinalStage nextUrl(String nextUrl) {
-            this.nextUrl = Optional.of(nextUrl);
+            this.nextUrl = Optional.ofNullable(nextUrl);
             return this;
         }
 
+        /**
+         * <p>A url that may be used to generate fetch the next set of results.
+         * Defined only when <code>has_more</code> is set to true</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "next_url", nulls = Nulls.SKIP)
         public _FinalStage nextUrl(Optional<String> nextUrl) {
@@ -242,7 +267,7 @@ public final class ListTenantsForUserResponse {
 
         @java.lang.Override
         public _FinalStage items(List<UserTenantAssociation> items) {
-            this.items = Optional.of(items);
+            this.items = Optional.ofNullable(items);
             return this;
         }
 

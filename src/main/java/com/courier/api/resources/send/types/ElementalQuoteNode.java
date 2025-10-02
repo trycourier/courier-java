@@ -17,8 +17,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ElementalQuoteNode.Builder.class)
 public final class ElementalQuoteNode implements IElementalBaseNode {
     private final Optional<List<String>> channels;
@@ -172,13 +173,16 @@ public final class ElementalQuoteNode implements IElementalBaseNode {
     }
 
     public interface ContentStage {
-        TextStyleStage content(String content);
+        /**
+         * <p>The text value of the quote.</p>
+         */
+        TextStyleStage content(@NotNull String content);
 
         Builder from(ElementalQuoteNode other);
     }
 
     public interface TextStyleStage {
-        _FinalStage textStyle(TextStyle textStyle);
+        _FinalStage textStyle(@NotNull TextStyle textStyle);
     }
 
     public interface _FinalStage {
@@ -200,14 +204,23 @@ public final class ElementalQuoteNode implements IElementalBaseNode {
 
         _FinalStage loop(String loop);
 
+        /**
+         * <p>Alignment of the quote.</p>
+         */
         _FinalStage align(Optional<IAlignment> align);
 
         _FinalStage align(IAlignment align);
 
+        /**
+         * <p>CSS border color property. For example, <code>#fff</code></p>
+         */
         _FinalStage borderColor(Optional<String> borderColor);
 
         _FinalStage borderColor(String borderColor);
 
+        /**
+         * <p>Region specific content. See <a href="https://www.courier.com/docs/platform/content/elemental/locales/">locales docs</a> for more details.</p>
+         */
         _FinalStage locales(Optional<Map<String, Locale>> locales);
 
         _FinalStage locales(Map<String, Locale> locales);
@@ -254,19 +267,20 @@ public final class ElementalQuoteNode implements IElementalBaseNode {
 
         /**
          * <p>The text value of the quote.</p>
+         * <p>The text value of the quote.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("content")
-        public TextStyleStage content(String content) {
-            this.content = content;
+        public TextStyleStage content(@NotNull String content) {
+            this.content = Objects.requireNonNull(content, "content must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("text_style")
-        public _FinalStage textStyle(TextStyle textStyle) {
-            this.textStyle = textStyle;
+        public _FinalStage textStyle(@NotNull TextStyle textStyle) {
+            this.textStyle = Objects.requireNonNull(textStyle, "textStyle must not be null");
             return this;
         }
 
@@ -276,10 +290,13 @@ public final class ElementalQuoteNode implements IElementalBaseNode {
          */
         @java.lang.Override
         public _FinalStage locales(Map<String, Locale> locales) {
-            this.locales = Optional.of(locales);
+            this.locales = Optional.ofNullable(locales);
             return this;
         }
 
+        /**
+         * <p>Region specific content. See <a href="https://www.courier.com/docs/platform/content/elemental/locales/">locales docs</a> for more details.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "locales", nulls = Nulls.SKIP)
         public _FinalStage locales(Optional<Map<String, Locale>> locales) {
@@ -293,10 +310,13 @@ public final class ElementalQuoteNode implements IElementalBaseNode {
          */
         @java.lang.Override
         public _FinalStage borderColor(String borderColor) {
-            this.borderColor = Optional.of(borderColor);
+            this.borderColor = Optional.ofNullable(borderColor);
             return this;
         }
 
+        /**
+         * <p>CSS border color property. For example, <code>#fff</code></p>
+         */
         @java.lang.Override
         @JsonSetter(value = "borderColor", nulls = Nulls.SKIP)
         public _FinalStage borderColor(Optional<String> borderColor) {
@@ -310,10 +330,13 @@ public final class ElementalQuoteNode implements IElementalBaseNode {
          */
         @java.lang.Override
         public _FinalStage align(IAlignment align) {
-            this.align = Optional.of(align);
+            this.align = Optional.ofNullable(align);
             return this;
         }
 
+        /**
+         * <p>Alignment of the quote.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "align", nulls = Nulls.SKIP)
         public _FinalStage align(Optional<IAlignment> align) {
@@ -323,7 +346,7 @@ public final class ElementalQuoteNode implements IElementalBaseNode {
 
         @java.lang.Override
         public _FinalStage loop(String loop) {
-            this.loop = Optional.of(loop);
+            this.loop = Optional.ofNullable(loop);
             return this;
         }
 
@@ -336,7 +359,7 @@ public final class ElementalQuoteNode implements IElementalBaseNode {
 
         @java.lang.Override
         public _FinalStage if_(String if_) {
-            this.if_ = Optional.of(if_);
+            this.if_ = Optional.ofNullable(if_);
             return this;
         }
 
@@ -349,7 +372,7 @@ public final class ElementalQuoteNode implements IElementalBaseNode {
 
         @java.lang.Override
         public _FinalStage ref(String ref) {
-            this.ref = Optional.of(ref);
+            this.ref = Optional.ofNullable(ref);
             return this;
         }
 
@@ -362,7 +385,7 @@ public final class ElementalQuoteNode implements IElementalBaseNode {
 
         @java.lang.Override
         public _FinalStage channels(List<String> channels) {
-            this.channels = Optional.of(channels);
+            this.channels = Optional.ofNullable(channels);
             return this;
         }
 

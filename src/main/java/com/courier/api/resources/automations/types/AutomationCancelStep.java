@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AutomationCancelStep.Builder.class)
 public final class AutomationCancelStep implements IAutomationStep {
     private final Optional<String> if_;
@@ -117,7 +117,7 @@ public final class AutomationCancelStep implements IAutomationStep {
         }
 
         public Builder if_(String if_) {
-            this.if_ = Optional.of(if_);
+            this.if_ = Optional.ofNullable(if_);
             return this;
         }
 
@@ -128,7 +128,7 @@ public final class AutomationCancelStep implements IAutomationStep {
         }
 
         public Builder ref(String ref) {
-            this.ref = Optional.of(ref);
+            this.ref = Optional.ofNullable(ref);
             return this;
         }
 
@@ -139,7 +139,7 @@ public final class AutomationCancelStep implements IAutomationStep {
         }
 
         public Builder cancelationToken(String cancelationToken) {
-            this.cancelationToken = Optional.of(cancelationToken);
+            this.cancelationToken = Optional.ofNullable(cancelationToken);
             return this;
         }
 

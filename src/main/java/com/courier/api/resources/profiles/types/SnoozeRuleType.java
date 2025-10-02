@@ -3,20 +3,71 @@
  */
 package com.courier.api.resources.profiles.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum SnoozeRuleType {
-    SNOOZE("snooze");
+public final class SnoozeRuleType {
+    public static final SnoozeRuleType SNOOZE = new SnoozeRuleType(Value.SNOOZE, "snooze");
 
-    private final String value;
+    private final Value value;
 
-    SnoozeRuleType(String value) {
+    private final String string;
+
+    SnoozeRuleType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof SnoozeRuleType && this.string.equals(((SnoozeRuleType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case SNOOZE:
+                return visitor.visitSnooze();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static SnoozeRuleType valueOf(String value) {
+        switch (value) {
+            case "snooze":
+                return SNOOZE;
+            default:
+                return new SnoozeRuleType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        SNOOZE,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitSnooze();
+
+        T visitUnknown(String unknownType);
     }
 }

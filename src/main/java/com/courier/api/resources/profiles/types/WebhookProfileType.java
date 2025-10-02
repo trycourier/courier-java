@@ -3,22 +3,81 @@
  */
 package com.courier.api.resources.profiles.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum WebhookProfileType {
-    LIMITED("limited"),
+public final class WebhookProfileType {
+    public static final WebhookProfileType EXPANDED = new WebhookProfileType(Value.EXPANDED, "expanded");
 
-    EXPANDED("expanded");
+    public static final WebhookProfileType LIMITED = new WebhookProfileType(Value.LIMITED, "limited");
 
-    private final String value;
+    private final Value value;
 
-    WebhookProfileType(String value) {
+    private final String string;
+
+    WebhookProfileType(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof WebhookProfileType && this.string.equals(((WebhookProfileType) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case EXPANDED:
+                return visitor.visitExpanded();
+            case LIMITED:
+                return visitor.visitLimited();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static WebhookProfileType valueOf(String value) {
+        switch (value) {
+            case "expanded":
+                return EXPANDED;
+            case "limited":
+                return LIMITED;
+            default:
+                return new WebhookProfileType(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        LIMITED,
+
+        EXPANDED,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitLimited();
+
+        T visitExpanded();
+
+        T visitUnknown(String unknownType);
     }
 }

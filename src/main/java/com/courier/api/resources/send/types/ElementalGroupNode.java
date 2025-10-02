@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ElementalGroupNode.Builder.class)
 public final class ElementalGroupNode implements IElementalBaseNode {
     private final Optional<List<String>> channels;
@@ -147,7 +147,7 @@ public final class ElementalGroupNode implements IElementalBaseNode {
         }
 
         public Builder channels(List<String> channels) {
-            this.channels = Optional.of(channels);
+            this.channels = Optional.ofNullable(channels);
             return this;
         }
 
@@ -158,7 +158,7 @@ public final class ElementalGroupNode implements IElementalBaseNode {
         }
 
         public Builder ref(String ref) {
-            this.ref = Optional.of(ref);
+            this.ref = Optional.ofNullable(ref);
             return this;
         }
 
@@ -169,7 +169,7 @@ public final class ElementalGroupNode implements IElementalBaseNode {
         }
 
         public Builder if_(String if_) {
-            this.if_ = Optional.of(if_);
+            this.if_ = Optional.ofNullable(if_);
             return this;
         }
 
@@ -180,14 +180,19 @@ public final class ElementalGroupNode implements IElementalBaseNode {
         }
 
         public Builder loop(String loop) {
-            this.loop = Optional.of(loop);
+            this.loop = Optional.ofNullable(loop);
             return this;
         }
 
+        /**
+         * <p>Sub elements to render.</p>
+         */
         @JsonSetter(value = "elements", nulls = Nulls.SKIP)
         public Builder elements(List<ElementalNode> elements) {
             this.elements.clear();
-            this.elements.addAll(elements);
+            if (elements != null) {
+                this.elements.addAll(elements);
+            }
             return this;
         }
 
@@ -197,7 +202,9 @@ public final class ElementalGroupNode implements IElementalBaseNode {
         }
 
         public Builder addAllElements(List<ElementalNode> elements) {
-            this.elements.addAll(elements);
+            if (elements != null) {
+                this.elements.addAll(elements);
+            }
             return this;
         }
 

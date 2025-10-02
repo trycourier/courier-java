@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = RecipientPreferences.Builder.class)
 public final class RecipientPreferences {
     private final Optional<Map<String, NotificationPreferenceDetails>> categories;
@@ -98,7 +98,7 @@ public final class RecipientPreferences {
         }
 
         public Builder categories(Map<String, NotificationPreferenceDetails> categories) {
-            this.categories = Optional.of(categories);
+            this.categories = Optional.ofNullable(categories);
             return this;
         }
 
@@ -109,7 +109,7 @@ public final class RecipientPreferences {
         }
 
         public Builder notifications(Map<String, NotificationPreferenceDetails> notifications) {
-            this.notifications = Optional.of(notifications);
+            this.notifications = Optional.ofNullable(notifications);
             return this;
         }
 

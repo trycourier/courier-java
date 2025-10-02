@@ -15,8 +15,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SlackRecipient.Builder.class)
 public final class SlackRecipient {
     private final Slack slack;
@@ -63,7 +64,7 @@ public final class SlackRecipient {
     }
 
     public interface SlackStage {
-        _FinalStage slack(Slack slack);
+        _FinalStage slack(@NotNull Slack slack);
 
         Builder from(SlackRecipient other);
     }
@@ -89,8 +90,8 @@ public final class SlackRecipient {
 
         @java.lang.Override
         @JsonSetter("slack")
-        public _FinalStage slack(Slack slack) {
-            this.slack = slack;
+        public _FinalStage slack(@NotNull Slack slack) {
+            this.slack = Objects.requireNonNull(slack, "slack must not be null");
             return this;
         }
 

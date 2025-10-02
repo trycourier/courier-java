@@ -16,8 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AutomationAddToBatchStep.Builder.class)
 public final class AutomationAddToBatchStep implements IAutomationStep {
     private final Optional<String> if_;
@@ -192,17 +193,23 @@ public final class AutomationAddToBatchStep implements IAutomationStep {
     }
 
     public interface WaitPeriodStage {
-        MaxWaitPeriodStage waitPeriod(String waitPeriod);
+        /**
+         * <p>Defines the period of inactivity before the batch is released. Specified as an <a href="https://en.wikipedia.org/wiki/ISO_8601#Durations">ISO 8601 duration</a></p>
+         */
+        MaxWaitPeriodStage waitPeriod(@NotNull String waitPeriod);
 
         Builder from(AutomationAddToBatchStep other);
     }
 
     public interface MaxWaitPeriodStage {
-        RetainStage maxWaitPeriod(String maxWaitPeriod);
+        /**
+         * <p>Defines the maximum wait time before the batch should be released. Must be less than wait period. Maximum of 60 days. Specified as an <a href="https://en.wikipedia.org/wiki/ISO_8601#Durations">ISO 8601 duration</a></p>
+         */
+        RetainStage maxWaitPeriod(@NotNull String maxWaitPeriod);
     }
 
     public interface RetainStage {
-        _FinalStage retain(AutomationAddToBatchRetain retain);
+        _FinalStage retain(@NotNull AutomationAddToBatchRetain retain);
     }
 
     public interface _FinalStage {
@@ -216,14 +223,24 @@ public final class AutomationAddToBatchStep implements IAutomationStep {
 
         _FinalStage ref(String ref);
 
+        /**
+         * <p>If specified, the batch will release as soon as this number is reached</p>
+         */
         _FinalStage maxItems(Optional<AutomationAddToBatchMaxItemsType> maxItems);
 
         _FinalStage maxItems(AutomationAddToBatchMaxItemsType maxItems);
 
+        /**
+         * <p>Determine the scope of the batching. If user, chosen in this order: recipient, profile.user_id, data.user_id, data.userId.
+         * If dynamic, then specify where the batch_key or a reference to the batch_key</p>
+         */
         _FinalStage scope(Optional<AutomationAddToBatchScope> scope);
 
         _FinalStage scope(AutomationAddToBatchScope scope);
 
+        /**
+         * <p>If using scope=dynamic, provide the key or a reference (e.g., refs.data.batch_key)</p>
+         */
         _FinalStage batchKey(Optional<String> batchKey);
 
         _FinalStage batchKey(String batchKey);
@@ -232,6 +249,9 @@ public final class AutomationAddToBatchStep implements IAutomationStep {
 
         _FinalStage batchId(String batchId);
 
+        /**
+         * <p>Defines the field of the data object the batch is set to when complete. Defaults to <code>batch</code></p>
+         */
         _FinalStage categoryKey(Optional<String> categoryKey);
 
         _FinalStage categoryKey(String categoryKey);
@@ -281,30 +301,32 @@ public final class AutomationAddToBatchStep implements IAutomationStep {
 
         /**
          * <p>Defines the period of inactivity before the batch is released. Specified as an <a href="https://en.wikipedia.org/wiki/ISO_8601#Durations">ISO 8601 duration</a></p>
+         * <p>Defines the period of inactivity before the batch is released. Specified as an <a href="https://en.wikipedia.org/wiki/ISO_8601#Durations">ISO 8601 duration</a></p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("wait_period")
-        public MaxWaitPeriodStage waitPeriod(String waitPeriod) {
-            this.waitPeriod = waitPeriod;
+        public MaxWaitPeriodStage waitPeriod(@NotNull String waitPeriod) {
+            this.waitPeriod = Objects.requireNonNull(waitPeriod, "waitPeriod must not be null");
             return this;
         }
 
         /**
          * <p>Defines the maximum wait time before the batch should be released. Must be less than wait period. Maximum of 60 days. Specified as an <a href="https://en.wikipedia.org/wiki/ISO_8601#Durations">ISO 8601 duration</a></p>
+         * <p>Defines the maximum wait time before the batch should be released. Must be less than wait period. Maximum of 60 days. Specified as an <a href="https://en.wikipedia.org/wiki/ISO_8601#Durations">ISO 8601 duration</a></p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("max_wait_period")
-        public RetainStage maxWaitPeriod(String maxWaitPeriod) {
-            this.maxWaitPeriod = maxWaitPeriod;
+        public RetainStage maxWaitPeriod(@NotNull String maxWaitPeriod) {
+            this.maxWaitPeriod = Objects.requireNonNull(maxWaitPeriod, "maxWaitPeriod must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("retain")
-        public _FinalStage retain(AutomationAddToBatchRetain retain) {
-            this.retain = retain;
+        public _FinalStage retain(@NotNull AutomationAddToBatchRetain retain) {
+            this.retain = Objects.requireNonNull(retain, "retain must not be null");
             return this;
         }
 
@@ -314,10 +336,13 @@ public final class AutomationAddToBatchStep implements IAutomationStep {
          */
         @java.lang.Override
         public _FinalStage categoryKey(String categoryKey) {
-            this.categoryKey = Optional.of(categoryKey);
+            this.categoryKey = Optional.ofNullable(categoryKey);
             return this;
         }
 
+        /**
+         * <p>Defines the field of the data object the batch is set to when complete. Defaults to <code>batch</code></p>
+         */
         @java.lang.Override
         @JsonSetter(value = "category_key", nulls = Nulls.SKIP)
         public _FinalStage categoryKey(Optional<String> categoryKey) {
@@ -327,7 +352,7 @@ public final class AutomationAddToBatchStep implements IAutomationStep {
 
         @java.lang.Override
         public _FinalStage batchId(String batchId) {
-            this.batchId = Optional.of(batchId);
+            this.batchId = Optional.ofNullable(batchId);
             return this;
         }
 
@@ -344,10 +369,13 @@ public final class AutomationAddToBatchStep implements IAutomationStep {
          */
         @java.lang.Override
         public _FinalStage batchKey(String batchKey) {
-            this.batchKey = Optional.of(batchKey);
+            this.batchKey = Optional.ofNullable(batchKey);
             return this;
         }
 
+        /**
+         * <p>If using scope=dynamic, provide the key or a reference (e.g., refs.data.batch_key)</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "batch_key", nulls = Nulls.SKIP)
         public _FinalStage batchKey(Optional<String> batchKey) {
@@ -362,10 +390,14 @@ public final class AutomationAddToBatchStep implements IAutomationStep {
          */
         @java.lang.Override
         public _FinalStage scope(AutomationAddToBatchScope scope) {
-            this.scope = Optional.of(scope);
+            this.scope = Optional.ofNullable(scope);
             return this;
         }
 
+        /**
+         * <p>Determine the scope of the batching. If user, chosen in this order: recipient, profile.user_id, data.user_id, data.userId.
+         * If dynamic, then specify where the batch_key or a reference to the batch_key</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "scope", nulls = Nulls.SKIP)
         public _FinalStage scope(Optional<AutomationAddToBatchScope> scope) {
@@ -379,10 +411,13 @@ public final class AutomationAddToBatchStep implements IAutomationStep {
          */
         @java.lang.Override
         public _FinalStage maxItems(AutomationAddToBatchMaxItemsType maxItems) {
-            this.maxItems = Optional.of(maxItems);
+            this.maxItems = Optional.ofNullable(maxItems);
             return this;
         }
 
+        /**
+         * <p>If specified, the batch will release as soon as this number is reached</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "max_items", nulls = Nulls.SKIP)
         public _FinalStage maxItems(Optional<AutomationAddToBatchMaxItemsType> maxItems) {
@@ -392,7 +427,7 @@ public final class AutomationAddToBatchStep implements IAutomationStep {
 
         @java.lang.Override
         public _FinalStage ref(String ref) {
-            this.ref = Optional.of(ref);
+            this.ref = Optional.ofNullable(ref);
             return this;
         }
 
@@ -405,7 +440,7 @@ public final class AutomationAddToBatchStep implements IAutomationStep {
 
         @java.lang.Override
         public _FinalStage if_(String if_) {
-            this.if_ = Optional.of(if_);
+            this.if_ = Optional.ofNullable(if_);
             return this;
         }
 

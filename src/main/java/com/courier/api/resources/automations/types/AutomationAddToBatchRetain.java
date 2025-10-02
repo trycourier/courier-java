@@ -16,8 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = AutomationAddToBatchRetain.Builder.class)
 public final class AutomationAddToBatchRetain {
     private final AutomationAddToBatchRetainType type;
@@ -95,18 +96,29 @@ public final class AutomationAddToBatchRetain {
     }
 
     public interface TypeStage {
-        CountStage type(AutomationAddToBatchRetainType type);
+        /**
+         * <p>Keep N number of notifications based on the type. First/Last N based on notification received.
+         * highest/lowest based on a scoring key providing in the data accessed by sort_key</p>
+         */
+        CountStage type(@NotNull AutomationAddToBatchRetainType type);
 
         Builder from(AutomationAddToBatchRetain other);
     }
 
     public interface CountStage {
+        /**
+         * <p>The number of records to keep in batch. Default is 10 and only configurable by requesting from support.
+         * When configurable minimum is 2 and maximum is 100.</p>
+         */
         _FinalStage count(int count);
     }
 
     public interface _FinalStage {
         AutomationAddToBatchRetain build();
 
+        /**
+         * <p>Defines the data value data[sort_key] that is used to sort the stored items. Required when type is set to highest or lowest.</p>
+         */
         _FinalStage sortKey(Optional<String> sortKey);
 
         _FinalStage sortKey(String sortKey);
@@ -136,16 +148,20 @@ public final class AutomationAddToBatchRetain {
         /**
          * <p>Keep N number of notifications based on the type. First/Last N based on notification received.
          * highest/lowest based on a scoring key providing in the data accessed by sort_key</p>
+         * <p>Keep N number of notifications based on the type. First/Last N based on notification received.
+         * highest/lowest based on a scoring key providing in the data accessed by sort_key</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("type")
-        public CountStage type(AutomationAddToBatchRetainType type) {
-            this.type = type;
+        public CountStage type(@NotNull AutomationAddToBatchRetainType type) {
+            this.type = Objects.requireNonNull(type, "type must not be null");
             return this;
         }
 
         /**
+         * <p>The number of records to keep in batch. Default is 10 and only configurable by requesting from support.
+         * When configurable minimum is 2 and maximum is 100.</p>
          * <p>The number of records to keep in batch. Default is 10 and only configurable by requesting from support.
          * When configurable minimum is 2 and maximum is 100.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
@@ -163,10 +179,13 @@ public final class AutomationAddToBatchRetain {
          */
         @java.lang.Override
         public _FinalStage sortKey(String sortKey) {
-            this.sortKey = Optional.of(sortKey);
+            this.sortKey = Optional.ofNullable(sortKey);
             return this;
         }
 
+        /**
+         * <p>Defines the data value data[sort_key] that is used to sort the stored items. Required when type is set to highest or lowest.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "sort_key", nulls = Nulls.SKIP)
         public _FinalStage sortKey(Optional<String> sortKey) {

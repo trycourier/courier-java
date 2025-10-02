@@ -17,8 +17,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = RoutingStrategy.Builder.class)
 public final class RoutingStrategy {
     private final RoutingStrategyMethod method;
@@ -80,7 +81,10 @@ public final class RoutingStrategy {
     }
 
     public interface MethodStage {
-        _FinalStage method(RoutingStrategyMethod method);
+        /**
+         * <p>The method for selecting channels to send the message with. Value can be either 'single' or 'all'. If not provided will default to 'single'</p>
+         */
+        _FinalStage method(@NotNull RoutingStrategyMethod method);
 
         Builder from(RoutingStrategy other);
     }
@@ -88,6 +92,9 @@ public final class RoutingStrategy {
     public interface _FinalStage {
         RoutingStrategy build();
 
+        /**
+         * <p>An array of valid channel identifiers (like email, push, sms, etc.) and additional routing nodes.</p>
+         */
         _FinalStage channels(List<String> channels);
 
         _FinalStage addChannels(String channels);
@@ -115,12 +122,13 @@ public final class RoutingStrategy {
 
         /**
          * <p>The method for selecting channels to send the message with. Value can be either 'single' or 'all'. If not provided will default to 'single'</p>
+         * <p>The method for selecting channels to send the message with. Value can be either 'single' or 'all'. If not provided will default to 'single'</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("method")
-        public _FinalStage method(RoutingStrategyMethod method) {
-            this.method = method;
+        public _FinalStage method(@NotNull RoutingStrategyMethod method) {
+            this.method = Objects.requireNonNull(method, "method must not be null");
             return this;
         }
 
@@ -130,7 +138,9 @@ public final class RoutingStrategy {
          */
         @java.lang.Override
         public _FinalStage addAllChannels(List<String> channels) {
-            this.channels.addAll(channels);
+            if (channels != null) {
+                this.channels.addAll(channels);
+            }
             return this;
         }
 
@@ -144,11 +154,16 @@ public final class RoutingStrategy {
             return this;
         }
 
+        /**
+         * <p>An array of valid channel identifiers (like email, push, sms, etc.) and additional routing nodes.</p>
+         */
         @java.lang.Override
         @JsonSetter(value = "channels", nulls = Nulls.SKIP)
         public _FinalStage channels(List<String> channels) {
             this.channels.clear();
-            this.channels.addAll(channels);
+            if (channels != null) {
+                this.channels.addAll(channels);
+            }
             return this;
         }
 

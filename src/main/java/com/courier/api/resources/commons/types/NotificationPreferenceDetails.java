@@ -17,8 +17,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = NotificationPreferenceDetails.Builder.class)
 public final class NotificationPreferenceDetails {
     private final PreferenceStatus status;
@@ -87,7 +88,7 @@ public final class NotificationPreferenceDetails {
     }
 
     public interface StatusStage {
-        _FinalStage status(PreferenceStatus status);
+        _FinalStage status(@NotNull PreferenceStatus status);
 
         Builder from(NotificationPreferenceDetails other);
     }
@@ -127,14 +128,14 @@ public final class NotificationPreferenceDetails {
 
         @java.lang.Override
         @JsonSetter("status")
-        public _FinalStage status(PreferenceStatus status) {
-            this.status = status;
+        public _FinalStage status(@NotNull PreferenceStatus status) {
+            this.status = Objects.requireNonNull(status, "status must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage channelPreferences(List<ChannelPreference> channelPreferences) {
-            this.channelPreferences = Optional.of(channelPreferences);
+            this.channelPreferences = Optional.ofNullable(channelPreferences);
             return this;
         }
 
@@ -147,7 +148,7 @@ public final class NotificationPreferenceDetails {
 
         @java.lang.Override
         public _FinalStage rules(List<Rule> rules) {
-            this.rules = Optional.of(rules);
+            this.rules = Optional.ofNullable(rules);
             return this;
         }
 

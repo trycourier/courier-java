@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = RenderOutput.Builder.class)
 public final class RenderOutput {
     private final String channel;
@@ -91,17 +92,26 @@ public final class RenderOutput {
     }
 
     public interface ChannelStage {
-        ChannelIdStage channel(String channel);
+        /**
+         * <p>The channel used for rendering the message.</p>
+         */
+        ChannelIdStage channel(@NotNull String channel);
 
         Builder from(RenderOutput other);
     }
 
     public interface ChannelIdStage {
-        ContentStage channelId(String channelId);
+        /**
+         * <p>The ID of channel used for rendering the message.</p>
+         */
+        ContentStage channelId(@NotNull String channelId);
     }
 
     public interface ContentStage {
-        _FinalStage content(RenderedMessageContent content);
+        /**
+         * <p>Content details of the rendered message.</p>
+         */
+        _FinalStage content(@NotNull RenderedMessageContent content);
     }
 
     public interface _FinalStage {
@@ -131,34 +141,37 @@ public final class RenderOutput {
 
         /**
          * <p>The channel used for rendering the message.</p>
+         * <p>The channel used for rendering the message.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("channel")
-        public ChannelIdStage channel(String channel) {
-            this.channel = channel;
+        public ChannelIdStage channel(@NotNull String channel) {
+            this.channel = Objects.requireNonNull(channel, "channel must not be null");
             return this;
         }
 
         /**
          * <p>The ID of channel used for rendering the message.</p>
+         * <p>The ID of channel used for rendering the message.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("channel_id")
-        public ContentStage channelId(String channelId) {
-            this.channelId = channelId;
+        public ContentStage channelId(@NotNull String channelId) {
+            this.channelId = Objects.requireNonNull(channelId, "channelId must not be null");
             return this;
         }
 
         /**
          * <p>Content details of the rendered message.</p>
+         * <p>Content details of the rendered message.</p>
          * @return Reference to {@code this} so that method calls can be chained together.
          */
         @java.lang.Override
         @JsonSetter("content")
-        public _FinalStage content(RenderedMessageContent content) {
-            this.content = content;
+        public _FinalStage content(@NotNull RenderedMessageContent content) {
+            this.content = Objects.requireNonNull(content, "content must not be null");
             return this;
         }
 

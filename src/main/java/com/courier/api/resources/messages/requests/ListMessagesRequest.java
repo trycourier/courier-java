@@ -12,14 +12,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = ListMessagesRequest.Builder.class)
 public final class ListMessagesRequest {
+    private final Optional<List<String>> provider;
+
+    private final Optional<List<String>> status;
+
+    private final Optional<List<String>> tag;
+
     private final Optional<Boolean> archived;
 
     private final Optional<String> cursor;
@@ -32,13 +40,7 @@ public final class ListMessagesRequest {
 
     private final Optional<String> notification;
 
-    private final Optional<String> provider;
-
     private final Optional<String> recipient;
-
-    private final Optional<String> status;
-
-    private final Optional<String> tag;
 
     private final Optional<String> tags;
 
@@ -51,36 +53,60 @@ public final class ListMessagesRequest {
     private final Map<String, Object> additionalProperties;
 
     private ListMessagesRequest(
+            Optional<List<String>> provider,
+            Optional<List<String>> status,
+            Optional<List<String>> tag,
             Optional<Boolean> archived,
             Optional<String> cursor,
             Optional<String> event,
             Optional<String> list,
             Optional<String> messageId,
             Optional<String> notification,
-            Optional<String> provider,
             Optional<String> recipient,
-            Optional<String> status,
-            Optional<String> tag,
             Optional<String> tags,
             Optional<String> tenantId,
             Optional<String> enqueuedAfter,
             Optional<String> traceId,
             Map<String, Object> additionalProperties) {
+        this.provider = provider;
+        this.status = status;
+        this.tag = tag;
         this.archived = archived;
         this.cursor = cursor;
         this.event = event;
         this.list = list;
         this.messageId = messageId;
         this.notification = notification;
-        this.provider = provider;
         this.recipient = recipient;
-        this.status = status;
-        this.tag = tag;
         this.tags = tags;
         this.tenantId = tenantId;
         this.enqueuedAfter = enqueuedAfter;
         this.traceId = traceId;
         this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * @return The key assocated to the provider you want to filter on. E.g., sendgrid, inbox, twilio, slack, msteams, etc. Allows multiple values to be set in query parameters.
+     */
+    @JsonProperty("provider")
+    public Optional<List<String>> getProvider() {
+        return provider;
+    }
+
+    /**
+     * @return An indicator of the current status of the message. Allows multiple values to be set in query parameters.
+     */
+    @JsonProperty("status")
+    public Optional<List<String>> getStatus() {
+        return status;
+    }
+
+    /**
+     * @return A tag placed in the metadata.tags during a notification send. Allows multiple values to be set in query parameters.
+     */
+    @JsonProperty("tag")
+    public Optional<List<String>> getTag() {
+        return tag;
     }
 
     /**
@@ -132,35 +158,11 @@ public final class ListMessagesRequest {
     }
 
     /**
-     * @return The key assocated to the provider you want to filter on. E.g., sendgrid, inbox, twilio, slack, msteams, etc. Allows multiple values to be set in query parameters.
-     */
-    @JsonProperty("provider")
-    public Optional<String> getProvider() {
-        return provider;
-    }
-
-    /**
      * @return A unique identifier representing the recipient associated with the requested profile.
      */
     @JsonProperty("recipient")
     public Optional<String> getRecipient() {
         return recipient;
-    }
-
-    /**
-     * @return An indicator of the current status of the message. Allows multiple values to be set in query parameters.
-     */
-    @JsonProperty("status")
-    public Optional<String> getStatus() {
-        return status;
-    }
-
-    /**
-     * @return A tag placed in the metadata.tags during a notification send. Allows multiple values to be set in query parameters.
-     */
-    @JsonProperty("tag")
-    public Optional<String> getTag() {
-        return tag;
     }
 
     /**
@@ -207,16 +209,16 @@ public final class ListMessagesRequest {
     }
 
     private boolean equalTo(ListMessagesRequest other) {
-        return archived.equals(other.archived)
+        return provider.equals(other.provider)
+                && status.equals(other.status)
+                && tag.equals(other.tag)
+                && archived.equals(other.archived)
                 && cursor.equals(other.cursor)
                 && event.equals(other.event)
                 && list.equals(other.list)
                 && messageId.equals(other.messageId)
                 && notification.equals(other.notification)
-                && provider.equals(other.provider)
                 && recipient.equals(other.recipient)
-                && status.equals(other.status)
-                && tag.equals(other.tag)
                 && tags.equals(other.tags)
                 && tenantId.equals(other.tenantId)
                 && enqueuedAfter.equals(other.enqueuedAfter)
@@ -226,16 +228,16 @@ public final class ListMessagesRequest {
     @java.lang.Override
     public int hashCode() {
         return Objects.hash(
+                this.provider,
+                this.status,
+                this.tag,
                 this.archived,
                 this.cursor,
                 this.event,
                 this.list,
                 this.messageId,
                 this.notification,
-                this.provider,
                 this.recipient,
-                this.status,
-                this.tag,
                 this.tags,
                 this.tenantId,
                 this.enqueuedAfter,
@@ -253,6 +255,12 @@ public final class ListMessagesRequest {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static final class Builder {
+        private Optional<List<String>> provider = Optional.empty();
+
+        private Optional<List<String>> status = Optional.empty();
+
+        private Optional<List<String>> tag = Optional.empty();
+
         private Optional<Boolean> archived = Optional.empty();
 
         private Optional<String> cursor = Optional.empty();
@@ -265,13 +273,7 @@ public final class ListMessagesRequest {
 
         private Optional<String> notification = Optional.empty();
 
-        private Optional<String> provider = Optional.empty();
-
         private Optional<String> recipient = Optional.empty();
-
-        private Optional<String> status = Optional.empty();
-
-        private Optional<String> tag = Optional.empty();
 
         private Optional<String> tags = Optional.empty();
 
@@ -287,16 +289,16 @@ public final class ListMessagesRequest {
         private Builder() {}
 
         public Builder from(ListMessagesRequest other) {
+            provider(other.getProvider());
+            status(other.getStatus());
+            tag(other.getTag());
             archived(other.getArchived());
             cursor(other.getCursor());
             event(other.getEvent());
             list(other.getList());
             messageId(other.getMessageId());
             notification(other.getNotification());
-            provider(other.getProvider());
             recipient(other.getRecipient());
-            status(other.getStatus());
-            tag(other.getTag());
             tags(other.getTags());
             tenantId(other.getTenantId());
             enqueuedAfter(other.getEnqueuedAfter());
@@ -304,6 +306,66 @@ public final class ListMessagesRequest {
             return this;
         }
 
+        /**
+         * <p>The key assocated to the provider you want to filter on. E.g., sendgrid, inbox, twilio, slack, msteams, etc. Allows multiple values to be set in query parameters.</p>
+         */
+        @JsonSetter(value = "provider", nulls = Nulls.SKIP)
+        public Builder provider(Optional<List<String>> provider) {
+            this.provider = provider;
+            return this;
+        }
+
+        public Builder provider(List<String> provider) {
+            this.provider = Optional.ofNullable(provider);
+            return this;
+        }
+
+        public Builder provider(String provider) {
+            this.provider = Optional.of(Collections.singletonList(provider));
+            return this;
+        }
+
+        /**
+         * <p>An indicator of the current status of the message. Allows multiple values to be set in query parameters.</p>
+         */
+        @JsonSetter(value = "status", nulls = Nulls.SKIP)
+        public Builder status(Optional<List<String>> status) {
+            this.status = status;
+            return this;
+        }
+
+        public Builder status(List<String> status) {
+            this.status = Optional.ofNullable(status);
+            return this;
+        }
+
+        public Builder status(String status) {
+            this.status = Optional.of(Collections.singletonList(status));
+            return this;
+        }
+
+        /**
+         * <p>A tag placed in the metadata.tags during a notification send. Allows multiple values to be set in query parameters.</p>
+         */
+        @JsonSetter(value = "tag", nulls = Nulls.SKIP)
+        public Builder tag(Optional<List<String>> tag) {
+            this.tag = tag;
+            return this;
+        }
+
+        public Builder tag(List<String> tag) {
+            this.tag = Optional.ofNullable(tag);
+            return this;
+        }
+
+        public Builder tag(String tag) {
+            this.tag = Optional.of(Collections.singletonList(tag));
+            return this;
+        }
+
+        /**
+         * <p>A boolean value that indicates whether archived messages should be included in the response.</p>
+         */
         @JsonSetter(value = "archived", nulls = Nulls.SKIP)
         public Builder archived(Optional<Boolean> archived) {
             this.archived = archived;
@@ -311,10 +373,13 @@ public final class ListMessagesRequest {
         }
 
         public Builder archived(Boolean archived) {
-            this.archived = Optional.of(archived);
+            this.archived = Optional.ofNullable(archived);
             return this;
         }
 
+        /**
+         * <p>A unique identifier that allows for fetching the next set of messages.</p>
+         */
         @JsonSetter(value = "cursor", nulls = Nulls.SKIP)
         public Builder cursor(Optional<String> cursor) {
             this.cursor = cursor;
@@ -322,10 +387,13 @@ public final class ListMessagesRequest {
         }
 
         public Builder cursor(String cursor) {
-            this.cursor = Optional.of(cursor);
+            this.cursor = Optional.ofNullable(cursor);
             return this;
         }
 
+        /**
+         * <p>A unique identifier representing the event that was used to send the event.</p>
+         */
         @JsonSetter(value = "event", nulls = Nulls.SKIP)
         public Builder event(Optional<String> event) {
             this.event = event;
@@ -333,10 +401,13 @@ public final class ListMessagesRequest {
         }
 
         public Builder event(String event) {
-            this.event = Optional.of(event);
+            this.event = Optional.ofNullable(event);
             return this;
         }
 
+        /**
+         * <p>A unique identifier representing the list the message was sent to.</p>
+         */
         @JsonSetter(value = "list", nulls = Nulls.SKIP)
         public Builder list(Optional<String> list) {
             this.list = list;
@@ -344,10 +415,13 @@ public final class ListMessagesRequest {
         }
 
         public Builder list(String list) {
-            this.list = Optional.of(list);
+            this.list = Optional.ofNullable(list);
             return this;
         }
 
+        /**
+         * <p>A unique identifier representing the message_id returned from either /send or /send/list.</p>
+         */
         @JsonSetter(value = "messageId", nulls = Nulls.SKIP)
         public Builder messageId(Optional<String> messageId) {
             this.messageId = messageId;
@@ -355,10 +429,13 @@ public final class ListMessagesRequest {
         }
 
         public Builder messageId(String messageId) {
-            this.messageId = Optional.of(messageId);
+            this.messageId = Optional.ofNullable(messageId);
             return this;
         }
 
+        /**
+         * <p>A unique identifier representing the notification that was used to send the event.</p>
+         */
         @JsonSetter(value = "notification", nulls = Nulls.SKIP)
         public Builder notification(Optional<String> notification) {
             this.notification = notification;
@@ -366,21 +443,13 @@ public final class ListMessagesRequest {
         }
 
         public Builder notification(String notification) {
-            this.notification = Optional.of(notification);
+            this.notification = Optional.ofNullable(notification);
             return this;
         }
 
-        @JsonSetter(value = "provider", nulls = Nulls.SKIP)
-        public Builder provider(Optional<String> provider) {
-            this.provider = provider;
-            return this;
-        }
-
-        public Builder provider(String provider) {
-            this.provider = Optional.of(provider);
-            return this;
-        }
-
+        /**
+         * <p>A unique identifier representing the recipient associated with the requested profile.</p>
+         */
         @JsonSetter(value = "recipient", nulls = Nulls.SKIP)
         public Builder recipient(Optional<String> recipient) {
             this.recipient = recipient;
@@ -388,32 +457,13 @@ public final class ListMessagesRequest {
         }
 
         public Builder recipient(String recipient) {
-            this.recipient = Optional.of(recipient);
+            this.recipient = Optional.ofNullable(recipient);
             return this;
         }
 
-        @JsonSetter(value = "status", nulls = Nulls.SKIP)
-        public Builder status(Optional<String> status) {
-            this.status = status;
-            return this;
-        }
-
-        public Builder status(String status) {
-            this.status = Optional.of(status);
-            return this;
-        }
-
-        @JsonSetter(value = "tag", nulls = Nulls.SKIP)
-        public Builder tag(Optional<String> tag) {
-            this.tag = tag;
-            return this;
-        }
-
-        public Builder tag(String tag) {
-            this.tag = Optional.of(tag);
-            return this;
-        }
-
+        /**
+         * <p>A comma delimited list of 'tags'. Messages will be returned if they match any of the tags passed in.</p>
+         */
         @JsonSetter(value = "tags", nulls = Nulls.SKIP)
         public Builder tags(Optional<String> tags) {
             this.tags = tags;
@@ -421,10 +471,13 @@ public final class ListMessagesRequest {
         }
 
         public Builder tags(String tags) {
-            this.tags = Optional.of(tags);
+            this.tags = Optional.ofNullable(tags);
             return this;
         }
 
+        /**
+         * <p>Messages sent with the context of a Tenant</p>
+         */
         @JsonSetter(value = "tenant_id", nulls = Nulls.SKIP)
         public Builder tenantId(Optional<String> tenantId) {
             this.tenantId = tenantId;
@@ -432,10 +485,13 @@ public final class ListMessagesRequest {
         }
 
         public Builder tenantId(String tenantId) {
-            this.tenantId = Optional.of(tenantId);
+            this.tenantId = Optional.ofNullable(tenantId);
             return this;
         }
 
+        /**
+         * <p>The enqueued datetime of a message to filter out messages received before.</p>
+         */
         @JsonSetter(value = "enqueued_after", nulls = Nulls.SKIP)
         public Builder enqueuedAfter(Optional<String> enqueuedAfter) {
             this.enqueuedAfter = enqueuedAfter;
@@ -443,10 +499,13 @@ public final class ListMessagesRequest {
         }
 
         public Builder enqueuedAfter(String enqueuedAfter) {
-            this.enqueuedAfter = Optional.of(enqueuedAfter);
+            this.enqueuedAfter = Optional.ofNullable(enqueuedAfter);
             return this;
         }
 
+        /**
+         * <p>The unique identifier used to trace the requests</p>
+         */
         @JsonSetter(value = "traceId", nulls = Nulls.SKIP)
         public Builder traceId(Optional<String> traceId) {
             this.traceId = traceId;
@@ -454,22 +513,22 @@ public final class ListMessagesRequest {
         }
 
         public Builder traceId(String traceId) {
-            this.traceId = Optional.of(traceId);
+            this.traceId = Optional.ofNullable(traceId);
             return this;
         }
 
         public ListMessagesRequest build() {
             return new ListMessagesRequest(
+                    provider,
+                    status,
+                    tag,
                     archived,
                     cursor,
                     event,
                     list,
                     messageId,
                     notification,
-                    provider,
                     recipient,
-                    status,
-                    tag,
                     tags,
                     tenantId,
                     enqueuedAfter,

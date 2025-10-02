@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = Preferences.Builder.class)
 public final class Preferences {
     private final List<String> templateIds;
@@ -81,7 +81,9 @@ public final class Preferences {
         @JsonSetter(value = "templateIds", nulls = Nulls.SKIP)
         public Builder templateIds(List<String> templateIds) {
             this.templateIds.clear();
-            this.templateIds.addAll(templateIds);
+            if (templateIds != null) {
+                this.templateIds.addAll(templateIds);
+            }
             return this;
         }
 
@@ -91,7 +93,9 @@ public final class Preferences {
         }
 
         public Builder addAllTemplateIds(List<String> templateIds) {
-            this.templateIds.addAll(templateIds);
+            if (templateIds != null) {
+                this.templateIds.addAll(templateIds);
+            }
             return this;
         }
 

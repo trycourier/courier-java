@@ -3,22 +3,81 @@
  */
 package com.courier.api.resources.audiences.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum LogicalOperator {
-    AND("AND"),
+public final class LogicalOperator {
+    public static final LogicalOperator AND = new LogicalOperator(Value.AND, "AND");
 
-    OR("OR");
+    public static final LogicalOperator OR = new LogicalOperator(Value.OR, "OR");
 
-    private final String value;
+    private final Value value;
 
-    LogicalOperator(String value) {
+    private final String string;
+
+    LogicalOperator(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof LogicalOperator && this.string.equals(((LogicalOperator) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case AND:
+                return visitor.visitAnd();
+            case OR:
+                return visitor.visitOr();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static LogicalOperator valueOf(String value) {
+        switch (value) {
+            case "AND":
+                return AND;
+            case "OR":
+                return OR;
+            default:
+                return new LogicalOperator(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        AND,
+
+        OR,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitAnd();
+
+        T visitOr();
+
+        T visitUnknown(String unknownType);
     }
 }

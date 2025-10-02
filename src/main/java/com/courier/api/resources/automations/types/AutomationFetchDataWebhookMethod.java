@@ -3,22 +3,83 @@
  */
 package com.courier.api.resources.automations.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum AutomationFetchDataWebhookMethod {
-    GET("GET"),
+public final class AutomationFetchDataWebhookMethod {
+    public static final AutomationFetchDataWebhookMethod GET = new AutomationFetchDataWebhookMethod(Value.GET, "GET");
 
-    POST("POST");
+    public static final AutomationFetchDataWebhookMethod POST =
+            new AutomationFetchDataWebhookMethod(Value.POST, "POST");
 
-    private final String value;
+    private final Value value;
 
-    AutomationFetchDataWebhookMethod(String value) {
+    private final String string;
+
+    AutomationFetchDataWebhookMethod(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof AutomationFetchDataWebhookMethod
+                        && this.string.equals(((AutomationFetchDataWebhookMethod) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case GET:
+                return visitor.visitGet();
+            case POST:
+                return visitor.visitPost();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static AutomationFetchDataWebhookMethod valueOf(String value) {
+        switch (value) {
+            case "GET":
+                return GET;
+            case "POST":
+                return POST;
+            default:
+                return new AutomationFetchDataWebhookMethod(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        GET,
+
+        POST,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitGet();
+
+        T visitPost();
+
+        T visitUnknown(String unknownType);
     }
 }

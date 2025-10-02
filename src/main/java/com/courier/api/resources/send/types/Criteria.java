@@ -3,26 +3,100 @@
  */
 package com.courier.api.resources.send.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum Criteria {
-    NO_ESCALATION("no-escalation"),
+public final class Criteria {
+    public static final Criteria NO_ESCALATION = new Criteria(Value.NO_ESCALATION, "no-escalation");
 
-    DELIVERED("delivered"),
+    public static final Criteria DELIVERED = new Criteria(Value.DELIVERED, "delivered");
 
-    VIEWED("viewed"),
+    public static final Criteria VIEWED = new Criteria(Value.VIEWED, "viewed");
 
-    ENGAGED("engaged");
+    public static final Criteria ENGAGED = new Criteria(Value.ENGAGED, "engaged");
 
-    private final String value;
+    private final Value value;
 
-    Criteria(String value) {
+    private final String string;
+
+    Criteria(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other) || (other instanceof Criteria && this.string.equals(((Criteria) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case NO_ESCALATION:
+                return visitor.visitNoEscalation();
+            case DELIVERED:
+                return visitor.visitDelivered();
+            case VIEWED:
+                return visitor.visitViewed();
+            case ENGAGED:
+                return visitor.visitEngaged();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static Criteria valueOf(String value) {
+        switch (value) {
+            case "no-escalation":
+                return NO_ESCALATION;
+            case "delivered":
+                return DELIVERED;
+            case "viewed":
+                return VIEWED;
+            case "engaged":
+                return ENGAGED;
+            default:
+                return new Criteria(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        NO_ESCALATION,
+
+        DELIVERED,
+
+        VIEWED,
+
+        ENGAGED,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitNoEscalation();
+
+        T visitDelivered();
+
+        T visitViewed();
+
+        T visitEngaged();
+
+        T visitUnknown(String unknownType);
     }
 }

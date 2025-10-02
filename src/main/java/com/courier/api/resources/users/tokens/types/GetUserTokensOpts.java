@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = GetUserTokensOpts.Builder.class)
 public final class GetUserTokensOpts {
     private final String userId;
@@ -62,7 +63,7 @@ public final class GetUserTokensOpts {
     }
 
     public interface UserIdStage {
-        _FinalStage userId(String userId);
+        _FinalStage userId(@NotNull String userId);
 
         Builder from(GetUserTokensOpts other);
     }
@@ -88,8 +89,8 @@ public final class GetUserTokensOpts {
 
         @java.lang.Override
         @JsonSetter("user_id")
-        public _FinalStage userId(String userId) {
-            this.userId = userId;
+        public _FinalStage userId(@NotNull String userId) {
+            this.userId = Objects.requireNonNull(userId, "userId must not be null");
             return this;
         }
 

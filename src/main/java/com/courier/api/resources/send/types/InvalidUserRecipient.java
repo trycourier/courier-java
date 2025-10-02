@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = InvalidUserRecipient.Builder.class)
 public final class InvalidUserRecipient {
     private final String listId;
@@ -70,13 +71,13 @@ public final class InvalidUserRecipient {
     }
 
     public interface ListIdStage {
-        ListPatternStage listId(String listId);
+        ListPatternStage listId(@NotNull String listId);
 
         Builder from(InvalidUserRecipient other);
     }
 
     public interface ListPatternStage {
-        _FinalStage listPattern(String listPattern);
+        _FinalStage listPattern(@NotNull String listPattern);
     }
 
     public interface _FinalStage {
@@ -103,15 +104,15 @@ public final class InvalidUserRecipient {
 
         @java.lang.Override
         @JsonSetter("list_id")
-        public ListPatternStage listId(String listId) {
-            this.listId = listId;
+        public ListPatternStage listId(@NotNull String listId) {
+            this.listId = Objects.requireNonNull(listId, "listId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("list_pattern")
-        public _FinalStage listPattern(String listPattern) {
-            this.listPattern = listPattern;
+        public _FinalStage listPattern(@NotNull String listPattern) {
+            this.listPattern = Objects.requireNonNull(listPattern, "listPattern must not be null");
             return this;
         }
 

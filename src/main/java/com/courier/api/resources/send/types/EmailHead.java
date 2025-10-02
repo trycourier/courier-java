@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = EmailHead.Builder.class)
 public final class EmailHead {
     private final boolean inheritDefault;
@@ -112,7 +112,7 @@ public final class EmailHead {
 
         @java.lang.Override
         public _FinalStage content(String content) {
-            this.content = Optional.of(content);
+            this.content = Optional.ofNullable(content);
             return this;
         }
 

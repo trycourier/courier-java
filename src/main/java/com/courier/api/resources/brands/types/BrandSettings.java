@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BrandSettings.Builder.class)
 public final class BrandSettings {
     private final Optional<BrandColors> colors;
@@ -111,7 +111,7 @@ public final class BrandSettings {
         }
 
         public Builder colors(BrandColors colors) {
-            this.colors = Optional.of(colors);
+            this.colors = Optional.ofNullable(colors);
             return this;
         }
 
@@ -122,7 +122,7 @@ public final class BrandSettings {
         }
 
         public Builder inapp(Object inapp) {
-            this.inapp = Optional.of(inapp);
+            this.inapp = Optional.ofNullable(inapp);
             return this;
         }
 
@@ -133,7 +133,7 @@ public final class BrandSettings {
         }
 
         public Builder email(Email email) {
-            this.email = Optional.of(email);
+            this.email = Optional.ofNullable(email);
             return this;
         }
 

@@ -14,8 +14,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = SendToMsTeamsUserId.Builder.class)
 public final class SendToMsTeamsUserId implements IMsTeamsBaseProperties {
     private final String tenantId;
@@ -81,17 +82,17 @@ public final class SendToMsTeamsUserId implements IMsTeamsBaseProperties {
     }
 
     public interface TenantIdStage {
-        ServiceUrlStage tenantId(String tenantId);
+        ServiceUrlStage tenantId(@NotNull String tenantId);
 
         Builder from(SendToMsTeamsUserId other);
     }
 
     public interface ServiceUrlStage {
-        UserIdStage serviceUrl(String serviceUrl);
+        UserIdStage serviceUrl(@NotNull String serviceUrl);
     }
 
     public interface UserIdStage {
-        _FinalStage userId(String userId);
+        _FinalStage userId(@NotNull String userId);
     }
 
     public interface _FinalStage {
@@ -121,22 +122,22 @@ public final class SendToMsTeamsUserId implements IMsTeamsBaseProperties {
 
         @java.lang.Override
         @JsonSetter("tenant_id")
-        public ServiceUrlStage tenantId(String tenantId) {
-            this.tenantId = tenantId;
+        public ServiceUrlStage tenantId(@NotNull String tenantId) {
+            this.tenantId = Objects.requireNonNull(tenantId, "tenantId must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("service_url")
-        public UserIdStage serviceUrl(String serviceUrl) {
-            this.serviceUrl = serviceUrl;
+        public UserIdStage serviceUrl(@NotNull String serviceUrl) {
+            this.serviceUrl = Objects.requireNonNull(serviceUrl, "serviceUrl must not be null");
             return this;
         }
 
         @java.lang.Override
         @JsonSetter("user_id")
-        public _FinalStage userId(String userId) {
-            this.userId = userId;
+        public _FinalStage userId(@NotNull String userId) {
+            this.userId = Objects.requireNonNull(userId, "userId must not be null");
             return this;
         }
 

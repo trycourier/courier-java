@@ -3,22 +3,81 @@
  */
 package com.courier.api.resources.send.types;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum RoutingMethod {
-    ALL("all"),
+public final class RoutingMethod {
+    public static final RoutingMethod ALL = new RoutingMethod(Value.ALL, "all");
 
-    SINGLE("single");
+    public static final RoutingMethod SINGLE = new RoutingMethod(Value.SINGLE, "single");
 
-    private final String value;
+    private final Value value;
 
-    RoutingMethod(String value) {
+    private final String string;
+
+    RoutingMethod(Value value, String string) {
         this.value = value;
+        this.string = string;
     }
 
-    @JsonValue
+    public Value getEnumValue() {
+        return value;
+    }
+
     @java.lang.Override
+    @JsonValue
     public String toString() {
-        return this.value;
+        return this.string;
+    }
+
+    @java.lang.Override
+    public boolean equals(Object other) {
+        return (this == other)
+                || (other instanceof RoutingMethod && this.string.equals(((RoutingMethod) other).string));
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+        return this.string.hashCode();
+    }
+
+    public <T> T visit(Visitor<T> visitor) {
+        switch (value) {
+            case ALL:
+                return visitor.visitAll();
+            case SINGLE:
+                return visitor.visitSingle();
+            case UNKNOWN:
+            default:
+                return visitor.visitUnknown(string);
+        }
+    }
+
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+    public static RoutingMethod valueOf(String value) {
+        switch (value) {
+            case "all":
+                return ALL;
+            case "single":
+                return SINGLE;
+            default:
+                return new RoutingMethod(Value.UNKNOWN, value);
+        }
+    }
+
+    public enum Value {
+        ALL,
+
+        SINGLE,
+
+        UNKNOWN
+    }
+
+    public interface Visitor<T> {
+        T visitAll();
+
+        T visitSingle();
+
+        T visitUnknown(String unknownType);
     }
 }

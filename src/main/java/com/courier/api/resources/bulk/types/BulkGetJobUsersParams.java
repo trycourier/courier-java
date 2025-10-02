@@ -16,8 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.jetbrains.annotations.NotNull;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BulkGetJobUsersParams.Builder.class)
 public final class BulkGetJobUsersParams {
     private final String jobId;
@@ -72,7 +73,7 @@ public final class BulkGetJobUsersParams {
     }
 
     public interface JobIdStage {
-        _FinalStage jobId(String jobId);
+        _FinalStage jobId(@NotNull String jobId);
 
         Builder from(BulkGetJobUsersParams other);
     }
@@ -105,14 +106,14 @@ public final class BulkGetJobUsersParams {
 
         @java.lang.Override
         @JsonSetter("jobId")
-        public _FinalStage jobId(String jobId) {
-            this.jobId = jobId;
+        public _FinalStage jobId(@NotNull String jobId) {
+            this.jobId = Objects.requireNonNull(jobId, "jobId must not be null");
             return this;
         }
 
         @java.lang.Override
         public _FinalStage cursor(String cursor) {
-            this.cursor = Optional.of(cursor);
+            this.cursor = Optional.ofNullable(cursor);
             return this;
         }
 

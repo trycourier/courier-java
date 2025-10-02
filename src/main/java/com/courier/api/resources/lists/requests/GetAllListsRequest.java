@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = GetAllListsRequest.Builder.class)
 public final class GetAllListsRequest {
     private final Optional<String> cursor;
@@ -95,6 +95,9 @@ public final class GetAllListsRequest {
             return this;
         }
 
+        /**
+         * <p>A unique identifier that allows for fetching the next page of lists.</p>
+         */
         @JsonSetter(value = "cursor", nulls = Nulls.SKIP)
         public Builder cursor(Optional<String> cursor) {
             this.cursor = cursor;
@@ -102,10 +105,13 @@ public final class GetAllListsRequest {
         }
 
         public Builder cursor(String cursor) {
-            this.cursor = Optional.of(cursor);
+            this.cursor = Optional.ofNullable(cursor);
             return this;
         }
 
+        /**
+         * <p>&quot;A pattern used to filter the list items returned. Pattern types supported: exact match on <code>list_id</code> or a pattern of one or more pattern parts. you may replace a part with either: <code>*</code> to match all parts in that position, or <code>**</code> to signify a wildcard <code>endsWith</code> pattern match.&quot;</p>
+         */
         @JsonSetter(value = "pattern", nulls = Nulls.SKIP)
         public Builder pattern(Optional<String> pattern) {
             this.pattern = pattern;
@@ -113,7 +119,7 @@ public final class GetAllListsRequest {
         }
 
         public Builder pattern(String pattern) {
-            this.pattern = Optional.of(pattern);
+            this.pattern = Optional.ofNullable(pattern);
             return this;
         }
 

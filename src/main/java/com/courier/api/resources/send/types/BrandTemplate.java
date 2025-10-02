@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 @JsonDeserialize(builder = BrandTemplate.Builder.class)
 public final class BrandTemplate implements IBrandTemplate {
     private final Optional<String> backgroundColor;
@@ -215,7 +215,7 @@ public final class BrandTemplate implements IBrandTemplate {
 
         @java.lang.Override
         public _FinalStage width(String width) {
-            this.width = Optional.of(width);
+            this.width = Optional.ofNullable(width);
             return this;
         }
 
@@ -228,7 +228,7 @@ public final class BrandTemplate implements IBrandTemplate {
 
         @java.lang.Override
         public _FinalStage header(String header) {
-            this.header = Optional.of(header);
+            this.header = Optional.ofNullable(header);
             return this;
         }
 
@@ -241,7 +241,7 @@ public final class BrandTemplate implements IBrandTemplate {
 
         @java.lang.Override
         public _FinalStage head(String head) {
-            this.head = Optional.of(head);
+            this.head = Optional.ofNullable(head);
             return this;
         }
 
@@ -254,7 +254,7 @@ public final class BrandTemplate implements IBrandTemplate {
 
         @java.lang.Override
         public _FinalStage footer(String footer) {
-            this.footer = Optional.of(footer);
+            this.footer = Optional.ofNullable(footer);
             return this;
         }
 
@@ -267,7 +267,7 @@ public final class BrandTemplate implements IBrandTemplate {
 
         @java.lang.Override
         public _FinalStage blocksBackgroundColor(String blocksBackgroundColor) {
-            this.blocksBackgroundColor = Optional.of(blocksBackgroundColor);
+            this.blocksBackgroundColor = Optional.ofNullable(blocksBackgroundColor);
             return this;
         }
 
@@ -280,7 +280,7 @@ public final class BrandTemplate implements IBrandTemplate {
 
         @java.lang.Override
         public _FinalStage backgroundColor(String backgroundColor) {
-            this.backgroundColor = Optional.of(backgroundColor);
+            this.backgroundColor = Optional.ofNullable(backgroundColor);
             return this;
         }
 
