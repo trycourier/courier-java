@@ -29,7 +29,7 @@ internal class ElementalNodeTest {
 
         assertThat(elementalNode.unionMember0()).contains(unionMember0)
         assertThat(elementalNode.unionMember1()).isEmpty
-        assertThat(elementalNode.unionMember2()).isEmpty
+        assertThat(elementalNode.type()).isEmpty
         assertThat(elementalNode.unionMember3()).isEmpty
         assertThat(elementalNode.unionMember4()).isEmpty
         assertThat(elementalNode.unionMember5()).isEmpty
@@ -75,7 +75,7 @@ internal class ElementalNodeTest {
 
         assertThat(elementalNode.unionMember0()).isEmpty
         assertThat(elementalNode.unionMember1()).contains(unionMember1)
-        assertThat(elementalNode.unionMember2()).isEmpty
+        assertThat(elementalNode.type()).isEmpty
         assertThat(elementalNode.unionMember3()).isEmpty
         assertThat(elementalNode.unionMember4()).isEmpty
         assertThat(elementalNode.unionMember5()).isEmpty
@@ -107,36 +107,14 @@ internal class ElementalNodeTest {
     }
 
     @Test
-    fun ofUnionMember2() {
-        val unionMember2 =
-            ElementalNode.UnionMember2.builder()
-                .channel("channel")
-                .addChannel("string")
-                .addElement(
-                    ElementalNode.UnionMember0.builder()
-                        .addChannel("string")
-                        .if_("if")
-                        .loop("loop")
-                        .ref("ref")
-                        .type(ElementalNode.UnionMember0.Type.TEXT)
-                        .build()
-                )
-                .if_("if")
-                .loop("loop")
-                .raw(
-                    ElementalChannelNode.Raw.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("bar"))
-                        .build()
-                )
-                .ref("ref")
-                .type(ElementalNode.UnionMember2.Type.CHANNEL)
-                .build()
+    fun ofType() {
+        val type = ElementalNode.Type.builder().type(ElementalNode.Type.InnerType.CHANNEL).build()
 
-        val elementalNode = ElementalNode.ofUnionMember2(unionMember2)
+        val elementalNode = ElementalNode.ofType(type)
 
         assertThat(elementalNode.unionMember0()).isEmpty
         assertThat(elementalNode.unionMember1()).isEmpty
-        assertThat(elementalNode.unionMember2()).contains(unionMember2)
+        assertThat(elementalNode.type()).contains(type)
         assertThat(elementalNode.unionMember3()).isEmpty
         assertThat(elementalNode.unionMember4()).isEmpty
         assertThat(elementalNode.unionMember5()).isEmpty
@@ -145,32 +123,11 @@ internal class ElementalNodeTest {
     }
 
     @Test
-    fun ofUnionMember2Roundtrip() {
+    fun ofTypeRoundtrip() {
         val jsonMapper = jsonMapper()
         val elementalNode =
-            ElementalNode.ofUnionMember2(
-                ElementalNode.UnionMember2.builder()
-                    .channel("channel")
-                    .addChannel("string")
-                    .addElement(
-                        ElementalNode.UnionMember0.builder()
-                            .addChannel("string")
-                            .if_("if")
-                            .loop("loop")
-                            .ref("ref")
-                            .type(ElementalNode.UnionMember0.Type.TEXT)
-                            .build()
-                    )
-                    .if_("if")
-                    .loop("loop")
-                    .raw(
-                        ElementalChannelNode.Raw.builder()
-                            .putAdditionalProperty("foo", JsonValue.from("bar"))
-                            .build()
-                    )
-                    .ref("ref")
-                    .type(ElementalNode.UnionMember2.Type.CHANNEL)
-                    .build()
+            ElementalNode.ofType(
+                ElementalNode.Type.builder().type(ElementalNode.Type.InnerType.CHANNEL).build()
             )
 
         val roundtrippedElementalNode =
@@ -197,7 +154,7 @@ internal class ElementalNodeTest {
 
         assertThat(elementalNode.unionMember0()).isEmpty
         assertThat(elementalNode.unionMember1()).isEmpty
-        assertThat(elementalNode.unionMember2()).isEmpty
+        assertThat(elementalNode.type()).isEmpty
         assertThat(elementalNode.unionMember3()).contains(unionMember3)
         assertThat(elementalNode.unionMember4()).isEmpty
         assertThat(elementalNode.unionMember5()).isEmpty
@@ -243,7 +200,7 @@ internal class ElementalNodeTest {
 
         assertThat(elementalNode.unionMember0()).isEmpty
         assertThat(elementalNode.unionMember1()).isEmpty
-        assertThat(elementalNode.unionMember2()).isEmpty
+        assertThat(elementalNode.type()).isEmpty
         assertThat(elementalNode.unionMember3()).isEmpty
         assertThat(elementalNode.unionMember4()).contains(unionMember4)
         assertThat(elementalNode.unionMember5()).isEmpty
@@ -289,7 +246,7 @@ internal class ElementalNodeTest {
 
         assertThat(elementalNode.unionMember0()).isEmpty
         assertThat(elementalNode.unionMember1()).isEmpty
-        assertThat(elementalNode.unionMember2()).isEmpty
+        assertThat(elementalNode.type()).isEmpty
         assertThat(elementalNode.unionMember3()).isEmpty
         assertThat(elementalNode.unionMember4()).isEmpty
         assertThat(elementalNode.unionMember5()).contains(unionMember5)
@@ -344,7 +301,7 @@ internal class ElementalNodeTest {
 
         assertThat(elementalNode.unionMember0()).isEmpty
         assertThat(elementalNode.unionMember1()).isEmpty
-        assertThat(elementalNode.unionMember2()).isEmpty
+        assertThat(elementalNode.type()).isEmpty
         assertThat(elementalNode.unionMember3()).isEmpty
         assertThat(elementalNode.unionMember4()).isEmpty
         assertThat(elementalNode.unionMember5()).isEmpty
@@ -399,7 +356,7 @@ internal class ElementalNodeTest {
 
         assertThat(elementalNode.unionMember0()).isEmpty
         assertThat(elementalNode.unionMember1()).isEmpty
-        assertThat(elementalNode.unionMember2()).isEmpty
+        assertThat(elementalNode.type()).isEmpty
         assertThat(elementalNode.unionMember3()).isEmpty
         assertThat(elementalNode.unionMember4()).isEmpty
         assertThat(elementalNode.unionMember5()).isEmpty
