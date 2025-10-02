@@ -19,12 +19,12 @@ internal class ContentTest {
         val elemental =
             Content.ElementalContent.builder()
                 .addElement(
-                    Content.ElementalContent.Element.UnionMember0.builder()
+                    ElementalNode.UnionMember0.builder()
                         .addChannel("string")
                         .if_("if")
                         .loop("loop")
                         .ref("ref")
-                        .type(Content.ElementalContent.Element.UnionMember0.Type.TEXT)
+                        .type(ElementalNode.UnionMember0.Type.TEXT)
                         .build()
                 )
                 .version("version")
@@ -44,12 +44,12 @@ internal class ContentTest {
             Content.ofElemental(
                 Content.ElementalContent.builder()
                     .addElement(
-                        Content.ElementalContent.Element.UnionMember0.builder()
+                        ElementalNode.UnionMember0.builder()
                             .addChannel("string")
                             .if_("if")
                             .loop("loop")
                             .ref("ref")
-                            .type(Content.ElementalContent.Element.UnionMember0.Type.TEXT)
+                            .type(ElementalNode.UnionMember0.Type.TEXT)
                             .build()
                     )
                     .version("version")
