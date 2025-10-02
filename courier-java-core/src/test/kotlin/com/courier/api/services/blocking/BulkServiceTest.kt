@@ -14,6 +14,7 @@ import com.courier.api.models.bulk.UserRecipient
 import com.courier.api.models.lists.subscriptions.RecipientPreferences
 import com.courier.api.models.send.BaseMessage
 import com.courier.api.models.send.MessageContext
+import com.courier.api.models.send.Utm
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -253,7 +254,7 @@ internal class BulkServiceTest {
                                             .addTag("string")
                                             .traceId("trace_id")
                                             .utm(
-                                                BaseMessage.Metadata.Utm.builder()
+                                                Utm.builder()
                                                     .campaign("campaign")
                                                     .content("content")
                                                     .medium("medium")

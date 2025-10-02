@@ -479,10 +479,10 @@ private constructor(
     private constructor(
         private val id: JsonField<String>,
         private val createdAt: JsonField<String>,
-        private val data: JsonField<Data>,
         private val publishedAt: JsonField<String>,
         private val updatedAt: JsonField<String>,
         private val version: JsonField<String>,
+        private val data: JsonField<Data>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -492,7 +492,6 @@ private constructor(
             @JsonProperty("created_at")
             @ExcludeMissing
             createdAt: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("data") @ExcludeMissing data: JsonField<Data> = JsonMissing.of(),
             @JsonProperty("published_at")
             @ExcludeMissing
             publishedAt: JsonField<String> = JsonMissing.of(),
@@ -500,7 +499,17 @@ private constructor(
             @ExcludeMissing
             updatedAt: JsonField<String> = JsonMissing.of(),
             @JsonProperty("version") @ExcludeMissing version: JsonField<String> = JsonMissing.of(),
-        ) : this(id, createdAt, data, publishedAt, updatedAt, version, mutableMapOf())
+            @JsonProperty("data") @ExcludeMissing data: JsonField<Data> = JsonMissing.of(),
+        ) : this(id, createdAt, publishedAt, updatedAt, version, data, mutableMapOf())
+
+        fun toBaseTemplateTenantAssociation(): BaseTemplateTenantAssociation =
+            BaseTemplateTenantAssociation.builder()
+                .id(id)
+                .createdAt(createdAt)
+                .publishedAt(publishedAt)
+                .updatedAt(updatedAt)
+                .version(version)
+                .build()
 
         /**
          * The template's id
@@ -517,14 +526,6 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun createdAt(): String = createdAt.getRequired("created_at")
-
-        /**
-         * The template's data containing it's routing configs
-         *
-         * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun data(): Data = data.getRequired("data")
 
         /**
          * The timestamp at which the template was published
@@ -551,6 +552,14 @@ private constructor(
         fun version(): String = version.getRequired("version")
 
         /**
+         * The template's data containing it's routing configs
+         *
+         * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun data(): Data = data.getRequired("data")
+
+        /**
          * Returns the raw JSON value of [id].
          *
          * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
@@ -563,13 +572,6 @@ private constructor(
          * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("created_at") @ExcludeMissing fun _createdAt(): JsonField<String> = createdAt
-
-        /**
-         * Returns the raw JSON value of [data].
-         *
-         * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
 
         /**
          * Returns the raw JSON value of [publishedAt].
@@ -594,6 +596,13 @@ private constructor(
          */
         @JsonProperty("version") @ExcludeMissing fun _version(): JsonField<String> = version
 
+        /**
+         * Returns the raw JSON value of [data].
+         *
+         * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
+
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
             additionalProperties.put(key, value)
@@ -615,10 +624,10 @@ private constructor(
              * ```java
              * .id()
              * .createdAt()
-             * .data()
              * .publishedAt()
              * .updatedAt()
              * .version()
+             * .data()
              * ```
              */
             @JvmStatic fun builder() = Builder()
@@ -629,20 +638,20 @@ private constructor(
 
             private var id: JsonField<String>? = null
             private var createdAt: JsonField<String>? = null
-            private var data: JsonField<Data>? = null
             private var publishedAt: JsonField<String>? = null
             private var updatedAt: JsonField<String>? = null
             private var version: JsonField<String>? = null
+            private var data: JsonField<Data>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(item: Item) = apply {
                 id = item.id
                 createdAt = item.createdAt
-                data = item.data
                 publishedAt = item.publishedAt
                 updatedAt = item.updatedAt
                 version = item.version
+                data = item.data
                 additionalProperties = item.additionalProperties.toMutableMap()
             }
 
@@ -669,18 +678,6 @@ private constructor(
              * supported value.
              */
             fun createdAt(createdAt: JsonField<String>) = apply { this.createdAt = createdAt }
-
-            /** The template's data containing it's routing configs */
-            fun data(data: Data) = data(JsonField.of(data))
-
-            /**
-             * Sets [Builder.data] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.data] with a well-typed [Data] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
-            fun data(data: JsonField<Data>) = apply { this.data = data }
 
             /** The timestamp at which the template was published */
             fun publishedAt(publishedAt: String) = publishedAt(JsonField.of(publishedAt))
@@ -720,6 +717,18 @@ private constructor(
              */
             fun version(version: JsonField<String>) = apply { this.version = version }
 
+            /** The template's data containing it's routing configs */
+            fun data(data: Data) = data(JsonField.of(data))
+
+            /**
+             * Sets [Builder.data] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.data] with a well-typed [Data] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun data(data: JsonField<Data>) = apply { this.data = data }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -748,10 +757,10 @@ private constructor(
              * ```java
              * .id()
              * .createdAt()
-             * .data()
              * .publishedAt()
              * .updatedAt()
              * .version()
+             * .data()
              * ```
              *
              * @throws IllegalStateException if any required field is unset.
@@ -760,10 +769,10 @@ private constructor(
                 Item(
                     checkRequired("id", id),
                     checkRequired("createdAt", createdAt),
-                    checkRequired("data", data),
                     checkRequired("publishedAt", publishedAt),
                     checkRequired("updatedAt", updatedAt),
                     checkRequired("version", version),
+                    checkRequired("data", data),
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -777,10 +786,10 @@ private constructor(
 
             id()
             createdAt()
-            data().validate()
             publishedAt()
             updatedAt()
             version()
+            data().validate()
             validated = true
         }
 
@@ -802,10 +811,10 @@ private constructor(
         internal fun validity(): Int =
             (if (id.asKnown().isPresent) 1 else 0) +
                 (if (createdAt.asKnown().isPresent) 1 else 0) +
-                (data.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (publishedAt.asKnown().isPresent) 1 else 0) +
                 (if (updatedAt.asKnown().isPresent) 1 else 0) +
-                (if (version.asKnown().isPresent) 1 else 0)
+                (if (version.asKnown().isPresent) 1 else 0) +
+                (data.asKnown().getOrNull()?.validity() ?: 0)
 
         /** The template's data containing it's routing configs */
         class Data
@@ -978,21 +987,21 @@ private constructor(
             return other is Item &&
                 id == other.id &&
                 createdAt == other.createdAt &&
-                data == other.data &&
                 publishedAt == other.publishedAt &&
                 updatedAt == other.updatedAt &&
                 version == other.version &&
+                data == other.data &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(id, createdAt, data, publishedAt, updatedAt, version, additionalProperties)
+            Objects.hash(id, createdAt, publishedAt, updatedAt, version, data, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Item{id=$id, createdAt=$createdAt, data=$data, publishedAt=$publishedAt, updatedAt=$updatedAt, version=$version, additionalProperties=$additionalProperties}"
+            "Item{id=$id, createdAt=$createdAt, publishedAt=$publishedAt, updatedAt=$updatedAt, version=$version, data=$data, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

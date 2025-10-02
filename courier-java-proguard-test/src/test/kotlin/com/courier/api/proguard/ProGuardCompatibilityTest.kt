@@ -9,6 +9,9 @@ import com.courier.api.models.automations.invoke.MergeAlgorithm
 import com.courier.api.models.send.BaseMessage
 import com.courier.api.models.send.Content
 import com.courier.api.models.send.MessageContext
+import com.courier.api.models.send.Utm
+import com.courier.api.models.tenants.templates.ElementalContent
+import com.courier.api.models.tenants.templates.ElementalNode
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import kotlin.reflect.full.memberFunctions
 import kotlin.reflect.jvm.javaMethod
@@ -119,7 +122,7 @@ internal class ProGuardCompatibilityTest {
                         .addTag("string")
                         .traceId("trace_id")
                         .utm(
-                            BaseMessage.Metadata.Utm.builder()
+                            Utm.builder()
                                 .campaign("campaign")
                                 .content("content")
                                 .medium("medium")
@@ -198,14 +201,14 @@ internal class ProGuardCompatibilityTest {
         val jsonMapper = jsonMapper()
         val content =
             Content.ofElemental(
-                Content.ElementalContent.builder()
+                ElementalContent.builder()
                     .addElement(
-                        Content.ElementalContent.Element.UnionMember0.builder()
+                        ElementalNode.UnionMember0.builder()
                             .addChannel("string")
                             .if_("if")
                             .loop("loop")
                             .ref("ref")
-                            .type(Content.ElementalContent.Element.UnionMember0.Type.TEXT)
+                            .type(ElementalNode.UnionMember0.Type.TEXT)
                             .build()
                     )
                     .version("version")

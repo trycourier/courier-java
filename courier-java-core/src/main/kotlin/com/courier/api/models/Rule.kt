@@ -1,14 +1,12 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.api.models.brands
+package com.courier.api.models
 
 import com.courier.api.core.ExcludeMissing
 import com.courier.api.core.JsonField
 import com.courier.api.core.JsonMissing
 import com.courier.api.core.JsonValue
-import com.courier.api.core.checkKnown
 import com.courier.api.core.checkRequired
-import com.courier.api.core.toImmutable
 import com.courier.api.errors.CourierInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -16,34 +14,48 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Collections
 import java.util.Objects
+import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-class BrandSnippets
+class Rule
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    private val items: JsonField<List<BrandSnippet>>,
+    private val until: JsonField<String>,
+    private val start: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("items")
-        @ExcludeMissing
-        items: JsonField<List<BrandSnippet>> = JsonMissing.of()
-    ) : this(items, mutableMapOf())
+        @JsonProperty("until") @ExcludeMissing until: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("start") @ExcludeMissing start: JsonField<String> = JsonMissing.of(),
+    ) : this(until, start, mutableMapOf())
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun items(): List<BrandSnippet> = items.getRequired("items")
+    fun until(): String = until.getRequired("until")
 
     /**
-     * Returns the raw JSON value of [items].
-     *
-     * Unlike [items], this method doesn't throw if the JSON field has an unexpected type.
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
-    @JsonProperty("items") @ExcludeMissing fun _items(): JsonField<List<BrandSnippet>> = items
+    fun start(): Optional<String> = start.getOptional("start")
+
+    /**
+     * Returns the raw JSON value of [until].
+     *
+     * Unlike [until], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("until") @ExcludeMissing fun _until(): JsonField<String> = until
+
+    /**
+     * Returns the raw JSON value of [start].
+     *
+     * Unlike [start], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("start") @ExcludeMissing fun _start(): JsonField<String> = start
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -60,50 +72,52 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [BrandSnippets].
+         * Returns a mutable builder for constructing an instance of [Rule].
          *
          * The following fields are required:
          * ```java
-         * .items()
+         * .until()
          * ```
          */
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [BrandSnippets]. */
+    /** A builder for [Rule]. */
     class Builder internal constructor() {
 
-        private var items: JsonField<MutableList<BrandSnippet>>? = null
+        private var until: JsonField<String>? = null
+        private var start: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(brandSnippets: BrandSnippets) = apply {
-            items = brandSnippets.items.map { it.toMutableList() }
-            additionalProperties = brandSnippets.additionalProperties.toMutableMap()
+        internal fun from(rule: Rule) = apply {
+            until = rule.until
+            start = rule.start
+            additionalProperties = rule.additionalProperties.toMutableMap()
         }
 
-        fun items(items: List<BrandSnippet>) = items(JsonField.of(items))
-
-        /**
-         * Sets [Builder.items] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.items] with a well-typed `List<BrandSnippet>` value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun items(items: JsonField<List<BrandSnippet>>) = apply {
-            this.items = items.map { it.toMutableList() }
-        }
+        fun until(until: String) = until(JsonField.of(until))
 
         /**
-         * Adds a single [BrandSnippet] to [items].
+         * Sets [Builder.until] to an arbitrary JSON value.
          *
-         * @throws IllegalStateException if the field was previously set to a non-list.
+         * You should usually call [Builder.until] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun addItem(item: BrandSnippet) = apply {
-            items =
-                (items ?: JsonField.of(mutableListOf())).also { checkKnown("items", it).add(item) }
-        }
+        fun until(until: JsonField<String>) = apply { this.until = until }
+
+        fun start(start: String?) = start(JsonField.ofNullable(start))
+
+        /** Alias for calling [Builder.start] with `start.orElse(null)`. */
+        fun start(start: Optional<String>) = start(start.getOrNull())
+
+        /**
+         * Sets [Builder.start] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.start] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun start(start: JsonField<String>) = apply { this.start = start }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -125,32 +139,30 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [BrandSnippets].
+         * Returns an immutable instance of [Rule].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
          * ```java
-         * .items()
+         * .until()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): BrandSnippets =
-            BrandSnippets(
-                checkRequired("items", items).map { it.toImmutable() },
-                additionalProperties.toMutableMap(),
-            )
+        fun build(): Rule =
+            Rule(checkRequired("until", until), start, additionalProperties.toMutableMap())
     }
 
     private var validated: Boolean = false
 
-    fun validate(): BrandSnippets = apply {
+    fun validate(): Rule = apply {
         if (validated) {
             return@apply
         }
 
-        items().forEach { it.validate() }
+        until()
+        start()
         validated = true
     }
 
@@ -169,22 +181,23 @@ private constructor(
      */
     @JvmSynthetic
     internal fun validity(): Int =
-        (items.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
+        (if (until.asKnown().isPresent) 1 else 0) + (if (start.asKnown().isPresent) 1 else 0)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return other is BrandSnippets &&
-            items == other.items &&
+        return other is Rule &&
+            until == other.until &&
+            start == other.start &&
             additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy { Objects.hash(items, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(until, start, additionalProperties) }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "BrandSnippets{items=$items, additionalProperties=$additionalProperties}"
+        "Rule{until=$until, start=$start, additionalProperties=$additionalProperties}"
 }

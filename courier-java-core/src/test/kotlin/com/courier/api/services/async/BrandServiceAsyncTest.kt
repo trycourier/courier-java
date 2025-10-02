@@ -5,11 +5,14 @@ package com.courier.api.services.async
 import com.courier.api.TestServerExtension
 import com.courier.api.client.okhttp.CourierOkHttpClientAsync
 import com.courier.api.core.JsonValue
+import com.courier.api.models.brands.BrandColors
 import com.courier.api.models.brands.BrandCreateParams
 import com.courier.api.models.brands.BrandListParams
 import com.courier.api.models.brands.BrandSettings
+import com.courier.api.models.brands.BrandSnippet
 import com.courier.api.models.brands.BrandSnippets
 import com.courier.api.models.brands.BrandUpdateParams
+import com.courier.api.models.brands.Email
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -34,14 +37,14 @@ internal class BrandServiceAsyncTest {
                     .settings(
                         BrandSettings.builder()
                             .colors(
-                                BrandSettings.Colors.builder()
+                                BrandColors.builder()
                                     .primary("primary")
                                     .secondary("secondary")
                                     .tertiary("tertiary")
                                     .build()
                             )
                             .email(
-                                BrandSettings.Email.builder()
+                                Email.builder()
                                     .footer(JsonValue.from(mapOf<String, Any>()))
                                     .header(JsonValue.from(mapOf<String, Any>()))
                                     .build()
@@ -53,8 +56,8 @@ internal class BrandServiceAsyncTest {
                     .snippets(
                         BrandSnippets.builder()
                             .addItem(
-                                BrandSnippets.Item.builder()
-                                    .format(BrandSnippets.Item.Format.HANDLEBARS)
+                                BrandSnippet.builder()
+                                    .format(BrandSnippet.Format.HANDLEBARS)
                                     .name("name")
                                     .value("value")
                                     .build()
@@ -102,14 +105,14 @@ internal class BrandServiceAsyncTest {
                     .settings(
                         BrandSettings.builder()
                             .colors(
-                                BrandSettings.Colors.builder()
+                                BrandColors.builder()
                                     .primary("primary")
                                     .secondary("secondary")
                                     .tertiary("tertiary")
                                     .build()
                             )
                             .email(
-                                BrandSettings.Email.builder()
+                                Email.builder()
                                     .footer(JsonValue.from(mapOf<String, Any>()))
                                     .header(JsonValue.from(mapOf<String, Any>()))
                                     .build()
@@ -120,8 +123,8 @@ internal class BrandServiceAsyncTest {
                     .snippets(
                         BrandSnippets.builder()
                             .addItem(
-                                BrandSnippets.Item.builder()
-                                    .format(BrandSnippets.Item.Format.HANDLEBARS)
+                                BrandSnippet.builder()
+                                    .format(BrandSnippet.Format.HANDLEBARS)
                                     .name("name")
                                     .value("value")
                                     .build()

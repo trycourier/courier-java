@@ -23,6 +23,9 @@ internal class TemplateListResponseTest {
                     TemplateListResponse.Item.builder()
                         .id("id")
                         .createdAt("created_at")
+                        .publishedAt("published_at")
+                        .updatedAt("updated_at")
+                        .version("version")
                         .data(
                             TemplateListResponse.Item.Data.builder()
                                 .routing(
@@ -33,9 +36,6 @@ internal class TemplateListResponseTest {
                                 )
                                 .build()
                         )
-                        .publishedAt("published_at")
-                        .updatedAt("updated_at")
-                        .version("version")
                         .build()
                 )
                 .nextUrl("next_url")
@@ -50,6 +50,9 @@ internal class TemplateListResponseTest {
                 TemplateListResponse.Item.builder()
                     .id("id")
                     .createdAt("created_at")
+                    .publishedAt("published_at")
+                    .updatedAt("updated_at")
+                    .version("version")
                     .data(
                         TemplateListResponse.Item.Data.builder()
                             .routing(
@@ -60,9 +63,6 @@ internal class TemplateListResponseTest {
                             )
                             .build()
                     )
-                    .publishedAt("published_at")
-                    .updatedAt("updated_at")
-                    .version("version")
                     .build()
             )
         assertThat(templateListResponse.nextUrl()).contains("next_url")
@@ -81,6 +81,9 @@ internal class TemplateListResponseTest {
                     TemplateListResponse.Item.builder()
                         .id("id")
                         .createdAt("created_at")
+                        .publishedAt("published_at")
+                        .updatedAt("updated_at")
+                        .version("version")
                         .data(
                             TemplateListResponse.Item.Data.builder()
                                 .routing(
@@ -91,9 +94,6 @@ internal class TemplateListResponseTest {
                                 )
                                 .build()
                         )
-                        .publishedAt("published_at")
-                        .updatedAt("updated_at")
-                        .version("version")
                         .build()
                 )
                 .nextUrl("next_url")

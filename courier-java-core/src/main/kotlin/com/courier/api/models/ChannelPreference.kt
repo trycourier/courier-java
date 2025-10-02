@@ -1,15 +1,14 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.api.models.brands
+package com.courier.api.models
 
 import com.courier.api.core.ExcludeMissing
 import com.courier.api.core.JsonField
 import com.courier.api.core.JsonMissing
 import com.courier.api.core.JsonValue
-import com.courier.api.core.checkKnown
 import com.courier.api.core.checkRequired
-import com.courier.api.core.toImmutable
 import com.courier.api.errors.CourierInvalidDataException
+import com.courier.api.models.tenants.defaultpreferences.items.ChannelClassification
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -18,32 +17,34 @@ import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
-class BrandSnippets
+class ChannelPreference
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    private val items: JsonField<List<BrandSnippet>>,
+    private val channel: JsonField<ChannelClassification>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("items")
+        @JsonProperty("channel")
         @ExcludeMissing
-        items: JsonField<List<BrandSnippet>> = JsonMissing.of()
-    ) : this(items, mutableMapOf())
+        channel: JsonField<ChannelClassification> = JsonMissing.of()
+    ) : this(channel, mutableMapOf())
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun items(): List<BrandSnippet> = items.getRequired("items")
+    fun channel(): ChannelClassification = channel.getRequired("channel")
 
     /**
-     * Returns the raw JSON value of [items].
+     * Returns the raw JSON value of [channel].
      *
-     * Unlike [items], this method doesn't throw if the JSON field has an unexpected type.
+     * Unlike [channel], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("items") @ExcludeMissing fun _items(): JsonField<List<BrandSnippet>> = items
+    @JsonProperty("channel")
+    @ExcludeMissing
+    fun _channel(): JsonField<ChannelClassification> = channel
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -60,50 +61,38 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [BrandSnippets].
+         * Returns a mutable builder for constructing an instance of [ChannelPreference].
          *
          * The following fields are required:
          * ```java
-         * .items()
+         * .channel()
          * ```
          */
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [BrandSnippets]. */
+    /** A builder for [ChannelPreference]. */
     class Builder internal constructor() {
 
-        private var items: JsonField<MutableList<BrandSnippet>>? = null
+        private var channel: JsonField<ChannelClassification>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(brandSnippets: BrandSnippets) = apply {
-            items = brandSnippets.items.map { it.toMutableList() }
-            additionalProperties = brandSnippets.additionalProperties.toMutableMap()
+        internal fun from(channelPreference: ChannelPreference) = apply {
+            channel = channelPreference.channel
+            additionalProperties = channelPreference.additionalProperties.toMutableMap()
         }
 
-        fun items(items: List<BrandSnippet>) = items(JsonField.of(items))
+        fun channel(channel: ChannelClassification) = channel(JsonField.of(channel))
 
         /**
-         * Sets [Builder.items] to an arbitrary JSON value.
+         * Sets [Builder.channel] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.items] with a well-typed `List<BrandSnippet>` value
+         * You should usually call [Builder.channel] with a well-typed [ChannelClassification] value
          * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun items(items: JsonField<List<BrandSnippet>>) = apply {
-            this.items = items.map { it.toMutableList() }
-        }
-
-        /**
-         * Adds a single [BrandSnippet] to [items].
-         *
-         * @throws IllegalStateException if the field was previously set to a non-list.
-         */
-        fun addItem(item: BrandSnippet) = apply {
-            items =
-                (items ?: JsonField.of(mutableListOf())).also { checkKnown("items", it).add(item) }
-        }
+        fun channel(channel: JsonField<ChannelClassification>) = apply { this.channel = channel }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -125,32 +114,32 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [BrandSnippets].
+         * Returns an immutable instance of [ChannelPreference].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
          * ```java
-         * .items()
+         * .channel()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): BrandSnippets =
-            BrandSnippets(
-                checkRequired("items", items).map { it.toImmutable() },
+        fun build(): ChannelPreference =
+            ChannelPreference(
+                checkRequired("channel", channel),
                 additionalProperties.toMutableMap(),
             )
     }
 
     private var validated: Boolean = false
 
-    fun validate(): BrandSnippets = apply {
+    fun validate(): ChannelPreference = apply {
         if (validated) {
             return@apply
         }
 
-        items().forEach { it.validate() }
+        channel().validate()
         validated = true
     }
 
@@ -167,24 +156,22 @@ private constructor(
      *
      * Used for best match union deserialization.
      */
-    @JvmSynthetic
-    internal fun validity(): Int =
-        (items.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
+    @JvmSynthetic internal fun validity(): Int = (channel.asKnown().getOrNull()?.validity() ?: 0)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return other is BrandSnippets &&
-            items == other.items &&
+        return other is ChannelPreference &&
+            channel == other.channel &&
             additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy { Objects.hash(items, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(channel, additionalProperties) }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "BrandSnippets{items=$items, additionalProperties=$additionalProperties}"
+        "ChannelPreference{channel=$channel, additionalProperties=$additionalProperties}"
 }

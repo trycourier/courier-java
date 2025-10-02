@@ -14,8 +14,8 @@ internal class BrandSnippetsTest {
         val brandSnippets =
             BrandSnippets.builder()
                 .addItem(
-                    BrandSnippets.Item.builder()
-                        .format(BrandSnippets.Item.Format.HANDLEBARS)
+                    BrandSnippet.builder()
+                        .format(BrandSnippet.Format.HANDLEBARS)
                         .name("name")
                         .value("value")
                         .build()
@@ -24,8 +24,8 @@ internal class BrandSnippetsTest {
 
         assertThat(brandSnippets.items())
             .containsExactly(
-                BrandSnippets.Item.builder()
-                    .format(BrandSnippets.Item.Format.HANDLEBARS)
+                BrandSnippet.builder()
+                    .format(BrandSnippet.Format.HANDLEBARS)
                     .name("name")
                     .value("value")
                     .build()
@@ -38,8 +38,8 @@ internal class BrandSnippetsTest {
         val brandSnippets =
             BrandSnippets.builder()
                 .addItem(
-                    BrandSnippets.Item.builder()
-                        .format(BrandSnippets.Item.Format.HANDLEBARS)
+                    BrandSnippet.builder()
+                        .format(BrandSnippet.Format.HANDLEBARS)
                         .name("name")
                         .value("value")
                         .build()

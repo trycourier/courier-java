@@ -59,7 +59,7 @@ internal class BaseMessageTest {
                         .addTag("string")
                         .traceId("trace_id")
                         .utm(
-                            BaseMessage.Metadata.Utm.builder()
+                            Utm.builder()
                                 .campaign("campaign")
                                 .content("content")
                                 .medium("medium")
@@ -175,7 +175,7 @@ internal class BaseMessageTest {
                     .addTag("string")
                     .traceId("trace_id")
                     .utm(
-                        BaseMessage.Metadata.Utm.builder()
+                        Utm.builder()
                             .campaign("campaign")
                             .content("content")
                             .medium("medium")
@@ -294,7 +294,7 @@ internal class BaseMessageTest {
                         .addTag("string")
                         .traceId("trace_id")
                         .utm(
-                            BaseMessage.Metadata.Utm.builder()
+                            Utm.builder()
                                 .campaign("campaign")
                                 .content("content")
                                 .medium("medium")

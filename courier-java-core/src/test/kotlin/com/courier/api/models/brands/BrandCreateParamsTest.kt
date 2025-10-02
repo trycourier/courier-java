@@ -15,14 +15,14 @@ internal class BrandCreateParamsTest {
             .settings(
                 BrandSettings.builder()
                     .colors(
-                        BrandSettings.Colors.builder()
+                        BrandColors.builder()
                             .primary("primary")
                             .secondary("secondary")
                             .tertiary("tertiary")
                             .build()
                     )
                     .email(
-                        BrandSettings.Email.builder()
+                        Email.builder()
                             .footer(JsonValue.from(mapOf<String, Any>()))
                             .header(JsonValue.from(mapOf<String, Any>()))
                             .build()
@@ -34,8 +34,8 @@ internal class BrandCreateParamsTest {
             .snippets(
                 BrandSnippets.builder()
                     .addItem(
-                        BrandSnippets.Item.builder()
-                            .format(BrandSnippets.Item.Format.HANDLEBARS)
+                        BrandSnippet.builder()
+                            .format(BrandSnippet.Format.HANDLEBARS)
                             .name("name")
                             .value("value")
                             .build()
@@ -53,14 +53,14 @@ internal class BrandCreateParamsTest {
                 .settings(
                     BrandSettings.builder()
                         .colors(
-                            BrandSettings.Colors.builder()
+                            BrandColors.builder()
                                 .primary("primary")
                                 .secondary("secondary")
                                 .tertiary("tertiary")
                                 .build()
                         )
                         .email(
-                            BrandSettings.Email.builder()
+                            Email.builder()
                                 .footer(JsonValue.from(mapOf<String, Any>()))
                                 .header(JsonValue.from(mapOf<String, Any>()))
                                 .build()
@@ -72,8 +72,8 @@ internal class BrandCreateParamsTest {
                 .snippets(
                     BrandSnippets.builder()
                         .addItem(
-                            BrandSnippets.Item.builder()
-                                .format(BrandSnippets.Item.Format.HANDLEBARS)
+                            BrandSnippet.builder()
+                                .format(BrandSnippet.Format.HANDLEBARS)
                                 .name("name")
                                 .value("value")
                                 .build()
@@ -89,14 +89,14 @@ internal class BrandCreateParamsTest {
             .isEqualTo(
                 BrandSettings.builder()
                     .colors(
-                        BrandSettings.Colors.builder()
+                        BrandColors.builder()
                             .primary("primary")
                             .secondary("secondary")
                             .tertiary("tertiary")
                             .build()
                     )
                     .email(
-                        BrandSettings.Email.builder()
+                        Email.builder()
                             .footer(JsonValue.from(mapOf<String, Any>()))
                             .header(JsonValue.from(mapOf<String, Any>()))
                             .build()
@@ -109,8 +109,8 @@ internal class BrandCreateParamsTest {
             .contains(
                 BrandSnippets.builder()
                     .addItem(
-                        BrandSnippets.Item.builder()
-                            .format(BrandSnippets.Item.Format.HANDLEBARS)
+                        BrandSnippet.builder()
+                            .format(BrandSnippet.Format.HANDLEBARS)
                             .name("name")
                             .value("value")
                             .build()
