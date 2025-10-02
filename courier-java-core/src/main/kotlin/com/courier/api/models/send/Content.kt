@@ -339,9 +339,8 @@ private constructor(
             fun addElement(unionMember1: ElementalNode.UnionMember1) =
                 addElement(ElementalNode.ofUnionMember1(unionMember1))
 
-            /** Alias for calling [addElement] with `ElementalNode.ofUnionMember2(unionMember2)`. */
-            fun addElement(unionMember2: ElementalNode.UnionMember2) =
-                addElement(ElementalNode.ofUnionMember2(unionMember2))
+            /** Alias for calling [addElement] with `ElementalNode.ofType(type)`. */
+            fun addElement(type: ElementalNode.Type) = addElement(ElementalNode.ofType(type))
 
             /** Alias for calling [addElement] with `ElementalNode.ofUnionMember3(unionMember3)`. */
             fun addElement(unionMember3: ElementalNode.UnionMember3) =
