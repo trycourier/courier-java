@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Collections
 import java.util.Objects
 
-class TemplateRetrieveResponse
+class BaseTemplateTenantAssociation
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
@@ -129,7 +129,8 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [TemplateRetrieveResponse].
+         * Returns a mutable builder for constructing an instance of
+         * [BaseTemplateTenantAssociation].
          *
          * The following fields are required:
          * ```java
@@ -143,7 +144,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [TemplateRetrieveResponse]. */
+    /** A builder for [BaseTemplateTenantAssociation]. */
     class Builder internal constructor() {
 
         private var id: JsonField<String>? = null
@@ -154,13 +155,13 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(templateRetrieveResponse: TemplateRetrieveResponse) = apply {
-            id = templateRetrieveResponse.id
-            createdAt = templateRetrieveResponse.createdAt
-            publishedAt = templateRetrieveResponse.publishedAt
-            updatedAt = templateRetrieveResponse.updatedAt
-            version = templateRetrieveResponse.version
-            additionalProperties = templateRetrieveResponse.additionalProperties.toMutableMap()
+        internal fun from(baseTemplateTenantAssociation: BaseTemplateTenantAssociation) = apply {
+            id = baseTemplateTenantAssociation.id
+            createdAt = baseTemplateTenantAssociation.createdAt
+            publishedAt = baseTemplateTenantAssociation.publishedAt
+            updatedAt = baseTemplateTenantAssociation.updatedAt
+            version = baseTemplateTenantAssociation.version
+            additionalProperties = baseTemplateTenantAssociation.additionalProperties.toMutableMap()
         }
 
         /** The template's id */
@@ -241,7 +242,7 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [TemplateRetrieveResponse].
+         * Returns an immutable instance of [BaseTemplateTenantAssociation].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
@@ -256,8 +257,8 @@ private constructor(
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): TemplateRetrieveResponse =
-            TemplateRetrieveResponse(
+        fun build(): BaseTemplateTenantAssociation =
+            BaseTemplateTenantAssociation(
                 checkRequired("id", id),
                 checkRequired("createdAt", createdAt),
                 checkRequired("publishedAt", publishedAt),
@@ -269,7 +270,7 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): TemplateRetrieveResponse = apply {
+    fun validate(): BaseTemplateTenantAssociation = apply {
         if (validated) {
             return@apply
         }
@@ -308,7 +309,7 @@ private constructor(
             return true
         }
 
-        return other is TemplateRetrieveResponse &&
+        return other is BaseTemplateTenantAssociation &&
             id == other.id &&
             createdAt == other.createdAt &&
             publishedAt == other.publishedAt &&
@@ -324,5 +325,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "TemplateRetrieveResponse{id=$id, createdAt=$createdAt, publishedAt=$publishedAt, updatedAt=$updatedAt, version=$version, additionalProperties=$additionalProperties}"
+        "BaseTemplateTenantAssociation{id=$id, createdAt=$createdAt, publishedAt=$publishedAt, updatedAt=$updatedAt, version=$version, additionalProperties=$additionalProperties}"
 }

@@ -15,14 +15,14 @@ internal class BrandSettingsTest {
         val brandSettings =
             BrandSettings.builder()
                 .colors(
-                    BrandSettings.Colors.builder()
+                    BrandColors.builder()
                         .primary("primary")
                         .secondary("secondary")
                         .tertiary("tertiary")
                         .build()
                 )
                 .email(
-                    BrandSettings.Email.builder()
+                    Email.builder()
                         .footer(JsonValue.from(mapOf<String, Any>()))
                         .header(JsonValue.from(mapOf<String, Any>()))
                         .build()
@@ -32,7 +32,7 @@ internal class BrandSettingsTest {
 
         assertThat(brandSettings.colors())
             .contains(
-                BrandSettings.Colors.builder()
+                BrandColors.builder()
                     .primary("primary")
                     .secondary("secondary")
                     .tertiary("tertiary")
@@ -40,7 +40,7 @@ internal class BrandSettingsTest {
             )
         assertThat(brandSettings.email())
             .contains(
-                BrandSettings.Email.builder()
+                Email.builder()
                     .footer(JsonValue.from(mapOf<String, Any>()))
                     .header(JsonValue.from(mapOf<String, Any>()))
                     .build()
@@ -54,14 +54,14 @@ internal class BrandSettingsTest {
         val brandSettings =
             BrandSettings.builder()
                 .colors(
-                    BrandSettings.Colors.builder()
+                    BrandColors.builder()
                         .primary("primary")
                         .secondary("secondary")
                         .tertiary("tertiary")
                         .build()
                 )
                 .email(
-                    BrandSettings.Email.builder()
+                    Email.builder()
                         .footer(JsonValue.from(mapOf<String, Any>()))
                         .header(JsonValue.from(mapOf<String, Any>()))
                         .build()

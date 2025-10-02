@@ -5,10 +5,10 @@ package com.courier.api.services.async.tenants
 import com.courier.api.core.ClientOptions
 import com.courier.api.core.RequestOptions
 import com.courier.api.core.http.HttpResponseFor
+import com.courier.api.models.tenants.templates.BaseTemplateTenantAssociation
 import com.courier.api.models.tenants.templates.TemplateListParams
 import com.courier.api.models.tenants.templates.TemplateListResponse
 import com.courier.api.models.tenants.templates.TemplateRetrieveParams
-import com.courier.api.models.tenants.templates.TemplateRetrieveResponse
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
@@ -30,7 +30,7 @@ interface TemplateServiceAsync {
     fun retrieve(
         templateId: String,
         params: TemplateRetrieveParams,
-    ): CompletableFuture<TemplateRetrieveResponse> =
+    ): CompletableFuture<BaseTemplateTenantAssociation> =
         retrieve(templateId, params, RequestOptions.none())
 
     /** @see retrieve */
@@ -38,18 +38,18 @@ interface TemplateServiceAsync {
         templateId: String,
         params: TemplateRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<TemplateRetrieveResponse> =
+    ): CompletableFuture<BaseTemplateTenantAssociation> =
         retrieve(params.toBuilder().templateId(templateId).build(), requestOptions)
 
     /** @see retrieve */
-    fun retrieve(params: TemplateRetrieveParams): CompletableFuture<TemplateRetrieveResponse> =
+    fun retrieve(params: TemplateRetrieveParams): CompletableFuture<BaseTemplateTenantAssociation> =
         retrieve(params, RequestOptions.none())
 
     /** @see retrieve */
     fun retrieve(
         params: TemplateRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<TemplateRetrieveResponse>
+    ): CompletableFuture<BaseTemplateTenantAssociation>
 
     /** List Templates in Tenant */
     fun list(tenantId: String): CompletableFuture<TemplateListResponse> =
@@ -107,7 +107,7 @@ interface TemplateServiceAsync {
         fun retrieve(
             templateId: String,
             params: TemplateRetrieveParams,
-        ): CompletableFuture<HttpResponseFor<TemplateRetrieveResponse>> =
+        ): CompletableFuture<HttpResponseFor<BaseTemplateTenantAssociation>> =
             retrieve(templateId, params, RequestOptions.none())
 
         /** @see retrieve */
@@ -115,20 +115,20 @@ interface TemplateServiceAsync {
             templateId: String,
             params: TemplateRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<TemplateRetrieveResponse>> =
+        ): CompletableFuture<HttpResponseFor<BaseTemplateTenantAssociation>> =
             retrieve(params.toBuilder().templateId(templateId).build(), requestOptions)
 
         /** @see retrieve */
         fun retrieve(
             params: TemplateRetrieveParams
-        ): CompletableFuture<HttpResponseFor<TemplateRetrieveResponse>> =
+        ): CompletableFuture<HttpResponseFor<BaseTemplateTenantAssociation>> =
             retrieve(params, RequestOptions.none())
 
         /** @see retrieve */
         fun retrieve(
             params: TemplateRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<TemplateRetrieveResponse>>
+        ): CompletableFuture<HttpResponseFor<BaseTemplateTenantAssociation>>
 
         /**
          * Returns a raw HTTP response for `get /tenants/{tenant_id}/templates`, but is otherwise

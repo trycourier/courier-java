@@ -23,7 +23,7 @@ internal class TemplateServiceTest {
                 .build()
         val templateService = client.tenants().templates()
 
-        val template =
+        val baseTemplateTenantAssociation =
             templateService.retrieve(
                 TemplateRetrieveParams.builder()
                     .tenantId("tenant_id")
@@ -31,7 +31,7 @@ internal class TemplateServiceTest {
                     .build()
             )
 
-        template.validate()
+        baseTemplateTenantAssociation.validate()
     }
 
     @Disabled("Prism tests are disabled")

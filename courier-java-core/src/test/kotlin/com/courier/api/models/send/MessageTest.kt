@@ -5,6 +5,8 @@ package com.courier.api.models.send
 import com.courier.api.core.JsonValue
 import com.courier.api.core.jsonMapper
 import com.courier.api.errors.CourierInvalidDataException
+import com.courier.api.models.tenants.templates.ElementalContent
+import com.courier.api.models.tenants.templates.ElementalNode
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -63,7 +65,7 @@ internal class MessageTest {
                         .addTag("string")
                         .traceId("trace_id")
                         .utm(
-                            BaseMessage.Metadata.Utm.builder()
+                            Utm.builder()
                                 .campaign("campaign")
                                 .content("content")
                                 .medium("medium")
@@ -146,14 +148,14 @@ internal class MessageTest {
                         .build()
                 )
                 .content(
-                    Content.ElementalContent.builder()
+                    ElementalContent.builder()
                         .addElement(
-                            Content.ElementalContent.Element.UnionMember0.builder()
+                            ElementalNode.UnionMember0.builder()
                                 .addChannel("string")
                                 .if_("if")
                                 .loop("loop")
                                 .ref("ref")
-                                .type(Content.ElementalContent.Element.UnionMember0.Type.TEXT)
+                                .type(ElementalNode.UnionMember0.Type.TEXT)
                                 .build()
                         )
                         .version("version")
@@ -222,7 +224,7 @@ internal class MessageTest {
                             .addTag("string")
                             .traceId("trace_id")
                             .utm(
-                                BaseMessage.Metadata.Utm.builder()
+                                Utm.builder()
                                     .campaign("campaign")
                                     .content("content")
                                     .medium("medium")
@@ -309,14 +311,14 @@ internal class MessageTest {
                             .build()
                     )
                     .content(
-                        Content.ElementalContent.builder()
+                        ElementalContent.builder()
                             .addElement(
-                                Content.ElementalContent.Element.UnionMember0.builder()
+                                ElementalNode.UnionMember0.builder()
                                     .addChannel("string")
                                     .if_("if")
                                     .loop("loop")
                                     .ref("ref")
-                                    .type(Content.ElementalContent.Element.UnionMember0.Type.TEXT)
+                                    .type(ElementalNode.UnionMember0.Type.TEXT)
                                     .build()
                             )
                             .version("version")
@@ -381,7 +383,7 @@ internal class MessageTest {
                         .addTag("string")
                         .traceId("trace_id")
                         .utm(
-                            BaseMessage.Metadata.Utm.builder()
+                            Utm.builder()
                                 .campaign("campaign")
                                 .content("content")
                                 .medium("medium")
@@ -526,7 +528,7 @@ internal class MessageTest {
                             .addTag("string")
                             .traceId("trace_id")
                             .utm(
-                                BaseMessage.Metadata.Utm.builder()
+                                Utm.builder()
                                     .campaign("campaign")
                                     .content("content")
                                     .medium("medium")

@@ -5,10 +5,10 @@ package com.courier.api.services.blocking.tenants
 import com.courier.api.core.ClientOptions
 import com.courier.api.core.RequestOptions
 import com.courier.api.core.http.HttpResponseFor
+import com.courier.api.models.tenants.templates.BaseTemplateTenantAssociation
 import com.courier.api.models.tenants.templates.TemplateListParams
 import com.courier.api.models.tenants.templates.TemplateListResponse
 import com.courier.api.models.tenants.templates.TemplateRetrieveParams
-import com.courier.api.models.tenants.templates.TemplateRetrieveResponse
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
@@ -27,26 +27,28 @@ interface TemplateService {
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): TemplateService
 
     /** Get a Template in Tenant */
-    fun retrieve(templateId: String, params: TemplateRetrieveParams): TemplateRetrieveResponse =
-        retrieve(templateId, params, RequestOptions.none())
+    fun retrieve(
+        templateId: String,
+        params: TemplateRetrieveParams,
+    ): BaseTemplateTenantAssociation = retrieve(templateId, params, RequestOptions.none())
 
     /** @see retrieve */
     fun retrieve(
         templateId: String,
         params: TemplateRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): TemplateRetrieveResponse =
+    ): BaseTemplateTenantAssociation =
         retrieve(params.toBuilder().templateId(templateId).build(), requestOptions)
 
     /** @see retrieve */
-    fun retrieve(params: TemplateRetrieveParams): TemplateRetrieveResponse =
+    fun retrieve(params: TemplateRetrieveParams): BaseTemplateTenantAssociation =
         retrieve(params, RequestOptions.none())
 
     /** @see retrieve */
     fun retrieve(
         params: TemplateRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): TemplateRetrieveResponse
+    ): BaseTemplateTenantAssociation
 
     /** List Templates in Tenant */
     fun list(tenantId: String): TemplateListResponse = list(tenantId, TemplateListParams.none())
@@ -95,7 +97,7 @@ interface TemplateService {
         fun retrieve(
             templateId: String,
             params: TemplateRetrieveParams,
-        ): HttpResponseFor<TemplateRetrieveResponse> =
+        ): HttpResponseFor<BaseTemplateTenantAssociation> =
             retrieve(templateId, params, RequestOptions.none())
 
         /** @see retrieve */
@@ -104,20 +106,21 @@ interface TemplateService {
             templateId: String,
             params: TemplateRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<TemplateRetrieveResponse> =
+        ): HttpResponseFor<BaseTemplateTenantAssociation> =
             retrieve(params.toBuilder().templateId(templateId).build(), requestOptions)
 
         /** @see retrieve */
         @MustBeClosed
-        fun retrieve(params: TemplateRetrieveParams): HttpResponseFor<TemplateRetrieveResponse> =
-            retrieve(params, RequestOptions.none())
+        fun retrieve(
+            params: TemplateRetrieveParams
+        ): HttpResponseFor<BaseTemplateTenantAssociation> = retrieve(params, RequestOptions.none())
 
         /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             params: TemplateRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<TemplateRetrieveResponse>
+        ): HttpResponseFor<BaseTemplateTenantAssociation>
 
         /**
          * Returns a raw HTTP response for `get /tenants/{tenant_id}/templates`, but is otherwise

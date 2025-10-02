@@ -6,6 +6,7 @@ import com.courier.api.core.JsonValue
 import com.courier.api.core.jsonMapper
 import com.courier.api.models.send.BaseMessage
 import com.courier.api.models.send.MessageContext
+import com.courier.api.models.send.Utm
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -78,7 +79,7 @@ internal class InboundBulkMessageTest {
                                 .addTag("string")
                                 .traceId("trace_id")
                                 .utm(
-                                    BaseMessage.Metadata.Utm.builder()
+                                    Utm.builder()
                                         .campaign("campaign")
                                         .content("content")
                                         .medium("medium")
@@ -213,7 +214,7 @@ internal class InboundBulkMessageTest {
                                 .addTag("string")
                                 .traceId("trace_id")
                                 .utm(
-                                    BaseMessage.Metadata.Utm.builder()
+                                    Utm.builder()
                                         .campaign("campaign")
                                         .content("content")
                                         .medium("medium")
@@ -350,7 +351,7 @@ internal class InboundBulkMessageTest {
                                 .addTag("string")
                                 .traceId("trace_id")
                                 .utm(
-                                    BaseMessage.Metadata.Utm.builder()
+                                    Utm.builder()
                                         .campaign("campaign")
                                         .content("content")
                                         .medium("medium")

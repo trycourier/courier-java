@@ -3,12 +3,9 @@
 package com.courier.api.models.brands
 
 import com.courier.api.core.ExcludeMissing
-import com.courier.api.core.JsonField
 import com.courier.api.core.JsonMissing
 import com.courier.api.core.JsonValue
-import com.courier.api.core.checkKnown
 import com.courier.api.core.checkRequired
-import com.courier.api.core.toImmutable
 import com.courier.api.errors.CourierInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -16,34 +13,24 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Collections
 import java.util.Objects
-import kotlin.jvm.optionals.getOrNull
 
-class BrandSnippets
+class Email
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    private val items: JsonField<List<BrandSnippet>>,
+    private val footer: JsonValue,
+    private val header: JsonValue,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("items")
-        @ExcludeMissing
-        items: JsonField<List<BrandSnippet>> = JsonMissing.of()
-    ) : this(items, mutableMapOf())
+        @JsonProperty("footer") @ExcludeMissing footer: JsonValue = JsonMissing.of(),
+        @JsonProperty("header") @ExcludeMissing header: JsonValue = JsonMissing.of(),
+    ) : this(footer, header, mutableMapOf())
 
-    /**
-     * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
-    fun items(): List<BrandSnippet> = items.getRequired("items")
+    @JsonProperty("footer") @ExcludeMissing fun _footer(): JsonValue = footer
 
-    /**
-     * Returns the raw JSON value of [items].
-     *
-     * Unlike [items], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("items") @ExcludeMissing fun _items(): JsonField<List<BrandSnippet>> = items
+    @JsonProperty("header") @ExcludeMissing fun _header(): JsonValue = header
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -60,50 +47,34 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [BrandSnippets].
+         * Returns a mutable builder for constructing an instance of [Email].
          *
          * The following fields are required:
          * ```java
-         * .items()
+         * .footer()
+         * .header()
          * ```
          */
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [BrandSnippets]. */
+    /** A builder for [Email]. */
     class Builder internal constructor() {
 
-        private var items: JsonField<MutableList<BrandSnippet>>? = null
+        private var footer: JsonValue? = null
+        private var header: JsonValue? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(brandSnippets: BrandSnippets) = apply {
-            items = brandSnippets.items.map { it.toMutableList() }
-            additionalProperties = brandSnippets.additionalProperties.toMutableMap()
+        internal fun from(email: Email) = apply {
+            footer = email.footer
+            header = email.header
+            additionalProperties = email.additionalProperties.toMutableMap()
         }
 
-        fun items(items: List<BrandSnippet>) = items(JsonField.of(items))
+        fun footer(footer: JsonValue) = apply { this.footer = footer }
 
-        /**
-         * Sets [Builder.items] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.items] with a well-typed `List<BrandSnippet>` value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun items(items: JsonField<List<BrandSnippet>>) = apply {
-            this.items = items.map { it.toMutableList() }
-        }
-
-        /**
-         * Adds a single [BrandSnippet] to [items].
-         *
-         * @throws IllegalStateException if the field was previously set to a non-list.
-         */
-        fun addItem(item: BrandSnippet) = apply {
-            items =
-                (items ?: JsonField.of(mutableListOf())).also { checkKnown("items", it).add(item) }
-        }
+        fun header(header: JsonValue) = apply { this.header = header }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -125,32 +96,33 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [BrandSnippets].
+         * Returns an immutable instance of [Email].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
          * ```java
-         * .items()
+         * .footer()
+         * .header()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): BrandSnippets =
-            BrandSnippets(
-                checkRequired("items", items).map { it.toImmutable() },
+        fun build(): Email =
+            Email(
+                checkRequired("footer", footer),
+                checkRequired("header", header),
                 additionalProperties.toMutableMap(),
             )
     }
 
     private var validated: Boolean = false
 
-    fun validate(): BrandSnippets = apply {
+    fun validate(): Email = apply {
         if (validated) {
             return@apply
         }
 
-        items().forEach { it.validate() }
         validated = true
     }
 
@@ -167,24 +139,23 @@ private constructor(
      *
      * Used for best match union deserialization.
      */
-    @JvmSynthetic
-    internal fun validity(): Int =
-        (items.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
+    @JvmSynthetic internal fun validity(): Int = 0
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return other is BrandSnippets &&
-            items == other.items &&
+        return other is Email &&
+            footer == other.footer &&
+            header == other.header &&
             additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy { Objects.hash(items, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(footer, header, additionalProperties) }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "BrandSnippets{items=$items, additionalProperties=$additionalProperties}"
+        "Email{footer=$footer, header=$header, additionalProperties=$additionalProperties}"
 }
