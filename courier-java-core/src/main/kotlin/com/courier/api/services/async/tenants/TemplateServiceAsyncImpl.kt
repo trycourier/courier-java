@@ -15,10 +15,10 @@ import com.courier.api.core.http.HttpResponse.Handler
 import com.courier.api.core.http.HttpResponseFor
 import com.courier.api.core.http.parseable
 import com.courier.api.core.prepareAsync
-import com.courier.api.models.tenants.templates.BaseTemplateTenantAssociation
 import com.courier.api.models.tenants.templates.TemplateListParams
 import com.courier.api.models.tenants.templates.TemplateListResponse
 import com.courier.api.models.tenants.templates.TemplateRetrieveParams
+import com.courier.api.models.tenants.templates.TemplateRetrieveResponse
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
@@ -38,7 +38,7 @@ class TemplateServiceAsyncImpl internal constructor(private val clientOptions: C
     override fun retrieve(
         params: TemplateRetrieveParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<BaseTemplateTenantAssociation> =
+    ): CompletableFuture<TemplateRetrieveResponse> =
         // get /tenants/{tenant_id}/templates/{template_id}
         withRawResponse().retrieve(params, requestOptions).thenApply { it.parse() }
 
@@ -62,13 +62,13 @@ class TemplateServiceAsyncImpl internal constructor(private val clientOptions: C
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
-        private val retrieveHandler: Handler<BaseTemplateTenantAssociation> =
-            jsonHandler<BaseTemplateTenantAssociation>(clientOptions.jsonMapper)
+        private val retrieveHandler: Handler<TemplateRetrieveResponse> =
+            jsonHandler<TemplateRetrieveResponse>(clientOptions.jsonMapper)
 
         override fun retrieve(
             params: TemplateRetrieveParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<BaseTemplateTenantAssociation>> {
+        ): CompletableFuture<HttpResponseFor<TemplateRetrieveResponse>> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("templateId", params.templateId().getOrNull())

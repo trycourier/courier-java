@@ -15,10 +15,10 @@ import com.courier.api.core.http.HttpResponse.Handler
 import com.courier.api.core.http.HttpResponseFor
 import com.courier.api.core.http.parseable
 import com.courier.api.core.prepare
-import com.courier.api.models.tenants.templates.BaseTemplateTenantAssociation
 import com.courier.api.models.tenants.templates.TemplateListParams
 import com.courier.api.models.tenants.templates.TemplateListResponse
 import com.courier.api.models.tenants.templates.TemplateRetrieveParams
+import com.courier.api.models.tenants.templates.TemplateRetrieveResponse
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
@@ -37,7 +37,7 @@ class TemplateServiceImpl internal constructor(private val clientOptions: Client
     override fun retrieve(
         params: TemplateRetrieveParams,
         requestOptions: RequestOptions,
-    ): BaseTemplateTenantAssociation =
+    ): TemplateRetrieveResponse =
         // get /tenants/{tenant_id}/templates/{template_id}
         withRawResponse().retrieve(params, requestOptions).parse()
 
@@ -61,13 +61,13 @@ class TemplateServiceImpl internal constructor(private val clientOptions: Client
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
-        private val retrieveHandler: Handler<BaseTemplateTenantAssociation> =
-            jsonHandler<BaseTemplateTenantAssociation>(clientOptions.jsonMapper)
+        private val retrieveHandler: Handler<TemplateRetrieveResponse> =
+            jsonHandler<TemplateRetrieveResponse>(clientOptions.jsonMapper)
 
         override fun retrieve(
             params: TemplateRetrieveParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<BaseTemplateTenantAssociation> {
+        ): HttpResponseFor<TemplateRetrieveResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("templateId", params.templateId().getOrNull())

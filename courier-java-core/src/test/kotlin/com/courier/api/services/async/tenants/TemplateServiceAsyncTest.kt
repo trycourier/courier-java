@@ -23,7 +23,7 @@ internal class TemplateServiceAsyncTest {
                 .build()
         val templateServiceAsync = client.tenants().templates()
 
-        val baseTemplateTenantAssociationFuture =
+        val templateFuture =
             templateServiceAsync.retrieve(
                 TemplateRetrieveParams.builder()
                     .tenantId("tenant_id")
@@ -31,8 +31,8 @@ internal class TemplateServiceAsyncTest {
                     .build()
             )
 
-        val baseTemplateTenantAssociation = baseTemplateTenantAssociationFuture.get()
-        baseTemplateTenantAssociation.validate()
+        val template = templateFuture.get()
+        template.validate()
     }
 
     @Disabled("Prism tests are disabled")
