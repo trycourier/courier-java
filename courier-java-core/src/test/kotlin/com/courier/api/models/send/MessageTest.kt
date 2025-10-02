@@ -186,12 +186,12 @@ internal class MessageTest {
                 .content(
                     Content.ElementalContent.builder()
                         .addElement(
-                            ElementalNode.UnionMember0.builder()
+                            Content.ElementalContent.Element.UnionMember0.builder()
                                 .addChannel("string")
                                 .if_("if")
                                 .loop("loop")
                                 .ref("ref")
-                                .type(ElementalNode.UnionMember0.Type.TEXT)
+                                .type(Content.ElementalContent.Element.UnionMember0.Type.TEXT)
                                 .build()
                         )
                         .version("version")
@@ -387,12 +387,12 @@ internal class MessageTest {
                     .content(
                         Content.ElementalContent.builder()
                             .addElement(
-                                ElementalNode.UnionMember0.builder()
+                                Content.ElementalContent.Element.UnionMember0.builder()
                                     .addChannel("string")
                                     .if_("if")
                                     .loop("loop")
                                     .ref("ref")
-                                    .type(ElementalNode.UnionMember0.Type.TEXT)
+                                    .type(Content.ElementalContent.Element.UnionMember0.Type.TEXT)
                                     .build()
                             )
                             .version("version")

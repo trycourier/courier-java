@@ -8,7 +8,6 @@ import com.courier.api.core.JsonValue
 import com.courier.api.models.send.BaseMessage
 import com.courier.api.models.send.BaseMessageSendTo
 import com.courier.api.models.send.Content
-import com.courier.api.models.send.ElementalNode
 import com.courier.api.models.send.Message
 import com.courier.api.models.send.MessageContext
 import com.courier.api.models.send.RoutingMethod
@@ -232,12 +231,14 @@ internal class ServiceParamsTest {
                         .content(
                             Content.ElementalContent.builder()
                                 .addElement(
-                                    ElementalNode.UnionMember0.builder()
+                                    Content.ElementalContent.Element.UnionMember0.builder()
                                         .addChannel("string")
                                         .if_("if")
                                         .loop("loop")
                                         .ref("ref")
-                                        .type(ElementalNode.UnionMember0.Type.TEXT)
+                                        .type(
+                                            Content.ElementalContent.Element.UnionMember0.Type.TEXT
+                                        )
                                         .build()
                                 )
                                 .version("version")
