@@ -5,13 +5,8 @@ package com.courier.api.services
 import com.courier.api.client.CourierClient
 import com.courier.api.client.okhttp.CourierOkHttpClient
 import com.courier.api.core.JsonValue
-import com.courier.api.models.send.BaseMessage
-import com.courier.api.models.send.BaseMessageSendTo
-import com.courier.api.models.send.Content
-import com.courier.api.models.send.Message
 import com.courier.api.models.send.MessageContext
-import com.courier.api.models.send.SendMessageParams
-import com.courier.api.models.send.Utm
+import com.courier.api.models.send.SendSendMessageParams
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.equalTo
 import com.github.tomakehurst.wiremock.client.WireMock.matchingJsonPath
@@ -44,17 +39,23 @@ internal class ServiceParamsTest {
 
     @Disabled("Prism tests are disabled")
     @Test
-    fun message() {
+    fun sendMessage() {
         val sendService = client.send()
         stubFor(post(anyUrl()).willReturn(ok("{}")))
 
-        sendService.message(
-            SendMessageParams.builder()
+        sendService.sendMessage(
+            SendSendMessageParams.builder()
                 .message(
-                    Message.ContentMessage.builder()
+                    SendSendMessageParams.Message.builder()
+                        .content(
+                            SendSendMessageParams.Message.Content.builder()
+                                .body("Thanks for signing up, {{name}}")
+                                .title("Welcome!")
+                                .build()
+                        )
                         .brandId("brand_id")
                         .channels(
-                            BaseMessage.Channels.builder()
+                            SendSendMessageParams.Message.Channels.builder()
                                 .putAdditionalProperty(
                                     "foo",
                                     JsonValue.from(
@@ -83,24 +84,29 @@ internal class ServiceParamsTest {
                         )
                         .context(MessageContext.builder().tenantId("tenant_id").build())
                         .data(
-                            BaseMessage.Data.builder()
+                            SendSendMessageParams.Message.Data.builder()
                                 .putAdditionalProperty("name", JsonValue.from("bar"))
                                 .build()
                         )
-                        .delay(BaseMessage.Delay.builder().duration(0L).until("until").build())
+                        .delay(
+                            SendSendMessageParams.Message.Delay.builder()
+                                .duration(0L)
+                                .until("until")
+                                .build()
+                        )
                         .expiry(
-                            BaseMessage.Expiry.builder()
+                            SendSendMessageParams.Message.Expiry.builder()
                                 .expiresIn("string")
                                 .expiresAt("expires_at")
                                 .build()
                         )
                         .metadata(
-                            BaseMessage.Metadata.builder()
+                            SendSendMessageParams.Message.Metadata.builder()
                                 .event("event")
                                 .addTag("string")
                                 .traceId("trace_id")
                                 .utm(
-                                    Utm.builder()
+                                    SendSendMessageParams.Message.Metadata.Utm.builder()
                                         .campaign("campaign")
                                         .content("content")
                                         .medium("medium")
@@ -111,12 +117,12 @@ internal class ServiceParamsTest {
                                 .build()
                         )
                         .preferences(
-                            BaseMessage.Preferences.builder()
+                            SendSendMessageParams.Message.Preferences.builder()
                                 .subscriptionTopicId("subscription_topic_id")
                                 .build()
                         )
                         .providers(
-                            BaseMessage.Providers.builder()
+                            SendSendMessageParams.Message.Providers.builder()
                                 .putAdditionalProperty(
                                     "foo",
                                     JsonValue.from(
@@ -141,54 +147,110 @@ internal class ServiceParamsTest {
                                 .build()
                         )
                         .routing(
-                            BaseMessage.Routing.builder()
+                            SendSendMessageParams.Message.Routing.builder()
                                 .addChannel("email")
-                                .method(BaseMessage.Routing.Method.SINGLE)
+                                .method(SendSendMessageParams.Message.Routing.Method.SINGLE)
                                 .build()
                         )
                         .timeout(
-                            BaseMessage.Timeout.builder()
+                            SendSendMessageParams.Message.Timeout.builder()
                                 .channel(
-                                    BaseMessage.Timeout.Channel.builder()
+                                    SendSendMessageParams.Message.Timeout.Channel.builder()
                                         .putAdditionalProperty("foo", JsonValue.from(0))
                                         .build()
                                 )
-                                .criteria(BaseMessage.Timeout.Criteria.NO_ESCALATION)
+                                .criteria(
+                                    SendSendMessageParams.Message.Timeout.Criteria.NO_ESCALATION
+                                )
                                 .escalation(0L)
                                 .message(0L)
                                 .provider(
-                                    BaseMessage.Timeout.Provider.builder()
+                                    SendSendMessageParams.Message.Timeout.Provider.builder()
                                         .putAdditionalProperty("foo", JsonValue.from(0))
                                         .build()
                                 )
                                 .build()
                         )
                         .to(
-                            BaseMessageSendTo.To.UnionMember1.builder()
+                            SendSendMessageParams.Message.To.UnionMember0.builder()
+                                .accountId("account_id")
+                                .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
-                                    BaseMessageSendTo.To.UnionMember1.Data.builder()
+                                    SendSendMessageParams.Message.To.UnionMember0.Data.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("bar"))
                                         .build()
                                 )
-                                .addFilter(
-                                    BaseMessageSendTo.To.UnionMember1.Filter.builder()
-                                        .operator(
-                                            BaseMessageSendTo.To.UnionMember1.Filter.Operator
-                                                .MEMBER_OF
+                                .email("email@example.com")
+                                .locale("locale")
+                                .phoneNumber("phone_number")
+                                .preferences(
+                                    SendSendMessageParams.Message.To.UnionMember0.Preferences
+                                        .builder()
+                                        .notifications(
+                                            SendSendMessageParams.Message.To.UnionMember0
+                                                .Preferences
+                                                .Notifications
+                                                .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from(
+                                                        mapOf(
+                                                            "status" to "OPTED_IN",
+                                                            "channel_preferences" to
+                                                                listOf(
+                                                                    mapOf(
+                                                                        "channel" to
+                                                                            "direct_message"
+                                                                    )
+                                                                ),
+                                                            "rules" to
+                                                                listOf(
+                                                                    mapOf(
+                                                                        "until" to "until",
+                                                                        "start" to "start",
+                                                                    )
+                                                                ),
+                                                            "source" to "subscription",
+                                                        )
+                                                    ),
+                                                )
+                                                .build()
                                         )
-                                        .path(
-                                            BaseMessageSendTo.To.UnionMember1.Filter.Path.ACCOUNT_ID
+                                        .categories(
+                                            SendSendMessageParams.Message.To.UnionMember0
+                                                .Preferences
+                                                .Categories
+                                                .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from(
+                                                        mapOf(
+                                                            "status" to "OPTED_IN",
+                                                            "channel_preferences" to
+                                                                listOf(
+                                                                    mapOf(
+                                                                        "channel" to
+                                                                            "direct_message"
+                                                                    )
+                                                                ),
+                                                            "rules" to
+                                                                listOf(
+                                                                    mapOf(
+                                                                        "until" to "until",
+                                                                        "start" to "start",
+                                                                    )
+                                                                ),
+                                                            "source" to "subscription",
+                                                        )
+                                                    ),
+                                                )
+                                                .build()
                                         )
-                                        .value("value")
+                                        .templateId("templateId")
                                         .build()
                                 )
-                                .listId("list_id")
-                                .build()
-                        )
-                        .content(
-                            Content.ElementalContentSugar.builder()
-                                .body("Thanks for signing up, {{name}}")
-                                .title("Welcome!")
+                                .tenantId("tenant_id")
+                                .userId("user_id")
                                 .build()
                         )
                         .build()
