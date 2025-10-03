@@ -18,6 +18,7 @@ import com.courier.api.errors.UnexpectedStatusCodeException
 import com.courier.api.errors.UnprocessableEntityException
 import com.courier.api.models.send.MessageContext
 import com.courier.api.models.send.SendMessageParams
+import com.courier.api.models.send.Utm
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.status
@@ -135,7 +136,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendMessageParams.Message.Metadata.Utm.builder()
+                                            Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -371,7 +372,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendMessageParams.Message.Metadata.Utm.builder()
+                                            Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -607,7 +608,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendMessageParams.Message.Metadata.Utm.builder()
+                                            Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -843,7 +844,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendMessageParams.Message.Metadata.Utm.builder()
+                                            Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -1079,7 +1080,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendMessageParams.Message.Metadata.Utm.builder()
+                                            Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -1315,7 +1316,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendMessageParams.Message.Metadata.Utm.builder()
+                                            Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -1551,7 +1552,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendMessageParams.Message.Metadata.Utm.builder()
+                                            Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -1787,7 +1788,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendMessageParams.Message.Metadata.Utm.builder()
+                                            Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -2023,7 +2024,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendMessageParams.Message.Metadata.Utm.builder()
+                                            Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -2259,7 +2260,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendMessageParams.Message.Metadata.Utm.builder()
+                                            Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -2495,7 +2496,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendMessageParams.Message.Metadata.Utm.builder()
+                                            Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -2731,7 +2732,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendMessageParams.Message.Metadata.Utm.builder()
+                                            Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -2967,7 +2968,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendMessageParams.Message.Metadata.Utm.builder()
+                                            Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -3203,7 +3204,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendMessageParams.Message.Metadata.Utm.builder()
+                                            Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -3439,7 +3440,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendMessageParams.Message.Metadata.Utm.builder()
+                                            Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -3675,7 +3676,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendMessageParams.Message.Metadata.Utm.builder()
+                                            Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -3909,7 +3910,7 @@ internal class ErrorHandlingTest {
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendMessageParams.Message.Metadata.Utm.builder()
+                                            Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
