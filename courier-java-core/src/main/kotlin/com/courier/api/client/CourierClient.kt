@@ -3,22 +3,7 @@
 package com.courier.api.client
 
 import com.courier.api.core.ClientOptions
-import com.courier.api.services.blocking.AudienceService
-import com.courier.api.services.blocking.AuditEventService
-import com.courier.api.services.blocking.AuthService
-import com.courier.api.services.blocking.AutomationService
-import com.courier.api.services.blocking.BrandService
-import com.courier.api.services.blocking.BulkService
-import com.courier.api.services.blocking.InboundService
-import com.courier.api.services.blocking.ListService
-import com.courier.api.services.blocking.MessageService
-import com.courier.api.services.blocking.NotificationService
-import com.courier.api.services.blocking.ProfileService
-import com.courier.api.services.blocking.RequestService
 import com.courier.api.services.blocking.SendService
-import com.courier.api.services.blocking.TenantService
-import com.courier.api.services.blocking.TranslationService
-import com.courier.api.services.blocking.UserService
 import java.util.function.Consumer
 
 /**
@@ -59,36 +44,6 @@ interface CourierClient {
 
     fun send(): SendService
 
-    fun audiences(): AudienceService
-
-    fun auditEvents(): AuditEventService
-
-    fun auth(): AuthService
-
-    fun automations(): AutomationService
-
-    fun brands(): BrandService
-
-    fun bulk(): BulkService
-
-    fun inbound(): InboundService
-
-    fun lists(): ListService
-
-    fun messages(): MessageService
-
-    fun requests(): RequestService
-
-    fun notifications(): NotificationService
-
-    fun profiles(): ProfileService
-
-    fun tenants(): TenantService
-
-    fun translations(): TranslationService
-
-    fun users(): UserService
-
     /**
      * Closes this client, relinquishing any underlying resources.
      *
@@ -113,35 +68,5 @@ interface CourierClient {
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): CourierClient.WithRawResponse
 
         fun send(): SendService.WithRawResponse
-
-        fun audiences(): AudienceService.WithRawResponse
-
-        fun auditEvents(): AuditEventService.WithRawResponse
-
-        fun auth(): AuthService.WithRawResponse
-
-        fun automations(): AutomationService.WithRawResponse
-
-        fun brands(): BrandService.WithRawResponse
-
-        fun bulk(): BulkService.WithRawResponse
-
-        fun inbound(): InboundService.WithRawResponse
-
-        fun lists(): ListService.WithRawResponse
-
-        fun messages(): MessageService.WithRawResponse
-
-        fun requests(): RequestService.WithRawResponse
-
-        fun notifications(): NotificationService.WithRawResponse
-
-        fun profiles(): ProfileService.WithRawResponse
-
-        fun tenants(): TenantService.WithRawResponse
-
-        fun translations(): TranslationService.WithRawResponse
-
-        fun users(): UserService.WithRawResponse
     }
 }

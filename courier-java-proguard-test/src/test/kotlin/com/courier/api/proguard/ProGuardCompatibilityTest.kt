@@ -3,15 +3,9 @@
 package com.courier.api.proguard
 
 import com.courier.api.client.okhttp.CourierOkHttpClient
-import com.courier.api.core.JsonValue
 import com.courier.api.core.jsonMapper
-import com.courier.api.models.automations.invoke.MergeAlgorithm
-import com.courier.api.models.send.BaseMessage
-import com.courier.api.models.send.Content
 import com.courier.api.models.send.MessageContext
-import com.courier.api.models.send.Utm
-import com.courier.api.models.tenants.templates.ElementalContent
-import com.courier.api.models.tenants.templates.ElementalNode
+import com.courier.api.models.send.MessageRoutingChannel
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import kotlin.reflect.full.memberFunctions
 import kotlin.reflect.jvm.javaMethod
@@ -55,184 +49,33 @@ internal class ProGuardCompatibilityTest {
 
         assertThat(client).isNotNull()
         assertThat(client.send()).isNotNull()
-        assertThat(client.audiences()).isNotNull()
-        assertThat(client.auditEvents()).isNotNull()
-        assertThat(client.auth()).isNotNull()
-        assertThat(client.automations()).isNotNull()
-        assertThat(client.brands()).isNotNull()
-        assertThat(client.bulk()).isNotNull()
-        assertThat(client.inbound()).isNotNull()
-        assertThat(client.lists()).isNotNull()
-        assertThat(client.messages()).isNotNull()
-        assertThat(client.requests()).isNotNull()
-        assertThat(client.notifications()).isNotNull()
-        assertThat(client.profiles()).isNotNull()
-        assertThat(client.tenants()).isNotNull()
-        assertThat(client.translations()).isNotNull()
-        assertThat(client.users()).isNotNull()
     }
 
     @Test
-    fun baseMessageRoundtrip() {
+    fun messageContextRoundtrip() {
         val jsonMapper = jsonMapper()
-        val baseMessage =
-            BaseMessage.builder()
-                .brandId("brand_id")
-                .channels(
-                    BaseMessage.Channels.builder()
-                        .putAdditionalProperty(
-                            "foo",
-                            JsonValue.from(
-                                mapOf(
-                                    "brand_id" to "brand_id",
-                                    "if" to "if",
-                                    "metadata" to
-                                        mapOf(
-                                            "utm" to
-                                                mapOf(
-                                                    "campaign" to "campaign",
-                                                    "content" to "content",
-                                                    "medium" to "medium",
-                                                    "source" to "source",
-                                                    "term" to "term",
-                                                )
-                                        ),
-                                    "override" to mapOf("foo" to "bar"),
-                                    "providers" to listOf("string"),
-                                    "routing_method" to "all",
-                                    "timeouts" to mapOf("channel" to 0, "provider" to 0),
-                                )
-                            ),
-                        )
-                        .build()
-                )
-                .context(MessageContext.builder().tenantId("tenant_id").build())
-                .data(
-                    BaseMessage.Data.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("bar"))
-                        .build()
-                )
-                .delay(BaseMessage.Delay.builder().duration(0L).until("until").build())
-                .expiry(
-                    BaseMessage.Expiry.builder().expiresIn("string").expiresAt("expires_at").build()
-                )
-                .metadata(
-                    BaseMessage.Metadata.builder()
-                        .event("event")
-                        .addTag("string")
-                        .traceId("trace_id")
-                        .utm(
-                            Utm.builder()
-                                .campaign("campaign")
-                                .content("content")
-                                .medium("medium")
-                                .source("source")
-                                .term("term")
-                                .build()
-                        )
-                        .build()
-                )
-                .preferences(
-                    BaseMessage.Preferences.builder()
-                        .subscriptionTopicId("subscription_topic_id")
-                        .build()
-                )
-                .providers(
-                    BaseMessage.Providers.builder()
-                        .putAdditionalProperty(
-                            "foo",
-                            JsonValue.from(
-                                mapOf(
-                                    "if" to "if",
-                                    "metadata" to
-                                        mapOf(
-                                            "utm" to
-                                                mapOf(
-                                                    "campaign" to "campaign",
-                                                    "content" to "content",
-                                                    "medium" to "medium",
-                                                    "source" to "source",
-                                                    "term" to "term",
-                                                )
-                                        ),
-                                    "override" to mapOf("foo" to "bar"),
-                                    "timeouts" to 0,
-                                )
-                            ),
-                        )
-                        .build()
-                )
-                .routing(
-                    BaseMessage.Routing.builder()
-                        .addChannel("string")
-                        .method(BaseMessage.Routing.Method.ALL)
-                        .build()
-                )
-                .timeout(
-                    BaseMessage.Timeout.builder()
-                        .channel(
-                            BaseMessage.Timeout.Channel.builder()
-                                .putAdditionalProperty("foo", JsonValue.from(0))
-                                .build()
-                        )
-                        .criteria(BaseMessage.Timeout.Criteria.NO_ESCALATION)
-                        .escalation(0L)
-                        .message(0L)
-                        .provider(
-                            BaseMessage.Timeout.Provider.builder()
-                                .putAdditionalProperty("foo", JsonValue.from(0))
-                                .build()
-                        )
-                        .build()
-                )
-                .build()
+        val messageContext = MessageContext.builder().tenantId("tenant_id").build()
 
-        val roundtrippedBaseMessage =
+        val roundtrippedMessageContext =
             jsonMapper.readValue(
-                jsonMapper.writeValueAsString(baseMessage),
-                jacksonTypeRef<BaseMessage>(),
+                jsonMapper.writeValueAsString(messageContext),
+                jacksonTypeRef<MessageContext>(),
             )
 
-        assertThat(roundtrippedBaseMessage).isEqualTo(baseMessage)
+        assertThat(roundtrippedMessageContext).isEqualTo(messageContext)
     }
 
     @Test
-    fun contentRoundtrip() {
+    fun messageRoutingChannelRoundtrip() {
         val jsonMapper = jsonMapper()
-        val content =
-            Content.ofElemental(
-                ElementalContent.builder()
-                    .addElement(
-                        ElementalNode.UnionMember0.builder()
-                            .addChannel("string")
-                            .if_("if")
-                            .loop("loop")
-                            .ref("ref")
-                            .type(ElementalNode.UnionMember0.Type.TEXT)
-                            .build()
-                    )
-                    .version("version")
-                    .brand(JsonValue.from(mapOf<String, Any>()))
-                    .build()
-            )
+        val messageRoutingChannel = MessageRoutingChannel.ofString("string")
 
-        val roundtrippedContent =
-            jsonMapper.readValue(jsonMapper.writeValueAsString(content), jacksonTypeRef<Content>())
-
-        assertThat(roundtrippedContent).isEqualTo(content)
-    }
-
-    @Test
-    fun mergeAlgorithmRoundtrip() {
-        val jsonMapper = jsonMapper()
-        val mergeAlgorithm = MergeAlgorithm.REPLACE
-
-        val roundtrippedMergeAlgorithm =
+        val roundtrippedMessageRoutingChannel =
             jsonMapper.readValue(
-                jsonMapper.writeValueAsString(mergeAlgorithm),
-                jacksonTypeRef<MergeAlgorithm>(),
+                jsonMapper.writeValueAsString(messageRoutingChannel),
+                jacksonTypeRef<MessageRoutingChannel>(),
             )
 
-        assertThat(roundtrippedMergeAlgorithm).isEqualTo(mergeAlgorithm)
+        assertThat(roundtrippedMessageRoutingChannel).isEqualTo(messageRoutingChannel)
     }
 }

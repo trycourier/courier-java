@@ -29,9 +29,7 @@ private constructor(
     ) : this(tenantId, mutableMapOf())
 
     /**
-     * An id of a tenant, see [tenants api docs](https://www.courier.com/docs/reference/tenants/).
-     * Will load brand, default preferences and any other base context data associated with this
-     * tenant.
+     * Tenant id used to load brand/default preferences/context.
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -75,11 +73,7 @@ private constructor(
             additionalProperties = messageContext.additionalProperties.toMutableMap()
         }
 
-        /**
-         * An id of a tenant, see
-         * [tenants api docs](https://www.courier.com/docs/reference/tenants/). Will load brand,
-         * default preferences and any other base context data associated with this tenant.
-         */
+        /** Tenant id used to load brand/default preferences/context. */
         fun tenantId(tenantId: String?) = tenantId(JsonField.ofNullable(tenantId))
 
         /** Alias for calling [Builder.tenantId] with `tenantId.orElse(null)`. */
