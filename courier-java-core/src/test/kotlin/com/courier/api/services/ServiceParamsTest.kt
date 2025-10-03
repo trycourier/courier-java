@@ -7,6 +7,7 @@ import com.courier.api.client.okhttp.CourierOkHttpClient
 import com.courier.api.core.JsonValue
 import com.courier.api.models.send.MessageContext
 import com.courier.api.models.send.SendMessageParams
+import com.courier.api.models.send.Utm
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.equalTo
 import com.github.tomakehurst.wiremock.client.WireMock.matchingJsonPath
@@ -106,7 +107,7 @@ internal class ServiceParamsTest {
                                 .addTag("string")
                                 .traceId("trace_id")
                                 .utm(
-                                    SendMessageParams.Message.Metadata.Utm.builder()
+                                    Utm.builder()
                                         .campaign("campaign")
                                         .content("content")
                                         .medium("medium")

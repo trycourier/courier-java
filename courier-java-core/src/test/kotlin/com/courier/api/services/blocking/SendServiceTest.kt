@@ -7,6 +7,7 @@ import com.courier.api.client.okhttp.CourierOkHttpClient
 import com.courier.api.core.JsonValue
 import com.courier.api.models.send.MessageContext
 import com.courier.api.models.send.SendMessageParams
+import com.courier.api.models.send.Utm
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -88,7 +89,7 @@ internal class SendServiceTest {
                                     .addTag("string")
                                     .traceId("trace_id")
                                     .utm(
-                                        SendMessageParams.Message.Metadata.Utm.builder()
+                                        Utm.builder()
                                             .campaign("campaign")
                                             .content("content")
                                             .medium("medium")
