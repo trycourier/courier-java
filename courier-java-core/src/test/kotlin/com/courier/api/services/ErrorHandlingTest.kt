@@ -17,7 +17,7 @@ import com.courier.api.errors.UnauthorizedException
 import com.courier.api.errors.UnexpectedStatusCodeException
 import com.courier.api.errors.UnprocessableEntityException
 import com.courier.api.models.send.MessageContext
-import com.courier.api.models.send.SendSendMessageParams
+import com.courier.api.models.send.SendMessageParams
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.status
@@ -60,7 +60,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage400() {
+    fun sendMessage400() {
         val sendService = client.send()
         stubFor(
             post(anyUrl())
@@ -71,19 +71,19 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<BadRequestException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
-                            SendSendMessageParams.Message.builder()
+                            SendMessageParams.Message.builder()
                                 .content(
-                                    SendSendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
                                 )
                                 .brandId("brand_id")
                                 .channels(
-                                    SendSendMessageParams.Message.Channels.builder()
+                                    SendMessageParams.Message.Channels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -113,29 +113,29 @@ internal class ErrorHandlingTest {
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
-                                    SendSendMessageParams.Message.Data.builder()
+                                    SendMessageParams.Message.Data.builder()
                                         .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
-                                    SendSendMessageParams.Message.Delay.builder()
+                                    SendMessageParams.Message.Delay.builder()
                                         .duration(0L)
                                         .until("until")
                                         .build()
                                 )
                                 .expiry(
-                                    SendSendMessageParams.Message.Expiry.builder()
+                                    SendMessageParams.Message.Expiry.builder()
                                         .expiresIn("string")
                                         .expiresAt("expires_at")
                                         .build()
                                 )
                                 .metadata(
-                                    SendSendMessageParams.Message.Metadata.builder()
+                                    SendMessageParams.Message.Metadata.builder()
                                         .event("event")
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendSendMessageParams.Message.Metadata.Utm.builder()
+                                            SendMessageParams.Message.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -146,12 +146,12 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .preferences(
-                                    SendSendMessageParams.Message.Preferences.builder()
+                                    SendMessageParams.Message.Preferences.builder()
                                         .subscriptionTopicId("subscription_topic_id")
                                         .build()
                                 )
                                 .providers(
-                                    SendSendMessageParams.Message.Providers.builder()
+                                    SendMessageParams.Message.Providers.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -176,40 +176,38 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .routing(
-                                    SendSendMessageParams.Message.Routing.builder()
+                                    SendMessageParams.Message.Routing.builder()
                                         .addChannel("email")
-                                        .method(SendSendMessageParams.Message.Routing.Method.SINGLE)
+                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
-                                    SendSendMessageParams.Message.Timeout.builder()
+                                    SendMessageParams.Message.Timeout.builder()
                                         .channel(
-                                            SendSendMessageParams.Message.Timeout.Channel.builder()
+                                            SendMessageParams.Message.Timeout.Channel.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .criteria(
-                                            SendSendMessageParams.Message.Timeout.Criteria
-                                                .NO_ESCALATION
+                                            SendMessageParams.Message.Timeout.Criteria.NO_ESCALATION
                                         )
                                         .escalation(0L)
                                         .message(0L)
                                         .provider(
-                                            SendSendMessageParams.Message.Timeout.Provider.builder()
+                                            SendMessageParams.Message.Timeout.Provider.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .build()
                                 )
                                 .to(
-                                    SendSendMessageParams.Message.To.UnionMember0.builder()
+                                    SendMessageParams.Message.To.UnionMember0.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendSendMessageParams.Message.To.UnionMember0.Data
-                                                .builder()
+                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -217,11 +215,10 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendSendMessageParams.Message.To.UnionMember0
-                                                .Preferences
+                                            SendMessageParams.Message.To.UnionMember0.Preferences
                                                 .builder()
                                                 .notifications(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Notifications
                                                         .builder()
@@ -251,7 +248,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Categories
                                                         .builder()
@@ -299,7 +296,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage400WithRawResponse() {
+    fun sendMessage400WithRawResponse() {
         val sendService = client.send().withRawResponse()
         stubFor(
             post(anyUrl())
@@ -310,19 +307,19 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<BadRequestException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
-                            SendSendMessageParams.Message.builder()
+                            SendMessageParams.Message.builder()
                                 .content(
-                                    SendSendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
                                 )
                                 .brandId("brand_id")
                                 .channels(
-                                    SendSendMessageParams.Message.Channels.builder()
+                                    SendMessageParams.Message.Channels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -352,29 +349,29 @@ internal class ErrorHandlingTest {
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
-                                    SendSendMessageParams.Message.Data.builder()
+                                    SendMessageParams.Message.Data.builder()
                                         .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
-                                    SendSendMessageParams.Message.Delay.builder()
+                                    SendMessageParams.Message.Delay.builder()
                                         .duration(0L)
                                         .until("until")
                                         .build()
                                 )
                                 .expiry(
-                                    SendSendMessageParams.Message.Expiry.builder()
+                                    SendMessageParams.Message.Expiry.builder()
                                         .expiresIn("string")
                                         .expiresAt("expires_at")
                                         .build()
                                 )
                                 .metadata(
-                                    SendSendMessageParams.Message.Metadata.builder()
+                                    SendMessageParams.Message.Metadata.builder()
                                         .event("event")
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendSendMessageParams.Message.Metadata.Utm.builder()
+                                            SendMessageParams.Message.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -385,12 +382,12 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .preferences(
-                                    SendSendMessageParams.Message.Preferences.builder()
+                                    SendMessageParams.Message.Preferences.builder()
                                         .subscriptionTopicId("subscription_topic_id")
                                         .build()
                                 )
                                 .providers(
-                                    SendSendMessageParams.Message.Providers.builder()
+                                    SendMessageParams.Message.Providers.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -415,40 +412,38 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .routing(
-                                    SendSendMessageParams.Message.Routing.builder()
+                                    SendMessageParams.Message.Routing.builder()
                                         .addChannel("email")
-                                        .method(SendSendMessageParams.Message.Routing.Method.SINGLE)
+                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
-                                    SendSendMessageParams.Message.Timeout.builder()
+                                    SendMessageParams.Message.Timeout.builder()
                                         .channel(
-                                            SendSendMessageParams.Message.Timeout.Channel.builder()
+                                            SendMessageParams.Message.Timeout.Channel.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .criteria(
-                                            SendSendMessageParams.Message.Timeout.Criteria
-                                                .NO_ESCALATION
+                                            SendMessageParams.Message.Timeout.Criteria.NO_ESCALATION
                                         )
                                         .escalation(0L)
                                         .message(0L)
                                         .provider(
-                                            SendSendMessageParams.Message.Timeout.Provider.builder()
+                                            SendMessageParams.Message.Timeout.Provider.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .build()
                                 )
                                 .to(
-                                    SendSendMessageParams.Message.To.UnionMember0.builder()
+                                    SendMessageParams.Message.To.UnionMember0.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendSendMessageParams.Message.To.UnionMember0.Data
-                                                .builder()
+                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -456,11 +451,10 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendSendMessageParams.Message.To.UnionMember0
-                                                .Preferences
+                                            SendMessageParams.Message.To.UnionMember0.Preferences
                                                 .builder()
                                                 .notifications(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Notifications
                                                         .builder()
@@ -490,7 +484,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Categories
                                                         .builder()
@@ -538,7 +532,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage401() {
+    fun sendMessage401() {
         val sendService = client.send()
         stubFor(
             post(anyUrl())
@@ -549,19 +543,19 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<UnauthorizedException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
-                            SendSendMessageParams.Message.builder()
+                            SendMessageParams.Message.builder()
                                 .content(
-                                    SendSendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
                                 )
                                 .brandId("brand_id")
                                 .channels(
-                                    SendSendMessageParams.Message.Channels.builder()
+                                    SendMessageParams.Message.Channels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -591,29 +585,29 @@ internal class ErrorHandlingTest {
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
-                                    SendSendMessageParams.Message.Data.builder()
+                                    SendMessageParams.Message.Data.builder()
                                         .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
-                                    SendSendMessageParams.Message.Delay.builder()
+                                    SendMessageParams.Message.Delay.builder()
                                         .duration(0L)
                                         .until("until")
                                         .build()
                                 )
                                 .expiry(
-                                    SendSendMessageParams.Message.Expiry.builder()
+                                    SendMessageParams.Message.Expiry.builder()
                                         .expiresIn("string")
                                         .expiresAt("expires_at")
                                         .build()
                                 )
                                 .metadata(
-                                    SendSendMessageParams.Message.Metadata.builder()
+                                    SendMessageParams.Message.Metadata.builder()
                                         .event("event")
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendSendMessageParams.Message.Metadata.Utm.builder()
+                                            SendMessageParams.Message.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -624,12 +618,12 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .preferences(
-                                    SendSendMessageParams.Message.Preferences.builder()
+                                    SendMessageParams.Message.Preferences.builder()
                                         .subscriptionTopicId("subscription_topic_id")
                                         .build()
                                 )
                                 .providers(
-                                    SendSendMessageParams.Message.Providers.builder()
+                                    SendMessageParams.Message.Providers.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -654,40 +648,38 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .routing(
-                                    SendSendMessageParams.Message.Routing.builder()
+                                    SendMessageParams.Message.Routing.builder()
                                         .addChannel("email")
-                                        .method(SendSendMessageParams.Message.Routing.Method.SINGLE)
+                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
-                                    SendSendMessageParams.Message.Timeout.builder()
+                                    SendMessageParams.Message.Timeout.builder()
                                         .channel(
-                                            SendSendMessageParams.Message.Timeout.Channel.builder()
+                                            SendMessageParams.Message.Timeout.Channel.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .criteria(
-                                            SendSendMessageParams.Message.Timeout.Criteria
-                                                .NO_ESCALATION
+                                            SendMessageParams.Message.Timeout.Criteria.NO_ESCALATION
                                         )
                                         .escalation(0L)
                                         .message(0L)
                                         .provider(
-                                            SendSendMessageParams.Message.Timeout.Provider.builder()
+                                            SendMessageParams.Message.Timeout.Provider.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .build()
                                 )
                                 .to(
-                                    SendSendMessageParams.Message.To.UnionMember0.builder()
+                                    SendMessageParams.Message.To.UnionMember0.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendSendMessageParams.Message.To.UnionMember0.Data
-                                                .builder()
+                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -695,11 +687,10 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendSendMessageParams.Message.To.UnionMember0
-                                                .Preferences
+                                            SendMessageParams.Message.To.UnionMember0.Preferences
                                                 .builder()
                                                 .notifications(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Notifications
                                                         .builder()
@@ -729,7 +720,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Categories
                                                         .builder()
@@ -777,7 +768,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage401WithRawResponse() {
+    fun sendMessage401WithRawResponse() {
         val sendService = client.send().withRawResponse()
         stubFor(
             post(anyUrl())
@@ -788,19 +779,19 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<UnauthorizedException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
-                            SendSendMessageParams.Message.builder()
+                            SendMessageParams.Message.builder()
                                 .content(
-                                    SendSendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
                                 )
                                 .brandId("brand_id")
                                 .channels(
-                                    SendSendMessageParams.Message.Channels.builder()
+                                    SendMessageParams.Message.Channels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -830,29 +821,29 @@ internal class ErrorHandlingTest {
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
-                                    SendSendMessageParams.Message.Data.builder()
+                                    SendMessageParams.Message.Data.builder()
                                         .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
-                                    SendSendMessageParams.Message.Delay.builder()
+                                    SendMessageParams.Message.Delay.builder()
                                         .duration(0L)
                                         .until("until")
                                         .build()
                                 )
                                 .expiry(
-                                    SendSendMessageParams.Message.Expiry.builder()
+                                    SendMessageParams.Message.Expiry.builder()
                                         .expiresIn("string")
                                         .expiresAt("expires_at")
                                         .build()
                                 )
                                 .metadata(
-                                    SendSendMessageParams.Message.Metadata.builder()
+                                    SendMessageParams.Message.Metadata.builder()
                                         .event("event")
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendSendMessageParams.Message.Metadata.Utm.builder()
+                                            SendMessageParams.Message.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -863,12 +854,12 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .preferences(
-                                    SendSendMessageParams.Message.Preferences.builder()
+                                    SendMessageParams.Message.Preferences.builder()
                                         .subscriptionTopicId("subscription_topic_id")
                                         .build()
                                 )
                                 .providers(
-                                    SendSendMessageParams.Message.Providers.builder()
+                                    SendMessageParams.Message.Providers.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -893,40 +884,38 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .routing(
-                                    SendSendMessageParams.Message.Routing.builder()
+                                    SendMessageParams.Message.Routing.builder()
                                         .addChannel("email")
-                                        .method(SendSendMessageParams.Message.Routing.Method.SINGLE)
+                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
-                                    SendSendMessageParams.Message.Timeout.builder()
+                                    SendMessageParams.Message.Timeout.builder()
                                         .channel(
-                                            SendSendMessageParams.Message.Timeout.Channel.builder()
+                                            SendMessageParams.Message.Timeout.Channel.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .criteria(
-                                            SendSendMessageParams.Message.Timeout.Criteria
-                                                .NO_ESCALATION
+                                            SendMessageParams.Message.Timeout.Criteria.NO_ESCALATION
                                         )
                                         .escalation(0L)
                                         .message(0L)
                                         .provider(
-                                            SendSendMessageParams.Message.Timeout.Provider.builder()
+                                            SendMessageParams.Message.Timeout.Provider.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .build()
                                 )
                                 .to(
-                                    SendSendMessageParams.Message.To.UnionMember0.builder()
+                                    SendMessageParams.Message.To.UnionMember0.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendSendMessageParams.Message.To.UnionMember0.Data
-                                                .builder()
+                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -934,11 +923,10 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendSendMessageParams.Message.To.UnionMember0
-                                                .Preferences
+                                            SendMessageParams.Message.To.UnionMember0.Preferences
                                                 .builder()
                                                 .notifications(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Notifications
                                                         .builder()
@@ -968,7 +956,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Categories
                                                         .builder()
@@ -1016,7 +1004,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage403() {
+    fun sendMessage403() {
         val sendService = client.send()
         stubFor(
             post(anyUrl())
@@ -1027,19 +1015,19 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<PermissionDeniedException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
-                            SendSendMessageParams.Message.builder()
+                            SendMessageParams.Message.builder()
                                 .content(
-                                    SendSendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
                                 )
                                 .brandId("brand_id")
                                 .channels(
-                                    SendSendMessageParams.Message.Channels.builder()
+                                    SendMessageParams.Message.Channels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -1069,29 +1057,29 @@ internal class ErrorHandlingTest {
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
-                                    SendSendMessageParams.Message.Data.builder()
+                                    SendMessageParams.Message.Data.builder()
                                         .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
-                                    SendSendMessageParams.Message.Delay.builder()
+                                    SendMessageParams.Message.Delay.builder()
                                         .duration(0L)
                                         .until("until")
                                         .build()
                                 )
                                 .expiry(
-                                    SendSendMessageParams.Message.Expiry.builder()
+                                    SendMessageParams.Message.Expiry.builder()
                                         .expiresIn("string")
                                         .expiresAt("expires_at")
                                         .build()
                                 )
                                 .metadata(
-                                    SendSendMessageParams.Message.Metadata.builder()
+                                    SendMessageParams.Message.Metadata.builder()
                                         .event("event")
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendSendMessageParams.Message.Metadata.Utm.builder()
+                                            SendMessageParams.Message.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -1102,12 +1090,12 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .preferences(
-                                    SendSendMessageParams.Message.Preferences.builder()
+                                    SendMessageParams.Message.Preferences.builder()
                                         .subscriptionTopicId("subscription_topic_id")
                                         .build()
                                 )
                                 .providers(
-                                    SendSendMessageParams.Message.Providers.builder()
+                                    SendMessageParams.Message.Providers.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -1132,40 +1120,38 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .routing(
-                                    SendSendMessageParams.Message.Routing.builder()
+                                    SendMessageParams.Message.Routing.builder()
                                         .addChannel("email")
-                                        .method(SendSendMessageParams.Message.Routing.Method.SINGLE)
+                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
-                                    SendSendMessageParams.Message.Timeout.builder()
+                                    SendMessageParams.Message.Timeout.builder()
                                         .channel(
-                                            SendSendMessageParams.Message.Timeout.Channel.builder()
+                                            SendMessageParams.Message.Timeout.Channel.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .criteria(
-                                            SendSendMessageParams.Message.Timeout.Criteria
-                                                .NO_ESCALATION
+                                            SendMessageParams.Message.Timeout.Criteria.NO_ESCALATION
                                         )
                                         .escalation(0L)
                                         .message(0L)
                                         .provider(
-                                            SendSendMessageParams.Message.Timeout.Provider.builder()
+                                            SendMessageParams.Message.Timeout.Provider.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .build()
                                 )
                                 .to(
-                                    SendSendMessageParams.Message.To.UnionMember0.builder()
+                                    SendMessageParams.Message.To.UnionMember0.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendSendMessageParams.Message.To.UnionMember0.Data
-                                                .builder()
+                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -1173,11 +1159,10 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendSendMessageParams.Message.To.UnionMember0
-                                                .Preferences
+                                            SendMessageParams.Message.To.UnionMember0.Preferences
                                                 .builder()
                                                 .notifications(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Notifications
                                                         .builder()
@@ -1207,7 +1192,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Categories
                                                         .builder()
@@ -1255,7 +1240,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage403WithRawResponse() {
+    fun sendMessage403WithRawResponse() {
         val sendService = client.send().withRawResponse()
         stubFor(
             post(anyUrl())
@@ -1266,19 +1251,19 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<PermissionDeniedException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
-                            SendSendMessageParams.Message.builder()
+                            SendMessageParams.Message.builder()
                                 .content(
-                                    SendSendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
                                 )
                                 .brandId("brand_id")
                                 .channels(
-                                    SendSendMessageParams.Message.Channels.builder()
+                                    SendMessageParams.Message.Channels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -1308,29 +1293,29 @@ internal class ErrorHandlingTest {
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
-                                    SendSendMessageParams.Message.Data.builder()
+                                    SendMessageParams.Message.Data.builder()
                                         .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
-                                    SendSendMessageParams.Message.Delay.builder()
+                                    SendMessageParams.Message.Delay.builder()
                                         .duration(0L)
                                         .until("until")
                                         .build()
                                 )
                                 .expiry(
-                                    SendSendMessageParams.Message.Expiry.builder()
+                                    SendMessageParams.Message.Expiry.builder()
                                         .expiresIn("string")
                                         .expiresAt("expires_at")
                                         .build()
                                 )
                                 .metadata(
-                                    SendSendMessageParams.Message.Metadata.builder()
+                                    SendMessageParams.Message.Metadata.builder()
                                         .event("event")
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendSendMessageParams.Message.Metadata.Utm.builder()
+                                            SendMessageParams.Message.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -1341,12 +1326,12 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .preferences(
-                                    SendSendMessageParams.Message.Preferences.builder()
+                                    SendMessageParams.Message.Preferences.builder()
                                         .subscriptionTopicId("subscription_topic_id")
                                         .build()
                                 )
                                 .providers(
-                                    SendSendMessageParams.Message.Providers.builder()
+                                    SendMessageParams.Message.Providers.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -1371,40 +1356,38 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .routing(
-                                    SendSendMessageParams.Message.Routing.builder()
+                                    SendMessageParams.Message.Routing.builder()
                                         .addChannel("email")
-                                        .method(SendSendMessageParams.Message.Routing.Method.SINGLE)
+                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
-                                    SendSendMessageParams.Message.Timeout.builder()
+                                    SendMessageParams.Message.Timeout.builder()
                                         .channel(
-                                            SendSendMessageParams.Message.Timeout.Channel.builder()
+                                            SendMessageParams.Message.Timeout.Channel.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .criteria(
-                                            SendSendMessageParams.Message.Timeout.Criteria
-                                                .NO_ESCALATION
+                                            SendMessageParams.Message.Timeout.Criteria.NO_ESCALATION
                                         )
                                         .escalation(0L)
                                         .message(0L)
                                         .provider(
-                                            SendSendMessageParams.Message.Timeout.Provider.builder()
+                                            SendMessageParams.Message.Timeout.Provider.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .build()
                                 )
                                 .to(
-                                    SendSendMessageParams.Message.To.UnionMember0.builder()
+                                    SendMessageParams.Message.To.UnionMember0.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendSendMessageParams.Message.To.UnionMember0.Data
-                                                .builder()
+                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -1412,11 +1395,10 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendSendMessageParams.Message.To.UnionMember0
-                                                .Preferences
+                                            SendMessageParams.Message.To.UnionMember0.Preferences
                                                 .builder()
                                                 .notifications(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Notifications
                                                         .builder()
@@ -1446,7 +1428,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Categories
                                                         .builder()
@@ -1494,7 +1476,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage404() {
+    fun sendMessage404() {
         val sendService = client.send()
         stubFor(
             post(anyUrl())
@@ -1505,19 +1487,19 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<NotFoundException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
-                            SendSendMessageParams.Message.builder()
+                            SendMessageParams.Message.builder()
                                 .content(
-                                    SendSendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
                                 )
                                 .brandId("brand_id")
                                 .channels(
-                                    SendSendMessageParams.Message.Channels.builder()
+                                    SendMessageParams.Message.Channels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -1547,29 +1529,29 @@ internal class ErrorHandlingTest {
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
-                                    SendSendMessageParams.Message.Data.builder()
+                                    SendMessageParams.Message.Data.builder()
                                         .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
-                                    SendSendMessageParams.Message.Delay.builder()
+                                    SendMessageParams.Message.Delay.builder()
                                         .duration(0L)
                                         .until("until")
                                         .build()
                                 )
                                 .expiry(
-                                    SendSendMessageParams.Message.Expiry.builder()
+                                    SendMessageParams.Message.Expiry.builder()
                                         .expiresIn("string")
                                         .expiresAt("expires_at")
                                         .build()
                                 )
                                 .metadata(
-                                    SendSendMessageParams.Message.Metadata.builder()
+                                    SendMessageParams.Message.Metadata.builder()
                                         .event("event")
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendSendMessageParams.Message.Metadata.Utm.builder()
+                                            SendMessageParams.Message.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -1580,12 +1562,12 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .preferences(
-                                    SendSendMessageParams.Message.Preferences.builder()
+                                    SendMessageParams.Message.Preferences.builder()
                                         .subscriptionTopicId("subscription_topic_id")
                                         .build()
                                 )
                                 .providers(
-                                    SendSendMessageParams.Message.Providers.builder()
+                                    SendMessageParams.Message.Providers.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -1610,40 +1592,38 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .routing(
-                                    SendSendMessageParams.Message.Routing.builder()
+                                    SendMessageParams.Message.Routing.builder()
                                         .addChannel("email")
-                                        .method(SendSendMessageParams.Message.Routing.Method.SINGLE)
+                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
-                                    SendSendMessageParams.Message.Timeout.builder()
+                                    SendMessageParams.Message.Timeout.builder()
                                         .channel(
-                                            SendSendMessageParams.Message.Timeout.Channel.builder()
+                                            SendMessageParams.Message.Timeout.Channel.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .criteria(
-                                            SendSendMessageParams.Message.Timeout.Criteria
-                                                .NO_ESCALATION
+                                            SendMessageParams.Message.Timeout.Criteria.NO_ESCALATION
                                         )
                                         .escalation(0L)
                                         .message(0L)
                                         .provider(
-                                            SendSendMessageParams.Message.Timeout.Provider.builder()
+                                            SendMessageParams.Message.Timeout.Provider.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .build()
                                 )
                                 .to(
-                                    SendSendMessageParams.Message.To.UnionMember0.builder()
+                                    SendMessageParams.Message.To.UnionMember0.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendSendMessageParams.Message.To.UnionMember0.Data
-                                                .builder()
+                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -1651,11 +1631,10 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendSendMessageParams.Message.To.UnionMember0
-                                                .Preferences
+                                            SendMessageParams.Message.To.UnionMember0.Preferences
                                                 .builder()
                                                 .notifications(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Notifications
                                                         .builder()
@@ -1685,7 +1664,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Categories
                                                         .builder()
@@ -1733,7 +1712,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage404WithRawResponse() {
+    fun sendMessage404WithRawResponse() {
         val sendService = client.send().withRawResponse()
         stubFor(
             post(anyUrl())
@@ -1744,19 +1723,19 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<NotFoundException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
-                            SendSendMessageParams.Message.builder()
+                            SendMessageParams.Message.builder()
                                 .content(
-                                    SendSendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
                                 )
                                 .brandId("brand_id")
                                 .channels(
-                                    SendSendMessageParams.Message.Channels.builder()
+                                    SendMessageParams.Message.Channels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -1786,29 +1765,29 @@ internal class ErrorHandlingTest {
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
-                                    SendSendMessageParams.Message.Data.builder()
+                                    SendMessageParams.Message.Data.builder()
                                         .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
-                                    SendSendMessageParams.Message.Delay.builder()
+                                    SendMessageParams.Message.Delay.builder()
                                         .duration(0L)
                                         .until("until")
                                         .build()
                                 )
                                 .expiry(
-                                    SendSendMessageParams.Message.Expiry.builder()
+                                    SendMessageParams.Message.Expiry.builder()
                                         .expiresIn("string")
                                         .expiresAt("expires_at")
                                         .build()
                                 )
                                 .metadata(
-                                    SendSendMessageParams.Message.Metadata.builder()
+                                    SendMessageParams.Message.Metadata.builder()
                                         .event("event")
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendSendMessageParams.Message.Metadata.Utm.builder()
+                                            SendMessageParams.Message.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -1819,12 +1798,12 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .preferences(
-                                    SendSendMessageParams.Message.Preferences.builder()
+                                    SendMessageParams.Message.Preferences.builder()
                                         .subscriptionTopicId("subscription_topic_id")
                                         .build()
                                 )
                                 .providers(
-                                    SendSendMessageParams.Message.Providers.builder()
+                                    SendMessageParams.Message.Providers.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -1849,40 +1828,38 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .routing(
-                                    SendSendMessageParams.Message.Routing.builder()
+                                    SendMessageParams.Message.Routing.builder()
                                         .addChannel("email")
-                                        .method(SendSendMessageParams.Message.Routing.Method.SINGLE)
+                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
-                                    SendSendMessageParams.Message.Timeout.builder()
+                                    SendMessageParams.Message.Timeout.builder()
                                         .channel(
-                                            SendSendMessageParams.Message.Timeout.Channel.builder()
+                                            SendMessageParams.Message.Timeout.Channel.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .criteria(
-                                            SendSendMessageParams.Message.Timeout.Criteria
-                                                .NO_ESCALATION
+                                            SendMessageParams.Message.Timeout.Criteria.NO_ESCALATION
                                         )
                                         .escalation(0L)
                                         .message(0L)
                                         .provider(
-                                            SendSendMessageParams.Message.Timeout.Provider.builder()
+                                            SendMessageParams.Message.Timeout.Provider.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .build()
                                 )
                                 .to(
-                                    SendSendMessageParams.Message.To.UnionMember0.builder()
+                                    SendMessageParams.Message.To.UnionMember0.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendSendMessageParams.Message.To.UnionMember0.Data
-                                                .builder()
+                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -1890,11 +1867,10 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendSendMessageParams.Message.To.UnionMember0
-                                                .Preferences
+                                            SendMessageParams.Message.To.UnionMember0.Preferences
                                                 .builder()
                                                 .notifications(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Notifications
                                                         .builder()
@@ -1924,7 +1900,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Categories
                                                         .builder()
@@ -1972,7 +1948,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage422() {
+    fun sendMessage422() {
         val sendService = client.send()
         stubFor(
             post(anyUrl())
@@ -1983,19 +1959,19 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<UnprocessableEntityException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
-                            SendSendMessageParams.Message.builder()
+                            SendMessageParams.Message.builder()
                                 .content(
-                                    SendSendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
                                 )
                                 .brandId("brand_id")
                                 .channels(
-                                    SendSendMessageParams.Message.Channels.builder()
+                                    SendMessageParams.Message.Channels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -2025,29 +2001,29 @@ internal class ErrorHandlingTest {
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
-                                    SendSendMessageParams.Message.Data.builder()
+                                    SendMessageParams.Message.Data.builder()
                                         .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
-                                    SendSendMessageParams.Message.Delay.builder()
+                                    SendMessageParams.Message.Delay.builder()
                                         .duration(0L)
                                         .until("until")
                                         .build()
                                 )
                                 .expiry(
-                                    SendSendMessageParams.Message.Expiry.builder()
+                                    SendMessageParams.Message.Expiry.builder()
                                         .expiresIn("string")
                                         .expiresAt("expires_at")
                                         .build()
                                 )
                                 .metadata(
-                                    SendSendMessageParams.Message.Metadata.builder()
+                                    SendMessageParams.Message.Metadata.builder()
                                         .event("event")
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendSendMessageParams.Message.Metadata.Utm.builder()
+                                            SendMessageParams.Message.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -2058,12 +2034,12 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .preferences(
-                                    SendSendMessageParams.Message.Preferences.builder()
+                                    SendMessageParams.Message.Preferences.builder()
                                         .subscriptionTopicId("subscription_topic_id")
                                         .build()
                                 )
                                 .providers(
-                                    SendSendMessageParams.Message.Providers.builder()
+                                    SendMessageParams.Message.Providers.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -2088,40 +2064,38 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .routing(
-                                    SendSendMessageParams.Message.Routing.builder()
+                                    SendMessageParams.Message.Routing.builder()
                                         .addChannel("email")
-                                        .method(SendSendMessageParams.Message.Routing.Method.SINGLE)
+                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
-                                    SendSendMessageParams.Message.Timeout.builder()
+                                    SendMessageParams.Message.Timeout.builder()
                                         .channel(
-                                            SendSendMessageParams.Message.Timeout.Channel.builder()
+                                            SendMessageParams.Message.Timeout.Channel.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .criteria(
-                                            SendSendMessageParams.Message.Timeout.Criteria
-                                                .NO_ESCALATION
+                                            SendMessageParams.Message.Timeout.Criteria.NO_ESCALATION
                                         )
                                         .escalation(0L)
                                         .message(0L)
                                         .provider(
-                                            SendSendMessageParams.Message.Timeout.Provider.builder()
+                                            SendMessageParams.Message.Timeout.Provider.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .build()
                                 )
                                 .to(
-                                    SendSendMessageParams.Message.To.UnionMember0.builder()
+                                    SendMessageParams.Message.To.UnionMember0.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendSendMessageParams.Message.To.UnionMember0.Data
-                                                .builder()
+                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -2129,11 +2103,10 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendSendMessageParams.Message.To.UnionMember0
-                                                .Preferences
+                                            SendMessageParams.Message.To.UnionMember0.Preferences
                                                 .builder()
                                                 .notifications(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Notifications
                                                         .builder()
@@ -2163,7 +2136,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Categories
                                                         .builder()
@@ -2211,7 +2184,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage422WithRawResponse() {
+    fun sendMessage422WithRawResponse() {
         val sendService = client.send().withRawResponse()
         stubFor(
             post(anyUrl())
@@ -2222,19 +2195,19 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<UnprocessableEntityException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
-                            SendSendMessageParams.Message.builder()
+                            SendMessageParams.Message.builder()
                                 .content(
-                                    SendSendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
                                 )
                                 .brandId("brand_id")
                                 .channels(
-                                    SendSendMessageParams.Message.Channels.builder()
+                                    SendMessageParams.Message.Channels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -2264,29 +2237,29 @@ internal class ErrorHandlingTest {
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
-                                    SendSendMessageParams.Message.Data.builder()
+                                    SendMessageParams.Message.Data.builder()
                                         .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
-                                    SendSendMessageParams.Message.Delay.builder()
+                                    SendMessageParams.Message.Delay.builder()
                                         .duration(0L)
                                         .until("until")
                                         .build()
                                 )
                                 .expiry(
-                                    SendSendMessageParams.Message.Expiry.builder()
+                                    SendMessageParams.Message.Expiry.builder()
                                         .expiresIn("string")
                                         .expiresAt("expires_at")
                                         .build()
                                 )
                                 .metadata(
-                                    SendSendMessageParams.Message.Metadata.builder()
+                                    SendMessageParams.Message.Metadata.builder()
                                         .event("event")
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendSendMessageParams.Message.Metadata.Utm.builder()
+                                            SendMessageParams.Message.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -2297,12 +2270,12 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .preferences(
-                                    SendSendMessageParams.Message.Preferences.builder()
+                                    SendMessageParams.Message.Preferences.builder()
                                         .subscriptionTopicId("subscription_topic_id")
                                         .build()
                                 )
                                 .providers(
-                                    SendSendMessageParams.Message.Providers.builder()
+                                    SendMessageParams.Message.Providers.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -2327,40 +2300,38 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .routing(
-                                    SendSendMessageParams.Message.Routing.builder()
+                                    SendMessageParams.Message.Routing.builder()
                                         .addChannel("email")
-                                        .method(SendSendMessageParams.Message.Routing.Method.SINGLE)
+                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
-                                    SendSendMessageParams.Message.Timeout.builder()
+                                    SendMessageParams.Message.Timeout.builder()
                                         .channel(
-                                            SendSendMessageParams.Message.Timeout.Channel.builder()
+                                            SendMessageParams.Message.Timeout.Channel.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .criteria(
-                                            SendSendMessageParams.Message.Timeout.Criteria
-                                                .NO_ESCALATION
+                                            SendMessageParams.Message.Timeout.Criteria.NO_ESCALATION
                                         )
                                         .escalation(0L)
                                         .message(0L)
                                         .provider(
-                                            SendSendMessageParams.Message.Timeout.Provider.builder()
+                                            SendMessageParams.Message.Timeout.Provider.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .build()
                                 )
                                 .to(
-                                    SendSendMessageParams.Message.To.UnionMember0.builder()
+                                    SendMessageParams.Message.To.UnionMember0.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendSendMessageParams.Message.To.UnionMember0.Data
-                                                .builder()
+                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -2368,11 +2339,10 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendSendMessageParams.Message.To.UnionMember0
-                                                .Preferences
+                                            SendMessageParams.Message.To.UnionMember0.Preferences
                                                 .builder()
                                                 .notifications(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Notifications
                                                         .builder()
@@ -2402,7 +2372,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Categories
                                                         .builder()
@@ -2450,7 +2420,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage429() {
+    fun sendMessage429() {
         val sendService = client.send()
         stubFor(
             post(anyUrl())
@@ -2461,19 +2431,19 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<RateLimitException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
-                            SendSendMessageParams.Message.builder()
+                            SendMessageParams.Message.builder()
                                 .content(
-                                    SendSendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
                                 )
                                 .brandId("brand_id")
                                 .channels(
-                                    SendSendMessageParams.Message.Channels.builder()
+                                    SendMessageParams.Message.Channels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -2503,29 +2473,29 @@ internal class ErrorHandlingTest {
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
-                                    SendSendMessageParams.Message.Data.builder()
+                                    SendMessageParams.Message.Data.builder()
                                         .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
-                                    SendSendMessageParams.Message.Delay.builder()
+                                    SendMessageParams.Message.Delay.builder()
                                         .duration(0L)
                                         .until("until")
                                         .build()
                                 )
                                 .expiry(
-                                    SendSendMessageParams.Message.Expiry.builder()
+                                    SendMessageParams.Message.Expiry.builder()
                                         .expiresIn("string")
                                         .expiresAt("expires_at")
                                         .build()
                                 )
                                 .metadata(
-                                    SendSendMessageParams.Message.Metadata.builder()
+                                    SendMessageParams.Message.Metadata.builder()
                                         .event("event")
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendSendMessageParams.Message.Metadata.Utm.builder()
+                                            SendMessageParams.Message.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -2536,12 +2506,12 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .preferences(
-                                    SendSendMessageParams.Message.Preferences.builder()
+                                    SendMessageParams.Message.Preferences.builder()
                                         .subscriptionTopicId("subscription_topic_id")
                                         .build()
                                 )
                                 .providers(
-                                    SendSendMessageParams.Message.Providers.builder()
+                                    SendMessageParams.Message.Providers.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -2566,40 +2536,38 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .routing(
-                                    SendSendMessageParams.Message.Routing.builder()
+                                    SendMessageParams.Message.Routing.builder()
                                         .addChannel("email")
-                                        .method(SendSendMessageParams.Message.Routing.Method.SINGLE)
+                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
-                                    SendSendMessageParams.Message.Timeout.builder()
+                                    SendMessageParams.Message.Timeout.builder()
                                         .channel(
-                                            SendSendMessageParams.Message.Timeout.Channel.builder()
+                                            SendMessageParams.Message.Timeout.Channel.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .criteria(
-                                            SendSendMessageParams.Message.Timeout.Criteria
-                                                .NO_ESCALATION
+                                            SendMessageParams.Message.Timeout.Criteria.NO_ESCALATION
                                         )
                                         .escalation(0L)
                                         .message(0L)
                                         .provider(
-                                            SendSendMessageParams.Message.Timeout.Provider.builder()
+                                            SendMessageParams.Message.Timeout.Provider.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .build()
                                 )
                                 .to(
-                                    SendSendMessageParams.Message.To.UnionMember0.builder()
+                                    SendMessageParams.Message.To.UnionMember0.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendSendMessageParams.Message.To.UnionMember0.Data
-                                                .builder()
+                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -2607,11 +2575,10 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendSendMessageParams.Message.To.UnionMember0
-                                                .Preferences
+                                            SendMessageParams.Message.To.UnionMember0.Preferences
                                                 .builder()
                                                 .notifications(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Notifications
                                                         .builder()
@@ -2641,7 +2608,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Categories
                                                         .builder()
@@ -2689,7 +2656,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage429WithRawResponse() {
+    fun sendMessage429WithRawResponse() {
         val sendService = client.send().withRawResponse()
         stubFor(
             post(anyUrl())
@@ -2700,19 +2667,19 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<RateLimitException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
-                            SendSendMessageParams.Message.builder()
+                            SendMessageParams.Message.builder()
                                 .content(
-                                    SendSendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
                                 )
                                 .brandId("brand_id")
                                 .channels(
-                                    SendSendMessageParams.Message.Channels.builder()
+                                    SendMessageParams.Message.Channels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -2742,29 +2709,29 @@ internal class ErrorHandlingTest {
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
-                                    SendSendMessageParams.Message.Data.builder()
+                                    SendMessageParams.Message.Data.builder()
                                         .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
-                                    SendSendMessageParams.Message.Delay.builder()
+                                    SendMessageParams.Message.Delay.builder()
                                         .duration(0L)
                                         .until("until")
                                         .build()
                                 )
                                 .expiry(
-                                    SendSendMessageParams.Message.Expiry.builder()
+                                    SendMessageParams.Message.Expiry.builder()
                                         .expiresIn("string")
                                         .expiresAt("expires_at")
                                         .build()
                                 )
                                 .metadata(
-                                    SendSendMessageParams.Message.Metadata.builder()
+                                    SendMessageParams.Message.Metadata.builder()
                                         .event("event")
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendSendMessageParams.Message.Metadata.Utm.builder()
+                                            SendMessageParams.Message.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -2775,12 +2742,12 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .preferences(
-                                    SendSendMessageParams.Message.Preferences.builder()
+                                    SendMessageParams.Message.Preferences.builder()
                                         .subscriptionTopicId("subscription_topic_id")
                                         .build()
                                 )
                                 .providers(
-                                    SendSendMessageParams.Message.Providers.builder()
+                                    SendMessageParams.Message.Providers.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -2805,40 +2772,38 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .routing(
-                                    SendSendMessageParams.Message.Routing.builder()
+                                    SendMessageParams.Message.Routing.builder()
                                         .addChannel("email")
-                                        .method(SendSendMessageParams.Message.Routing.Method.SINGLE)
+                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
-                                    SendSendMessageParams.Message.Timeout.builder()
+                                    SendMessageParams.Message.Timeout.builder()
                                         .channel(
-                                            SendSendMessageParams.Message.Timeout.Channel.builder()
+                                            SendMessageParams.Message.Timeout.Channel.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .criteria(
-                                            SendSendMessageParams.Message.Timeout.Criteria
-                                                .NO_ESCALATION
+                                            SendMessageParams.Message.Timeout.Criteria.NO_ESCALATION
                                         )
                                         .escalation(0L)
                                         .message(0L)
                                         .provider(
-                                            SendSendMessageParams.Message.Timeout.Provider.builder()
+                                            SendMessageParams.Message.Timeout.Provider.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .build()
                                 )
                                 .to(
-                                    SendSendMessageParams.Message.To.UnionMember0.builder()
+                                    SendMessageParams.Message.To.UnionMember0.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendSendMessageParams.Message.To.UnionMember0.Data
-                                                .builder()
+                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -2846,11 +2811,10 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendSendMessageParams.Message.To.UnionMember0
-                                                .Preferences
+                                            SendMessageParams.Message.To.UnionMember0.Preferences
                                                 .builder()
                                                 .notifications(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Notifications
                                                         .builder()
@@ -2880,7 +2844,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Categories
                                                         .builder()
@@ -2928,7 +2892,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage500() {
+    fun sendMessage500() {
         val sendService = client.send()
         stubFor(
             post(anyUrl())
@@ -2939,19 +2903,19 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<InternalServerException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
-                            SendSendMessageParams.Message.builder()
+                            SendMessageParams.Message.builder()
                                 .content(
-                                    SendSendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
                                 )
                                 .brandId("brand_id")
                                 .channels(
-                                    SendSendMessageParams.Message.Channels.builder()
+                                    SendMessageParams.Message.Channels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -2981,29 +2945,29 @@ internal class ErrorHandlingTest {
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
-                                    SendSendMessageParams.Message.Data.builder()
+                                    SendMessageParams.Message.Data.builder()
                                         .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
-                                    SendSendMessageParams.Message.Delay.builder()
+                                    SendMessageParams.Message.Delay.builder()
                                         .duration(0L)
                                         .until("until")
                                         .build()
                                 )
                                 .expiry(
-                                    SendSendMessageParams.Message.Expiry.builder()
+                                    SendMessageParams.Message.Expiry.builder()
                                         .expiresIn("string")
                                         .expiresAt("expires_at")
                                         .build()
                                 )
                                 .metadata(
-                                    SendSendMessageParams.Message.Metadata.builder()
+                                    SendMessageParams.Message.Metadata.builder()
                                         .event("event")
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendSendMessageParams.Message.Metadata.Utm.builder()
+                                            SendMessageParams.Message.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -3014,12 +2978,12 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .preferences(
-                                    SendSendMessageParams.Message.Preferences.builder()
+                                    SendMessageParams.Message.Preferences.builder()
                                         .subscriptionTopicId("subscription_topic_id")
                                         .build()
                                 )
                                 .providers(
-                                    SendSendMessageParams.Message.Providers.builder()
+                                    SendMessageParams.Message.Providers.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -3044,40 +3008,38 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .routing(
-                                    SendSendMessageParams.Message.Routing.builder()
+                                    SendMessageParams.Message.Routing.builder()
                                         .addChannel("email")
-                                        .method(SendSendMessageParams.Message.Routing.Method.SINGLE)
+                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
-                                    SendSendMessageParams.Message.Timeout.builder()
+                                    SendMessageParams.Message.Timeout.builder()
                                         .channel(
-                                            SendSendMessageParams.Message.Timeout.Channel.builder()
+                                            SendMessageParams.Message.Timeout.Channel.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .criteria(
-                                            SendSendMessageParams.Message.Timeout.Criteria
-                                                .NO_ESCALATION
+                                            SendMessageParams.Message.Timeout.Criteria.NO_ESCALATION
                                         )
                                         .escalation(0L)
                                         .message(0L)
                                         .provider(
-                                            SendSendMessageParams.Message.Timeout.Provider.builder()
+                                            SendMessageParams.Message.Timeout.Provider.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .build()
                                 )
                                 .to(
-                                    SendSendMessageParams.Message.To.UnionMember0.builder()
+                                    SendMessageParams.Message.To.UnionMember0.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendSendMessageParams.Message.To.UnionMember0.Data
-                                                .builder()
+                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -3085,11 +3047,10 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendSendMessageParams.Message.To.UnionMember0
-                                                .Preferences
+                                            SendMessageParams.Message.To.UnionMember0.Preferences
                                                 .builder()
                                                 .notifications(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Notifications
                                                         .builder()
@@ -3119,7 +3080,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Categories
                                                         .builder()
@@ -3167,7 +3128,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage500WithRawResponse() {
+    fun sendMessage500WithRawResponse() {
         val sendService = client.send().withRawResponse()
         stubFor(
             post(anyUrl())
@@ -3178,19 +3139,19 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<InternalServerException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
-                            SendSendMessageParams.Message.builder()
+                            SendMessageParams.Message.builder()
                                 .content(
-                                    SendSendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
                                 )
                                 .brandId("brand_id")
                                 .channels(
-                                    SendSendMessageParams.Message.Channels.builder()
+                                    SendMessageParams.Message.Channels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -3220,29 +3181,29 @@ internal class ErrorHandlingTest {
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
-                                    SendSendMessageParams.Message.Data.builder()
+                                    SendMessageParams.Message.Data.builder()
                                         .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
-                                    SendSendMessageParams.Message.Delay.builder()
+                                    SendMessageParams.Message.Delay.builder()
                                         .duration(0L)
                                         .until("until")
                                         .build()
                                 )
                                 .expiry(
-                                    SendSendMessageParams.Message.Expiry.builder()
+                                    SendMessageParams.Message.Expiry.builder()
                                         .expiresIn("string")
                                         .expiresAt("expires_at")
                                         .build()
                                 )
                                 .metadata(
-                                    SendSendMessageParams.Message.Metadata.builder()
+                                    SendMessageParams.Message.Metadata.builder()
                                         .event("event")
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendSendMessageParams.Message.Metadata.Utm.builder()
+                                            SendMessageParams.Message.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -3253,12 +3214,12 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .preferences(
-                                    SendSendMessageParams.Message.Preferences.builder()
+                                    SendMessageParams.Message.Preferences.builder()
                                         .subscriptionTopicId("subscription_topic_id")
                                         .build()
                                 )
                                 .providers(
-                                    SendSendMessageParams.Message.Providers.builder()
+                                    SendMessageParams.Message.Providers.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -3283,40 +3244,38 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .routing(
-                                    SendSendMessageParams.Message.Routing.builder()
+                                    SendMessageParams.Message.Routing.builder()
                                         .addChannel("email")
-                                        .method(SendSendMessageParams.Message.Routing.Method.SINGLE)
+                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
-                                    SendSendMessageParams.Message.Timeout.builder()
+                                    SendMessageParams.Message.Timeout.builder()
                                         .channel(
-                                            SendSendMessageParams.Message.Timeout.Channel.builder()
+                                            SendMessageParams.Message.Timeout.Channel.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .criteria(
-                                            SendSendMessageParams.Message.Timeout.Criteria
-                                                .NO_ESCALATION
+                                            SendMessageParams.Message.Timeout.Criteria.NO_ESCALATION
                                         )
                                         .escalation(0L)
                                         .message(0L)
                                         .provider(
-                                            SendSendMessageParams.Message.Timeout.Provider.builder()
+                                            SendMessageParams.Message.Timeout.Provider.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .build()
                                 )
                                 .to(
-                                    SendSendMessageParams.Message.To.UnionMember0.builder()
+                                    SendMessageParams.Message.To.UnionMember0.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendSendMessageParams.Message.To.UnionMember0.Data
-                                                .builder()
+                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -3324,11 +3283,10 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendSendMessageParams.Message.To.UnionMember0
-                                                .Preferences
+                                            SendMessageParams.Message.To.UnionMember0.Preferences
                                                 .builder()
                                                 .notifications(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Notifications
                                                         .builder()
@@ -3358,7 +3316,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Categories
                                                         .builder()
@@ -3406,7 +3364,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage999() {
+    fun sendMessage999() {
         val sendService = client.send()
         stubFor(
             post(anyUrl())
@@ -3417,19 +3375,19 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<UnexpectedStatusCodeException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
-                            SendSendMessageParams.Message.builder()
+                            SendMessageParams.Message.builder()
                                 .content(
-                                    SendSendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
                                 )
                                 .brandId("brand_id")
                                 .channels(
-                                    SendSendMessageParams.Message.Channels.builder()
+                                    SendMessageParams.Message.Channels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -3459,29 +3417,29 @@ internal class ErrorHandlingTest {
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
-                                    SendSendMessageParams.Message.Data.builder()
+                                    SendMessageParams.Message.Data.builder()
                                         .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
-                                    SendSendMessageParams.Message.Delay.builder()
+                                    SendMessageParams.Message.Delay.builder()
                                         .duration(0L)
                                         .until("until")
                                         .build()
                                 )
                                 .expiry(
-                                    SendSendMessageParams.Message.Expiry.builder()
+                                    SendMessageParams.Message.Expiry.builder()
                                         .expiresIn("string")
                                         .expiresAt("expires_at")
                                         .build()
                                 )
                                 .metadata(
-                                    SendSendMessageParams.Message.Metadata.builder()
+                                    SendMessageParams.Message.Metadata.builder()
                                         .event("event")
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendSendMessageParams.Message.Metadata.Utm.builder()
+                                            SendMessageParams.Message.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -3492,12 +3450,12 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .preferences(
-                                    SendSendMessageParams.Message.Preferences.builder()
+                                    SendMessageParams.Message.Preferences.builder()
                                         .subscriptionTopicId("subscription_topic_id")
                                         .build()
                                 )
                                 .providers(
-                                    SendSendMessageParams.Message.Providers.builder()
+                                    SendMessageParams.Message.Providers.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -3522,40 +3480,38 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .routing(
-                                    SendSendMessageParams.Message.Routing.builder()
+                                    SendMessageParams.Message.Routing.builder()
                                         .addChannel("email")
-                                        .method(SendSendMessageParams.Message.Routing.Method.SINGLE)
+                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
-                                    SendSendMessageParams.Message.Timeout.builder()
+                                    SendMessageParams.Message.Timeout.builder()
                                         .channel(
-                                            SendSendMessageParams.Message.Timeout.Channel.builder()
+                                            SendMessageParams.Message.Timeout.Channel.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .criteria(
-                                            SendSendMessageParams.Message.Timeout.Criteria
-                                                .NO_ESCALATION
+                                            SendMessageParams.Message.Timeout.Criteria.NO_ESCALATION
                                         )
                                         .escalation(0L)
                                         .message(0L)
                                         .provider(
-                                            SendSendMessageParams.Message.Timeout.Provider.builder()
+                                            SendMessageParams.Message.Timeout.Provider.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .build()
                                 )
                                 .to(
-                                    SendSendMessageParams.Message.To.UnionMember0.builder()
+                                    SendMessageParams.Message.To.UnionMember0.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendSendMessageParams.Message.To.UnionMember0.Data
-                                                .builder()
+                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -3563,11 +3519,10 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendSendMessageParams.Message.To.UnionMember0
-                                                .Preferences
+                                            SendMessageParams.Message.To.UnionMember0.Preferences
                                                 .builder()
                                                 .notifications(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Notifications
                                                         .builder()
@@ -3597,7 +3552,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Categories
                                                         .builder()
@@ -3645,7 +3600,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessage999WithRawResponse() {
+    fun sendMessage999WithRawResponse() {
         val sendService = client.send().withRawResponse()
         stubFor(
             post(anyUrl())
@@ -3656,19 +3611,19 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<UnexpectedStatusCodeException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
-                            SendSendMessageParams.Message.builder()
+                            SendMessageParams.Message.builder()
                                 .content(
-                                    SendSendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
                                 )
                                 .brandId("brand_id")
                                 .channels(
-                                    SendSendMessageParams.Message.Channels.builder()
+                                    SendMessageParams.Message.Channels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -3698,29 +3653,29 @@ internal class ErrorHandlingTest {
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
-                                    SendSendMessageParams.Message.Data.builder()
+                                    SendMessageParams.Message.Data.builder()
                                         .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
-                                    SendSendMessageParams.Message.Delay.builder()
+                                    SendMessageParams.Message.Delay.builder()
                                         .duration(0L)
                                         .until("until")
                                         .build()
                                 )
                                 .expiry(
-                                    SendSendMessageParams.Message.Expiry.builder()
+                                    SendMessageParams.Message.Expiry.builder()
                                         .expiresIn("string")
                                         .expiresAt("expires_at")
                                         .build()
                                 )
                                 .metadata(
-                                    SendSendMessageParams.Message.Metadata.builder()
+                                    SendMessageParams.Message.Metadata.builder()
                                         .event("event")
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendSendMessageParams.Message.Metadata.Utm.builder()
+                                            SendMessageParams.Message.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -3731,12 +3686,12 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .preferences(
-                                    SendSendMessageParams.Message.Preferences.builder()
+                                    SendMessageParams.Message.Preferences.builder()
                                         .subscriptionTopicId("subscription_topic_id")
                                         .build()
                                 )
                                 .providers(
-                                    SendSendMessageParams.Message.Providers.builder()
+                                    SendMessageParams.Message.Providers.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -3761,40 +3716,38 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .routing(
-                                    SendSendMessageParams.Message.Routing.builder()
+                                    SendMessageParams.Message.Routing.builder()
                                         .addChannel("email")
-                                        .method(SendSendMessageParams.Message.Routing.Method.SINGLE)
+                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
-                                    SendSendMessageParams.Message.Timeout.builder()
+                                    SendMessageParams.Message.Timeout.builder()
                                         .channel(
-                                            SendSendMessageParams.Message.Timeout.Channel.builder()
+                                            SendMessageParams.Message.Timeout.Channel.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .criteria(
-                                            SendSendMessageParams.Message.Timeout.Criteria
-                                                .NO_ESCALATION
+                                            SendMessageParams.Message.Timeout.Criteria.NO_ESCALATION
                                         )
                                         .escalation(0L)
                                         .message(0L)
                                         .provider(
-                                            SendSendMessageParams.Message.Timeout.Provider.builder()
+                                            SendMessageParams.Message.Timeout.Provider.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .build()
                                 )
                                 .to(
-                                    SendSendMessageParams.Message.To.UnionMember0.builder()
+                                    SendMessageParams.Message.To.UnionMember0.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendSendMessageParams.Message.To.UnionMember0.Data
-                                                .builder()
+                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -3802,11 +3755,10 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendSendMessageParams.Message.To.UnionMember0
-                                                .Preferences
+                                            SendMessageParams.Message.To.UnionMember0.Preferences
                                                 .builder()
                                                 .notifications(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Notifications
                                                         .builder()
@@ -3836,7 +3788,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Categories
                                                         .builder()
@@ -3884,7 +3836,7 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun sendSendMessageInvalidJsonBody() {
+    fun sendMessageInvalidJsonBody() {
         val sendService = client.send()
         stubFor(
             post(anyUrl())
@@ -3893,19 +3845,19 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<CourierException> {
-                sendService.sendMessage(
-                    SendSendMessageParams.builder()
+                sendService.message(
+                    SendMessageParams.builder()
                         .message(
-                            SendSendMessageParams.Message.builder()
+                            SendMessageParams.Message.builder()
                                 .content(
-                                    SendSendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
                                 )
                                 .brandId("brand_id")
                                 .channels(
-                                    SendSendMessageParams.Message.Channels.builder()
+                                    SendMessageParams.Message.Channels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -3935,29 +3887,29 @@ internal class ErrorHandlingTest {
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
-                                    SendSendMessageParams.Message.Data.builder()
+                                    SendMessageParams.Message.Data.builder()
                                         .putAdditionalProperty("name", JsonValue.from("bar"))
                                         .build()
                                 )
                                 .delay(
-                                    SendSendMessageParams.Message.Delay.builder()
+                                    SendMessageParams.Message.Delay.builder()
                                         .duration(0L)
                                         .until("until")
                                         .build()
                                 )
                                 .expiry(
-                                    SendSendMessageParams.Message.Expiry.builder()
+                                    SendMessageParams.Message.Expiry.builder()
                                         .expiresIn("string")
                                         .expiresAt("expires_at")
                                         .build()
                                 )
                                 .metadata(
-                                    SendSendMessageParams.Message.Metadata.builder()
+                                    SendMessageParams.Message.Metadata.builder()
                                         .event("event")
                                         .addTag("string")
                                         .traceId("trace_id")
                                         .utm(
-                                            SendSendMessageParams.Message.Metadata.Utm.builder()
+                                            SendMessageParams.Message.Metadata.Utm.builder()
                                                 .campaign("campaign")
                                                 .content("content")
                                                 .medium("medium")
@@ -3968,12 +3920,12 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .preferences(
-                                    SendSendMessageParams.Message.Preferences.builder()
+                                    SendMessageParams.Message.Preferences.builder()
                                         .subscriptionTopicId("subscription_topic_id")
                                         .build()
                                 )
                                 .providers(
-                                    SendSendMessageParams.Message.Providers.builder()
+                                    SendMessageParams.Message.Providers.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -3998,40 +3950,38 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .routing(
-                                    SendSendMessageParams.Message.Routing.builder()
+                                    SendMessageParams.Message.Routing.builder()
                                         .addChannel("email")
-                                        .method(SendSendMessageParams.Message.Routing.Method.SINGLE)
+                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
                                         .build()
                                 )
                                 .timeout(
-                                    SendSendMessageParams.Message.Timeout.builder()
+                                    SendMessageParams.Message.Timeout.builder()
                                         .channel(
-                                            SendSendMessageParams.Message.Timeout.Channel.builder()
+                                            SendMessageParams.Message.Timeout.Channel.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .criteria(
-                                            SendSendMessageParams.Message.Timeout.Criteria
-                                                .NO_ESCALATION
+                                            SendMessageParams.Message.Timeout.Criteria.NO_ESCALATION
                                         )
                                         .escalation(0L)
                                         .message(0L)
                                         .provider(
-                                            SendSendMessageParams.Message.Timeout.Provider.builder()
+                                            SendMessageParams.Message.Timeout.Provider.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from(0))
                                                 .build()
                                         )
                                         .build()
                                 )
                                 .to(
-                                    SendSendMessageParams.Message.To.UnionMember0.builder()
+                                    SendMessageParams.Message.To.UnionMember0.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendSendMessageParams.Message.To.UnionMember0.Data
-                                                .builder()
+                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -4039,11 +3989,10 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendSendMessageParams.Message.To.UnionMember0
-                                                .Preferences
+                                            SendMessageParams.Message.To.UnionMember0.Preferences
                                                 .builder()
                                                 .notifications(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Notifications
                                                         .builder()
@@ -4073,7 +4022,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendSendMessageParams.Message.To.UnionMember0
+                                                    SendMessageParams.Message.To.UnionMember0
                                                         .Preferences
                                                         .Categories
                                                         .builder()

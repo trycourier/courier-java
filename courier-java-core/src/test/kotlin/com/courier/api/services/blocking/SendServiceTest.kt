@@ -6,7 +6,7 @@ import com.courier.api.TestServerExtension
 import com.courier.api.client.okhttp.CourierOkHttpClient
 import com.courier.api.core.JsonValue
 import com.courier.api.models.send.MessageContext
-import com.courier.api.models.send.SendSendMessageParams
+import com.courier.api.models.send.SendMessageParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -16,7 +16,7 @@ internal class SendServiceTest {
 
     @Disabled("Prism tests are disabled")
     @Test
-    fun sendMessage() {
+    fun message() {
         val client =
             CourierOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
@@ -25,19 +25,19 @@ internal class SendServiceTest {
         val sendService = client.send()
 
         val response =
-            sendService.sendMessage(
-                SendSendMessageParams.builder()
+            sendService.message(
+                SendMessageParams.builder()
                     .message(
-                        SendSendMessageParams.Message.builder()
+                        SendMessageParams.Message.builder()
                             .content(
-                                SendSendMessageParams.Message.Content.builder()
+                                SendMessageParams.Message.Content.builder()
                                     .body("Thanks for signing up, {{name}}")
                                     .title("Welcome!")
                                     .build()
                             )
                             .brandId("brand_id")
                             .channels(
-                                SendSendMessageParams.Message.Channels.builder()
+                                SendMessageParams.Message.Channels.builder()
                                     .putAdditionalProperty(
                                         "foo",
                                         JsonValue.from(
@@ -66,29 +66,29 @@ internal class SendServiceTest {
                             )
                             .context(MessageContext.builder().tenantId("tenant_id").build())
                             .data(
-                                SendSendMessageParams.Message.Data.builder()
+                                SendMessageParams.Message.Data.builder()
                                     .putAdditionalProperty("name", JsonValue.from("bar"))
                                     .build()
                             )
                             .delay(
-                                SendSendMessageParams.Message.Delay.builder()
+                                SendMessageParams.Message.Delay.builder()
                                     .duration(0L)
                                     .until("until")
                                     .build()
                             )
                             .expiry(
-                                SendSendMessageParams.Message.Expiry.builder()
+                                SendMessageParams.Message.Expiry.builder()
                                     .expiresIn("string")
                                     .expiresAt("expires_at")
                                     .build()
                             )
                             .metadata(
-                                SendSendMessageParams.Message.Metadata.builder()
+                                SendMessageParams.Message.Metadata.builder()
                                     .event("event")
                                     .addTag("string")
                                     .traceId("trace_id")
                                     .utm(
-                                        SendSendMessageParams.Message.Metadata.Utm.builder()
+                                        SendMessageParams.Message.Metadata.Utm.builder()
                                             .campaign("campaign")
                                             .content("content")
                                             .medium("medium")
@@ -99,12 +99,12 @@ internal class SendServiceTest {
                                     .build()
                             )
                             .preferences(
-                                SendSendMessageParams.Message.Preferences.builder()
+                                SendMessageParams.Message.Preferences.builder()
                                     .subscriptionTopicId("subscription_topic_id")
                                     .build()
                             )
                             .providers(
-                                SendSendMessageParams.Message.Providers.builder()
+                                SendMessageParams.Message.Providers.builder()
                                     .putAdditionalProperty(
                                         "foo",
                                         JsonValue.from(
@@ -129,36 +129,36 @@ internal class SendServiceTest {
                                     .build()
                             )
                             .routing(
-                                SendSendMessageParams.Message.Routing.builder()
+                                SendMessageParams.Message.Routing.builder()
                                     .addChannel("email")
-                                    .method(SendSendMessageParams.Message.Routing.Method.SINGLE)
+                                    .method(SendMessageParams.Message.Routing.Method.SINGLE)
                                     .build()
                             )
                             .timeout(
-                                SendSendMessageParams.Message.Timeout.builder()
+                                SendMessageParams.Message.Timeout.builder()
                                     .channel(
-                                        SendSendMessageParams.Message.Timeout.Channel.builder()
+                                        SendMessageParams.Message.Timeout.Channel.builder()
                                             .putAdditionalProperty("foo", JsonValue.from(0))
                                             .build()
                                     )
                                     .criteria(
-                                        SendSendMessageParams.Message.Timeout.Criteria.NO_ESCALATION
+                                        SendMessageParams.Message.Timeout.Criteria.NO_ESCALATION
                                     )
                                     .escalation(0L)
                                     .message(0L)
                                     .provider(
-                                        SendSendMessageParams.Message.Timeout.Provider.builder()
+                                        SendMessageParams.Message.Timeout.Provider.builder()
                                             .putAdditionalProperty("foo", JsonValue.from(0))
                                             .build()
                                     )
                                     .build()
                             )
                             .to(
-                                SendSendMessageParams.Message.To.UnionMember0.builder()
+                                SendMessageParams.Message.To.UnionMember0.builder()
                                     .accountId("account_id")
                                     .context(MessageContext.builder().tenantId("tenant_id").build())
                                     .data(
-                                        SendSendMessageParams.Message.To.UnionMember0.Data.builder()
+                                        SendMessageParams.Message.To.UnionMember0.Data.builder()
                                             .putAdditionalProperty("foo", JsonValue.from("bar"))
                                             .build()
                                     )
@@ -166,10 +166,10 @@ internal class SendServiceTest {
                                     .locale("locale")
                                     .phoneNumber("phone_number")
                                     .preferences(
-                                        SendSendMessageParams.Message.To.UnionMember0.Preferences
+                                        SendMessageParams.Message.To.UnionMember0.Preferences
                                             .builder()
                                             .notifications(
-                                                SendSendMessageParams.Message.To.UnionMember0
+                                                SendMessageParams.Message.To.UnionMember0
                                                     .Preferences
                                                     .Notifications
                                                     .builder()
@@ -199,7 +199,7 @@ internal class SendServiceTest {
                                                     .build()
                                             )
                                             .categories(
-                                                SendSendMessageParams.Message.To.UnionMember0
+                                                SendMessageParams.Message.To.UnionMember0
                                                     .Preferences
                                                     .Categories
                                                     .builder()
