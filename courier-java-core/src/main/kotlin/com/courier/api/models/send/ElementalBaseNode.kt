@@ -7,7 +7,6 @@ import com.courier.api.core.JsonField
 import com.courier.api.core.JsonMissing
 import com.courier.api.core.JsonValue
 import com.courier.api.core.checkKnown
-import com.courier.api.core.checkRequired
 import com.courier.api.core.toImmutable
 import com.courier.api.errors.CourierInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -19,26 +18,13 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/**
- * The channel element allows a notification to be customized based on which channel it is sent
- * through. For example, you may want to display a detailed message when the notification is sent
- * through email, and a more concise message in a push notification. Channel elements are only valid
- * as top-level elements; you cannot nest channel elements. If there is a channel element specified
- * at the top-level of the document, all sibling elements must be channel elements. Note: As an
- * alternative, most elements support a `channel` property. Which allows you to selectively display
- * an individual element on a per channel basis. See the
- * [control flow docs](https://www.courier.com/docs/platform/content/elemental/control-flow/) for
- * more details.
- */
-class ElementalChannelNode
+class ElementalBaseNode
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val channels: JsonField<List<String>>,
     private val if_: JsonField<String>,
     private val loop: JsonField<String>,
     private val ref: JsonField<String>,
-    private val channel: JsonField<String>,
-    private val raw: JsonField<Raw>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -50,12 +36,7 @@ private constructor(
         @JsonProperty("if") @ExcludeMissing if_: JsonField<String> = JsonMissing.of(),
         @JsonProperty("loop") @ExcludeMissing loop: JsonField<String> = JsonMissing.of(),
         @JsonProperty("ref") @ExcludeMissing ref: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("channel") @ExcludeMissing channel: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("raw") @ExcludeMissing raw: JsonField<Raw> = JsonMissing.of(),
-    ) : this(channels, if_, loop, ref, channel, raw, mutableMapOf())
-
-    fun toElementalBaseNode(): ElementalBaseNode =
-        ElementalBaseNode.builder().channels(channels).if_(if_).loop(loop).ref(ref).build()
+    ) : this(channels, if_, loop, ref, mutableMapOf())
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -80,23 +61,6 @@ private constructor(
      *   server responded with an unexpected value).
      */
     fun ref(): Optional<String> = ref.getOptional("ref")
-
-    /**
-     * The channel the contents of this element should be applied to. Can be `email`, `push`,
-     * `direct_message`, `sms` or a provider such as slack
-     *
-     * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
-    fun channel(): String = channel.getRequired("channel")
-
-    /**
-     * Raw data to apply to the channel. If `elements` has not been specified, `raw` is `required`.
-     *
-     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
-    fun raw(): Optional<Raw> = raw.getOptional("raw")
 
     /**
      * Returns the raw JSON value of [channels].
@@ -126,20 +90,6 @@ private constructor(
      */
     @JsonProperty("ref") @ExcludeMissing fun _ref(): JsonField<String> = ref
 
-    /**
-     * Returns the raw JSON value of [channel].
-     *
-     * Unlike [channel], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("channel") @ExcludeMissing fun _channel(): JsonField<String> = channel
-
-    /**
-     * Returns the raw JSON value of [raw].
-     *
-     * Unlike [raw], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("raw") @ExcludeMissing fun _raw(): JsonField<Raw> = raw
-
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
@@ -154,37 +104,26 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [ElementalChannelNode].
-         *
-         * The following fields are required:
-         * ```java
-         * .channel()
-         * ```
-         */
+        /** Returns a mutable builder for constructing an instance of [ElementalBaseNode]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [ElementalChannelNode]. */
+    /** A builder for [ElementalBaseNode]. */
     class Builder internal constructor() {
 
         private var channels: JsonField<MutableList<String>>? = null
         private var if_: JsonField<String> = JsonMissing.of()
         private var loop: JsonField<String> = JsonMissing.of()
         private var ref: JsonField<String> = JsonMissing.of()
-        private var channel: JsonField<String>? = null
-        private var raw: JsonField<Raw> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(elementalChannelNode: ElementalChannelNode) = apply {
-            channels = elementalChannelNode.channels.map { it.toMutableList() }
-            if_ = elementalChannelNode.if_
-            loop = elementalChannelNode.loop
-            ref = elementalChannelNode.ref
-            channel = elementalChannelNode.channel
-            raw = elementalChannelNode.raw
-            additionalProperties = elementalChannelNode.additionalProperties.toMutableMap()
+        internal fun from(elementalBaseNode: ElementalBaseNode) = apply {
+            channels = elementalBaseNode.channels.map { it.toMutableList() }
+            if_ = elementalBaseNode.if_
+            loop = elementalBaseNode.loop
+            ref = elementalBaseNode.ref
+            additionalProperties = elementalBaseNode.additionalProperties.toMutableMap()
         }
 
         fun channels(channels: List<String>?) = channels(JsonField.ofNullable(channels))
@@ -254,37 +193,6 @@ private constructor(
          */
         fun ref(ref: JsonField<String>) = apply { this.ref = ref }
 
-        /**
-         * The channel the contents of this element should be applied to. Can be `email`, `push`,
-         * `direct_message`, `sms` or a provider such as slack
-         */
-        fun channel(channel: String) = channel(JsonField.of(channel))
-
-        /**
-         * Sets [Builder.channel] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.channel] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun channel(channel: JsonField<String>) = apply { this.channel = channel }
-
-        /**
-         * Raw data to apply to the channel. If `elements` has not been specified, `raw` is
-         * `required`.
-         */
-        fun raw(raw: Raw?) = raw(JsonField.ofNullable(raw))
-
-        /** Alias for calling [Builder.raw] with `raw.orElse(null)`. */
-        fun raw(raw: Optional<Raw>) = raw(raw.getOrNull())
-
-        /**
-         * Sets [Builder.raw] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.raw] with a well-typed [Raw] value instead. This method
-         * is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun raw(raw: JsonField<Raw>) = apply { this.raw = raw }
-
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -305,32 +213,23 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [ElementalChannelNode].
+         * Returns an immutable instance of [ElementalBaseNode].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .channel()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): ElementalChannelNode =
-            ElementalChannelNode(
+        fun build(): ElementalBaseNode =
+            ElementalBaseNode(
                 (channels ?: JsonMissing.of()).map { it.toImmutable() },
                 if_,
                 loop,
                 ref,
-                checkRequired("channel", channel),
-                raw,
                 additionalProperties.toMutableMap(),
             )
     }
 
     private var validated: Boolean = false
 
-    fun validate(): ElementalChannelNode = apply {
+    fun validate(): ElementalBaseNode = apply {
         if (validated) {
             return@apply
         }
@@ -339,8 +238,6 @@ private constructor(
         if_()
         loop()
         ref()
-        channel()
-        raw().ifPresent { it.validate() }
         validated = true
     }
 
@@ -362,133 +259,27 @@ private constructor(
         (channels.asKnown().getOrNull()?.size ?: 0) +
             (if (if_.asKnown().isPresent) 1 else 0) +
             (if (loop.asKnown().isPresent) 1 else 0) +
-            (if (ref.asKnown().isPresent) 1 else 0) +
-            (if (channel.asKnown().isPresent) 1 else 0) +
-            (raw.asKnown().getOrNull()?.validity() ?: 0)
-
-    /**
-     * Raw data to apply to the channel. If `elements` has not been specified, `raw` is `required`.
-     */
-    class Raw
-    @JsonCreator
-    private constructor(
-        @com.fasterxml.jackson.annotation.JsonValue
-        private val additionalProperties: Map<String, JsonValue>
-    ) {
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [Raw]. */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        /** A builder for [Raw]. */
-        class Builder internal constructor() {
-
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(raw: Raw) = apply {
-                additionalProperties = raw.additionalProperties.toMutableMap()
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Raw].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): Raw = Raw(additionalProperties.toImmutable())
-        }
-
-        private var validated: Boolean = false
-
-        fun validate(): Raw = apply {
-            if (validated) {
-                return@apply
-            }
-
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: CourierInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        @JvmSynthetic
-        internal fun validity(): Int =
-            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Raw && additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() = "Raw{additionalProperties=$additionalProperties}"
-    }
+            (if (ref.asKnown().isPresent) 1 else 0)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return other is ElementalChannelNode &&
+        return other is ElementalBaseNode &&
             channels == other.channels &&
             if_ == other.if_ &&
             loop == other.loop &&
             ref == other.ref &&
-            channel == other.channel &&
-            raw == other.raw &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(channels, if_, loop, ref, channel, raw, additionalProperties)
+        Objects.hash(channels, if_, loop, ref, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ElementalChannelNode{channels=$channels, if_=$if_, loop=$loop, ref=$ref, channel=$channel, raw=$raw, additionalProperties=$additionalProperties}"
+        "ElementalBaseNode{channels=$channels, if_=$if_, loop=$loop, ref=$ref, additionalProperties=$additionalProperties}"
 }

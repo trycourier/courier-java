@@ -417,6 +417,9 @@ private constructor(
             @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
         ) : this(channels, if_, loop, ref, type, mutableMapOf())
 
+        fun toElementalBaseNode(): ElementalBaseNode =
+            ElementalBaseNode.builder().channels(channels).if_(if_).loop(loop).ref(ref).build()
+
         /**
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -842,6 +845,9 @@ private constructor(
             @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
         ) : this(channels, if_, loop, ref, type, mutableMapOf())
 
+        fun toElementalBaseNode(): ElementalBaseNode =
+            ElementalBaseNode.builder().channels(channels).if_(if_).loop(loop).ref(ref).build()
+
         /**
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -1259,69 +1265,46 @@ private constructor(
     class UnionMember2
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
-        private val channel: JsonField<String>,
         private val channels: JsonField<List<String>>,
-        private val elements: JsonField<List<ElementalNode>>,
         private val if_: JsonField<String>,
         private val loop: JsonField<String>,
-        private val raw: JsonField<ElementalChannelNode.Raw>,
         private val ref: JsonField<String>,
+        private val channel: JsonField<String>,
+        private val raw: JsonField<ElementalChannelNode.Raw>,
         private val type: JsonField<Type>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
         @JsonCreator
         private constructor(
-            @JsonProperty("channel") @ExcludeMissing channel: JsonField<String> = JsonMissing.of(),
             @JsonProperty("channels")
             @ExcludeMissing
             channels: JsonField<List<String>> = JsonMissing.of(),
-            @JsonProperty("elements")
-            @ExcludeMissing
-            elements: JsonField<List<ElementalNode>> = JsonMissing.of(),
             @JsonProperty("if") @ExcludeMissing if_: JsonField<String> = JsonMissing.of(),
             @JsonProperty("loop") @ExcludeMissing loop: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("ref") @ExcludeMissing ref: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("channel") @ExcludeMissing channel: JsonField<String> = JsonMissing.of(),
             @JsonProperty("raw")
             @ExcludeMissing
             raw: JsonField<ElementalChannelNode.Raw> = JsonMissing.of(),
-            @JsonProperty("ref") @ExcludeMissing ref: JsonField<String> = JsonMissing.of(),
             @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
-        ) : this(channel, channels, elements, if_, loop, raw, ref, type, mutableMapOf())
+        ) : this(channels, if_, loop, ref, channel, raw, type, mutableMapOf())
 
         fun toElementalChannelNode(): ElementalChannelNode =
             ElementalChannelNode.builder()
-                .channel(channel)
                 .channels(channels)
-                .elements(elements)
                 .if_(if_)
                 .loop(loop)
-                .raw(raw)
                 .ref(ref)
+                .channel(channel)
+                .raw(raw)
                 .build()
-
-        /**
-         * The channel the contents of this element should be applied to. Can be `email`, `push`,
-         * `direct_message`, `sms` or a provider such as slack
-         *
-         * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun channel(): String = channel.getRequired("channel")
 
         /**
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
         fun channels(): Optional<List<String>> = channels.getOptional("channels")
-
-        /**
-         * An array of elements to apply to the channel. If `raw` has not been specified, `elements`
-         * is `required`.
-         *
-         * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun elements(): Optional<List<ElementalNode>> = elements.getOptional("elements")
 
         /**
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -1336,6 +1319,21 @@ private constructor(
         fun loop(): Optional<String> = loop.getOptional("loop")
 
         /**
+         * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun ref(): Optional<String> = ref.getOptional("ref")
+
+        /**
+         * The channel the contents of this element should be applied to. Can be `email`, `push`,
+         * `direct_message`, `sms` or a provider such as slack
+         *
+         * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun channel(): String = channel.getRequired("channel")
+
+        /**
          * Raw data to apply to the channel. If `elements` has not been specified, `raw` is
          * `required`.
          *
@@ -1348,20 +1346,7 @@ private constructor(
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun ref(): Optional<String> = ref.getOptional("ref")
-
-        /**
-         * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
         fun type(): Optional<Type> = type.getOptional("type")
-
-        /**
-         * Returns the raw JSON value of [channel].
-         *
-         * Unlike [channel], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("channel") @ExcludeMissing fun _channel(): JsonField<String> = channel
 
         /**
          * Returns the raw JSON value of [channels].
@@ -1371,15 +1356,6 @@ private constructor(
         @JsonProperty("channels")
         @ExcludeMissing
         fun _channels(): JsonField<List<String>> = channels
-
-        /**
-         * Returns the raw JSON value of [elements].
-         *
-         * Unlike [elements], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("elements")
-        @ExcludeMissing
-        fun _elements(): JsonField<List<ElementalNode>> = elements
 
         /**
          * Returns the raw JSON value of [if_].
@@ -1396,18 +1372,25 @@ private constructor(
         @JsonProperty("loop") @ExcludeMissing fun _loop(): JsonField<String> = loop
 
         /**
-         * Returns the raw JSON value of [raw].
-         *
-         * Unlike [raw], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("raw") @ExcludeMissing fun _raw(): JsonField<ElementalChannelNode.Raw> = raw
-
-        /**
          * Returns the raw JSON value of [ref].
          *
          * Unlike [ref], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("ref") @ExcludeMissing fun _ref(): JsonField<String> = ref
+
+        /**
+         * Returns the raw JSON value of [channel].
+         *
+         * Unlike [channel], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("channel") @ExcludeMissing fun _channel(): JsonField<String> = channel
+
+        /**
+         * Returns the raw JSON value of [raw].
+         *
+         * Unlike [raw], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("raw") @ExcludeMissing fun _raw(): JsonField<ElementalChannelNode.Raw> = raw
 
         /**
          * Returns the raw JSON value of [type].
@@ -1444,43 +1427,26 @@ private constructor(
         /** A builder for [UnionMember2]. */
         class Builder internal constructor() {
 
-            private var channel: JsonField<String>? = null
             private var channels: JsonField<MutableList<String>>? = null
-            private var elements: JsonField<MutableList<ElementalNode>>? = null
             private var if_: JsonField<String> = JsonMissing.of()
             private var loop: JsonField<String> = JsonMissing.of()
-            private var raw: JsonField<ElementalChannelNode.Raw> = JsonMissing.of()
             private var ref: JsonField<String> = JsonMissing.of()
+            private var channel: JsonField<String>? = null
+            private var raw: JsonField<ElementalChannelNode.Raw> = JsonMissing.of()
             private var type: JsonField<Type> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(unionMember2: UnionMember2) = apply {
-                channel = unionMember2.channel
                 channels = unionMember2.channels.map { it.toMutableList() }
-                elements = unionMember2.elements.map { it.toMutableList() }
                 if_ = unionMember2.if_
                 loop = unionMember2.loop
-                raw = unionMember2.raw
                 ref = unionMember2.ref
+                channel = unionMember2.channel
+                raw = unionMember2.raw
                 type = unionMember2.type
                 additionalProperties = unionMember2.additionalProperties.toMutableMap()
             }
-
-            /**
-             * The channel the contents of this element should be applied to. Can be `email`,
-             * `push`, `direct_message`, `sms` or a provider such as slack
-             */
-            fun channel(channel: String) = channel(JsonField.of(channel))
-
-            /**
-             * Sets [Builder.channel] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.channel] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun channel(channel: JsonField<String>) = apply { this.channel = channel }
 
             fun channels(channels: List<String>?) = channels(JsonField.ofNullable(channels))
 
@@ -1510,66 +1476,6 @@ private constructor(
                     }
             }
 
-            /**
-             * An array of elements to apply to the channel. If `raw` has not been specified,
-             * `elements` is `required`.
-             */
-            fun elements(elements: List<ElementalNode>?) = elements(JsonField.ofNullable(elements))
-
-            /** Alias for calling [Builder.elements] with `elements.orElse(null)`. */
-            fun elements(elements: Optional<List<ElementalNode>>) = elements(elements.getOrNull())
-
-            /**
-             * Sets [Builder.elements] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.elements] with a well-typed `List<ElementalNode>`
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
-             */
-            fun elements(elements: JsonField<List<ElementalNode>>) = apply {
-                this.elements = elements.map { it.toMutableList() }
-            }
-
-            /**
-             * Adds a single [ElementalNode] to [elements].
-             *
-             * @throws IllegalStateException if the field was previously set to a non-list.
-             */
-            fun addElement(element: ElementalNode) = apply {
-                elements =
-                    (elements ?: JsonField.of(mutableListOf())).also {
-                        checkKnown("elements", it).add(element)
-                    }
-            }
-
-            /** Alias for calling [addElement] with `ElementalNode.ofUnionMember0(unionMember0)`. */
-            fun addElement(unionMember0: UnionMember0) =
-                addElement(ElementalNode.ofUnionMember0(unionMember0))
-
-            /** Alias for calling [addElement] with `ElementalNode.ofUnionMember1(unionMember1)`. */
-            fun addElement(unionMember1: UnionMember1) =
-                addElement(ElementalNode.ofUnionMember1(unionMember1))
-
-            /** Alias for calling [addElement] with `ElementalNode.ofUnionMember2(unionMember2)`. */
-            fun addElement(unionMember2: UnionMember2) =
-                addElement(ElementalNode.ofUnionMember2(unionMember2))
-
-            /** Alias for calling [addElement] with `ElementalNode.ofUnionMember3(unionMember3)`. */
-            fun addElement(unionMember3: UnionMember3) =
-                addElement(ElementalNode.ofUnionMember3(unionMember3))
-
-            /** Alias for calling [addElement] with `ElementalNode.ofUnionMember4(unionMember4)`. */
-            fun addElement(unionMember4: UnionMember4) =
-                addElement(ElementalNode.ofUnionMember4(unionMember4))
-
-            /** Alias for calling [addElement] with `ElementalNode.ofUnionMember5(unionMember5)`. */
-            fun addElement(unionMember5: UnionMember5) =
-                addElement(ElementalNode.ofUnionMember5(unionMember5))
-
-            /** Alias for calling [addElement] with `ElementalNode.ofUnionMember6(unionMember6)`. */
-            fun addElement(unionMember6: UnionMember6) =
-                addElement(ElementalNode.ofUnionMember6(unionMember6))
-
             fun if_(if_: String?) = if_(JsonField.ofNullable(if_))
 
             /** Alias for calling [Builder.if_] with `if_.orElse(null)`. */
@@ -1598,6 +1504,35 @@ private constructor(
              */
             fun loop(loop: JsonField<String>) = apply { this.loop = loop }
 
+            fun ref(ref: String?) = ref(JsonField.ofNullable(ref))
+
+            /** Alias for calling [Builder.ref] with `ref.orElse(null)`. */
+            fun ref(ref: Optional<String>) = ref(ref.getOrNull())
+
+            /**
+             * Sets [Builder.ref] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.ref] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun ref(ref: JsonField<String>) = apply { this.ref = ref }
+
+            /**
+             * The channel the contents of this element should be applied to. Can be `email`,
+             * `push`, `direct_message`, `sms` or a provider such as slack
+             */
+            fun channel(channel: String) = channel(JsonField.of(channel))
+
+            /**
+             * Sets [Builder.channel] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.channel] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun channel(channel: JsonField<String>) = apply { this.channel = channel }
+
             /**
              * Raw data to apply to the channel. If `elements` has not been specified, `raw` is
              * `required`.
@@ -1615,20 +1550,6 @@ private constructor(
              * not yet supported value.
              */
             fun raw(raw: JsonField<ElementalChannelNode.Raw>) = apply { this.raw = raw }
-
-            fun ref(ref: String?) = ref(JsonField.ofNullable(ref))
-
-            /** Alias for calling [Builder.ref] with `ref.orElse(null)`. */
-            fun ref(ref: Optional<String>) = ref(ref.getOrNull())
-
-            /**
-             * Sets [Builder.ref] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.ref] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
-            fun ref(ref: JsonField<String>) = apply { this.ref = ref }
 
             fun type(type: Type) = type(JsonField.of(type))
 
@@ -1674,13 +1595,12 @@ private constructor(
              */
             fun build(): UnionMember2 =
                 UnionMember2(
-                    checkRequired("channel", channel),
                     (channels ?: JsonMissing.of()).map { it.toImmutable() },
-                    (elements ?: JsonMissing.of()).map { it.toImmutable() },
                     if_,
                     loop,
-                    raw,
                     ref,
+                    checkRequired("channel", channel),
+                    raw,
                     type,
                     additionalProperties.toMutableMap(),
                 )
@@ -1693,13 +1613,12 @@ private constructor(
                 return@apply
             }
 
-            channel()
             channels()
-            elements().ifPresent { it.forEach { it.validate() } }
             if_()
             loop()
-            raw().ifPresent { it.validate() }
             ref()
+            channel()
+            raw().ifPresent { it.validate() }
             type().ifPresent { it.validate() }
             validated = true
         }
@@ -1720,13 +1639,12 @@ private constructor(
          */
         @JvmSynthetic
         internal fun validity(): Int =
-            (if (channel.asKnown().isPresent) 1 else 0) +
-                (channels.asKnown().getOrNull()?.size ?: 0) +
-                (elements.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+            (channels.asKnown().getOrNull()?.size ?: 0) +
                 (if (if_.asKnown().isPresent) 1 else 0) +
                 (if (loop.asKnown().isPresent) 1 else 0) +
-                (raw.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (ref.asKnown().isPresent) 1 else 0) +
+                (if (channel.asKnown().isPresent) 1 else 0) +
+                (raw.asKnown().getOrNull()?.validity() ?: 0) +
                 (type.asKnown().getOrNull()?.validity() ?: 0)
 
         class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
@@ -1856,35 +1774,24 @@ private constructor(
             }
 
             return other is UnionMember2 &&
-                channel == other.channel &&
                 channels == other.channels &&
-                elements == other.elements &&
                 if_ == other.if_ &&
                 loop == other.loop &&
-                raw == other.raw &&
                 ref == other.ref &&
+                channel == other.channel &&
+                raw == other.raw &&
                 type == other.type &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(
-                channel,
-                channels,
-                elements,
-                if_,
-                loop,
-                raw,
-                ref,
-                type,
-                additionalProperties,
-            )
+            Objects.hash(channels, if_, loop, ref, channel, raw, type, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "UnionMember2{channel=$channel, channels=$channels, elements=$elements, if_=$if_, loop=$loop, raw=$raw, ref=$ref, type=$type, additionalProperties=$additionalProperties}"
+            "UnionMember2{channels=$channels, if_=$if_, loop=$loop, ref=$ref, channel=$channel, raw=$raw, type=$type, additionalProperties=$additionalProperties}"
     }
 
     class UnionMember3
@@ -1908,6 +1815,9 @@ private constructor(
             @JsonProperty("ref") @ExcludeMissing ref: JsonField<String> = JsonMissing.of(),
             @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
         ) : this(channels, if_, loop, ref, type, mutableMapOf())
+
+        fun toElementalBaseNode(): ElementalBaseNode =
+            ElementalBaseNode.builder().channels(channels).if_(if_).loop(loop).ref(ref).build()
 
         /**
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -2316,7 +2226,7 @@ private constructor(
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val actionId: JsonField<String>,
-        private val align: JsonField<Align>,
+        private val align: JsonField<Alignment>,
         private val backgroundColor: JsonField<String>,
         private val content: JsonField<String>,
         private val href: JsonField<String>,
@@ -2331,7 +2241,7 @@ private constructor(
             @JsonProperty("action_id")
             @ExcludeMissing
             actionId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("align") @ExcludeMissing align: JsonField<Align> = JsonMissing.of(),
+            @JsonProperty("align") @ExcludeMissing align: JsonField<Alignment> = JsonMissing.of(),
             @JsonProperty("background_color")
             @ExcludeMissing
             backgroundColor: JsonField<String> = JsonMissing.of(),
@@ -2366,7 +2276,7 @@ private constructor(
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun align(): Optional<Align> = align.getOptional("align")
+        fun align(): Optional<Alignment> = align.getOptional("align")
 
         /**
          * The background color of the action button.
@@ -2428,7 +2338,7 @@ private constructor(
          *
          * Unlike [align], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("align") @ExcludeMissing fun _align(): JsonField<Align> = align
+        @JsonProperty("align") @ExcludeMissing fun _align(): JsonField<Alignment> = align
 
         /**
          * Returns the raw JSON value of [backgroundColor].
@@ -2497,7 +2407,7 @@ private constructor(
         class Builder internal constructor() {
 
             private var actionId: JsonField<String> = JsonMissing.of()
-            private var align: JsonField<Align> = JsonMissing.of()
+            private var align: JsonField<Alignment> = JsonMissing.of()
             private var backgroundColor: JsonField<String> = JsonMissing.of()
             private var content: JsonField<String> = JsonMissing.of()
             private var href: JsonField<String> = JsonMissing.of()
@@ -2535,19 +2445,19 @@ private constructor(
             fun actionId(actionId: JsonField<String>) = apply { this.actionId = actionId }
 
             /** The alignment of the action button. Defaults to "center". */
-            fun align(align: Align?) = align(JsonField.ofNullable(align))
+            fun align(align: Alignment?) = align(JsonField.ofNullable(align))
 
             /** Alias for calling [Builder.align] with `align.orElse(null)`. */
-            fun align(align: Optional<Align>) = align(align.getOrNull())
+            fun align(align: Optional<Alignment>) = align(align.getOrNull())
 
             /**
              * Sets [Builder.align] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.align] with a well-typed [Align] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
+             * You should usually call [Builder.align] with a well-typed [Alignment] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
-            fun align(align: JsonField<Align>) = apply { this.align = align }
+            fun align(align: JsonField<Alignment>) = apply { this.align = align }
 
             /** The background color of the action button. */
             fun backgroundColor(backgroundColor: String?) =
@@ -2717,148 +2627,6 @@ private constructor(
                 (locales.asKnown().getOrNull()?.validity() ?: 0) +
                 (style.asKnown().getOrNull()?.validity() ?: 0) +
                 (type.asKnown().getOrNull()?.validity() ?: 0)
-
-        /** The alignment of the action button. Defaults to "center". */
-        class Align @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
-
-            /**
-             * Returns this class instance's raw value.
-             *
-             * This is usually only useful if this instance was deserialized from data that doesn't
-             * match any known member, and you want to know that value. For example, if the SDK is
-             * on an older version than the API, then the API may respond with new members that the
-             * SDK is unaware of.
-             */
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-            companion object {
-
-                @JvmField val CENTER = of("center")
-
-                @JvmField val LEFT = of("left")
-
-                @JvmField val RIGHT = of("right")
-
-                @JvmField val FULL = of("full")
-
-                @JvmStatic fun of(value: String) = Align(JsonField.of(value))
-            }
-
-            /** An enum containing [Align]'s known values. */
-            enum class Known {
-                CENTER,
-                LEFT,
-                RIGHT,
-                FULL,
-            }
-
-            /**
-             * An enum containing [Align]'s known values, as well as an [_UNKNOWN] member.
-             *
-             * An instance of [Align] can contain an unknown value in a couple of cases:
-             * - It was deserialized from data that doesn't match any known member. For example, if
-             *   the SDK is on an older version than the API, then the API may respond with new
-             *   members that the SDK is unaware of.
-             * - It was constructed with an arbitrary value using the [of] method.
-             */
-            enum class Value {
-                CENTER,
-                LEFT,
-                RIGHT,
-                FULL,
-                /**
-                 * An enum member indicating that [Align] was instantiated with an unknown value.
-                 */
-                _UNKNOWN,
-            }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value, or
-             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-             *
-             * Use the [known] method instead if you're certain the value is always known or if you
-             * want to throw for the unknown case.
-             */
-            fun value(): Value =
-                when (this) {
-                    CENTER -> Value.CENTER
-                    LEFT -> Value.LEFT
-                    RIGHT -> Value.RIGHT
-                    FULL -> Value.FULL
-                    else -> Value._UNKNOWN
-                }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value.
-             *
-             * Use the [value] method instead if you're uncertain the value is always known and
-             * don't want to throw for the unknown case.
-             *
-             * @throws CourierInvalidDataException if this class instance's value is a not a known
-             *   member.
-             */
-            fun known(): Known =
-                when (this) {
-                    CENTER -> Known.CENTER
-                    LEFT -> Known.LEFT
-                    RIGHT -> Known.RIGHT
-                    FULL -> Known.FULL
-                    else -> throw CourierInvalidDataException("Unknown Align: $value")
-                }
-
-            /**
-             * Returns this class instance's primitive wire representation.
-             *
-             * This differs from the [toString] method because that method is primarily for
-             * debugging and generally doesn't throw.
-             *
-             * @throws CourierInvalidDataException if this class instance's value does not have the
-             *   expected primitive type.
-             */
-            fun asString(): String =
-                _value().asString().orElseThrow {
-                    CourierInvalidDataException("Value is not a String")
-                }
-
-            private var validated: Boolean = false
-
-            fun validate(): Align = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                known()
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: CourierInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is Align && value == other.value
-            }
-
-            override fun hashCode() = value.hashCode()
-
-            override fun toString() = value.toString()
-        }
 
         /**
          * Region specific content. See
@@ -3276,6 +3044,9 @@ private constructor(
             @JsonProperty("ref") @ExcludeMissing ref: JsonField<String> = JsonMissing.of(),
             @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
         ) : this(channels, if_, loop, ref, type, mutableMapOf())
+
+        fun toElementalBaseNode(): ElementalBaseNode =
+            ElementalBaseNode.builder().channels(channels).if_(if_).loop(loop).ref(ref).build()
 
         /**
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -3701,6 +3472,9 @@ private constructor(
             @JsonProperty("ref") @ExcludeMissing ref: JsonField<String> = JsonMissing.of(),
             @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
         ) : this(channels, if_, loop, ref, type, mutableMapOf())
+
+        fun toElementalBaseNode(): ElementalBaseNode =
+            ElementalBaseNode.builder().channels(channels).if_(if_).loop(loop).ref(ref).build()
 
         /**
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
