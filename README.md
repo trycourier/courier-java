@@ -49,6 +49,7 @@ This library requires Java 8 or later.
 import com.courier.api.client.CourierClient;
 import com.courier.api.client.okhttp.CourierOkHttpClient;
 import com.courier.api.core.JsonValue;
+import com.courier.api.models.bulk.UserRecipient;
 import com.courier.api.models.send.SendMessageParams;
 import com.courier.api.models.send.SendMessageResponse;
 
@@ -58,7 +59,7 @@ CourierClient client = CourierOkHttpClient.fromEnv();
 
 SendMessageParams params = SendMessageParams.builder()
     .message(SendMessageParams.Message.builder()
-        .to(SendMessageParams.Message.To.UnionMember0.builder()
+        .to(UserRecipient.builder()
             .userId("your_user_id")
             .build())
         .data(SendMessageParams.Message.Data.builder()
@@ -157,6 +158,7 @@ The default client is synchronous. To switch to asynchronous execution, call the
 import com.courier.api.client.CourierClient;
 import com.courier.api.client.okhttp.CourierOkHttpClient;
 import com.courier.api.core.JsonValue;
+import com.courier.api.models.bulk.UserRecipient;
 import com.courier.api.models.send.SendMessageParams;
 import com.courier.api.models.send.SendMessageResponse;
 import java.util.concurrent.CompletableFuture;
@@ -167,7 +169,7 @@ CourierClient client = CourierOkHttpClient.fromEnv();
 
 SendMessageParams params = SendMessageParams.builder()
     .message(SendMessageParams.Message.builder()
-        .to(SendMessageParams.Message.To.UnionMember0.builder()
+        .to(UserRecipient.builder()
             .userId("your_user_id")
             .build())
         .data(SendMessageParams.Message.Data.builder()
@@ -184,6 +186,7 @@ Or create an asynchronous client from the beginning:
 import com.courier.api.client.CourierClientAsync;
 import com.courier.api.client.okhttp.CourierOkHttpClientAsync;
 import com.courier.api.core.JsonValue;
+import com.courier.api.models.bulk.UserRecipient;
 import com.courier.api.models.send.SendMessageParams;
 import com.courier.api.models.send.SendMessageResponse;
 import java.util.concurrent.CompletableFuture;
@@ -194,7 +197,7 @@ CourierClientAsync client = CourierOkHttpClientAsync.fromEnv();
 
 SendMessageParams params = SendMessageParams.builder()
     .message(SendMessageParams.Message.builder()
-        .to(SendMessageParams.Message.To.UnionMember0.builder()
+        .to(UserRecipient.builder()
             .userId("your_user_id")
             .build())
         .data(SendMessageParams.Message.Data.builder()
@@ -217,12 +220,13 @@ To access this data, prefix any HTTP method call on a client or service with `wi
 import com.courier.api.core.JsonValue;
 import com.courier.api.core.http.Headers;
 import com.courier.api.core.http.HttpResponseFor;
+import com.courier.api.models.bulk.UserRecipient;
 import com.courier.api.models.send.SendMessageParams;
 import com.courier.api.models.send.SendMessageResponse;
 
 SendMessageParams params = SendMessageParams.builder()
     .message(SendMessageParams.Message.builder()
-        .to(SendMessageParams.Message.To.UnionMember0.builder()
+        .to(UserRecipient.builder()
             .userId("your_user_id")
             .build())
         .data(SendMessageParams.Message.Data.builder()

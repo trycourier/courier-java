@@ -16,6 +16,8 @@ import com.courier.api.errors.RateLimitException
 import com.courier.api.errors.UnauthorizedException
 import com.courier.api.errors.UnexpectedStatusCodeException
 import com.courier.api.errors.UnprocessableEntityException
+import com.courier.api.models.bulk.UserRecipient
+import com.courier.api.models.send.Content
 import com.courier.api.models.send.MessageContext
 import com.courier.api.models.send.SendMessageParams
 import com.courier.api.models.send.Utm
@@ -107,8 +109,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
+                                    Content.ElementalContentSugar.builder()
                                         .body("body")
                                         .title("title")
                                         .build()
@@ -203,13 +204,13 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    SendMessageParams.Message.To.UnionMember0.builder()
+                                    UserRecipient.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
+                                            UserRecipient.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -217,12 +218,9 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendMessageParams.Message.To.UnionMember0.Preferences
-                                                .builder()
+                                            UserRecipient.Preferences.builder()
                                                 .notifications(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Notifications
+                                                    UserRecipient.Preferences.Notifications
                                                         .builder()
                                                         .putAdditionalProperty(
                                                             "foo",
@@ -250,10 +248,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Categories
-                                                        .builder()
+                                                    UserRecipient.Preferences.Categories.builder()
                                                         .putAdditionalProperty(
                                                             "foo",
                                                             JsonValue.from(
@@ -344,8 +339,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
+                                    Content.ElementalContentSugar.builder()
                                         .body("body")
                                         .title("title")
                                         .build()
@@ -440,13 +434,13 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    SendMessageParams.Message.To.UnionMember0.builder()
+                                    UserRecipient.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
+                                            UserRecipient.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -454,12 +448,9 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendMessageParams.Message.To.UnionMember0.Preferences
-                                                .builder()
+                                            UserRecipient.Preferences.builder()
                                                 .notifications(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Notifications
+                                                    UserRecipient.Preferences.Notifications
                                                         .builder()
                                                         .putAdditionalProperty(
                                                             "foo",
@@ -487,10 +478,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Categories
-                                                        .builder()
+                                                    UserRecipient.Preferences.Categories.builder()
                                                         .putAdditionalProperty(
                                                             "foo",
                                                             JsonValue.from(
@@ -581,8 +569,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
+                                    Content.ElementalContentSugar.builder()
                                         .body("body")
                                         .title("title")
                                         .build()
@@ -677,13 +664,13 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    SendMessageParams.Message.To.UnionMember0.builder()
+                                    UserRecipient.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
+                                            UserRecipient.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -691,12 +678,9 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendMessageParams.Message.To.UnionMember0.Preferences
-                                                .builder()
+                                            UserRecipient.Preferences.builder()
                                                 .notifications(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Notifications
+                                                    UserRecipient.Preferences.Notifications
                                                         .builder()
                                                         .putAdditionalProperty(
                                                             "foo",
@@ -724,10 +708,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Categories
-                                                        .builder()
+                                                    UserRecipient.Preferences.Categories.builder()
                                                         .putAdditionalProperty(
                                                             "foo",
                                                             JsonValue.from(
@@ -818,8 +799,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
+                                    Content.ElementalContentSugar.builder()
                                         .body("body")
                                         .title("title")
                                         .build()
@@ -914,13 +894,13 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    SendMessageParams.Message.To.UnionMember0.builder()
+                                    UserRecipient.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
+                                            UserRecipient.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -928,12 +908,9 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendMessageParams.Message.To.UnionMember0.Preferences
-                                                .builder()
+                                            UserRecipient.Preferences.builder()
                                                 .notifications(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Notifications
+                                                    UserRecipient.Preferences.Notifications
                                                         .builder()
                                                         .putAdditionalProperty(
                                                             "foo",
@@ -961,10 +938,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Categories
-                                                        .builder()
+                                                    UserRecipient.Preferences.Categories.builder()
                                                         .putAdditionalProperty(
                                                             "foo",
                                                             JsonValue.from(
@@ -1055,8 +1029,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
+                                    Content.ElementalContentSugar.builder()
                                         .body("body")
                                         .title("title")
                                         .build()
@@ -1151,13 +1124,13 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    SendMessageParams.Message.To.UnionMember0.builder()
+                                    UserRecipient.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
+                                            UserRecipient.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -1165,12 +1138,9 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendMessageParams.Message.To.UnionMember0.Preferences
-                                                .builder()
+                                            UserRecipient.Preferences.builder()
                                                 .notifications(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Notifications
+                                                    UserRecipient.Preferences.Notifications
                                                         .builder()
                                                         .putAdditionalProperty(
                                                             "foo",
@@ -1198,10 +1168,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Categories
-                                                        .builder()
+                                                    UserRecipient.Preferences.Categories.builder()
                                                         .putAdditionalProperty(
                                                             "foo",
                                                             JsonValue.from(
@@ -1292,8 +1259,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
+                                    Content.ElementalContentSugar.builder()
                                         .body("body")
                                         .title("title")
                                         .build()
@@ -1388,13 +1354,13 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    SendMessageParams.Message.To.UnionMember0.builder()
+                                    UserRecipient.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
+                                            UserRecipient.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -1402,12 +1368,9 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendMessageParams.Message.To.UnionMember0.Preferences
-                                                .builder()
+                                            UserRecipient.Preferences.builder()
                                                 .notifications(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Notifications
+                                                    UserRecipient.Preferences.Notifications
                                                         .builder()
                                                         .putAdditionalProperty(
                                                             "foo",
@@ -1435,10 +1398,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Categories
-                                                        .builder()
+                                                    UserRecipient.Preferences.Categories.builder()
                                                         .putAdditionalProperty(
                                                             "foo",
                                                             JsonValue.from(
@@ -1529,8 +1489,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
+                                    Content.ElementalContentSugar.builder()
                                         .body("body")
                                         .title("title")
                                         .build()
@@ -1625,13 +1584,13 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    SendMessageParams.Message.To.UnionMember0.builder()
+                                    UserRecipient.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
+                                            UserRecipient.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -1639,12 +1598,9 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendMessageParams.Message.To.UnionMember0.Preferences
-                                                .builder()
+                                            UserRecipient.Preferences.builder()
                                                 .notifications(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Notifications
+                                                    UserRecipient.Preferences.Notifications
                                                         .builder()
                                                         .putAdditionalProperty(
                                                             "foo",
@@ -1672,10 +1628,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Categories
-                                                        .builder()
+                                                    UserRecipient.Preferences.Categories.builder()
                                                         .putAdditionalProperty(
                                                             "foo",
                                                             JsonValue.from(
@@ -1766,8 +1719,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
+                                    Content.ElementalContentSugar.builder()
                                         .body("body")
                                         .title("title")
                                         .build()
@@ -1862,13 +1814,13 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    SendMessageParams.Message.To.UnionMember0.builder()
+                                    UserRecipient.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
+                                            UserRecipient.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -1876,12 +1828,9 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendMessageParams.Message.To.UnionMember0.Preferences
-                                                .builder()
+                                            UserRecipient.Preferences.builder()
                                                 .notifications(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Notifications
+                                                    UserRecipient.Preferences.Notifications
                                                         .builder()
                                                         .putAdditionalProperty(
                                                             "foo",
@@ -1909,10 +1858,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Categories
-                                                        .builder()
+                                                    UserRecipient.Preferences.Categories.builder()
                                                         .putAdditionalProperty(
                                                             "foo",
                                                             JsonValue.from(
@@ -2003,8 +1949,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
+                                    Content.ElementalContentSugar.builder()
                                         .body("body")
                                         .title("title")
                                         .build()
@@ -2099,13 +2044,13 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    SendMessageParams.Message.To.UnionMember0.builder()
+                                    UserRecipient.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
+                                            UserRecipient.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -2113,12 +2058,9 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendMessageParams.Message.To.UnionMember0.Preferences
-                                                .builder()
+                                            UserRecipient.Preferences.builder()
                                                 .notifications(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Notifications
+                                                    UserRecipient.Preferences.Notifications
                                                         .builder()
                                                         .putAdditionalProperty(
                                                             "foo",
@@ -2146,10 +2088,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Categories
-                                                        .builder()
+                                                    UserRecipient.Preferences.Categories.builder()
                                                         .putAdditionalProperty(
                                                             "foo",
                                                             JsonValue.from(
@@ -2240,8 +2179,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
+                                    Content.ElementalContentSugar.builder()
                                         .body("body")
                                         .title("title")
                                         .build()
@@ -2336,13 +2274,13 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    SendMessageParams.Message.To.UnionMember0.builder()
+                                    UserRecipient.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
+                                            UserRecipient.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -2350,12 +2288,9 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendMessageParams.Message.To.UnionMember0.Preferences
-                                                .builder()
+                                            UserRecipient.Preferences.builder()
                                                 .notifications(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Notifications
+                                                    UserRecipient.Preferences.Notifications
                                                         .builder()
                                                         .putAdditionalProperty(
                                                             "foo",
@@ -2383,10 +2318,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Categories
-                                                        .builder()
+                                                    UserRecipient.Preferences.Categories.builder()
                                                         .putAdditionalProperty(
                                                             "foo",
                                                             JsonValue.from(
@@ -2477,8 +2409,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
+                                    Content.ElementalContentSugar.builder()
                                         .body("body")
                                         .title("title")
                                         .build()
@@ -2573,13 +2504,13 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    SendMessageParams.Message.To.UnionMember0.builder()
+                                    UserRecipient.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
+                                            UserRecipient.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -2587,12 +2518,9 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendMessageParams.Message.To.UnionMember0.Preferences
-                                                .builder()
+                                            UserRecipient.Preferences.builder()
                                                 .notifications(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Notifications
+                                                    UserRecipient.Preferences.Notifications
                                                         .builder()
                                                         .putAdditionalProperty(
                                                             "foo",
@@ -2620,10 +2548,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Categories
-                                                        .builder()
+                                                    UserRecipient.Preferences.Categories.builder()
                                                         .putAdditionalProperty(
                                                             "foo",
                                                             JsonValue.from(
@@ -2714,8 +2639,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
+                                    Content.ElementalContentSugar.builder()
                                         .body("body")
                                         .title("title")
                                         .build()
@@ -2810,13 +2734,13 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    SendMessageParams.Message.To.UnionMember0.builder()
+                                    UserRecipient.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
+                                            UserRecipient.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -2824,12 +2748,9 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendMessageParams.Message.To.UnionMember0.Preferences
-                                                .builder()
+                                            UserRecipient.Preferences.builder()
                                                 .notifications(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Notifications
+                                                    UserRecipient.Preferences.Notifications
                                                         .builder()
                                                         .putAdditionalProperty(
                                                             "foo",
@@ -2857,10 +2778,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Categories
-                                                        .builder()
+                                                    UserRecipient.Preferences.Categories.builder()
                                                         .putAdditionalProperty(
                                                             "foo",
                                                             JsonValue.from(
@@ -2951,8 +2869,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
+                                    Content.ElementalContentSugar.builder()
                                         .body("body")
                                         .title("title")
                                         .build()
@@ -3047,13 +2964,13 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    SendMessageParams.Message.To.UnionMember0.builder()
+                                    UserRecipient.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
+                                            UserRecipient.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -3061,12 +2978,9 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendMessageParams.Message.To.UnionMember0.Preferences
-                                                .builder()
+                                            UserRecipient.Preferences.builder()
                                                 .notifications(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Notifications
+                                                    UserRecipient.Preferences.Notifications
                                                         .builder()
                                                         .putAdditionalProperty(
                                                             "foo",
@@ -3094,10 +3008,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Categories
-                                                        .builder()
+                                                    UserRecipient.Preferences.Categories.builder()
                                                         .putAdditionalProperty(
                                                             "foo",
                                                             JsonValue.from(
@@ -3188,8 +3099,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
+                                    Content.ElementalContentSugar.builder()
                                         .body("body")
                                         .title("title")
                                         .build()
@@ -3284,13 +3194,13 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    SendMessageParams.Message.To.UnionMember0.builder()
+                                    UserRecipient.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
+                                            UserRecipient.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -3298,12 +3208,9 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendMessageParams.Message.To.UnionMember0.Preferences
-                                                .builder()
+                                            UserRecipient.Preferences.builder()
                                                 .notifications(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Notifications
+                                                    UserRecipient.Preferences.Notifications
                                                         .builder()
                                                         .putAdditionalProperty(
                                                             "foo",
@@ -3331,10 +3238,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Categories
-                                                        .builder()
+                                                    UserRecipient.Preferences.Categories.builder()
                                                         .putAdditionalProperty(
                                                             "foo",
                                                             JsonValue.from(
@@ -3425,8 +3329,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
+                                    Content.ElementalContentSugar.builder()
                                         .body("body")
                                         .title("title")
                                         .build()
@@ -3521,13 +3424,13 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    SendMessageParams.Message.To.UnionMember0.builder()
+                                    UserRecipient.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
+                                            UserRecipient.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -3535,12 +3438,9 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendMessageParams.Message.To.UnionMember0.Preferences
-                                                .builder()
+                                            UserRecipient.Preferences.builder()
                                                 .notifications(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Notifications
+                                                    UserRecipient.Preferences.Notifications
                                                         .builder()
                                                         .putAdditionalProperty(
                                                             "foo",
@@ -3568,10 +3468,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Categories
-                                                        .builder()
+                                                    UserRecipient.Preferences.Categories.builder()
                                                         .putAdditionalProperty(
                                                             "foo",
                                                             JsonValue.from(
@@ -3662,8 +3559,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
+                                    Content.ElementalContentSugar.builder()
                                         .body("body")
                                         .title("title")
                                         .build()
@@ -3758,13 +3654,13 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    SendMessageParams.Message.To.UnionMember0.builder()
+                                    UserRecipient.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
+                                            UserRecipient.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -3772,12 +3668,9 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendMessageParams.Message.To.UnionMember0.Preferences
-                                                .builder()
+                                            UserRecipient.Preferences.builder()
                                                 .notifications(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Notifications
+                                                    UserRecipient.Preferences.Notifications
                                                         .builder()
                                                         .putAdditionalProperty(
                                                             "foo",
@@ -3805,10 +3698,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Categories
-                                                        .builder()
+                                                    UserRecipient.Preferences.Categories.builder()
                                                         .putAdditionalProperty(
                                                             "foo",
                                                             JsonValue.from(
@@ -3897,8 +3787,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
+                                    Content.ElementalContentSugar.builder()
                                         .body("body")
                                         .title("title")
                                         .build()
@@ -3993,13 +3882,13 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .to(
-                                    SendMessageParams.Message.To.UnionMember0.builder()
+                                    UserRecipient.builder()
                                         .accountId("account_id")
                                         .context(
                                             MessageContext.builder().tenantId("tenant_id").build()
                                         )
                                         .data(
-                                            SendMessageParams.Message.To.UnionMember0.Data.builder()
+                                            UserRecipient.Data.builder()
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
@@ -4007,12 +3896,9 @@ internal class ErrorHandlingTest {
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
-                                            SendMessageParams.Message.To.UnionMember0.Preferences
-                                                .builder()
+                                            UserRecipient.Preferences.builder()
                                                 .notifications(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Notifications
+                                                    UserRecipient.Preferences.Notifications
                                                         .builder()
                                                         .putAdditionalProperty(
                                                             "foo",
@@ -4040,10 +3926,7 @@ internal class ErrorHandlingTest {
                                                         .build()
                                                 )
                                                 .categories(
-                                                    SendMessageParams.Message.To.UnionMember0
-                                                        .Preferences
-                                                        .Categories
-                                                        .builder()
+                                                    UserRecipient.Preferences.Categories.builder()
                                                         .putAdditionalProperty(
                                                             "foo",
                                                             JsonValue.from(

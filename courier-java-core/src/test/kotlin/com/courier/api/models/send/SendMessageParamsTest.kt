@@ -3,6 +3,7 @@
 package com.courier.api.models.send
 
 import com.courier.api.core.JsonValue
+import com.courier.api.models.bulk.UserRecipient
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -43,10 +44,7 @@ internal class SendMessageParamsTest {
                             .build()
                     )
                     .content(
-                        SendMessageParams.Message.Content.ElementalContentSugar.builder()
-                            .body("body")
-                            .title("title")
-                            .build()
+                        Content.ElementalContentSugar.builder().body("body").title("title").build()
                     )
                     .context(MessageContext.builder().tenantId("tenant_id").build())
                     .data(
@@ -136,11 +134,11 @@ internal class SendMessageParamsTest {
                             .build()
                     )
                     .to(
-                        SendMessageParams.Message.To.UnionMember0.builder()
+                        UserRecipient.builder()
                             .accountId("account_id")
                             .context(MessageContext.builder().tenantId("tenant_id").build())
                             .data(
-                                SendMessageParams.Message.To.UnionMember0.Data.builder()
+                                UserRecipient.Data.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("bar"))
                                     .build()
                             )
@@ -148,11 +146,9 @@ internal class SendMessageParamsTest {
                             .locale("locale")
                             .phoneNumber("phone_number")
                             .preferences(
-                                SendMessageParams.Message.To.UnionMember0.Preferences.builder()
+                                UserRecipient.Preferences.builder()
                                     .notifications(
-                                        SendMessageParams.Message.To.UnionMember0.Preferences
-                                            .Notifications
-                                            .builder()
+                                        UserRecipient.Preferences.Notifications.builder()
                                             .putAdditionalProperty(
                                                 "foo",
                                                 JsonValue.from(
@@ -176,9 +172,7 @@ internal class SendMessageParamsTest {
                                             .build()
                                     )
                                     .categories(
-                                        SendMessageParams.Message.To.UnionMember0.Preferences
-                                            .Categories
-                                            .builder()
+                                        UserRecipient.Preferences.Categories.builder()
                                             .putAdditionalProperty(
                                                 "foo",
                                                 JsonValue.from(
@@ -249,7 +243,7 @@ internal class SendMessageParamsTest {
                                 .build()
                         )
                         .content(
-                            SendMessageParams.Message.Content.ElementalContentSugar.builder()
+                            Content.ElementalContentSugar.builder()
                                 .body("body")
                                 .title("title")
                                 .build()
@@ -342,11 +336,11 @@ internal class SendMessageParamsTest {
                                 .build()
                         )
                         .to(
-                            SendMessageParams.Message.To.UnionMember0.builder()
+                            UserRecipient.builder()
                                 .accountId("account_id")
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
                                 .data(
-                                    SendMessageParams.Message.To.UnionMember0.Data.builder()
+                                    UserRecipient.Data.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("bar"))
                                         .build()
                                 )
@@ -354,11 +348,9 @@ internal class SendMessageParamsTest {
                                 .locale("locale")
                                 .phoneNumber("phone_number")
                                 .preferences(
-                                    SendMessageParams.Message.To.UnionMember0.Preferences.builder()
+                                    UserRecipient.Preferences.builder()
                                         .notifications(
-                                            SendMessageParams.Message.To.UnionMember0.Preferences
-                                                .Notifications
-                                                .builder()
+                                            UserRecipient.Preferences.Notifications.builder()
                                                 .putAdditionalProperty(
                                                     "foo",
                                                     JsonValue.from(
@@ -385,9 +377,7 @@ internal class SendMessageParamsTest {
                                                 .build()
                                         )
                                         .categories(
-                                            SendMessageParams.Message.To.UnionMember0.Preferences
-                                                .Categories
-                                                .builder()
+                                            UserRecipient.Preferences.Categories.builder()
                                                 .putAdditionalProperty(
                                                     "foo",
                                                     JsonValue.from(
@@ -459,10 +449,7 @@ internal class SendMessageParamsTest {
                             .build()
                     )
                     .content(
-                        SendMessageParams.Message.Content.ElementalContentSugar.builder()
-                            .body("body")
-                            .title("title")
-                            .build()
+                        Content.ElementalContentSugar.builder().body("body").title("title").build()
                     )
                     .context(MessageContext.builder().tenantId("tenant_id").build())
                     .data(
@@ -552,11 +539,11 @@ internal class SendMessageParamsTest {
                             .build()
                     )
                     .to(
-                        SendMessageParams.Message.To.UnionMember0.builder()
+                        UserRecipient.builder()
                             .accountId("account_id")
                             .context(MessageContext.builder().tenantId("tenant_id").build())
                             .data(
-                                SendMessageParams.Message.To.UnionMember0.Data.builder()
+                                UserRecipient.Data.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("bar"))
                                     .build()
                             )
@@ -564,11 +551,9 @@ internal class SendMessageParamsTest {
                             .locale("locale")
                             .phoneNumber("phone_number")
                             .preferences(
-                                SendMessageParams.Message.To.UnionMember0.Preferences.builder()
+                                UserRecipient.Preferences.builder()
                                     .notifications(
-                                        SendMessageParams.Message.To.UnionMember0.Preferences
-                                            .Notifications
-                                            .builder()
+                                        UserRecipient.Preferences.Notifications.builder()
                                             .putAdditionalProperty(
                                                 "foo",
                                                 JsonValue.from(
@@ -592,9 +577,7 @@ internal class SendMessageParamsTest {
                                             .build()
                                     )
                                     .categories(
-                                        SendMessageParams.Message.To.UnionMember0.Preferences
-                                            .Categories
-                                            .builder()
+                                        UserRecipient.Preferences.Categories.builder()
                                             .putAdditionalProperty(
                                                 "foo",
                                                 JsonValue.from(
