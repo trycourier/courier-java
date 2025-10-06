@@ -3,9 +3,9 @@
 package com.courier.api.proguard
 
 import com.courier.api.client.okhttp.CourierOkHttpClient
-import com.courier.api.core.JsonValue
 import com.courier.api.core.jsonMapper
-import com.courier.api.models.send.ElementalChannelNode
+import com.courier.api.models.send.Alignment
+import com.courier.api.models.send.ElementalBaseNode
 import com.courier.api.models.send.ElementalNode
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import kotlin.reflect.full.memberFunctions
@@ -53,38 +53,23 @@ internal class ProGuardCompatibilityTest {
     }
 
     @Test
-    fun elementalChannelNodeRoundtrip() {
+    fun elementalBaseNodeRoundtrip() {
         val jsonMapper = jsonMapper()
-        val elementalChannelNode =
-            ElementalChannelNode.builder()
-                .channel("channel")
+        val elementalBaseNode =
+            ElementalBaseNode.builder()
                 .addChannel("string")
-                .addElement(
-                    ElementalNode.UnionMember0.builder()
-                        .addChannel("string")
-                        .if_("if")
-                        .loop("loop")
-                        .ref("ref")
-                        .type(ElementalNode.UnionMember0.Type.TEXT)
-                        .build()
-                )
                 .if_("if")
                 .loop("loop")
-                .raw(
-                    ElementalChannelNode.Raw.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("bar"))
-                        .build()
-                )
                 .ref("ref")
                 .build()
 
-        val roundtrippedElementalChannelNode =
+        val roundtrippedElementalBaseNode =
             jsonMapper.readValue(
-                jsonMapper.writeValueAsString(elementalChannelNode),
-                jacksonTypeRef<ElementalChannelNode>(),
+                jsonMapper.writeValueAsString(elementalBaseNode),
+                jacksonTypeRef<ElementalBaseNode>(),
             )
 
-        assertThat(roundtrippedElementalChannelNode).isEqualTo(elementalChannelNode)
+        assertThat(roundtrippedElementalBaseNode).isEqualTo(elementalBaseNode)
     }
 
     @Test
@@ -108,5 +93,19 @@ internal class ProGuardCompatibilityTest {
             )
 
         assertThat(roundtrippedElementalNode).isEqualTo(elementalNode)
+    }
+
+    @Test
+    fun alignmentRoundtrip() {
+        val jsonMapper = jsonMapper()
+        val alignment = Alignment.CENTER
+
+        val roundtrippedAlignment =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(alignment),
+                jacksonTypeRef<Alignment>(),
+            )
+
+        assertThat(roundtrippedAlignment).isEqualTo(alignment)
     }
 }

@@ -15,50 +15,29 @@ internal class ElementalChannelNodeTest {
     fun create() {
         val elementalChannelNode =
             ElementalChannelNode.builder()
-                .channel("channel")
                 .addChannel("string")
-                .addElement(
-                    ElementalNode.UnionMember0.builder()
-                        .addChannel("string")
-                        .if_("if")
-                        .loop("loop")
-                        .ref("ref")
-                        .type(ElementalNode.UnionMember0.Type.TEXT)
-                        .build()
-                )
                 .if_("if")
                 .loop("loop")
+                .ref("ref")
+                .channel("channel")
                 .raw(
                     ElementalChannelNode.Raw.builder()
                         .putAdditionalProperty("foo", JsonValue.from("bar"))
                         .build()
                 )
-                .ref("ref")
                 .build()
 
-        assertThat(elementalChannelNode.channel()).isEqualTo("channel")
         assertThat(elementalChannelNode.channels().getOrNull()).containsExactly("string")
-        assertThat(elementalChannelNode.elements().getOrNull())
-            .containsExactly(
-                ElementalNode.ofUnionMember0(
-                    ElementalNode.UnionMember0.builder()
-                        .addChannel("string")
-                        .if_("if")
-                        .loop("loop")
-                        .ref("ref")
-                        .type(ElementalNode.UnionMember0.Type.TEXT)
-                        .build()
-                )
-            )
         assertThat(elementalChannelNode.if_()).contains("if")
         assertThat(elementalChannelNode.loop()).contains("loop")
+        assertThat(elementalChannelNode.ref()).contains("ref")
+        assertThat(elementalChannelNode.channel()).isEqualTo("channel")
         assertThat(elementalChannelNode.raw())
             .contains(
                 ElementalChannelNode.Raw.builder()
                     .putAdditionalProperty("foo", JsonValue.from("bar"))
                     .build()
             )
-        assertThat(elementalChannelNode.ref()).contains("ref")
     }
 
     @Test
@@ -66,25 +45,16 @@ internal class ElementalChannelNodeTest {
         val jsonMapper = jsonMapper()
         val elementalChannelNode =
             ElementalChannelNode.builder()
-                .channel("channel")
                 .addChannel("string")
-                .addElement(
-                    ElementalNode.UnionMember0.builder()
-                        .addChannel("string")
-                        .if_("if")
-                        .loop("loop")
-                        .ref("ref")
-                        .type(ElementalNode.UnionMember0.Type.TEXT)
-                        .build()
-                )
                 .if_("if")
                 .loop("loop")
+                .ref("ref")
+                .channel("channel")
                 .raw(
                     ElementalChannelNode.Raw.builder()
                         .putAdditionalProperty("foo", JsonValue.from("bar"))
                         .build()
                 )
-                .ref("ref")
                 .build()
 
         val roundtrippedElementalChannelNode =
