@@ -110,9 +110,24 @@ internal class ElementalNodeTest {
     fun ofUnionMember2() {
         val unionMember2 =
             ElementalNode.UnionMember2.builder()
+                .channel("channel")
                 .addChannel("string")
+                .addElement(
+                    ElementalNode.UnionMember0.builder()
+                        .addChannel("string")
+                        .if_("if")
+                        .loop("loop")
+                        .ref("ref")
+                        .type(ElementalNode.UnionMember0.Type.TEXT)
+                        .build()
+                )
                 .if_("if")
                 .loop("loop")
+                .raw(
+                    ElementalChannelNode.Raw.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .build()
+                )
                 .ref("ref")
                 .type(ElementalNode.UnionMember2.Type.CHANNEL)
                 .build()
@@ -135,9 +150,24 @@ internal class ElementalNodeTest {
         val elementalNode =
             ElementalNode.ofUnionMember2(
                 ElementalNode.UnionMember2.builder()
+                    .channel("channel")
                     .addChannel("string")
+                    .addElement(
+                        ElementalNode.UnionMember0.builder()
+                            .addChannel("string")
+                            .if_("if")
+                            .loop("loop")
+                            .ref("ref")
+                            .type(ElementalNode.UnionMember0.Type.TEXT)
+                            .build()
+                    )
                     .if_("if")
                     .loop("loop")
+                    .raw(
+                        ElementalChannelNode.Raw.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
                     .ref("ref")
                     .type(ElementalNode.UnionMember2.Type.CHANNEL)
                     .build()
@@ -311,6 +341,15 @@ internal class ElementalNodeTest {
     fun ofUnionMember6() {
         val unionMember6 =
             ElementalNode.UnionMember6.builder()
+                .addElement(
+                    ElementalNode.UnionMember0.builder()
+                        .addChannel("string")
+                        .if_("if")
+                        .loop("loop")
+                        .ref("ref")
+                        .type(ElementalNode.UnionMember0.Type.TEXT)
+                        .build()
+                )
                 .addChannel("string")
                 .if_("if")
                 .loop("loop")
@@ -336,6 +375,15 @@ internal class ElementalNodeTest {
         val elementalNode =
             ElementalNode.ofUnionMember6(
                 ElementalNode.UnionMember6.builder()
+                    .addElement(
+                        ElementalNode.UnionMember0.builder()
+                            .addChannel("string")
+                            .if_("if")
+                            .loop("loop")
+                            .ref("ref")
+                            .type(ElementalNode.UnionMember0.Type.TEXT)
+                            .build()
+                    )
                     .addChannel("string")
                     .if_("if")
                     .loop("loop")

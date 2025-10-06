@@ -3,9 +3,10 @@
 package com.courier.api.proguard
 
 import com.courier.api.client.okhttp.CourierOkHttpClient
+import com.courier.api.core.JsonValue
 import com.courier.api.core.jsonMapper
+import com.courier.api.models.send.ElementalChannelNode
 import com.courier.api.models.send.ElementalNode
-import com.courier.api.models.send.MessageContext
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import kotlin.reflect.full.memberFunctions
 import kotlin.reflect.jvm.javaMethod
@@ -52,17 +53,38 @@ internal class ProGuardCompatibilityTest {
     }
 
     @Test
-    fun messageContextRoundtrip() {
+    fun elementalChannelNodeRoundtrip() {
         val jsonMapper = jsonMapper()
-        val messageContext = MessageContext.builder().tenantId("tenant_id").build()
+        val elementalChannelNode =
+            ElementalChannelNode.builder()
+                .channel("channel")
+                .addChannel("string")
+                .addElement(
+                    ElementalNode.UnionMember0.builder()
+                        .addChannel("string")
+                        .if_("if")
+                        .loop("loop")
+                        .ref("ref")
+                        .type(ElementalNode.UnionMember0.Type.TEXT)
+                        .build()
+                )
+                .if_("if")
+                .loop("loop")
+                .raw(
+                    ElementalChannelNode.Raw.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .build()
+                )
+                .ref("ref")
+                .build()
 
-        val roundtrippedMessageContext =
+        val roundtrippedElementalChannelNode =
             jsonMapper.readValue(
-                jsonMapper.writeValueAsString(messageContext),
-                jacksonTypeRef<MessageContext>(),
+                jsonMapper.writeValueAsString(elementalChannelNode),
+                jacksonTypeRef<ElementalChannelNode>(),
             )
 
-        assertThat(roundtrippedMessageContext).isEqualTo(messageContext)
+        assertThat(roundtrippedElementalChannelNode).isEqualTo(elementalChannelNode)
     }
 
     @Test

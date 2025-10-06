@@ -11,6 +11,7 @@ import com.courier.api.core.JsonMissing
 import com.courier.api.core.JsonValue
 import com.courier.api.core.allMaxBy
 import com.courier.api.core.checkKnown
+import com.courier.api.core.checkRequired
 import com.courier.api.core.getOrThrow
 import com.courier.api.core.toImmutable
 import com.courier.api.errors.CourierInvalidDataException
@@ -30,6 +31,17 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * The channel element allows a notification to be customized based on which channel it is sent
+ * through. For example, you may want to display a detailed message when the notification is sent
+ * through email, and a more concise message in a push notification. Channel elements are only valid
+ * as top-level elements; you cannot nest channel elements. If there is a channel element specified
+ * at the top-level of the document, all sibling elements must be channel elements. Note: As an
+ * alternative, most elements support a `channel` property. Which allows you to selectively display
+ * an individual element on a per channel basis. See the
+ * [control flow docs](https://www.courier.com/docs/platform/content/elemental/control-flow/) for
+ * more details.
+ */
 @JsonDeserialize(using = ElementalNode.Deserializer::class)
 @JsonSerialize(using = ElementalNode.Serializer::class)
 class ElementalNode
@@ -49,6 +61,17 @@ private constructor(
 
     fun unionMember1(): Optional<UnionMember1> = Optional.ofNullable(unionMember1)
 
+    /**
+     * The channel element allows a notification to be customized based on which channel it is sent
+     * through. For example, you may want to display a detailed message when the notification is
+     * sent through email, and a more concise message in a push notification. Channel elements are
+     * only valid as top-level elements; you cannot nest channel elements. If there is a channel
+     * element specified at the top-level of the document, all sibling elements must be channel
+     * elements. Note: As an alternative, most elements support a `channel` property. Which allows
+     * you to selectively display an individual element on a per channel basis. See the
+     * [control flow docs](https://www.courier.com/docs/platform/content/elemental/control-flow/)
+     * for more details.
+     */
     fun unionMember2(): Optional<UnionMember2> = Optional.ofNullable(unionMember2)
 
     fun unionMember3(): Optional<UnionMember3> = Optional.ofNullable(unionMember3)
@@ -57,6 +80,12 @@ private constructor(
 
     fun unionMember5(): Optional<UnionMember5> = Optional.ofNullable(unionMember5)
 
+    /**
+     * Allows you to group elements together. This can be useful when used in combination with "if"
+     * or "loop". See
+     * [control flow docs](https://www.courier.com/docs/platform/content/elemental/control-flow/)
+     * for more details.
+     */
     fun unionMember6(): Optional<UnionMember6> = Optional.ofNullable(unionMember6)
 
     fun unionMember7(): Optional<UnionMember7> = Optional.ofNullable(unionMember7)
@@ -81,6 +110,17 @@ private constructor(
 
     fun asUnionMember1(): UnionMember1 = unionMember1.getOrThrow("unionMember1")
 
+    /**
+     * The channel element allows a notification to be customized based on which channel it is sent
+     * through. For example, you may want to display a detailed message when the notification is
+     * sent through email, and a more concise message in a push notification. Channel elements are
+     * only valid as top-level elements; you cannot nest channel elements. If there is a channel
+     * element specified at the top-level of the document, all sibling elements must be channel
+     * elements. Note: As an alternative, most elements support a `channel` property. Which allows
+     * you to selectively display an individual element on a per channel basis. See the
+     * [control flow docs](https://www.courier.com/docs/platform/content/elemental/control-flow/)
+     * for more details.
+     */
     fun asUnionMember2(): UnionMember2 = unionMember2.getOrThrow("unionMember2")
 
     fun asUnionMember3(): UnionMember3 = unionMember3.getOrThrow("unionMember3")
@@ -89,6 +129,12 @@ private constructor(
 
     fun asUnionMember5(): UnionMember5 = unionMember5.getOrThrow("unionMember5")
 
+    /**
+     * Allows you to group elements together. This can be useful when used in combination with "if"
+     * or "loop". See
+     * [control flow docs](https://www.courier.com/docs/platform/content/elemental/control-flow/)
+     * for more details.
+     */
     fun asUnionMember6(): UnionMember6 = unionMember6.getOrThrow("unionMember6")
 
     fun asUnionMember7(): UnionMember7 = unionMember7.getOrThrow("unionMember7")
@@ -240,6 +286,18 @@ private constructor(
         @JvmStatic
         fun ofUnionMember1(unionMember1: UnionMember1) = ElementalNode(unionMember1 = unionMember1)
 
+        /**
+         * The channel element allows a notification to be customized based on which channel it is
+         * sent through. For example, you may want to display a detailed message when the
+         * notification is sent through email, and a more concise message in a push notification.
+         * Channel elements are only valid as top-level elements; you cannot nest channel elements.
+         * If there is a channel element specified at the top-level of the document, all sibling
+         * elements must be channel elements. Note: As an alternative, most elements support a
+         * `channel` property. Which allows you to selectively display an individual element on a
+         * per channel basis. See the
+         * [control flow docs](https://www.courier.com/docs/platform/content/elemental/control-flow/)
+         * for more details.
+         */
         @JvmStatic
         fun ofUnionMember2(unionMember2: UnionMember2) = ElementalNode(unionMember2 = unionMember2)
 
@@ -252,6 +310,12 @@ private constructor(
         @JvmStatic
         fun ofUnionMember5(unionMember5: UnionMember5) = ElementalNode(unionMember5 = unionMember5)
 
+        /**
+         * Allows you to group elements together. This can be useful when used in combination with
+         * "if" or "loop". See
+         * [control flow docs](https://www.courier.com/docs/platform/content/elemental/control-flow/)
+         * for more details.
+         */
         @JvmStatic
         fun ofUnionMember6(unionMember6: UnionMember6) = ElementalNode(unionMember6 = unionMember6)
 
@@ -268,6 +332,18 @@ private constructor(
 
         fun visitUnionMember1(unionMember1: UnionMember1): T
 
+        /**
+         * The channel element allows a notification to be customized based on which channel it is
+         * sent through. For example, you may want to display a detailed message when the
+         * notification is sent through email, and a more concise message in a push notification.
+         * Channel elements are only valid as top-level elements; you cannot nest channel elements.
+         * If there is a channel element specified at the top-level of the document, all sibling
+         * elements must be channel elements. Note: As an alternative, most elements support a
+         * `channel` property. Which allows you to selectively display an individual element on a
+         * per channel basis. See the
+         * [control flow docs](https://www.courier.com/docs/platform/content/elemental/control-flow/)
+         * for more details.
+         */
         fun visitUnionMember2(unionMember2: UnionMember2): T
 
         fun visitUnionMember3(unionMember3: UnionMember3): T
@@ -276,6 +352,12 @@ private constructor(
 
         fun visitUnionMember5(unionMember5: UnionMember5): T
 
+        /**
+         * Allows you to group elements together. This can be useful when used in combination with
+         * "if" or "loop". See
+         * [control flow docs](https://www.courier.com/docs/platform/content/elemental/control-flow/)
+         * for more details.
+         */
         fun visitUnionMember6(unionMember6: UnionMember6): T
 
         fun visitUnionMember7(unionMember7: UnionMember7): T
@@ -1213,12 +1295,26 @@ private constructor(
             "UnionMember1{channels=$channels, if_=$if_, loop=$loop, ref=$ref, type=$type, additionalProperties=$additionalProperties}"
     }
 
+    /**
+     * The channel element allows a notification to be customized based on which channel it is sent
+     * through. For example, you may want to display a detailed message when the notification is
+     * sent through email, and a more concise message in a push notification. Channel elements are
+     * only valid as top-level elements; you cannot nest channel elements. If there is a channel
+     * element specified at the top-level of the document, all sibling elements must be channel
+     * elements. Note: As an alternative, most elements support a `channel` property. Which allows
+     * you to selectively display an individual element on a per channel basis. See the
+     * [control flow docs](https://www.courier.com/docs/platform/content/elemental/control-flow/)
+     * for more details.
+     */
     class UnionMember2
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
+        private val channel: JsonField<String>,
         private val channels: JsonField<List<String>>,
+        private val elements: JsonField<List<ElementalNode>>,
         private val if_: JsonField<String>,
         private val loop: JsonField<String>,
+        private val raw: JsonField<ElementalChannelNode.Raw>,
         private val ref: JsonField<String>,
         private val type: JsonField<Type>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -1226,20 +1322,56 @@ private constructor(
 
         @JsonCreator
         private constructor(
+            @JsonProperty("channel") @ExcludeMissing channel: JsonField<String> = JsonMissing.of(),
             @JsonProperty("channels")
             @ExcludeMissing
             channels: JsonField<List<String>> = JsonMissing.of(),
+            @JsonProperty("elements")
+            @ExcludeMissing
+            elements: JsonField<List<ElementalNode>> = JsonMissing.of(),
             @JsonProperty("if") @ExcludeMissing if_: JsonField<String> = JsonMissing.of(),
             @JsonProperty("loop") @ExcludeMissing loop: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("raw")
+            @ExcludeMissing
+            raw: JsonField<ElementalChannelNode.Raw> = JsonMissing.of(),
             @JsonProperty("ref") @ExcludeMissing ref: JsonField<String> = JsonMissing.of(),
             @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
-        ) : this(channels, if_, loop, ref, type, mutableMapOf())
+        ) : this(channel, channels, elements, if_, loop, raw, ref, type, mutableMapOf())
+
+        fun toElementalChannelNode(): ElementalChannelNode =
+            ElementalChannelNode.builder()
+                .channel(channel)
+                .channels(channels)
+                .elements(elements)
+                .if_(if_)
+                .loop(loop)
+                .raw(raw)
+                .ref(ref)
+                .build()
+
+        /**
+         * The channel the contents of this element should be applied to. Can be `email`, `push`,
+         * `direct_message`, `sms` or a provider such as slack
+         *
+         * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun channel(): String = channel.getRequired("channel")
 
         /**
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
         fun channels(): Optional<List<String>> = channels.getOptional("channels")
+
+        /**
+         * An array of elements to apply to the channel. If `raw` has not been specified, `elements`
+         * is `required`.
+         *
+         * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun elements(): Optional<List<ElementalNode>> = elements.getOptional("elements")
 
         /**
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -1254,6 +1386,15 @@ private constructor(
         fun loop(): Optional<String> = loop.getOptional("loop")
 
         /**
+         * Raw data to apply to the channel. If `elements` has not been specified, `raw` is
+         * `required`.
+         *
+         * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun raw(): Optional<ElementalChannelNode.Raw> = raw.getOptional("raw")
+
+        /**
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
@@ -1266,6 +1407,13 @@ private constructor(
         fun type(): Optional<Type> = type.getOptional("type")
 
         /**
+         * Returns the raw JSON value of [channel].
+         *
+         * Unlike [channel], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("channel") @ExcludeMissing fun _channel(): JsonField<String> = channel
+
+        /**
          * Returns the raw JSON value of [channels].
          *
          * Unlike [channels], this method doesn't throw if the JSON field has an unexpected type.
@@ -1273,6 +1421,15 @@ private constructor(
         @JsonProperty("channels")
         @ExcludeMissing
         fun _channels(): JsonField<List<String>> = channels
+
+        /**
+         * Returns the raw JSON value of [elements].
+         *
+         * Unlike [elements], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("elements")
+        @ExcludeMissing
+        fun _elements(): JsonField<List<ElementalNode>> = elements
 
         /**
          * Returns the raw JSON value of [if_].
@@ -1287,6 +1444,13 @@ private constructor(
          * Unlike [loop], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("loop") @ExcludeMissing fun _loop(): JsonField<String> = loop
+
+        /**
+         * Returns the raw JSON value of [raw].
+         *
+         * Unlike [raw], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("raw") @ExcludeMissing fun _raw(): JsonField<ElementalChannelNode.Raw> = raw
 
         /**
          * Returns the raw JSON value of [ref].
@@ -1316,29 +1480,57 @@ private constructor(
 
         companion object {
 
-            /** Returns a mutable builder for constructing an instance of [UnionMember2]. */
+            /**
+             * Returns a mutable builder for constructing an instance of [UnionMember2].
+             *
+             * The following fields are required:
+             * ```java
+             * .channel()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
         /** A builder for [UnionMember2]. */
         class Builder internal constructor() {
 
+            private var channel: JsonField<String>? = null
             private var channels: JsonField<MutableList<String>>? = null
+            private var elements: JsonField<MutableList<ElementalNode>>? = null
             private var if_: JsonField<String> = JsonMissing.of()
             private var loop: JsonField<String> = JsonMissing.of()
+            private var raw: JsonField<ElementalChannelNode.Raw> = JsonMissing.of()
             private var ref: JsonField<String> = JsonMissing.of()
             private var type: JsonField<Type> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(unionMember2: UnionMember2) = apply {
+                channel = unionMember2.channel
                 channels = unionMember2.channels.map { it.toMutableList() }
+                elements = unionMember2.elements.map { it.toMutableList() }
                 if_ = unionMember2.if_
                 loop = unionMember2.loop
+                raw = unionMember2.raw
                 ref = unionMember2.ref
                 type = unionMember2.type
                 additionalProperties = unionMember2.additionalProperties.toMutableMap()
             }
+
+            /**
+             * The channel the contents of this element should be applied to. Can be `email`,
+             * `push`, `direct_message`, `sms` or a provider such as slack
+             */
+            fun channel(channel: String) = channel(JsonField.of(channel))
+
+            /**
+             * Sets [Builder.channel] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.channel] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun channel(channel: JsonField<String>) = apply { this.channel = channel }
 
             fun channels(channels: List<String>?) = channels(JsonField.ofNullable(channels))
 
@@ -1368,6 +1560,70 @@ private constructor(
                     }
             }
 
+            /**
+             * An array of elements to apply to the channel. If `raw` has not been specified,
+             * `elements` is `required`.
+             */
+            fun elements(elements: List<ElementalNode>?) = elements(JsonField.ofNullable(elements))
+
+            /** Alias for calling [Builder.elements] with `elements.orElse(null)`. */
+            fun elements(elements: Optional<List<ElementalNode>>) = elements(elements.getOrNull())
+
+            /**
+             * Sets [Builder.elements] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.elements] with a well-typed `List<ElementalNode>`
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun elements(elements: JsonField<List<ElementalNode>>) = apply {
+                this.elements = elements.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [ElementalNode] to [elements].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addElement(element: ElementalNode) = apply {
+                elements =
+                    (elements ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("elements", it).add(element)
+                    }
+            }
+
+            /** Alias for calling [addElement] with `ElementalNode.ofUnionMember0(unionMember0)`. */
+            fun addElement(unionMember0: UnionMember0) =
+                addElement(ElementalNode.ofUnionMember0(unionMember0))
+
+            /** Alias for calling [addElement] with `ElementalNode.ofUnionMember1(unionMember1)`. */
+            fun addElement(unionMember1: UnionMember1) =
+                addElement(ElementalNode.ofUnionMember1(unionMember1))
+
+            /** Alias for calling [addElement] with `ElementalNode.ofUnionMember2(unionMember2)`. */
+            fun addElement(unionMember2: UnionMember2) =
+                addElement(ElementalNode.ofUnionMember2(unionMember2))
+
+            /** Alias for calling [addElement] with `ElementalNode.ofUnionMember3(unionMember3)`. */
+            fun addElement(unionMember3: UnionMember3) =
+                addElement(ElementalNode.ofUnionMember3(unionMember3))
+
+            /** Alias for calling [addElement] with `ElementalNode.ofUnionMember4(unionMember4)`. */
+            fun addElement(unionMember4: UnionMember4) =
+                addElement(ElementalNode.ofUnionMember4(unionMember4))
+
+            /** Alias for calling [addElement] with `ElementalNode.ofUnionMember5(unionMember5)`. */
+            fun addElement(unionMember5: UnionMember5) =
+                addElement(ElementalNode.ofUnionMember5(unionMember5))
+
+            /** Alias for calling [addElement] with `ElementalNode.ofUnionMember6(unionMember6)`. */
+            fun addElement(unionMember6: UnionMember6) =
+                addElement(ElementalNode.ofUnionMember6(unionMember6))
+
+            /** Alias for calling [addElement] with `ElementalNode.ofUnionMember7(unionMember7)`. */
+            fun addElement(unionMember7: UnionMember7) =
+                addElement(ElementalNode.ofUnionMember7(unionMember7))
+
             fun if_(if_: String?) = if_(JsonField.ofNullable(if_))
 
             /** Alias for calling [Builder.if_] with `if_.orElse(null)`. */
@@ -1395,6 +1651,24 @@ private constructor(
              * value.
              */
             fun loop(loop: JsonField<String>) = apply { this.loop = loop }
+
+            /**
+             * Raw data to apply to the channel. If `elements` has not been specified, `raw` is
+             * `required`.
+             */
+            fun raw(raw: ElementalChannelNode.Raw?) = raw(JsonField.ofNullable(raw))
+
+            /** Alias for calling [Builder.raw] with `raw.orElse(null)`. */
+            fun raw(raw: Optional<ElementalChannelNode.Raw>) = raw(raw.getOrNull())
+
+            /**
+             * Sets [Builder.raw] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.raw] with a well-typed [ElementalChannelNode.Raw]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun raw(raw: JsonField<ElementalChannelNode.Raw>) = apply { this.raw = raw }
 
             fun ref(ref: String?) = ref(JsonField.ofNullable(ref))
 
@@ -1444,12 +1718,22 @@ private constructor(
              * Returns an immutable instance of [UnionMember2].
              *
              * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .channel()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
              */
             fun build(): UnionMember2 =
                 UnionMember2(
+                    checkRequired("channel", channel),
                     (channels ?: JsonMissing.of()).map { it.toImmutable() },
+                    (elements ?: JsonMissing.of()).map { it.toImmutable() },
                     if_,
                     loop,
+                    raw,
                     ref,
                     type,
                     additionalProperties.toMutableMap(),
@@ -1463,9 +1747,12 @@ private constructor(
                 return@apply
             }
 
+            channel()
             channels()
+            elements().ifPresent { it.forEach { it.validate() } }
             if_()
             loop()
+            raw().ifPresent { it.validate() }
             ref()
             type().ifPresent { it.validate() }
             validated = true
@@ -1487,9 +1774,12 @@ private constructor(
          */
         @JvmSynthetic
         internal fun validity(): Int =
-            (channels.asKnown().getOrNull()?.size ?: 0) +
+            (if (channel.asKnown().isPresent) 1 else 0) +
+                (channels.asKnown().getOrNull()?.size ?: 0) +
+                (elements.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
                 (if (if_.asKnown().isPresent) 1 else 0) +
                 (if (loop.asKnown().isPresent) 1 else 0) +
+                (raw.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (ref.asKnown().isPresent) 1 else 0) +
                 (type.asKnown().getOrNull()?.validity() ?: 0)
 
@@ -1620,22 +1910,35 @@ private constructor(
             }
 
             return other is UnionMember2 &&
+                channel == other.channel &&
                 channels == other.channels &&
+                elements == other.elements &&
                 if_ == other.if_ &&
                 loop == other.loop &&
+                raw == other.raw &&
                 ref == other.ref &&
                 type == other.type &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(channels, if_, loop, ref, type, additionalProperties)
+            Objects.hash(
+                channel,
+                channels,
+                elements,
+                if_,
+                loop,
+                raw,
+                ref,
+                type,
+                additionalProperties,
+            )
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "UnionMember2{channels=$channels, if_=$if_, loop=$loop, ref=$ref, type=$type, additionalProperties=$additionalProperties}"
+            "UnionMember2{channel=$channel, channels=$channels, elements=$elements, if_=$if_, loop=$loop, raw=$raw, ref=$ref, type=$type, additionalProperties=$additionalProperties}"
     }
 
     class UnionMember3
@@ -3431,9 +3734,16 @@ private constructor(
             "UnionMember5{channels=$channels, if_=$if_, loop=$loop, ref=$ref, type=$type, additionalProperties=$additionalProperties}"
     }
 
+    /**
+     * Allows you to group elements together. This can be useful when used in combination with "if"
+     * or "loop". See
+     * [control flow docs](https://www.courier.com/docs/platform/content/elemental/control-flow/)
+     * for more details.
+     */
     class UnionMember6
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
+        private val elements: JsonField<List<ElementalNode>>,
         private val channels: JsonField<List<String>>,
         private val if_: JsonField<String>,
         private val loop: JsonField<String>,
@@ -3444,6 +3754,9 @@ private constructor(
 
         @JsonCreator
         private constructor(
+            @JsonProperty("elements")
+            @ExcludeMissing
+            elements: JsonField<List<ElementalNode>> = JsonMissing.of(),
             @JsonProperty("channels")
             @ExcludeMissing
             channels: JsonField<List<String>> = JsonMissing.of(),
@@ -3451,7 +3764,24 @@ private constructor(
             @JsonProperty("loop") @ExcludeMissing loop: JsonField<String> = JsonMissing.of(),
             @JsonProperty("ref") @ExcludeMissing ref: JsonField<String> = JsonMissing.of(),
             @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
-        ) : this(channels, if_, loop, ref, type, mutableMapOf())
+        ) : this(elements, channels, if_, loop, ref, type, mutableMapOf())
+
+        fun toElementalGroupNode(): ElementalGroupNode =
+            ElementalGroupNode.builder()
+                .elements(elements)
+                .channels(channels)
+                .if_(if_)
+                .loop(loop)
+                .ref(ref)
+                .build()
+
+        /**
+         * Sub elements to render.
+         *
+         * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun elements(): List<ElementalNode> = elements.getRequired("elements")
 
         /**
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -3482,6 +3812,15 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun type(): Optional<Type> = type.getOptional("type")
+
+        /**
+         * Returns the raw JSON value of [elements].
+         *
+         * Unlike [elements], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("elements")
+        @ExcludeMissing
+        fun _elements(): JsonField<List<ElementalNode>> = elements
 
         /**
          * Returns the raw JSON value of [channels].
@@ -3534,13 +3873,21 @@ private constructor(
 
         companion object {
 
-            /** Returns a mutable builder for constructing an instance of [UnionMember6]. */
+            /**
+             * Returns a mutable builder for constructing an instance of [UnionMember6].
+             *
+             * The following fields are required:
+             * ```java
+             * .elements()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
         /** A builder for [UnionMember6]. */
         class Builder internal constructor() {
 
+            private var elements: JsonField<MutableList<ElementalNode>>? = null
             private var channels: JsonField<MutableList<String>>? = null
             private var if_: JsonField<String> = JsonMissing.of()
             private var loop: JsonField<String> = JsonMissing.of()
@@ -3550,6 +3897,7 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(unionMember6: UnionMember6) = apply {
+                elements = unionMember6.elements.map { it.toMutableList() }
                 channels = unionMember6.channels.map { it.toMutableList() }
                 if_ = unionMember6.if_
                 loop = unionMember6.loop
@@ -3557,6 +3905,64 @@ private constructor(
                 type = unionMember6.type
                 additionalProperties = unionMember6.additionalProperties.toMutableMap()
             }
+
+            /** Sub elements to render. */
+            fun elements(elements: List<ElementalNode>) = elements(JsonField.of(elements))
+
+            /**
+             * Sets [Builder.elements] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.elements] with a well-typed `List<ElementalNode>`
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun elements(elements: JsonField<List<ElementalNode>>) = apply {
+                this.elements = elements.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [ElementalNode] to [elements].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addElement(element: ElementalNode) = apply {
+                elements =
+                    (elements ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("elements", it).add(element)
+                    }
+            }
+
+            /** Alias for calling [addElement] with `ElementalNode.ofUnionMember0(unionMember0)`. */
+            fun addElement(unionMember0: UnionMember0) =
+                addElement(ElementalNode.ofUnionMember0(unionMember0))
+
+            /** Alias for calling [addElement] with `ElementalNode.ofUnionMember1(unionMember1)`. */
+            fun addElement(unionMember1: UnionMember1) =
+                addElement(ElementalNode.ofUnionMember1(unionMember1))
+
+            /** Alias for calling [addElement] with `ElementalNode.ofUnionMember2(unionMember2)`. */
+            fun addElement(unionMember2: UnionMember2) =
+                addElement(ElementalNode.ofUnionMember2(unionMember2))
+
+            /** Alias for calling [addElement] with `ElementalNode.ofUnionMember3(unionMember3)`. */
+            fun addElement(unionMember3: UnionMember3) =
+                addElement(ElementalNode.ofUnionMember3(unionMember3))
+
+            /** Alias for calling [addElement] with `ElementalNode.ofUnionMember4(unionMember4)`. */
+            fun addElement(unionMember4: UnionMember4) =
+                addElement(ElementalNode.ofUnionMember4(unionMember4))
+
+            /** Alias for calling [addElement] with `ElementalNode.ofUnionMember5(unionMember5)`. */
+            fun addElement(unionMember5: UnionMember5) =
+                addElement(ElementalNode.ofUnionMember5(unionMember5))
+
+            /** Alias for calling [addElement] with `ElementalNode.ofUnionMember6(unionMember6)`. */
+            fun addElement(unionMember6: UnionMember6) =
+                addElement(ElementalNode.ofUnionMember6(unionMember6))
+
+            /** Alias for calling [addElement] with `ElementalNode.ofUnionMember7(unionMember7)`. */
+            fun addElement(unionMember7: UnionMember7) =
+                addElement(ElementalNode.ofUnionMember7(unionMember7))
 
             fun channels(channels: List<String>?) = channels(JsonField.ofNullable(channels))
 
@@ -3662,9 +4068,17 @@ private constructor(
              * Returns an immutable instance of [UnionMember6].
              *
              * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .elements()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
              */
             fun build(): UnionMember6 =
                 UnionMember6(
+                    checkRequired("elements", elements).map { it.toImmutable() },
                     (channels ?: JsonMissing.of()).map { it.toImmutable() },
                     if_,
                     loop,
@@ -3681,6 +4095,7 @@ private constructor(
                 return@apply
             }
 
+            elements().forEach { it.validate() }
             channels()
             if_()
             loop()
@@ -3705,7 +4120,8 @@ private constructor(
          */
         @JvmSynthetic
         internal fun validity(): Int =
-            (channels.asKnown().getOrNull()?.size ?: 0) +
+            (elements.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                (channels.asKnown().getOrNull()?.size ?: 0) +
                 (if (if_.asKnown().isPresent) 1 else 0) +
                 (if (loop.asKnown().isPresent) 1 else 0) +
                 (if (ref.asKnown().isPresent) 1 else 0) +
@@ -3838,6 +4254,7 @@ private constructor(
             }
 
             return other is UnionMember6 &&
+                elements == other.elements &&
                 channels == other.channels &&
                 if_ == other.if_ &&
                 loop == other.loop &&
@@ -3847,13 +4264,13 @@ private constructor(
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(channels, if_, loop, ref, type, additionalProperties)
+            Objects.hash(elements, channels, if_, loop, ref, type, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "UnionMember6{channels=$channels, if_=$if_, loop=$loop, ref=$ref, type=$type, additionalProperties=$additionalProperties}"
+            "UnionMember6{elements=$elements, channels=$channels, if_=$if_, loop=$loop, ref=$ref, type=$type, additionalProperties=$additionalProperties}"
     }
 
     class UnionMember7
