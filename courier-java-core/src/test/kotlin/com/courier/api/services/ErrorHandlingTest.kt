@@ -76,13 +76,6 @@ internal class ErrorHandlingTest {
                     SendMessageParams.builder()
                         .message(
                             SendMessageParams.Message.builder()
-                                .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
-                                        .body("body")
-                                        .title("title")
-                                        .build()
-                                )
                                 .brandId("brand_id")
                                 .channels(
                                     SendMessageParams.Message.Channels.builder()
@@ -111,6 +104,13 @@ internal class ErrorHandlingTest {
                                                 )
                                             ),
                                         )
+                                        .build()
+                                )
+                                .content(
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
@@ -313,13 +313,6 @@ internal class ErrorHandlingTest {
                     SendMessageParams.builder()
                         .message(
                             SendMessageParams.Message.builder()
-                                .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
-                                        .body("body")
-                                        .title("title")
-                                        .build()
-                                )
                                 .brandId("brand_id")
                                 .channels(
                                     SendMessageParams.Message.Channels.builder()
@@ -348,6 +341,13 @@ internal class ErrorHandlingTest {
                                                 )
                                             ),
                                         )
+                                        .build()
+                                )
+                                .content(
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
@@ -550,13 +550,6 @@ internal class ErrorHandlingTest {
                     SendMessageParams.builder()
                         .message(
                             SendMessageParams.Message.builder()
-                                .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
-                                        .body("body")
-                                        .title("title")
-                                        .build()
-                                )
                                 .brandId("brand_id")
                                 .channels(
                                     SendMessageParams.Message.Channels.builder()
@@ -585,6 +578,13 @@ internal class ErrorHandlingTest {
                                                 )
                                             ),
                                         )
+                                        .build()
+                                )
+                                .content(
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
@@ -787,13 +787,6 @@ internal class ErrorHandlingTest {
                     SendMessageParams.builder()
                         .message(
                             SendMessageParams.Message.builder()
-                                .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
-                                        .body("body")
-                                        .title("title")
-                                        .build()
-                                )
                                 .brandId("brand_id")
                                 .channels(
                                     SendMessageParams.Message.Channels.builder()
@@ -822,6 +815,13 @@ internal class ErrorHandlingTest {
                                                 )
                                             ),
                                         )
+                                        .build()
+                                )
+                                .content(
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
@@ -1024,13 +1024,6 @@ internal class ErrorHandlingTest {
                     SendMessageParams.builder()
                         .message(
                             SendMessageParams.Message.builder()
-                                .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
-                                        .body("body")
-                                        .title("title")
-                                        .build()
-                                )
                                 .brandId("brand_id")
                                 .channels(
                                     SendMessageParams.Message.Channels.builder()
@@ -1059,6 +1052,13 @@ internal class ErrorHandlingTest {
                                                 )
                                             ),
                                         )
+                                        .build()
+                                )
+                                .content(
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
@@ -1261,13 +1261,6 @@ internal class ErrorHandlingTest {
                     SendMessageParams.builder()
                         .message(
                             SendMessageParams.Message.builder()
-                                .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
-                                        .body("body")
-                                        .title("title")
-                                        .build()
-                                )
                                 .brandId("brand_id")
                                 .channels(
                                     SendMessageParams.Message.Channels.builder()
@@ -1296,6 +1289,13 @@ internal class ErrorHandlingTest {
                                                 )
                                             ),
                                         )
+                                        .build()
+                                )
+                                .content(
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
@@ -1498,13 +1498,6 @@ internal class ErrorHandlingTest {
                     SendMessageParams.builder()
                         .message(
                             SendMessageParams.Message.builder()
-                                .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
-                                        .body("body")
-                                        .title("title")
-                                        .build()
-                                )
                                 .brandId("brand_id")
                                 .channels(
                                     SendMessageParams.Message.Channels.builder()
@@ -1533,6 +1526,13 @@ internal class ErrorHandlingTest {
                                                 )
                                             ),
                                         )
+                                        .build()
+                                )
+                                .content(
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
@@ -1735,13 +1735,6 @@ internal class ErrorHandlingTest {
                     SendMessageParams.builder()
                         .message(
                             SendMessageParams.Message.builder()
-                                .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
-                                        .body("body")
-                                        .title("title")
-                                        .build()
-                                )
                                 .brandId("brand_id")
                                 .channels(
                                     SendMessageParams.Message.Channels.builder()
@@ -1770,6 +1763,13 @@ internal class ErrorHandlingTest {
                                                 )
                                             ),
                                         )
+                                        .build()
+                                )
+                                .content(
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
@@ -1972,13 +1972,6 @@ internal class ErrorHandlingTest {
                     SendMessageParams.builder()
                         .message(
                             SendMessageParams.Message.builder()
-                                .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
-                                        .body("body")
-                                        .title("title")
-                                        .build()
-                                )
                                 .brandId("brand_id")
                                 .channels(
                                     SendMessageParams.Message.Channels.builder()
@@ -2007,6 +2000,13 @@ internal class ErrorHandlingTest {
                                                 )
                                             ),
                                         )
+                                        .build()
+                                )
+                                .content(
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
@@ -2209,13 +2209,6 @@ internal class ErrorHandlingTest {
                     SendMessageParams.builder()
                         .message(
                             SendMessageParams.Message.builder()
-                                .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
-                                        .body("body")
-                                        .title("title")
-                                        .build()
-                                )
                                 .brandId("brand_id")
                                 .channels(
                                     SendMessageParams.Message.Channels.builder()
@@ -2244,6 +2237,13 @@ internal class ErrorHandlingTest {
                                                 )
                                             ),
                                         )
+                                        .build()
+                                )
+                                .content(
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
@@ -2446,13 +2446,6 @@ internal class ErrorHandlingTest {
                     SendMessageParams.builder()
                         .message(
                             SendMessageParams.Message.builder()
-                                .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
-                                        .body("body")
-                                        .title("title")
-                                        .build()
-                                )
                                 .brandId("brand_id")
                                 .channels(
                                     SendMessageParams.Message.Channels.builder()
@@ -2481,6 +2474,13 @@ internal class ErrorHandlingTest {
                                                 )
                                             ),
                                         )
+                                        .build()
+                                )
+                                .content(
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
@@ -2683,13 +2683,6 @@ internal class ErrorHandlingTest {
                     SendMessageParams.builder()
                         .message(
                             SendMessageParams.Message.builder()
-                                .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
-                                        .body("body")
-                                        .title("title")
-                                        .build()
-                                )
                                 .brandId("brand_id")
                                 .channels(
                                     SendMessageParams.Message.Channels.builder()
@@ -2718,6 +2711,13 @@ internal class ErrorHandlingTest {
                                                 )
                                             ),
                                         )
+                                        .build()
+                                )
+                                .content(
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
@@ -2920,13 +2920,6 @@ internal class ErrorHandlingTest {
                     SendMessageParams.builder()
                         .message(
                             SendMessageParams.Message.builder()
-                                .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
-                                        .body("body")
-                                        .title("title")
-                                        .build()
-                                )
                                 .brandId("brand_id")
                                 .channels(
                                     SendMessageParams.Message.Channels.builder()
@@ -2955,6 +2948,13 @@ internal class ErrorHandlingTest {
                                                 )
                                             ),
                                         )
+                                        .build()
+                                )
+                                .content(
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
@@ -3157,13 +3157,6 @@ internal class ErrorHandlingTest {
                     SendMessageParams.builder()
                         .message(
                             SendMessageParams.Message.builder()
-                                .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
-                                        .body("body")
-                                        .title("title")
-                                        .build()
-                                )
                                 .brandId("brand_id")
                                 .channels(
                                     SendMessageParams.Message.Channels.builder()
@@ -3192,6 +3185,13 @@ internal class ErrorHandlingTest {
                                                 )
                                             ),
                                         )
+                                        .build()
+                                )
+                                .content(
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
@@ -3394,13 +3394,6 @@ internal class ErrorHandlingTest {
                     SendMessageParams.builder()
                         .message(
                             SendMessageParams.Message.builder()
-                                .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
-                                        .body("body")
-                                        .title("title")
-                                        .build()
-                                )
                                 .brandId("brand_id")
                                 .channels(
                                     SendMessageParams.Message.Channels.builder()
@@ -3429,6 +3422,13 @@ internal class ErrorHandlingTest {
                                                 )
                                             ),
                                         )
+                                        .build()
+                                )
+                                .content(
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
@@ -3631,13 +3631,6 @@ internal class ErrorHandlingTest {
                     SendMessageParams.builder()
                         .message(
                             SendMessageParams.Message.builder()
-                                .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
-                                        .body("body")
-                                        .title("title")
-                                        .build()
-                                )
                                 .brandId("brand_id")
                                 .channels(
                                     SendMessageParams.Message.Channels.builder()
@@ -3666,6 +3659,13 @@ internal class ErrorHandlingTest {
                                                 )
                                             ),
                                         )
+                                        .build()
+                                )
+                                .content(
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())
@@ -3866,13 +3866,6 @@ internal class ErrorHandlingTest {
                     SendMessageParams.builder()
                         .message(
                             SendMessageParams.Message.builder()
-                                .content(
-                                    SendMessageParams.Message.Content.ElementalContentSugar
-                                        .builder()
-                                        .body("body")
-                                        .title("title")
-                                        .build()
-                                )
                                 .brandId("brand_id")
                                 .channels(
                                     SendMessageParams.Message.Channels.builder()
@@ -3901,6 +3894,13 @@ internal class ErrorHandlingTest {
                                                 )
                                             ),
                                         )
+                                        .build()
+                                )
+                                .content(
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .context(MessageContext.builder().tenantId("tenant_id").build())

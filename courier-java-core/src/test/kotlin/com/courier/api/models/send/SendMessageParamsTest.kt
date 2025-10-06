@@ -13,12 +13,6 @@ internal class SendMessageParamsTest {
         SendMessageParams.builder()
             .message(
                 SendMessageParams.Message.builder()
-                    .content(
-                        SendMessageParams.Message.Content.ElementalContentSugar.builder()
-                            .body("body")
-                            .title("title")
-                            .build()
-                    )
                     .brandId("brand_id")
                     .channels(
                         SendMessageParams.Message.Channels.builder()
@@ -46,6 +40,12 @@ internal class SendMessageParamsTest {
                                     )
                                 ),
                             )
+                            .build()
+                    )
+                    .content(
+                        SendMessageParams.Message.Content.ElementalContentSugar.builder()
+                            .body("body")
+                            .title("title")
                             .build()
                     )
                     .context(MessageContext.builder().tenantId("tenant_id").build())
@@ -219,12 +219,6 @@ internal class SendMessageParamsTest {
             SendMessageParams.builder()
                 .message(
                     SendMessageParams.Message.builder()
-                        .content(
-                            SendMessageParams.Message.Content.ElementalContentSugar.builder()
-                                .body("body")
-                                .title("title")
-                                .build()
-                        )
                         .brandId("brand_id")
                         .channels(
                             SendMessageParams.Message.Channels.builder()
@@ -252,6 +246,12 @@ internal class SendMessageParamsTest {
                                         )
                                     ),
                                 )
+                                .build()
+                        )
+                        .content(
+                            SendMessageParams.Message.Content.ElementalContentSugar.builder()
+                                .body("body")
+                                .title("title")
                                 .build()
                         )
                         .context(MessageContext.builder().tenantId("tenant_id").build())
@@ -429,12 +429,6 @@ internal class SendMessageParamsTest {
         assertThat(body.message())
             .isEqualTo(
                 SendMessageParams.Message.builder()
-                    .content(
-                        SendMessageParams.Message.Content.ElementalContentSugar.builder()
-                            .body("body")
-                            .title("title")
-                            .build()
-                    )
                     .brandId("brand_id")
                     .channels(
                         SendMessageParams.Message.Channels.builder()
@@ -462,6 +456,12 @@ internal class SendMessageParamsTest {
                                     )
                                 ),
                             )
+                            .build()
+                    )
+                    .content(
+                        SendMessageParams.Message.Content.ElementalContentSugar.builder()
+                            .body("body")
+                            .title("title")
                             .build()
                     )
                     .context(MessageContext.builder().tenantId("tenant_id").build())
@@ -631,31 +631,10 @@ internal class SendMessageParamsTest {
     @Test
     fun bodyWithoutOptionalFields() {
         val params =
-            SendMessageParams.builder()
-                .message(
-                    SendMessageParams.Message.builder()
-                        .content(
-                            SendMessageParams.Message.Content.ElementalContentSugar.builder()
-                                .body("body")
-                                .title("title")
-                                .build()
-                        )
-                        .build()
-                )
-                .build()
+            SendMessageParams.builder().message(SendMessageParams.Message.builder().build()).build()
 
         val body = params._body()
 
-        assertThat(body.message())
-            .isEqualTo(
-                SendMessageParams.Message.builder()
-                    .content(
-                        SendMessageParams.Message.Content.ElementalContentSugar.builder()
-                            .body("body")
-                            .title("title")
-                            .build()
-                    )
-                    .build()
-            )
+        assertThat(body.message()).isEqualTo(SendMessageParams.Message.builder().build())
     }
 }
