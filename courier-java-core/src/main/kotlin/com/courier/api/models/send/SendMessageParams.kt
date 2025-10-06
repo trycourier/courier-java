@@ -429,9 +429,9 @@ private constructor(
     class Message
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
-        private val content: JsonField<Content>,
         private val brandId: JsonField<String>,
         private val channels: JsonField<Channels>,
+        private val content: JsonField<Content>,
         private val context: JsonField<MessageContext>,
         private val data: JsonField<Data>,
         private val delay: JsonField<Delay>,
@@ -447,11 +447,11 @@ private constructor(
 
         @JsonCreator
         private constructor(
-            @JsonProperty("content") @ExcludeMissing content: JsonField<Content> = JsonMissing.of(),
             @JsonProperty("brand_id") @ExcludeMissing brandId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("channels")
             @ExcludeMissing
             channels: JsonField<Channels> = JsonMissing.of(),
+            @JsonProperty("content") @ExcludeMissing content: JsonField<Content> = JsonMissing.of(),
             @JsonProperty("context")
             @ExcludeMissing
             context: JsonField<MessageContext> = JsonMissing.of(),
@@ -471,9 +471,9 @@ private constructor(
             @JsonProperty("timeout") @ExcludeMissing timeout: JsonField<Timeout> = JsonMissing.of(),
             @JsonProperty("to") @ExcludeMissing to: JsonField<To> = JsonMissing.of(),
         ) : this(
-            content,
             brandId,
             channels,
+            content,
             context,
             data,
             delay,
@@ -486,14 +486,6 @@ private constructor(
             to,
             mutableMapOf(),
         )
-
-        /**
-         * Describes content that will work for email, inbox, push, chat, or any channel id.
-         *
-         * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun content(): Content = content.getRequired("content")
 
         /**
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -509,6 +501,14 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun channels(): Optional<Channels> = channels.getOptional("channels")
+
+        /**
+         * Describes content that will work for email, inbox, push, chat, or any channel id.
+         *
+         * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun content(): Optional<Content> = content.getOptional("content")
 
         /**
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -575,13 +575,6 @@ private constructor(
         fun to(): Optional<To> = to.getOptional("to")
 
         /**
-         * Returns the raw JSON value of [content].
-         *
-         * Unlike [content], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("content") @ExcludeMissing fun _content(): JsonField<Content> = content
-
-        /**
          * Returns the raw JSON value of [brandId].
          *
          * Unlike [brandId], this method doesn't throw if the JSON field has an unexpected type.
@@ -594,6 +587,13 @@ private constructor(
          * Unlike [channels], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("channels") @ExcludeMissing fun _channels(): JsonField<Channels> = channels
+
+        /**
+         * Returns the raw JSON value of [content].
+         *
+         * Unlike [content], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("content") @ExcludeMissing fun _content(): JsonField<Content> = content
 
         /**
          * Returns the raw JSON value of [context].
@@ -683,23 +683,16 @@ private constructor(
 
         companion object {
 
-            /**
-             * Returns a mutable builder for constructing an instance of [Message].
-             *
-             * The following fields are required:
-             * ```java
-             * .content()
-             * ```
-             */
+            /** Returns a mutable builder for constructing an instance of [Message]. */
             @JvmStatic fun builder() = Builder()
         }
 
         /** A builder for [Message]. */
         class Builder internal constructor() {
 
-            private var content: JsonField<Content>? = null
             private var brandId: JsonField<String> = JsonMissing.of()
             private var channels: JsonField<Channels> = JsonMissing.of()
+            private var content: JsonField<Content> = JsonMissing.of()
             private var context: JsonField<MessageContext> = JsonMissing.of()
             private var data: JsonField<Data> = JsonMissing.of()
             private var delay: JsonField<Delay> = JsonMissing.of()
@@ -714,9 +707,9 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(message: Message) = apply {
-                content = message.content
                 brandId = message.brandId
                 channels = message.channels
+                content = message.content
                 context = message.context
                 data = message.data
                 delay = message.delay
@@ -729,29 +722,6 @@ private constructor(
                 to = message.to
                 additionalProperties = message.additionalProperties.toMutableMap()
             }
-
-            /** Describes content that will work for email, inbox, push, chat, or any channel id. */
-            fun content(content: Content) = content(JsonField.of(content))
-
-            /**
-             * Sets [Builder.content] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.content] with a well-typed [Content] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun content(content: JsonField<Content>) = apply { this.content = content }
-
-            /**
-             * Alias for calling [content] with
-             * `Content.ofElementalContentSugar(elementalContentSugar)`.
-             */
-            fun content(elementalContentSugar: Content.ElementalContentSugar) =
-                content(Content.ofElementalContentSugar(elementalContentSugar))
-
-            /** Alias for calling [content] with `Content.ofElemental(elemental)`. */
-            fun content(elemental: Content.ElementalContent) =
-                content(Content.ofElemental(elemental))
 
             fun brandId(brandId: String?) = brandId(JsonField.ofNullable(brandId))
 
@@ -784,6 +754,29 @@ private constructor(
              * supported value.
              */
             fun channels(channels: JsonField<Channels>) = apply { this.channels = channels }
+
+            /** Describes content that will work for email, inbox, push, chat, or any channel id. */
+            fun content(content: Content) = content(JsonField.of(content))
+
+            /**
+             * Sets [Builder.content] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.content] with a well-typed [Content] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun content(content: JsonField<Content>) = apply { this.content = content }
+
+            /**
+             * Alias for calling [content] with
+             * `Content.ofElementalContentSugar(elementalContentSugar)`.
+             */
+            fun content(elementalContentSugar: Content.ElementalContentSugar) =
+                content(Content.ofElementalContentSugar(elementalContentSugar))
+
+            /** Alias for calling [content] with `Content.ofElemental(elemental)`. */
+            fun content(elemental: Content.ElementalContent) =
+                content(Content.ofElemental(elemental))
 
             fun context(context: MessageContext?) = context(JsonField.ofNullable(context))
 
@@ -960,19 +953,12 @@ private constructor(
              * Returns an immutable instance of [Message].
              *
              * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```java
-             * .content()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
              */
             fun build(): Message =
                 Message(
-                    checkRequired("content", content),
                     brandId,
                     channels,
+                    content,
                     context,
                     data,
                     delay,
@@ -994,9 +980,9 @@ private constructor(
                 return@apply
             }
 
-            content().validate()
             brandId()
             channels().ifPresent { it.validate() }
+            content().ifPresent { it.validate() }
             context().ifPresent { it.validate() }
             data().ifPresent { it.validate() }
             delay().ifPresent { it.validate() }
@@ -1026,9 +1012,9 @@ private constructor(
          */
         @JvmSynthetic
         internal fun validity(): Int =
-            (content.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (brandId.asKnown().isPresent) 1 else 0) +
+            (if (brandId.asKnown().isPresent) 1 else 0) +
                 (channels.asKnown().getOrNull()?.validity() ?: 0) +
+                (content.asKnown().getOrNull()?.validity() ?: 0) +
                 (context.asKnown().getOrNull()?.validity() ?: 0) +
                 (data.asKnown().getOrNull()?.validity() ?: 0) +
                 (delay.asKnown().getOrNull()?.validity() ?: 0) +
@@ -1039,6 +1025,112 @@ private constructor(
                 (routing.asKnown().getOrNull()?.validity() ?: 0) +
                 (timeout.asKnown().getOrNull()?.validity() ?: 0) +
                 (to.asKnown().getOrNull()?.validity() ?: 0)
+
+        /**
+         * Define run-time configuration for channels. Valid ChannelId's: email, sms, push, inbox,
+         * direct_message, banner, webhook.
+         */
+        class Channels
+        @JsonCreator
+        private constructor(
+            @com.fasterxml.jackson.annotation.JsonValue
+            private val additionalProperties: Map<String, JsonValue>
+        ) {
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /** Returns a mutable builder for constructing an instance of [Channels]. */
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [Channels]. */
+            class Builder internal constructor() {
+
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(channels: Channels) = apply {
+                    additionalProperties = channels.additionalProperties.toMutableMap()
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Channels].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
+                fun build(): Channels = Channels(additionalProperties.toImmutable())
+            }
+
+            private var validated: Boolean = false
+
+            fun validate(): Channels = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: CourierInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Channels && additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() = "Channels{additionalProperties=$additionalProperties}"
+        }
 
         /** Describes content that will work for email, inbox, push, chat, or any channel id. */
         @JsonDeserialize(using = Content.Deserializer::class)
@@ -1757,112 +1849,6 @@ private constructor(
                 override fun toString() =
                     "ElementalContent{elements=$elements, version=$version, brand=$brand, additionalProperties=$additionalProperties}"
             }
-        }
-
-        /**
-         * Define run-time configuration for channels. Valid ChannelId's: email, sms, push, inbox,
-         * direct_message, banner, webhook.
-         */
-        class Channels
-        @JsonCreator
-        private constructor(
-            @com.fasterxml.jackson.annotation.JsonValue
-            private val additionalProperties: Map<String, JsonValue>
-        ) {
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /** Returns a mutable builder for constructing an instance of [Channels]. */
-                @JvmStatic fun builder() = Builder()
-            }
-
-            /** A builder for [Channels]. */
-            class Builder internal constructor() {
-
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(channels: Channels) = apply {
-                    additionalProperties = channels.additionalProperties.toMutableMap()
-                }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [Channels].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 */
-                fun build(): Channels = Channels(additionalProperties.toImmutable())
-            }
-
-            private var validated: Boolean = false
-
-            fun validate(): Channels = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: CourierInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            @JvmSynthetic
-            internal fun validity(): Int =
-                additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is Channels && additionalProperties == other.additionalProperties
-            }
-
-            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() = "Channels{additionalProperties=$additionalProperties}"
         }
 
         class Data
@@ -5445,9 +5431,9 @@ private constructor(
             }
 
             return other is Message &&
-                content == other.content &&
                 brandId == other.brandId &&
                 channels == other.channels &&
+                content == other.content &&
                 context == other.context &&
                 data == other.data &&
                 delay == other.delay &&
@@ -5463,9 +5449,9 @@ private constructor(
 
         private val hashCode: Int by lazy {
             Objects.hash(
-                content,
                 brandId,
                 channels,
+                content,
                 context,
                 data,
                 delay,
@@ -5483,7 +5469,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Message{content=$content, brandId=$brandId, channels=$channels, context=$context, data=$data, delay=$delay, expiry=$expiry, metadata=$metadata, preferences=$preferences, providers=$providers, routing=$routing, timeout=$timeout, to=$to, additionalProperties=$additionalProperties}"
+            "Message{brandId=$brandId, channels=$channels, content=$content, context=$context, data=$data, delay=$delay, expiry=$expiry, metadata=$metadata, preferences=$preferences, providers=$providers, routing=$routing, timeout=$timeout, to=$to, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

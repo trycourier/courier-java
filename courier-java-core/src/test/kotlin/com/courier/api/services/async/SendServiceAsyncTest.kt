@@ -30,12 +30,6 @@ internal class SendServiceAsyncTest {
                 SendMessageParams.builder()
                     .message(
                         SendMessageParams.Message.builder()
-                            .content(
-                                SendMessageParams.Message.Content.ElementalContentSugar.builder()
-                                    .body("body")
-                                    .title("title")
-                                    .build()
-                            )
                             .brandId("brand_id")
                             .channels(
                                 SendMessageParams.Message.Channels.builder()
@@ -63,6 +57,12 @@ internal class SendServiceAsyncTest {
                                             )
                                         ),
                                     )
+                                    .build()
+                            )
+                            .content(
+                                SendMessageParams.Message.Content.ElementalContentSugar.builder()
+                                    .body("body")
+                                    .title("title")
                                     .build()
                             )
                             .context(MessageContext.builder().tenantId("tenant_id").build())
