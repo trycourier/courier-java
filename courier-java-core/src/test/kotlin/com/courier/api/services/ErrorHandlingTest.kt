@@ -79,8 +79,8 @@ internal class ErrorHandlingTest {
                                 .content(
                                     SendMessageParams.Message.Content.ElementalContentSugar
                                         .builder()
-                                        .body("Thanks for signing up, {{name}}")
-                                        .title("Welcome!")
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .brandId("brand_id")
@@ -179,8 +179,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     SendMessageParams.Message.Routing.builder()
-                                        .addChannel("email")
-                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
+                                        .addChannel("string")
+                                        .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
                                 .timeout(
@@ -213,7 +213,7 @@ internal class ErrorHandlingTest {
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
-                                        .email("email@example.com")
+                                        .email("email")
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
@@ -283,7 +283,7 @@ internal class ErrorHandlingTest {
                                                 .build()
                                         )
                                         .tenantId("tenant_id")
-                                        .userId("user_id")
+                                        .userId("example_user")
                                         .build()
                                 )
                                 .build()
@@ -316,8 +316,8 @@ internal class ErrorHandlingTest {
                                 .content(
                                     SendMessageParams.Message.Content.ElementalContentSugar
                                         .builder()
-                                        .body("Thanks for signing up, {{name}}")
-                                        .title("Welcome!")
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .brandId("brand_id")
@@ -416,8 +416,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     SendMessageParams.Message.Routing.builder()
-                                        .addChannel("email")
-                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
+                                        .addChannel("string")
+                                        .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
                                 .timeout(
@@ -450,7 +450,7 @@ internal class ErrorHandlingTest {
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
-                                        .email("email@example.com")
+                                        .email("email")
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
@@ -520,7 +520,7 @@ internal class ErrorHandlingTest {
                                                 .build()
                                         )
                                         .tenantId("tenant_id")
-                                        .userId("user_id")
+                                        .userId("example_user")
                                         .build()
                                 )
                                 .build()
@@ -553,8 +553,8 @@ internal class ErrorHandlingTest {
                                 .content(
                                     SendMessageParams.Message.Content.ElementalContentSugar
                                         .builder()
-                                        .body("Thanks for signing up, {{name}}")
-                                        .title("Welcome!")
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .brandId("brand_id")
@@ -653,8 +653,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     SendMessageParams.Message.Routing.builder()
-                                        .addChannel("email")
-                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
+                                        .addChannel("string")
+                                        .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
                                 .timeout(
@@ -687,7 +687,7 @@ internal class ErrorHandlingTest {
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
-                                        .email("email@example.com")
+                                        .email("email")
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
@@ -757,7 +757,7 @@ internal class ErrorHandlingTest {
                                                 .build()
                                         )
                                         .tenantId("tenant_id")
-                                        .userId("user_id")
+                                        .userId("example_user")
                                         .build()
                                 )
                                 .build()
@@ -790,8 +790,8 @@ internal class ErrorHandlingTest {
                                 .content(
                                     SendMessageParams.Message.Content.ElementalContentSugar
                                         .builder()
-                                        .body("Thanks for signing up, {{name}}")
-                                        .title("Welcome!")
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .brandId("brand_id")
@@ -890,8 +890,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     SendMessageParams.Message.Routing.builder()
-                                        .addChannel("email")
-                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
+                                        .addChannel("string")
+                                        .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
                                 .timeout(
@@ -924,7 +924,7 @@ internal class ErrorHandlingTest {
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
-                                        .email("email@example.com")
+                                        .email("email")
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
@@ -994,7 +994,7 @@ internal class ErrorHandlingTest {
                                                 .build()
                                         )
                                         .tenantId("tenant_id")
-                                        .userId("user_id")
+                                        .userId("example_user")
                                         .build()
                                 )
                                 .build()
@@ -1027,8 +1027,8 @@ internal class ErrorHandlingTest {
                                 .content(
                                     SendMessageParams.Message.Content.ElementalContentSugar
                                         .builder()
-                                        .body("Thanks for signing up, {{name}}")
-                                        .title("Welcome!")
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .brandId("brand_id")
@@ -1127,8 +1127,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     SendMessageParams.Message.Routing.builder()
-                                        .addChannel("email")
-                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
+                                        .addChannel("string")
+                                        .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
                                 .timeout(
@@ -1161,7 +1161,7 @@ internal class ErrorHandlingTest {
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
-                                        .email("email@example.com")
+                                        .email("email")
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
@@ -1231,7 +1231,7 @@ internal class ErrorHandlingTest {
                                                 .build()
                                         )
                                         .tenantId("tenant_id")
-                                        .userId("user_id")
+                                        .userId("example_user")
                                         .build()
                                 )
                                 .build()
@@ -1264,8 +1264,8 @@ internal class ErrorHandlingTest {
                                 .content(
                                     SendMessageParams.Message.Content.ElementalContentSugar
                                         .builder()
-                                        .body("Thanks for signing up, {{name}}")
-                                        .title("Welcome!")
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .brandId("brand_id")
@@ -1364,8 +1364,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     SendMessageParams.Message.Routing.builder()
-                                        .addChannel("email")
-                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
+                                        .addChannel("string")
+                                        .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
                                 .timeout(
@@ -1398,7 +1398,7 @@ internal class ErrorHandlingTest {
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
-                                        .email("email@example.com")
+                                        .email("email")
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
@@ -1468,7 +1468,7 @@ internal class ErrorHandlingTest {
                                                 .build()
                                         )
                                         .tenantId("tenant_id")
-                                        .userId("user_id")
+                                        .userId("example_user")
                                         .build()
                                 )
                                 .build()
@@ -1501,8 +1501,8 @@ internal class ErrorHandlingTest {
                                 .content(
                                     SendMessageParams.Message.Content.ElementalContentSugar
                                         .builder()
-                                        .body("Thanks for signing up, {{name}}")
-                                        .title("Welcome!")
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .brandId("brand_id")
@@ -1601,8 +1601,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     SendMessageParams.Message.Routing.builder()
-                                        .addChannel("email")
-                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
+                                        .addChannel("string")
+                                        .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
                                 .timeout(
@@ -1635,7 +1635,7 @@ internal class ErrorHandlingTest {
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
-                                        .email("email@example.com")
+                                        .email("email")
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
@@ -1705,7 +1705,7 @@ internal class ErrorHandlingTest {
                                                 .build()
                                         )
                                         .tenantId("tenant_id")
-                                        .userId("user_id")
+                                        .userId("example_user")
                                         .build()
                                 )
                                 .build()
@@ -1738,8 +1738,8 @@ internal class ErrorHandlingTest {
                                 .content(
                                     SendMessageParams.Message.Content.ElementalContentSugar
                                         .builder()
-                                        .body("Thanks for signing up, {{name}}")
-                                        .title("Welcome!")
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .brandId("brand_id")
@@ -1838,8 +1838,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     SendMessageParams.Message.Routing.builder()
-                                        .addChannel("email")
-                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
+                                        .addChannel("string")
+                                        .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
                                 .timeout(
@@ -1872,7 +1872,7 @@ internal class ErrorHandlingTest {
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
-                                        .email("email@example.com")
+                                        .email("email")
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
@@ -1942,7 +1942,7 @@ internal class ErrorHandlingTest {
                                                 .build()
                                         )
                                         .tenantId("tenant_id")
-                                        .userId("user_id")
+                                        .userId("example_user")
                                         .build()
                                 )
                                 .build()
@@ -1975,8 +1975,8 @@ internal class ErrorHandlingTest {
                                 .content(
                                     SendMessageParams.Message.Content.ElementalContentSugar
                                         .builder()
-                                        .body("Thanks for signing up, {{name}}")
-                                        .title("Welcome!")
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .brandId("brand_id")
@@ -2075,8 +2075,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     SendMessageParams.Message.Routing.builder()
-                                        .addChannel("email")
-                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
+                                        .addChannel("string")
+                                        .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
                                 .timeout(
@@ -2109,7 +2109,7 @@ internal class ErrorHandlingTest {
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
-                                        .email("email@example.com")
+                                        .email("email")
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
@@ -2179,7 +2179,7 @@ internal class ErrorHandlingTest {
                                                 .build()
                                         )
                                         .tenantId("tenant_id")
-                                        .userId("user_id")
+                                        .userId("example_user")
                                         .build()
                                 )
                                 .build()
@@ -2212,8 +2212,8 @@ internal class ErrorHandlingTest {
                                 .content(
                                     SendMessageParams.Message.Content.ElementalContentSugar
                                         .builder()
-                                        .body("Thanks for signing up, {{name}}")
-                                        .title("Welcome!")
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .brandId("brand_id")
@@ -2312,8 +2312,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     SendMessageParams.Message.Routing.builder()
-                                        .addChannel("email")
-                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
+                                        .addChannel("string")
+                                        .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
                                 .timeout(
@@ -2346,7 +2346,7 @@ internal class ErrorHandlingTest {
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
-                                        .email("email@example.com")
+                                        .email("email")
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
@@ -2416,7 +2416,7 @@ internal class ErrorHandlingTest {
                                                 .build()
                                         )
                                         .tenantId("tenant_id")
-                                        .userId("user_id")
+                                        .userId("example_user")
                                         .build()
                                 )
                                 .build()
@@ -2449,8 +2449,8 @@ internal class ErrorHandlingTest {
                                 .content(
                                     SendMessageParams.Message.Content.ElementalContentSugar
                                         .builder()
-                                        .body("Thanks for signing up, {{name}}")
-                                        .title("Welcome!")
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .brandId("brand_id")
@@ -2549,8 +2549,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     SendMessageParams.Message.Routing.builder()
-                                        .addChannel("email")
-                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
+                                        .addChannel("string")
+                                        .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
                                 .timeout(
@@ -2583,7 +2583,7 @@ internal class ErrorHandlingTest {
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
-                                        .email("email@example.com")
+                                        .email("email")
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
@@ -2653,7 +2653,7 @@ internal class ErrorHandlingTest {
                                                 .build()
                                         )
                                         .tenantId("tenant_id")
-                                        .userId("user_id")
+                                        .userId("example_user")
                                         .build()
                                 )
                                 .build()
@@ -2686,8 +2686,8 @@ internal class ErrorHandlingTest {
                                 .content(
                                     SendMessageParams.Message.Content.ElementalContentSugar
                                         .builder()
-                                        .body("Thanks for signing up, {{name}}")
-                                        .title("Welcome!")
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .brandId("brand_id")
@@ -2786,8 +2786,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     SendMessageParams.Message.Routing.builder()
-                                        .addChannel("email")
-                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
+                                        .addChannel("string")
+                                        .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
                                 .timeout(
@@ -2820,7 +2820,7 @@ internal class ErrorHandlingTest {
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
-                                        .email("email@example.com")
+                                        .email("email")
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
@@ -2890,7 +2890,7 @@ internal class ErrorHandlingTest {
                                                 .build()
                                         )
                                         .tenantId("tenant_id")
-                                        .userId("user_id")
+                                        .userId("example_user")
                                         .build()
                                 )
                                 .build()
@@ -2923,8 +2923,8 @@ internal class ErrorHandlingTest {
                                 .content(
                                     SendMessageParams.Message.Content.ElementalContentSugar
                                         .builder()
-                                        .body("Thanks for signing up, {{name}}")
-                                        .title("Welcome!")
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .brandId("brand_id")
@@ -3023,8 +3023,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     SendMessageParams.Message.Routing.builder()
-                                        .addChannel("email")
-                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
+                                        .addChannel("string")
+                                        .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
                                 .timeout(
@@ -3057,7 +3057,7 @@ internal class ErrorHandlingTest {
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
-                                        .email("email@example.com")
+                                        .email("email")
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
@@ -3127,7 +3127,7 @@ internal class ErrorHandlingTest {
                                                 .build()
                                         )
                                         .tenantId("tenant_id")
-                                        .userId("user_id")
+                                        .userId("example_user")
                                         .build()
                                 )
                                 .build()
@@ -3160,8 +3160,8 @@ internal class ErrorHandlingTest {
                                 .content(
                                     SendMessageParams.Message.Content.ElementalContentSugar
                                         .builder()
-                                        .body("Thanks for signing up, {{name}}")
-                                        .title("Welcome!")
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .brandId("brand_id")
@@ -3260,8 +3260,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     SendMessageParams.Message.Routing.builder()
-                                        .addChannel("email")
-                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
+                                        .addChannel("string")
+                                        .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
                                 .timeout(
@@ -3294,7 +3294,7 @@ internal class ErrorHandlingTest {
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
-                                        .email("email@example.com")
+                                        .email("email")
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
@@ -3364,7 +3364,7 @@ internal class ErrorHandlingTest {
                                                 .build()
                                         )
                                         .tenantId("tenant_id")
-                                        .userId("user_id")
+                                        .userId("example_user")
                                         .build()
                                 )
                                 .build()
@@ -3397,8 +3397,8 @@ internal class ErrorHandlingTest {
                                 .content(
                                     SendMessageParams.Message.Content.ElementalContentSugar
                                         .builder()
-                                        .body("Thanks for signing up, {{name}}")
-                                        .title("Welcome!")
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .brandId("brand_id")
@@ -3497,8 +3497,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     SendMessageParams.Message.Routing.builder()
-                                        .addChannel("email")
-                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
+                                        .addChannel("string")
+                                        .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
                                 .timeout(
@@ -3531,7 +3531,7 @@ internal class ErrorHandlingTest {
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
-                                        .email("email@example.com")
+                                        .email("email")
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
@@ -3601,7 +3601,7 @@ internal class ErrorHandlingTest {
                                                 .build()
                                         )
                                         .tenantId("tenant_id")
-                                        .userId("user_id")
+                                        .userId("example_user")
                                         .build()
                                 )
                                 .build()
@@ -3634,8 +3634,8 @@ internal class ErrorHandlingTest {
                                 .content(
                                     SendMessageParams.Message.Content.ElementalContentSugar
                                         .builder()
-                                        .body("Thanks for signing up, {{name}}")
-                                        .title("Welcome!")
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .brandId("brand_id")
@@ -3734,8 +3734,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     SendMessageParams.Message.Routing.builder()
-                                        .addChannel("email")
-                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
+                                        .addChannel("string")
+                                        .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
                                 .timeout(
@@ -3768,7 +3768,7 @@ internal class ErrorHandlingTest {
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
-                                        .email("email@example.com")
+                                        .email("email")
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
@@ -3838,7 +3838,7 @@ internal class ErrorHandlingTest {
                                                 .build()
                                         )
                                         .tenantId("tenant_id")
-                                        .userId("user_id")
+                                        .userId("example_user")
                                         .build()
                                 )
                                 .build()
@@ -3869,8 +3869,8 @@ internal class ErrorHandlingTest {
                                 .content(
                                     SendMessageParams.Message.Content.ElementalContentSugar
                                         .builder()
-                                        .body("Thanks for signing up, {{name}}")
-                                        .title("Welcome!")
+                                        .body("body")
+                                        .title("title")
                                         .build()
                                 )
                                 .brandId("brand_id")
@@ -3969,8 +3969,8 @@ internal class ErrorHandlingTest {
                                 )
                                 .routing(
                                     SendMessageParams.Message.Routing.builder()
-                                        .addChannel("email")
-                                        .method(SendMessageParams.Message.Routing.Method.SINGLE)
+                                        .addChannel("string")
+                                        .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
                                 .timeout(
@@ -4003,7 +4003,7 @@ internal class ErrorHandlingTest {
                                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                                 .build()
                                         )
-                                        .email("email@example.com")
+                                        .email("email")
                                         .locale("locale")
                                         .phoneNumber("phone_number")
                                         .preferences(
@@ -4073,7 +4073,7 @@ internal class ErrorHandlingTest {
                                                 .build()
                                         )
                                         .tenantId("tenant_id")
-                                        .userId("user_id")
+                                        .userId("example_user")
                                         .build()
                                 )
                                 .build()

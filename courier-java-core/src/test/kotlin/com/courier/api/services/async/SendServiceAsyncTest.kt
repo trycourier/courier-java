@@ -32,8 +32,8 @@ internal class SendServiceAsyncTest {
                         SendMessageParams.Message.builder()
                             .content(
                                 SendMessageParams.Message.Content.ElementalContentSugar.builder()
-                                    .body("Thanks for signing up, {{name}}")
-                                    .title("Welcome!")
+                                    .body("body")
+                                    .title("title")
                                     .build()
                             )
                             .brandId("brand_id")
@@ -131,8 +131,8 @@ internal class SendServiceAsyncTest {
                             )
                             .routing(
                                 SendMessageParams.Message.Routing.builder()
-                                    .addChannel("email")
-                                    .method(SendMessageParams.Message.Routing.Method.SINGLE)
+                                    .addChannel("string")
+                                    .method(SendMessageParams.Message.Routing.Method.ALL)
                                     .build()
                             )
                             .timeout(
@@ -163,7 +163,7 @@ internal class SendServiceAsyncTest {
                                             .putAdditionalProperty("foo", JsonValue.from("bar"))
                                             .build()
                                     )
-                                    .email("email@example.com")
+                                    .email("email")
                                     .locale("locale")
                                     .phoneNumber("phone_number")
                                     .preferences(
@@ -233,7 +233,7 @@ internal class SendServiceAsyncTest {
                                             .build()
                                     )
                                     .tenantId("tenant_id")
-                                    .userId("user_id")
+                                    .userId("example_user")
                                     .build()
                             )
                             .build()
