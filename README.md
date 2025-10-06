@@ -48,6 +48,7 @@ This library requires Java 8 or later.
 ```java
 import com.courier.api.client.CourierClient;
 import com.courier.api.client.okhttp.CourierOkHttpClient;
+import com.courier.api.core.JsonValue;
 import com.courier.api.models.send.SendMessageParams;
 import com.courier.api.models.send.SendMessageResponse;
 
@@ -60,6 +61,12 @@ SendMessageParams params = SendMessageParams.builder()
         .content(SendMessageParams.Message.Content.ElementalContentSugar.builder()
             .body("body")
             .title("title")
+            .build())
+        .data(SendMessageParams.Message.Data.builder()
+            .putAdditionalProperty("foo", JsonValue.from("bar"))
+            .build())
+        .to(SendMessageParams.Message.To.UnionMember0.builder()
+            .userId("your_user_id")
             .build())
         .build())
     .build();
@@ -153,6 +160,7 @@ The default client is synchronous. To switch to asynchronous execution, call the
 ```java
 import com.courier.api.client.CourierClient;
 import com.courier.api.client.okhttp.CourierOkHttpClient;
+import com.courier.api.core.JsonValue;
 import com.courier.api.models.send.SendMessageParams;
 import com.courier.api.models.send.SendMessageResponse;
 import java.util.concurrent.CompletableFuture;
@@ -167,6 +175,12 @@ SendMessageParams params = SendMessageParams.builder()
             .body("body")
             .title("title")
             .build())
+        .data(SendMessageParams.Message.Data.builder()
+            .putAdditionalProperty("foo", JsonValue.from("bar"))
+            .build())
+        .to(SendMessageParams.Message.To.UnionMember0.builder()
+            .userId("your_user_id")
+            .build())
         .build())
     .build();
 CompletableFuture<SendMessageResponse> response = client.async().send().message(params);
@@ -177,6 +191,7 @@ Or create an asynchronous client from the beginning:
 ```java
 import com.courier.api.client.CourierClientAsync;
 import com.courier.api.client.okhttp.CourierOkHttpClientAsync;
+import com.courier.api.core.JsonValue;
 import com.courier.api.models.send.SendMessageParams;
 import com.courier.api.models.send.SendMessageResponse;
 import java.util.concurrent.CompletableFuture;
@@ -190,6 +205,12 @@ SendMessageParams params = SendMessageParams.builder()
         .content(SendMessageParams.Message.Content.ElementalContentSugar.builder()
             .body("body")
             .title("title")
+            .build())
+        .data(SendMessageParams.Message.Data.builder()
+            .putAdditionalProperty("foo", JsonValue.from("bar"))
+            .build())
+        .to(SendMessageParams.Message.To.UnionMember0.builder()
+            .userId("your_user_id")
             .build())
         .build())
     .build();
@@ -205,6 +226,7 @@ The SDK defines methods that deserialize responses into instances of Java classe
 To access this data, prefix any HTTP method call on a client or service with `withRawResponse()`:
 
 ```java
+import com.courier.api.core.JsonValue;
 import com.courier.api.core.http.Headers;
 import com.courier.api.core.http.HttpResponseFor;
 import com.courier.api.models.send.SendMessageParams;
@@ -215,6 +237,12 @@ SendMessageParams params = SendMessageParams.builder()
         .content(SendMessageParams.Message.Content.ElementalContentSugar.builder()
             .body("body")
             .title("title")
+            .build())
+        .data(SendMessageParams.Message.Data.builder()
+            .putAdditionalProperty("foo", JsonValue.from("bar"))
+            .build())
+        .to(SendMessageParams.Message.To.UnionMember0.builder()
+            .userId("your_user_id")
             .build())
         .build())
     .build();
