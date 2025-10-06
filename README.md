@@ -57,7 +57,7 @@ CourierClient client = CourierOkHttpClient.fromEnv();
 
 SendMessageParams params = SendMessageParams.builder()
     .message(SendMessageParams.Message.builder()
-        .content(SendMessageParams.Message.Content.builder()
+        .content(SendMessageParams.Message.Content.ElementalContentSugar.builder()
             .body("body")
             .title("title")
             .build())
@@ -163,7 +163,7 @@ CourierClient client = CourierOkHttpClient.fromEnv();
 
 SendMessageParams params = SendMessageParams.builder()
     .message(SendMessageParams.Message.builder()
-        .content(SendMessageParams.Message.Content.builder()
+        .content(SendMessageParams.Message.Content.ElementalContentSugar.builder()
             .body("body")
             .title("title")
             .build())
@@ -187,7 +187,7 @@ CourierClientAsync client = CourierOkHttpClientAsync.fromEnv();
 
 SendMessageParams params = SendMessageParams.builder()
     .message(SendMessageParams.Message.builder()
-        .content(SendMessageParams.Message.Content.builder()
+        .content(SendMessageParams.Message.Content.ElementalContentSugar.builder()
             .body("body")
             .title("title")
             .build())
@@ -212,7 +212,7 @@ import com.courier.api.models.send.SendMessageResponse;
 
 SendMessageParams params = SendMessageParams.builder()
     .message(SendMessageParams.Message.builder()
-        .content(SendMessageParams.Message.Content.builder()
+        .content(SendMessageParams.Message.Content.ElementalContentSugar.builder()
             .body("body")
             .title("title")
             .build())

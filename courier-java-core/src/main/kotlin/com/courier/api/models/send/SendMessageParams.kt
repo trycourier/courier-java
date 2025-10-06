@@ -488,7 +488,7 @@ private constructor(
         )
 
         /**
-         * Syntactic sugar to provide a fast shorthand for Courier Elemental Blocks.
+         * Describes content that will work for email, inbox, push, chat, or any channel id.
          *
          * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -730,7 +730,7 @@ private constructor(
                 additionalProperties = message.additionalProperties.toMutableMap()
             }
 
-            /** Syntactic sugar to provide a fast shorthand for Courier Elemental Blocks. */
+            /** Describes content that will work for email, inbox, push, chat, or any channel id. */
             fun content(content: Content) = content(JsonField.of(content))
 
             /**
@@ -741,6 +741,17 @@ private constructor(
              * supported value.
              */
             fun content(content: JsonField<Content>) = apply { this.content = content }
+
+            /**
+             * Alias for calling [content] with
+             * `Content.ofElementalContentSugar(elementalContentSugar)`.
+             */
+            fun content(elementalContentSugar: Content.ElementalContentSugar) =
+                content(Content.ofElementalContentSugar(elementalContentSugar))
+
+            /** Alias for calling [content] with `Content.ofElemental(elemental)`. */
+            fun content(elemental: Content.ElementalContent) =
+                content(Content.ofElemental(elemental))
 
             fun brandId(brandId: String?) = brandId(JsonField.ofNullable(brandId))
 
@@ -1029,159 +1040,41 @@ private constructor(
                 (timeout.asKnown().getOrNull()?.validity() ?: 0) +
                 (to.asKnown().getOrNull()?.validity() ?: 0)
 
-        /** Syntactic sugar to provide a fast shorthand for Courier Elemental Blocks. */
+        /** Describes content that will work for email, inbox, push, chat, or any channel id. */
+        @JsonDeserialize(using = Content.Deserializer::class)
+        @JsonSerialize(using = Content.Serializer::class)
         class Content
-        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
-            private val body: JsonField<String>,
-            private val title: JsonField<String>,
-            private val additionalProperties: MutableMap<String, JsonValue>,
+            private val elementalContentSugar: ElementalContentSugar? = null,
+            private val elemental: ElementalContent? = null,
+            private val _json: JsonValue? = null,
         ) {
 
-            @JsonCreator
-            private constructor(
-                @JsonProperty("body") @ExcludeMissing body: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("title") @ExcludeMissing title: JsonField<String> = JsonMissing.of(),
-            ) : this(body, title, mutableMapOf())
+            /** Syntactic sugar to provide a fast shorthand for Courier Elemental Blocks. */
+            fun elementalContentSugar(): Optional<ElementalContentSugar> =
+                Optional.ofNullable(elementalContentSugar)
 
-            /**
-             * The text content displayed in the notification.
-             *
-             * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
-             */
-            fun body(): String = body.getRequired("body")
+            fun elemental(): Optional<ElementalContent> = Optional.ofNullable(elemental)
 
-            /**
-             * Title/subject displayed by supported channels.
-             *
-             * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
-             */
-            fun title(): String = title.getRequired("title")
+            fun isElementalContentSugar(): Boolean = elementalContentSugar != null
 
-            /**
-             * Returns the raw JSON value of [body].
-             *
-             * Unlike [body], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("body") @ExcludeMissing fun _body(): JsonField<String> = body
+            fun isElemental(): Boolean = elemental != null
 
-            /**
-             * Returns the raw JSON value of [title].
-             *
-             * Unlike [title], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("title") @ExcludeMissing fun _title(): JsonField<String> = title
+            /** Syntactic sugar to provide a fast shorthand for Courier Elemental Blocks. */
+            fun asElementalContentSugar(): ElementalContentSugar =
+                elementalContentSugar.getOrThrow("elementalContentSugar")
 
-            @JsonAnySetter
-            private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
-            }
+            fun asElemental(): ElementalContent = elemental.getOrThrow("elemental")
 
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
+            fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /**
-                 * Returns a mutable builder for constructing an instance of [Content].
-                 *
-                 * The following fields are required:
-                 * ```java
-                 * .body()
-                 * .title()
-                 * ```
-                 */
-                @JvmStatic fun builder() = Builder()
-            }
-
-            /** A builder for [Content]. */
-            class Builder internal constructor() {
-
-                private var body: JsonField<String>? = null
-                private var title: JsonField<String>? = null
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(content: Content) = apply {
-                    body = content.body
-                    title = content.title
-                    additionalProperties = content.additionalProperties.toMutableMap()
+            fun <T> accept(visitor: Visitor<T>): T =
+                when {
+                    elementalContentSugar != null ->
+                        visitor.visitElementalContentSugar(elementalContentSugar)
+                    elemental != null -> visitor.visitElemental(elemental)
+                    else -> visitor.unknown(_json)
                 }
-
-                /** The text content displayed in the notification. */
-                fun body(body: String) = body(JsonField.of(body))
-
-                /**
-                 * Sets [Builder.body] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.body] with a well-typed [String] value instead.
-                 * This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
-                 */
-                fun body(body: JsonField<String>) = apply { this.body = body }
-
-                /** Title/subject displayed by supported channels. */
-                fun title(title: String) = title(JsonField.of(title))
-
-                /**
-                 * Sets [Builder.title] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.title] with a well-typed [String] value instead.
-                 * This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
-                 */
-                fun title(title: JsonField<String>) = apply { this.title = title }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [Content].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 *
-                 * The following fields are required:
-                 * ```java
-                 * .body()
-                 * .title()
-                 * ```
-                 *
-                 * @throws IllegalStateException if any required field is unset.
-                 */
-                fun build(): Content =
-                    Content(
-                        checkRequired("body", body),
-                        checkRequired("title", title),
-                        additionalProperties.toMutableMap(),
-                    )
-            }
 
             private var validated: Boolean = false
 
@@ -1190,8 +1083,19 @@ private constructor(
                     return@apply
                 }
 
-                body()
-                title()
+                accept(
+                    object : Visitor<Unit> {
+                        override fun visitElementalContentSugar(
+                            elementalContentSugar: ElementalContentSugar
+                        ) {
+                            elementalContentSugar.validate()
+                        }
+
+                        override fun visitElemental(elemental: ElementalContent) {
+                            elemental.validate()
+                        }
+                    }
+                )
                 validated = true
             }
 
@@ -1211,7 +1115,18 @@ private constructor(
              */
             @JvmSynthetic
             internal fun validity(): Int =
-                (if (body.asKnown().isPresent) 1 else 0) + (if (title.asKnown().isPresent) 1 else 0)
+                accept(
+                    object : Visitor<Int> {
+                        override fun visitElementalContentSugar(
+                            elementalContentSugar: ElementalContentSugar
+                        ) = elementalContentSugar.validity()
+
+                        override fun visitElemental(elemental: ElementalContent) =
+                            elemental.validity()
+
+                        override fun unknown(json: JsonValue?) = 0
+                    }
+                )
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -1219,17 +1134,608 @@ private constructor(
                 }
 
                 return other is Content &&
-                    body == other.body &&
-                    title == other.title &&
-                    additionalProperties == other.additionalProperties
+                    elementalContentSugar == other.elementalContentSugar &&
+                    elemental == other.elemental
             }
 
-            private val hashCode: Int by lazy { Objects.hash(body, title, additionalProperties) }
+            override fun hashCode(): Int = Objects.hash(elementalContentSugar, elemental)
 
-            override fun hashCode(): Int = hashCode
+            override fun toString(): String =
+                when {
+                    elementalContentSugar != null ->
+                        "Content{elementalContentSugar=$elementalContentSugar}"
+                    elemental != null -> "Content{elemental=$elemental}"
+                    _json != null -> "Content{_unknown=$_json}"
+                    else -> throw IllegalStateException("Invalid Content")
+                }
 
-            override fun toString() =
-                "Content{body=$body, title=$title, additionalProperties=$additionalProperties}"
+            companion object {
+
+                /** Syntactic sugar to provide a fast shorthand for Courier Elemental Blocks. */
+                @JvmStatic
+                fun ofElementalContentSugar(elementalContentSugar: ElementalContentSugar) =
+                    Content(elementalContentSugar = elementalContentSugar)
+
+                @JvmStatic
+                fun ofElemental(elemental: ElementalContent) = Content(elemental = elemental)
+            }
+
+            /**
+             * An interface that defines how to map each variant of [Content] to a value of type
+             * [T].
+             */
+            interface Visitor<out T> {
+
+                /** Syntactic sugar to provide a fast shorthand for Courier Elemental Blocks. */
+                fun visitElementalContentSugar(elementalContentSugar: ElementalContentSugar): T
+
+                fun visitElemental(elemental: ElementalContent): T
+
+                /**
+                 * Maps an unknown variant of [Content] to a value of type [T].
+                 *
+                 * An instance of [Content] can contain an unknown variant if it was deserialized
+                 * from data that doesn't match any known variant. For example, if the SDK is on an
+                 * older version than the API, then the API may respond with new variants that the
+                 * SDK is unaware of.
+                 *
+                 * @throws CourierInvalidDataException in the default implementation.
+                 */
+                fun unknown(json: JsonValue?): T {
+                    throw CourierInvalidDataException("Unknown Content: $json")
+                }
+            }
+
+            internal class Deserializer : BaseDeserializer<Content>(Content::class) {
+
+                override fun ObjectCodec.deserialize(node: JsonNode): Content {
+                    val json = JsonValue.fromJsonNode(node)
+
+                    val bestMatches =
+                        sequenceOf(
+                                tryDeserialize(node, jacksonTypeRef<ElementalContentSugar>())?.let {
+                                    Content(elementalContentSugar = it, _json = json)
+                                },
+                                tryDeserialize(node, jacksonTypeRef<ElementalContent>())?.let {
+                                    Content(elemental = it, _json = json)
+                                },
+                            )
+                            .filterNotNull()
+                            .allMaxBy { it.validity() }
+                            .toList()
+                    return when (bestMatches.size) {
+                        // This can happen if what we're deserializing is completely incompatible
+                        // with all the possible variants (e.g. deserializing from boolean).
+                        0 -> Content(_json = json)
+                        1 -> bestMatches.single()
+                        // If there's more than one match with the highest validity, then use the
+                        // first completely valid match, or simply the first match if none are
+                        // completely valid.
+                        else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
+                    }
+                }
+            }
+
+            internal class Serializer : BaseSerializer<Content>(Content::class) {
+
+                override fun serialize(
+                    value: Content,
+                    generator: JsonGenerator,
+                    provider: SerializerProvider,
+                ) {
+                    when {
+                        value.elementalContentSugar != null ->
+                            generator.writeObject(value.elementalContentSugar)
+                        value.elemental != null -> generator.writeObject(value.elemental)
+                        value._json != null -> generator.writeObject(value._json)
+                        else -> throw IllegalStateException("Invalid Content")
+                    }
+                }
+            }
+
+            /** Syntactic sugar to provide a fast shorthand for Courier Elemental Blocks. */
+            class ElementalContentSugar
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+            private constructor(
+                private val body: JsonField<String>,
+                private val title: JsonField<String>,
+                private val additionalProperties: MutableMap<String, JsonValue>,
+            ) {
+
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("body")
+                    @ExcludeMissing
+                    body: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("title")
+                    @ExcludeMissing
+                    title: JsonField<String> = JsonMissing.of(),
+                ) : this(body, title, mutableMapOf())
+
+                /**
+                 * The text content displayed in the notification.
+                 *
+                 * @throws CourierInvalidDataException if the JSON field has an unexpected type or
+                 *   is unexpectedly missing or null (e.g. if the server responded with an
+                 *   unexpected value).
+                 */
+                fun body(): String = body.getRequired("body")
+
+                /**
+                 * Title/subject displayed by supported channels.
+                 *
+                 * @throws CourierInvalidDataException if the JSON field has an unexpected type or
+                 *   is unexpectedly missing or null (e.g. if the server responded with an
+                 *   unexpected value).
+                 */
+                fun title(): String = title.getRequired("title")
+
+                /**
+                 * Returns the raw JSON value of [body].
+                 *
+                 * Unlike [body], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("body") @ExcludeMissing fun _body(): JsonField<String> = body
+
+                /**
+                 * Returns the raw JSON value of [title].
+                 *
+                 * Unlike [title], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("title") @ExcludeMissing fun _title(): JsonField<String> = title
+
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
+
+                fun toBuilder() = Builder().from(this)
+
+                companion object {
+
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [ElementalContentSugar].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .body()
+                     * .title()
+                     * ```
+                     */
+                    @JvmStatic fun builder() = Builder()
+                }
+
+                /** A builder for [ElementalContentSugar]. */
+                class Builder internal constructor() {
+
+                    private var body: JsonField<String>? = null
+                    private var title: JsonField<String>? = null
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    @JvmSynthetic
+                    internal fun from(elementalContentSugar: ElementalContentSugar) = apply {
+                        body = elementalContentSugar.body
+                        title = elementalContentSugar.title
+                        additionalProperties =
+                            elementalContentSugar.additionalProperties.toMutableMap()
+                    }
+
+                    /** The text content displayed in the notification. */
+                    fun body(body: String) = body(JsonField.of(body))
+
+                    /**
+                     * Sets [Builder.body] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.body] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
+                    fun body(body: JsonField<String>) = apply { this.body = body }
+
+                    /** Title/subject displayed by supported channels. */
+                    fun title(title: String) = title(JsonField.of(title))
+
+                    /**
+                     * Sets [Builder.title] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.title] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
+                    fun title(title: JsonField<String>) = apply { this.title = title }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
+
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [ElementalContentSugar].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .body()
+                     * .title()
+                     * ```
+                     *
+                     * @throws IllegalStateException if any required field is unset.
+                     */
+                    fun build(): ElementalContentSugar =
+                        ElementalContentSugar(
+                            checkRequired("body", body),
+                            checkRequired("title", title),
+                            additionalProperties.toMutableMap(),
+                        )
+                }
+
+                private var validated: Boolean = false
+
+                fun validate(): ElementalContentSugar = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    body()
+                    title()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: CourierInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic
+                internal fun validity(): Int =
+                    (if (body.asKnown().isPresent) 1 else 0) +
+                        (if (title.asKnown().isPresent) 1 else 0)
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is ElementalContentSugar &&
+                        body == other.body &&
+                        title == other.title &&
+                        additionalProperties == other.additionalProperties
+                }
+
+                private val hashCode: Int by lazy {
+                    Objects.hash(body, title, additionalProperties)
+                }
+
+                override fun hashCode(): Int = hashCode
+
+                override fun toString() =
+                    "ElementalContentSugar{body=$body, title=$title, additionalProperties=$additionalProperties}"
+            }
+
+            class ElementalContent
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+            private constructor(
+                private val elements: JsonField<List<ElementalNode>>,
+                private val version: JsonField<String>,
+                private val brand: JsonValue,
+                private val additionalProperties: MutableMap<String, JsonValue>,
+            ) {
+
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("elements")
+                    @ExcludeMissing
+                    elements: JsonField<List<ElementalNode>> = JsonMissing.of(),
+                    @JsonProperty("version")
+                    @ExcludeMissing
+                    version: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("brand") @ExcludeMissing brand: JsonValue = JsonMissing.of(),
+                ) : this(elements, version, brand, mutableMapOf())
+
+                /**
+                 * @throws CourierInvalidDataException if the JSON field has an unexpected type or
+                 *   is unexpectedly missing or null (e.g. if the server responded with an
+                 *   unexpected value).
+                 */
+                fun elements(): List<ElementalNode> = elements.getRequired("elements")
+
+                /**
+                 * For example, "2022-01-01"
+                 *
+                 * @throws CourierInvalidDataException if the JSON field has an unexpected type or
+                 *   is unexpectedly missing or null (e.g. if the server responded with an
+                 *   unexpected value).
+                 */
+                fun version(): String = version.getRequired("version")
+
+                @JsonProperty("brand") @ExcludeMissing fun _brand(): JsonValue = brand
+
+                /**
+                 * Returns the raw JSON value of [elements].
+                 *
+                 * Unlike [elements], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("elements")
+                @ExcludeMissing
+                fun _elements(): JsonField<List<ElementalNode>> = elements
+
+                /**
+                 * Returns the raw JSON value of [version].
+                 *
+                 * Unlike [version], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("version") @ExcludeMissing fun _version(): JsonField<String> = version
+
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
+
+                fun toBuilder() = Builder().from(this)
+
+                companion object {
+
+                    /**
+                     * Returns a mutable builder for constructing an instance of [ElementalContent].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .elements()
+                     * .version()
+                     * ```
+                     */
+                    @JvmStatic fun builder() = Builder()
+                }
+
+                /** A builder for [ElementalContent]. */
+                class Builder internal constructor() {
+
+                    private var elements: JsonField<MutableList<ElementalNode>>? = null
+                    private var version: JsonField<String>? = null
+                    private var brand: JsonValue = JsonMissing.of()
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    @JvmSynthetic
+                    internal fun from(elementalContent: ElementalContent) = apply {
+                        elements = elementalContent.elements.map { it.toMutableList() }
+                        version = elementalContent.version
+                        brand = elementalContent.brand
+                        additionalProperties = elementalContent.additionalProperties.toMutableMap()
+                    }
+
+                    fun elements(elements: List<ElementalNode>) = elements(JsonField.of(elements))
+
+                    /**
+                     * Sets [Builder.elements] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.elements] with a well-typed
+                     * `List<ElementalNode>` value instead. This method is primarily for setting the
+                     * field to an undocumented or not yet supported value.
+                     */
+                    fun elements(elements: JsonField<List<ElementalNode>>) = apply {
+                        this.elements = elements.map { it.toMutableList() }
+                    }
+
+                    /**
+                     * Adds a single [ElementalNode] to [elements].
+                     *
+                     * @throws IllegalStateException if the field was previously set to a non-list.
+                     */
+                    fun addElement(element: ElementalNode) = apply {
+                        elements =
+                            (elements ?: JsonField.of(mutableListOf())).also {
+                                checkKnown("elements", it).add(element)
+                            }
+                    }
+
+                    /**
+                     * Alias for calling [addElement] with
+                     * `ElementalNode.ofUnionMember0(unionMember0)`.
+                     */
+                    fun addElement(unionMember0: ElementalNode.UnionMember0) =
+                        addElement(ElementalNode.ofUnionMember0(unionMember0))
+
+                    /**
+                     * Alias for calling [addElement] with
+                     * `ElementalNode.ofUnionMember1(unionMember1)`.
+                     */
+                    fun addElement(unionMember1: ElementalNode.UnionMember1) =
+                        addElement(ElementalNode.ofUnionMember1(unionMember1))
+
+                    /**
+                     * Alias for calling [addElement] with
+                     * `ElementalNode.ofUnionMember2(unionMember2)`.
+                     */
+                    fun addElement(unionMember2: ElementalNode.UnionMember2) =
+                        addElement(ElementalNode.ofUnionMember2(unionMember2))
+
+                    /**
+                     * Alias for calling [addElement] with
+                     * `ElementalNode.ofUnionMember3(unionMember3)`.
+                     */
+                    fun addElement(unionMember3: ElementalNode.UnionMember3) =
+                        addElement(ElementalNode.ofUnionMember3(unionMember3))
+
+                    /**
+                     * Alias for calling [addElement] with
+                     * `ElementalNode.ofUnionMember4(unionMember4)`.
+                     */
+                    fun addElement(unionMember4: ElementalNode.UnionMember4) =
+                        addElement(ElementalNode.ofUnionMember4(unionMember4))
+
+                    /**
+                     * Alias for calling [addElement] with
+                     * `ElementalNode.ofUnionMember5(unionMember5)`.
+                     */
+                    fun addElement(unionMember5: ElementalNode.UnionMember5) =
+                        addElement(ElementalNode.ofUnionMember5(unionMember5))
+
+                    /**
+                     * Alias for calling [addElement] with
+                     * `ElementalNode.ofUnionMember6(unionMember6)`.
+                     */
+                    fun addElement(unionMember6: ElementalNode.UnionMember6) =
+                        addElement(ElementalNode.ofUnionMember6(unionMember6))
+
+                    /**
+                     * Alias for calling [addElement] with
+                     * `ElementalNode.ofUnionMember7(unionMember7)`.
+                     */
+                    fun addElement(unionMember7: ElementalNode.UnionMember7) =
+                        addElement(ElementalNode.ofUnionMember7(unionMember7))
+
+                    /** For example, "2022-01-01" */
+                    fun version(version: String) = version(JsonField.of(version))
+
+                    /**
+                     * Sets [Builder.version] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.version] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
+                    fun version(version: JsonField<String>) = apply { this.version = version }
+
+                    fun brand(brand: JsonValue) = apply { this.brand = brand }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
+
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [ElementalContent].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .elements()
+                     * .version()
+                     * ```
+                     *
+                     * @throws IllegalStateException if any required field is unset.
+                     */
+                    fun build(): ElementalContent =
+                        ElementalContent(
+                            checkRequired("elements", elements).map { it.toImmutable() },
+                            checkRequired("version", version),
+                            brand,
+                            additionalProperties.toMutableMap(),
+                        )
+                }
+
+                private var validated: Boolean = false
+
+                fun validate(): ElementalContent = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    elements().forEach { it.validate() }
+                    version()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: CourierInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic
+                internal fun validity(): Int =
+                    (elements.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                        (if (version.asKnown().isPresent) 1 else 0)
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is ElementalContent &&
+                        elements == other.elements &&
+                        version == other.version &&
+                        brand == other.brand &&
+                        additionalProperties == other.additionalProperties
+                }
+
+                private val hashCode: Int by lazy {
+                    Objects.hash(elements, version, brand, additionalProperties)
+                }
+
+                override fun hashCode(): Int = hashCode
+
+                override fun toString() =
+                    "ElementalContent{elements=$elements, version=$version, brand=$brand, additionalProperties=$additionalProperties}"
+            }
         }
 
         /**
