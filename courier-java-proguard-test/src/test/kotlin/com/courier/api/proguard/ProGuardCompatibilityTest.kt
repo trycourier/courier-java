@@ -4,8 +4,8 @@ package com.courier.api.proguard
 
 import com.courier.api.client.okhttp.CourierOkHttpClient
 import com.courier.api.core.jsonMapper
+import com.courier.api.models.send.ElementalNode
 import com.courier.api.models.send.MessageContext
-import com.courier.api.models.send.MessageRoutingChannel
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import kotlin.reflect.full.memberFunctions
 import kotlin.reflect.jvm.javaMethod
@@ -66,16 +66,25 @@ internal class ProGuardCompatibilityTest {
     }
 
     @Test
-    fun messageRoutingChannelRoundtrip() {
+    fun elementalNodeRoundtrip() {
         val jsonMapper = jsonMapper()
-        val messageRoutingChannel = MessageRoutingChannel.ofString("string")
-
-        val roundtrippedMessageRoutingChannel =
-            jsonMapper.readValue(
-                jsonMapper.writeValueAsString(messageRoutingChannel),
-                jacksonTypeRef<MessageRoutingChannel>(),
+        val elementalNode =
+            ElementalNode.ofUnionMember0(
+                ElementalNode.UnionMember0.builder()
+                    .addChannel("string")
+                    .if_("if")
+                    .loop("loop")
+                    .ref("ref")
+                    .type(ElementalNode.UnionMember0.Type.TEXT)
+                    .build()
             )
 
-        assertThat(roundtrippedMessageRoutingChannel).isEqualTo(messageRoutingChannel)
+        val roundtrippedElementalNode =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(elementalNode),
+                jacksonTypeRef<ElementalNode>(),
+            )
+
+        assertThat(roundtrippedElementalNode).isEqualTo(elementalNode)
     }
 }

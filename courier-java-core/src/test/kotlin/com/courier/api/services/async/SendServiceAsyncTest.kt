@@ -31,7 +31,7 @@ internal class SendServiceAsyncTest {
                     .message(
                         SendMessageParams.Message.builder()
                             .content(
-                                SendMessageParams.Message.Content.builder()
+                                SendMessageParams.Message.Content.ElementalContentSugar.builder()
                                     .body("Thanks for signing up, {{name}}")
                                     .title("Welcome!")
                                     .build()

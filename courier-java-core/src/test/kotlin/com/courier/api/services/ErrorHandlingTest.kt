@@ -77,7 +77,8 @@ internal class ErrorHandlingTest {
                         .message(
                             SendMessageParams.Message.builder()
                                 .content(
-                                    SendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
@@ -313,7 +314,8 @@ internal class ErrorHandlingTest {
                         .message(
                             SendMessageParams.Message.builder()
                                 .content(
-                                    SendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
@@ -549,7 +551,8 @@ internal class ErrorHandlingTest {
                         .message(
                             SendMessageParams.Message.builder()
                                 .content(
-                                    SendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
@@ -785,7 +788,8 @@ internal class ErrorHandlingTest {
                         .message(
                             SendMessageParams.Message.builder()
                                 .content(
-                                    SendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
@@ -1021,7 +1025,8 @@ internal class ErrorHandlingTest {
                         .message(
                             SendMessageParams.Message.builder()
                                 .content(
-                                    SendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
@@ -1257,7 +1262,8 @@ internal class ErrorHandlingTest {
                         .message(
                             SendMessageParams.Message.builder()
                                 .content(
-                                    SendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
@@ -1493,7 +1499,8 @@ internal class ErrorHandlingTest {
                         .message(
                             SendMessageParams.Message.builder()
                                 .content(
-                                    SendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
@@ -1729,7 +1736,8 @@ internal class ErrorHandlingTest {
                         .message(
                             SendMessageParams.Message.builder()
                                 .content(
-                                    SendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
@@ -1965,7 +1973,8 @@ internal class ErrorHandlingTest {
                         .message(
                             SendMessageParams.Message.builder()
                                 .content(
-                                    SendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
@@ -2201,7 +2210,8 @@ internal class ErrorHandlingTest {
                         .message(
                             SendMessageParams.Message.builder()
                                 .content(
-                                    SendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
@@ -2437,7 +2447,8 @@ internal class ErrorHandlingTest {
                         .message(
                             SendMessageParams.Message.builder()
                                 .content(
-                                    SendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
@@ -2673,7 +2684,8 @@ internal class ErrorHandlingTest {
                         .message(
                             SendMessageParams.Message.builder()
                                 .content(
-                                    SendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
@@ -2909,7 +2921,8 @@ internal class ErrorHandlingTest {
                         .message(
                             SendMessageParams.Message.builder()
                                 .content(
-                                    SendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
@@ -3145,7 +3158,8 @@ internal class ErrorHandlingTest {
                         .message(
                             SendMessageParams.Message.builder()
                                 .content(
-                                    SendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
@@ -3381,7 +3395,8 @@ internal class ErrorHandlingTest {
                         .message(
                             SendMessageParams.Message.builder()
                                 .content(
-                                    SendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
@@ -3617,7 +3632,8 @@ internal class ErrorHandlingTest {
                         .message(
                             SendMessageParams.Message.builder()
                                 .content(
-                                    SendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
@@ -3851,7 +3867,8 @@ internal class ErrorHandlingTest {
                         .message(
                             SendMessageParams.Message.builder()
                                 .content(
-                                    SendMessageParams.Message.Content.builder()
+                                    SendMessageParams.Message.Content.ElementalContentSugar
+                                        .builder()
                                         .body("Thanks for signing up, {{name}}")
                                         .title("Welcome!")
                                         .build()
