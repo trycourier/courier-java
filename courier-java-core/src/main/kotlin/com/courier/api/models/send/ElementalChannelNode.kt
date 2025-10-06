@@ -299,10 +299,6 @@ private constructor(
         fun addElement(unionMember6: ElementalNode.UnionMember6) =
             addElement(ElementalNode.ofUnionMember6(unionMember6))
 
-        /** Alias for calling [addElement] with `ElementalNode.ofUnionMember7(unionMember7)`. */
-        fun addElement(unionMember7: ElementalNode.UnionMember7) =
-            addElement(ElementalNode.ofUnionMember7(unionMember7))
-
         fun if_(if_: String?) = if_(JsonField.ofNullable(if_))
 
         /** Alias for calling [Builder.if_] with `if_.orElse(null)`. */

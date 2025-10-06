@@ -34,7 +34,6 @@ internal class ElementalNodeTest {
         assertThat(elementalNode.unionMember4()).isEmpty
         assertThat(elementalNode.unionMember5()).isEmpty
         assertThat(elementalNode.unionMember6()).isEmpty
-        assertThat(elementalNode.unionMember7()).isEmpty
     }
 
     @Test
@@ -80,7 +79,6 @@ internal class ElementalNodeTest {
         assertThat(elementalNode.unionMember4()).isEmpty
         assertThat(elementalNode.unionMember5()).isEmpty
         assertThat(elementalNode.unionMember6()).isEmpty
-        assertThat(elementalNode.unionMember7()).isEmpty
     }
 
     @Test
@@ -141,7 +139,6 @@ internal class ElementalNodeTest {
         assertThat(elementalNode.unionMember4()).isEmpty
         assertThat(elementalNode.unionMember5()).isEmpty
         assertThat(elementalNode.unionMember6()).isEmpty
-        assertThat(elementalNode.unionMember7()).isEmpty
     }
 
     @Test
@@ -202,7 +199,6 @@ internal class ElementalNodeTest {
         assertThat(elementalNode.unionMember4()).isEmpty
         assertThat(elementalNode.unionMember5()).isEmpty
         assertThat(elementalNode.unionMember6()).isEmpty
-        assertThat(elementalNode.unionMember7()).isEmpty
     }
 
     @Test
@@ -255,7 +251,6 @@ internal class ElementalNodeTest {
         assertThat(elementalNode.unionMember4()).contains(unionMember4)
         assertThat(elementalNode.unionMember5()).isEmpty
         assertThat(elementalNode.unionMember6()).isEmpty
-        assertThat(elementalNode.unionMember7()).isEmpty
     }
 
     @Test
@@ -311,7 +306,6 @@ internal class ElementalNodeTest {
         assertThat(elementalNode.unionMember4()).isEmpty
         assertThat(elementalNode.unionMember5()).contains(unionMember5)
         assertThat(elementalNode.unionMember6()).isEmpty
-        assertThat(elementalNode.unionMember7()).isEmpty
     }
 
     @Test
@@ -341,20 +335,11 @@ internal class ElementalNodeTest {
     fun ofUnionMember6() {
         val unionMember6 =
             ElementalNode.UnionMember6.builder()
-                .addElement(
-                    ElementalNode.UnionMember0.builder()
-                        .addChannel("string")
-                        .if_("if")
-                        .loop("loop")
-                        .ref("ref")
-                        .type(ElementalNode.UnionMember0.Type.TEXT)
-                        .build()
-                )
                 .addChannel("string")
                 .if_("if")
                 .loop("loop")
                 .ref("ref")
-                .type(ElementalNode.UnionMember6.Type.GROUP)
+                .type(ElementalNode.UnionMember6.Type.QUOTE)
                 .build()
 
         val elementalNode = ElementalNode.ofUnionMember6(unionMember6)
@@ -366,7 +351,6 @@ internal class ElementalNodeTest {
         assertThat(elementalNode.unionMember4()).isEmpty
         assertThat(elementalNode.unionMember5()).isEmpty
         assertThat(elementalNode.unionMember6()).contains(unionMember6)
-        assertThat(elementalNode.unionMember7()).isEmpty
     }
 
     @Test
@@ -375,66 +359,11 @@ internal class ElementalNodeTest {
         val elementalNode =
             ElementalNode.ofUnionMember6(
                 ElementalNode.UnionMember6.builder()
-                    .addElement(
-                        ElementalNode.UnionMember0.builder()
-                            .addChannel("string")
-                            .if_("if")
-                            .loop("loop")
-                            .ref("ref")
-                            .type(ElementalNode.UnionMember0.Type.TEXT)
-                            .build()
-                    )
                     .addChannel("string")
                     .if_("if")
                     .loop("loop")
                     .ref("ref")
-                    .type(ElementalNode.UnionMember6.Type.GROUP)
-                    .build()
-            )
-
-        val roundtrippedElementalNode =
-            jsonMapper.readValue(
-                jsonMapper.writeValueAsString(elementalNode),
-                jacksonTypeRef<ElementalNode>(),
-            )
-
-        assertThat(roundtrippedElementalNode).isEqualTo(elementalNode)
-    }
-
-    @Test
-    fun ofUnionMember7() {
-        val unionMember7 =
-            ElementalNode.UnionMember7.builder()
-                .addChannel("string")
-                .if_("if")
-                .loop("loop")
-                .ref("ref")
-                .type(ElementalNode.UnionMember7.Type.QUOTE)
-                .build()
-
-        val elementalNode = ElementalNode.ofUnionMember7(unionMember7)
-
-        assertThat(elementalNode.unionMember0()).isEmpty
-        assertThat(elementalNode.unionMember1()).isEmpty
-        assertThat(elementalNode.unionMember2()).isEmpty
-        assertThat(elementalNode.unionMember3()).isEmpty
-        assertThat(elementalNode.unionMember4()).isEmpty
-        assertThat(elementalNode.unionMember5()).isEmpty
-        assertThat(elementalNode.unionMember6()).isEmpty
-        assertThat(elementalNode.unionMember7()).contains(unionMember7)
-    }
-
-    @Test
-    fun ofUnionMember7Roundtrip() {
-        val jsonMapper = jsonMapper()
-        val elementalNode =
-            ElementalNode.ofUnionMember7(
-                ElementalNode.UnionMember7.builder()
-                    .addChannel("string")
-                    .if_("if")
-                    .loop("loop")
-                    .ref("ref")
-                    .type(ElementalNode.UnionMember7.Type.QUOTE)
+                    .type(ElementalNode.UnionMember6.Type.QUOTE)
                     .build()
             )
 

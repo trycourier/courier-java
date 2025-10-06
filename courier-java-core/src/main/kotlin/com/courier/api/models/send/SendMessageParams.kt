@@ -1619,13 +1619,6 @@ private constructor(
                     fun addElement(unionMember6: ElementalNode.UnionMember6) =
                         addElement(ElementalNode.ofUnionMember6(unionMember6))
 
-                    /**
-                     * Alias for calling [addElement] with
-                     * `ElementalNode.ofUnionMember7(unionMember7)`.
-                     */
-                    fun addElement(unionMember7: ElementalNode.UnionMember7) =
-                        addElement(ElementalNode.ofUnionMember7(unionMember7))
-
                     /** For example, "2022-01-01" */
                     fun version(version: String) = version(JsonField.of(version))
 
