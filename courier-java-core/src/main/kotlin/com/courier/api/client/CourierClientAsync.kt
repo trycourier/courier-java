@@ -3,7 +3,22 @@
 package com.courier.api.client
 
 import com.courier.api.core.ClientOptions
+import com.courier.api.services.async.AudienceServiceAsync
+import com.courier.api.services.async.AuditEventServiceAsync
+import com.courier.api.services.async.AuthServiceAsync
+import com.courier.api.services.async.AutomationServiceAsync
+import com.courier.api.services.async.BrandServiceAsync
+import com.courier.api.services.async.BulkServiceAsync
+import com.courier.api.services.async.InboundServiceAsync
+import com.courier.api.services.async.ListServiceAsync
+import com.courier.api.services.async.MessageServiceAsync
+import com.courier.api.services.async.NotificationServiceAsync
+import com.courier.api.services.async.ProfileServiceAsync
+import com.courier.api.services.async.RequestServiceAsync
 import com.courier.api.services.async.SendServiceAsync
+import com.courier.api.services.async.TenantServiceAsync
+import com.courier.api.services.async.TranslationServiceAsync
+import com.courier.api.services.async.UserServiceAsync
 import java.util.function.Consumer
 
 /**
@@ -44,6 +59,36 @@ interface CourierClientAsync {
 
     fun send(): SendServiceAsync
 
+    fun tenants(): TenantServiceAsync
+
+    fun audiences(): AudienceServiceAsync
+
+    fun bulk(): BulkServiceAsync
+
+    fun users(): UserServiceAsync
+
+    fun auditEvents(): AuditEventServiceAsync
+
+    fun automations(): AutomationServiceAsync
+
+    fun brands(): BrandServiceAsync
+
+    fun lists(): ListServiceAsync
+
+    fun messages(): MessageServiceAsync
+
+    fun notifications(): NotificationServiceAsync
+
+    fun auth(): AuthServiceAsync
+
+    fun inbound(): InboundServiceAsync
+
+    fun requests(): RequestServiceAsync
+
+    fun profiles(): ProfileServiceAsync
+
+    fun translations(): TranslationServiceAsync
+
     /**
      * Closes this client, relinquishing any underlying resources.
      *
@@ -72,5 +117,35 @@ interface CourierClientAsync {
         ): CourierClientAsync.WithRawResponse
 
         fun send(): SendServiceAsync.WithRawResponse
+
+        fun tenants(): TenantServiceAsync.WithRawResponse
+
+        fun audiences(): AudienceServiceAsync.WithRawResponse
+
+        fun bulk(): BulkServiceAsync.WithRawResponse
+
+        fun users(): UserServiceAsync.WithRawResponse
+
+        fun auditEvents(): AuditEventServiceAsync.WithRawResponse
+
+        fun automations(): AutomationServiceAsync.WithRawResponse
+
+        fun brands(): BrandServiceAsync.WithRawResponse
+
+        fun lists(): ListServiceAsync.WithRawResponse
+
+        fun messages(): MessageServiceAsync.WithRawResponse
+
+        fun notifications(): NotificationServiceAsync.WithRawResponse
+
+        fun auth(): AuthServiceAsync.WithRawResponse
+
+        fun inbound(): InboundServiceAsync.WithRawResponse
+
+        fun requests(): RequestServiceAsync.WithRawResponse
+
+        fun profiles(): ProfileServiceAsync.WithRawResponse
+
+        fun translations(): TranslationServiceAsync.WithRawResponse
     }
 }

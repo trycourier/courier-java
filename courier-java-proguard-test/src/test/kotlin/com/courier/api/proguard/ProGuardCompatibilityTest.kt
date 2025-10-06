@@ -5,8 +5,8 @@ package com.courier.api.proguard
 import com.courier.api.client.okhttp.CourierOkHttpClient
 import com.courier.api.core.jsonMapper
 import com.courier.api.models.send.Alignment
+import com.courier.api.models.send.Content
 import com.courier.api.models.send.ElementalBaseNode
-import com.courier.api.models.send.ElementalNode
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import kotlin.reflect.full.memberFunctions
 import kotlin.reflect.jvm.javaMethod
@@ -50,6 +50,21 @@ internal class ProGuardCompatibilityTest {
 
         assertThat(client).isNotNull()
         assertThat(client.send()).isNotNull()
+        assertThat(client.tenants()).isNotNull()
+        assertThat(client.audiences()).isNotNull()
+        assertThat(client.bulk()).isNotNull()
+        assertThat(client.users()).isNotNull()
+        assertThat(client.auditEvents()).isNotNull()
+        assertThat(client.automations()).isNotNull()
+        assertThat(client.brands()).isNotNull()
+        assertThat(client.lists()).isNotNull()
+        assertThat(client.messages()).isNotNull()
+        assertThat(client.notifications()).isNotNull()
+        assertThat(client.auth()).isNotNull()
+        assertThat(client.inbound()).isNotNull()
+        assertThat(client.requests()).isNotNull()
+        assertThat(client.profiles()).isNotNull()
+        assertThat(client.translations()).isNotNull()
     }
 
     @Test
@@ -73,26 +88,17 @@ internal class ProGuardCompatibilityTest {
     }
 
     @Test
-    fun elementalNodeRoundtrip() {
+    fun contentRoundtrip() {
         val jsonMapper = jsonMapper()
-        val elementalNode =
-            ElementalNode.ofUnionMember0(
-                ElementalNode.UnionMember0.builder()
-                    .addChannel("string")
-                    .if_("if")
-                    .loop("loop")
-                    .ref("ref")
-                    .type(ElementalNode.UnionMember0.Type.TEXT)
-                    .build()
+        val content =
+            Content.ofElementalContentSugar(
+                Content.ElementalContentSugar.builder().body("body").title("title").build()
             )
 
-        val roundtrippedElementalNode =
-            jsonMapper.readValue(
-                jsonMapper.writeValueAsString(elementalNode),
-                jacksonTypeRef<ElementalNode>(),
-            )
+        val roundtrippedContent =
+            jsonMapper.readValue(jsonMapper.writeValueAsString(content), jacksonTypeRef<Content>())
 
-        assertThat(roundtrippedElementalNode).isEqualTo(elementalNode)
+        assertThat(roundtrippedContent).isEqualTo(content)
     }
 
     @Test

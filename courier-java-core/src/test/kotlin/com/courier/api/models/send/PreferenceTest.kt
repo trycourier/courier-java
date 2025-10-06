@@ -3,6 +3,10 @@
 package com.courier.api.models.send
 
 import com.courier.api.core.jsonMapper
+import com.courier.api.models.ChannelPreference
+import com.courier.api.models.Rule
+import com.courier.api.models.tenants.defaultpreferences.items.ChannelClassification
+import com.courier.api.models.users.preferences.PreferenceStatus
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
@@ -14,25 +18,23 @@ internal class PreferenceTest {
     fun create() {
         val preference =
             Preference.builder()
-                .status(Preference.Status.OPTED_IN)
+                .status(PreferenceStatus.OPTED_IN)
                 .addChannelPreference(
-                    Preference.ChannelPreference.builder()
-                        .channel(Preference.ChannelPreference.Channel.DIRECT_MESSAGE)
+                    ChannelPreference.builder()
+                        .channel(ChannelClassification.DIRECT_MESSAGE)
                         .build()
                 )
-                .addRule(Preference.Rule.builder().until("until").start("start").build())
+                .addRule(Rule.builder().until("until").start("start").build())
                 .source(Preference.Source.SUBSCRIPTION)
                 .build()
 
-        assertThat(preference.status()).isEqualTo(Preference.Status.OPTED_IN)
+        assertThat(preference.status()).isEqualTo(PreferenceStatus.OPTED_IN)
         assertThat(preference.channelPreferences().getOrNull())
             .containsExactly(
-                Preference.ChannelPreference.builder()
-                    .channel(Preference.ChannelPreference.Channel.DIRECT_MESSAGE)
-                    .build()
+                ChannelPreference.builder().channel(ChannelClassification.DIRECT_MESSAGE).build()
             )
         assertThat(preference.rules().getOrNull())
-            .containsExactly(Preference.Rule.builder().until("until").start("start").build())
+            .containsExactly(Rule.builder().until("until").start("start").build())
         assertThat(preference.source()).contains(Preference.Source.SUBSCRIPTION)
     }
 
@@ -41,13 +43,13 @@ internal class PreferenceTest {
         val jsonMapper = jsonMapper()
         val preference =
             Preference.builder()
-                .status(Preference.Status.OPTED_IN)
+                .status(PreferenceStatus.OPTED_IN)
                 .addChannelPreference(
-                    Preference.ChannelPreference.builder()
-                        .channel(Preference.ChannelPreference.Channel.DIRECT_MESSAGE)
+                    ChannelPreference.builder()
+                        .channel(ChannelClassification.DIRECT_MESSAGE)
                         .build()
                 )
-                .addRule(Preference.Rule.builder().until("until").start("start").build())
+                .addRule(Rule.builder().until("until").start("start").build())
                 .source(Preference.Source.SUBSCRIPTION)
                 .build()
 
