@@ -6,8 +6,6 @@ import com.courier.api.core.ExcludeMissing
 import com.courier.api.core.JsonField
 import com.courier.api.core.JsonMissing
 import com.courier.api.core.JsonValue
-import com.courier.api.core.checkKnown
-import com.courier.api.core.toImmutable
 import com.courier.api.errors.CourierInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -18,32 +16,45 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-class BrandSnippets
+class Icons
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    private val items: JsonField<List<BrandSnippet>>,
+    private val bell: JsonField<String>,
+    private val message: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("items")
-        @ExcludeMissing
-        items: JsonField<List<BrandSnippet>> = JsonMissing.of()
-    ) : this(items, mutableMapOf())
+        @JsonProperty("bell") @ExcludeMissing bell: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("message") @ExcludeMissing message: JsonField<String> = JsonMissing.of(),
+    ) : this(bell, message, mutableMapOf())
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun items(): Optional<List<BrandSnippet>> = items.getOptional("items")
+    fun bell(): Optional<String> = bell.getOptional("bell")
 
     /**
-     * Returns the raw JSON value of [items].
-     *
-     * Unlike [items], this method doesn't throw if the JSON field has an unexpected type.
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
-    @JsonProperty("items") @ExcludeMissing fun _items(): JsonField<List<BrandSnippet>> = items
+    fun message(): Optional<String> = message.getOptional("message")
+
+    /**
+     * Returns the raw JSON value of [bell].
+     *
+     * Unlike [bell], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("bell") @ExcludeMissing fun _bell(): JsonField<String> = bell
+
+    /**
+     * Returns the raw JSON value of [message].
+     *
+     * Unlike [message], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("message") @ExcludeMissing fun _message(): JsonField<String> = message
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -59,47 +70,49 @@ private constructor(
 
     companion object {
 
-        /** Returns a mutable builder for constructing an instance of [BrandSnippets]. */
+        /** Returns a mutable builder for constructing an instance of [Icons]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [BrandSnippets]. */
+    /** A builder for [Icons]. */
     class Builder internal constructor() {
 
-        private var items: JsonField<MutableList<BrandSnippet>>? = null
+        private var bell: JsonField<String> = JsonMissing.of()
+        private var message: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(brandSnippets: BrandSnippets) = apply {
-            items = brandSnippets.items.map { it.toMutableList() }
-            additionalProperties = brandSnippets.additionalProperties.toMutableMap()
+        internal fun from(icons: Icons) = apply {
+            bell = icons.bell
+            message = icons.message
+            additionalProperties = icons.additionalProperties.toMutableMap()
         }
 
-        fun items(items: List<BrandSnippet>?) = items(JsonField.ofNullable(items))
+        fun bell(bell: String?) = bell(JsonField.ofNullable(bell))
 
-        /** Alias for calling [Builder.items] with `items.orElse(null)`. */
-        fun items(items: Optional<List<BrandSnippet>>) = items(items.getOrNull())
+        /** Alias for calling [Builder.bell] with `bell.orElse(null)`. */
+        fun bell(bell: Optional<String>) = bell(bell.getOrNull())
 
         /**
-         * Sets [Builder.items] to an arbitrary JSON value.
+         * Sets [Builder.bell] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.items] with a well-typed `List<BrandSnippet>` value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.bell] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun items(items: JsonField<List<BrandSnippet>>) = apply {
-            this.items = items.map { it.toMutableList() }
-        }
+        fun bell(bell: JsonField<String>) = apply { this.bell = bell }
+
+        fun message(message: String?) = message(JsonField.ofNullable(message))
+
+        /** Alias for calling [Builder.message] with `message.orElse(null)`. */
+        fun message(message: Optional<String>) = message(message.getOrNull())
 
         /**
-         * Adds a single [BrandSnippet] to [items].
+         * Sets [Builder.message] to an arbitrary JSON value.
          *
-         * @throws IllegalStateException if the field was previously set to a non-list.
+         * You should usually call [Builder.message] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun addItem(item: BrandSnippet) = apply {
-            items =
-                (items ?: JsonField.of(mutableListOf())).also { checkKnown("items", it).add(item) }
-        }
+        fun message(message: JsonField<String>) = apply { this.message = message }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -121,25 +134,22 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [BrandSnippets].
+         * Returns an immutable instance of [Icons].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          */
-        fun build(): BrandSnippets =
-            BrandSnippets(
-                (items ?: JsonMissing.of()).map { it.toImmutable() },
-                additionalProperties.toMutableMap(),
-            )
+        fun build(): Icons = Icons(bell, message, additionalProperties.toMutableMap())
     }
 
     private var validated: Boolean = false
 
-    fun validate(): BrandSnippets = apply {
+    fun validate(): Icons = apply {
         if (validated) {
             return@apply
         }
 
-        items().ifPresent { it.forEach { it.validate() } }
+        bell()
+        message()
         validated = true
     }
 
@@ -158,22 +168,23 @@ private constructor(
      */
     @JvmSynthetic
     internal fun validity(): Int =
-        (items.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
+        (if (bell.asKnown().isPresent) 1 else 0) + (if (message.asKnown().isPresent) 1 else 0)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return other is BrandSnippets &&
-            items == other.items &&
+        return other is Icons &&
+            bell == other.bell &&
+            message == other.message &&
             additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy { Objects.hash(items, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(bell, message, additionalProperties) }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "BrandSnippets{items=$items, additionalProperties=$additionalProperties}"
+        "Icons{bell=$bell, message=$message, additionalProperties=$additionalProperties}"
 }
