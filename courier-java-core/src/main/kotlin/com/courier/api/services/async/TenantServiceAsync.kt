@@ -33,9 +33,9 @@ interface TenantServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): TenantServiceAsync
 
-    fun templates(): TemplateServiceAsync
-
     fun defaultPreferences(): DefaultPreferenceServiceAsync
+
+    fun templates(): TemplateServiceAsync
 
     /** Get a Tenant */
     fun retrieve(tenantId: String): CompletableFuture<Tenant> =
@@ -191,9 +191,9 @@ interface TenantServiceAsync {
             modifier: Consumer<ClientOptions.Builder>
         ): TenantServiceAsync.WithRawResponse
 
-        fun templates(): TemplateServiceAsync.WithRawResponse
-
         fun defaultPreferences(): DefaultPreferenceServiceAsync.WithRawResponse
+
+        fun templates(): TemplateServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `get /tenants/{tenant_id}`, but is otherwise the same as

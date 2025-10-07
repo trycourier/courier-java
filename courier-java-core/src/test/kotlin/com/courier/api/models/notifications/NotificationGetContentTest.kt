@@ -9,39 +9,39 @@ import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-internal class NotificationContentTest {
+internal class NotificationGetContentTest {
 
     @Test
     fun create() {
-        val notificationContent =
-            NotificationContent.builder()
+        val notificationGetContent =
+            NotificationGetContent.builder()
                 .addBlock(
-                    NotificationContent.Block.builder()
+                    NotificationGetContent.Block.builder()
                         .id("id")
-                        .type(NotificationContent.Block.Type.ACTION)
+                        .type(NotificationGetContent.Block.Type.ACTION)
                         .alias("alias")
                         .checksum("checksum")
                         .content("string")
                         .context("context")
                         .locales(
-                            NotificationContent.Block.Locales.builder()
+                            NotificationGetContent.Block.Locales.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
                         .build()
                 )
                 .addChannel(
-                    NotificationContent.Channel.builder()
+                    NotificationGetContent.Channel.builder()
                         .id("id")
                         .checksum("checksum")
                         .content(
-                            NotificationContent.Channel.Content.builder()
+                            NotificationGetContent.Channel.Content.builder()
                                 .subject("subject")
                                 .title("title")
                                 .build()
                         )
                         .locales(
-                            NotificationContent.Channel.Locales.builder()
+                            NotificationGetContent.Channel.Locales.builder()
                                 .putAdditionalProperty(
                                     "foo",
                                     JsonValue.from(
@@ -56,35 +56,35 @@ internal class NotificationContentTest {
                 .checksum("checksum")
                 .build()
 
-        assertThat(notificationContent.blocks().getOrNull())
+        assertThat(notificationGetContent.blocks().getOrNull())
             .containsExactly(
-                NotificationContent.Block.builder()
+                NotificationGetContent.Block.builder()
                     .id("id")
-                    .type(NotificationContent.Block.Type.ACTION)
+                    .type(NotificationGetContent.Block.Type.ACTION)
                     .alias("alias")
                     .checksum("checksum")
                     .content("string")
                     .context("context")
                     .locales(
-                        NotificationContent.Block.Locales.builder()
+                        NotificationGetContent.Block.Locales.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
                     .build()
             )
-        assertThat(notificationContent.channels().getOrNull())
+        assertThat(notificationGetContent.channels().getOrNull())
             .containsExactly(
-                NotificationContent.Channel.builder()
+                NotificationGetContent.Channel.builder()
                     .id("id")
                     .checksum("checksum")
                     .content(
-                        NotificationContent.Channel.Content.builder()
+                        NotificationGetContent.Channel.Content.builder()
                             .subject("subject")
                             .title("title")
                             .build()
                     )
                     .locales(
-                        NotificationContent.Channel.Locales.builder()
+                        NotificationGetContent.Channel.Locales.builder()
                             .putAdditionalProperty(
                                 "foo",
                                 JsonValue.from(mapOf("subject" to "subject", "title" to "title")),
@@ -94,41 +94,41 @@ internal class NotificationContentTest {
                     .type("type")
                     .build()
             )
-        assertThat(notificationContent.checksum()).contains("checksum")
+        assertThat(notificationGetContent.checksum()).contains("checksum")
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val notificationContent =
-            NotificationContent.builder()
+        val notificationGetContent =
+            NotificationGetContent.builder()
                 .addBlock(
-                    NotificationContent.Block.builder()
+                    NotificationGetContent.Block.builder()
                         .id("id")
-                        .type(NotificationContent.Block.Type.ACTION)
+                        .type(NotificationGetContent.Block.Type.ACTION)
                         .alias("alias")
                         .checksum("checksum")
                         .content("string")
                         .context("context")
                         .locales(
-                            NotificationContent.Block.Locales.builder()
+                            NotificationGetContent.Block.Locales.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
                         .build()
                 )
                 .addChannel(
-                    NotificationContent.Channel.builder()
+                    NotificationGetContent.Channel.builder()
                         .id("id")
                         .checksum("checksum")
                         .content(
-                            NotificationContent.Channel.Content.builder()
+                            NotificationGetContent.Channel.Content.builder()
                                 .subject("subject")
                                 .title("title")
                                 .build()
                         )
                         .locales(
-                            NotificationContent.Channel.Locales.builder()
+                            NotificationGetContent.Channel.Locales.builder()
                                 .putAdditionalProperty(
                                     "foo",
                                     JsonValue.from(
@@ -143,12 +143,12 @@ internal class NotificationContentTest {
                 .checksum("checksum")
                 .build()
 
-        val roundtrippedNotificationContent =
+        val roundtrippedNotificationGetContent =
             jsonMapper.readValue(
-                jsonMapper.writeValueAsString(notificationContent),
-                jacksonTypeRef<NotificationContent>(),
+                jsonMapper.writeValueAsString(notificationGetContent),
+                jacksonTypeRef<NotificationGetContent>(),
             )
 
-        assertThat(roundtrippedNotificationContent).isEqualTo(notificationContent)
+        assertThat(roundtrippedNotificationGetContent).isEqualTo(notificationGetContent)
     }
 }

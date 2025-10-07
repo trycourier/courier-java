@@ -5,7 +5,7 @@ package com.courier.api.services.blocking.notifications
 import com.courier.api.core.ClientOptions
 import com.courier.api.core.RequestOptions
 import com.courier.api.core.http.HttpResponseFor
-import com.courier.api.models.notifications.NotificationContent
+import com.courier.api.models.notifications.NotificationGetContent
 import com.courier.api.models.notifications.draft.DraftRetrieveContentParams
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
@@ -24,7 +24,7 @@ interface DraftService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): DraftService
 
-    fun retrieveContent(id: String): NotificationContent =
+    fun retrieveContent(id: String): NotificationGetContent =
         retrieveContent(id, DraftRetrieveContentParams.none())
 
     /** @see retrieveContent */
@@ -32,26 +32,26 @@ interface DraftService {
         id: String,
         params: DraftRetrieveContentParams = DraftRetrieveContentParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): NotificationContent = retrieveContent(params.toBuilder().id(id).build(), requestOptions)
+    ): NotificationGetContent = retrieveContent(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see retrieveContent */
     fun retrieveContent(
         id: String,
         params: DraftRetrieveContentParams = DraftRetrieveContentParams.none(),
-    ): NotificationContent = retrieveContent(id, params, RequestOptions.none())
+    ): NotificationGetContent = retrieveContent(id, params, RequestOptions.none())
 
     /** @see retrieveContent */
     fun retrieveContent(
         params: DraftRetrieveContentParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): NotificationContent
+    ): NotificationGetContent
 
     /** @see retrieveContent */
-    fun retrieveContent(params: DraftRetrieveContentParams): NotificationContent =
+    fun retrieveContent(params: DraftRetrieveContentParams): NotificationGetContent =
         retrieveContent(params, RequestOptions.none())
 
     /** @see retrieveContent */
-    fun retrieveContent(id: String, requestOptions: RequestOptions): NotificationContent =
+    fun retrieveContent(id: String, requestOptions: RequestOptions): NotificationGetContent =
         retrieveContent(id, DraftRetrieveContentParams.none(), requestOptions)
 
     /** A view of [DraftService] that provides access to raw HTTP responses for each method. */
@@ -69,7 +69,7 @@ interface DraftService {
          * the same as [DraftService.retrieveContent].
          */
         @MustBeClosed
-        fun retrieveContent(id: String): HttpResponseFor<NotificationContent> =
+        fun retrieveContent(id: String): HttpResponseFor<NotificationGetContent> =
             retrieveContent(id, DraftRetrieveContentParams.none())
 
         /** @see retrieveContent */
@@ -78,7 +78,7 @@ interface DraftService {
             id: String,
             params: DraftRetrieveContentParams = DraftRetrieveContentParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<NotificationContent> =
+        ): HttpResponseFor<NotificationGetContent> =
             retrieveContent(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see retrieveContent */
@@ -86,27 +86,28 @@ interface DraftService {
         fun retrieveContent(
             id: String,
             params: DraftRetrieveContentParams = DraftRetrieveContentParams.none(),
-        ): HttpResponseFor<NotificationContent> = retrieveContent(id, params, RequestOptions.none())
+        ): HttpResponseFor<NotificationGetContent> =
+            retrieveContent(id, params, RequestOptions.none())
 
         /** @see retrieveContent */
         @MustBeClosed
         fun retrieveContent(
             params: DraftRetrieveContentParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<NotificationContent>
+        ): HttpResponseFor<NotificationGetContent>
 
         /** @see retrieveContent */
         @MustBeClosed
         fun retrieveContent(
             params: DraftRetrieveContentParams
-        ): HttpResponseFor<NotificationContent> = retrieveContent(params, RequestOptions.none())
+        ): HttpResponseFor<NotificationGetContent> = retrieveContent(params, RequestOptions.none())
 
         /** @see retrieveContent */
         @MustBeClosed
         fun retrieveContent(
             id: String,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<NotificationContent> =
+        ): HttpResponseFor<NotificationGetContent> =
             retrieveContent(id, DraftRetrieveContentParams.none(), requestOptions)
     }
 }

@@ -3,7 +3,7 @@
 package com.courier.api.models.tenants.templates
 
 import com.courier.api.core.jsonMapper
-import com.courier.api.models.send.MessageRouting
+import com.courier.api.models.notifications.MessageRouting
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat

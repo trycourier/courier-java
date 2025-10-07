@@ -5,7 +5,7 @@ package com.courier.api.services.blocking
 import com.courier.api.core.ClientOptions
 import com.courier.api.core.RequestOptions
 import com.courier.api.core.http.HttpResponseFor
-import com.courier.api.models.notifications.NotificationContent
+import com.courier.api.models.notifications.NotificationGetContent
 import com.courier.api.models.notifications.NotificationListParams
 import com.courier.api.models.notifications.NotificationListResponse
 import com.courier.api.models.notifications.NotificationRetrieveContentParams
@@ -28,9 +28,9 @@ interface NotificationService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): NotificationService
 
-    fun checks(): CheckService
-
     fun draft(): DraftService
+
+    fun checks(): CheckService
 
     fun list(): NotificationListResponse = list(NotificationListParams.none())
 
@@ -49,7 +49,7 @@ interface NotificationService {
     fun list(requestOptions: RequestOptions): NotificationListResponse =
         list(NotificationListParams.none(), requestOptions)
 
-    fun retrieveContent(id: String): NotificationContent =
+    fun retrieveContent(id: String): NotificationGetContent =
         retrieveContent(id, NotificationRetrieveContentParams.none())
 
     /** @see retrieveContent */
@@ -57,26 +57,26 @@ interface NotificationService {
         id: String,
         params: NotificationRetrieveContentParams = NotificationRetrieveContentParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): NotificationContent = retrieveContent(params.toBuilder().id(id).build(), requestOptions)
+    ): NotificationGetContent = retrieveContent(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see retrieveContent */
     fun retrieveContent(
         id: String,
         params: NotificationRetrieveContentParams = NotificationRetrieveContentParams.none(),
-    ): NotificationContent = retrieveContent(id, params, RequestOptions.none())
+    ): NotificationGetContent = retrieveContent(id, params, RequestOptions.none())
 
     /** @see retrieveContent */
     fun retrieveContent(
         params: NotificationRetrieveContentParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): NotificationContent
+    ): NotificationGetContent
 
     /** @see retrieveContent */
-    fun retrieveContent(params: NotificationRetrieveContentParams): NotificationContent =
+    fun retrieveContent(params: NotificationRetrieveContentParams): NotificationGetContent =
         retrieveContent(params, RequestOptions.none())
 
     /** @see retrieveContent */
-    fun retrieveContent(id: String, requestOptions: RequestOptions): NotificationContent =
+    fun retrieveContent(id: String, requestOptions: RequestOptions): NotificationGetContent =
         retrieveContent(id, NotificationRetrieveContentParams.none(), requestOptions)
 
     /**
@@ -93,9 +93,9 @@ interface NotificationService {
             modifier: Consumer<ClientOptions.Builder>
         ): NotificationService.WithRawResponse
 
-        fun checks(): CheckService.WithRawResponse
-
         fun draft(): DraftService.WithRawResponse
+
+        fun checks(): CheckService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `get /notifications`, but is otherwise the same as
@@ -127,7 +127,7 @@ interface NotificationService {
          * same as [NotificationService.retrieveContent].
          */
         @MustBeClosed
-        fun retrieveContent(id: String): HttpResponseFor<NotificationContent> =
+        fun retrieveContent(id: String): HttpResponseFor<NotificationGetContent> =
             retrieveContent(id, NotificationRetrieveContentParams.none())
 
         /** @see retrieveContent */
@@ -136,7 +136,7 @@ interface NotificationService {
             id: String,
             params: NotificationRetrieveContentParams = NotificationRetrieveContentParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<NotificationContent> =
+        ): HttpResponseFor<NotificationGetContent> =
             retrieveContent(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see retrieveContent */
@@ -144,27 +144,28 @@ interface NotificationService {
         fun retrieveContent(
             id: String,
             params: NotificationRetrieveContentParams = NotificationRetrieveContentParams.none(),
-        ): HttpResponseFor<NotificationContent> = retrieveContent(id, params, RequestOptions.none())
+        ): HttpResponseFor<NotificationGetContent> =
+            retrieveContent(id, params, RequestOptions.none())
 
         /** @see retrieveContent */
         @MustBeClosed
         fun retrieveContent(
             params: NotificationRetrieveContentParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<NotificationContent>
+        ): HttpResponseFor<NotificationGetContent>
 
         /** @see retrieveContent */
         @MustBeClosed
         fun retrieveContent(
             params: NotificationRetrieveContentParams
-        ): HttpResponseFor<NotificationContent> = retrieveContent(params, RequestOptions.none())
+        ): HttpResponseFor<NotificationGetContent> = retrieveContent(params, RequestOptions.none())
 
         /** @see retrieveContent */
         @MustBeClosed
         fun retrieveContent(
             id: String,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<NotificationContent> =
+        ): HttpResponseFor<NotificationGetContent> =
             retrieveContent(id, NotificationRetrieveContentParams.none(), requestOptions)
     }
 }

@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Collections
 import java.util.Objects
 
-class SendMessageResponse
+class SendSendMessageResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val requestId: JsonField<String>,
@@ -59,7 +59,7 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [SendMessageResponse].
+         * Returns a mutable builder for constructing an instance of [SendSendMessageResponse].
          *
          * The following fields are required:
          * ```java
@@ -69,16 +69,16 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [SendMessageResponse]. */
+    /** A builder for [SendSendMessageResponse]. */
     class Builder internal constructor() {
 
         private var requestId: JsonField<String>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(sendMessageResponse: SendMessageResponse) = apply {
-            requestId = sendMessageResponse.requestId
-            additionalProperties = sendMessageResponse.additionalProperties.toMutableMap()
+        internal fun from(sendSendMessageResponse: SendSendMessageResponse) = apply {
+            requestId = sendSendMessageResponse.requestId
+            additionalProperties = sendSendMessageResponse.additionalProperties.toMutableMap()
         }
 
         /**
@@ -118,7 +118,7 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [SendMessageResponse].
+         * Returns an immutable instance of [SendSendMessageResponse].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
@@ -129,8 +129,8 @@ private constructor(
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): SendMessageResponse =
-            SendMessageResponse(
+        fun build(): SendSendMessageResponse =
+            SendSendMessageResponse(
                 checkRequired("requestId", requestId),
                 additionalProperties.toMutableMap(),
             )
@@ -138,7 +138,7 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): SendMessageResponse = apply {
+    fun validate(): SendSendMessageResponse = apply {
         if (validated) {
             return@apply
         }
@@ -167,7 +167,7 @@ private constructor(
             return true
         }
 
-        return other is SendMessageResponse &&
+        return other is SendSendMessageResponse &&
             requestId == other.requestId &&
             additionalProperties == other.additionalProperties
     }
@@ -177,5 +177,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "SendMessageResponse{requestId=$requestId, additionalProperties=$additionalProperties}"
+        "SendSendMessageResponse{requestId=$requestId, additionalProperties=$additionalProperties}"
 }

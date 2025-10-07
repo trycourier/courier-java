@@ -21,8 +21,8 @@ internal class DraftServiceTest {
                 .build()
         val draftService = client.notifications().draft()
 
-        val notificationContent = draftService.retrieveContent("id")
+        val notificationGetContent = draftService.retrieveContent("id")
 
-        notificationContent.validate()
+        notificationGetContent.validate()
     }
 }

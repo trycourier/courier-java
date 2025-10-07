@@ -59,35 +59,35 @@ interface CourierClientAsync {
 
     fun send(): SendServiceAsync
 
-    fun tenants(): TenantServiceAsync
-
     fun audiences(): AudienceServiceAsync
 
-    fun bulk(): BulkServiceAsync
-
-    fun users(): UserServiceAsync
-
     fun auditEvents(): AuditEventServiceAsync
+
+    fun auth(): AuthServiceAsync
 
     fun automations(): AutomationServiceAsync
 
     fun brands(): BrandServiceAsync
 
+    fun bulk(): BulkServiceAsync
+
+    fun inbound(): InboundServiceAsync
+
     fun lists(): ListServiceAsync
 
     fun messages(): MessageServiceAsync
 
-    fun notifications(): NotificationServiceAsync
-
-    fun auth(): AuthServiceAsync
-
-    fun inbound(): InboundServiceAsync
-
     fun requests(): RequestServiceAsync
+
+    fun notifications(): NotificationServiceAsync
 
     fun profiles(): ProfileServiceAsync
 
+    fun tenants(): TenantServiceAsync
+
     fun translations(): TranslationServiceAsync
+
+    fun users(): UserServiceAsync
 
     /**
      * Closes this client, relinquishing any underlying resources.
@@ -118,34 +118,34 @@ interface CourierClientAsync {
 
         fun send(): SendServiceAsync.WithRawResponse
 
-        fun tenants(): TenantServiceAsync.WithRawResponse
-
         fun audiences(): AudienceServiceAsync.WithRawResponse
 
-        fun bulk(): BulkServiceAsync.WithRawResponse
-
-        fun users(): UserServiceAsync.WithRawResponse
-
         fun auditEvents(): AuditEventServiceAsync.WithRawResponse
+
+        fun auth(): AuthServiceAsync.WithRawResponse
 
         fun automations(): AutomationServiceAsync.WithRawResponse
 
         fun brands(): BrandServiceAsync.WithRawResponse
 
+        fun bulk(): BulkServiceAsync.WithRawResponse
+
+        fun inbound(): InboundServiceAsync.WithRawResponse
+
         fun lists(): ListServiceAsync.WithRawResponse
 
         fun messages(): MessageServiceAsync.WithRawResponse
 
-        fun notifications(): NotificationServiceAsync.WithRawResponse
-
-        fun auth(): AuthServiceAsync.WithRawResponse
-
-        fun inbound(): InboundServiceAsync.WithRawResponse
-
         fun requests(): RequestServiceAsync.WithRawResponse
+
+        fun notifications(): NotificationServiceAsync.WithRawResponse
 
         fun profiles(): ProfileServiceAsync.WithRawResponse
 
+        fun tenants(): TenantServiceAsync.WithRawResponse
+
         fun translations(): TranslationServiceAsync.WithRawResponse
+
+        fun users(): UserServiceAsync.WithRawResponse
     }
 }

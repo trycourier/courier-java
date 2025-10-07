@@ -41,9 +41,9 @@ internal class NotificationServiceAsyncTest {
                 .build()
         val notificationServiceAsync = client.notifications()
 
-        val notificationContentFuture = notificationServiceAsync.retrieveContent("id")
+        val notificationGetContentFuture = notificationServiceAsync.retrieveContent("id")
 
-        val notificationContent = notificationContentFuture.get()
-        notificationContent.validate()
+        val notificationGetContent = notificationGetContentFuture.get()
+        notificationGetContent.validate()
     }
 }

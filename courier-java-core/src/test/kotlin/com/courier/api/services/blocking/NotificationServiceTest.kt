@@ -40,8 +40,8 @@ internal class NotificationServiceTest {
                 .build()
         val notificationService = client.notifications()
 
-        val notificationContent = notificationService.retrieveContent("id")
+        val notificationGetContent = notificationService.retrieveContent("id")
 
-        notificationContent.validate()
+        notificationGetContent.validate()
     }
 }

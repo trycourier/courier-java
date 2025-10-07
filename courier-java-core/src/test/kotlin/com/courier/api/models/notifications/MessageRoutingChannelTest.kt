@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.api.models.send
+package com.courier.api.models.notifications
 
 import com.courier.api.core.JsonValue
 import com.courier.api.core.jsonMapper

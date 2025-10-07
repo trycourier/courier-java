@@ -31,7 +31,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-class NotificationContent
+class NotificationGetContent
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val blocks: JsonField<List<Block>>,
@@ -102,11 +102,11 @@ private constructor(
 
     companion object {
 
-        /** Returns a mutable builder for constructing an instance of [NotificationContent]. */
+        /** Returns a mutable builder for constructing an instance of [NotificationGetContent]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [NotificationContent]. */
+    /** A builder for [NotificationGetContent]. */
     class Builder internal constructor() {
 
         private var blocks: JsonField<MutableList<Block>>? = null
@@ -115,11 +115,11 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(notificationContent: NotificationContent) = apply {
-            blocks = notificationContent.blocks.map { it.toMutableList() }
-            channels = notificationContent.channels.map { it.toMutableList() }
-            checksum = notificationContent.checksum
-            additionalProperties = notificationContent.additionalProperties.toMutableMap()
+        internal fun from(notificationGetContent: NotificationGetContent) = apply {
+            blocks = notificationGetContent.blocks.map { it.toMutableList() }
+            channels = notificationGetContent.channels.map { it.toMutableList() }
+            checksum = notificationGetContent.checksum
+            additionalProperties = notificationGetContent.additionalProperties.toMutableMap()
         }
 
         fun blocks(blocks: List<Block>?) = blocks(JsonField.ofNullable(blocks))
@@ -211,12 +211,12 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [NotificationContent].
+         * Returns an immutable instance of [NotificationGetContent].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          */
-        fun build(): NotificationContent =
-            NotificationContent(
+        fun build(): NotificationGetContent =
+            NotificationGetContent(
                 (blocks ?: JsonMissing.of()).map { it.toImmutable() },
                 (channels ?: JsonMissing.of()).map { it.toImmutable() },
                 checksum,
@@ -226,7 +226,7 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): NotificationContent = apply {
+    fun validate(): NotificationGetContent = apply {
         if (validated) {
             return@apply
         }
@@ -1888,7 +1888,7 @@ private constructor(
             return true
         }
 
-        return other is NotificationContent &&
+        return other is NotificationGetContent &&
             blocks == other.blocks &&
             channels == other.channels &&
             checksum == other.checksum &&
@@ -1902,5 +1902,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "NotificationContent{blocks=$blocks, channels=$channels, checksum=$checksum, additionalProperties=$additionalProperties}"
+        "NotificationGetContent{blocks=$blocks, channels=$channels, checksum=$checksum, additionalProperties=$additionalProperties}"
 }

@@ -5,7 +5,7 @@ package com.courier.api.services.async
 import com.courier.api.core.ClientOptions
 import com.courier.api.core.RequestOptions
 import com.courier.api.core.http.HttpResponseFor
-import com.courier.api.models.notifications.NotificationContent
+import com.courier.api.models.notifications.NotificationGetContent
 import com.courier.api.models.notifications.NotificationListParams
 import com.courier.api.models.notifications.NotificationListResponse
 import com.courier.api.models.notifications.NotificationRetrieveContentParams
@@ -28,9 +28,9 @@ interface NotificationServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): NotificationServiceAsync
 
-    fun checks(): CheckServiceAsync
-
     fun draft(): DraftServiceAsync
+
+    fun checks(): CheckServiceAsync
 
     fun list(): CompletableFuture<NotificationListResponse> = list(NotificationListParams.none())
 
@@ -49,7 +49,7 @@ interface NotificationServiceAsync {
     fun list(requestOptions: RequestOptions): CompletableFuture<NotificationListResponse> =
         list(NotificationListParams.none(), requestOptions)
 
-    fun retrieveContent(id: String): CompletableFuture<NotificationContent> =
+    fun retrieveContent(id: String): CompletableFuture<NotificationGetContent> =
         retrieveContent(id, NotificationRetrieveContentParams.none())
 
     /** @see retrieveContent */
@@ -57,31 +57,32 @@ interface NotificationServiceAsync {
         id: String,
         params: NotificationRetrieveContentParams = NotificationRetrieveContentParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<NotificationContent> =
+    ): CompletableFuture<NotificationGetContent> =
         retrieveContent(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see retrieveContent */
     fun retrieveContent(
         id: String,
         params: NotificationRetrieveContentParams = NotificationRetrieveContentParams.none(),
-    ): CompletableFuture<NotificationContent> = retrieveContent(id, params, RequestOptions.none())
+    ): CompletableFuture<NotificationGetContent> =
+        retrieveContent(id, params, RequestOptions.none())
 
     /** @see retrieveContent */
     fun retrieveContent(
         params: NotificationRetrieveContentParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<NotificationContent>
+    ): CompletableFuture<NotificationGetContent>
 
     /** @see retrieveContent */
     fun retrieveContent(
         params: NotificationRetrieveContentParams
-    ): CompletableFuture<NotificationContent> = retrieveContent(params, RequestOptions.none())
+    ): CompletableFuture<NotificationGetContent> = retrieveContent(params, RequestOptions.none())
 
     /** @see retrieveContent */
     fun retrieveContent(
         id: String,
         requestOptions: RequestOptions,
-    ): CompletableFuture<NotificationContent> =
+    ): CompletableFuture<NotificationGetContent> =
         retrieveContent(id, NotificationRetrieveContentParams.none(), requestOptions)
 
     /**
@@ -99,9 +100,9 @@ interface NotificationServiceAsync {
             modifier: Consumer<ClientOptions.Builder>
         ): NotificationServiceAsync.WithRawResponse
 
-        fun checks(): CheckServiceAsync.WithRawResponse
-
         fun draft(): DraftServiceAsync.WithRawResponse
+
+        fun checks(): CheckServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `get /notifications`, but is otherwise the same as
@@ -132,7 +133,9 @@ interface NotificationServiceAsync {
          * Returns a raw HTTP response for `get /notifications/{id}/content`, but is otherwise the
          * same as [NotificationServiceAsync.retrieveContent].
          */
-        fun retrieveContent(id: String): CompletableFuture<HttpResponseFor<NotificationContent>> =
+        fun retrieveContent(
+            id: String
+        ): CompletableFuture<HttpResponseFor<NotificationGetContent>> =
             retrieveContent(id, NotificationRetrieveContentParams.none())
 
         /** @see retrieveContent */
@@ -140,33 +143,33 @@ interface NotificationServiceAsync {
             id: String,
             params: NotificationRetrieveContentParams = NotificationRetrieveContentParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<NotificationContent>> =
+        ): CompletableFuture<HttpResponseFor<NotificationGetContent>> =
             retrieveContent(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see retrieveContent */
         fun retrieveContent(
             id: String,
             params: NotificationRetrieveContentParams = NotificationRetrieveContentParams.none(),
-        ): CompletableFuture<HttpResponseFor<NotificationContent>> =
+        ): CompletableFuture<HttpResponseFor<NotificationGetContent>> =
             retrieveContent(id, params, RequestOptions.none())
 
         /** @see retrieveContent */
         fun retrieveContent(
             params: NotificationRetrieveContentParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<NotificationContent>>
+        ): CompletableFuture<HttpResponseFor<NotificationGetContent>>
 
         /** @see retrieveContent */
         fun retrieveContent(
             params: NotificationRetrieveContentParams
-        ): CompletableFuture<HttpResponseFor<NotificationContent>> =
+        ): CompletableFuture<HttpResponseFor<NotificationGetContent>> =
             retrieveContent(params, RequestOptions.none())
 
         /** @see retrieveContent */
         fun retrieveContent(
             id: String,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<NotificationContent>> =
+        ): CompletableFuture<HttpResponseFor<NotificationGetContent>> =
             retrieveContent(id, NotificationRetrieveContentParams.none(), requestOptions)
     }
 }

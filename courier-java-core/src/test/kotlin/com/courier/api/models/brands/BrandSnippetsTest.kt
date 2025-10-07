@@ -14,11 +14,11 @@ internal class BrandSnippetsTest {
     fun create() {
         val brandSnippets =
             BrandSnippets.builder()
-                .addItem(BrandSnippet.builder().name("name").value("value").build())
+                .addItem(BrandSnippets.Item.builder().name("name").value("value").build())
                 .build()
 
         assertThat(brandSnippets.items().getOrNull())
-            .containsExactly(BrandSnippet.builder().name("name").value("value").build())
+            .containsExactly(BrandSnippets.Item.builder().name("name").value("value").build())
     }
 
     @Test
@@ -26,7 +26,7 @@ internal class BrandSnippetsTest {
         val jsonMapper = jsonMapper()
         val brandSnippets =
             BrandSnippets.builder()
-                .addItem(BrandSnippet.builder().name("name").value("value").build())
+                .addItem(BrandSnippets.Item.builder().name("name").value("value").build())
                 .build()
 
         val roundtrippedBrandSnippets =

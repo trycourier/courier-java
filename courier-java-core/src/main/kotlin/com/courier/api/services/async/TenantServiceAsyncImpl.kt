@@ -40,20 +40,20 @@ class TenantServiceAsyncImpl internal constructor(private val clientOptions: Cli
         WithRawResponseImpl(clientOptions)
     }
 
-    private val templates: TemplateServiceAsync by lazy { TemplateServiceAsyncImpl(clientOptions) }
-
     private val defaultPreferences: DefaultPreferenceServiceAsync by lazy {
         DefaultPreferenceServiceAsyncImpl(clientOptions)
     }
+
+    private val templates: TemplateServiceAsync by lazy { TemplateServiceAsyncImpl(clientOptions) }
 
     override fun withRawResponse(): TenantServiceAsync.WithRawResponse = withRawResponse
 
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): TenantServiceAsync =
         TenantServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
-    override fun templates(): TemplateServiceAsync = templates
-
     override fun defaultPreferences(): DefaultPreferenceServiceAsync = defaultPreferences
+
+    override fun templates(): TemplateServiceAsync = templates
 
     override fun retrieve(
         params: TenantRetrieveParams,
@@ -96,12 +96,12 @@ class TenantServiceAsyncImpl internal constructor(private val clientOptions: Cli
         private val errorHandler: Handler<HttpResponse> =
             errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
-        private val templates: TemplateServiceAsync.WithRawResponse by lazy {
-            TemplateServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
-
         private val defaultPreferences: DefaultPreferenceServiceAsync.WithRawResponse by lazy {
             DefaultPreferenceServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val templates: TemplateServiceAsync.WithRawResponse by lazy {
+            TemplateServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
         override fun withOptions(
@@ -111,10 +111,10 @@ class TenantServiceAsyncImpl internal constructor(private val clientOptions: Cli
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
-        override fun templates(): TemplateServiceAsync.WithRawResponse = templates
-
         override fun defaultPreferences(): DefaultPreferenceServiceAsync.WithRawResponse =
             defaultPreferences
+
+        override fun templates(): TemplateServiceAsync.WithRawResponse = templates
 
         private val retrieveHandler: Handler<Tenant> = jsonHandler<Tenant>(clientOptions.jsonMapper)
 
