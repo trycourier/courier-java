@@ -6,8 +6,6 @@ import com.courier.api.core.ExcludeMissing
 import com.courier.api.core.JsonField
 import com.courier.api.core.JsonMissing
 import com.courier.api.core.JsonValue
-import com.courier.api.core.checkKnown
-import com.courier.api.core.toImmutable
 import com.courier.api.errors.CourierInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -18,32 +16,45 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-class BrandSnippets
+class Logo
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    private val items: JsonField<List<BrandSnippet>>,
+    private val href: JsonField<String>,
+    private val image: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("items")
-        @ExcludeMissing
-        items: JsonField<List<BrandSnippet>> = JsonMissing.of()
-    ) : this(items, mutableMapOf())
+        @JsonProperty("href") @ExcludeMissing href: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("image") @ExcludeMissing image: JsonField<String> = JsonMissing.of(),
+    ) : this(href, image, mutableMapOf())
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun items(): Optional<List<BrandSnippet>> = items.getOptional("items")
+    fun href(): Optional<String> = href.getOptional("href")
 
     /**
-     * Returns the raw JSON value of [items].
-     *
-     * Unlike [items], this method doesn't throw if the JSON field has an unexpected type.
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
-    @JsonProperty("items") @ExcludeMissing fun _items(): JsonField<List<BrandSnippet>> = items
+    fun image(): Optional<String> = image.getOptional("image")
+
+    /**
+     * Returns the raw JSON value of [href].
+     *
+     * Unlike [href], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("href") @ExcludeMissing fun _href(): JsonField<String> = href
+
+    /**
+     * Returns the raw JSON value of [image].
+     *
+     * Unlike [image], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("image") @ExcludeMissing fun _image(): JsonField<String> = image
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -59,47 +70,49 @@ private constructor(
 
     companion object {
 
-        /** Returns a mutable builder for constructing an instance of [BrandSnippets]. */
+        /** Returns a mutable builder for constructing an instance of [Logo]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [BrandSnippets]. */
+    /** A builder for [Logo]. */
     class Builder internal constructor() {
 
-        private var items: JsonField<MutableList<BrandSnippet>>? = null
+        private var href: JsonField<String> = JsonMissing.of()
+        private var image: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(brandSnippets: BrandSnippets) = apply {
-            items = brandSnippets.items.map { it.toMutableList() }
-            additionalProperties = brandSnippets.additionalProperties.toMutableMap()
+        internal fun from(logo: Logo) = apply {
+            href = logo.href
+            image = logo.image
+            additionalProperties = logo.additionalProperties.toMutableMap()
         }
 
-        fun items(items: List<BrandSnippet>?) = items(JsonField.ofNullable(items))
+        fun href(href: String?) = href(JsonField.ofNullable(href))
 
-        /** Alias for calling [Builder.items] with `items.orElse(null)`. */
-        fun items(items: Optional<List<BrandSnippet>>) = items(items.getOrNull())
+        /** Alias for calling [Builder.href] with `href.orElse(null)`. */
+        fun href(href: Optional<String>) = href(href.getOrNull())
 
         /**
-         * Sets [Builder.items] to an arbitrary JSON value.
+         * Sets [Builder.href] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.items] with a well-typed `List<BrandSnippet>` value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.href] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun items(items: JsonField<List<BrandSnippet>>) = apply {
-            this.items = items.map { it.toMutableList() }
-        }
+        fun href(href: JsonField<String>) = apply { this.href = href }
+
+        fun image(image: String?) = image(JsonField.ofNullable(image))
+
+        /** Alias for calling [Builder.image] with `image.orElse(null)`. */
+        fun image(image: Optional<String>) = image(image.getOrNull())
 
         /**
-         * Adds a single [BrandSnippet] to [items].
+         * Sets [Builder.image] to an arbitrary JSON value.
          *
-         * @throws IllegalStateException if the field was previously set to a non-list.
+         * You should usually call [Builder.image] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun addItem(item: BrandSnippet) = apply {
-            items =
-                (items ?: JsonField.of(mutableListOf())).also { checkKnown("items", it).add(item) }
-        }
+        fun image(image: JsonField<String>) = apply { this.image = image }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -121,25 +134,22 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [BrandSnippets].
+         * Returns an immutable instance of [Logo].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          */
-        fun build(): BrandSnippets =
-            BrandSnippets(
-                (items ?: JsonMissing.of()).map { it.toImmutable() },
-                additionalProperties.toMutableMap(),
-            )
+        fun build(): Logo = Logo(href, image, additionalProperties.toMutableMap())
     }
 
     private var validated: Boolean = false
 
-    fun validate(): BrandSnippets = apply {
+    fun validate(): Logo = apply {
         if (validated) {
             return@apply
         }
 
-        items().ifPresent { it.forEach { it.validate() } }
+        href()
+        image()
         validated = true
     }
 
@@ -158,22 +168,23 @@ private constructor(
      */
     @JvmSynthetic
     internal fun validity(): Int =
-        (items.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
+        (if (href.asKnown().isPresent) 1 else 0) + (if (image.asKnown().isPresent) 1 else 0)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return other is BrandSnippets &&
-            items == other.items &&
+        return other is Logo &&
+            href == other.href &&
+            image == other.image &&
             additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy { Objects.hash(items, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(href, image, additionalProperties) }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "BrandSnippets{items=$items, additionalProperties=$additionalProperties}"
+        "Logo{href=$href, image=$image, additionalProperties=$additionalProperties}"
 }

@@ -4,12 +4,22 @@ package com.courier.api.services.blocking
 
 import com.courier.api.TestServerExtension
 import com.courier.api.client.okhttp.CourierOkHttpClient
+import com.courier.api.models.brands.BrandColors
 import com.courier.api.models.brands.BrandCreateParams
 import com.courier.api.models.brands.BrandListParams
 import com.courier.api.models.brands.BrandSettings
+import com.courier.api.models.brands.BrandSettingsEmail
+import com.courier.api.models.brands.BrandSettingsInApp
+import com.courier.api.models.brands.BrandSnippet
 import com.courier.api.models.brands.BrandSnippets
 import com.courier.api.models.brands.BrandTemplate
 import com.courier.api.models.brands.BrandUpdateParams
+import com.courier.api.models.brands.EmailFooter
+import com.courier.api.models.brands.EmailHead
+import com.courier.api.models.brands.EmailHeader
+import com.courier.api.models.brands.Icons
+import com.courier.api.models.brands.Logo
+import com.courier.api.models.brands.WidgetBackground
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -35,39 +45,36 @@ internal class BrandServiceTest {
                     .settings(
                         BrandSettings.builder()
                             .colors(
-                                BrandSettings.Colors.builder()
+                                BrandColors.builder()
                                     .primary("primary")
                                     .secondary("secondary")
                                     .build()
                             )
                             .email(
-                                BrandSettings.Email.builder()
+                                BrandSettingsEmail.builder()
                                     .footer(
-                                        BrandSettings.Email.Footer.builder()
+                                        EmailFooter.builder()
                                             .content("content")
                                             .inheritDefault(true)
                                             .build()
                                     )
                                     .head(
-                                        BrandSettings.Email.Head.builder()
+                                        EmailHead.builder()
                                             .inheritDefault(true)
                                             .content("content")
                                             .build()
                                     )
                                     .header(
-                                        BrandSettings.Email.Header.builder()
+                                        EmailHeader.builder()
                                             .logo(
-                                                BrandSettings.Email.Header.Logo.builder()
-                                                    .href("href")
-                                                    .image("image")
-                                                    .build()
+                                                Logo.builder().href("href").image("image").build()
                                             )
                                             .barColor("barColor")
                                             .inheritDefault(true)
                                             .build()
                                     )
                                     .templateOverride(
-                                        BrandSettings.Email.TemplateOverride.builder()
+                                        BrandSettingsEmail.TemplateOverride.builder()
                                             .enabled(true)
                                             .backgroundColor("backgroundColor")
                                             .blocksBackgroundColor("blocksBackgroundColor")
@@ -93,21 +100,16 @@ internal class BrandServiceTest {
                                     .build()
                             )
                             .inapp(
-                                BrandSettings.Inapp.builder()
+                                BrandSettingsInApp.builder()
                                     .colors(
-                                        BrandSettings.Inapp.Colors.builder()
+                                        BrandColors.builder()
                                             .primary("primary")
                                             .secondary("secondary")
                                             .build()
                                     )
-                                    .icons(
-                                        BrandSettings.Inapp.Icons.builder()
-                                            .bell("bell")
-                                            .message("message")
-                                            .build()
-                                    )
+                                    .icons(Icons.builder().bell("bell").message("message").build())
                                     .widgetBackground(
-                                        BrandSettings.Inapp.WidgetBackground.builder()
+                                        WidgetBackground.builder()
                                             .bottomColor("bottomColor")
                                             .topColor("topColor")
                                             .build()
@@ -115,16 +117,14 @@ internal class BrandServiceTest {
                                     .borderRadius("borderRadius")
                                     .disableMessageIcon(true)
                                     .fontFamily("fontFamily")
-                                    .placement(BrandSettings.Inapp.Placement.TOP)
+                                    .placement(BrandSettingsInApp.Placement.TOP)
                                     .build()
                             )
                             .build()
                     )
                     .snippets(
                         BrandSnippets.builder()
-                            .addItem(
-                                BrandSnippets.Item.builder().name("name").value("value").build()
-                            )
+                            .addItem(BrandSnippet.builder().name("name").value("value").build())
                             .build()
                     )
                     .build()
@@ -166,39 +166,36 @@ internal class BrandServiceTest {
                     .settings(
                         BrandSettings.builder()
                             .colors(
-                                BrandSettings.Colors.builder()
+                                BrandColors.builder()
                                     .primary("primary")
                                     .secondary("secondary")
                                     .build()
                             )
                             .email(
-                                BrandSettings.Email.builder()
+                                BrandSettingsEmail.builder()
                                     .footer(
-                                        BrandSettings.Email.Footer.builder()
+                                        EmailFooter.builder()
                                             .content("content")
                                             .inheritDefault(true)
                                             .build()
                                     )
                                     .head(
-                                        BrandSettings.Email.Head.builder()
+                                        EmailHead.builder()
                                             .inheritDefault(true)
                                             .content("content")
                                             .build()
                                     )
                                     .header(
-                                        BrandSettings.Email.Header.builder()
+                                        EmailHeader.builder()
                                             .logo(
-                                                BrandSettings.Email.Header.Logo.builder()
-                                                    .href("href")
-                                                    .image("image")
-                                                    .build()
+                                                Logo.builder().href("href").image("image").build()
                                             )
                                             .barColor("barColor")
                                             .inheritDefault(true)
                                             .build()
                                     )
                                     .templateOverride(
-                                        BrandSettings.Email.TemplateOverride.builder()
+                                        BrandSettingsEmail.TemplateOverride.builder()
                                             .enabled(true)
                                             .backgroundColor("backgroundColor")
                                             .blocksBackgroundColor("blocksBackgroundColor")
@@ -224,21 +221,16 @@ internal class BrandServiceTest {
                                     .build()
                             )
                             .inapp(
-                                BrandSettings.Inapp.builder()
+                                BrandSettingsInApp.builder()
                                     .colors(
-                                        BrandSettings.Inapp.Colors.builder()
+                                        BrandColors.builder()
                                             .primary("primary")
                                             .secondary("secondary")
                                             .build()
                                     )
-                                    .icons(
-                                        BrandSettings.Inapp.Icons.builder()
-                                            .bell("bell")
-                                            .message("message")
-                                            .build()
-                                    )
+                                    .icons(Icons.builder().bell("bell").message("message").build())
                                     .widgetBackground(
-                                        BrandSettings.Inapp.WidgetBackground.builder()
+                                        WidgetBackground.builder()
                                             .bottomColor("bottomColor")
                                             .topColor("topColor")
                                             .build()
@@ -246,16 +238,14 @@ internal class BrandServiceTest {
                                     .borderRadius("borderRadius")
                                     .disableMessageIcon(true)
                                     .fontFamily("fontFamily")
-                                    .placement(BrandSettings.Inapp.Placement.TOP)
+                                    .placement(BrandSettingsInApp.Placement.TOP)
                                     .build()
                             )
                             .build()
                     )
                     .snippets(
                         BrandSnippets.builder()
-                            .addItem(
-                                BrandSnippets.Item.builder().name("name").value("value").build()
-                            )
+                            .addItem(BrandSnippet.builder().name("name").value("value").build())
                             .build()
                     )
                     .build()

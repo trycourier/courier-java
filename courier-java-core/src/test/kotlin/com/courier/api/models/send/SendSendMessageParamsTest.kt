@@ -70,7 +70,7 @@ internal class SendSendMessageParamsTest {
                             .addTag("string")
                             .traceId("trace_id")
                             .utm(
-                                SendSendMessageParams.Message.Metadata.Utm.builder()
+                                Utm.builder()
                                     .campaign("campaign")
                                     .content("content")
                                     .medium("medium")
@@ -272,7 +272,7 @@ internal class SendSendMessageParamsTest {
                                 .addTag("string")
                                 .traceId("trace_id")
                                 .utm(
-                                    SendSendMessageParams.Message.Metadata.Utm.builder()
+                                    Utm.builder()
                                         .campaign("campaign")
                                         .content("content")
                                         .medium("medium")
@@ -477,7 +477,7 @@ internal class SendSendMessageParamsTest {
                             .addTag("string")
                             .traceId("trace_id")
                             .utm(
-                                SendSendMessageParams.Message.Metadata.Utm.builder()
+                                Utm.builder()
                                     .campaign("campaign")
                                     .content("content")
                                     .medium("medium")

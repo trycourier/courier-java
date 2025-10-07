@@ -9,6 +9,7 @@ import com.courier.api.models.bulk.UserRecipient
 import com.courier.api.models.send.Content
 import com.courier.api.models.send.MessageContext
 import com.courier.api.models.send.SendSendMessageParams
+import com.courier.api.models.send.Utm
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -90,7 +91,7 @@ internal class SendServiceAsyncTest {
                                     .addTag("string")
                                     .traceId("trace_id")
                                     .utm(
-                                        SendSendMessageParams.Message.Metadata.Utm.builder()
+                                        Utm.builder()
                                             .campaign("campaign")
                                             .content("content")
                                             .medium("medium")
