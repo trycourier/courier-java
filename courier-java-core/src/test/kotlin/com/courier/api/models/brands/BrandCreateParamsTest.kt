@@ -2,7 +2,6 @@
 
 package com.courier.api.models.brands
 
-import com.courier.api.core.JsonValue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -20,7 +19,7 @@ internal class BrandCreateParamsTest {
                         BrandSettingsEmail.builder()
                             .footer(
                                 EmailFooter.builder()
-                                    .content(JsonValue.from(mapOf<String, Any>()))
+                                    .content("content")
                                     .inheritDefault(true)
                                     .build()
                             )
@@ -106,7 +105,7 @@ internal class BrandCreateParamsTest {
                             BrandSettingsEmail.builder()
                                 .footer(
                                     EmailFooter.builder()
-                                        .content(JsonValue.from(mapOf<String, Any>()))
+                                        .content("content")
                                         .inheritDefault(true)
                                         .build()
                                 )
@@ -191,7 +190,7 @@ internal class BrandCreateParamsTest {
                         BrandSettingsEmail.builder()
                             .footer(
                                 EmailFooter.builder()
-                                    .content(JsonValue.from(mapOf<String, Any>()))
+                                    .content("content")
                                     .inheritDefault(true)
                                     .build()
                             )

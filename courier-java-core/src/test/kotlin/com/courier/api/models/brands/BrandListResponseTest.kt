@@ -2,7 +2,6 @@
 
 package com.courier.api.models.brands
 
-import com.courier.api.core.JsonValue
 import com.courier.api.core.jsonMapper
 import com.courier.api.models.audiences.Paging
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
@@ -35,7 +34,7 @@ internal class BrandListResponseTest {
                                     BrandSettingsEmail.builder()
                                         .footer(
                                             EmailFooter.builder()
-                                                .content(JsonValue.from(mapOf<String, Any>()))
+                                                .content("content")
                                                 .inheritDefault(true)
                                                 .build()
                                         )
@@ -142,7 +141,7 @@ internal class BrandListResponseTest {
                                 BrandSettingsEmail.builder()
                                     .footer(
                                         EmailFooter.builder()
-                                            .content(JsonValue.from(mapOf<String, Any>()))
+                                            .content("content")
                                             .inheritDefault(true)
                                             .build()
                                     )
@@ -245,7 +244,7 @@ internal class BrandListResponseTest {
                                     BrandSettingsEmail.builder()
                                         .footer(
                                             EmailFooter.builder()
-                                                .content(JsonValue.from(mapOf<String, Any>()))
+                                                .content("content")
                                                 .inheritDefault(true)
                                                 .build()
                                         )
