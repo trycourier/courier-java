@@ -14,7 +14,6 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Collections
 import java.util.Objects
 import java.util.Optional
-import kotlin.jvm.optionals.getOrNull
 
 class BrandColors
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
@@ -88,10 +87,7 @@ private constructor(
             additionalProperties = brandColors.additionalProperties.toMutableMap()
         }
 
-        fun primary(primary: String?) = primary(JsonField.ofNullable(primary))
-
-        /** Alias for calling [Builder.primary] with `primary.orElse(null)`. */
-        fun primary(primary: Optional<String>) = primary(primary.getOrNull())
+        fun primary(primary: String) = primary(JsonField.of(primary))
 
         /**
          * Sets [Builder.primary] to an arbitrary JSON value.
@@ -101,10 +97,7 @@ private constructor(
          */
         fun primary(primary: JsonField<String>) = apply { this.primary = primary }
 
-        fun secondary(secondary: String?) = secondary(JsonField.ofNullable(secondary))
-
-        /** Alias for calling [Builder.secondary] with `secondary.orElse(null)`. */
-        fun secondary(secondary: Optional<String>) = secondary(secondary.getOrNull())
+        fun secondary(secondary: String) = secondary(JsonField.of(secondary))
 
         /**
          * Sets [Builder.secondary] to an arbitrary JSON value.
