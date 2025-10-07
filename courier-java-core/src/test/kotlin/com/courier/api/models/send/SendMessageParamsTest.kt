@@ -3,6 +3,7 @@
 package com.courier.api.models.send
 
 import com.courier.api.core.JsonValue
+import com.courier.api.models.ElementalContentSugar
 import com.courier.api.models.bulk.UserRecipient
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -43,12 +44,7 @@ internal class SendMessageParamsTest {
                             )
                             .build()
                     )
-                    .content(
-                        SendMessageParams.Message.Content.ElementalContentSugar.builder()
-                            .body("body")
-                            .title("title")
-                            .build()
-                    )
+                    .content(ElementalContentSugar.builder().body("body").title("title").build())
                     .context(MessageContext.builder().tenantId("tenant_id").build())
                     .data(
                         SendMessageParams.Message.Data.builder()
@@ -246,10 +242,7 @@ internal class SendMessageParamsTest {
                                 .build()
                         )
                         .content(
-                            SendMessageParams.Message.Content.ElementalContentSugar.builder()
-                                .body("body")
-                                .title("title")
-                                .build()
+                            ElementalContentSugar.builder().body("body").title("title").build()
                         )
                         .context(MessageContext.builder().tenantId("tenant_id").build())
                         .data(
@@ -451,12 +444,7 @@ internal class SendMessageParamsTest {
                             )
                             .build()
                     )
-                    .content(
-                        SendMessageParams.Message.Content.ElementalContentSugar.builder()
-                            .body("body")
-                            .title("title")
-                            .build()
-                    )
+                    .content(ElementalContentSugar.builder().body("body").title("title").build())
                     .context(MessageContext.builder().tenantId("tenant_id").build())
                     .data(
                         SendMessageParams.Message.Data.builder()
