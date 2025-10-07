@@ -63,7 +63,7 @@ private constructor(
     fun description(): String = description.getRequired("description")
 
     /**
-     * The operator to use for filtering
+     * A single filter to use for filtering
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -212,7 +212,7 @@ private constructor(
          */
         fun description(description: JsonField<String>) = apply { this.description = description }
 
-        /** The operator to use for filtering */
+        /** A single filter to use for filtering */
         fun filter(filter: Filter) = filter(JsonField.of(filter))
 
         /**
@@ -222,13 +222,6 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun filter(filter: JsonField<Filter>) = apply { this.filter = filter }
-
-        /** Alias for calling [filter] with `Filter.ofUnionMember0(unionMember0)`. */
-        fun filter(unionMember0: Filter.UnionMember0) = filter(Filter.ofUnionMember0(unionMember0))
-
-        /** Alias for calling [filter] with `Filter.ofNestedFilterConfig(nestedFilterConfig)`. */
-        fun filter(nestedFilterConfig: NestedFilterConfig) =
-            filter(Filter.ofNestedFilterConfig(nestedFilterConfig))
 
         /** The name of the audience */
         fun name(name: String) = name(JsonField.of(name))

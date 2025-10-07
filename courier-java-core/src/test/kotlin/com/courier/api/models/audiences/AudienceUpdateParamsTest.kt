@@ -13,8 +13,8 @@ internal class AudienceUpdateParamsTest {
             .audienceId("audience_id")
             .description("description")
             .filter(
-                Filter.UnionMember0.builder()
-                    .operator(Filter.UnionMember0.Operator.ENDS_WITH)
+                Filter.builder()
+                    .operator(Filter.Operator.ENDS_WITH)
                     .path("path")
                     .value("value")
                     .build()
@@ -39,8 +39,8 @@ internal class AudienceUpdateParamsTest {
                 .audienceId("audience_id")
                 .description("description")
                 .filter(
-                    Filter.UnionMember0.builder()
-                        .operator(Filter.UnionMember0.Operator.ENDS_WITH)
+                    Filter.builder()
+                        .operator(Filter.Operator.ENDS_WITH)
                         .path("path")
                         .value("value")
                         .build()
@@ -53,13 +53,11 @@ internal class AudienceUpdateParamsTest {
         assertThat(body.description()).contains("description")
         assertThat(body.filter())
             .contains(
-                Filter.ofUnionMember0(
-                    Filter.UnionMember0.builder()
-                        .operator(Filter.UnionMember0.Operator.ENDS_WITH)
-                        .path("path")
-                        .value("value")
-                        .build()
-                )
+                Filter.builder()
+                    .operator(Filter.Operator.ENDS_WITH)
+                    .path("path")
+                    .value("value")
+                    .build()
             )
         assertThat(body.name()).contains("name")
     }
