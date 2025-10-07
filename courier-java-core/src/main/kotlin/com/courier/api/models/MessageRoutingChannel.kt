@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.api.models.notifications
+package com.courier.api.models
 
 import com.courier.api.core.BaseDeserializer
 import com.courier.api.core.BaseSerializer

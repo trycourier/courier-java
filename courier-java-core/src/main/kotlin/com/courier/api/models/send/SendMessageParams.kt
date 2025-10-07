@@ -18,9 +18,9 @@ import com.courier.api.core.http.Headers
 import com.courier.api.core.http.QueryParams
 import com.courier.api.core.toImmutable
 import com.courier.api.errors.CourierInvalidDataException
+import com.courier.api.models.MessageRouting
+import com.courier.api.models.MessageRoutingChannel
 import com.courier.api.models.bulk.UserRecipient
-import com.courier.api.models.notifications.MessageRouting
-import com.courier.api.models.notifications.MessageRoutingChannel
 import com.courier.api.models.tenants.templates.ElementalContent
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -39,7 +39,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** Use the send API to send a message to one or more recipients. */
-class SendSendMessageParams
+class SendMessageParams
 private constructor(
     private val body: Body,
     private val additionalHeaders: Headers,
@@ -75,7 +75,7 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [SendSendMessageParams].
+         * Returns a mutable builder for constructing an instance of [SendMessageParams].
          *
          * The following fields are required:
          * ```java
@@ -85,7 +85,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [SendSendMessageParams]. */
+    /** A builder for [SendMessageParams]. */
     class Builder internal constructor() {
 
         private var body: Body.Builder = Body.builder()
@@ -93,10 +93,10 @@ private constructor(
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(sendSendMessageParams: SendSendMessageParams) = apply {
-            body = sendSendMessageParams.body.toBuilder()
-            additionalHeaders = sendSendMessageParams.additionalHeaders.toBuilder()
-            additionalQueryParams = sendSendMessageParams.additionalQueryParams.toBuilder()
+        internal fun from(sendMessageParams: SendMessageParams) = apply {
+            body = sendMessageParams.body.toBuilder()
+            additionalHeaders = sendMessageParams.additionalHeaders.toBuilder()
+            additionalQueryParams = sendMessageParams.additionalQueryParams.toBuilder()
         }
 
         /**
@@ -240,7 +240,7 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [SendSendMessageParams].
+         * Returns an immutable instance of [SendMessageParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
@@ -251,8 +251,8 @@ private constructor(
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): SendSendMessageParams =
-            SendSendMessageParams(
+        fun build(): SendMessageParams =
+            SendMessageParams(
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -1133,6 +1133,414 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() = "Channels{additionalProperties=$additionalProperties}"
+        }
+
+        /** Describes content that will work for email, inbox, push, chat, or any channel id. */
+        @JsonDeserialize(using = Content.Deserializer::class)
+        @JsonSerialize(using = Content.Serializer::class)
+        class Content
+        private constructor(
+            private val elementalContentSugar: ElementalContentSugar? = null,
+            private val elemental: ElementalContent? = null,
+            private val _json: JsonValue? = null,
+        ) {
+
+            /** Syntactic sugar to provide a fast shorthand for Courier Elemental Blocks. */
+            fun elementalContentSugar(): Optional<ElementalContentSugar> =
+                Optional.ofNullable(elementalContentSugar)
+
+            fun elemental(): Optional<ElementalContent> = Optional.ofNullable(elemental)
+
+            fun isElementalContentSugar(): Boolean = elementalContentSugar != null
+
+            fun isElemental(): Boolean = elemental != null
+
+            /** Syntactic sugar to provide a fast shorthand for Courier Elemental Blocks. */
+            fun asElementalContentSugar(): ElementalContentSugar =
+                elementalContentSugar.getOrThrow("elementalContentSugar")
+
+            fun asElemental(): ElementalContent = elemental.getOrThrow("elemental")
+
+            fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
+
+            fun <T> accept(visitor: Visitor<T>): T =
+                when {
+                    elementalContentSugar != null ->
+                        visitor.visitElementalContentSugar(elementalContentSugar)
+                    elemental != null -> visitor.visitElemental(elemental)
+                    else -> visitor.unknown(_json)
+                }
+
+            private var validated: Boolean = false
+
+            fun validate(): Content = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                accept(
+                    object : Visitor<Unit> {
+                        override fun visitElementalContentSugar(
+                            elementalContentSugar: ElementalContentSugar
+                        ) {
+                            elementalContentSugar.validate()
+                        }
+
+                        override fun visitElemental(elemental: ElementalContent) {
+                            elemental.validate()
+                        }
+                    }
+                )
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: CourierInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                accept(
+                    object : Visitor<Int> {
+                        override fun visitElementalContentSugar(
+                            elementalContentSugar: ElementalContentSugar
+                        ) = elementalContentSugar.validity()
+
+                        override fun visitElemental(elemental: ElementalContent) =
+                            elemental.validity()
+
+                        override fun unknown(json: JsonValue?) = 0
+                    }
+                )
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Content &&
+                    elementalContentSugar == other.elementalContentSugar &&
+                    elemental == other.elemental
+            }
+
+            override fun hashCode(): Int = Objects.hash(elementalContentSugar, elemental)
+
+            override fun toString(): String =
+                when {
+                    elementalContentSugar != null ->
+                        "Content{elementalContentSugar=$elementalContentSugar}"
+                    elemental != null -> "Content{elemental=$elemental}"
+                    _json != null -> "Content{_unknown=$_json}"
+                    else -> throw IllegalStateException("Invalid Content")
+                }
+
+            companion object {
+
+                /** Syntactic sugar to provide a fast shorthand for Courier Elemental Blocks. */
+                @JvmStatic
+                fun ofElementalContentSugar(elementalContentSugar: ElementalContentSugar) =
+                    Content(elementalContentSugar = elementalContentSugar)
+
+                @JvmStatic
+                fun ofElemental(elemental: ElementalContent) = Content(elemental = elemental)
+            }
+
+            /**
+             * An interface that defines how to map each variant of [Content] to a value of type
+             * [T].
+             */
+            interface Visitor<out T> {
+
+                /** Syntactic sugar to provide a fast shorthand for Courier Elemental Blocks. */
+                fun visitElementalContentSugar(elementalContentSugar: ElementalContentSugar): T
+
+                fun visitElemental(elemental: ElementalContent): T
+
+                /**
+                 * Maps an unknown variant of [Content] to a value of type [T].
+                 *
+                 * An instance of [Content] can contain an unknown variant if it was deserialized
+                 * from data that doesn't match any known variant. For example, if the SDK is on an
+                 * older version than the API, then the API may respond with new variants that the
+                 * SDK is unaware of.
+                 *
+                 * @throws CourierInvalidDataException in the default implementation.
+                 */
+                fun unknown(json: JsonValue?): T {
+                    throw CourierInvalidDataException("Unknown Content: $json")
+                }
+            }
+
+            internal class Deserializer : BaseDeserializer<Content>(Content::class) {
+
+                override fun ObjectCodec.deserialize(node: JsonNode): Content {
+                    val json = JsonValue.fromJsonNode(node)
+
+                    val bestMatches =
+                        sequenceOf(
+                                tryDeserialize(node, jacksonTypeRef<ElementalContentSugar>())?.let {
+                                    Content(elementalContentSugar = it, _json = json)
+                                },
+                                tryDeserialize(node, jacksonTypeRef<ElementalContent>())?.let {
+                                    Content(elemental = it, _json = json)
+                                },
+                            )
+                            .filterNotNull()
+                            .allMaxBy { it.validity() }
+                            .toList()
+                    return when (bestMatches.size) {
+                        // This can happen if what we're deserializing is completely incompatible
+                        // with all the possible variants (e.g. deserializing from boolean).
+                        0 -> Content(_json = json)
+                        1 -> bestMatches.single()
+                        // If there's more than one match with the highest validity, then use the
+                        // first completely valid match, or simply the first match if none are
+                        // completely valid.
+                        else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
+                    }
+                }
+            }
+
+            internal class Serializer : BaseSerializer<Content>(Content::class) {
+
+                override fun serialize(
+                    value: Content,
+                    generator: JsonGenerator,
+                    provider: SerializerProvider,
+                ) {
+                    when {
+                        value.elementalContentSugar != null ->
+                            generator.writeObject(value.elementalContentSugar)
+                        value.elemental != null -> generator.writeObject(value.elemental)
+                        value._json != null -> generator.writeObject(value._json)
+                        else -> throw IllegalStateException("Invalid Content")
+                    }
+                }
+            }
+
+            /** Syntactic sugar to provide a fast shorthand for Courier Elemental Blocks. */
+            class ElementalContentSugar
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+            private constructor(
+                private val body: JsonField<String>,
+                private val title: JsonField<String>,
+                private val additionalProperties: MutableMap<String, JsonValue>,
+            ) {
+
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("body")
+                    @ExcludeMissing
+                    body: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("title")
+                    @ExcludeMissing
+                    title: JsonField<String> = JsonMissing.of(),
+                ) : this(body, title, mutableMapOf())
+
+                /**
+                 * The text content displayed in the notification.
+                 *
+                 * @throws CourierInvalidDataException if the JSON field has an unexpected type or
+                 *   is unexpectedly missing or null (e.g. if the server responded with an
+                 *   unexpected value).
+                 */
+                fun body(): String = body.getRequired("body")
+
+                /**
+                 * Title/subject displayed by supported channels.
+                 *
+                 * @throws CourierInvalidDataException if the JSON field has an unexpected type or
+                 *   is unexpectedly missing or null (e.g. if the server responded with an
+                 *   unexpected value).
+                 */
+                fun title(): String = title.getRequired("title")
+
+                /**
+                 * Returns the raw JSON value of [body].
+                 *
+                 * Unlike [body], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("body") @ExcludeMissing fun _body(): JsonField<String> = body
+
+                /**
+                 * Returns the raw JSON value of [title].
+                 *
+                 * Unlike [title], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("title") @ExcludeMissing fun _title(): JsonField<String> = title
+
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
+
+                fun toBuilder() = Builder().from(this)
+
+                companion object {
+
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [ElementalContentSugar].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .body()
+                     * .title()
+                     * ```
+                     */
+                    @JvmStatic fun builder() = Builder()
+                }
+
+                /** A builder for [ElementalContentSugar]. */
+                class Builder internal constructor() {
+
+                    private var body: JsonField<String>? = null
+                    private var title: JsonField<String>? = null
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    @JvmSynthetic
+                    internal fun from(elementalContentSugar: ElementalContentSugar) = apply {
+                        body = elementalContentSugar.body
+                        title = elementalContentSugar.title
+                        additionalProperties =
+                            elementalContentSugar.additionalProperties.toMutableMap()
+                    }
+
+                    /** The text content displayed in the notification. */
+                    fun body(body: String) = body(JsonField.of(body))
+
+                    /**
+                     * Sets [Builder.body] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.body] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
+                    fun body(body: JsonField<String>) = apply { this.body = body }
+
+                    /** Title/subject displayed by supported channels. */
+                    fun title(title: String) = title(JsonField.of(title))
+
+                    /**
+                     * Sets [Builder.title] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.title] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
+                    fun title(title: JsonField<String>) = apply { this.title = title }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
+
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [ElementalContentSugar].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .body()
+                     * .title()
+                     * ```
+                     *
+                     * @throws IllegalStateException if any required field is unset.
+                     */
+                    fun build(): ElementalContentSugar =
+                        ElementalContentSugar(
+                            checkRequired("body", body),
+                            checkRequired("title", title),
+                            additionalProperties.toMutableMap(),
+                        )
+                }
+
+                private var validated: Boolean = false
+
+                fun validate(): ElementalContentSugar = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    body()
+                    title()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: CourierInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic
+                internal fun validity(): Int =
+                    (if (body.asKnown().isPresent) 1 else 0) +
+                        (if (title.asKnown().isPresent) 1 else 0)
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is ElementalContentSugar &&
+                        body == other.body &&
+                        title == other.title &&
+                        additionalProperties == other.additionalProperties
+                }
+
+                private val hashCode: Int by lazy {
+                    Objects.hash(body, title, additionalProperties)
+                }
+
+                override fun hashCode(): Int = hashCode
+
+                override fun toString() =
+                    "ElementalContentSugar{body=$body, title=$title, additionalProperties=$additionalProperties}"
+            }
         }
 
         class Data
@@ -3654,7 +4062,7 @@ private constructor(
             return true
         }
 
-        return other is SendSendMessageParams &&
+        return other is SendMessageParams &&
             body == other.body &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
@@ -3663,5 +4071,5 @@ private constructor(
     override fun hashCode(): Int = Objects.hash(body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "SendSendMessageParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "SendMessageParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

@@ -7,16 +7,16 @@ import com.courier.api.models.bulk.UserRecipient
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-internal class SendSendMessageParamsTest {
+internal class SendMessageParamsTest {
 
     @Test
     fun create() {
-        SendSendMessageParams.builder()
+        SendMessageParams.builder()
             .message(
-                SendSendMessageParams.Message.builder()
+                SendMessageParams.Message.builder()
                     .brandId("brand_id")
                     .channels(
-                        SendSendMessageParams.Message.Channels.builder()
+                        SendMessageParams.Message.Channels.builder()
                             .putAdditionalProperty(
                                 "foo",
                                 JsonValue.from(
@@ -44,28 +44,31 @@ internal class SendSendMessageParamsTest {
                             .build()
                     )
                     .content(
-                        Content.ElementalContentSugar.builder().body("body").title("title").build()
+                        SendMessageParams.Message.Content.ElementalContentSugar.builder()
+                            .body("body")
+                            .title("title")
+                            .build()
                     )
                     .context(MessageContext.builder().tenantId("tenant_id").build())
                     .data(
-                        SendSendMessageParams.Message.Data.builder()
+                        SendMessageParams.Message.Data.builder()
                             .putAdditionalProperty("name", JsonValue.from("bar"))
                             .build()
                     )
                     .delay(
-                        SendSendMessageParams.Message.Delay.builder()
+                        SendMessageParams.Message.Delay.builder()
                             .duration(0L)
                             .until("until")
                             .build()
                     )
                     .expiry(
-                        SendSendMessageParams.Message.Expiry.builder()
+                        SendMessageParams.Message.Expiry.builder()
                             .expiresIn("string")
                             .expiresAt("expires_at")
                             .build()
                     )
                     .metadata(
-                        SendSendMessageParams.Message.Metadata.builder()
+                        SendMessageParams.Message.Metadata.builder()
                             .event("event")
                             .addTag("string")
                             .traceId("trace_id")
@@ -81,12 +84,12 @@ internal class SendSendMessageParamsTest {
                             .build()
                     )
                     .preferences(
-                        SendSendMessageParams.Message.Preferences.builder()
+                        SendMessageParams.Message.Preferences.builder()
                             .subscriptionTopicId("subscription_topic_id")
                             .build()
                     )
                     .providers(
-                        SendSendMessageParams.Message.Providers.builder()
+                        SendMessageParams.Message.Providers.builder()
                             .putAdditionalProperty(
                                 "foo",
                                 JsonValue.from(
@@ -111,23 +114,23 @@ internal class SendSendMessageParamsTest {
                             .build()
                     )
                     .routing(
-                        SendSendMessageParams.Message.Routing.builder()
+                        SendMessageParams.Message.Routing.builder()
                             .addChannel("string")
-                            .method(SendSendMessageParams.Message.Routing.Method.ALL)
+                            .method(SendMessageParams.Message.Routing.Method.ALL)
                             .build()
                     )
                     .timeout(
-                        SendSendMessageParams.Message.Timeout.builder()
+                        SendMessageParams.Message.Timeout.builder()
                             .channel(
-                                SendSendMessageParams.Message.Timeout.Channel.builder()
+                                SendMessageParams.Message.Timeout.Channel.builder()
                                     .putAdditionalProperty("foo", JsonValue.from(0))
                                     .build()
                             )
-                            .criteria(SendSendMessageParams.Message.Timeout.Criteria.NO_ESCALATION)
+                            .criteria(SendMessageParams.Message.Timeout.Criteria.NO_ESCALATION)
                             .escalation(0L)
                             .message(0L)
                             .provider(
-                                SendSendMessageParams.Message.Timeout.Provider.builder()
+                                SendMessageParams.Message.Timeout.Provider.builder()
                                     .putAdditionalProperty("foo", JsonValue.from(0))
                                     .build()
                             )
@@ -210,12 +213,12 @@ internal class SendSendMessageParamsTest {
     @Test
     fun body() {
         val params =
-            SendSendMessageParams.builder()
+            SendMessageParams.builder()
                 .message(
-                    SendSendMessageParams.Message.builder()
+                    SendMessageParams.Message.builder()
                         .brandId("brand_id")
                         .channels(
-                            SendSendMessageParams.Message.Channels.builder()
+                            SendMessageParams.Message.Channels.builder()
                                 .putAdditionalProperty(
                                     "foo",
                                     JsonValue.from(
@@ -243,31 +246,31 @@ internal class SendSendMessageParamsTest {
                                 .build()
                         )
                         .content(
-                            Content.ElementalContentSugar.builder()
+                            SendMessageParams.Message.Content.ElementalContentSugar.builder()
                                 .body("body")
                                 .title("title")
                                 .build()
                         )
                         .context(MessageContext.builder().tenantId("tenant_id").build())
                         .data(
-                            SendSendMessageParams.Message.Data.builder()
+                            SendMessageParams.Message.Data.builder()
                                 .putAdditionalProperty("name", JsonValue.from("bar"))
                                 .build()
                         )
                         .delay(
-                            SendSendMessageParams.Message.Delay.builder()
+                            SendMessageParams.Message.Delay.builder()
                                 .duration(0L)
                                 .until("until")
                                 .build()
                         )
                         .expiry(
-                            SendSendMessageParams.Message.Expiry.builder()
+                            SendMessageParams.Message.Expiry.builder()
                                 .expiresIn("string")
                                 .expiresAt("expires_at")
                                 .build()
                         )
                         .metadata(
-                            SendSendMessageParams.Message.Metadata.builder()
+                            SendMessageParams.Message.Metadata.builder()
                                 .event("event")
                                 .addTag("string")
                                 .traceId("trace_id")
@@ -283,12 +286,12 @@ internal class SendSendMessageParamsTest {
                                 .build()
                         )
                         .preferences(
-                            SendSendMessageParams.Message.Preferences.builder()
+                            SendMessageParams.Message.Preferences.builder()
                                 .subscriptionTopicId("subscription_topic_id")
                                 .build()
                         )
                         .providers(
-                            SendSendMessageParams.Message.Providers.builder()
+                            SendMessageParams.Message.Providers.builder()
                                 .putAdditionalProperty(
                                     "foo",
                                     JsonValue.from(
@@ -313,25 +316,23 @@ internal class SendSendMessageParamsTest {
                                 .build()
                         )
                         .routing(
-                            SendSendMessageParams.Message.Routing.builder()
+                            SendMessageParams.Message.Routing.builder()
                                 .addChannel("string")
-                                .method(SendSendMessageParams.Message.Routing.Method.ALL)
+                                .method(SendMessageParams.Message.Routing.Method.ALL)
                                 .build()
                         )
                         .timeout(
-                            SendSendMessageParams.Message.Timeout.builder()
+                            SendMessageParams.Message.Timeout.builder()
                                 .channel(
-                                    SendSendMessageParams.Message.Timeout.Channel.builder()
+                                    SendMessageParams.Message.Timeout.Channel.builder()
                                         .putAdditionalProperty("foo", JsonValue.from(0))
                                         .build()
                                 )
-                                .criteria(
-                                    SendSendMessageParams.Message.Timeout.Criteria.NO_ESCALATION
-                                )
+                                .criteria(SendMessageParams.Message.Timeout.Criteria.NO_ESCALATION)
                                 .escalation(0L)
                                 .message(0L)
                                 .provider(
-                                    SendSendMessageParams.Message.Timeout.Provider.builder()
+                                    SendMessageParams.Message.Timeout.Provider.builder()
                                         .putAdditionalProperty("foo", JsonValue.from(0))
                                         .build()
                                 )
@@ -420,10 +421,10 @@ internal class SendSendMessageParamsTest {
 
         assertThat(body.message())
             .isEqualTo(
-                SendSendMessageParams.Message.builder()
+                SendMessageParams.Message.builder()
                     .brandId("brand_id")
                     .channels(
-                        SendSendMessageParams.Message.Channels.builder()
+                        SendMessageParams.Message.Channels.builder()
                             .putAdditionalProperty(
                                 "foo",
                                 JsonValue.from(
@@ -451,28 +452,31 @@ internal class SendSendMessageParamsTest {
                             .build()
                     )
                     .content(
-                        Content.ElementalContentSugar.builder().body("body").title("title").build()
+                        SendMessageParams.Message.Content.ElementalContentSugar.builder()
+                            .body("body")
+                            .title("title")
+                            .build()
                     )
                     .context(MessageContext.builder().tenantId("tenant_id").build())
                     .data(
-                        SendSendMessageParams.Message.Data.builder()
+                        SendMessageParams.Message.Data.builder()
                             .putAdditionalProperty("name", JsonValue.from("bar"))
                             .build()
                     )
                     .delay(
-                        SendSendMessageParams.Message.Delay.builder()
+                        SendMessageParams.Message.Delay.builder()
                             .duration(0L)
                             .until("until")
                             .build()
                     )
                     .expiry(
-                        SendSendMessageParams.Message.Expiry.builder()
+                        SendMessageParams.Message.Expiry.builder()
                             .expiresIn("string")
                             .expiresAt("expires_at")
                             .build()
                     )
                     .metadata(
-                        SendSendMessageParams.Message.Metadata.builder()
+                        SendMessageParams.Message.Metadata.builder()
                             .event("event")
                             .addTag("string")
                             .traceId("trace_id")
@@ -488,12 +492,12 @@ internal class SendSendMessageParamsTest {
                             .build()
                     )
                     .preferences(
-                        SendSendMessageParams.Message.Preferences.builder()
+                        SendMessageParams.Message.Preferences.builder()
                             .subscriptionTopicId("subscription_topic_id")
                             .build()
                     )
                     .providers(
-                        SendSendMessageParams.Message.Providers.builder()
+                        SendMessageParams.Message.Providers.builder()
                             .putAdditionalProperty(
                                 "foo",
                                 JsonValue.from(
@@ -518,23 +522,23 @@ internal class SendSendMessageParamsTest {
                             .build()
                     )
                     .routing(
-                        SendSendMessageParams.Message.Routing.builder()
+                        SendMessageParams.Message.Routing.builder()
                             .addChannel("string")
-                            .method(SendSendMessageParams.Message.Routing.Method.ALL)
+                            .method(SendMessageParams.Message.Routing.Method.ALL)
                             .build()
                     )
                     .timeout(
-                        SendSendMessageParams.Message.Timeout.builder()
+                        SendMessageParams.Message.Timeout.builder()
                             .channel(
-                                SendSendMessageParams.Message.Timeout.Channel.builder()
+                                SendMessageParams.Message.Timeout.Channel.builder()
                                     .putAdditionalProperty("foo", JsonValue.from(0))
                                     .build()
                             )
-                            .criteria(SendSendMessageParams.Message.Timeout.Criteria.NO_ESCALATION)
+                            .criteria(SendMessageParams.Message.Timeout.Criteria.NO_ESCALATION)
                             .escalation(0L)
                             .message(0L)
                             .provider(
-                                SendSendMessageParams.Message.Timeout.Provider.builder()
+                                SendMessageParams.Message.Timeout.Provider.builder()
                                     .putAdditionalProperty("foo", JsonValue.from(0))
                                     .build()
                             )
@@ -616,12 +620,10 @@ internal class SendSendMessageParamsTest {
     @Test
     fun bodyWithoutOptionalFields() {
         val params =
-            SendSendMessageParams.builder()
-                .message(SendSendMessageParams.Message.builder().build())
-                .build()
+            SendMessageParams.builder().message(SendMessageParams.Message.builder().build()).build()
 
         val body = params._body()
 
-        assertThat(body.message()).isEqualTo(SendSendMessageParams.Message.builder().build())
+        assertThat(body.message()).isEqualTo(SendMessageParams.Message.builder().build())
     }
 }

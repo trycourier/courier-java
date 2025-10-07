@@ -4,9 +4,9 @@ package com.courier.api.proguard
 
 import com.courier.api.client.okhttp.CourierOkHttpClient
 import com.courier.api.core.jsonMapper
-import com.courier.api.models.send.Content
+import com.courier.api.models.Alignment
+import com.courier.api.models.send.ElementalNode
 import com.courier.api.models.send.MessageContext
-import com.courier.api.models.tenants.defaultpreferences.items.ChannelClassification
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import kotlin.reflect.full.memberFunctions
 import kotlin.reflect.jvm.javaMethod
@@ -82,30 +82,39 @@ internal class ProGuardCompatibilityTest {
     }
 
     @Test
-    fun contentRoundtrip() {
+    fun elementalNodeRoundtrip() {
         val jsonMapper = jsonMapper()
-        val content =
-            Content.ofElementalContentSugar(
-                Content.ElementalContentSugar.builder().body("body").title("title").build()
+        val elementalNode =
+            ElementalNode.ofUnionMember0(
+                ElementalNode.UnionMember0.builder()
+                    .addChannel("string")
+                    .if_("if")
+                    .loop("loop")
+                    .ref("ref")
+                    .type(ElementalNode.UnionMember0.Type.TEXT)
+                    .build()
             )
 
-        val roundtrippedContent =
-            jsonMapper.readValue(jsonMapper.writeValueAsString(content), jacksonTypeRef<Content>())
+        val roundtrippedElementalNode =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(elementalNode),
+                jacksonTypeRef<ElementalNode>(),
+            )
 
-        assertThat(roundtrippedContent).isEqualTo(content)
+        assertThat(roundtrippedElementalNode).isEqualTo(elementalNode)
     }
 
     @Test
-    fun channelClassificationRoundtrip() {
+    fun alignmentRoundtrip() {
         val jsonMapper = jsonMapper()
-        val channelClassification = ChannelClassification.DIRECT_MESSAGE
+        val alignment = Alignment.CENTER
 
-        val roundtrippedChannelClassification =
+        val roundtrippedAlignment =
             jsonMapper.readValue(
-                jsonMapper.writeValueAsString(channelClassification),
-                jacksonTypeRef<ChannelClassification>(),
+                jsonMapper.writeValueAsString(alignment),
+                jacksonTypeRef<Alignment>(),
             )
 
-        assertThat(roundtrippedChannelClassification).isEqualTo(channelClassification)
+        assertThat(roundtrippedAlignment).isEqualTo(alignment)
     }
 }

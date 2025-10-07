@@ -1,13 +1,13 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.api.models.tenants.templates
+package com.courier.api.models
 
 import com.courier.api.core.Enum
 import com.courier.api.core.JsonField
 import com.courier.api.errors.CourierInvalidDataException
 import com.fasterxml.jackson.annotation.JsonCreator
 
-class Alignment @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+class TextStyle @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
     /**
      * Returns this class instance's raw value.
@@ -20,40 +20,40 @@ class Alignment @JsonCreator private constructor(private val value: JsonField<St
 
     companion object {
 
-        @JvmField val CENTER = of("center")
+        @JvmField val TEXT = of("text")
 
-        @JvmField val LEFT = of("left")
+        @JvmField val H1 = of("h1")
 
-        @JvmField val RIGHT = of("right")
+        @JvmField val H2 = of("h2")
 
-        @JvmField val FULL = of("full")
+        @JvmField val SUBTEXT = of("subtext")
 
-        @JvmStatic fun of(value: String) = Alignment(JsonField.of(value))
+        @JvmStatic fun of(value: String) = TextStyle(JsonField.of(value))
     }
 
-    /** An enum containing [Alignment]'s known values. */
+    /** An enum containing [TextStyle]'s known values. */
     enum class Known {
-        CENTER,
-        LEFT,
-        RIGHT,
-        FULL,
+        TEXT,
+        H1,
+        H2,
+        SUBTEXT,
     }
 
     /**
-     * An enum containing [Alignment]'s known values, as well as an [_UNKNOWN] member.
+     * An enum containing [TextStyle]'s known values, as well as an [_UNKNOWN] member.
      *
-     * An instance of [Alignment] can contain an unknown value in a couple of cases:
+     * An instance of [TextStyle] can contain an unknown value in a couple of cases:
      * - It was deserialized from data that doesn't match any known member. For example, if the SDK
      *   is on an older version than the API, then the API may respond with new members that the SDK
      *   is unaware of.
      * - It was constructed with an arbitrary value using the [of] method.
      */
     enum class Value {
-        CENTER,
-        LEFT,
-        RIGHT,
-        FULL,
-        /** An enum member indicating that [Alignment] was instantiated with an unknown value. */
+        TEXT,
+        H1,
+        H2,
+        SUBTEXT,
+        /** An enum member indicating that [TextStyle] was instantiated with an unknown value. */
         _UNKNOWN,
     }
 
@@ -66,10 +66,10 @@ class Alignment @JsonCreator private constructor(private val value: JsonField<St
      */
     fun value(): Value =
         when (this) {
-            CENTER -> Value.CENTER
-            LEFT -> Value.LEFT
-            RIGHT -> Value.RIGHT
-            FULL -> Value.FULL
+            TEXT -> Value.TEXT
+            H1 -> Value.H1
+            H2 -> Value.H2
+            SUBTEXT -> Value.SUBTEXT
             else -> Value._UNKNOWN
         }
 
@@ -83,11 +83,11 @@ class Alignment @JsonCreator private constructor(private val value: JsonField<St
      */
     fun known(): Known =
         when (this) {
-            CENTER -> Known.CENTER
-            LEFT -> Known.LEFT
-            RIGHT -> Known.RIGHT
-            FULL -> Known.FULL
-            else -> throw CourierInvalidDataException("Unknown Alignment: $value")
+            TEXT -> Known.TEXT
+            H1 -> Known.H1
+            H2 -> Known.H2
+            SUBTEXT -> Known.SUBTEXT
+            else -> throw CourierInvalidDataException("Unknown TextStyle: $value")
         }
 
     /**
@@ -104,7 +104,7 @@ class Alignment @JsonCreator private constructor(private val value: JsonField<St
 
     private var validated: Boolean = false
 
-    fun validate(): Alignment = apply {
+    fun validate(): TextStyle = apply {
         if (validated) {
             return@apply
         }
@@ -133,7 +133,7 @@ class Alignment @JsonCreator private constructor(private val value: JsonField<St
             return true
         }
 
-        return other is Alignment && value == other.value
+        return other is TextStyle && value == other.value
     }
 
     override fun hashCode() = value.hashCode()
