@@ -4,7 +4,6 @@ package com.courier.api.services.blocking
 
 import com.courier.api.TestServerExtension
 import com.courier.api.client.okhttp.CourierOkHttpClient
-import com.courier.api.core.JsonValue
 import com.courier.api.models.brands.BrandColors
 import com.courier.api.models.brands.BrandCreateParams
 import com.courier.api.models.brands.BrandListParams
@@ -55,7 +54,7 @@ internal class BrandServiceTest {
                                 BrandSettingsEmail.builder()
                                     .footer(
                                         EmailFooter.builder()
-                                            .content(JsonValue.from(mapOf<String, Any>()))
+                                            .content("content")
                                             .inheritDefault(true)
                                             .build()
                                     )
@@ -176,7 +175,7 @@ internal class BrandServiceTest {
                                 BrandSettingsEmail.builder()
                                     .footer(
                                         EmailFooter.builder()
-                                            .content(JsonValue.from(mapOf<String, Any>()))
+                                            .content("content")
                                             .inheritDefault(true)
                                             .build()
                                     )

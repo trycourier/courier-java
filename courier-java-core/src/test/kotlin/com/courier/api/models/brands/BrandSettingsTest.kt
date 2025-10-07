@@ -2,7 +2,6 @@
 
 package com.courier.api.models.brands
 
-import com.courier.api.core.JsonValue
 import com.courier.api.core.jsonMapper
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
@@ -18,10 +17,7 @@ internal class BrandSettingsTest {
                 .email(
                     BrandSettingsEmail.builder()
                         .footer(
-                            EmailFooter.builder()
-                                .content(JsonValue.from(mapOf<String, Any>()))
-                                .inheritDefault(true)
-                                .build()
+                            EmailFooter.builder().content("content").inheritDefault(true).build()
                         )
                         .head(EmailHead.builder().inheritDefault(true).content("content").build())
                         .header(
@@ -82,12 +78,7 @@ internal class BrandSettingsTest {
         assertThat(brandSettings.email())
             .contains(
                 BrandSettingsEmail.builder()
-                    .footer(
-                        EmailFooter.builder()
-                            .content(JsonValue.from(mapOf<String, Any>()))
-                            .inheritDefault(true)
-                            .build()
-                    )
+                    .footer(EmailFooter.builder().content("content").inheritDefault(true).build())
                     .head(EmailHead.builder().inheritDefault(true).content("content").build())
                     .header(
                         EmailHeader.builder()
@@ -150,10 +141,7 @@ internal class BrandSettingsTest {
                 .email(
                     BrandSettingsEmail.builder()
                         .footer(
-                            EmailFooter.builder()
-                                .content(JsonValue.from(mapOf<String, Any>()))
-                                .inheritDefault(true)
-                                .build()
+                            EmailFooter.builder().content("content").inheritDefault(true).build()
                         )
                         .head(EmailHead.builder().inheritDefault(true).content("content").build())
                         .header(

@@ -19,26 +19,37 @@ import kotlin.jvm.optionals.getOrNull
 class EmailFooter
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    private val content: JsonValue,
+    private val content: JsonField<String>,
     private val inheritDefault: JsonField<Boolean>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("content") @ExcludeMissing content: JsonValue = JsonMissing.of(),
+        @JsonProperty("content") @ExcludeMissing content: JsonField<String> = JsonMissing.of(),
         @JsonProperty("inheritDefault")
         @ExcludeMissing
         inheritDefault: JsonField<Boolean> = JsonMissing.of(),
     ) : this(content, inheritDefault, mutableMapOf())
 
-    @JsonProperty("content") @ExcludeMissing fun _content(): JsonValue = content
+    /**
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun content(): Optional<String> = content.getOptional("content")
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun inheritDefault(): Optional<Boolean> = inheritDefault.getOptional("inheritDefault")
+
+    /**
+     * Returns the raw JSON value of [content].
+     *
+     * Unlike [content], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("content") @ExcludeMissing fun _content(): JsonField<String> = content
 
     /**
      * Returns the raw JSON value of [inheritDefault].
@@ -70,7 +81,7 @@ private constructor(
     /** A builder for [EmailFooter]. */
     class Builder internal constructor() {
 
-        private var content: JsonValue = JsonMissing.of()
+        private var content: JsonField<String> = JsonMissing.of()
         private var inheritDefault: JsonField<Boolean> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -81,7 +92,18 @@ private constructor(
             additionalProperties = emailFooter.additionalProperties.toMutableMap()
         }
 
-        fun content(content: JsonValue) = apply { this.content = content }
+        fun content(content: String?) = content(JsonField.ofNullable(content))
+
+        /** Alias for calling [Builder.content] with `content.orElse(null)`. */
+        fun content(content: Optional<String>) = content(content.getOrNull())
+
+        /**
+         * Sets [Builder.content] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.content] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun content(content: JsonField<String>) = apply { this.content = content }
 
         fun inheritDefault(inheritDefault: Boolean?) =
             inheritDefault(JsonField.ofNullable(inheritDefault))
@@ -143,6 +165,7 @@ private constructor(
             return@apply
         }
 
+        content()
         inheritDefault()
         validated = true
     }
@@ -160,7 +183,10 @@ private constructor(
      *
      * Used for best match union deserialization.
      */
-    @JvmSynthetic internal fun validity(): Int = (if (inheritDefault.asKnown().isPresent) 1 else 0)
+    @JvmSynthetic
+    internal fun validity(): Int =
+        (if (content.asKnown().isPresent) 1 else 0) +
+            (if (inheritDefault.asKnown().isPresent) 1 else 0)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
