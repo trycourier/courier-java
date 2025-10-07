@@ -571,6 +571,8 @@ private constructor(
         fun routing(): Optional<Routing> = routing.getOptional("routing")
 
         /**
+         * The id of the template you want to send
+         *
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
@@ -919,6 +921,7 @@ private constructor(
              */
             fun routing(routing: JsonField<Routing>) = apply { this.routing = routing }
 
+            /** The id of the template you want to send */
             fun template(template: String?) = template(JsonField.ofNullable(template))
 
             /** Alias for calling [Builder.template] with `template.orElse(null)`. */
