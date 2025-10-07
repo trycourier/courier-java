@@ -5,6 +5,7 @@ package com.courier.api.services.blocking
 import com.courier.api.TestServerExtension
 import com.courier.api.client.okhttp.CourierOkHttpClient
 import com.courier.api.core.JsonValue
+import com.courier.api.models.ElementalContentSugar
 import com.courier.api.models.bulk.UserRecipient
 import com.courier.api.models.send.MessageContext
 import com.courier.api.models.send.SendMessageParams
@@ -61,10 +62,7 @@ internal class SendServiceTest {
                                     .build()
                             )
                             .content(
-                                SendMessageParams.Message.Content.ElementalContentSugar.builder()
-                                    .body("body")
-                                    .title("title")
-                                    .build()
+                                ElementalContentSugar.builder().body("body").title("title").build()
                             )
                             .context(MessageContext.builder().tenantId("tenant_id").build())
                             .data(
