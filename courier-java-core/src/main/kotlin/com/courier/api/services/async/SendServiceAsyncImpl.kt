@@ -15,8 +15,8 @@ import com.courier.api.core.http.HttpResponseFor
 import com.courier.api.core.http.json
 import com.courier.api.core.http.parseable
 import com.courier.api.core.prepareAsync
-import com.courier.api.models.send.SendSendMessageParams
-import com.courier.api.models.send.SendSendMessageResponse
+import com.courier.api.models.send.SendMessageParams
+import com.courier.api.models.send.SendMessageResponse
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
@@ -32,12 +32,12 @@ class SendServiceAsyncImpl internal constructor(private val clientOptions: Clien
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): SendServiceAsync =
         SendServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
-    override fun sendMessage(
-        params: SendSendMessageParams,
+    override fun message(
+        params: SendMessageParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<SendSendMessageResponse> =
+    ): CompletableFuture<SendMessageResponse> =
         // post /send
-        withRawResponse().sendMessage(params, requestOptions).thenApply { it.parse() }
+        withRawResponse().message(params, requestOptions).thenApply { it.parse() }
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         SendServiceAsync.WithRawResponse {
@@ -52,13 +52,13 @@ class SendServiceAsyncImpl internal constructor(private val clientOptions: Clien
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
-        private val sendMessageHandler: Handler<SendSendMessageResponse> =
-            jsonHandler<SendSendMessageResponse>(clientOptions.jsonMapper)
+        private val messageHandler: Handler<SendMessageResponse> =
+            jsonHandler<SendMessageResponse>(clientOptions.jsonMapper)
 
-        override fun sendMessage(
-            params: SendSendMessageParams,
+        override fun message(
+            params: SendMessageParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<SendSendMessageResponse>> {
+        ): CompletableFuture<HttpResponseFor<SendMessageResponse>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -73,7 +73,7 @@ class SendServiceAsyncImpl internal constructor(private val clientOptions: Clien
                 .thenApply { response ->
                     errorHandler.handle(response).parseable {
                         response
-                            .use { sendMessageHandler.handle(it) }
+                            .use { messageHandler.handle(it) }
                             .also {
                                 if (requestOptions.responseValidation!!) {
                                     it.validate()

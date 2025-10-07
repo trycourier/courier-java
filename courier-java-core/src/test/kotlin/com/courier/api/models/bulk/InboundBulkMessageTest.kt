@@ -5,7 +5,6 @@ package com.courier.api.models.bulk
 import com.courier.api.core.JsonValue
 import com.courier.api.core.jsonMapper
 import com.courier.api.errors.CourierInvalidDataException
-import com.courier.api.models.send.Content
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -86,7 +85,11 @@ internal class InboundBulkMessageTest {
         val content =
             InboundBulkMessage.InboundBulkContentMessage.builder()
                 .content(
-                    Content.ElementalContentSugar.builder().body("body").title("title").build()
+                    InboundBulkMessage.InboundBulkContentMessage.Content.ElementalContentSugar
+                        .builder()
+                        .body("body")
+                        .title("title")
+                        .build()
                 )
                 .brand("brand")
                 .data(
@@ -120,7 +123,11 @@ internal class InboundBulkMessageTest {
             InboundBulkMessage.ofContent(
                 InboundBulkMessage.InboundBulkContentMessage.builder()
                     .content(
-                        Content.ElementalContentSugar.builder().body("body").title("title").build()
+                        InboundBulkMessage.InboundBulkContentMessage.Content.ElementalContentSugar
+                            .builder()
+                            .body("body")
+                            .title("title")
+                            .build()
                     )
                     .brand("brand")
                     .data(

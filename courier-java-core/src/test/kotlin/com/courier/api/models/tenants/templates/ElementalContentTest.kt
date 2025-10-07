@@ -3,6 +3,7 @@
 package com.courier.api.models.tenants.templates
 
 import com.courier.api.core.jsonMapper
+import com.courier.api.models.send.ElementalNode
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -14,12 +15,12 @@ internal class ElementalContentTest {
         val elementalContent =
             ElementalContent.builder()
                 .addElement(
-                    ElementalContent.Element.UnionMember0.builder()
+                    ElementalNode.UnionMember0.builder()
                         .addChannel("string")
                         .if_("if")
                         .loop("loop")
                         .ref("ref")
-                        .type(ElementalContent.Element.UnionMember0.Type.TEXT)
+                        .type(ElementalNode.UnionMember0.Type.TEXT)
                         .build()
                 )
                 .version("version")
@@ -28,13 +29,13 @@ internal class ElementalContentTest {
 
         assertThat(elementalContent.elements())
             .containsExactly(
-                ElementalContent.Element.ofUnionMember0(
-                    ElementalContent.Element.UnionMember0.builder()
+                ElementalNode.ofUnionMember0(
+                    ElementalNode.UnionMember0.builder()
                         .addChannel("string")
                         .if_("if")
                         .loop("loop")
                         .ref("ref")
-                        .type(ElementalContent.Element.UnionMember0.Type.TEXT)
+                        .type(ElementalNode.UnionMember0.Type.TEXT)
                         .build()
                 )
             )
@@ -48,12 +49,12 @@ internal class ElementalContentTest {
         val elementalContent =
             ElementalContent.builder()
                 .addElement(
-                    ElementalContent.Element.UnionMember0.builder()
+                    ElementalNode.UnionMember0.builder()
                         .addChannel("string")
                         .if_("if")
                         .loop("loop")
                         .ref("ref")
-                        .type(ElementalContent.Element.UnionMember0.Type.TEXT)
+                        .type(ElementalNode.UnionMember0.Type.TEXT)
                         .build()
                 )
                 .version("version")
