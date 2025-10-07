@@ -8,8 +8,7 @@ import com.courier.api.core.JsonValue
 import com.courier.api.models.bulk.UserRecipient
 import com.courier.api.models.send.Content
 import com.courier.api.models.send.MessageContext
-import com.courier.api.models.send.SendMessageParams
-import com.courier.api.models.send.Utm
+import com.courier.api.models.send.SendSendMessageParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -19,7 +18,7 @@ internal class SendServiceAsyncTest {
 
     @Disabled("Prism tests are disabled")
     @Test
-    fun message() {
+    fun sendMessage() {
         val client =
             CourierOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
@@ -28,13 +27,13 @@ internal class SendServiceAsyncTest {
         val sendServiceAsync = client.send()
 
         val responseFuture =
-            sendServiceAsync.message(
-                SendMessageParams.builder()
+            sendServiceAsync.sendMessage(
+                SendSendMessageParams.builder()
                     .message(
-                        SendMessageParams.Message.builder()
+                        SendSendMessageParams.Message.builder()
                             .brandId("brand_id")
                             .channels(
-                                SendMessageParams.Message.Channels.builder()
+                                SendSendMessageParams.Message.Channels.builder()
                                     .putAdditionalProperty(
                                         "foo",
                                         JsonValue.from(
@@ -69,29 +68,29 @@ internal class SendServiceAsyncTest {
                             )
                             .context(MessageContext.builder().tenantId("tenant_id").build())
                             .data(
-                                SendMessageParams.Message.Data.builder()
+                                SendSendMessageParams.Message.Data.builder()
                                     .putAdditionalProperty("name", JsonValue.from("bar"))
                                     .build()
                             )
                             .delay(
-                                SendMessageParams.Message.Delay.builder()
+                                SendSendMessageParams.Message.Delay.builder()
                                     .duration(0L)
                                     .until("until")
                                     .build()
                             )
                             .expiry(
-                                SendMessageParams.Message.Expiry.builder()
+                                SendSendMessageParams.Message.Expiry.builder()
                                     .expiresIn("string")
                                     .expiresAt("expires_at")
                                     .build()
                             )
                             .metadata(
-                                SendMessageParams.Message.Metadata.builder()
+                                SendSendMessageParams.Message.Metadata.builder()
                                     .event("event")
                                     .addTag("string")
                                     .traceId("trace_id")
                                     .utm(
-                                        Utm.builder()
+                                        SendSendMessageParams.Message.Metadata.Utm.builder()
                                             .campaign("campaign")
                                             .content("content")
                                             .medium("medium")
@@ -102,12 +101,12 @@ internal class SendServiceAsyncTest {
                                     .build()
                             )
                             .preferences(
-                                SendMessageParams.Message.Preferences.builder()
+                                SendSendMessageParams.Message.Preferences.builder()
                                     .subscriptionTopicId("subscription_topic_id")
                                     .build()
                             )
                             .providers(
-                                SendMessageParams.Message.Providers.builder()
+                                SendSendMessageParams.Message.Providers.builder()
                                     .putAdditionalProperty(
                                         "foo",
                                         JsonValue.from(
@@ -132,25 +131,25 @@ internal class SendServiceAsyncTest {
                                     .build()
                             )
                             .routing(
-                                SendMessageParams.Message.Routing.builder()
+                                SendSendMessageParams.Message.Routing.builder()
                                     .addChannel("string")
-                                    .method(SendMessageParams.Message.Routing.Method.ALL)
+                                    .method(SendSendMessageParams.Message.Routing.Method.ALL)
                                     .build()
                             )
                             .timeout(
-                                SendMessageParams.Message.Timeout.builder()
+                                SendSendMessageParams.Message.Timeout.builder()
                                     .channel(
-                                        SendMessageParams.Message.Timeout.Channel.builder()
+                                        SendSendMessageParams.Message.Timeout.Channel.builder()
                                             .putAdditionalProperty("foo", JsonValue.from(0))
                                             .build()
                                     )
                                     .criteria(
-                                        SendMessageParams.Message.Timeout.Criteria.NO_ESCALATION
+                                        SendSendMessageParams.Message.Timeout.Criteria.NO_ESCALATION
                                     )
                                     .escalation(0L)
                                     .message(0L)
                                     .provider(
-                                        SendMessageParams.Message.Timeout.Provider.builder()
+                                        SendSendMessageParams.Message.Timeout.Provider.builder()
                                             .putAdditionalProperty("foo", JsonValue.from(0))
                                             .build()
                                     )

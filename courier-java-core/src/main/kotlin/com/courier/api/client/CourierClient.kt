@@ -59,35 +59,35 @@ interface CourierClient {
 
     fun send(): SendService
 
-    fun tenants(): TenantService
-
     fun audiences(): AudienceService
 
-    fun bulk(): BulkService
-
-    fun users(): UserService
-
     fun auditEvents(): AuditEventService
+
+    fun auth(): AuthService
 
     fun automations(): AutomationService
 
     fun brands(): BrandService
 
+    fun bulk(): BulkService
+
+    fun inbound(): InboundService
+
     fun lists(): ListService
 
     fun messages(): MessageService
 
-    fun notifications(): NotificationService
-
-    fun auth(): AuthService
-
-    fun inbound(): InboundService
-
     fun requests(): RequestService
+
+    fun notifications(): NotificationService
 
     fun profiles(): ProfileService
 
+    fun tenants(): TenantService
+
     fun translations(): TranslationService
+
+    fun users(): UserService
 
     /**
      * Closes this client, relinquishing any underlying resources.
@@ -114,34 +114,34 @@ interface CourierClient {
 
         fun send(): SendService.WithRawResponse
 
-        fun tenants(): TenantService.WithRawResponse
-
         fun audiences(): AudienceService.WithRawResponse
 
-        fun bulk(): BulkService.WithRawResponse
-
-        fun users(): UserService.WithRawResponse
-
         fun auditEvents(): AuditEventService.WithRawResponse
+
+        fun auth(): AuthService.WithRawResponse
 
         fun automations(): AutomationService.WithRawResponse
 
         fun brands(): BrandService.WithRawResponse
 
+        fun bulk(): BulkService.WithRawResponse
+
+        fun inbound(): InboundService.WithRawResponse
+
         fun lists(): ListService.WithRawResponse
 
         fun messages(): MessageService.WithRawResponse
 
-        fun notifications(): NotificationService.WithRawResponse
-
-        fun auth(): AuthService.WithRawResponse
-
-        fun inbound(): InboundService.WithRawResponse
-
         fun requests(): RequestService.WithRawResponse
+
+        fun notifications(): NotificationService.WithRawResponse
 
         fun profiles(): ProfileService.WithRawResponse
 
+        fun tenants(): TenantService.WithRawResponse
+
         fun translations(): TranslationService.WithRawResponse
+
+        fun users(): UserService.WithRawResponse
     }
 }

@@ -15,7 +15,7 @@ import com.courier.api.core.http.HttpResponse.Handler
 import com.courier.api.core.http.HttpResponseFor
 import com.courier.api.core.http.parseable
 import com.courier.api.core.prepare
-import com.courier.api.models.notifications.NotificationContent
+import com.courier.api.models.notifications.NotificationGetContent
 import com.courier.api.models.notifications.draft.DraftRetrieveContentParams
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
@@ -35,7 +35,7 @@ class DraftServiceImpl internal constructor(private val clientOptions: ClientOpt
     override fun retrieveContent(
         params: DraftRetrieveContentParams,
         requestOptions: RequestOptions,
-    ): NotificationContent =
+    ): NotificationGetContent =
         // get /notifications/{id}/draft/content
         withRawResponse().retrieveContent(params, requestOptions).parse()
 
@@ -52,13 +52,13 @@ class DraftServiceImpl internal constructor(private val clientOptions: ClientOpt
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
-        private val retrieveContentHandler: Handler<NotificationContent> =
-            jsonHandler<NotificationContent>(clientOptions.jsonMapper)
+        private val retrieveContentHandler: Handler<NotificationGetContent> =
+            jsonHandler<NotificationGetContent>(clientOptions.jsonMapper)
 
         override fun retrieveContent(
             params: DraftRetrieveContentParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<NotificationContent> {
+        ): HttpResponseFor<NotificationGetContent> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id().getOrNull())

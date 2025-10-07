@@ -15,7 +15,7 @@ import com.courier.api.core.http.HttpResponse.Handler
 import com.courier.api.core.http.HttpResponseFor
 import com.courier.api.core.http.parseable
 import com.courier.api.core.prepare
-import com.courier.api.models.notifications.NotificationContent
+import com.courier.api.models.notifications.NotificationGetContent
 import com.courier.api.models.notifications.NotificationListParams
 import com.courier.api.models.notifications.NotificationListResponse
 import com.courier.api.models.notifications.NotificationRetrieveContentParams
@@ -33,18 +33,18 @@ class NotificationServiceImpl internal constructor(private val clientOptions: Cl
         WithRawResponseImpl(clientOptions)
     }
 
-    private val checks: CheckService by lazy { CheckServiceImpl(clientOptions) }
-
     private val draft: DraftService by lazy { DraftServiceImpl(clientOptions) }
+
+    private val checks: CheckService by lazy { CheckServiceImpl(clientOptions) }
 
     override fun withRawResponse(): NotificationService.WithRawResponse = withRawResponse
 
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): NotificationService =
         NotificationServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
-    override fun checks(): CheckService = checks
-
     override fun draft(): DraftService = draft
+
+    override fun checks(): CheckService = checks
 
     override fun list(
         params: NotificationListParams,
@@ -56,7 +56,7 @@ class NotificationServiceImpl internal constructor(private val clientOptions: Cl
     override fun retrieveContent(
         params: NotificationRetrieveContentParams,
         requestOptions: RequestOptions,
-    ): NotificationContent =
+    ): NotificationGetContent =
         // get /notifications/{id}/content
         withRawResponse().retrieveContent(params, requestOptions).parse()
 
@@ -66,12 +66,12 @@ class NotificationServiceImpl internal constructor(private val clientOptions: Cl
         private val errorHandler: Handler<HttpResponse> =
             errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
-        private val checks: CheckService.WithRawResponse by lazy {
-            CheckServiceImpl.WithRawResponseImpl(clientOptions)
-        }
-
         private val draft: DraftService.WithRawResponse by lazy {
             DraftServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val checks: CheckService.WithRawResponse by lazy {
+            CheckServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
         override fun withOptions(
@@ -81,9 +81,9 @@ class NotificationServiceImpl internal constructor(private val clientOptions: Cl
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
-        override fun checks(): CheckService.WithRawResponse = checks
-
         override fun draft(): DraftService.WithRawResponse = draft
+
+        override fun checks(): CheckService.WithRawResponse = checks
 
         private val listHandler: Handler<NotificationListResponse> =
             jsonHandler<NotificationListResponse>(clientOptions.jsonMapper)
@@ -112,13 +112,13 @@ class NotificationServiceImpl internal constructor(private val clientOptions: Cl
             }
         }
 
-        private val retrieveContentHandler: Handler<NotificationContent> =
-            jsonHandler<NotificationContent>(clientOptions.jsonMapper)
+        private val retrieveContentHandler: Handler<NotificationGetContent> =
+            jsonHandler<NotificationGetContent>(clientOptions.jsonMapper)
 
         override fun retrieveContent(
             params: NotificationRetrieveContentParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<NotificationContent> {
+        ): HttpResponseFor<NotificationGetContent> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id().getOrNull())

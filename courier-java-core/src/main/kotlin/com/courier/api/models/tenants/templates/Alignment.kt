@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.api.models.send
+package com.courier.api.models.tenants.templates
 
 import com.courier.api.core.Enum
 import com.courier.api.core.JsonField

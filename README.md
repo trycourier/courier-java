@@ -1,25 +1,15 @@
 # Courier Java API Library
 
-<!-- x-release-please-start-version -->
-
 [![Maven Central](https://img.shields.io/maven-central/v/com.courier.api/courier-java)](https://central.sonatype.com/artifact/com.courier.api/courier-java/0.0.1)
 [![javadoc](https://javadoc.io/badge2/com.courier.api/courier-java/0.0.1/javadoc.svg)](https://javadoc.io/doc/com.courier.api/courier-java/0.0.1)
-
-<!-- x-release-please-end -->
 
 The Courier Java SDK provides convenient access to the Courier REST API from applications written in Java.
 
 It is generated with [Stainless](https://www.stainless.com/).
 
-<!-- x-release-please-start-version -->
-
 Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.courier.api/courier-java/0.0.1).
 
-<!-- x-release-please-end -->
-
 ## Installation
-
-<!-- x-release-please-start-version -->
 
 ### Gradle
 
@@ -37,8 +27,6 @@ implementation("com.courier.api:courier-java:0.0.1")
 </dependency>
 ```
 
-<!-- x-release-please-end -->
-
 ## Requirements
 
 This library requires Java 8 or later.
@@ -50,24 +38,24 @@ import com.courier.api.client.CourierClient;
 import com.courier.api.client.okhttp.CourierOkHttpClient;
 import com.courier.api.core.JsonValue;
 import com.courier.api.models.bulk.UserRecipient;
-import com.courier.api.models.send.SendMessageParams;
-import com.courier.api.models.send.SendMessageResponse;
+import com.courier.api.models.send.SendSendMessageParams;
+import com.courier.api.models.send.SendSendMessageResponse;
 
 // Configures using the `courier.apiKey` and `courier.baseUrl` system properties
 // Or configures using the `COURIER_API_KEY` and `COURIER_BASE_URL` environment variables
 CourierClient client = CourierOkHttpClient.fromEnv();
 
-SendMessageParams params = SendMessageParams.builder()
-    .message(SendMessageParams.Message.builder()
+SendSendMessageParams params = SendSendMessageParams.builder()
+    .message(SendSendMessageParams.Message.builder()
         .to(UserRecipient.builder()
             .userId("your_user_id")
             .build())
-        .data(SendMessageParams.Message.Data.builder()
+        .data(SendSendMessageParams.Message.Data.builder()
             .putAdditionalProperty("foo", JsonValue.from("bar"))
             .build())
         .build())
     .build();
-SendMessageResponse response = client.send().message(params);
+SendSendMessageResponse response = client.send().sendMessage(params);
 ```
 
 ## Client configuration
@@ -140,7 +128,7 @@ The `withOptions()` method does not affect the original client or service.
 
 To send a request to the Courier API, build an instance of some `Params` class and pass it to the corresponding client method. When the response is received, it will be deserialized into an instance of a Java class.
 
-For example, `client.send().message(...)` should be called with an instance of `SendMessageParams`, and it will return an instance of `SendMessageResponse`.
+For example, `client.send().sendMessage(...)` should be called with an instance of `SendSendMessageParams`, and it will return an instance of `SendSendMessageResponse`.
 
 ## Immutability
 
@@ -159,25 +147,25 @@ import com.courier.api.client.CourierClient;
 import com.courier.api.client.okhttp.CourierOkHttpClient;
 import com.courier.api.core.JsonValue;
 import com.courier.api.models.bulk.UserRecipient;
-import com.courier.api.models.send.SendMessageParams;
-import com.courier.api.models.send.SendMessageResponse;
+import com.courier.api.models.send.SendSendMessageParams;
+import com.courier.api.models.send.SendSendMessageResponse;
 import java.util.concurrent.CompletableFuture;
 
 // Configures using the `courier.apiKey` and `courier.baseUrl` system properties
 // Or configures using the `COURIER_API_KEY` and `COURIER_BASE_URL` environment variables
 CourierClient client = CourierOkHttpClient.fromEnv();
 
-SendMessageParams params = SendMessageParams.builder()
-    .message(SendMessageParams.Message.builder()
+SendSendMessageParams params = SendSendMessageParams.builder()
+    .message(SendSendMessageParams.Message.builder()
         .to(UserRecipient.builder()
             .userId("your_user_id")
             .build())
-        .data(SendMessageParams.Message.Data.builder()
+        .data(SendSendMessageParams.Message.Data.builder()
             .putAdditionalProperty("foo", JsonValue.from("bar"))
             .build())
         .build())
     .build();
-CompletableFuture<SendMessageResponse> response = client.async().send().message(params);
+CompletableFuture<SendSendMessageResponse> response = client.async().send().sendMessage(params);
 ```
 
 Or create an asynchronous client from the beginning:
@@ -187,25 +175,25 @@ import com.courier.api.client.CourierClientAsync;
 import com.courier.api.client.okhttp.CourierOkHttpClientAsync;
 import com.courier.api.core.JsonValue;
 import com.courier.api.models.bulk.UserRecipient;
-import com.courier.api.models.send.SendMessageParams;
-import com.courier.api.models.send.SendMessageResponse;
+import com.courier.api.models.send.SendSendMessageParams;
+import com.courier.api.models.send.SendSendMessageResponse;
 import java.util.concurrent.CompletableFuture;
 
 // Configures using the `courier.apiKey` and `courier.baseUrl` system properties
 // Or configures using the `COURIER_API_KEY` and `COURIER_BASE_URL` environment variables
 CourierClientAsync client = CourierOkHttpClientAsync.fromEnv();
 
-SendMessageParams params = SendMessageParams.builder()
-    .message(SendMessageParams.Message.builder()
+SendSendMessageParams params = SendSendMessageParams.builder()
+    .message(SendSendMessageParams.Message.builder()
         .to(UserRecipient.builder()
             .userId("your_user_id")
             .build())
-        .data(SendMessageParams.Message.Data.builder()
+        .data(SendSendMessageParams.Message.Data.builder()
             .putAdditionalProperty("foo", JsonValue.from("bar"))
             .build())
         .build())
     .build();
-CompletableFuture<SendMessageResponse> response = client.send().message(params);
+CompletableFuture<SendSendMessageResponse> response = client.send().sendMessage(params);
 ```
 
 The asynchronous client supports the same options as the synchronous one, except most methods return `CompletableFuture`s.
@@ -221,20 +209,20 @@ import com.courier.api.core.JsonValue;
 import com.courier.api.core.http.Headers;
 import com.courier.api.core.http.HttpResponseFor;
 import com.courier.api.models.bulk.UserRecipient;
-import com.courier.api.models.send.SendMessageParams;
-import com.courier.api.models.send.SendMessageResponse;
+import com.courier.api.models.send.SendSendMessageParams;
+import com.courier.api.models.send.SendSendMessageResponse;
 
-SendMessageParams params = SendMessageParams.builder()
-    .message(SendMessageParams.Message.builder()
+SendSendMessageParams params = SendSendMessageParams.builder()
+    .message(SendSendMessageParams.Message.builder()
         .to(UserRecipient.builder()
             .userId("your_user_id")
             .build())
-        .data(SendMessageParams.Message.Data.builder()
+        .data(SendSendMessageParams.Message.Data.builder()
             .putAdditionalProperty("foo", JsonValue.from("bar"))
             .build())
         .build())
     .build();
-HttpResponseFor<SendMessageResponse> response = client.send().withRawResponse().message(params);
+HttpResponseFor<SendSendMessageResponse> response = client.send().withRawResponse().sendMessage(params);
 
 int statusCode = response.statusCode();
 Headers headers = response.headers();
@@ -243,9 +231,9 @@ Headers headers = response.headers();
 You can still deserialize the response into an instance of a Java class if needed:
 
 ```java
-import com.courier.api.models.send.SendMessageResponse;
+import com.courier.api.models.send.SendSendMessageResponse;
 
-SendMessageResponse parsedResponse = response.parse();
+SendSendMessageResponse parsedResponse = response.parse();
 ```
 
 ## Error handling
@@ -341,9 +329,9 @@ Requests time out after 1 minute by default.
 To set a custom timeout, configure the method call using the `timeout` method:
 
 ```java
-import com.courier.api.models.send.SendMessageResponse;
+import com.courier.api.models.send.SendSendMessageResponse;
 
-SendMessageResponse response = client.send().message(
+SendSendMessageResponse response = client.send().sendMessage(
   params, RequestOptions.builder().timeout(Duration.ofSeconds(30)).build()
 );
 ```
@@ -448,9 +436,9 @@ To set undocumented parameters, call the `putAdditionalHeader`, `putAdditionalQu
 
 ```java
 import com.courier.api.core.JsonValue;
-import com.courier.api.models.send.SendMessageParams;
+import com.courier.api.models.send.SendSendMessageParams;
 
-SendMessageParams params = SendMessageParams.builder()
+SendSendMessageParams params = SendSendMessageParams.builder()
     .putAdditionalHeader("Secret-Header", "42")
     .putAdditionalQueryParam("secret_query_param", "42")
     .putAdditionalBodyProperty("secretProperty", JsonValue.from("42"))
@@ -463,10 +451,10 @@ To set undocumented parameters on _nested_ headers, query params, or body classe
 
 ```java
 import com.courier.api.core.JsonValue;
-import com.courier.api.models.send.SendMessageParams;
+import com.courier.api.models.send.SendSendMessageParams;
 
-SendMessageParams params = SendMessageParams.builder()
-    .message(SendMessageParams.Message.builder()
+SendSendMessageParams params = SendSendMessageParams.builder()
+    .message(SendSendMessageParams.Message.builder()
         .putAdditionalProperty("secretProperty", JsonValue.from("42"))
         .build())
     .build();
@@ -478,9 +466,9 @@ To set a documented parameter or property to an undocumented or not yet supporte
 
 ```java
 import com.courier.api.core.JsonValue;
-import com.courier.api.models.send.SendMessageParams;
+import com.courier.api.models.send.SendSendMessageParams;
 
-SendMessageParams params = SendMessageParams.builder()
+SendSendMessageParams params = SendSendMessageParams.builder()
     .message(JsonValue.from(42))
     .build();
 ```
@@ -530,9 +518,9 @@ To forcibly omit a required parameter or property, pass [`JsonMissing`](courier-
 
 ```java
 import com.courier.api.core.JsonMissing;
-import com.courier.api.models.send.SendMessageParams;
+import com.courier.api.models.send.SendSendMessageParams;
 
-SendMessageParams params = SendMessageParams.builder()
+SendSendMessageParams params = SendSendMessageParams.builder()
     .message(JsonMissing.of())
     .build();
 ```
@@ -545,7 +533,7 @@ To access undocumented response properties, call the `_additionalProperties()` m
 import com.courier.api.core.JsonValue;
 import java.util.Map;
 
-Map<String, JsonValue> additionalProperties = client.send().message(params)._additionalProperties();
+Map<String, JsonValue> additionalProperties = client.send().sendMessage(params)._additionalProperties();
 JsonValue secretPropertyValue = additionalProperties.get("secretProperty");
 
 String result = secretPropertyValue.accept(new JsonValue.Visitor<>() {
@@ -573,10 +561,10 @@ To access a property's raw JSON value, which may be undocumented, call its `_` p
 
 ```java
 import com.courier.api.core.JsonField;
-import com.courier.api.models.send.SendMessageParams;
+import com.courier.api.models.send.SendSendMessageParams;
 import java.util.Optional;
 
-JsonField<SendMessageParams.Message> message = client.send().message(params)._message();
+JsonField<SendSendMessageParams.Message> message = client.send().sendMessage(params)._message();
 
 if (message.isMissing()) {
   // The property is absent from the JSON response
@@ -601,17 +589,17 @@ By default, the SDK will not throw an exception in this case. It will throw [`Co
 If you would prefer to check that the response is completely well-typed upfront, then either call `validate()`:
 
 ```java
-import com.courier.api.models.send.SendMessageResponse;
+import com.courier.api.models.send.SendSendMessageResponse;
 
-SendMessageResponse response = client.send().message(params).validate();
+SendSendMessageResponse response = client.send().sendMessage(params).validate();
 ```
 
 Or configure the method call to validate the response using the `responseValidation` method:
 
 ```java
-import com.courier.api.models.send.SendMessageResponse;
+import com.courier.api.models.send.SendSendMessageResponse;
 
-SendMessageResponse response = client.send().message(
+SendSendMessageResponse response = client.send().sendMessage(
   params, RequestOptions.builder().responseValidation(true).build()
 );
 ```
@@ -666,4 +654,4 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/trycourier/courier-java/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/courier-java/issues) with questions, bugs, or suggestions.

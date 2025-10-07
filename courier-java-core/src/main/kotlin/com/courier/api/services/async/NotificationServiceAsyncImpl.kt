@@ -15,7 +15,7 @@ import com.courier.api.core.http.HttpResponse.Handler
 import com.courier.api.core.http.HttpResponseFor
 import com.courier.api.core.http.parseable
 import com.courier.api.core.prepareAsync
-import com.courier.api.models.notifications.NotificationContent
+import com.courier.api.models.notifications.NotificationGetContent
 import com.courier.api.models.notifications.NotificationListParams
 import com.courier.api.models.notifications.NotificationListResponse
 import com.courier.api.models.notifications.NotificationRetrieveContentParams
@@ -34,18 +34,18 @@ class NotificationServiceAsyncImpl internal constructor(private val clientOption
         WithRawResponseImpl(clientOptions)
     }
 
-    private val checks: CheckServiceAsync by lazy { CheckServiceAsyncImpl(clientOptions) }
-
     private val draft: DraftServiceAsync by lazy { DraftServiceAsyncImpl(clientOptions) }
+
+    private val checks: CheckServiceAsync by lazy { CheckServiceAsyncImpl(clientOptions) }
 
     override fun withRawResponse(): NotificationServiceAsync.WithRawResponse = withRawResponse
 
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): NotificationServiceAsync =
         NotificationServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
-    override fun checks(): CheckServiceAsync = checks
-
     override fun draft(): DraftServiceAsync = draft
+
+    override fun checks(): CheckServiceAsync = checks
 
     override fun list(
         params: NotificationListParams,
@@ -57,7 +57,7 @@ class NotificationServiceAsyncImpl internal constructor(private val clientOption
     override fun retrieveContent(
         params: NotificationRetrieveContentParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<NotificationContent> =
+    ): CompletableFuture<NotificationGetContent> =
         // get /notifications/{id}/content
         withRawResponse().retrieveContent(params, requestOptions).thenApply { it.parse() }
 
@@ -67,12 +67,12 @@ class NotificationServiceAsyncImpl internal constructor(private val clientOption
         private val errorHandler: Handler<HttpResponse> =
             errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
-        private val checks: CheckServiceAsync.WithRawResponse by lazy {
-            CheckServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
-
         private val draft: DraftServiceAsync.WithRawResponse by lazy {
             DraftServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val checks: CheckServiceAsync.WithRawResponse by lazy {
+            CheckServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
         override fun withOptions(
@@ -82,9 +82,9 @@ class NotificationServiceAsyncImpl internal constructor(private val clientOption
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
-        override fun checks(): CheckServiceAsync.WithRawResponse = checks
-
         override fun draft(): DraftServiceAsync.WithRawResponse = draft
+
+        override fun checks(): CheckServiceAsync.WithRawResponse = checks
 
         private val listHandler: Handler<NotificationListResponse> =
             jsonHandler<NotificationListResponse>(clientOptions.jsonMapper)
@@ -116,13 +116,13 @@ class NotificationServiceAsyncImpl internal constructor(private val clientOption
                 }
         }
 
-        private val retrieveContentHandler: Handler<NotificationContent> =
-            jsonHandler<NotificationContent>(clientOptions.jsonMapper)
+        private val retrieveContentHandler: Handler<NotificationGetContent> =
+            jsonHandler<NotificationGetContent>(clientOptions.jsonMapper)
 
         override fun retrieveContent(
             params: NotificationRetrieveContentParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<NotificationContent>> {
+        ): CompletableFuture<HttpResponseFor<NotificationGetContent>> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id().getOrNull())

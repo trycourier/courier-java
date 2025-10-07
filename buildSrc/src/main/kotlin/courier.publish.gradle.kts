@@ -11,7 +11,7 @@ configure<PublishingExtension> {
             pom {
                 name.set("Courier")
                 description.set("An SDK library for courier")
-                url.set("https://www.github.com/trycourier/courier-java")
+                url.set("https://www.github.com/stainless-sdks/courier-java")
 
                 licenses {
                     license {
@@ -26,9 +26,9 @@ configure<PublishingExtension> {
                 }
 
                 scm {
-                    connection.set("scm:git:git://github.com/trycourier/courier-java.git")
-                    developerConnection.set("scm:git:git://github.com/trycourier/courier-java.git")
-                    url.set("https://github.com/trycourier/courier-java")
+                    connection.set("scm:git:git://github.com/stainless-sdks/courier-java.git")
+                    developerConnection.set("scm:git:git://github.com/stainless-sdks/courier-java.git")
+                    url.set("https://github.com/stainless-sdks/courier-java")
                 }
 
                 versionMapping {

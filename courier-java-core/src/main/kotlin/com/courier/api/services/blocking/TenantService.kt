@@ -33,9 +33,9 @@ interface TenantService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): TenantService
 
-    fun templates(): TemplateService
-
     fun defaultPreferences(): DefaultPreferenceService
+
+    fun templates(): TemplateService
 
     /** Get a Tenant */
     fun retrieve(tenantId: String): Tenant = retrieve(tenantId, TenantRetrieveParams.none())
@@ -169,9 +169,9 @@ interface TenantService {
          */
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): TenantService.WithRawResponse
 
-        fun templates(): TemplateService.WithRawResponse
-
         fun defaultPreferences(): DefaultPreferenceService.WithRawResponse
+
+        fun templates(): TemplateService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `get /tenants/{tenant_id}`, but is otherwise the same as

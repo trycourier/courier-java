@@ -15,7 +15,7 @@ import com.courier.api.core.http.HttpResponse.Handler
 import com.courier.api.core.http.HttpResponseFor
 import com.courier.api.core.http.parseable
 import com.courier.api.core.prepareAsync
-import com.courier.api.models.notifications.NotificationContent
+import com.courier.api.models.notifications.NotificationGetContent
 import com.courier.api.models.notifications.draft.DraftRetrieveContentParams
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
@@ -36,7 +36,7 @@ class DraftServiceAsyncImpl internal constructor(private val clientOptions: Clie
     override fun retrieveContent(
         params: DraftRetrieveContentParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<NotificationContent> =
+    ): CompletableFuture<NotificationGetContent> =
         // get /notifications/{id}/draft/content
         withRawResponse().retrieveContent(params, requestOptions).thenApply { it.parse() }
 
@@ -53,13 +53,13 @@ class DraftServiceAsyncImpl internal constructor(private val clientOptions: Clie
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
-        private val retrieveContentHandler: Handler<NotificationContent> =
-            jsonHandler<NotificationContent>(clientOptions.jsonMapper)
+        private val retrieveContentHandler: Handler<NotificationGetContent> =
+            jsonHandler<NotificationGetContent>(clientOptions.jsonMapper)
 
         override fun retrieveContent(
             params: DraftRetrieveContentParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<NotificationContent>> {
+        ): CompletableFuture<HttpResponseFor<NotificationGetContent>> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id().getOrNull())

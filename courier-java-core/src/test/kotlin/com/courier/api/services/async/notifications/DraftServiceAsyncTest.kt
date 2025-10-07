@@ -21,9 +21,9 @@ internal class DraftServiceAsyncTest {
                 .build()
         val draftServiceAsync = client.notifications().draft()
 
-        val notificationContentFuture = draftServiceAsync.retrieveContent("id")
+        val notificationGetContentFuture = draftServiceAsync.retrieveContent("id")
 
-        val notificationContent = notificationContentFuture.get()
-        notificationContent.validate()
+        val notificationGetContent = notificationGetContentFuture.get()
+        notificationGetContent.validate()
     }
 }

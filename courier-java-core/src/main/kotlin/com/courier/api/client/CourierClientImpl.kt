@@ -57,19 +57,15 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
 
     private val send: SendService by lazy { SendServiceImpl(clientOptionsWithUserAgent) }
 
-    private val tenants: TenantService by lazy { TenantServiceImpl(clientOptionsWithUserAgent) }
-
     private val audiences: AudienceService by lazy {
         AudienceServiceImpl(clientOptionsWithUserAgent)
     }
 
-    private val bulk: BulkService by lazy { BulkServiceImpl(clientOptionsWithUserAgent) }
-
-    private val users: UserService by lazy { UserServiceImpl(clientOptionsWithUserAgent) }
-
     private val auditEvents: AuditEventService by lazy {
         AuditEventServiceImpl(clientOptionsWithUserAgent)
     }
+
+    private val auth: AuthService by lazy { AuthServiceImpl(clientOptionsWithUserAgent) }
 
     private val automations: AutomationService by lazy {
         AutomationServiceImpl(clientOptionsWithUserAgent)
@@ -77,25 +73,29 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
 
     private val brands: BrandService by lazy { BrandServiceImpl(clientOptionsWithUserAgent) }
 
+    private val bulk: BulkService by lazy { BulkServiceImpl(clientOptionsWithUserAgent) }
+
+    private val inbound: InboundService by lazy { InboundServiceImpl(clientOptionsWithUserAgent) }
+
     private val lists: ListService by lazy { ListServiceImpl(clientOptionsWithUserAgent) }
 
     private val messages: MessageService by lazy { MessageServiceImpl(clientOptionsWithUserAgent) }
+
+    private val requests: RequestService by lazy { RequestServiceImpl(clientOptionsWithUserAgent) }
 
     private val notifications: NotificationService by lazy {
         NotificationServiceImpl(clientOptionsWithUserAgent)
     }
 
-    private val auth: AuthService by lazy { AuthServiceImpl(clientOptionsWithUserAgent) }
-
-    private val inbound: InboundService by lazy { InboundServiceImpl(clientOptionsWithUserAgent) }
-
-    private val requests: RequestService by lazy { RequestServiceImpl(clientOptionsWithUserAgent) }
-
     private val profiles: ProfileService by lazy { ProfileServiceImpl(clientOptionsWithUserAgent) }
+
+    private val tenants: TenantService by lazy { TenantServiceImpl(clientOptionsWithUserAgent) }
 
     private val translations: TranslationService by lazy {
         TranslationServiceImpl(clientOptionsWithUserAgent)
     }
+
+    private val users: UserService by lazy { UserServiceImpl(clientOptionsWithUserAgent) }
 
     override fun async(): CourierClientAsync = async
 
@@ -106,35 +106,35 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
 
     override fun send(): SendService = send
 
-    override fun tenants(): TenantService = tenants
-
     override fun audiences(): AudienceService = audiences
 
-    override fun bulk(): BulkService = bulk
-
-    override fun users(): UserService = users
-
     override fun auditEvents(): AuditEventService = auditEvents
+
+    override fun auth(): AuthService = auth
 
     override fun automations(): AutomationService = automations
 
     override fun brands(): BrandService = brands
 
+    override fun bulk(): BulkService = bulk
+
+    override fun inbound(): InboundService = inbound
+
     override fun lists(): ListService = lists
 
     override fun messages(): MessageService = messages
 
-    override fun notifications(): NotificationService = notifications
-
-    override fun auth(): AuthService = auth
-
-    override fun inbound(): InboundService = inbound
-
     override fun requests(): RequestService = requests
+
+    override fun notifications(): NotificationService = notifications
 
     override fun profiles(): ProfileService = profiles
 
+    override fun tenants(): TenantService = tenants
+
     override fun translations(): TranslationService = translations
+
+    override fun users(): UserService = users
 
     override fun close() = clientOptions.close()
 
@@ -145,24 +145,16 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
             SendServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
-        private val tenants: TenantService.WithRawResponse by lazy {
-            TenantServiceImpl.WithRawResponseImpl(clientOptions)
-        }
-
         private val audiences: AudienceService.WithRawResponse by lazy {
             AudienceServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
-        private val bulk: BulkService.WithRawResponse by lazy {
-            BulkServiceImpl.WithRawResponseImpl(clientOptions)
-        }
-
-        private val users: UserService.WithRawResponse by lazy {
-            UserServiceImpl.WithRawResponseImpl(clientOptions)
-        }
-
         private val auditEvents: AuditEventService.WithRawResponse by lazy {
             AuditEventServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val auth: AuthService.WithRawResponse by lazy {
+            AuthServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
         private val automations: AutomationService.WithRawResponse by lazy {
@@ -173,6 +165,14 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
             BrandServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val bulk: BulkService.WithRawResponse by lazy {
+            BulkServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val inbound: InboundService.WithRawResponse by lazy {
+            InboundServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
         private val lists: ListService.WithRawResponse by lazy {
             ListServiceImpl.WithRawResponseImpl(clientOptions)
         }
@@ -181,28 +181,28 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
             MessageServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
-        private val notifications: NotificationService.WithRawResponse by lazy {
-            NotificationServiceImpl.WithRawResponseImpl(clientOptions)
-        }
-
-        private val auth: AuthService.WithRawResponse by lazy {
-            AuthServiceImpl.WithRawResponseImpl(clientOptions)
-        }
-
-        private val inbound: InboundService.WithRawResponse by lazy {
-            InboundServiceImpl.WithRawResponseImpl(clientOptions)
-        }
-
         private val requests: RequestService.WithRawResponse by lazy {
             RequestServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val notifications: NotificationService.WithRawResponse by lazy {
+            NotificationServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
         private val profiles: ProfileService.WithRawResponse by lazy {
             ProfileServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val tenants: TenantService.WithRawResponse by lazy {
+            TenantServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
         private val translations: TranslationService.WithRawResponse by lazy {
             TranslationServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val users: UserService.WithRawResponse by lazy {
+            UserServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
         override fun withOptions(
@@ -214,34 +214,34 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
 
         override fun send(): SendService.WithRawResponse = send
 
-        override fun tenants(): TenantService.WithRawResponse = tenants
-
         override fun audiences(): AudienceService.WithRawResponse = audiences
 
-        override fun bulk(): BulkService.WithRawResponse = bulk
-
-        override fun users(): UserService.WithRawResponse = users
-
         override fun auditEvents(): AuditEventService.WithRawResponse = auditEvents
+
+        override fun auth(): AuthService.WithRawResponse = auth
 
         override fun automations(): AutomationService.WithRawResponse = automations
 
         override fun brands(): BrandService.WithRawResponse = brands
 
+        override fun bulk(): BulkService.WithRawResponse = bulk
+
+        override fun inbound(): InboundService.WithRawResponse = inbound
+
         override fun lists(): ListService.WithRawResponse = lists
 
         override fun messages(): MessageService.WithRawResponse = messages
 
-        override fun notifications(): NotificationService.WithRawResponse = notifications
-
-        override fun auth(): AuthService.WithRawResponse = auth
-
-        override fun inbound(): InboundService.WithRawResponse = inbound
-
         override fun requests(): RequestService.WithRawResponse = requests
+
+        override fun notifications(): NotificationService.WithRawResponse = notifications
 
         override fun profiles(): ProfileService.WithRawResponse = profiles
 
+        override fun tenants(): TenantService.WithRawResponse = tenants
+
         override fun translations(): TranslationService.WithRawResponse = translations
+
+        override fun users(): UserService.WithRawResponse = users
     }
 }
