@@ -19,9 +19,10 @@ import com.courier.api.core.http.QueryParams
 import com.courier.api.core.toImmutable
 import com.courier.api.errors.CourierInvalidDataException
 import com.courier.api.models.ElementalContentSugar
+import com.courier.api.models.ListRecipient
 import com.courier.api.models.MessageRouting
 import com.courier.api.models.MessageRoutingChannel
-import com.courier.api.models.bulk.UserRecipient
+import com.courier.api.models.UserRecipient
 import com.courier.api.models.tenants.templates.ElementalContent
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -967,6 +968,9 @@ private constructor(
 
             /** Alias for calling [to] with `To.ofUserRecipient(userRecipient)`. */
             fun to(userRecipient: UserRecipient) = to(To.ofUserRecipient(userRecipient))
+
+            /** Alias for calling [to] with `To.ofListRecipient(listRecipient)`. */
+            fun to(listRecipient: ListRecipient) = to(To.ofListRecipient(listRecipient))
 
             /** Alias for calling [to] with `To.ofRecipients(recipients)`. */
             fun toOfRecipients(recipients: List<Recipient>) = to(To.ofRecipients(recipients))
@@ -3663,19 +3667,26 @@ private constructor(
         class To
         private constructor(
             private val userRecipient: UserRecipient? = null,
+            private val listRecipient: ListRecipient? = null,
             private val recipients: List<Recipient>? = null,
             private val _json: JsonValue? = null,
         ) {
 
             fun userRecipient(): Optional<UserRecipient> = Optional.ofNullable(userRecipient)
 
+            fun listRecipient(): Optional<ListRecipient> = Optional.ofNullable(listRecipient)
+
             fun recipients(): Optional<List<Recipient>> = Optional.ofNullable(recipients)
 
             fun isUserRecipient(): Boolean = userRecipient != null
 
+            fun isListRecipient(): Boolean = listRecipient != null
+
             fun isRecipients(): Boolean = recipients != null
 
             fun asUserRecipient(): UserRecipient = userRecipient.getOrThrow("userRecipient")
+
+            fun asListRecipient(): ListRecipient = listRecipient.getOrThrow("listRecipient")
 
             fun asRecipients(): List<Recipient> = recipients.getOrThrow("recipients")
 
@@ -3684,6 +3695,7 @@ private constructor(
             fun <T> accept(visitor: Visitor<T>): T =
                 when {
                     userRecipient != null -> visitor.visitUserRecipient(userRecipient)
+                    listRecipient != null -> visitor.visitListRecipient(listRecipient)
                     recipients != null -> visitor.visitRecipients(recipients)
                     else -> visitor.unknown(_json)
                 }
@@ -3699,6 +3711,10 @@ private constructor(
                     object : Visitor<Unit> {
                         override fun visitUserRecipient(userRecipient: UserRecipient) {
                             userRecipient.validate()
+                        }
+
+                        override fun visitListRecipient(listRecipient: ListRecipient) {
+                            listRecipient.validate()
                         }
 
                         override fun visitRecipients(recipients: List<Recipient>) {
@@ -3730,6 +3746,9 @@ private constructor(
                         override fun visitUserRecipient(userRecipient: UserRecipient) =
                             userRecipient.validity()
 
+                        override fun visitListRecipient(listRecipient: ListRecipient) =
+                            listRecipient.validity()
+
                         override fun visitRecipients(recipients: List<Recipient>) =
                             recipients.sumOf { it.validity().toInt() }
 
@@ -3744,14 +3763,16 @@ private constructor(
 
                 return other is To &&
                     userRecipient == other.userRecipient &&
+                    listRecipient == other.listRecipient &&
                     recipients == other.recipients
             }
 
-            override fun hashCode(): Int = Objects.hash(userRecipient, recipients)
+            override fun hashCode(): Int = Objects.hash(userRecipient, listRecipient, recipients)
 
             override fun toString(): String =
                 when {
                     userRecipient != null -> "To{userRecipient=$userRecipient}"
+                    listRecipient != null -> "To{listRecipient=$listRecipient}"
                     recipients != null -> "To{recipients=$recipients}"
                     _json != null -> "To{_unknown=$_json}"
                     else -> throw IllegalStateException("Invalid To")
@@ -3764,6 +3785,10 @@ private constructor(
                     To(userRecipient = userRecipient)
 
                 @JvmStatic
+                fun ofListRecipient(listRecipient: ListRecipient) =
+                    To(listRecipient = listRecipient)
+
+                @JvmStatic
                 fun ofRecipients(recipients: List<Recipient>) =
                     To(recipients = recipients.toImmutable())
             }
@@ -3772,6 +3797,8 @@ private constructor(
             interface Visitor<out T> {
 
                 fun visitUserRecipient(userRecipient: UserRecipient): T
+
+                fun visitListRecipient(listRecipient: ListRecipient): T
 
                 fun visitRecipients(recipients: List<Recipient>): T
 
@@ -3799,6 +3826,9 @@ private constructor(
                         sequenceOf(
                                 tryDeserialize(node, jacksonTypeRef<UserRecipient>())?.let {
                                     To(userRecipient = it, _json = json)
+                                },
+                                tryDeserialize(node, jacksonTypeRef<ListRecipient>())?.let {
+                                    To(listRecipient = it, _json = json)
                                 },
                                 tryDeserialize(node, jacksonTypeRef<List<Recipient>>())?.let {
                                     To(recipients = it, _json = json)
@@ -3829,6 +3859,7 @@ private constructor(
                 ) {
                     when {
                         value.userRecipient != null -> generator.writeObject(value.userRecipient)
+                        value.listRecipient != null -> generator.writeObject(value.listRecipient)
                         value.recipients != null -> generator.writeObject(value.recipients)
                         value._json != null -> generator.writeObject(value._json)
                         else -> throw IllegalStateException("Invalid To")

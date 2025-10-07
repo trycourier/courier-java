@@ -4,6 +4,7 @@ package com.courier.api.models.bulk
 
 import com.courier.api.core.JsonValue
 import com.courier.api.core.jsonMapper
+import com.courier.api.models.UserRecipient
 import com.courier.api.models.lists.subscriptions.RecipientPreferences
 import com.courier.api.models.send.MessageContext
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
