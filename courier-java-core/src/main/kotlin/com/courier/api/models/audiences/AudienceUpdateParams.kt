@@ -39,7 +39,7 @@ private constructor(
     fun description(): Optional<String> = body.description()
 
     /**
-     * The operator to use for filtering
+     * A single filter to use for filtering
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -140,7 +140,7 @@ private constructor(
          */
         fun description(description: JsonField<String>) = apply { body.description(description) }
 
-        /** The operator to use for filtering */
+        /** A single filter to use for filtering */
         fun filter(filter: Filter?) = apply { body.filter(filter) }
 
         /** Alias for calling [Builder.filter] with `filter.orElse(null)`. */
@@ -153,14 +153,6 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun filter(filter: JsonField<Filter>) = apply { body.filter(filter) }
-
-        /** Alias for calling [filter] with `Filter.ofUnionMember0(unionMember0)`. */
-        fun filter(unionMember0: Filter.UnionMember0) = apply { body.filter(unionMember0) }
-
-        /** Alias for calling [filter] with `Filter.ofNestedFilterConfig(nestedFilterConfig)`. */
-        fun filter(nestedFilterConfig: NestedFilterConfig) = apply {
-            body.filter(nestedFilterConfig)
-        }
 
         /** The name of the audience */
         fun name(name: String?) = apply { body.name(name) }
@@ -346,7 +338,7 @@ private constructor(
         fun description(): Optional<String> = description.getOptional("description")
 
         /**
-         * The operator to use for filtering
+         * A single filter to use for filtering
          *
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -435,7 +427,7 @@ private constructor(
                 this.description = description
             }
 
-            /** The operator to use for filtering */
+            /** A single filter to use for filtering */
             fun filter(filter: Filter?) = filter(JsonField.ofNullable(filter))
 
             /** Alias for calling [Builder.filter] with `filter.orElse(null)`. */
@@ -449,16 +441,6 @@ private constructor(
              * supported value.
              */
             fun filter(filter: JsonField<Filter>) = apply { this.filter = filter }
-
-            /** Alias for calling [filter] with `Filter.ofUnionMember0(unionMember0)`. */
-            fun filter(unionMember0: Filter.UnionMember0) =
-                filter(Filter.ofUnionMember0(unionMember0))
-
-            /**
-             * Alias for calling [filter] with `Filter.ofNestedFilterConfig(nestedFilterConfig)`.
-             */
-            fun filter(nestedFilterConfig: NestedFilterConfig) =
-                filter(Filter.ofNestedFilterConfig(nestedFilterConfig))
 
             /** The name of the audience */
             fun name(name: String?) = name(JsonField.ofNullable(name))
