@@ -15,7 +15,6 @@ import com.courier.api.core.checkRequired
 import com.courier.api.core.getOrThrow
 import com.courier.api.core.toImmutable
 import com.courier.api.errors.CourierInvalidDataException
-import com.courier.api.models.Alignment
 import com.courier.api.models.ElementalBaseNode
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -2227,100 +2226,51 @@ private constructor(
     class UnionMember4
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
-        private val actionId: JsonField<String>,
-        private val align: JsonField<Alignment>,
-        private val backgroundColor: JsonField<String>,
-        private val content: JsonField<String>,
-        private val href: JsonField<String>,
-        private val locales: JsonField<Locales>,
-        private val style: JsonField<Style>,
+        private val channels: JsonField<List<String>>,
+        private val if_: JsonField<String>,
+        private val loop: JsonField<String>,
+        private val ref: JsonField<String>,
         private val type: JsonField<Type>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
         @JsonCreator
         private constructor(
-            @JsonProperty("action_id")
+            @JsonProperty("channels")
             @ExcludeMissing
-            actionId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("align") @ExcludeMissing align: JsonField<Alignment> = JsonMissing.of(),
-            @JsonProperty("background_color")
-            @ExcludeMissing
-            backgroundColor: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("content") @ExcludeMissing content: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("href") @ExcludeMissing href: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("locales") @ExcludeMissing locales: JsonField<Locales> = JsonMissing.of(),
-            @JsonProperty("style") @ExcludeMissing style: JsonField<Style> = JsonMissing.of(),
+            channels: JsonField<List<String>> = JsonMissing.of(),
+            @JsonProperty("if") @ExcludeMissing if_: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("loop") @ExcludeMissing loop: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("ref") @ExcludeMissing ref: JsonField<String> = JsonMissing.of(),
             @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
-        ) : this(
-            actionId,
-            align,
-            backgroundColor,
-            content,
-            href,
-            locales,
-            style,
-            type,
-            mutableMapOf(),
-        )
+        ) : this(channels, if_, loop, ref, type, mutableMapOf())
+
+        fun toElementalBaseNode(): ElementalBaseNode =
+            ElementalBaseNode.builder().channels(channels).if_(if_).loop(loop).ref(ref).build()
 
         /**
-         * A unique id used to identify the action when it is executed.
-         *
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun actionId(): Optional<String> = actionId.getOptional("action_id")
+        fun channels(): Optional<List<String>> = channels.getOptional("channels")
 
         /**
-         * The alignment of the action button. Defaults to "center".
-         *
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun align(): Optional<Alignment> = align.getOptional("align")
+        fun if_(): Optional<String> = if_.getOptional("if")
 
         /**
-         * The background color of the action button.
-         *
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun backgroundColor(): Optional<String> = backgroundColor.getOptional("background_color")
+        fun loop(): Optional<String> = loop.getOptional("loop")
 
         /**
-         * The text content of the action shown to the user.
-         *
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun content(): Optional<String> = content.getOptional("content")
-
-        /**
-         * The target URL of the action.
-         *
-         * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun href(): Optional<String> = href.getOptional("href")
-
-        /**
-         * Region specific content. See
-         * [locales docs](https://www.courier.com/docs/platform/content/elemental/locales/) for more
-         * details.
-         *
-         * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun locales(): Optional<Locales> = locales.getOptional("locales")
-
-        /**
-         * Defaults to `button`.
-         *
-         * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun style(): Optional<Style> = style.getOptional("style")
+        fun ref(): Optional<String> = ref.getOptional("ref")
 
         /**
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -2329,56 +2279,34 @@ private constructor(
         fun type(): Optional<Type> = type.getOptional("type")
 
         /**
-         * Returns the raw JSON value of [actionId].
+         * Returns the raw JSON value of [channels].
          *
-         * Unlike [actionId], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [channels], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("action_id") @ExcludeMissing fun _actionId(): JsonField<String> = actionId
-
-        /**
-         * Returns the raw JSON value of [align].
-         *
-         * Unlike [align], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("align") @ExcludeMissing fun _align(): JsonField<Alignment> = align
-
-        /**
-         * Returns the raw JSON value of [backgroundColor].
-         *
-         * Unlike [backgroundColor], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("background_color")
+        @JsonProperty("channels")
         @ExcludeMissing
-        fun _backgroundColor(): JsonField<String> = backgroundColor
+        fun _channels(): JsonField<List<String>> = channels
 
         /**
-         * Returns the raw JSON value of [content].
+         * Returns the raw JSON value of [if_].
          *
-         * Unlike [content], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [if_], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("content") @ExcludeMissing fun _content(): JsonField<String> = content
+        @JsonProperty("if") @ExcludeMissing fun _if_(): JsonField<String> = if_
 
         /**
-         * Returns the raw JSON value of [href].
+         * Returns the raw JSON value of [loop].
          *
-         * Unlike [href], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [loop], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("href") @ExcludeMissing fun _href(): JsonField<String> = href
+        @JsonProperty("loop") @ExcludeMissing fun _loop(): JsonField<String> = loop
 
         /**
-         * Returns the raw JSON value of [locales].
+         * Returns the raw JSON value of [ref].
          *
-         * Unlike [locales], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [ref], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("locales") @ExcludeMissing fun _locales(): JsonField<Locales> = locales
-
-        /**
-         * Returns the raw JSON value of [style].
-         *
-         * Unlike [style], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("style") @ExcludeMissing fun _style(): JsonField<Style> = style
+        @JsonProperty("ref") @ExcludeMissing fun _ref(): JsonField<String> = ref
 
         /**
          * Returns the raw JSON value of [type].
@@ -2408,135 +2336,92 @@ private constructor(
         /** A builder for [UnionMember4]. */
         class Builder internal constructor() {
 
-            private var actionId: JsonField<String> = JsonMissing.of()
-            private var align: JsonField<Alignment> = JsonMissing.of()
-            private var backgroundColor: JsonField<String> = JsonMissing.of()
-            private var content: JsonField<String> = JsonMissing.of()
-            private var href: JsonField<String> = JsonMissing.of()
-            private var locales: JsonField<Locales> = JsonMissing.of()
-            private var style: JsonField<Style> = JsonMissing.of()
+            private var channels: JsonField<MutableList<String>>? = null
+            private var if_: JsonField<String> = JsonMissing.of()
+            private var loop: JsonField<String> = JsonMissing.of()
+            private var ref: JsonField<String> = JsonMissing.of()
             private var type: JsonField<Type> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(unionMember4: UnionMember4) = apply {
-                actionId = unionMember4.actionId
-                align = unionMember4.align
-                backgroundColor = unionMember4.backgroundColor
-                content = unionMember4.content
-                href = unionMember4.href
-                locales = unionMember4.locales
-                style = unionMember4.style
+                channels = unionMember4.channels.map { it.toMutableList() }
+                if_ = unionMember4.if_
+                loop = unionMember4.loop
+                ref = unionMember4.ref
                 type = unionMember4.type
                 additionalProperties = unionMember4.additionalProperties.toMutableMap()
             }
 
-            /** A unique id used to identify the action when it is executed. */
-            fun actionId(actionId: String?) = actionId(JsonField.ofNullable(actionId))
+            fun channels(channels: List<String>?) = channels(JsonField.ofNullable(channels))
 
-            /** Alias for calling [Builder.actionId] with `actionId.orElse(null)`. */
-            fun actionId(actionId: Optional<String>) = actionId(actionId.getOrNull())
-
-            /**
-             * Sets [Builder.actionId] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.actionId] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun actionId(actionId: JsonField<String>) = apply { this.actionId = actionId }
-
-            /** The alignment of the action button. Defaults to "center". */
-            fun align(align: Alignment?) = align(JsonField.ofNullable(align))
-
-            /** Alias for calling [Builder.align] with `align.orElse(null)`. */
-            fun align(align: Optional<Alignment>) = align(align.getOrNull())
+            /** Alias for calling [Builder.channels] with `channels.orElse(null)`. */
+            fun channels(channels: Optional<List<String>>) = channels(channels.getOrNull())
 
             /**
-             * Sets [Builder.align] to an arbitrary JSON value.
+             * Sets [Builder.channels] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.align] with a well-typed [Alignment] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun align(align: JsonField<Alignment>) = apply { this.align = align }
-
-            /** The background color of the action button. */
-            fun backgroundColor(backgroundColor: String?) =
-                backgroundColor(JsonField.ofNullable(backgroundColor))
-
-            /** Alias for calling [Builder.backgroundColor] with `backgroundColor.orElse(null)`. */
-            fun backgroundColor(backgroundColor: Optional<String>) =
-                backgroundColor(backgroundColor.getOrNull())
-
-            /**
-             * Sets [Builder.backgroundColor] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.backgroundColor] with a well-typed [String] value
+             * You should usually call [Builder.channels] with a well-typed `List<String>` value
              * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun backgroundColor(backgroundColor: JsonField<String>) = apply {
-                this.backgroundColor = backgroundColor
+            fun channels(channels: JsonField<List<String>>) = apply {
+                this.channels = channels.map { it.toMutableList() }
             }
 
-            /** The text content of the action shown to the user. */
-            fun content(content: String) = content(JsonField.of(content))
-
             /**
-             * Sets [Builder.content] to an arbitrary JSON value.
+             * Adds a single [String] to [channels].
              *
-             * You should usually call [Builder.content] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * @throws IllegalStateException if the field was previously set to a non-list.
              */
-            fun content(content: JsonField<String>) = apply { this.content = content }
+            fun addChannel(channel: String) = apply {
+                channels =
+                    (channels ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("channels", it).add(channel)
+                    }
+            }
 
-            /** The target URL of the action. */
-            fun href(href: String) = href(JsonField.of(href))
+            fun if_(if_: String?) = if_(JsonField.ofNullable(if_))
+
+            /** Alias for calling [Builder.if_] with `if_.orElse(null)`. */
+            fun if_(if_: Optional<String>) = if_(if_.getOrNull())
 
             /**
-             * Sets [Builder.href] to an arbitrary JSON value.
+             * Sets [Builder.if_] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.href] with a well-typed [String] value instead. This
+             * You should usually call [Builder.if_] with a well-typed [String] value instead. This
              * method is primarily for setting the field to an undocumented or not yet supported
              * value.
              */
-            fun href(href: JsonField<String>) = apply { this.href = href }
+            fun if_(if_: JsonField<String>) = apply { this.if_ = if_ }
+
+            fun loop(loop: String?) = loop(JsonField.ofNullable(loop))
+
+            /** Alias for calling [Builder.loop] with `loop.orElse(null)`. */
+            fun loop(loop: Optional<String>) = loop(loop.getOrNull())
 
             /**
-             * Region specific content. See
-             * [locales docs](https://www.courier.com/docs/platform/content/elemental/locales/) for
-             * more details.
-             */
-            fun locales(locales: Locales?) = locales(JsonField.ofNullable(locales))
-
-            /** Alias for calling [Builder.locales] with `locales.orElse(null)`. */
-            fun locales(locales: Optional<Locales>) = locales(locales.getOrNull())
-
-            /**
-             * Sets [Builder.locales] to an arbitrary JSON value.
+             * Sets [Builder.loop] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.locales] with a well-typed [Locales] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun locales(locales: JsonField<Locales>) = apply { this.locales = locales }
-
-            /** Defaults to `button`. */
-            fun style(style: Style?) = style(JsonField.ofNullable(style))
-
-            /** Alias for calling [Builder.style] with `style.orElse(null)`. */
-            fun style(style: Optional<Style>) = style(style.getOrNull())
-
-            /**
-             * Sets [Builder.style] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.style] with a well-typed [Style] value instead. This
+             * You should usually call [Builder.loop] with a well-typed [String] value instead. This
              * method is primarily for setting the field to an undocumented or not yet supported
              * value.
              */
-            fun style(style: JsonField<Style>) = apply { this.style = style }
+            fun loop(loop: JsonField<String>) = apply { this.loop = loop }
+
+            fun ref(ref: String?) = ref(JsonField.ofNullable(ref))
+
+            /** Alias for calling [Builder.ref] with `ref.orElse(null)`. */
+            fun ref(ref: Optional<String>) = ref(ref.getOrNull())
+
+            /**
+             * Sets [Builder.ref] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.ref] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun ref(ref: JsonField<String>) = apply { this.ref = ref }
 
             fun type(type: Type) = type(JsonField.of(type))
 
@@ -2575,13 +2460,10 @@ private constructor(
              */
             fun build(): UnionMember4 =
                 UnionMember4(
-                    actionId,
-                    align,
-                    backgroundColor,
-                    content,
-                    href,
-                    locales,
-                    style,
+                    (channels ?: JsonMissing.of()).map { it.toImmutable() },
+                    if_,
+                    loop,
+                    ref,
                     type,
                     additionalProperties.toMutableMap(),
                 )
@@ -2594,13 +2476,10 @@ private constructor(
                 return@apply
             }
 
-            actionId()
-            align().ifPresent { it.validate() }
-            backgroundColor()
-            content()
-            href()
-            locales().ifPresent { it.validate() }
-            style().ifPresent { it.validate() }
+            channels()
+            if_()
+            loop()
+            ref()
             type().ifPresent { it.validate() }
             validated = true
         }
@@ -2621,251 +2500,11 @@ private constructor(
          */
         @JvmSynthetic
         internal fun validity(): Int =
-            (if (actionId.asKnown().isPresent) 1 else 0) +
-                (align.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (backgroundColor.asKnown().isPresent) 1 else 0) +
-                (if (content.asKnown().isPresent) 1 else 0) +
-                (if (href.asKnown().isPresent) 1 else 0) +
-                (locales.asKnown().getOrNull()?.validity() ?: 0) +
-                (style.asKnown().getOrNull()?.validity() ?: 0) +
+            (channels.asKnown().getOrNull()?.size ?: 0) +
+                (if (if_.asKnown().isPresent) 1 else 0) +
+                (if (loop.asKnown().isPresent) 1 else 0) +
+                (if (ref.asKnown().isPresent) 1 else 0) +
                 (type.asKnown().getOrNull()?.validity() ?: 0)
-
-        /**
-         * Region specific content. See
-         * [locales docs](https://www.courier.com/docs/platform/content/elemental/locales/) for more
-         * details.
-         */
-        class Locales
-        @JsonCreator
-        private constructor(
-            @com.fasterxml.jackson.annotation.JsonValue
-            private val additionalProperties: Map<String, JsonValue>
-        ) {
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /** Returns a mutable builder for constructing an instance of [Locales]. */
-                @JvmStatic fun builder() = Builder()
-            }
-
-            /** A builder for [Locales]. */
-            class Builder internal constructor() {
-
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(locales: Locales) = apply {
-                    additionalProperties = locales.additionalProperties.toMutableMap()
-                }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [Locales].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 */
-                fun build(): Locales = Locales(additionalProperties.toImmutable())
-            }
-
-            private var validated: Boolean = false
-
-            fun validate(): Locales = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: CourierInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            @JvmSynthetic
-            internal fun validity(): Int =
-                additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is Locales && additionalProperties == other.additionalProperties
-            }
-
-            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() = "Locales{additionalProperties=$additionalProperties}"
-        }
-
-        /** Defaults to `button`. */
-        class Style @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
-
-            /**
-             * Returns this class instance's raw value.
-             *
-             * This is usually only useful if this instance was deserialized from data that doesn't
-             * match any known member, and you want to know that value. For example, if the SDK is
-             * on an older version than the API, then the API may respond with new members that the
-             * SDK is unaware of.
-             */
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-            companion object {
-
-                @JvmField val BUTTON = of("button")
-
-                @JvmField val LINK = of("link")
-
-                @JvmStatic fun of(value: String) = Style(JsonField.of(value))
-            }
-
-            /** An enum containing [Style]'s known values. */
-            enum class Known {
-                BUTTON,
-                LINK,
-            }
-
-            /**
-             * An enum containing [Style]'s known values, as well as an [_UNKNOWN] member.
-             *
-             * An instance of [Style] can contain an unknown value in a couple of cases:
-             * - It was deserialized from data that doesn't match any known member. For example, if
-             *   the SDK is on an older version than the API, then the API may respond with new
-             *   members that the SDK is unaware of.
-             * - It was constructed with an arbitrary value using the [of] method.
-             */
-            enum class Value {
-                BUTTON,
-                LINK,
-                /**
-                 * An enum member indicating that [Style] was instantiated with an unknown value.
-                 */
-                _UNKNOWN,
-            }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value, or
-             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-             *
-             * Use the [known] method instead if you're certain the value is always known or if you
-             * want to throw for the unknown case.
-             */
-            fun value(): Value =
-                when (this) {
-                    BUTTON -> Value.BUTTON
-                    LINK -> Value.LINK
-                    else -> Value._UNKNOWN
-                }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value.
-             *
-             * Use the [value] method instead if you're uncertain the value is always known and
-             * don't want to throw for the unknown case.
-             *
-             * @throws CourierInvalidDataException if this class instance's value is a not a known
-             *   member.
-             */
-            fun known(): Known =
-                when (this) {
-                    BUTTON -> Known.BUTTON
-                    LINK -> Known.LINK
-                    else -> throw CourierInvalidDataException("Unknown Style: $value")
-                }
-
-            /**
-             * Returns this class instance's primitive wire representation.
-             *
-             * This differs from the [toString] method because that method is primarily for
-             * debugging and generally doesn't throw.
-             *
-             * @throws CourierInvalidDataException if this class instance's value does not have the
-             *   expected primitive type.
-             */
-            fun asString(): String =
-                _value().asString().orElseThrow {
-                    CourierInvalidDataException("Value is not a String")
-                }
-
-            private var validated: Boolean = false
-
-            fun validate(): Style = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                known()
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: CourierInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is Style && value == other.value
-            }
-
-            override fun hashCode() = value.hashCode()
-
-            override fun toString() = value.toString()
-        }
 
         class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
@@ -2994,35 +2633,22 @@ private constructor(
             }
 
             return other is UnionMember4 &&
-                actionId == other.actionId &&
-                align == other.align &&
-                backgroundColor == other.backgroundColor &&
-                content == other.content &&
-                href == other.href &&
-                locales == other.locales &&
-                style == other.style &&
+                channels == other.channels &&
+                if_ == other.if_ &&
+                loop == other.loop &&
+                ref == other.ref &&
                 type == other.type &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(
-                actionId,
-                align,
-                backgroundColor,
-                content,
-                href,
-                locales,
-                style,
-                type,
-                additionalProperties,
-            )
+            Objects.hash(channels, if_, loop, ref, type, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "UnionMember4{actionId=$actionId, align=$align, backgroundColor=$backgroundColor, content=$content, href=$href, locales=$locales, style=$style, type=$type, additionalProperties=$additionalProperties}"
+            "UnionMember4{channels=$channels, if_=$if_, loop=$loop, ref=$ref, type=$type, additionalProperties=$additionalProperties}"
     }
 
     class UnionMember5
