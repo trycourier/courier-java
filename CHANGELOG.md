@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.0 (2025-10-08)
+
+Full Changelog: [v0.1.0...v0.2.0](https://github.com/trycourier/courier-java/compare/v0.1.0...v0.2.0)
+
+### Features
+
+* **api:** manual updates ([bea49ba](https://github.com/trycourier/courier-java/commit/bea49ba0584c19e5d94584fa318328f7613b6524))
+
 ## 0.1.0 (2025-10-08)
 
 Full Changelog: [v0.0.1...v0.1.0](https://github.com/trycourier/courier-java/compare/v0.0.1...v0.1.0)
