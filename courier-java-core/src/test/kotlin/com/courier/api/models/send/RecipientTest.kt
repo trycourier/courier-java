@@ -5,8 +5,7 @@ package com.courier.api.models.send
 import com.courier.api.core.JsonValue
 import com.courier.api.core.jsonMapper
 import com.courier.api.errors.CourierInvalidDataException
-import com.courier.api.models.ListRecipient
-import com.courier.api.models.UserRecipient
+import com.courier.api.models.bulk.UserRecipient
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -165,9 +164,9 @@ internal class RecipientTest {
     @Test
     fun ofList() {
         val list =
-            ListRecipient.builder()
+            Recipient.ListRecipient.builder()
                 .data(
-                    ListRecipient.Data.builder()
+                    Recipient.ListRecipient.Data.builder()
                         .putAdditionalProperty("foo", JsonValue.from("bar"))
                         .build()
                 )
@@ -185,9 +184,9 @@ internal class RecipientTest {
         val jsonMapper = jsonMapper()
         val recipient =
             Recipient.ofList(
-                ListRecipient.builder()
+                Recipient.ListRecipient.builder()
                     .data(
-                        ListRecipient.Data.builder()
+                        Recipient.ListRecipient.Data.builder()
                             .putAdditionalProperty("foo", JsonValue.from("bar"))
                             .build()
                     )
