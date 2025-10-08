@@ -6,7 +6,7 @@ import com.courier.api.client.CourierClient
 import com.courier.api.client.okhttp.CourierOkHttpClient
 import com.courier.api.core.JsonValue
 import com.courier.api.models.ElementalContentSugar
-import com.courier.api.models.UserRecipient
+import com.courier.api.models.bulk.UserRecipient
 import com.courier.api.models.send.MessageContext
 import com.courier.api.models.send.SendMessageParams
 import com.courier.api.models.send.Utm

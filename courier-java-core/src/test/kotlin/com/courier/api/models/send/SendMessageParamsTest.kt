@@ -4,7 +4,7 @@ package com.courier.api.models.send
 
 import com.courier.api.core.JsonValue
 import com.courier.api.models.ElementalContentSugar
-import com.courier.api.models.UserRecipient
+import com.courier.api.models.bulk.UserRecipient
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

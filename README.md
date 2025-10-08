@@ -2,8 +2,8 @@
 
 <!-- x-release-please-start-version -->
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.courier.api/courier-java)](https://central.sonatype.com/artifact/com.courier.api/courier-java/0.1.0)
-[![javadoc](https://javadoc.io/badge2/com.courier.api/courier-java/0.1.0/javadoc.svg)](https://javadoc.io/doc/com.courier.api/courier-java/0.1.0)
+[![Maven Central](https://img.shields.io/maven-central/v/com.courier.api/courier-java)](https://central.sonatype.com/artifact/com.courier.api/courier-java/0.2.0)
+[![javadoc](https://javadoc.io/badge2/com.courier.api/courier-java/0.2.0/javadoc.svg)](https://javadoc.io/doc/com.courier.api/courier-java/0.2.0)
 
 <!-- x-release-please-end -->
 
@@ -13,7 +13,7 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 <!-- x-release-please-start-version -->
 
-Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.courier.api/courier-java/0.1.0).
+Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.courier.api/courier-java/0.2.0).
 
 <!-- x-release-please-end -->
 
@@ -24,7 +24,7 @@ Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.courier.api/co
 ### Gradle
 
 ```kotlin
-implementation("com.courier.api:courier-java:0.1.0")
+implementation("com.courier.api:courier-java:0.2.0")
 ```
 
 ### Maven
@@ -33,7 +33,7 @@ implementation("com.courier.api:courier-java:0.1.0")
 <dependency>
   <groupId>com.courier.api</groupId>
   <artifactId>courier-java</artifactId>
-  <version>0.1.0</version>
+  <version>0.2.0</version>
 </dependency>
 ```
 
@@ -49,7 +49,7 @@ This library requires Java 8 or later.
 import com.courier.api.client.CourierClient;
 import com.courier.api.client.okhttp.CourierOkHttpClient;
 import com.courier.api.core.JsonValue;
-import com.courier.api.models.UserRecipient;
+import com.courier.api.models.bulk.UserRecipient;
 import com.courier.api.models.send.SendMessageParams;
 import com.courier.api.models.send.SendMessageResponse;
 
@@ -159,7 +159,7 @@ The default client is synchronous. To switch to asynchronous execution, call the
 import com.courier.api.client.CourierClient;
 import com.courier.api.client.okhttp.CourierOkHttpClient;
 import com.courier.api.core.JsonValue;
-import com.courier.api.models.UserRecipient;
+import com.courier.api.models.bulk.UserRecipient;
 import com.courier.api.models.send.SendMessageParams;
 import com.courier.api.models.send.SendMessageResponse;
 import java.util.concurrent.CompletableFuture;
@@ -188,7 +188,7 @@ Or create an asynchronous client from the beginning:
 import com.courier.api.client.CourierClientAsync;
 import com.courier.api.client.okhttp.CourierOkHttpClientAsync;
 import com.courier.api.core.JsonValue;
-import com.courier.api.models.UserRecipient;
+import com.courier.api.models.bulk.UserRecipient;
 import com.courier.api.models.send.SendMessageParams;
 import com.courier.api.models.send.SendMessageResponse;
 import java.util.concurrent.CompletableFuture;
@@ -223,7 +223,7 @@ To access this data, prefix any HTTP method call on a client or service with `wi
 import com.courier.api.core.JsonValue;
 import com.courier.api.core.http.Headers;
 import com.courier.api.core.http.HttpResponseFor;
-import com.courier.api.models.UserRecipient;
+import com.courier.api.models.bulk.UserRecipient;
 import com.courier.api.models.send.SendMessageParams;
 import com.courier.api.models.send.SendMessageResponse;
 
