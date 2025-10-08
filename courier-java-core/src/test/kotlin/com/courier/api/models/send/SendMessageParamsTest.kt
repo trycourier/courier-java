@@ -4,7 +4,9 @@ package com.courier.api.models.send
 
 import com.courier.api.core.JsonValue
 import com.courier.api.models.ElementalContentSugar
-import com.courier.api.models.bulk.UserRecipient
+import com.courier.api.models.MessageContext
+import com.courier.api.models.UserRecipient
+import com.courier.api.models.Utm
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -115,7 +117,6 @@ internal class SendMessageParamsTest {
                             .method(SendMessageParams.Message.Routing.Method.ALL)
                             .build()
                     )
-                    .template("template_id")
                     .timeout(
                         SendMessageParams.Message.Timeout.builder()
                             .channel(
@@ -315,7 +316,6 @@ internal class SendMessageParamsTest {
                                 .method(SendMessageParams.Message.Routing.Method.ALL)
                                 .build()
                         )
-                        .template("template_id")
                         .timeout(
                             SendMessageParams.Message.Timeout.builder()
                                 .channel(
@@ -517,7 +517,6 @@ internal class SendMessageParamsTest {
                             .method(SendMessageParams.Message.Routing.Method.ALL)
                             .build()
                     )
-                    .template("template_id")
                     .timeout(
                         SendMessageParams.Message.Timeout.builder()
                             .channel(

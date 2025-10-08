@@ -4,6 +4,7 @@ package com.courier.api.models.messages
 
 import com.courier.api.core.JsonValue
 import com.courier.api.core.jsonMapper
+import com.courier.api.models.MessageDetails
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat

@@ -17,6 +17,7 @@ import com.courier.api.core.http.HttpResponseFor
 import com.courier.api.core.http.json
 import com.courier.api.core.http.parseable
 import com.courier.api.core.prepare
+import com.courier.api.models.UserToken
 import com.courier.api.models.users.tokens.TokenAddMultipleParams
 import com.courier.api.models.users.tokens.TokenAddSingleParams
 import com.courier.api.models.users.tokens.TokenDeleteParams
@@ -24,7 +25,6 @@ import com.courier.api.models.users.tokens.TokenListParams
 import com.courier.api.models.users.tokens.TokenRetrieveParams
 import com.courier.api.models.users.tokens.TokenRetrieveResponse
 import com.courier.api.models.users.tokens.TokenUpdateParams
-import com.courier.api.models.users.tokens.UserToken
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 

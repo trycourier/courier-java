@@ -7,6 +7,7 @@ import com.courier.api.core.Params
 import com.courier.api.core.checkRequired
 import com.courier.api.core.http.Headers
 import com.courier.api.core.http.QueryParams
+import com.courier.api.models.UserToken
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull

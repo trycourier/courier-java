@@ -6,10 +6,10 @@ import com.courier.api.TestServerExtension
 import com.courier.api.client.okhttp.CourierOkHttpClient
 import com.courier.api.core.JsonValue
 import com.courier.api.models.ElementalContentSugar
-import com.courier.api.models.bulk.UserRecipient
-import com.courier.api.models.send.MessageContext
+import com.courier.api.models.MessageContext
+import com.courier.api.models.UserRecipient
+import com.courier.api.models.Utm
 import com.courier.api.models.send.SendMessageParams
-import com.courier.api.models.send.Utm
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -134,7 +134,6 @@ internal class SendServiceTest {
                                     .method(SendMessageParams.Message.Routing.Method.ALL)
                                     .build()
                             )
-                            .template("template_id")
                             .timeout(
                                 SendMessageParams.Message.Timeout.builder()
                                     .channel(

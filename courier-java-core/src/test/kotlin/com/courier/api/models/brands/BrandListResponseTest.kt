@@ -3,7 +3,21 @@
 package com.courier.api.models.brands
 
 import com.courier.api.core.jsonMapper
-import com.courier.api.models.audiences.Paging
+import com.courier.api.models.Brand
+import com.courier.api.models.BrandColors
+import com.courier.api.models.BrandSettings
+import com.courier.api.models.BrandSettingsEmail
+import com.courier.api.models.BrandSettingsInApp
+import com.courier.api.models.BrandSnippet
+import com.courier.api.models.BrandSnippets
+import com.courier.api.models.BrandTemplate
+import com.courier.api.models.EmailFooter
+import com.courier.api.models.EmailHead
+import com.courier.api.models.EmailHeader
+import com.courier.api.models.Icons
+import com.courier.api.models.Logo
+import com.courier.api.models.Paging
+import com.courier.api.models.WidgetBackground
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

@@ -17,7 +17,7 @@ import com.courier.api.core.http.HttpResponseFor
 import com.courier.api.core.http.json
 import com.courier.api.core.http.parseable
 import com.courier.api.core.prepareAsync
-import com.courier.api.models.tenants.Tenant
+import com.courier.api.models.Tenant
 import com.courier.api.models.tenants.TenantDeleteParams
 import com.courier.api.models.tenants.TenantListParams
 import com.courier.api.models.tenants.TenantListResponse

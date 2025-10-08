@@ -5,9 +5,9 @@ package com.courier.api.services.blocking.users
 import com.courier.api.TestServerExtension
 import com.courier.api.client.okhttp.CourierOkHttpClient
 import com.courier.api.core.JsonValue
+import com.courier.api.models.TenantAssociation
 import com.courier.api.models.users.tenants.TenantAddMultipleParams
 import com.courier.api.models.users.tenants.TenantAddSingleParams
-import com.courier.api.models.users.tenants.TenantAssociation
 import com.courier.api.models.users.tenants.TenantListParams
 import com.courier.api.models.users.tenants.TenantRemoveSingleParams
 import org.junit.jupiter.api.Disabled
