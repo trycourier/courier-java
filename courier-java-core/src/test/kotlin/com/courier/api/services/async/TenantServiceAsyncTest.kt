@@ -5,12 +5,12 @@ package com.courier.api.services.async
 import com.courier.api.TestServerExtension
 import com.courier.api.client.okhttp.CourierOkHttpClientAsync
 import com.courier.api.core.JsonValue
-import com.courier.api.models.tenants.DefaultPreferences
+import com.courier.api.models.ChannelClassification
+import com.courier.api.models.DefaultPreferences
+import com.courier.api.models.SubscriptionTopicNew
 import com.courier.api.models.tenants.TenantListParams
 import com.courier.api.models.tenants.TenantListUsersParams
 import com.courier.api.models.tenants.TenantUpdateParams
-import com.courier.api.models.tenants.defaultpreferences.items.ChannelClassification
-import com.courier.api.models.tenants.defaultpreferences.items.SubscriptionTopicNew
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

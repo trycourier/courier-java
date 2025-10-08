@@ -17,7 +17,7 @@ import com.courier.api.core.http.HttpResponseFor
 import com.courier.api.core.http.json
 import com.courier.api.core.http.parseable
 import com.courier.api.core.prepare
-import com.courier.api.models.lists.List
+import com.courier.api.models.List
 import com.courier.api.models.lists.ListDeleteParams
 import com.courier.api.models.lists.ListListParams
 import com.courier.api.models.lists.ListListResponse

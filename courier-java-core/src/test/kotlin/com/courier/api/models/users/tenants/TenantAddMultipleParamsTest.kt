@@ -3,6 +3,7 @@
 package com.courier.api.models.users.tenants
 
 import com.courier.api.core.JsonValue
+import com.courier.api.models.TenantAssociation
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

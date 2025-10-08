@@ -6,7 +6,7 @@ import com.courier.api.core.ClientOptions
 import com.courier.api.core.RequestOptions
 import com.courier.api.core.http.HttpResponse
 import com.courier.api.core.http.HttpResponseFor
-import com.courier.api.models.brands.Brand
+import com.courier.api.models.Brand
 import com.courier.api.models.brands.BrandCreateParams
 import com.courier.api.models.brands.BrandDeleteParams
 import com.courier.api.models.brands.BrandListParams

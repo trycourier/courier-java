@@ -13,7 +13,8 @@ import com.courier.api.core.http.Headers
 import com.courier.api.core.http.QueryParams
 import com.courier.api.core.toImmutable
 import com.courier.api.errors.CourierInvalidDataException
-import com.courier.api.models.tenants.defaultpreferences.items.ChannelClassification
+import com.courier.api.models.ChannelClassification
+import com.courier.api.models.PreferenceStatus
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator

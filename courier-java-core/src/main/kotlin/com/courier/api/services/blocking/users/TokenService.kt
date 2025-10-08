@@ -6,6 +6,7 @@ import com.courier.api.core.ClientOptions
 import com.courier.api.core.RequestOptions
 import com.courier.api.core.http.HttpResponse
 import com.courier.api.core.http.HttpResponseFor
+import com.courier.api.models.UserToken
 import com.courier.api.models.users.tokens.TokenAddMultipleParams
 import com.courier.api.models.users.tokens.TokenAddSingleParams
 import com.courier.api.models.users.tokens.TokenDeleteParams
@@ -13,7 +14,6 @@ import com.courier.api.models.users.tokens.TokenListParams
 import com.courier.api.models.users.tokens.TokenRetrieveParams
 import com.courier.api.models.users.tokens.TokenRetrieveResponse
 import com.courier.api.models.users.tokens.TokenUpdateParams
-import com.courier.api.models.users.tokens.UserToken
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 

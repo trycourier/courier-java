@@ -5,8 +5,8 @@ package com.courier.api.services.async.lists
 import com.courier.api.TestServerExtension
 import com.courier.api.client.okhttp.CourierOkHttpClientAsync
 import com.courier.api.core.JsonValue
-import com.courier.api.models.lists.subscriptions.PutSubscriptionsRecipient
-import com.courier.api.models.lists.subscriptions.RecipientPreferences
+import com.courier.api.models.PutSubscriptionsRecipient
+import com.courier.api.models.RecipientPreferences
 import com.courier.api.models.lists.subscriptions.SubscriptionAddParams
 import com.courier.api.models.lists.subscriptions.SubscriptionListParams
 import com.courier.api.models.lists.subscriptions.SubscriptionSubscribeParams

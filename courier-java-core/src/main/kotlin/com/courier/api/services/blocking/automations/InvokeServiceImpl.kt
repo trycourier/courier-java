@@ -16,7 +16,7 @@ import com.courier.api.core.http.HttpResponseFor
 import com.courier.api.core.http.json
 import com.courier.api.core.http.parseable
 import com.courier.api.core.prepare
-import com.courier.api.models.automations.invoke.AutomationInvokeResponse
+import com.courier.api.models.AutomationInvokeResponse
 import com.courier.api.models.automations.invoke.InvokeInvokeAdHocParams
 import com.courier.api.models.automations.invoke.InvokeInvokeByTemplateParams
 import java.util.function.Consumer

@@ -3,6 +3,8 @@
 package com.courier.api.models.lists.subscriptions
 
 import com.courier.api.core.JsonValue
+import com.courier.api.models.PutSubscriptionsRecipient
+import com.courier.api.models.RecipientPreferences
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

@@ -3,7 +3,8 @@
 package com.courier.api.models.users.preferences
 
 import com.courier.api.core.http.QueryParams
-import com.courier.api.models.tenants.defaultpreferences.items.ChannelClassification
+import com.courier.api.models.ChannelClassification
+import com.courier.api.models.PreferenceStatus
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
