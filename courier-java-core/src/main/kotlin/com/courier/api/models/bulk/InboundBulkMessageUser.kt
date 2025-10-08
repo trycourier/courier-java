@@ -7,7 +7,6 @@ import com.courier.api.core.JsonField
 import com.courier.api.core.JsonMissing
 import com.courier.api.core.JsonValue
 import com.courier.api.errors.CourierInvalidDataException
-import com.courier.api.models.UserRecipient
 import com.courier.api.models.lists.subscriptions.RecipientPreferences
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
