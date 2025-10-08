@@ -5,7 +5,6 @@ package com.courier.api.models.send
 import com.courier.api.core.JsonValue
 import com.courier.api.core.jsonMapper
 import com.courier.api.errors.CourierInvalidDataException
-import com.courier.api.models.Alignment
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -191,17 +190,10 @@ internal class ElementalNodeTest {
     fun ofUnionMember4() {
         val unionMember4 =
             ElementalNode.UnionMember4.builder()
-                .actionId("action_id")
-                .align(Alignment.CENTER)
-                .backgroundColor("background_color")
-                .content("content")
-                .href("href")
-                .locales(
-                    ElementalNode.UnionMember4.Locales.builder()
-                        .putAdditionalProperty("foo", JsonValue.from(mapOf("content" to "content")))
-                        .build()
-                )
-                .style(ElementalNode.UnionMember4.Style.BUTTON)
+                .addChannel("string")
+                .if_("if")
+                .loop("loop")
+                .ref("ref")
                 .type(ElementalNode.UnionMember4.Type.ACTION)
                 .build()
 
@@ -222,20 +214,10 @@ internal class ElementalNodeTest {
         val elementalNode =
             ElementalNode.ofUnionMember4(
                 ElementalNode.UnionMember4.builder()
-                    .actionId("action_id")
-                    .align(Alignment.CENTER)
-                    .backgroundColor("background_color")
-                    .content("content")
-                    .href("href")
-                    .locales(
-                        ElementalNode.UnionMember4.Locales.builder()
-                            .putAdditionalProperty(
-                                "foo",
-                                JsonValue.from(mapOf("content" to "content")),
-                            )
-                            .build()
-                    )
-                    .style(ElementalNode.UnionMember4.Style.BUTTON)
+                    .addChannel("string")
+                    .if_("if")
+                    .loop("loop")
+                    .ref("ref")
                     .type(ElementalNode.UnionMember4.Type.ACTION)
                     .build()
             )

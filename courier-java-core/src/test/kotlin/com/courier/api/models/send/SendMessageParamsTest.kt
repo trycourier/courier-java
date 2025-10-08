@@ -48,7 +48,7 @@ internal class SendMessageParamsTest {
                     .context(MessageContext.builder().tenantId("tenant_id").build())
                     .data(
                         SendMessageParams.Message.Data.builder()
-                            .putAdditionalProperty("name", JsonValue.from("bar"))
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
                             .build()
                     )
                     .delay(
@@ -248,7 +248,7 @@ internal class SendMessageParamsTest {
                         .context(MessageContext.builder().tenantId("tenant_id").build())
                         .data(
                             SendMessageParams.Message.Data.builder()
-                                .putAdditionalProperty("name", JsonValue.from("bar"))
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
                                 .build()
                         )
                         .delay(
@@ -450,7 +450,7 @@ internal class SendMessageParamsTest {
                     .context(MessageContext.builder().tenantId("tenant_id").build())
                     .data(
                         SendMessageParams.Message.Data.builder()
-                            .putAdditionalProperty("name", JsonValue.from("bar"))
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
                             .build()
                     )
                     .delay(
