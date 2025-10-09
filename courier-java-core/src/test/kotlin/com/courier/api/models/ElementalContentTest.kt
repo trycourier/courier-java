@@ -14,12 +14,12 @@ internal class ElementalContentTest {
         val elementalContent =
             ElementalContent.builder()
                 .addElement(
-                    ElementalNode.UnionMember0.builder()
+                    ElementalTextNodeWithType.builder()
                         .addChannel("string")
                         .if_("if")
                         .loop("loop")
                         .ref("ref")
-                        .type(ElementalNode.UnionMember0.Type.TEXT)
+                        .type(ElementalTextNodeWithType.Type.TEXT)
                         .build()
                 )
                 .version("version")
@@ -28,13 +28,13 @@ internal class ElementalContentTest {
 
         assertThat(elementalContent.elements())
             .containsExactly(
-                ElementalNode.ofUnionMember0(
-                    ElementalNode.UnionMember0.builder()
+                ElementalNode.ofTextNodeWithType(
+                    ElementalTextNodeWithType.builder()
                         .addChannel("string")
                         .if_("if")
                         .loop("loop")
                         .ref("ref")
-                        .type(ElementalNode.UnionMember0.Type.TEXT)
+                        .type(ElementalTextNodeWithType.Type.TEXT)
                         .build()
                 )
             )
@@ -48,12 +48,12 @@ internal class ElementalContentTest {
         val elementalContent =
             ElementalContent.builder()
                 .addElement(
-                    ElementalNode.UnionMember0.builder()
+                    ElementalTextNodeWithType.builder()
                         .addChannel("string")
                         .if_("if")
                         .loop("loop")
                         .ref("ref")
-                        .type(ElementalNode.UnionMember0.Type.TEXT)
+                        .type(ElementalTextNodeWithType.Type.TEXT)
                         .build()
                 )
                 .version("version")
