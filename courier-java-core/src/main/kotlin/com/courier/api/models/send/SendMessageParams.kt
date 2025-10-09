@@ -448,6 +448,7 @@ private constructor(
         private val preferences: JsonField<Preferences>,
         private val providers: JsonField<Providers>,
         private val routing: JsonField<Routing>,
+        private val template: JsonField<String>,
         private val timeout: JsonField<Timeout>,
         private val to: JsonField<To>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -476,6 +477,9 @@ private constructor(
             @ExcludeMissing
             providers: JsonField<Providers> = JsonMissing.of(),
             @JsonProperty("routing") @ExcludeMissing routing: JsonField<Routing> = JsonMissing.of(),
+            @JsonProperty("template")
+            @ExcludeMissing
+            template: JsonField<String> = JsonMissing.of(),
             @JsonProperty("timeout") @ExcludeMissing timeout: JsonField<Timeout> = JsonMissing.of(),
             @JsonProperty("to") @ExcludeMissing to: JsonField<To> = JsonMissing.of(),
         ) : this(
@@ -490,6 +494,7 @@ private constructor(
             preferences,
             providers,
             routing,
+            template,
             timeout,
             to,
             mutableMapOf(),
@@ -567,6 +572,12 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun routing(): Optional<Routing> = routing.getOptional("routing")
+
+        /**
+         * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun template(): Optional<String> = template.getOptional("template")
 
         /**
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -664,6 +675,13 @@ private constructor(
         @JsonProperty("routing") @ExcludeMissing fun _routing(): JsonField<Routing> = routing
 
         /**
+         * Returns the raw JSON value of [template].
+         *
+         * Unlike [template], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("template") @ExcludeMissing fun _template(): JsonField<String> = template
+
+        /**
          * Returns the raw JSON value of [timeout].
          *
          * Unlike [timeout], this method doesn't throw if the JSON field has an unexpected type.
@@ -709,6 +727,7 @@ private constructor(
             private var preferences: JsonField<Preferences> = JsonMissing.of()
             private var providers: JsonField<Providers> = JsonMissing.of()
             private var routing: JsonField<Routing> = JsonMissing.of()
+            private var template: JsonField<String> = JsonMissing.of()
             private var timeout: JsonField<Timeout> = JsonMissing.of()
             private var to: JsonField<To> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -726,6 +745,7 @@ private constructor(
                 preferences = message.preferences
                 providers = message.providers
                 routing = message.routing
+                template = message.template
                 timeout = message.timeout
                 to = message.to
                 additionalProperties = message.additionalProperties.toMutableMap()
@@ -902,6 +922,20 @@ private constructor(
              */
             fun routing(routing: JsonField<Routing>) = apply { this.routing = routing }
 
+            fun template(template: String?) = template(JsonField.ofNullable(template))
+
+            /** Alias for calling [Builder.template] with `template.orElse(null)`. */
+            fun template(template: Optional<String>) = template(template.getOrNull())
+
+            /**
+             * Sets [Builder.template] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.template] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun template(template: JsonField<String>) = apply { this.template = template }
+
             fun timeout(timeout: Timeout?) = timeout(JsonField.ofNullable(timeout))
 
             /** Alias for calling [Builder.timeout] with `timeout.orElse(null)`. */
@@ -974,6 +1008,7 @@ private constructor(
                     preferences,
                     providers,
                     routing,
+                    template,
                     timeout,
                     to,
                     additionalProperties.toMutableMap(),
@@ -998,6 +1033,7 @@ private constructor(
             preferences().ifPresent { it.validate() }
             providers().ifPresent { it.validate() }
             routing().ifPresent { it.validate() }
+            template()
             timeout().ifPresent { it.validate() }
             to().ifPresent { it.validate() }
             validated = true
@@ -1030,6 +1066,7 @@ private constructor(
                 (preferences.asKnown().getOrNull()?.validity() ?: 0) +
                 (providers.asKnown().getOrNull()?.validity() ?: 0) +
                 (routing.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (template.asKnown().isPresent) 1 else 0) +
                 (timeout.asKnown().getOrNull()?.validity() ?: 0) +
                 (to.asKnown().getOrNull()?.validity() ?: 0)
 
@@ -3817,6 +3854,7 @@ private constructor(
                 preferences == other.preferences &&
                 providers == other.providers &&
                 routing == other.routing &&
+                template == other.template &&
                 timeout == other.timeout &&
                 to == other.to &&
                 additionalProperties == other.additionalProperties
@@ -3835,6 +3873,7 @@ private constructor(
                 preferences,
                 providers,
                 routing,
+                template,
                 timeout,
                 to,
                 additionalProperties,
@@ -3844,7 +3883,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Message{brandId=$brandId, channels=$channels, content=$content, context=$context, data=$data, delay=$delay, expiry=$expiry, metadata=$metadata, preferences=$preferences, providers=$providers, routing=$routing, timeout=$timeout, to=$to, additionalProperties=$additionalProperties}"
+            "Message{brandId=$brandId, channels=$channels, content=$content, context=$context, data=$data, delay=$delay, expiry=$expiry, metadata=$metadata, preferences=$preferences, providers=$providers, routing=$routing, template=$template, timeout=$timeout, to=$to, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

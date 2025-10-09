@@ -117,6 +117,7 @@ internal class SendMessageParamsTest {
                             .method(SendMessageParams.Message.Routing.Method.ALL)
                             .build()
                     )
+                    .template("template_id")
                     .timeout(
                         SendMessageParams.Message.Timeout.builder()
                             .channel(
@@ -316,6 +317,7 @@ internal class SendMessageParamsTest {
                                 .method(SendMessageParams.Message.Routing.Method.ALL)
                                 .build()
                         )
+                        .template("template_id")
                         .timeout(
                             SendMessageParams.Message.Timeout.builder()
                                 .channel(
@@ -517,6 +519,7 @@ internal class SendMessageParamsTest {
                             .method(SendMessageParams.Message.Routing.Method.ALL)
                             .build()
                     )
+                    .template("template_id")
                     .timeout(
                         SendMessageParams.Message.Timeout.builder()
                             .channel(
