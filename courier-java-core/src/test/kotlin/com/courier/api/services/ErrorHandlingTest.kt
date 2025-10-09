@@ -184,6 +184,7 @@ internal class ErrorHandlingTest {
                                         .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
+                                .template("template_id")
                                 .timeout(
                                     SendMessageParams.Message.Timeout.builder()
                                         .channel(
@@ -414,6 +415,7 @@ internal class ErrorHandlingTest {
                                         .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
+                                .template("template_id")
                                 .timeout(
                                     SendMessageParams.Message.Timeout.builder()
                                         .channel(
@@ -644,6 +646,7 @@ internal class ErrorHandlingTest {
                                         .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
+                                .template("template_id")
                                 .timeout(
                                     SendMessageParams.Message.Timeout.builder()
                                         .channel(
@@ -874,6 +877,7 @@ internal class ErrorHandlingTest {
                                         .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
+                                .template("template_id")
                                 .timeout(
                                     SendMessageParams.Message.Timeout.builder()
                                         .channel(
@@ -1104,6 +1108,7 @@ internal class ErrorHandlingTest {
                                         .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
+                                .template("template_id")
                                 .timeout(
                                     SendMessageParams.Message.Timeout.builder()
                                         .channel(
@@ -1334,6 +1339,7 @@ internal class ErrorHandlingTest {
                                         .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
+                                .template("template_id")
                                 .timeout(
                                     SendMessageParams.Message.Timeout.builder()
                                         .channel(
@@ -1564,6 +1570,7 @@ internal class ErrorHandlingTest {
                                         .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
+                                .template("template_id")
                                 .timeout(
                                     SendMessageParams.Message.Timeout.builder()
                                         .channel(
@@ -1794,6 +1801,7 @@ internal class ErrorHandlingTest {
                                         .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
+                                .template("template_id")
                                 .timeout(
                                     SendMessageParams.Message.Timeout.builder()
                                         .channel(
@@ -2024,6 +2032,7 @@ internal class ErrorHandlingTest {
                                         .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
+                                .template("template_id")
                                 .timeout(
                                     SendMessageParams.Message.Timeout.builder()
                                         .channel(
@@ -2254,6 +2263,7 @@ internal class ErrorHandlingTest {
                                         .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
+                                .template("template_id")
                                 .timeout(
                                     SendMessageParams.Message.Timeout.builder()
                                         .channel(
@@ -2484,6 +2494,7 @@ internal class ErrorHandlingTest {
                                         .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
+                                .template("template_id")
                                 .timeout(
                                     SendMessageParams.Message.Timeout.builder()
                                         .channel(
@@ -2714,6 +2725,7 @@ internal class ErrorHandlingTest {
                                         .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
+                                .template("template_id")
                                 .timeout(
                                     SendMessageParams.Message.Timeout.builder()
                                         .channel(
@@ -2944,6 +2956,7 @@ internal class ErrorHandlingTest {
                                         .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
+                                .template("template_id")
                                 .timeout(
                                     SendMessageParams.Message.Timeout.builder()
                                         .channel(
@@ -3174,6 +3187,7 @@ internal class ErrorHandlingTest {
                                         .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
+                                .template("template_id")
                                 .timeout(
                                     SendMessageParams.Message.Timeout.builder()
                                         .channel(
@@ -3404,6 +3418,7 @@ internal class ErrorHandlingTest {
                                         .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
+                                .template("template_id")
                                 .timeout(
                                     SendMessageParams.Message.Timeout.builder()
                                         .channel(
@@ -3634,6 +3649,7 @@ internal class ErrorHandlingTest {
                                         .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
+                                .template("template_id")
                                 .timeout(
                                     SendMessageParams.Message.Timeout.builder()
                                         .channel(
@@ -3862,6 +3878,7 @@ internal class ErrorHandlingTest {
                                         .method(SendMessageParams.Message.Routing.Method.ALL)
                                         .build()
                                 )
+                                .template("template_id")
                                 .timeout(
                                     SendMessageParams.Message.Timeout.builder()
                                         .channel(
