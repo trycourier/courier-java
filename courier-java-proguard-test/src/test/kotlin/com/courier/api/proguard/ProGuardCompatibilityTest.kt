@@ -6,6 +6,7 @@ import com.courier.api.client.okhttp.CourierOkHttpClient
 import com.courier.api.core.jsonMapper
 import com.courier.api.models.Alignment
 import com.courier.api.models.ElementalNode
+import com.courier.api.models.ElementalTextNodeWithType
 import com.courier.api.models.send.SendMessageResponse
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import kotlin.reflect.full.memberFunctions
@@ -86,13 +87,13 @@ internal class ProGuardCompatibilityTest {
     fun elementalNodeRoundtrip() {
         val jsonMapper = jsonMapper()
         val elementalNode =
-            ElementalNode.ofUnionMember0(
-                ElementalNode.UnionMember0.builder()
+            ElementalNode.ofTextNodeWithType(
+                ElementalTextNodeWithType.builder()
                     .addChannel("string")
                     .if_("if")
                     .loop("loop")
                     .ref("ref")
-                    .type(ElementalNode.UnionMember0.Type.TEXT)
+                    .type(ElementalTextNodeWithType.Type.TEXT)
                     .build()
             )
 

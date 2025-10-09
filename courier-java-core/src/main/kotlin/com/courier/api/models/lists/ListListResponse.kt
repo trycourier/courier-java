@@ -10,8 +10,8 @@ import com.courier.api.core.checkKnown
 import com.courier.api.core.checkRequired
 import com.courier.api.core.toImmutable
 import com.courier.api.errors.CourierInvalidDataException
-import com.courier.api.models.List
 import com.courier.api.models.Paging
+import com.courier.api.models.UserList
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -23,14 +23,14 @@ import kotlin.jvm.optionals.getOrNull
 class ListListResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    private val items: JsonField<List<List>>,
+    private val items: JsonField<List<UserList>>,
     private val paging: JsonField<Paging>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("items") @ExcludeMissing items: JsonField<List<List>> = JsonMissing.of(),
+        @JsonProperty("items") @ExcludeMissing items: JsonField<List<UserList>> = JsonMissing.of(),
         @JsonProperty("paging") @ExcludeMissing paging: JsonField<Paging> = JsonMissing.of(),
     ) : this(items, paging, mutableMapOf())
 
@@ -38,7 +38,7 @@ private constructor(
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun items(): List<List> = items.getRequired("items")
+    fun items(): List<UserList> = items.getRequired("items")
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
@@ -51,7 +51,7 @@ private constructor(
      *
      * Unlike [items], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("items") @ExcludeMissing fun _items(): JsonField<List<List>> = items
+    @JsonProperty("items") @ExcludeMissing fun _items(): JsonField<List<UserList>> = items
 
     /**
      * Returns the raw JSON value of [paging].
@@ -89,7 +89,7 @@ private constructor(
     /** A builder for [ListListResponse]. */
     class Builder internal constructor() {
 
-        private var items: JsonField<MutableList<List>>? = null
+        private var items: JsonField<MutableList<UserList>>? = null
         private var paging: JsonField<Paging>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -100,25 +100,25 @@ private constructor(
             additionalProperties = listListResponse.additionalProperties.toMutableMap()
         }
 
-        fun items(items: List<List>) = items(JsonField.of(items))
+        fun items(items: List<UserList>) = items(JsonField.of(items))
 
         /**
          * Sets [Builder.items] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.items] with a well-typed `List<List>` value instead.
+         * You should usually call [Builder.items] with a well-typed `List<UserList>` value instead.
          * This method is primarily for setting the field to an undocumented or not yet supported
          * value.
          */
-        fun items(items: JsonField<List<List>>) = apply {
+        fun items(items: JsonField<List<UserList>>) = apply {
             this.items = items.map { it.toMutableList() }
         }
 
         /**
-         * Adds a single [List] to [items].
+         * Adds a single [UserList] to [items].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addItem(item: List) = apply {
+        fun addItem(item: UserList) = apply {
             items =
                 (items ?: JsonField.of(mutableListOf())).also { checkKnown("items", it).add(item) }
         }

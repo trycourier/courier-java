@@ -15,38 +15,38 @@ import org.junit.jupiter.params.provider.EnumSource
 internal class ElementalNodeTest {
 
     @Test
-    fun ofUnionMember0() {
-        val unionMember0 =
-            ElementalNode.UnionMember0.builder()
+    fun ofTextNodeWithType() {
+        val textNodeWithType =
+            ElementalTextNodeWithType.builder()
                 .addChannel("string")
                 .if_("if")
                 .loop("loop")
                 .ref("ref")
-                .type(ElementalNode.UnionMember0.Type.TEXT)
+                .type(ElementalTextNodeWithType.Type.TEXT)
                 .build()
 
-        val elementalNode = ElementalNode.ofUnionMember0(unionMember0)
+        val elementalNode = ElementalNode.ofTextNodeWithType(textNodeWithType)
 
-        assertThat(elementalNode.unionMember0()).contains(unionMember0)
-        assertThat(elementalNode.unionMember1()).isEmpty
-        assertThat(elementalNode.unionMember2()).isEmpty
-        assertThat(elementalNode.unionMember3()).isEmpty
-        assertThat(elementalNode.unionMember4()).isEmpty
-        assertThat(elementalNode.unionMember5()).isEmpty
-        assertThat(elementalNode.unionMember6()).isEmpty
+        assertThat(elementalNode.textNodeWithType()).contains(textNodeWithType)
+        assertThat(elementalNode.metaNodeWithType()).isEmpty
+        assertThat(elementalNode.channelNodeWithType()).isEmpty
+        assertThat(elementalNode.imageNodeWithType()).isEmpty
+        assertThat(elementalNode.actionNodeWithType()).isEmpty
+        assertThat(elementalNode.dividerNodeWithType()).isEmpty
+        assertThat(elementalNode.quoteNodeWithType()).isEmpty
     }
 
     @Test
-    fun ofUnionMember0Roundtrip() {
+    fun ofTextNodeWithTypeRoundtrip() {
         val jsonMapper = jsonMapper()
         val elementalNode =
-            ElementalNode.ofUnionMember0(
-                ElementalNode.UnionMember0.builder()
+            ElementalNode.ofTextNodeWithType(
+                ElementalTextNodeWithType.builder()
                     .addChannel("string")
                     .if_("if")
                     .loop("loop")
                     .ref("ref")
-                    .type(ElementalNode.UnionMember0.Type.TEXT)
+                    .type(ElementalTextNodeWithType.Type.TEXT)
                     .build()
             )
 
@@ -60,38 +60,38 @@ internal class ElementalNodeTest {
     }
 
     @Test
-    fun ofUnionMember1() {
-        val unionMember1 =
-            ElementalNode.UnionMember1.builder()
+    fun ofMetaNodeWithType() {
+        val metaNodeWithType =
+            ElementalMetaNodeWithType.builder()
                 .addChannel("string")
                 .if_("if")
                 .loop("loop")
                 .ref("ref")
-                .type(ElementalNode.UnionMember1.Type.META)
+                .type(ElementalMetaNodeWithType.Type.META)
                 .build()
 
-        val elementalNode = ElementalNode.ofUnionMember1(unionMember1)
+        val elementalNode = ElementalNode.ofMetaNodeWithType(metaNodeWithType)
 
-        assertThat(elementalNode.unionMember0()).isEmpty
-        assertThat(elementalNode.unionMember1()).contains(unionMember1)
-        assertThat(elementalNode.unionMember2()).isEmpty
-        assertThat(elementalNode.unionMember3()).isEmpty
-        assertThat(elementalNode.unionMember4()).isEmpty
-        assertThat(elementalNode.unionMember5()).isEmpty
-        assertThat(elementalNode.unionMember6()).isEmpty
+        assertThat(elementalNode.textNodeWithType()).isEmpty
+        assertThat(elementalNode.metaNodeWithType()).contains(metaNodeWithType)
+        assertThat(elementalNode.channelNodeWithType()).isEmpty
+        assertThat(elementalNode.imageNodeWithType()).isEmpty
+        assertThat(elementalNode.actionNodeWithType()).isEmpty
+        assertThat(elementalNode.dividerNodeWithType()).isEmpty
+        assertThat(elementalNode.quoteNodeWithType()).isEmpty
     }
 
     @Test
-    fun ofUnionMember1Roundtrip() {
+    fun ofMetaNodeWithTypeRoundtrip() {
         val jsonMapper = jsonMapper()
         val elementalNode =
-            ElementalNode.ofUnionMember1(
-                ElementalNode.UnionMember1.builder()
+            ElementalNode.ofMetaNodeWithType(
+                ElementalMetaNodeWithType.builder()
                     .addChannel("string")
                     .if_("if")
                     .loop("loop")
                     .ref("ref")
-                    .type(ElementalNode.UnionMember1.Type.META)
+                    .type(ElementalMetaNodeWithType.Type.META)
                     .build()
             )
 
@@ -105,30 +105,30 @@ internal class ElementalNodeTest {
     }
 
     @Test
-    fun ofUnionMember2() {
-        val unionMember2 =
-            ElementalNode.UnionMember2.builder()
-                .type(ElementalNode.UnionMember2.Type.CHANNEL)
+    fun ofChannelNodeWithType() {
+        val channelNodeWithType =
+            ElementalChannelNodeWithType.builder()
+                .type(ElementalChannelNodeWithType.Type.CHANNEL)
                 .build()
 
-        val elementalNode = ElementalNode.ofUnionMember2(unionMember2)
+        val elementalNode = ElementalNode.ofChannelNodeWithType(channelNodeWithType)
 
-        assertThat(elementalNode.unionMember0()).isEmpty
-        assertThat(elementalNode.unionMember1()).isEmpty
-        assertThat(elementalNode.unionMember2()).contains(unionMember2)
-        assertThat(elementalNode.unionMember3()).isEmpty
-        assertThat(elementalNode.unionMember4()).isEmpty
-        assertThat(elementalNode.unionMember5()).isEmpty
-        assertThat(elementalNode.unionMember6()).isEmpty
+        assertThat(elementalNode.textNodeWithType()).isEmpty
+        assertThat(elementalNode.metaNodeWithType()).isEmpty
+        assertThat(elementalNode.channelNodeWithType()).contains(channelNodeWithType)
+        assertThat(elementalNode.imageNodeWithType()).isEmpty
+        assertThat(elementalNode.actionNodeWithType()).isEmpty
+        assertThat(elementalNode.dividerNodeWithType()).isEmpty
+        assertThat(elementalNode.quoteNodeWithType()).isEmpty
     }
 
     @Test
-    fun ofUnionMember2Roundtrip() {
+    fun ofChannelNodeWithTypeRoundtrip() {
         val jsonMapper = jsonMapper()
         val elementalNode =
-            ElementalNode.ofUnionMember2(
-                ElementalNode.UnionMember2.builder()
-                    .type(ElementalNode.UnionMember2.Type.CHANNEL)
+            ElementalNode.ofChannelNodeWithType(
+                ElementalChannelNodeWithType.builder()
+                    .type(ElementalChannelNodeWithType.Type.CHANNEL)
                     .build()
             )
 
@@ -142,38 +142,38 @@ internal class ElementalNodeTest {
     }
 
     @Test
-    fun ofUnionMember3() {
-        val unionMember3 =
-            ElementalNode.UnionMember3.builder()
+    fun ofImageNodeWithType() {
+        val imageNodeWithType =
+            ElementalImageNodeWithType.builder()
                 .addChannel("string")
                 .if_("if")
                 .loop("loop")
                 .ref("ref")
-                .type(ElementalNode.UnionMember3.Type.IMAGE)
+                .type(ElementalImageNodeWithType.Type.IMAGE)
                 .build()
 
-        val elementalNode = ElementalNode.ofUnionMember3(unionMember3)
+        val elementalNode = ElementalNode.ofImageNodeWithType(imageNodeWithType)
 
-        assertThat(elementalNode.unionMember0()).isEmpty
-        assertThat(elementalNode.unionMember1()).isEmpty
-        assertThat(elementalNode.unionMember2()).isEmpty
-        assertThat(elementalNode.unionMember3()).contains(unionMember3)
-        assertThat(elementalNode.unionMember4()).isEmpty
-        assertThat(elementalNode.unionMember5()).isEmpty
-        assertThat(elementalNode.unionMember6()).isEmpty
+        assertThat(elementalNode.textNodeWithType()).isEmpty
+        assertThat(elementalNode.metaNodeWithType()).isEmpty
+        assertThat(elementalNode.channelNodeWithType()).isEmpty
+        assertThat(elementalNode.imageNodeWithType()).contains(imageNodeWithType)
+        assertThat(elementalNode.actionNodeWithType()).isEmpty
+        assertThat(elementalNode.dividerNodeWithType()).isEmpty
+        assertThat(elementalNode.quoteNodeWithType()).isEmpty
     }
 
     @Test
-    fun ofUnionMember3Roundtrip() {
+    fun ofImageNodeWithTypeRoundtrip() {
         val jsonMapper = jsonMapper()
         val elementalNode =
-            ElementalNode.ofUnionMember3(
-                ElementalNode.UnionMember3.builder()
+            ElementalNode.ofImageNodeWithType(
+                ElementalImageNodeWithType.builder()
                     .addChannel("string")
                     .if_("if")
                     .loop("loop")
                     .ref("ref")
-                    .type(ElementalNode.UnionMember3.Type.IMAGE)
+                    .type(ElementalImageNodeWithType.Type.IMAGE)
                     .build()
             )
 
@@ -187,38 +187,38 @@ internal class ElementalNodeTest {
     }
 
     @Test
-    fun ofUnionMember4() {
-        val unionMember4 =
-            ElementalNode.UnionMember4.builder()
+    fun ofActionNodeWithType() {
+        val actionNodeWithType =
+            ElementalActionNodeWithType.builder()
                 .addChannel("string")
                 .if_("if")
                 .loop("loop")
                 .ref("ref")
-                .type(ElementalNode.UnionMember4.Type.ACTION)
+                .type(ElementalActionNodeWithType.Type.ACTION)
                 .build()
 
-        val elementalNode = ElementalNode.ofUnionMember4(unionMember4)
+        val elementalNode = ElementalNode.ofActionNodeWithType(actionNodeWithType)
 
-        assertThat(elementalNode.unionMember0()).isEmpty
-        assertThat(elementalNode.unionMember1()).isEmpty
-        assertThat(elementalNode.unionMember2()).isEmpty
-        assertThat(elementalNode.unionMember3()).isEmpty
-        assertThat(elementalNode.unionMember4()).contains(unionMember4)
-        assertThat(elementalNode.unionMember5()).isEmpty
-        assertThat(elementalNode.unionMember6()).isEmpty
+        assertThat(elementalNode.textNodeWithType()).isEmpty
+        assertThat(elementalNode.metaNodeWithType()).isEmpty
+        assertThat(elementalNode.channelNodeWithType()).isEmpty
+        assertThat(elementalNode.imageNodeWithType()).isEmpty
+        assertThat(elementalNode.actionNodeWithType()).contains(actionNodeWithType)
+        assertThat(elementalNode.dividerNodeWithType()).isEmpty
+        assertThat(elementalNode.quoteNodeWithType()).isEmpty
     }
 
     @Test
-    fun ofUnionMember4Roundtrip() {
+    fun ofActionNodeWithTypeRoundtrip() {
         val jsonMapper = jsonMapper()
         val elementalNode =
-            ElementalNode.ofUnionMember4(
-                ElementalNode.UnionMember4.builder()
+            ElementalNode.ofActionNodeWithType(
+                ElementalActionNodeWithType.builder()
                     .addChannel("string")
                     .if_("if")
                     .loop("loop")
                     .ref("ref")
-                    .type(ElementalNode.UnionMember4.Type.ACTION)
+                    .type(ElementalActionNodeWithType.Type.ACTION)
                     .build()
             )
 
@@ -232,38 +232,38 @@ internal class ElementalNodeTest {
     }
 
     @Test
-    fun ofUnionMember5() {
-        val unionMember5 =
-            ElementalNode.UnionMember5.builder()
+    fun ofDividerNodeWithType() {
+        val dividerNodeWithType =
+            ElementalDividerNodeWithType.builder()
                 .addChannel("string")
                 .if_("if")
                 .loop("loop")
                 .ref("ref")
-                .type(ElementalNode.UnionMember5.Type.DIVIDER)
+                .type(ElementalDividerNodeWithType.Type.DIVIDER)
                 .build()
 
-        val elementalNode = ElementalNode.ofUnionMember5(unionMember5)
+        val elementalNode = ElementalNode.ofDividerNodeWithType(dividerNodeWithType)
 
-        assertThat(elementalNode.unionMember0()).isEmpty
-        assertThat(elementalNode.unionMember1()).isEmpty
-        assertThat(elementalNode.unionMember2()).isEmpty
-        assertThat(elementalNode.unionMember3()).isEmpty
-        assertThat(elementalNode.unionMember4()).isEmpty
-        assertThat(elementalNode.unionMember5()).contains(unionMember5)
-        assertThat(elementalNode.unionMember6()).isEmpty
+        assertThat(elementalNode.textNodeWithType()).isEmpty
+        assertThat(elementalNode.metaNodeWithType()).isEmpty
+        assertThat(elementalNode.channelNodeWithType()).isEmpty
+        assertThat(elementalNode.imageNodeWithType()).isEmpty
+        assertThat(elementalNode.actionNodeWithType()).isEmpty
+        assertThat(elementalNode.dividerNodeWithType()).contains(dividerNodeWithType)
+        assertThat(elementalNode.quoteNodeWithType()).isEmpty
     }
 
     @Test
-    fun ofUnionMember5Roundtrip() {
+    fun ofDividerNodeWithTypeRoundtrip() {
         val jsonMapper = jsonMapper()
         val elementalNode =
-            ElementalNode.ofUnionMember5(
-                ElementalNode.UnionMember5.builder()
+            ElementalNode.ofDividerNodeWithType(
+                ElementalDividerNodeWithType.builder()
                     .addChannel("string")
                     .if_("if")
                     .loop("loop")
                     .ref("ref")
-                    .type(ElementalNode.UnionMember5.Type.DIVIDER)
+                    .type(ElementalDividerNodeWithType.Type.DIVIDER)
                     .build()
             )
 
@@ -277,38 +277,38 @@ internal class ElementalNodeTest {
     }
 
     @Test
-    fun ofUnionMember6() {
-        val unionMember6 =
-            ElementalNode.UnionMember6.builder()
+    fun ofQuoteNodeWithType() {
+        val quoteNodeWithType =
+            ElementalQuoteNodeWithType.builder()
                 .addChannel("string")
                 .if_("if")
                 .loop("loop")
                 .ref("ref")
-                .type(ElementalNode.UnionMember6.Type.QUOTE)
+                .type(ElementalQuoteNodeWithType.Type.QUOTE)
                 .build()
 
-        val elementalNode = ElementalNode.ofUnionMember6(unionMember6)
+        val elementalNode = ElementalNode.ofQuoteNodeWithType(quoteNodeWithType)
 
-        assertThat(elementalNode.unionMember0()).isEmpty
-        assertThat(elementalNode.unionMember1()).isEmpty
-        assertThat(elementalNode.unionMember2()).isEmpty
-        assertThat(elementalNode.unionMember3()).isEmpty
-        assertThat(elementalNode.unionMember4()).isEmpty
-        assertThat(elementalNode.unionMember5()).isEmpty
-        assertThat(elementalNode.unionMember6()).contains(unionMember6)
+        assertThat(elementalNode.textNodeWithType()).isEmpty
+        assertThat(elementalNode.metaNodeWithType()).isEmpty
+        assertThat(elementalNode.channelNodeWithType()).isEmpty
+        assertThat(elementalNode.imageNodeWithType()).isEmpty
+        assertThat(elementalNode.actionNodeWithType()).isEmpty
+        assertThat(elementalNode.dividerNodeWithType()).isEmpty
+        assertThat(elementalNode.quoteNodeWithType()).contains(quoteNodeWithType)
     }
 
     @Test
-    fun ofUnionMember6Roundtrip() {
+    fun ofQuoteNodeWithTypeRoundtrip() {
         val jsonMapper = jsonMapper()
         val elementalNode =
-            ElementalNode.ofUnionMember6(
-                ElementalNode.UnionMember6.builder()
+            ElementalNode.ofQuoteNodeWithType(
+                ElementalQuoteNodeWithType.builder()
                     .addChannel("string")
                     .if_("if")
                     .loop("loop")
                     .ref("ref")
-                    .type(ElementalNode.UnionMember6.Type.QUOTE)
+                    .type(ElementalQuoteNodeWithType.Type.QUOTE)
                     .build()
             )
 

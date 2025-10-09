@@ -147,33 +147,52 @@ private constructor(
                 }
         }
 
-        /** Alias for calling [addElement] with `ElementalNode.ofUnionMember0(unionMember0)`. */
-        fun addElement(unionMember0: ElementalNode.UnionMember0) =
-            addElement(ElementalNode.ofUnionMember0(unionMember0))
+        /**
+         * Alias for calling [addElement] with `ElementalNode.ofTextNodeWithType(textNodeWithType)`.
+         */
+        fun addElement(textNodeWithType: ElementalTextNodeWithType) =
+            addElement(ElementalNode.ofTextNodeWithType(textNodeWithType))
 
-        /** Alias for calling [addElement] with `ElementalNode.ofUnionMember1(unionMember1)`. */
-        fun addElement(unionMember1: ElementalNode.UnionMember1) =
-            addElement(ElementalNode.ofUnionMember1(unionMember1))
+        /**
+         * Alias for calling [addElement] with `ElementalNode.ofMetaNodeWithType(metaNodeWithType)`.
+         */
+        fun addElement(metaNodeWithType: ElementalMetaNodeWithType) =
+            addElement(ElementalNode.ofMetaNodeWithType(metaNodeWithType))
 
-        /** Alias for calling [addElement] with `ElementalNode.ofUnionMember2(unionMember2)`. */
-        fun addElement(unionMember2: ElementalNode.UnionMember2) =
-            addElement(ElementalNode.ofUnionMember2(unionMember2))
+        /**
+         * Alias for calling [addElement] with
+         * `ElementalNode.ofChannelNodeWithType(channelNodeWithType)`.
+         */
+        fun addElement(channelNodeWithType: ElementalChannelNodeWithType) =
+            addElement(ElementalNode.ofChannelNodeWithType(channelNodeWithType))
 
-        /** Alias for calling [addElement] with `ElementalNode.ofUnionMember3(unionMember3)`. */
-        fun addElement(unionMember3: ElementalNode.UnionMember3) =
-            addElement(ElementalNode.ofUnionMember3(unionMember3))
+        /**
+         * Alias for calling [addElement] with
+         * `ElementalNode.ofImageNodeWithType(imageNodeWithType)`.
+         */
+        fun addElement(imageNodeWithType: ElementalImageNodeWithType) =
+            addElement(ElementalNode.ofImageNodeWithType(imageNodeWithType))
 
-        /** Alias for calling [addElement] with `ElementalNode.ofUnionMember4(unionMember4)`. */
-        fun addElement(unionMember4: ElementalNode.UnionMember4) =
-            addElement(ElementalNode.ofUnionMember4(unionMember4))
+        /**
+         * Alias for calling [addElement] with
+         * `ElementalNode.ofActionNodeWithType(actionNodeWithType)`.
+         */
+        fun addElement(actionNodeWithType: ElementalActionNodeWithType) =
+            addElement(ElementalNode.ofActionNodeWithType(actionNodeWithType))
 
-        /** Alias for calling [addElement] with `ElementalNode.ofUnionMember5(unionMember5)`. */
-        fun addElement(unionMember5: ElementalNode.UnionMember5) =
-            addElement(ElementalNode.ofUnionMember5(unionMember5))
+        /**
+         * Alias for calling [addElement] with
+         * `ElementalNode.ofDividerNodeWithType(dividerNodeWithType)`.
+         */
+        fun addElement(dividerNodeWithType: ElementalDividerNodeWithType) =
+            addElement(ElementalNode.ofDividerNodeWithType(dividerNodeWithType))
 
-        /** Alias for calling [addElement] with `ElementalNode.ofUnionMember6(unionMember6)`. */
-        fun addElement(unionMember6: ElementalNode.UnionMember6) =
-            addElement(ElementalNode.ofUnionMember6(unionMember6))
+        /**
+         * Alias for calling [addElement] with
+         * `ElementalNode.ofQuoteNodeWithType(quoteNodeWithType)`.
+         */
+        fun addElement(quoteNodeWithType: ElementalQuoteNodeWithType) =
+            addElement(ElementalNode.ofQuoteNodeWithType(quoteNodeWithType))
 
         /** For example, "2022-01-01" */
         fun version(version: String) = version(JsonField.of(version))

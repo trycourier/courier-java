@@ -17,7 +17,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-class List
+class UserList
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
@@ -102,7 +102,7 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [List].
+         * Returns a mutable builder for constructing an instance of [UserList].
          *
          * The following fields are required:
          * ```java
@@ -113,7 +113,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [List]. */
+    /** A builder for [UserList]. */
     class Builder internal constructor() {
 
         private var id: JsonField<String>? = null
@@ -123,12 +123,12 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(list: List) = apply {
-            id = list.id
-            name = list.name
-            created = list.created
-            updated = list.updated
-            additionalProperties = list.additionalProperties.toMutableMap()
+        internal fun from(userList: UserList) = apply {
+            id = userList.id
+            name = userList.name
+            created = userList.created
+            updated = userList.updated
+            additionalProperties = userList.additionalProperties.toMutableMap()
         }
 
         fun id(id: String) = id(JsonField.of(id))
@@ -197,7 +197,7 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [List].
+         * Returns an immutable instance of [UserList].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
@@ -209,8 +209,8 @@ private constructor(
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): List =
-            List(
+        fun build(): UserList =
+            UserList(
                 checkRequired("id", id),
                 checkRequired("name", name),
                 created,
@@ -221,7 +221,7 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): List = apply {
+    fun validate(): UserList = apply {
         if (validated) {
             return@apply
         }
@@ -258,7 +258,7 @@ private constructor(
             return true
         }
 
-        return other is List &&
+        return other is UserList &&
             id == other.id &&
             name == other.name &&
             created == other.created &&
@@ -273,5 +273,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "List{id=$id, name=$name, created=$created, updated=$updated, additionalProperties=$additionalProperties}"
+        "UserList{id=$id, name=$name, created=$created, updated=$updated, additionalProperties=$additionalProperties}"
 }
