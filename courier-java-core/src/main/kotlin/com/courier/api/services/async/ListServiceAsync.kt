@@ -6,7 +6,7 @@ import com.courier.api.core.ClientOptions
 import com.courier.api.core.RequestOptions
 import com.courier.api.core.http.HttpResponse
 import com.courier.api.core.http.HttpResponseFor
-import com.courier.api.models.UserList
+import com.courier.api.models.SubscriptionList
 import com.courier.api.models.lists.ListDeleteParams
 import com.courier.api.models.lists.ListListParams
 import com.courier.api.models.lists.ListListResponse
@@ -34,7 +34,7 @@ interface ListServiceAsync {
     fun subscriptions(): SubscriptionServiceAsync
 
     /** Returns a list based on the list ID provided. */
-    fun retrieve(listId: String): CompletableFuture<UserList> =
+    fun retrieve(listId: String): CompletableFuture<SubscriptionList> =
         retrieve(listId, ListRetrieveParams.none())
 
     /** @see retrieve */
@@ -42,27 +42,30 @@ interface ListServiceAsync {
         listId: String,
         params: ListRetrieveParams = ListRetrieveParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<UserList> =
+    ): CompletableFuture<SubscriptionList> =
         retrieve(params.toBuilder().listId(listId).build(), requestOptions)
 
     /** @see retrieve */
     fun retrieve(
         listId: String,
         params: ListRetrieveParams = ListRetrieveParams.none(),
-    ): CompletableFuture<UserList> = retrieve(listId, params, RequestOptions.none())
+    ): CompletableFuture<SubscriptionList> = retrieve(listId, params, RequestOptions.none())
 
     /** @see retrieve */
     fun retrieve(
         params: ListRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<UserList>
+    ): CompletableFuture<SubscriptionList>
 
     /** @see retrieve */
-    fun retrieve(params: ListRetrieveParams): CompletableFuture<UserList> =
+    fun retrieve(params: ListRetrieveParams): CompletableFuture<SubscriptionList> =
         retrieve(params, RequestOptions.none())
 
     /** @see retrieve */
-    fun retrieve(listId: String, requestOptions: RequestOptions): CompletableFuture<UserList> =
+    fun retrieve(
+        listId: String,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<SubscriptionList> =
         retrieve(listId, ListRetrieveParams.none(), requestOptions)
 
     /** Create or replace an existing list with the supplied values. */
@@ -170,7 +173,7 @@ interface ListServiceAsync {
          * Returns a raw HTTP response for `get /lists/{list_id}`, but is otherwise the same as
          * [ListServiceAsync.retrieve].
          */
-        fun retrieve(listId: String): CompletableFuture<HttpResponseFor<UserList>> =
+        fun retrieve(listId: String): CompletableFuture<HttpResponseFor<SubscriptionList>> =
             retrieve(listId, ListRetrieveParams.none())
 
         /** @see retrieve */
@@ -178,31 +181,33 @@ interface ListServiceAsync {
             listId: String,
             params: ListRetrieveParams = ListRetrieveParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<UserList>> =
+        ): CompletableFuture<HttpResponseFor<SubscriptionList>> =
             retrieve(params.toBuilder().listId(listId).build(), requestOptions)
 
         /** @see retrieve */
         fun retrieve(
             listId: String,
             params: ListRetrieveParams = ListRetrieveParams.none(),
-        ): CompletableFuture<HttpResponseFor<UserList>> =
+        ): CompletableFuture<HttpResponseFor<SubscriptionList>> =
             retrieve(listId, params, RequestOptions.none())
 
         /** @see retrieve */
         fun retrieve(
             params: ListRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<UserList>>
+        ): CompletableFuture<HttpResponseFor<SubscriptionList>>
 
         /** @see retrieve */
-        fun retrieve(params: ListRetrieveParams): CompletableFuture<HttpResponseFor<UserList>> =
+        fun retrieve(
+            params: ListRetrieveParams
+        ): CompletableFuture<HttpResponseFor<SubscriptionList>> =
             retrieve(params, RequestOptions.none())
 
         /** @see retrieve */
         fun retrieve(
             listId: String,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<UserList>> =
+        ): CompletableFuture<HttpResponseFor<SubscriptionList>> =
             retrieve(listId, ListRetrieveParams.none(), requestOptions)
 
         /**

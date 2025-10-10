@@ -26,9 +26,9 @@ internal class ListServiceTest {
                 .build()
         val listService = client.lists()
 
-        val userList = listService.retrieve("list_id")
+        val subscriptionList = listService.retrieve("list_id")
 
-        userList.validate()
+        subscriptionList.validate()
     }
 
     @Disabled("Prism tests are disabled")

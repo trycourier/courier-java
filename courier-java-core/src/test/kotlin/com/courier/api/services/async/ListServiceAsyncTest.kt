@@ -26,10 +26,10 @@ internal class ListServiceAsyncTest {
                 .build()
         val listServiceAsync = client.lists()
 
-        val userListFuture = listServiceAsync.retrieve("list_id")
+        val subscriptionListFuture = listServiceAsync.retrieve("list_id")
 
-        val userList = userListFuture.get()
-        userList.validate()
+        val subscriptionList = subscriptionListFuture.get()
+        subscriptionList.validate()
     }
 
     @Disabled("Prism tests are disabled")
