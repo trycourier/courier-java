@@ -4,7 +4,7 @@ package com.courier.api.models.lists
 
 import com.courier.api.core.jsonMapper
 import com.courier.api.models.Paging
-import com.courier.api.models.UserList
+import com.courier.api.models.SubscriptionList
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -16,7 +16,7 @@ internal class ListListResponseTest {
         val listListResponse =
             ListListResponse.builder()
                 .addItem(
-                    UserList.builder()
+                    SubscriptionList.builder()
                         .id("id")
                         .name("name")
                         .created("created")
@@ -28,7 +28,7 @@ internal class ListListResponseTest {
 
         assertThat(listListResponse.items())
             .containsExactly(
-                UserList.builder()
+                SubscriptionList.builder()
                     .id("id")
                     .name("name")
                     .created("created")
@@ -45,7 +45,7 @@ internal class ListListResponseTest {
         val listListResponse =
             ListListResponse.builder()
                 .addItem(
-                    UserList.builder()
+                    SubscriptionList.builder()
                         .id("id")
                         .name("name")
                         .created("created")

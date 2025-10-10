@@ -86,6 +86,8 @@ private constructor(
     fun data(): Optional<Data> = data.getOptional("data")
 
     /**
+     * The user's email address.
+     *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -100,6 +102,8 @@ private constructor(
     fun locale(): Optional<String> = locale.getOptional("locale")
 
     /**
+     * The user's phone number.
+     *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -112,7 +116,7 @@ private constructor(
     fun preferences(): Optional<Preferences> = preferences.getOptional("preferences")
 
     /**
-     * Tenant id. Will load brand, default preferences and base context data.
+     * The id of the tenant the user is associated with.
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -120,6 +124,9 @@ private constructor(
     fun tenantId(): Optional<String> = tenantId.getOptional("tenant_id")
 
     /**
+     * The user's unique identifier. Typically, this will match the user id of a user in your
+     * system.
+     *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -281,6 +288,7 @@ private constructor(
          */
         fun data(data: JsonField<Data>) = apply { this.data = data }
 
+        /** The user's email address. */
         fun email(email: String?) = email(JsonField.ofNullable(email))
 
         /** Alias for calling [Builder.email] with `email.orElse(null)`. */
@@ -308,6 +316,7 @@ private constructor(
          */
         fun locale(locale: JsonField<String>) = apply { this.locale = locale }
 
+        /** The user's phone number. */
         fun phoneNumber(phoneNumber: String?) = phoneNumber(JsonField.ofNullable(phoneNumber))
 
         /** Alias for calling [Builder.phoneNumber] with `phoneNumber.orElse(null)`. */
@@ -338,7 +347,7 @@ private constructor(
             this.preferences = preferences
         }
 
-        /** Tenant id. Will load brand, default preferences and base context data. */
+        /** The id of the tenant the user is associated with. */
         fun tenantId(tenantId: String?) = tenantId(JsonField.ofNullable(tenantId))
 
         /** Alias for calling [Builder.tenantId] with `tenantId.orElse(null)`. */
@@ -352,6 +361,10 @@ private constructor(
          */
         fun tenantId(tenantId: JsonField<String>) = apply { this.tenantId = tenantId }
 
+        /**
+         * The user's unique identifier. Typically, this will match the user id of a user in your
+         * system.
+         */
         fun userId(userId: String?) = userId(JsonField.ofNullable(userId))
 
         /** Alias for calling [Builder.userId] with `userId.orElse(null)`. */
