@@ -40,14 +40,14 @@ private constructor(
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun lists(): List<SubscribeList> = body.lists()
+    fun lists(): List<List> = body.lists()
 
     /**
      * Returns the raw JSON value of [lists].
      *
      * Unlike [lists], this method doesn't throw if the JSON field has an unexpected type.
      */
-    fun _lists(): JsonField<List<SubscribeList>> = body._lists()
+    fun _lists(): JsonField<List<List>> = body._lists()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -102,23 +102,23 @@ private constructor(
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
-        fun lists(lists: List<SubscribeList>) = apply { body.lists(lists) }
+        fun lists(lists: List<List>) = apply { body.lists(lists) }
 
         /**
          * Sets [Builder.lists] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.lists] with a well-typed `List<SubscribeList>` value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.lists] with a well-typed `List<List>` value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
-        fun lists(lists: JsonField<List<SubscribeList>>) = apply { body.lists(lists) }
+        fun lists(lists: JsonField<List<List>>) = apply { body.lists(lists) }
 
         /**
-         * Adds a single [SubscribeList] to [lists].
+         * Adds a single [List] to [lists].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addList(list: SubscribeList) = apply { body.addList(list) }
+        fun addList(list: List) = apply { body.addList(list) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
@@ -273,29 +273,27 @@ private constructor(
     class Body
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
-        private val lists: JsonField<List<SubscribeList>>,
+        private val lists: JsonField<List<List>>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
         @JsonCreator
         private constructor(
-            @JsonProperty("lists")
-            @ExcludeMissing
-            lists: JsonField<List<SubscribeList>> = JsonMissing.of()
+            @JsonProperty("lists") @ExcludeMissing lists: JsonField<List<List>> = JsonMissing.of()
         ) : this(lists, mutableMapOf())
 
         /**
          * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun lists(): List<SubscribeList> = lists.getRequired("lists")
+        fun lists(): List<List> = lists.getRequired("lists")
 
         /**
          * Returns the raw JSON value of [lists].
          *
          * Unlike [lists], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("lists") @ExcludeMissing fun _lists(): JsonField<List<SubscribeList>> = lists
+        @JsonProperty("lists") @ExcludeMissing fun _lists(): JsonField<List<List>> = lists
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -325,7 +323,7 @@ private constructor(
         /** A builder for [Body]. */
         class Builder internal constructor() {
 
-            private var lists: JsonField<MutableList<SubscribeList>>? = null
+            private var lists: JsonField<MutableList<List>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -334,25 +332,25 @@ private constructor(
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
-            fun lists(lists: List<SubscribeList>) = lists(JsonField.of(lists))
+            fun lists(lists: List<List>) = lists(JsonField.of(lists))
 
             /**
              * Sets [Builder.lists] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.lists] with a well-typed `List<SubscribeList>` value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.lists] with a well-typed `List<List>` value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun lists(lists: JsonField<List<SubscribeList>>) = apply {
+            fun lists(lists: JsonField<List<List>>) = apply {
                 this.lists = lists.map { it.toMutableList() }
             }
 
             /**
-             * Adds a single [SubscribeList] to [lists].
+             * Adds a single [List] to [lists].
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
-            fun addList(list: SubscribeList) = apply {
+            fun addList(list: List) = apply {
                 lists =
                     (lists ?: JsonField.of(mutableListOf())).also {
                         checkKnown("lists", it).add(list)
@@ -443,7 +441,7 @@ private constructor(
         override fun toString() = "Body{lists=$lists, additionalProperties=$additionalProperties}"
     }
 
-    class SubscribeList
+    class List
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val listId: JsonField<String>,
@@ -502,7 +500,7 @@ private constructor(
         companion object {
 
             /**
-             * Returns a mutable builder for constructing an instance of [SubscribeList].
+             * Returns a mutable builder for constructing an instance of [List].
              *
              * The following fields are required:
              * ```java
@@ -512,7 +510,7 @@ private constructor(
             @JvmStatic fun builder() = Builder()
         }
 
-        /** A builder for [SubscribeList]. */
+        /** A builder for [List]. */
         class Builder internal constructor() {
 
             private var listId: JsonField<String>? = null
@@ -520,10 +518,10 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(subscribeList: SubscribeList) = apply {
-                listId = subscribeList.listId
-                preferences = subscribeList.preferences
-                additionalProperties = subscribeList.additionalProperties.toMutableMap()
+            internal fun from(list: List) = apply {
+                listId = list.listId
+                preferences = list.preferences
+                additionalProperties = list.additionalProperties.toMutableMap()
             }
 
             fun listId(listId: String) = listId(JsonField.of(listId))
@@ -575,7 +573,7 @@ private constructor(
             }
 
             /**
-             * Returns an immutable instance of [SubscribeList].
+             * Returns an immutable instance of [List].
              *
              * Further updates to this [Builder] will not mutate the returned instance.
              *
@@ -586,8 +584,8 @@ private constructor(
              *
              * @throws IllegalStateException if any required field is unset.
              */
-            fun build(): SubscribeList =
-                SubscribeList(
+            fun build(): List =
+                List(
                     checkRequired("listId", listId),
                     preferences,
                     additionalProperties.toMutableMap(),
@@ -596,7 +594,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): SubscribeList = apply {
+        fun validate(): List = apply {
             if (validated) {
                 return@apply
             }
@@ -630,7 +628,7 @@ private constructor(
                 return true
             }
 
-            return other is SubscribeList &&
+            return other is List &&
                 listId == other.listId &&
                 preferences == other.preferences &&
                 additionalProperties == other.additionalProperties
@@ -643,7 +641,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "SubscribeList{listId=$listId, preferences=$preferences, additionalProperties=$additionalProperties}"
+            "List{listId=$listId, preferences=$preferences, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

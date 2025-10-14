@@ -63,7 +63,7 @@ internal class ListServiceTest {
                 ListSubscribeParams.builder()
                     .userId("user_id")
                     .addList(
-                        ListSubscribeParams.SubscribeList.builder()
+                        ListSubscribeParams.List.builder()
                             .listId("listId")
                             .preferences(
                                 RecipientPreferences.builder()
