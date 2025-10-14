@@ -4,10 +4,10 @@ package com.courier.api.services.blocking.tenants.defaultpreferences
 
 import com.courier.api.TestServerExtension
 import com.courier.api.client.okhttp.CourierOkHttpClient
-import com.courier.api.models.tenants.defaultpreferences.items.ChannelClassification
+import com.courier.api.models.ChannelClassification
+import com.courier.api.models.SubscriptionTopicNew
 import com.courier.api.models.tenants.defaultpreferences.items.ItemDeleteParams
 import com.courier.api.models.tenants.defaultpreferences.items.ItemUpdateParams
-import com.courier.api.models.tenants.defaultpreferences.items.SubscriptionTopicNew
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

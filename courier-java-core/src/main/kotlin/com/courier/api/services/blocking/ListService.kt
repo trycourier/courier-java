@@ -6,7 +6,7 @@ import com.courier.api.core.ClientOptions
 import com.courier.api.core.RequestOptions
 import com.courier.api.core.http.HttpResponse
 import com.courier.api.core.http.HttpResponseFor
-import com.courier.api.models.lists.List
+import com.courier.api.models.SubscriptionList
 import com.courier.api.models.lists.ListDeleteParams
 import com.courier.api.models.lists.ListListParams
 import com.courier.api.models.lists.ListListResponse
@@ -34,30 +34,33 @@ interface ListService {
     fun subscriptions(): SubscriptionService
 
     /** Returns a list based on the list ID provided. */
-    fun retrieve(listId: String): List = retrieve(listId, ListRetrieveParams.none())
+    fun retrieve(listId: String): SubscriptionList = retrieve(listId, ListRetrieveParams.none())
 
     /** @see retrieve */
     fun retrieve(
         listId: String,
         params: ListRetrieveParams = ListRetrieveParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): List = retrieve(params.toBuilder().listId(listId).build(), requestOptions)
+    ): SubscriptionList = retrieve(params.toBuilder().listId(listId).build(), requestOptions)
 
     /** @see retrieve */
-    fun retrieve(listId: String, params: ListRetrieveParams = ListRetrieveParams.none()): List =
-        retrieve(listId, params, RequestOptions.none())
+    fun retrieve(
+        listId: String,
+        params: ListRetrieveParams = ListRetrieveParams.none(),
+    ): SubscriptionList = retrieve(listId, params, RequestOptions.none())
 
     /** @see retrieve */
     fun retrieve(
         params: ListRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): List
+    ): SubscriptionList
 
     /** @see retrieve */
-    fun retrieve(params: ListRetrieveParams): List = retrieve(params, RequestOptions.none())
+    fun retrieve(params: ListRetrieveParams): SubscriptionList =
+        retrieve(params, RequestOptions.none())
 
     /** @see retrieve */
-    fun retrieve(listId: String, requestOptions: RequestOptions): List =
+    fun retrieve(listId: String, requestOptions: RequestOptions): SubscriptionList =
         retrieve(listId, ListRetrieveParams.none(), requestOptions)
 
     /** Create or replace an existing list with the supplied values. */
@@ -152,7 +155,7 @@ interface ListService {
          * [ListService.retrieve].
          */
         @MustBeClosed
-        fun retrieve(listId: String): HttpResponseFor<List> =
+        fun retrieve(listId: String): HttpResponseFor<SubscriptionList> =
             retrieve(listId, ListRetrieveParams.none())
 
         /** @see retrieve */
@@ -161,7 +164,7 @@ interface ListService {
             listId: String,
             params: ListRetrieveParams = ListRetrieveParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<List> =
+        ): HttpResponseFor<SubscriptionList> =
             retrieve(params.toBuilder().listId(listId).build(), requestOptions)
 
         /** @see retrieve */
@@ -169,23 +172,26 @@ interface ListService {
         fun retrieve(
             listId: String,
             params: ListRetrieveParams = ListRetrieveParams.none(),
-        ): HttpResponseFor<List> = retrieve(listId, params, RequestOptions.none())
+        ): HttpResponseFor<SubscriptionList> = retrieve(listId, params, RequestOptions.none())
 
         /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             params: ListRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<List>
+        ): HttpResponseFor<SubscriptionList>
 
         /** @see retrieve */
         @MustBeClosed
-        fun retrieve(params: ListRetrieveParams): HttpResponseFor<List> =
+        fun retrieve(params: ListRetrieveParams): HttpResponseFor<SubscriptionList> =
             retrieve(params, RequestOptions.none())
 
         /** @see retrieve */
         @MustBeClosed
-        fun retrieve(listId: String, requestOptions: RequestOptions): HttpResponseFor<List> =
+        fun retrieve(
+            listId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<SubscriptionList> =
             retrieve(listId, ListRetrieveParams.none(), requestOptions)
 
         /**

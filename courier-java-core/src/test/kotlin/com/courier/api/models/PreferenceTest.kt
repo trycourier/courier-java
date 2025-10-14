@@ -3,8 +3,6 @@
 package com.courier.api.models
 
 import com.courier.api.core.jsonMapper
-import com.courier.api.models.tenants.defaultpreferences.items.ChannelClassification
-import com.courier.api.models.users.preferences.PreferenceStatus
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat

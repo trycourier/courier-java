@@ -17,10 +17,10 @@ import com.courier.api.errors.UnauthorizedException
 import com.courier.api.errors.UnexpectedStatusCodeException
 import com.courier.api.errors.UnprocessableEntityException
 import com.courier.api.models.ElementalContentSugar
-import com.courier.api.models.bulk.UserRecipient
-import com.courier.api.models.send.MessageContext
+import com.courier.api.models.MessageContext
+import com.courier.api.models.UserRecipient
+import com.courier.api.models.Utm
 import com.courier.api.models.send.SendMessageParams
-import com.courier.api.models.send.Utm
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.status

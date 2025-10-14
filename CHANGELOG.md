@@ -1,5 +1,22 @@
 # Changelog
 
+## 3.7.0-alpha0 (2025-10-14)
+
+Full Changelog: [v0.2.0...v3.7.0-alpha0](https://github.com/trycourier/courier-java/compare/v0.2.0...v3.7.0-alpha0)
+
+### Features
+
+* Kick of merge attempt ([db5f91b](https://github.com/trycourier/courier-java/commit/db5f91ba4ca352805f4367ea8a02cbd636224b7d))
+* Model sync ([0e586b9](https://github.com/trycourier/courier-java/commit/0e586b9a81627a68afa4c760a2453e8cc166c667))
+* Polish and Kick of Java Kit Gen ([7650a29](https://github.com/trycourier/courier-java/commit/7650a294024eed0a1d074be64ca67d679491ca10))
+* Template Id ([150a51a](https://github.com/trycourier/courier-java/commit/150a51add95002f29d1893beec7c4db6890b9aeb))
+* Test Github Action ([333fa1a](https://github.com/trycourier/courier-java/commit/333fa1a7398dd84cb98f21af74f305dc6574417a))
+
+
+### Chores
+
+* **client:** custom java naming to fix List overlap ([c95e9d1](https://github.com/trycourier/courier-java/commit/c95e9d1776c66978bfc891c6fabb8a82b9a09123))
+
 ## 0.2.0 (2025-10-08)
 
 Full Changelog: [v0.1.0...v0.2.0](https://github.com/trycourier/courier-java/compare/v0.1.0...v0.2.0)

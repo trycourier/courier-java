@@ -5,10 +5,10 @@ package com.courier.api.services.blocking
 import com.courier.api.TestServerExtension
 import com.courier.api.client.okhttp.CourierOkHttpClient
 import com.courier.api.core.JsonValue
+import com.courier.api.models.RecipientPreferences
 import com.courier.api.models.lists.ListListParams
 import com.courier.api.models.lists.ListRestoreParams
 import com.courier.api.models.lists.ListUpdateParams
-import com.courier.api.models.lists.subscriptions.RecipientPreferences
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -26,9 +26,9 @@ internal class ListServiceTest {
                 .build()
         val listService = client.lists()
 
-        val list = listService.retrieve("list_id")
+        val subscriptionList = listService.retrieve("list_id")
 
-        list.validate()
+        subscriptionList.validate()
     }
 
     @Disabled("Prism tests are disabled")

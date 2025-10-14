@@ -5,7 +5,7 @@ package com.courier.api.services.async.profiles
 import com.courier.api.TestServerExtension
 import com.courier.api.client.okhttp.CourierOkHttpClientAsync
 import com.courier.api.core.JsonValue
-import com.courier.api.models.lists.subscriptions.RecipientPreferences
+import com.courier.api.models.RecipientPreferences
 import com.courier.api.models.profiles.lists.ListRetrieveParams
 import com.courier.api.models.profiles.lists.ListSubscribeParams
 import org.junit.jupiter.api.Disabled
@@ -65,7 +65,7 @@ internal class ListServiceAsyncTest {
                 ListSubscribeParams.builder()
                     .userId("user_id")
                     .addList(
-                        ListSubscribeParams.List.builder()
+                        ListSubscribeParams.SubscribeList.builder()
                             .listId("listId")
                             .preferences(
                                 RecipientPreferences.builder()

@@ -6,7 +6,7 @@ import com.courier.api.core.ClientOptions
 import com.courier.api.core.RequestOptions
 import com.courier.api.core.http.HttpResponse
 import com.courier.api.core.http.HttpResponseFor
-import com.courier.api.models.tenants.Tenant
+import com.courier.api.models.Tenant
 import com.courier.api.models.tenants.TenantDeleteParams
 import com.courier.api.models.tenants.TenantListParams
 import com.courier.api.models.tenants.TenantListResponse

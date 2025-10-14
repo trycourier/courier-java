@@ -17,7 +17,7 @@ import com.courier.api.core.http.HttpResponseFor
 import com.courier.api.core.http.json
 import com.courier.api.core.http.parseable
 import com.courier.api.core.prepare
-import com.courier.api.models.lists.List
+import com.courier.api.models.SubscriptionList
 import com.courier.api.models.lists.ListDeleteParams
 import com.courier.api.models.lists.ListListParams
 import com.courier.api.models.lists.ListListResponse
@@ -46,7 +46,10 @@ class ListServiceImpl internal constructor(private val clientOptions: ClientOpti
 
     override fun subscriptions(): SubscriptionService = subscriptions
 
-    override fun retrieve(params: ListRetrieveParams, requestOptions: RequestOptions): List =
+    override fun retrieve(
+        params: ListRetrieveParams,
+        requestOptions: RequestOptions,
+    ): SubscriptionList =
         // get /lists/{list_id}
         withRawResponse().retrieve(params, requestOptions).parse()
 
@@ -88,12 +91,13 @@ class ListServiceImpl internal constructor(private val clientOptions: ClientOpti
 
         override fun subscriptions(): SubscriptionService.WithRawResponse = subscriptions
 
-        private val retrieveHandler: Handler<List> = jsonHandler<List>(clientOptions.jsonMapper)
+        private val retrieveHandler: Handler<SubscriptionList> =
+            jsonHandler<SubscriptionList>(clientOptions.jsonMapper)
 
         override fun retrieve(
             params: ListRetrieveParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<List> {
+        ): HttpResponseFor<SubscriptionList> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("listId", params.listId().getOrNull())

@@ -2,6 +2,8 @@
 
 package com.courier.api.models.tenants.defaultpreferences.items
 
+import com.courier.api.models.ChannelClassification
+import com.courier.api.models.SubscriptionTopicNew
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

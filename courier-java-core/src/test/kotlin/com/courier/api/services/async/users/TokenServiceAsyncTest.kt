@@ -5,11 +5,11 @@ package com.courier.api.services.async.users
 import com.courier.api.TestServerExtension
 import com.courier.api.client.okhttp.CourierOkHttpClientAsync
 import com.courier.api.core.JsonValue
+import com.courier.api.models.UserToken
 import com.courier.api.models.users.tokens.TokenAddSingleParams
 import com.courier.api.models.users.tokens.TokenDeleteParams
 import com.courier.api.models.users.tokens.TokenRetrieveParams
 import com.courier.api.models.users.tokens.TokenUpdateParams
-import com.courier.api.models.users.tokens.UserToken
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

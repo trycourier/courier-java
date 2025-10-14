@@ -4,9 +4,10 @@ package com.courier.api.models.bulk
 
 import com.courier.api.core.JsonValue
 import com.courier.api.core.jsonMapper
-import com.courier.api.models.audiences.Paging
-import com.courier.api.models.lists.subscriptions.RecipientPreferences
-import com.courier.api.models.send.MessageContext
+import com.courier.api.models.MessageContext
+import com.courier.api.models.Paging
+import com.courier.api.models.RecipientPreferences
+import com.courier.api.models.UserRecipient
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

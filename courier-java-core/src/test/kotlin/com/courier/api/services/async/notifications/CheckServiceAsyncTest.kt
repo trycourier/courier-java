@@ -4,7 +4,7 @@ package com.courier.api.services.async.notifications
 
 import com.courier.api.TestServerExtension
 import com.courier.api.client.okhttp.CourierOkHttpClientAsync
-import com.courier.api.models.notifications.checks.BaseCheck
+import com.courier.api.models.BaseCheck
 import com.courier.api.models.notifications.checks.CheckDeleteParams
 import com.courier.api.models.notifications.checks.CheckListParams
 import com.courier.api.models.notifications.checks.CheckUpdateParams

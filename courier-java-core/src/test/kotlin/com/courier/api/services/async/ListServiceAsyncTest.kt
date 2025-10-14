@@ -5,10 +5,10 @@ package com.courier.api.services.async
 import com.courier.api.TestServerExtension
 import com.courier.api.client.okhttp.CourierOkHttpClientAsync
 import com.courier.api.core.JsonValue
+import com.courier.api.models.RecipientPreferences
 import com.courier.api.models.lists.ListListParams
 import com.courier.api.models.lists.ListRestoreParams
 import com.courier.api.models.lists.ListUpdateParams
-import com.courier.api.models.lists.subscriptions.RecipientPreferences
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -26,10 +26,10 @@ internal class ListServiceAsyncTest {
                 .build()
         val listServiceAsync = client.lists()
 
-        val listFuture = listServiceAsync.retrieve("list_id")
+        val subscriptionListFuture = listServiceAsync.retrieve("list_id")
 
-        val list = listFuture.get()
-        list.validate()
+        val subscriptionList = subscriptionListFuture.get()
+        subscriptionList.validate()
     }
 
     @Disabled("Prism tests are disabled")

@@ -5,8 +5,9 @@ package com.courier.api.proguard
 import com.courier.api.client.okhttp.CourierOkHttpClient
 import com.courier.api.core.jsonMapper
 import com.courier.api.models.Alignment
-import com.courier.api.models.send.ElementalNode
-import com.courier.api.models.send.MessageContext
+import com.courier.api.models.ElementalNode
+import com.courier.api.models.ElementalTextNodeWithType
+import com.courier.api.models.send.SendMessageResponse
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import kotlin.reflect.full.memberFunctions
 import kotlin.reflect.jvm.javaMethod
@@ -68,30 +69,31 @@ internal class ProGuardCompatibilityTest {
     }
 
     @Test
-    fun messageContextRoundtrip() {
+    fun sendMessageResponseRoundtrip() {
         val jsonMapper = jsonMapper()
-        val messageContext = MessageContext.builder().tenantId("tenant_id").build()
+        val sendMessageResponse =
+            SendMessageResponse.builder().requestId("1-65f240a0-47a6a120c8374de9bcf9f22c").build()
 
-        val roundtrippedMessageContext =
+        val roundtrippedSendMessageResponse =
             jsonMapper.readValue(
-                jsonMapper.writeValueAsString(messageContext),
-                jacksonTypeRef<MessageContext>(),
+                jsonMapper.writeValueAsString(sendMessageResponse),
+                jacksonTypeRef<SendMessageResponse>(),
             )
 
-        assertThat(roundtrippedMessageContext).isEqualTo(messageContext)
+        assertThat(roundtrippedSendMessageResponse).isEqualTo(sendMessageResponse)
     }
 
     @Test
     fun elementalNodeRoundtrip() {
         val jsonMapper = jsonMapper()
         val elementalNode =
-            ElementalNode.ofUnionMember0(
-                ElementalNode.UnionMember0.builder()
+            ElementalNode.ofTextNodeWithType(
+                ElementalTextNodeWithType.builder()
                     .addChannel("string")
                     .if_("if")
                     .loop("loop")
                     .ref("ref")
-                    .type(ElementalNode.UnionMember0.Type.TEXT)
+                    .type(ElementalTextNodeWithType.Type.TEXT)
                     .build()
             )
 

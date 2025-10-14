@@ -5,7 +5,7 @@ package com.courier.api.services.async.automations
 import com.courier.api.core.ClientOptions
 import com.courier.api.core.RequestOptions
 import com.courier.api.core.http.HttpResponseFor
-import com.courier.api.models.automations.invoke.AutomationInvokeResponse
+import com.courier.api.models.AutomationInvokeResponse
 import com.courier.api.models.automations.invoke.InvokeInvokeAdHocParams
 import com.courier.api.models.automations.invoke.InvokeInvokeByTemplateParams
 import java.util.concurrent.CompletableFuture
