@@ -19,7 +19,7 @@ internal class ElementalChannelNodeTest {
                 .if_("if")
                 .loop("loop")
                 .ref("ref")
-                .channel("channel")
+                .channel("email")
                 .raw(
                     ElementalChannelNode.Raw.builder()
                         .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -31,7 +31,7 @@ internal class ElementalChannelNodeTest {
         assertThat(elementalChannelNode.if_()).contains("if")
         assertThat(elementalChannelNode.loop()).contains("loop")
         assertThat(elementalChannelNode.ref()).contains("ref")
-        assertThat(elementalChannelNode.channel()).isEqualTo("channel")
+        assertThat(elementalChannelNode.channel()).isEqualTo("email")
         assertThat(elementalChannelNode.raw())
             .contains(
                 ElementalChannelNode.Raw.builder()
@@ -49,7 +49,7 @@ internal class ElementalChannelNodeTest {
                 .if_("if")
                 .loop("loop")
                 .ref("ref")
-                .channel("channel")
+                .channel("email")
                 .raw(
                     ElementalChannelNode.Raw.builder()
                         .putAdditionalProperty("foo", JsonValue.from("bar"))
