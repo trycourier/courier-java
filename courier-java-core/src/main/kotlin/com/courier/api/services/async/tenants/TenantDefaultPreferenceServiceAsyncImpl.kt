@@ -3,30 +3,34 @@
 package com.courier.api.services.async.tenants
 
 import com.courier.api.core.ClientOptions
-import com.courier.api.services.async.tenants.defaultpreferences.ItemServiceAsync
-import com.courier.api.services.async.tenants.defaultpreferences.ItemServiceAsyncImpl
+import com.courier.api.services.async.tenants.tenantdefaultpreferences.ItemServiceAsync
+import com.courier.api.services.async.tenants.tenantdefaultpreferences.ItemServiceAsyncImpl
 import java.util.function.Consumer
 
-class DefaultPreferenceServiceAsyncImpl
-internal constructor(private val clientOptions: ClientOptions) : DefaultPreferenceServiceAsync {
+class TenantDefaultPreferenceServiceAsyncImpl
+internal constructor(private val clientOptions: ClientOptions) :
+    TenantDefaultPreferenceServiceAsync {
 
-    private val withRawResponse: DefaultPreferenceServiceAsync.WithRawResponse by lazy {
+    private val withRawResponse: TenantDefaultPreferenceServiceAsync.WithRawResponse by lazy {
         WithRawResponseImpl(clientOptions)
     }
 
     private val items: ItemServiceAsync by lazy { ItemServiceAsyncImpl(clientOptions) }
 
-    override fun withRawResponse(): DefaultPreferenceServiceAsync.WithRawResponse = withRawResponse
+    override fun withRawResponse(): TenantDefaultPreferenceServiceAsync.WithRawResponse =
+        withRawResponse
 
     override fun withOptions(
         modifier: Consumer<ClientOptions.Builder>
-    ): DefaultPreferenceServiceAsync =
-        DefaultPreferenceServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+    ): TenantDefaultPreferenceServiceAsync =
+        TenantDefaultPreferenceServiceAsyncImpl(
+            clientOptions.toBuilder().apply(modifier::accept).build()
+        )
 
     override fun items(): ItemServiceAsync = items
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        DefaultPreferenceServiceAsync.WithRawResponse {
+        TenantDefaultPreferenceServiceAsync.WithRawResponse {
 
         private val items: ItemServiceAsync.WithRawResponse by lazy {
             ItemServiceAsyncImpl.WithRawResponseImpl(clientOptions)
@@ -34,8 +38,8 @@ internal constructor(private val clientOptions: ClientOptions) : DefaultPreferen
 
         override fun withOptions(
             modifier: Consumer<ClientOptions.Builder>
-        ): DefaultPreferenceServiceAsync.WithRawResponse =
-            DefaultPreferenceServiceAsyncImpl.WithRawResponseImpl(
+        ): TenantDefaultPreferenceServiceAsync.WithRawResponse =
+            TenantDefaultPreferenceServiceAsyncImpl.WithRawResponseImpl(
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 

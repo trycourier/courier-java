@@ -25,10 +25,10 @@ import com.courier.api.models.tenants.TenantListUsersParams
 import com.courier.api.models.tenants.TenantListUsersResponse
 import com.courier.api.models.tenants.TenantRetrieveParams
 import com.courier.api.models.tenants.TenantUpdateParams
-import com.courier.api.services.blocking.tenants.DefaultPreferenceService
-import com.courier.api.services.blocking.tenants.DefaultPreferenceServiceImpl
 import com.courier.api.services.blocking.tenants.TemplateService
 import com.courier.api.services.blocking.tenants.TemplateServiceImpl
+import com.courier.api.services.blocking.tenants.TenantDefaultPreferenceService
+import com.courier.api.services.blocking.tenants.TenantDefaultPreferenceServiceImpl
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
@@ -39,8 +39,8 @@ class TenantServiceImpl internal constructor(private val clientOptions: ClientOp
         WithRawResponseImpl(clientOptions)
     }
 
-    private val defaultPreferences: DefaultPreferenceService by lazy {
-        DefaultPreferenceServiceImpl(clientOptions)
+    private val tenantDefaultPreferences: TenantDefaultPreferenceService by lazy {
+        TenantDefaultPreferenceServiceImpl(clientOptions)
     }
 
     private val templates: TemplateService by lazy { TemplateServiceImpl(clientOptions) }
@@ -50,7 +50,8 @@ class TenantServiceImpl internal constructor(private val clientOptions: ClientOp
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): TenantService =
         TenantServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
-    override fun defaultPreferences(): DefaultPreferenceService = defaultPreferences
+    override fun tenantDefaultPreferences(): TenantDefaultPreferenceService =
+        tenantDefaultPreferences
 
     override fun templates(): TemplateService = templates
 
@@ -87,8 +88,9 @@ class TenantServiceImpl internal constructor(private val clientOptions: ClientOp
         private val errorHandler: Handler<HttpResponse> =
             errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
-        private val defaultPreferences: DefaultPreferenceService.WithRawResponse by lazy {
-            DefaultPreferenceServiceImpl.WithRawResponseImpl(clientOptions)
+        private val tenantDefaultPreferences:
+            TenantDefaultPreferenceService.WithRawResponse by lazy {
+            TenantDefaultPreferenceServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
         private val templates: TemplateService.WithRawResponse by lazy {
@@ -102,8 +104,8 @@ class TenantServiceImpl internal constructor(private val clientOptions: ClientOp
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
-        override fun defaultPreferences(): DefaultPreferenceService.WithRawResponse =
-            defaultPreferences
+        override fun tenantDefaultPreferences(): TenantDefaultPreferenceService.WithRawResponse =
+            tenantDefaultPreferences
 
         override fun templates(): TemplateService.WithRawResponse = templates
 

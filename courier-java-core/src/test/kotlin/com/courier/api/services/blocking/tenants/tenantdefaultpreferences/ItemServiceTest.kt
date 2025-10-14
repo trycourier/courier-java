@@ -1,13 +1,13 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.api.services.blocking.tenants.defaultpreferences
+package com.courier.api.services.blocking.tenants.tenantdefaultpreferences
 
 import com.courier.api.TestServerExtension
 import com.courier.api.client.okhttp.CourierOkHttpClient
 import com.courier.api.models.ChannelClassification
 import com.courier.api.models.SubscriptionTopicNew
-import com.courier.api.models.tenants.defaultpreferences.items.ItemDeleteParams
-import com.courier.api.models.tenants.defaultpreferences.items.ItemUpdateParams
+import com.courier.api.models.tenants.tenantdefaultpreferences.items.ItemDeleteParams
+import com.courier.api.models.tenants.tenantdefaultpreferences.items.ItemUpdateParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -23,7 +23,7 @@ internal class ItemServiceTest {
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val itemService = client.tenants().defaultPreferences().items()
+        val itemService = client.tenants().tenantDefaultPreferences().items()
 
         itemService.update(
             ItemUpdateParams.builder()
@@ -48,7 +48,7 @@ internal class ItemServiceTest {
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val itemService = client.tenants().defaultPreferences().items()
+        val itemService = client.tenants().tenantDefaultPreferences().items()
 
         itemService.delete(
             ItemDeleteParams.builder().tenantId("tenant_id").topicId("topic_id").build()

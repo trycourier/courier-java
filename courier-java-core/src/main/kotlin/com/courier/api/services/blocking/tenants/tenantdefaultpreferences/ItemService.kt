@@ -1,12 +1,12 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.api.services.blocking.tenants.defaultpreferences
+package com.courier.api.services.blocking.tenants.tenantdefaultpreferences
 
 import com.courier.api.core.ClientOptions
 import com.courier.api.core.RequestOptions
 import com.courier.api.core.http.HttpResponse
-import com.courier.api.models.tenants.defaultpreferences.items.ItemDeleteParams
-import com.courier.api.models.tenants.defaultpreferences.items.ItemUpdateParams
+import com.courier.api.models.tenants.tenantdefaultpreferences.items.ItemDeleteParams
+import com.courier.api.models.tenants.tenantdefaultpreferences.items.ItemUpdateParams
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
