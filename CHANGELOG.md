@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.7.0-alpha2 (2025-10-14)
+
+Full Changelog: [v3.7.0-alpha1...v3.7.0-alpha2](https://github.com/trycourier/courier-java/compare/v3.7.0-alpha1...v3.7.0-alpha2)
+
+### Features
+
+* Feature/java 2 ([699fc18](https://github.com/trycourier/courier-java/commit/699fc187551f2caab3a133bfd247cada53c54526))
+
 ## 3.7.0-alpha1 (2025-10-14)
 
 Full Changelog: [v3.7.0-alpha0...v3.7.0-alpha1](https://github.com/trycourier/courier-java/compare/v3.7.0-alpha0...v3.7.0-alpha1)
