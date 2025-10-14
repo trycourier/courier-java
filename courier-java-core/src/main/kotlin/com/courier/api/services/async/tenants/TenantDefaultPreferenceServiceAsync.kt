@@ -1,12 +1,12 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.api.services.blocking.tenants
+package com.courier.api.services.async.tenants
 
 import com.courier.api.core.ClientOptions
-import com.courier.api.services.blocking.tenants.defaultpreferences.ItemService
+import com.courier.api.services.async.tenants.tenantdefaultpreferences.ItemServiceAsync
 import java.util.function.Consumer
 
-interface DefaultPreferenceService {
+interface TenantDefaultPreferenceServiceAsync {
 
     /**
      * Returns a view of this service that provides access to raw HTTP responses for each method.
@@ -18,13 +18,13 @@ interface DefaultPreferenceService {
      *
      * The original service is not modified.
      */
-    fun withOptions(modifier: Consumer<ClientOptions.Builder>): DefaultPreferenceService
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): TenantDefaultPreferenceServiceAsync
 
-    fun items(): ItemService
+    fun items(): ItemServiceAsync
 
     /**
-     * A view of [DefaultPreferenceService] that provides access to raw HTTP responses for each
-     * method.
+     * A view of [TenantDefaultPreferenceServiceAsync] that provides access to raw HTTP responses
+     * for each method.
      */
     interface WithRawResponse {
 
@@ -35,8 +35,8 @@ interface DefaultPreferenceService {
          */
         fun withOptions(
             modifier: Consumer<ClientOptions.Builder>
-        ): DefaultPreferenceService.WithRawResponse
+        ): TenantDefaultPreferenceServiceAsync.WithRawResponse
 
-        fun items(): ItemService.WithRawResponse
+        fun items(): ItemServiceAsync.WithRawResponse
     }
 }

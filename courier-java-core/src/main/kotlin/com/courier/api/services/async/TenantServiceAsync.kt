@@ -14,8 +14,8 @@ import com.courier.api.models.tenants.TenantListUsersParams
 import com.courier.api.models.tenants.TenantListUsersResponse
 import com.courier.api.models.tenants.TenantRetrieveParams
 import com.courier.api.models.tenants.TenantUpdateParams
-import com.courier.api.services.async.tenants.DefaultPreferenceServiceAsync
 import com.courier.api.services.async.tenants.TemplateServiceAsync
+import com.courier.api.services.async.tenants.TenantDefaultPreferenceServiceAsync
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
@@ -33,7 +33,7 @@ interface TenantServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): TenantServiceAsync
 
-    fun defaultPreferences(): DefaultPreferenceServiceAsync
+    fun tenantDefaultPreferences(): TenantDefaultPreferenceServiceAsync
 
     fun templates(): TemplateServiceAsync
 
@@ -191,7 +191,7 @@ interface TenantServiceAsync {
             modifier: Consumer<ClientOptions.Builder>
         ): TenantServiceAsync.WithRawResponse
 
-        fun defaultPreferences(): DefaultPreferenceServiceAsync.WithRawResponse
+        fun tenantDefaultPreferences(): TenantDefaultPreferenceServiceAsync.WithRawResponse
 
         fun templates(): TemplateServiceAsync.WithRawResponse
 
