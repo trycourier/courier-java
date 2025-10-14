@@ -65,7 +65,7 @@ internal class ListServiceAsyncTest {
                 ListSubscribeParams.builder()
                     .userId("user_id")
                     .addList(
-                        ListSubscribeParams.List.builder()
+                        ListSubscribeParams.SubscribeList.builder()
                             .listId("listId")
                             .preferences(
                                 RecipientPreferences.builder()
