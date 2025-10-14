@@ -14,7 +14,7 @@ internal class ListSubscribeParamsTest {
         ListSubscribeParams.builder()
             .userId("user_id")
             .addList(
-                ListSubscribeParams.List.builder()
+                ListSubscribeParams.SubscribeList.builder()
                     .listId("listId")
                     .preferences(
                         RecipientPreferences.builder()
@@ -72,7 +72,7 @@ internal class ListSubscribeParamsTest {
         val params =
             ListSubscribeParams.builder()
                 .userId("user_id")
-                .addList(ListSubscribeParams.List.builder().listId("listId").build())
+                .addList(ListSubscribeParams.SubscribeList.builder().listId("listId").build())
                 .build()
 
         assertThat(params._pathParam(0)).isEqualTo("user_id")
@@ -86,7 +86,7 @@ internal class ListSubscribeParamsTest {
             ListSubscribeParams.builder()
                 .userId("user_id")
                 .addList(
-                    ListSubscribeParams.List.builder()
+                    ListSubscribeParams.SubscribeList.builder()
                         .listId("listId")
                         .preferences(
                             RecipientPreferences.builder()
@@ -146,7 +146,7 @@ internal class ListSubscribeParamsTest {
 
         assertThat(body.lists())
             .containsExactly(
-                ListSubscribeParams.List.builder()
+                ListSubscribeParams.SubscribeList.builder()
                     .listId("listId")
                     .preferences(
                         RecipientPreferences.builder()
@@ -203,12 +203,12 @@ internal class ListSubscribeParamsTest {
         val params =
             ListSubscribeParams.builder()
                 .userId("user_id")
-                .addList(ListSubscribeParams.List.builder().listId("listId").build())
+                .addList(ListSubscribeParams.SubscribeList.builder().listId("listId").build())
                 .build()
 
         val body = params._body()
 
         assertThat(body.lists())
-            .containsExactly(ListSubscribeParams.List.builder().listId("listId").build())
+            .containsExactly(ListSubscribeParams.SubscribeList.builder().listId("listId").build())
     }
 }
