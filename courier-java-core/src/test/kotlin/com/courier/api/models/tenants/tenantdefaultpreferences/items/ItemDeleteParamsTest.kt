@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.api.models.tenants.defaultpreferences.items
+package com.courier.api.models.tenants.tenantdefaultpreferences.items
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

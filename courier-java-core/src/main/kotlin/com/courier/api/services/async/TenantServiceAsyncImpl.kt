@@ -25,10 +25,10 @@ import com.courier.api.models.tenants.TenantListUsersParams
 import com.courier.api.models.tenants.TenantListUsersResponse
 import com.courier.api.models.tenants.TenantRetrieveParams
 import com.courier.api.models.tenants.TenantUpdateParams
-import com.courier.api.services.async.tenants.DefaultPreferenceServiceAsync
-import com.courier.api.services.async.tenants.DefaultPreferenceServiceAsyncImpl
 import com.courier.api.services.async.tenants.TemplateServiceAsync
 import com.courier.api.services.async.tenants.TemplateServiceAsyncImpl
+import com.courier.api.services.async.tenants.TenantDefaultPreferenceServiceAsync
+import com.courier.api.services.async.tenants.TenantDefaultPreferenceServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
@@ -40,8 +40,8 @@ class TenantServiceAsyncImpl internal constructor(private val clientOptions: Cli
         WithRawResponseImpl(clientOptions)
     }
 
-    private val defaultPreferences: DefaultPreferenceServiceAsync by lazy {
-        DefaultPreferenceServiceAsyncImpl(clientOptions)
+    private val tenantDefaultPreferences: TenantDefaultPreferenceServiceAsync by lazy {
+        TenantDefaultPreferenceServiceAsyncImpl(clientOptions)
     }
 
     private val templates: TemplateServiceAsync by lazy { TemplateServiceAsyncImpl(clientOptions) }
@@ -51,7 +51,8 @@ class TenantServiceAsyncImpl internal constructor(private val clientOptions: Cli
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): TenantServiceAsync =
         TenantServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
-    override fun defaultPreferences(): DefaultPreferenceServiceAsync = defaultPreferences
+    override fun tenantDefaultPreferences(): TenantDefaultPreferenceServiceAsync =
+        tenantDefaultPreferences
 
     override fun templates(): TemplateServiceAsync = templates
 
@@ -96,8 +97,9 @@ class TenantServiceAsyncImpl internal constructor(private val clientOptions: Cli
         private val errorHandler: Handler<HttpResponse> =
             errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
-        private val defaultPreferences: DefaultPreferenceServiceAsync.WithRawResponse by lazy {
-            DefaultPreferenceServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        private val tenantDefaultPreferences:
+            TenantDefaultPreferenceServiceAsync.WithRawResponse by lazy {
+            TenantDefaultPreferenceServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
         private val templates: TemplateServiceAsync.WithRawResponse by lazy {
@@ -111,8 +113,8 @@ class TenantServiceAsyncImpl internal constructor(private val clientOptions: Cli
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
-        override fun defaultPreferences(): DefaultPreferenceServiceAsync.WithRawResponse =
-            defaultPreferences
+        override fun tenantDefaultPreferences():
+            TenantDefaultPreferenceServiceAsync.WithRawResponse = tenantDefaultPreferences
 
         override fun templates(): TemplateServiceAsync.WithRawResponse = templates
 
