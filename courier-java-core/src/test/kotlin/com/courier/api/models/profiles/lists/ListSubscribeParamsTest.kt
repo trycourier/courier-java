@@ -4,6 +4,7 @@ package com.courier.api.models.profiles.lists
 
 import com.courier.api.core.JsonValue
 import com.courier.api.models.RecipientPreferences
+import com.courier.api.models.SubscribeToListsRequestItem
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -14,7 +15,7 @@ internal class ListSubscribeParamsTest {
         ListSubscribeParams.builder()
             .userId("user_id")
             .addList(
-                ListSubscribeParams.List.builder()
+                SubscribeToListsRequestItem.builder()
                     .listId("listId")
                     .preferences(
                         RecipientPreferences.builder()
@@ -72,7 +73,7 @@ internal class ListSubscribeParamsTest {
         val params =
             ListSubscribeParams.builder()
                 .userId("user_id")
-                .addList(ListSubscribeParams.List.builder().listId("listId").build())
+                .addList(SubscribeToListsRequestItem.builder().listId("listId").build())
                 .build()
 
         assertThat(params._pathParam(0)).isEqualTo("user_id")
@@ -86,7 +87,7 @@ internal class ListSubscribeParamsTest {
             ListSubscribeParams.builder()
                 .userId("user_id")
                 .addList(
-                    ListSubscribeParams.List.builder()
+                    SubscribeToListsRequestItem.builder()
                         .listId("listId")
                         .preferences(
                             RecipientPreferences.builder()
@@ -146,7 +147,7 @@ internal class ListSubscribeParamsTest {
 
         assertThat(body.lists())
             .containsExactly(
-                ListSubscribeParams.List.builder()
+                SubscribeToListsRequestItem.builder()
                     .listId("listId")
                     .preferences(
                         RecipientPreferences.builder()
@@ -203,12 +204,12 @@ internal class ListSubscribeParamsTest {
         val params =
             ListSubscribeParams.builder()
                 .userId("user_id")
-                .addList(ListSubscribeParams.List.builder().listId("listId").build())
+                .addList(SubscribeToListsRequestItem.builder().listId("listId").build())
                 .build()
 
         val body = params._body()
 
         assertThat(body.lists())
-            .containsExactly(ListSubscribeParams.List.builder().listId("listId").build())
+            .containsExactly(SubscribeToListsRequestItem.builder().listId("listId").build())
     }
 }
