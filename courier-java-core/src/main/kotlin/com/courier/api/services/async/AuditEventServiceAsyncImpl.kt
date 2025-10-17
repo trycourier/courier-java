@@ -15,7 +15,7 @@ import com.courier.api.core.http.HttpResponse.Handler
 import com.courier.api.core.http.HttpResponseFor
 import com.courier.api.core.http.parseable
 import com.courier.api.core.prepareAsync
-import com.courier.api.models.AuditEvent
+import com.courier.api.models.auditevents.AuditEvent
 import com.courier.api.models.auditevents.AuditEventListParams
 import com.courier.api.models.auditevents.AuditEventListResponse
 import com.courier.api.models.auditevents.AuditEventRetrieveParams

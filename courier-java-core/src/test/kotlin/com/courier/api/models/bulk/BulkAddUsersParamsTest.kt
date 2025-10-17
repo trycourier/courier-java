@@ -3,7 +3,6 @@
 package com.courier.api.models.bulk
 
 import com.courier.api.core.JsonValue
-import com.courier.api.models.InboundBulkMessageUser
 import com.courier.api.models.MessageContext
 import com.courier.api.models.RecipientPreferences
 import com.courier.api.models.UserRecipient

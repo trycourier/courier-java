@@ -2,7 +2,6 @@
 
 package com.courier.api.models.audiences
 
-import com.courier.api.models.Filter
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

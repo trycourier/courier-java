@@ -5,7 +5,7 @@ package com.courier.api.services.blocking
 import com.courier.api.core.ClientOptions
 import com.courier.api.core.RequestOptions
 import com.courier.api.core.http.HttpResponseFor
-import com.courier.api.models.AuditEvent
+import com.courier.api.models.auditevents.AuditEvent
 import com.courier.api.models.auditevents.AuditEventListParams
 import com.courier.api.models.auditevents.AuditEventListResponse
 import com.courier.api.models.auditevents.AuditEventRetrieveParams

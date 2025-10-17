@@ -5,10 +5,10 @@ package com.courier.api.services.blocking
 import com.courier.api.core.ClientOptions
 import com.courier.api.core.RequestOptions
 import com.courier.api.core.http.HttpResponseFor
-import com.courier.api.models.MessageDetails
 import com.courier.api.models.messages.MessageCancelParams
 import com.courier.api.models.messages.MessageContentParams
 import com.courier.api.models.messages.MessageContentResponse
+import com.courier.api.models.messages.MessageDetails
 import com.courier.api.models.messages.MessageHistoryParams
 import com.courier.api.models.messages.MessageHistoryResponse
 import com.courier.api.models.messages.MessageListParams

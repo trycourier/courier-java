@@ -17,7 +17,7 @@ import com.courier.api.core.http.HttpResponseFor
 import com.courier.api.core.http.json
 import com.courier.api.core.http.parseable
 import com.courier.api.core.prepareAsync
-import com.courier.api.models.Brand
+import com.courier.api.models.brands.Brand
 import com.courier.api.models.brands.BrandCreateParams
 import com.courier.api.models.brands.BrandDeleteParams
 import com.courier.api.models.brands.BrandListParams

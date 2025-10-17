@@ -4,10 +4,10 @@ package com.courier.api.services.async
 
 import com.courier.api.TestServerExtension
 import com.courier.api.client.okhttp.CourierOkHttpClientAsync
-import com.courier.api.models.Filter
 import com.courier.api.models.audiences.AudienceListMembersParams
 import com.courier.api.models.audiences.AudienceListParams
 import com.courier.api.models.audiences.AudienceUpdateParams
+import com.courier.api.models.audiences.Filter
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

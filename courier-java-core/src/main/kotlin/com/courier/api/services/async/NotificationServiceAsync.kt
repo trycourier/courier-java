@@ -5,7 +5,7 @@ package com.courier.api.services.async
 import com.courier.api.core.ClientOptions
 import com.courier.api.core.RequestOptions
 import com.courier.api.core.http.HttpResponseFor
-import com.courier.api.models.NotificationGetContent
+import com.courier.api.models.notifications.NotificationGetContent
 import com.courier.api.models.notifications.NotificationListParams
 import com.courier.api.models.notifications.NotificationListResponse
 import com.courier.api.models.notifications.NotificationRetrieveContentParams

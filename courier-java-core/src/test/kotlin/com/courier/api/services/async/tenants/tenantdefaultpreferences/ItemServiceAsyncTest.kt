@@ -5,7 +5,7 @@ package com.courier.api.services.async.tenants.tenantdefaultpreferences
 import com.courier.api.TestServerExtension
 import com.courier.api.client.okhttp.CourierOkHttpClientAsync
 import com.courier.api.models.ChannelClassification
-import com.courier.api.models.SubscriptionTopicNew
+import com.courier.api.models.tenants.SubscriptionTopicNew
 import com.courier.api.models.tenants.tenantdefaultpreferences.items.ItemDeleteParams
 import com.courier.api.models.tenants.tenantdefaultpreferences.items.ItemUpdateParams
 import org.junit.jupiter.api.Disabled
