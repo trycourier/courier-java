@@ -6,7 +6,7 @@ import com.courier.api.TestServerExtension
 import com.courier.api.client.okhttp.CourierOkHttpClient
 import com.courier.api.core.JsonValue
 import com.courier.api.models.RecipientPreferences
-import com.courier.api.models.SubscribeToListsRequestItem
+import com.courier.api.models.profiles.SubscribeToListsRequestItem
 import com.courier.api.models.profiles.lists.ListRetrieveParams
 import com.courier.api.models.profiles.lists.ListSubscribeParams
 import org.junit.jupiter.api.Disabled

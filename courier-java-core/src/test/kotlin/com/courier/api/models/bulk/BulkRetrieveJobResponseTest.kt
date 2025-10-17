@@ -4,7 +4,6 @@ package com.courier.api.models.bulk
 
 import com.courier.api.core.JsonValue
 import com.courier.api.core.jsonMapper
-import com.courier.api.models.InboundBulkMessage
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

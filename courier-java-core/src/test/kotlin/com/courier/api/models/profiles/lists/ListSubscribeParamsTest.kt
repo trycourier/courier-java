@@ -4,7 +4,7 @@ package com.courier.api.models.profiles.lists
 
 import com.courier.api.core.JsonValue
 import com.courier.api.models.RecipientPreferences
-import com.courier.api.models.SubscribeToListsRequestItem
+import com.courier.api.models.profiles.SubscribeToListsRequestItem
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

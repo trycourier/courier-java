@@ -6,7 +6,7 @@ import com.courier.api.core.ClientOptions
 import com.courier.api.core.RequestOptions
 import com.courier.api.core.http.HttpResponse
 import com.courier.api.core.http.HttpResponseFor
-import com.courier.api.models.Audience
+import com.courier.api.models.audiences.Audience
 import com.courier.api.models.audiences.AudienceDeleteParams
 import com.courier.api.models.audiences.AudienceListMembersParams
 import com.courier.api.models.audiences.AudienceListMembersResponse

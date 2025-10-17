@@ -3,7 +3,7 @@
 package com.courier.api.models.tenants.tenantdefaultpreferences.items
 
 import com.courier.api.models.ChannelClassification
-import com.courier.api.models.SubscriptionTopicNew
+import com.courier.api.models.tenants.SubscriptionTopicNew
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

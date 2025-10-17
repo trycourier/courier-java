@@ -5,9 +5,6 @@ package com.courier.api.models.tenants
 import com.courier.api.core.JsonValue
 import com.courier.api.core.jsonMapper
 import com.courier.api.models.ChannelClassification
-import com.courier.api.models.DefaultPreferences
-import com.courier.api.models.SubscriptionTopicNew
-import com.courier.api.models.Tenant
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
