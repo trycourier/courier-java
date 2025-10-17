@@ -11,7 +11,6 @@ import com.courier.api.core.checkKnown
 import com.courier.api.core.checkRequired
 import com.courier.api.core.toImmutable
 import com.courier.api.errors.CourierInvalidDataException
-import com.courier.api.models.InboundBulkMessageUser
 import com.courier.api.models.Paging
 import com.courier.api.models.RecipientPreferences
 import com.courier.api.models.UserRecipient

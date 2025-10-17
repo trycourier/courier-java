@@ -15,7 +15,7 @@ import com.courier.api.core.http.HttpResponse.Handler
 import com.courier.api.core.http.HttpResponseFor
 import com.courier.api.core.http.parseable
 import com.courier.api.core.prepareAsync
-import com.courier.api.models.BaseTemplateTenantAssociation
+import com.courier.api.models.tenants.BaseTemplateTenantAssociation
 import com.courier.api.models.tenants.templates.TemplateListParams
 import com.courier.api.models.tenants.templates.TemplateListResponse
 import com.courier.api.models.tenants.templates.TemplateRetrieveParams

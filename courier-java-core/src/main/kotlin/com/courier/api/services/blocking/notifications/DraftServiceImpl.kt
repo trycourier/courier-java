@@ -15,7 +15,7 @@ import com.courier.api.core.http.HttpResponse.Handler
 import com.courier.api.core.http.HttpResponseFor
 import com.courier.api.core.http.parseable
 import com.courier.api.core.prepare
-import com.courier.api.models.NotificationGetContent
+import com.courier.api.models.notifications.NotificationGetContent
 import com.courier.api.models.notifications.draft.DraftRetrieveContentParams
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull

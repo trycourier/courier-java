@@ -3,7 +3,6 @@
 package com.courier.api.models.auditevents
 
 import com.courier.api.core.jsonMapper
-import com.courier.api.models.AuditEvent
 import com.courier.api.models.Paging
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat

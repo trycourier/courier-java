@@ -3,7 +3,6 @@
 package com.courier.api.models.users.tokens
 
 import com.courier.api.core.JsonValue
-import com.courier.api.models.UserToken
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

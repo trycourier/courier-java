@@ -11,8 +11,8 @@ import com.courier.api.core.checkKnown
 import com.courier.api.core.checkRequired
 import com.courier.api.core.toImmutable
 import com.courier.api.errors.CourierInvalidDataException
-import com.courier.api.models.BaseTemplateTenantAssociation
 import com.courier.api.models.MessageRouting
+import com.courier.api.models.tenants.BaseTemplateTenantAssociation
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator

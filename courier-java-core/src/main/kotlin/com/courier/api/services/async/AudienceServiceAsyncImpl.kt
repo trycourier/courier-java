@@ -17,7 +17,7 @@ import com.courier.api.core.http.HttpResponseFor
 import com.courier.api.core.http.json
 import com.courier.api.core.http.parseable
 import com.courier.api.core.prepareAsync
-import com.courier.api.models.Audience
+import com.courier.api.models.audiences.Audience
 import com.courier.api.models.audiences.AudienceDeleteParams
 import com.courier.api.models.audiences.AudienceListMembersParams
 import com.courier.api.models.audiences.AudienceListMembersResponse

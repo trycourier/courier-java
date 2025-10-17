@@ -2,7 +2,7 @@
 
 package com.courier.api.models.notifications.checks
 
-import com.courier.api.models.BaseCheck
+import com.courier.api.models.notifications.BaseCheck
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

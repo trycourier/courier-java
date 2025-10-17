@@ -15,7 +15,7 @@ import com.courier.api.core.http.HttpResponse.Handler
 import com.courier.api.core.http.HttpResponseFor
 import com.courier.api.core.http.parseable
 import com.courier.api.core.prepareAsync
-import com.courier.api.models.NotificationGetContent
+import com.courier.api.models.notifications.NotificationGetContent
 import com.courier.api.models.notifications.NotificationListParams
 import com.courier.api.models.notifications.NotificationListResponse
 import com.courier.api.models.notifications.NotificationRetrieveContentParams
