@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.7.0-alpha4 (2025-10-17)
+
+Full Changelog: [v3.7.0-alpha3...v3.7.0-alpha4](https://github.com/trycourier/courier-java/compare/v3.7.0-alpha3...v3.7.0-alpha4)
+
+### Bug Fixes
+
+* Updated paths for each model and go example updates ([175539f](https://github.com/trycourier/courier-java/commit/175539f9d0376f5bd6539c44650ece4c899d84c2))
+
 ## 3.7.0-alpha3 (2025-10-17)
 
 Full Changelog: [v3.7.0-alpha2...v3.7.0-alpha3](https://github.com/trycourier/courier-java/compare/v3.7.0-alpha2...v3.7.0-alpha3)
