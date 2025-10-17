@@ -64,7 +64,7 @@ private constructor(
     )
 
     /**
-     * Use `tenant_id` instead.
+     * Deprecated - Use `tenant_id` instead.
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -245,7 +245,7 @@ private constructor(
             additionalProperties = userRecipient.additionalProperties.toMutableMap()
         }
 
-        /** Use `tenant_id` instead. */
+        /** Deprecated - Use `tenant_id` instead. */
         fun accountId(accountId: String?) = accountId(JsonField.ofNullable(accountId))
 
         /** Alias for calling [Builder.accountId] with `accountId.orElse(null)`. */
