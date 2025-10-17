@@ -109,6 +109,7 @@ internal class ElementalNodeTest {
         val channelNodeWithType =
             ElementalChannelNodeWithType.builder()
                 .type(ElementalChannelNodeWithType.Type.CHANNEL)
+                .channel("slack")
                 .build()
 
         val elementalNode = ElementalNode.ofChannelNodeWithType(channelNodeWithType)
@@ -129,6 +130,7 @@ internal class ElementalNodeTest {
             ElementalNode.ofChannelNodeWithType(
                 ElementalChannelNodeWithType.builder()
                     .type(ElementalChannelNodeWithType.Type.CHANNEL)
+                    .channel("slack")
                     .build()
             )
 
