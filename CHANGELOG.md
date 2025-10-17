@@ -1,5 +1,18 @@
 # Changelog
 
+## 3.7.0-alpha3 (2025-10-17)
+
+Full Changelog: [v3.7.0-alpha2...v3.7.0-alpha3](https://github.com/trycourier/courier-java/compare/v3.7.0-alpha2...v3.7.0-alpha3)
+
+### Features
+
+* More PHP and attempted node automerge ([a034224](https://github.com/trycourier/courier-java/commit/a034224e176fd5cfd303732bf202d19f9c269584))
+
+
+### Bug Fixes
+
+* **test:** set required field channel ([93525f3](https://github.com/trycourier/courier-java/commit/93525f374fe22c412e473afd0b4f22f649dada8f))
+
 ## 3.7.0-alpha2 (2025-10-14)
 
 Full Changelog: [v3.7.0-alpha1...v3.7.0-alpha2](https://github.com/trycourier/courier-java/compare/v3.7.0-alpha1...v3.7.0-alpha2)

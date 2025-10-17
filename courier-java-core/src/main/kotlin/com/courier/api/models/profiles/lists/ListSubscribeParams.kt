@@ -13,7 +13,7 @@ import com.courier.api.core.http.Headers
 import com.courier.api.core.http.QueryParams
 import com.courier.api.core.toImmutable
 import com.courier.api.errors.CourierInvalidDataException
-import com.courier.api.models.RecipientPreferences
+import com.courier.api.models.SubscribeToListsRequestItem
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -40,14 +40,14 @@ private constructor(
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun lists(): List<List> = body.lists()
+    fun lists(): List<SubscribeToListsRequestItem> = body.lists()
 
     /**
      * Returns the raw JSON value of [lists].
      *
      * Unlike [lists], this method doesn't throw if the JSON field has an unexpected type.
      */
-    fun _lists(): JsonField<List<List>> = body._lists()
+    fun _lists(): JsonField<List<SubscribeToListsRequestItem>> = body._lists()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -102,23 +102,23 @@ private constructor(
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
-        fun lists(lists: List<List>) = apply { body.lists(lists) }
+        fun lists(lists: List<SubscribeToListsRequestItem>) = apply { body.lists(lists) }
 
         /**
          * Sets [Builder.lists] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.lists] with a well-typed `List<List>` value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
+         * You should usually call [Builder.lists] with a well-typed
+         * `List<SubscribeToListsRequestItem>` value instead. This method is primarily for setting
+         * the field to an undocumented or not yet supported value.
          */
-        fun lists(lists: JsonField<List<List>>) = apply { body.lists(lists) }
+        fun lists(lists: JsonField<List<SubscribeToListsRequestItem>>) = apply { body.lists(lists) }
 
         /**
-         * Adds a single [List] to [lists].
+         * Adds a single [SubscribeToListsRequestItem] to [lists].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addList(list: List) = apply { body.addList(list) }
+        fun addList(list: SubscribeToListsRequestItem) = apply { body.addList(list) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
@@ -273,27 +273,31 @@ private constructor(
     class Body
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
-        private val lists: JsonField<List<List>>,
+        private val lists: JsonField<List<SubscribeToListsRequestItem>>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
         @JsonCreator
         private constructor(
-            @JsonProperty("lists") @ExcludeMissing lists: JsonField<List<List>> = JsonMissing.of()
+            @JsonProperty("lists")
+            @ExcludeMissing
+            lists: JsonField<List<SubscribeToListsRequestItem>> = JsonMissing.of()
         ) : this(lists, mutableMapOf())
 
         /**
          * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun lists(): List<List> = lists.getRequired("lists")
+        fun lists(): List<SubscribeToListsRequestItem> = lists.getRequired("lists")
 
         /**
          * Returns the raw JSON value of [lists].
          *
          * Unlike [lists], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("lists") @ExcludeMissing fun _lists(): JsonField<List<List>> = lists
+        @JsonProperty("lists")
+        @ExcludeMissing
+        fun _lists(): JsonField<List<SubscribeToListsRequestItem>> = lists
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -323,7 +327,7 @@ private constructor(
         /** A builder for [Body]. */
         class Builder internal constructor() {
 
-            private var lists: JsonField<MutableList<List>>? = null
+            private var lists: JsonField<MutableList<SubscribeToListsRequestItem>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -332,25 +336,25 @@ private constructor(
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
-            fun lists(lists: List<List>) = lists(JsonField.of(lists))
+            fun lists(lists: List<SubscribeToListsRequestItem>) = lists(JsonField.of(lists))
 
             /**
              * Sets [Builder.lists] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.lists] with a well-typed `List<List>` value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.lists] with a well-typed
+             * `List<SubscribeToListsRequestItem>` value instead. This method is primarily for
+             * setting the field to an undocumented or not yet supported value.
              */
-            fun lists(lists: JsonField<List<List>>) = apply {
+            fun lists(lists: JsonField<List<SubscribeToListsRequestItem>>) = apply {
                 this.lists = lists.map { it.toMutableList() }
             }
 
             /**
-             * Adds a single [List] to [lists].
+             * Adds a single [SubscribeToListsRequestItem] to [lists].
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
-            fun addList(list: List) = apply {
+            fun addList(list: SubscribeToListsRequestItem) = apply {
                 lists =
                     (lists ?: JsonField.of(mutableListOf())).also {
                         checkKnown("lists", it).add(list)
@@ -439,209 +443,6 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() = "Body{lists=$lists, additionalProperties=$additionalProperties}"
-    }
-
-    class List
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
-        private val listId: JsonField<String>,
-        private val preferences: JsonField<RecipientPreferences>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("listId") @ExcludeMissing listId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("preferences")
-            @ExcludeMissing
-            preferences: JsonField<RecipientPreferences> = JsonMissing.of(),
-        ) : this(listId, preferences, mutableMapOf())
-
-        /**
-         * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun listId(): String = listId.getRequired("listId")
-
-        /**
-         * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun preferences(): Optional<RecipientPreferences> = preferences.getOptional("preferences")
-
-        /**
-         * Returns the raw JSON value of [listId].
-         *
-         * Unlike [listId], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("listId") @ExcludeMissing fun _listId(): JsonField<String> = listId
-
-        /**
-         * Returns the raw JSON value of [preferences].
-         *
-         * Unlike [preferences], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("preferences")
-        @ExcludeMissing
-        fun _preferences(): JsonField<RecipientPreferences> = preferences
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [List].
-             *
-             * The following fields are required:
-             * ```java
-             * .listId()
-             * ```
-             */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        /** A builder for [List]. */
-        class Builder internal constructor() {
-
-            private var listId: JsonField<String>? = null
-            private var preferences: JsonField<RecipientPreferences> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(list: List) = apply {
-                listId = list.listId
-                preferences = list.preferences
-                additionalProperties = list.additionalProperties.toMutableMap()
-            }
-
-            fun listId(listId: String) = listId(JsonField.of(listId))
-
-            /**
-             * Sets [Builder.listId] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.listId] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun listId(listId: JsonField<String>) = apply { this.listId = listId }
-
-            fun preferences(preferences: RecipientPreferences?) =
-                preferences(JsonField.ofNullable(preferences))
-
-            /** Alias for calling [Builder.preferences] with `preferences.orElse(null)`. */
-            fun preferences(preferences: Optional<RecipientPreferences>) =
-                preferences(preferences.getOrNull())
-
-            /**
-             * Sets [Builder.preferences] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.preferences] with a well-typed
-             * [RecipientPreferences] value instead. This method is primarily for setting the field
-             * to an undocumented or not yet supported value.
-             */
-            fun preferences(preferences: JsonField<RecipientPreferences>) = apply {
-                this.preferences = preferences
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [List].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```java
-             * .listId()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
-             */
-            fun build(): List =
-                List(
-                    checkRequired("listId", listId),
-                    preferences,
-                    additionalProperties.toMutableMap(),
-                )
-        }
-
-        private var validated: Boolean = false
-
-        fun validate(): List = apply {
-            if (validated) {
-                return@apply
-            }
-
-            listId()
-            preferences().ifPresent { it.validate() }
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: CourierInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        @JvmSynthetic
-        internal fun validity(): Int =
-            (if (listId.asKnown().isPresent) 1 else 0) +
-                (preferences.asKnown().getOrNull()?.validity() ?: 0)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is List &&
-                listId == other.listId &&
-                preferences == other.preferences &&
-                additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy {
-            Objects.hash(listId, preferences, additionalProperties)
-        }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "List{listId=$listId, preferences=$preferences, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
