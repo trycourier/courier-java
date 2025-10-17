@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.7.0-alpha5 (2025-10-17)
+
+Full Changelog: [v3.7.0-alpha4...v3.7.0-alpha5](https://github.com/trycourier/courier-java/compare/v3.7.0-alpha4...v3.7.0-alpha5)
+
+### Bug Fixes
+
+* Dep Warning ([9f7c1b2](https://github.com/trycourier/courier-java/commit/9f7c1b278685a941c2a37edfc5928610d18c42a3))
+
 ## 3.7.0-alpha4 (2025-10-17)
 
 Full Changelog: [v3.7.0-alpha3...v3.7.0-alpha4](https://github.com/trycourier/courier-java/compare/v3.7.0-alpha3...v3.7.0-alpha4)
