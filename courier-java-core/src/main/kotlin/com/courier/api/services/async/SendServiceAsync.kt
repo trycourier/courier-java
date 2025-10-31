@@ -24,7 +24,7 @@ interface SendServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): SendServiceAsync
 
-    /** Use the send API to send a message to one or more recipients. */
+    /** API to send a message to one or more recipients. */
     fun message(params: SendMessageParams): CompletableFuture<SendMessageResponse> =
         message(params, RequestOptions.none())
 
