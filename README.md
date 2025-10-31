@@ -2,8 +2,8 @@
 
 <!-- x-release-please-start-version -->
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.courier.api/courier-java)](https://central.sonatype.com/artifact/com.courier.api/courier-java/3.7.0-alpha5)
-[![javadoc](https://javadoc.io/badge2/com.courier.api/courier-java/3.7.0-alpha5/javadoc.svg)](https://javadoc.io/doc/com.courier.api/courier-java/3.7.0-alpha5)
+[![Maven Central](https://img.shields.io/maven-central/v/com.courier.api/courier-java)](https://central.sonatype.com/artifact/com.courier.api/courier-java/3.7.0-alpha6)
+[![javadoc](https://javadoc.io/badge2/com.courier.api/courier-java/3.7.0-alpha6/javadoc.svg)](https://javadoc.io/doc/com.courier.api/courier-java/3.7.0-alpha6)
 
 <!-- x-release-please-end -->
 
@@ -13,7 +13,7 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 <!-- x-release-please-start-version -->
 
-Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.courier.api/courier-java/3.7.0-alpha5).
+Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.courier.api/courier-java/3.7.0-alpha6).
 
 <!-- x-release-please-end -->
 
@@ -24,7 +24,7 @@ Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.courier.api/co
 ### Gradle
 
 ```kotlin
-implementation("com.courier.api:courier-java:3.7.0-alpha5")
+implementation("com.courier.api:courier-java:3.7.0-alpha6")
 ```
 
 ### Maven
@@ -33,7 +33,7 @@ implementation("com.courier.api:courier-java:3.7.0-alpha5")
 <dependency>
   <groupId>com.courier.api</groupId>
   <artifactId>courier-java</artifactId>
-  <version>3.7.0-alpha5</version>
+  <version>3.7.0-alpha6</version>
 </dependency>
 ```
 

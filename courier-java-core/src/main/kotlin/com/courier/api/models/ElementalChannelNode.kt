@@ -91,7 +91,7 @@ private constructor(
     fun channel(): String = channel.getRequired("channel")
 
     /**
-     * Raw data to apply to the channel. If `elements` has not been specified, `raw` is `required`.
+     * Raw data to apply to the channel. If `elements` has not been specified, `raw` is required.
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -270,7 +270,7 @@ private constructor(
 
         /**
          * Raw data to apply to the channel. If `elements` has not been specified, `raw` is
-         * `required`.
+         * required.
          */
         fun raw(raw: Raw?) = raw(JsonField.ofNullable(raw))
 
@@ -367,7 +367,7 @@ private constructor(
             (raw.asKnown().getOrNull()?.validity() ?: 0)
 
     /**
-     * Raw data to apply to the channel. If `elements` has not been specified, `raw` is `required`.
+     * Raw data to apply to the channel. If `elements` has not been specified, `raw` is required.
      */
     class Raw
     @JsonCreator
