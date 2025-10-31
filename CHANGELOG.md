@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.7.0-alpha7 (2025-10-31)
+
+Full Changelog: [v3.7.0-alpha6...v3.7.0-alpha7](https://github.com/trycourier/courier-java/compare/v3.7.0-alpha6...v3.7.0-alpha7)
+
+### Bug Fixes
+
+* Courier Reverse Domain for Java ([29df93f](https://github.com/trycourier/courier-java/commit/29df93f9ee88817e62d724d5b5e4755895bb0e29))
+
 ## 3.7.0-alpha6 (2025-10-31)
 
 Full Changelog: [v3.7.0-alpha5...v3.7.0-alpha6](https://github.com/trycourier/courier-java/compare/v3.7.0-alpha5...v3.7.0-alpha6)
