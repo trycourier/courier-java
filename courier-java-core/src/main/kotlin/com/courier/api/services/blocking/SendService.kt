@@ -24,7 +24,7 @@ interface SendService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): SendService
 
-    /** Use the send API to send a message to one or more recipients. */
+    /** API to send a message to one or more recipients. */
     fun message(params: SendMessageParams): SendMessageResponse =
         message(params, RequestOptions.none())
 
