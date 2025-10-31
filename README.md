@@ -2,8 +2,8 @@
 
 <!-- x-release-please-start-version -->
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.courier.api/courier-java)](https://central.sonatype.com/artifact/com.courier.api/courier-java/3.7.0-alpha6)
-[![javadoc](https://javadoc.io/badge2/com.courier.api/courier-java/3.7.0-alpha6/javadoc.svg)](https://javadoc.io/doc/com.courier.api/courier-java/3.7.0-alpha6)
+[![Maven Central](https://img.shields.io/maven-central/v/com.courier/courier-java)](https://central.sonatype.com/artifact/com.courier/courier-java/3.7.0-alpha6)
+[![javadoc](https://javadoc.io/badge2/com.courier/courier-java/3.7.0-alpha6/javadoc.svg)](https://javadoc.io/doc/com.courier/courier-java/3.7.0-alpha6)
 
 <!-- x-release-please-end -->
 
@@ -13,7 +13,7 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 <!-- x-release-please-start-version -->
 
-Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.courier.api/courier-java/3.7.0-alpha6).
+Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.courier/courier-java/3.7.0-alpha6).
 
 <!-- x-release-please-end -->
 
@@ -24,14 +24,14 @@ Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.courier.api/co
 ### Gradle
 
 ```kotlin
-implementation("com.courier.api:courier-java:3.7.0-alpha6")
+implementation("com.courier:courier-java:3.7.0-alpha6")
 ```
 
 ### Maven
 
 ```xml
 <dependency>
-  <groupId>com.courier.api</groupId>
+  <groupId>com.courier</groupId>
   <artifactId>courier-java</artifactId>
   <version>3.7.0-alpha6</version>
 </dependency>
@@ -46,12 +46,12 @@ This library requires Java 8 or later.
 ## Usage
 
 ```java
-import com.courier.api.client.CourierClient;
-import com.courier.api.client.okhttp.CourierOkHttpClient;
-import com.courier.api.core.JsonValue;
-import com.courier.api.models.UserRecipient;
-import com.courier.api.models.send.SendMessageParams;
-import com.courier.api.models.send.SendMessageResponse;
+import com.courier.client.CourierClient;
+import com.courier.client.okhttp.CourierOkHttpClient;
+import com.courier.core.JsonValue;
+import com.courier.models.UserRecipient;
+import com.courier.models.send.SendMessageParams;
+import com.courier.models.send.SendMessageResponse;
 
 // Configures using the `courier.apiKey` and `courier.baseUrl` system properties
 // Or configures using the `COURIER_API_KEY` and `COURIER_BASE_URL` environment variables
@@ -76,8 +76,8 @@ SendMessageResponse response = client.send().message(params);
 Configure the client using system properties or environment variables:
 
 ```java
-import com.courier.api.client.CourierClient;
-import com.courier.api.client.okhttp.CourierOkHttpClient;
+import com.courier.client.CourierClient;
+import com.courier.client.okhttp.CourierOkHttpClient;
 
 // Configures using the `courier.apiKey` and `courier.baseUrl` system properties
 // Or configures using the `COURIER_API_KEY` and `COURIER_BASE_URL` environment variables
@@ -87,8 +87,8 @@ CourierClient client = CourierOkHttpClient.fromEnv();
 Or manually:
 
 ```java
-import com.courier.api.client.CourierClient;
-import com.courier.api.client.okhttp.CourierOkHttpClient;
+import com.courier.client.CourierClient;
+import com.courier.client.okhttp.CourierOkHttpClient;
 
 CourierClient client = CourierOkHttpClient.builder()
     .apiKey("My API Key")
@@ -98,8 +98,8 @@ CourierClient client = CourierOkHttpClient.builder()
 Or using a combination of the two approaches:
 
 ```java
-import com.courier.api.client.CourierClient;
-import com.courier.api.client.okhttp.CourierOkHttpClient;
+import com.courier.client.CourierClient;
+import com.courier.client.okhttp.CourierOkHttpClient;
 
 CourierClient client = CourierOkHttpClient.builder()
     // Configures using the `courier.apiKey` and `courier.baseUrl` system properties
@@ -127,7 +127,7 @@ System properties take precedence over environment variables.
 To temporarily use a modified client configuration, while reusing the same connection and thread pools, call `withOptions()` on any client or service:
 
 ```java
-import com.courier.api.client.CourierClient;
+import com.courier.client.CourierClient;
 
 CourierClient clientWithOptions = client.withOptions(optionsBuilder -> {
     optionsBuilder.baseUrl("https://example.com");
@@ -156,12 +156,12 @@ Because each class is immutable, builder modification will _never_ affect alread
 The default client is synchronous. To switch to asynchronous execution, call the `async()` method:
 
 ```java
-import com.courier.api.client.CourierClient;
-import com.courier.api.client.okhttp.CourierOkHttpClient;
-import com.courier.api.core.JsonValue;
-import com.courier.api.models.UserRecipient;
-import com.courier.api.models.send.SendMessageParams;
-import com.courier.api.models.send.SendMessageResponse;
+import com.courier.client.CourierClient;
+import com.courier.client.okhttp.CourierOkHttpClient;
+import com.courier.core.JsonValue;
+import com.courier.models.UserRecipient;
+import com.courier.models.send.SendMessageParams;
+import com.courier.models.send.SendMessageResponse;
 import java.util.concurrent.CompletableFuture;
 
 // Configures using the `courier.apiKey` and `courier.baseUrl` system properties
@@ -185,12 +185,12 @@ CompletableFuture<SendMessageResponse> response = client.async().send().message(
 Or create an asynchronous client from the beginning:
 
 ```java
-import com.courier.api.client.CourierClientAsync;
-import com.courier.api.client.okhttp.CourierOkHttpClientAsync;
-import com.courier.api.core.JsonValue;
-import com.courier.api.models.UserRecipient;
-import com.courier.api.models.send.SendMessageParams;
-import com.courier.api.models.send.SendMessageResponse;
+import com.courier.client.CourierClientAsync;
+import com.courier.client.okhttp.CourierOkHttpClientAsync;
+import com.courier.core.JsonValue;
+import com.courier.models.UserRecipient;
+import com.courier.models.send.SendMessageParams;
+import com.courier.models.send.SendMessageResponse;
 import java.util.concurrent.CompletableFuture;
 
 // Configures using the `courier.apiKey` and `courier.baseUrl` system properties
@@ -220,12 +220,12 @@ The SDK defines methods that deserialize responses into instances of Java classe
 To access this data, prefix any HTTP method call on a client or service with `withRawResponse()`:
 
 ```java
-import com.courier.api.core.JsonValue;
-import com.courier.api.core.http.Headers;
-import com.courier.api.core.http.HttpResponseFor;
-import com.courier.api.models.UserRecipient;
-import com.courier.api.models.send.SendMessageParams;
-import com.courier.api.models.send.SendMessageResponse;
+import com.courier.core.JsonValue;
+import com.courier.core.http.Headers;
+import com.courier.core.http.HttpResponseFor;
+import com.courier.models.UserRecipient;
+import com.courier.models.send.SendMessageParams;
+import com.courier.models.send.SendMessageResponse;
 
 SendMessageParams params = SendMessageParams.builder()
     .message(SendMessageParams.Message.builder()
@@ -247,7 +247,7 @@ Headers headers = response.headers();
 You can still deserialize the response into an instance of a Java class if needed:
 
 ```java
-import com.courier.api.models.send.SendMessageResponse;
+import com.courier.models.send.SendMessageResponse;
 
 SendMessageResponse parsedResponse = response.parse();
 ```
@@ -256,26 +256,26 @@ SendMessageResponse parsedResponse = response.parse();
 
 The SDK throws custom unchecked exception types:
 
-- [`CourierServiceException`](courier-java-core/src/main/kotlin/com/courier/api/errors/CourierServiceException.kt): Base class for HTTP errors. See this table for which exception subclass is thrown for each HTTP status code:
+- [`CourierServiceException`](courier-java-core/src/main/kotlin/com/courier/errors/CourierServiceException.kt): Base class for HTTP errors. See this table for which exception subclass is thrown for each HTTP status code:
 
-  | Status | Exception                                                                                                                    |
-  | ------ | ---------------------------------------------------------------------------------------------------------------------------- |
-  | 400    | [`BadRequestException`](courier-java-core/src/main/kotlin/com/courier/api/errors/BadRequestException.kt)                     |
-  | 401    | [`UnauthorizedException`](courier-java-core/src/main/kotlin/com/courier/api/errors/UnauthorizedException.kt)                 |
-  | 403    | [`PermissionDeniedException`](courier-java-core/src/main/kotlin/com/courier/api/errors/PermissionDeniedException.kt)         |
-  | 404    | [`NotFoundException`](courier-java-core/src/main/kotlin/com/courier/api/errors/NotFoundException.kt)                         |
-  | 422    | [`UnprocessableEntityException`](courier-java-core/src/main/kotlin/com/courier/api/errors/UnprocessableEntityException.kt)   |
-  | 429    | [`RateLimitException`](courier-java-core/src/main/kotlin/com/courier/api/errors/RateLimitException.kt)                       |
-  | 5xx    | [`InternalServerException`](courier-java-core/src/main/kotlin/com/courier/api/errors/InternalServerException.kt)             |
-  | others | [`UnexpectedStatusCodeException`](courier-java-core/src/main/kotlin/com/courier/api/errors/UnexpectedStatusCodeException.kt) |
+  | Status | Exception                                                                                                                |
+  | ------ | ------------------------------------------------------------------------------------------------------------------------ |
+  | 400    | [`BadRequestException`](courier-java-core/src/main/kotlin/com/courier/errors/BadRequestException.kt)                     |
+  | 401    | [`UnauthorizedException`](courier-java-core/src/main/kotlin/com/courier/errors/UnauthorizedException.kt)                 |
+  | 403    | [`PermissionDeniedException`](courier-java-core/src/main/kotlin/com/courier/errors/PermissionDeniedException.kt)         |
+  | 404    | [`NotFoundException`](courier-java-core/src/main/kotlin/com/courier/errors/NotFoundException.kt)                         |
+  | 422    | [`UnprocessableEntityException`](courier-java-core/src/main/kotlin/com/courier/errors/UnprocessableEntityException.kt)   |
+  | 429    | [`RateLimitException`](courier-java-core/src/main/kotlin/com/courier/errors/RateLimitException.kt)                       |
+  | 5xx    | [`InternalServerException`](courier-java-core/src/main/kotlin/com/courier/errors/InternalServerException.kt)             |
+  | others | [`UnexpectedStatusCodeException`](courier-java-core/src/main/kotlin/com/courier/errors/UnexpectedStatusCodeException.kt) |
 
-- [`CourierIoException`](courier-java-core/src/main/kotlin/com/courier/api/errors/CourierIoException.kt): I/O networking errors.
+- [`CourierIoException`](courier-java-core/src/main/kotlin/com/courier/errors/CourierIoException.kt): I/O networking errors.
 
-- [`CourierRetryableException`](courier-java-core/src/main/kotlin/com/courier/api/errors/CourierRetryableException.kt): Generic error indicating a failure that could be retried by the client.
+- [`CourierRetryableException`](courier-java-core/src/main/kotlin/com/courier/errors/CourierRetryableException.kt): Generic error indicating a failure that could be retried by the client.
 
-- [`CourierInvalidDataException`](courier-java-core/src/main/kotlin/com/courier/api/errors/CourierInvalidDataException.kt): Failure to interpret successfully parsed data. For example, when accessing a property that's supposed to be required, but the API unexpectedly omitted it from the response.
+- [`CourierInvalidDataException`](courier-java-core/src/main/kotlin/com/courier/errors/CourierInvalidDataException.kt): Failure to interpret successfully parsed data. For example, when accessing a property that's supposed to be required, but the API unexpectedly omitted it from the response.
 
-- [`CourierException`](courier-java-core/src/main/kotlin/com/courier/api/errors/CourierException.kt): Base class for all exceptions. Most errors will result in one of the previously mentioned ones, but completely generic errors may be thrown using the base class.
+- [`CourierException`](courier-java-core/src/main/kotlin/com/courier/errors/CourierException.kt): Base class for all exceptions. Most errors will result in one of the previously mentioned ones, but completely generic errors may be thrown using the base class.
 
 ## Logging
 
@@ -305,7 +305,7 @@ The SDK depends on [Jackson](https://github.com/FasterXML/jackson) for JSON seri
 
 The SDK throws an exception if it detects an incompatible Jackson version at runtime (e.g. if the default version was overridden in your Maven or Gradle config).
 
-If the SDK threw an exception, but you're _certain_ the version is compatible, then disable the version check using the `checkJacksonVersionCompatibility` on [`CourierOkHttpClient`](courier-java-client-okhttp/src/main/kotlin/com/courier/api/client/okhttp/CourierOkHttpClient.kt) or [`CourierOkHttpClientAsync`](courier-java-client-okhttp/src/main/kotlin/com/courier/api/client/okhttp/CourierOkHttpClientAsync.kt).
+If the SDK threw an exception, but you're _certain_ the version is compatible, then disable the version check using the `checkJacksonVersionCompatibility` on [`CourierOkHttpClient`](courier-java-client-okhttp/src/main/kotlin/com/courier/client/okhttp/CourierOkHttpClient.kt) or [`CourierOkHttpClientAsync`](courier-java-client-okhttp/src/main/kotlin/com/courier/client/okhttp/CourierOkHttpClientAsync.kt).
 
 > [!CAUTION]
 > We make no guarantee that the SDK works correctly when the Jackson version check is disabled.
@@ -329,8 +329,8 @@ The API may also explicitly instruct the SDK to retry or not retry a request.
 To set a custom number of retries, configure the client using the `maxRetries` method:
 
 ```java
-import com.courier.api.client.CourierClient;
-import com.courier.api.client.okhttp.CourierOkHttpClient;
+import com.courier.client.CourierClient;
+import com.courier.client.okhttp.CourierOkHttpClient;
 
 CourierClient client = CourierOkHttpClient.builder()
     .fromEnv()
@@ -345,7 +345,7 @@ Requests time out after 1 minute by default.
 To set a custom timeout, configure the method call using the `timeout` method:
 
 ```java
-import com.courier.api.models.send.SendMessageResponse;
+import com.courier.models.send.SendMessageResponse;
 
 SendMessageResponse response = client.send().message(
   params, RequestOptions.builder().timeout(Duration.ofSeconds(30)).build()
@@ -355,8 +355,8 @@ SendMessageResponse response = client.send().message(
 Or configure the default for all method calls at the client level:
 
 ```java
-import com.courier.api.client.CourierClient;
-import com.courier.api.client.okhttp.CourierOkHttpClient;
+import com.courier.client.CourierClient;
+import com.courier.client.okhttp.CourierOkHttpClient;
 import java.time.Duration;
 
 CourierClient client = CourierOkHttpClient.builder()
@@ -370,8 +370,8 @@ CourierClient client = CourierOkHttpClient.builder()
 To route requests through a proxy, configure the client using the `proxy` method:
 
 ```java
-import com.courier.api.client.CourierClient;
-import com.courier.api.client.okhttp.CourierOkHttpClient;
+import com.courier.client.CourierClient;
+import com.courier.client.okhttp.CourierOkHttpClient;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 
@@ -394,8 +394,8 @@ CourierClient client = CourierOkHttpClient.builder()
 To configure how HTTPS connections are secured, configure the client using the `sslSocketFactory`, `trustManager`, and `hostnameVerifier` methods:
 
 ```java
-import com.courier.api.client.CourierClient;
-import com.courier.api.client.okhttp.CourierOkHttpClient;
+import com.courier.client.CourierClient;
+import com.courier.client.okhttp.CourierOkHttpClient;
 
 CourierClient client = CourierOkHttpClient.builder()
     .fromEnv()
@@ -413,10 +413,10 @@ The SDK consists of three artifacts:
 - `courier-java-core`
   - Contains core SDK logic
   - Does not depend on [OkHttp](https://square.github.io/okhttp)
-  - Exposes [`CourierClient`](courier-java-core/src/main/kotlin/com/courier/api/client/CourierClient.kt), [`CourierClientAsync`](courier-java-core/src/main/kotlin/com/courier/api/client/CourierClientAsync.kt), [`CourierClientImpl`](courier-java-core/src/main/kotlin/com/courier/api/client/CourierClientImpl.kt), and [`CourierClientAsyncImpl`](courier-java-core/src/main/kotlin/com/courier/api/client/CourierClientAsyncImpl.kt), all of which can work with any HTTP client
+  - Exposes [`CourierClient`](courier-java-core/src/main/kotlin/com/courier/client/CourierClient.kt), [`CourierClientAsync`](courier-java-core/src/main/kotlin/com/courier/client/CourierClientAsync.kt), [`CourierClientImpl`](courier-java-core/src/main/kotlin/com/courier/client/CourierClientImpl.kt), and [`CourierClientAsyncImpl`](courier-java-core/src/main/kotlin/com/courier/client/CourierClientAsyncImpl.kt), all of which can work with any HTTP client
 - `courier-java-client-okhttp`
   - Depends on [OkHttp](https://square.github.io/okhttp)
-  - Exposes [`CourierOkHttpClient`](courier-java-client-okhttp/src/main/kotlin/com/courier/api/client/okhttp/CourierOkHttpClient.kt) and [`CourierOkHttpClientAsync`](courier-java-client-okhttp/src/main/kotlin/com/courier/api/client/okhttp/CourierOkHttpClientAsync.kt), which provide a way to construct [`CourierClientImpl`](courier-java-core/src/main/kotlin/com/courier/api/client/CourierClientImpl.kt) and [`CourierClientAsyncImpl`](courier-java-core/src/main/kotlin/com/courier/api/client/CourierClientAsyncImpl.kt), respectively, using OkHttp
+  - Exposes [`CourierOkHttpClient`](courier-java-client-okhttp/src/main/kotlin/com/courier/client/okhttp/CourierOkHttpClient.kt) and [`CourierOkHttpClientAsync`](courier-java-client-okhttp/src/main/kotlin/com/courier/client/okhttp/CourierOkHttpClientAsync.kt), which provide a way to construct [`CourierClientImpl`](courier-java-core/src/main/kotlin/com/courier/client/CourierClientImpl.kt) and [`CourierClientAsyncImpl`](courier-java-core/src/main/kotlin/com/courier/client/CourierClientAsyncImpl.kt), respectively, using OkHttp
 - `courier-java`
   - Depends on and exposes the APIs of both `courier-java-core` and `courier-java-client-okhttp`
   - Does not have its own logic
@@ -431,16 +431,16 @@ This structure allows replacing the SDK's default HTTP client without pulling in
 To use a customized `OkHttpClient`:
 
 1. Replace your [`courier-java` dependency](#installation) with `courier-java-core`
-2. Copy `courier-java-client-okhttp`'s [`OkHttpClient`](courier-java-client-okhttp/src/main/kotlin/com/courier/api/client/okhttp/OkHttpClient.kt) class into your code and customize it
-3. Construct [`CourierClientImpl`](courier-java-core/src/main/kotlin/com/courier/api/client/CourierClientImpl.kt) or [`CourierClientAsyncImpl`](courier-java-core/src/main/kotlin/com/courier/api/client/CourierClientAsyncImpl.kt), similarly to [`CourierOkHttpClient`](courier-java-client-okhttp/src/main/kotlin/com/courier/api/client/okhttp/CourierOkHttpClient.kt) or [`CourierOkHttpClientAsync`](courier-java-client-okhttp/src/main/kotlin/com/courier/api/client/okhttp/CourierOkHttpClientAsync.kt), using your customized client
+2. Copy `courier-java-client-okhttp`'s [`OkHttpClient`](courier-java-client-okhttp/src/main/kotlin/com/courier/client/okhttp/OkHttpClient.kt) class into your code and customize it
+3. Construct [`CourierClientImpl`](courier-java-core/src/main/kotlin/com/courier/client/CourierClientImpl.kt) or [`CourierClientAsyncImpl`](courier-java-core/src/main/kotlin/com/courier/client/CourierClientAsyncImpl.kt), similarly to [`CourierOkHttpClient`](courier-java-client-okhttp/src/main/kotlin/com/courier/client/okhttp/CourierOkHttpClient.kt) or [`CourierOkHttpClientAsync`](courier-java-client-okhttp/src/main/kotlin/com/courier/client/okhttp/CourierOkHttpClientAsync.kt), using your customized client
 
 ### Completely custom HTTP client
 
 To use a completely custom HTTP client:
 
 1. Replace your [`courier-java` dependency](#installation) with `courier-java-core`
-2. Write a class that implements the [`HttpClient`](courier-java-core/src/main/kotlin/com/courier/api/core/http/HttpClient.kt) interface
-3. Construct [`CourierClientImpl`](courier-java-core/src/main/kotlin/com/courier/api/client/CourierClientImpl.kt) or [`CourierClientAsyncImpl`](courier-java-core/src/main/kotlin/com/courier/api/client/CourierClientAsyncImpl.kt), similarly to [`CourierOkHttpClient`](courier-java-client-okhttp/src/main/kotlin/com/courier/api/client/okhttp/CourierOkHttpClient.kt) or [`CourierOkHttpClientAsync`](courier-java-client-okhttp/src/main/kotlin/com/courier/api/client/okhttp/CourierOkHttpClientAsync.kt), using your new client class
+2. Write a class that implements the [`HttpClient`](courier-java-core/src/main/kotlin/com/courier/core/http/HttpClient.kt) interface
+3. Construct [`CourierClientImpl`](courier-java-core/src/main/kotlin/com/courier/client/CourierClientImpl.kt) or [`CourierClientAsyncImpl`](courier-java-core/src/main/kotlin/com/courier/client/CourierClientAsyncImpl.kt), similarly to [`CourierOkHttpClient`](courier-java-client-okhttp/src/main/kotlin/com/courier/client/okhttp/CourierOkHttpClient.kt) or [`CourierOkHttpClientAsync`](courier-java-client-okhttp/src/main/kotlin/com/courier/client/okhttp/CourierOkHttpClientAsync.kt), using your new client class
 
 ## Undocumented API functionality
 
@@ -451,8 +451,8 @@ The SDK is typed for convenient usage of the documented API. However, it also su
 To set undocumented parameters, call the `putAdditionalHeader`, `putAdditionalQueryParam`, or `putAdditionalBodyProperty` methods on any `Params` class:
 
 ```java
-import com.courier.api.core.JsonValue;
-import com.courier.api.models.send.SendMessageParams;
+import com.courier.core.JsonValue;
+import com.courier.models.send.SendMessageParams;
 
 SendMessageParams params = SendMessageParams.builder()
     .putAdditionalHeader("Secret-Header", "42")
@@ -466,8 +466,8 @@ These can be accessed on the built object later using the `_additionalHeaders()`
 To set undocumented parameters on _nested_ headers, query params, or body classes, call the `putAdditionalProperty` method on the nested class:
 
 ```java
-import com.courier.api.core.JsonValue;
-import com.courier.api.models.send.SendMessageParams;
+import com.courier.core.JsonValue;
+import com.courier.models.send.SendMessageParams;
 
 SendMessageParams params = SendMessageParams.builder()
     .message(SendMessageParams.Message.builder()
@@ -478,21 +478,21 @@ SendMessageParams params = SendMessageParams.builder()
 
 These properties can be accessed on the nested built object later using the `_additionalProperties()` method.
 
-To set a documented parameter or property to an undocumented or not yet supported _value_, pass a [`JsonValue`](courier-java-core/src/main/kotlin/com/courier/api/core/Values.kt) object to its setter:
+To set a documented parameter or property to an undocumented or not yet supported _value_, pass a [`JsonValue`](courier-java-core/src/main/kotlin/com/courier/core/Values.kt) object to its setter:
 
 ```java
-import com.courier.api.core.JsonValue;
-import com.courier.api.models.send.SendMessageParams;
+import com.courier.core.JsonValue;
+import com.courier.models.send.SendMessageParams;
 
 SendMessageParams params = SendMessageParams.builder()
     .message(JsonValue.from(42))
     .build();
 ```
 
-The most straightforward way to create a [`JsonValue`](courier-java-core/src/main/kotlin/com/courier/api/core/Values.kt) is using its `from(...)` method:
+The most straightforward way to create a [`JsonValue`](courier-java-core/src/main/kotlin/com/courier/core/Values.kt) is using its `from(...)` method:
 
 ```java
-import com.courier.api.core.JsonValue;
+import com.courier.core.JsonValue;
 import java.util.List;
 import java.util.Map;
 
@@ -530,11 +530,11 @@ JsonValue complexValue = JsonValue.from(Map.of(
 
 Normally a `Builder` class's `build` method will throw [`IllegalStateException`](https://docs.oracle.com/javase/8/docs/api/java/lang/IllegalStateException.html) if any required parameter or property is unset.
 
-To forcibly omit a required parameter or property, pass [`JsonMissing`](courier-java-core/src/main/kotlin/com/courier/api/core/Values.kt):
+To forcibly omit a required parameter or property, pass [`JsonMissing`](courier-java-core/src/main/kotlin/com/courier/core/Values.kt):
 
 ```java
-import com.courier.api.core.JsonMissing;
-import com.courier.api.models.send.SendMessageParams;
+import com.courier.core.JsonMissing;
+import com.courier.models.send.SendMessageParams;
 
 SendMessageParams params = SendMessageParams.builder()
     .message(JsonMissing.of())
@@ -546,7 +546,7 @@ SendMessageParams params = SendMessageParams.builder()
 To access undocumented response properties, call the `_additionalProperties()` method:
 
 ```java
-import com.courier.api.core.JsonValue;
+import com.courier.core.JsonValue;
 import java.util.Map;
 
 Map<String, JsonValue> additionalProperties = client.send().message(params)._additionalProperties();
@@ -576,8 +576,8 @@ String result = secretPropertyValue.accept(new JsonValue.Visitor<>() {
 To access a property's raw JSON value, which may be undocumented, call its `_` prefixed method:
 
 ```java
-import com.courier.api.core.JsonField;
-import com.courier.api.models.send.SendMessageParams;
+import com.courier.core.JsonField;
+import com.courier.models.send.SendMessageParams;
 import java.util.Optional;
 
 JsonField<SendMessageParams.Message> message = client.send().message(params)._message();
@@ -600,12 +600,12 @@ if (message.isMissing()) {
 
 In rare cases, the API may return a response that doesn't match the expected type. For example, the SDK may expect a property to contain a `String`, but the API could return something else.
 
-By default, the SDK will not throw an exception in this case. It will throw [`CourierInvalidDataException`](courier-java-core/src/main/kotlin/com/courier/api/errors/CourierInvalidDataException.kt) only if you directly access the property.
+By default, the SDK will not throw an exception in this case. It will throw [`CourierInvalidDataException`](courier-java-core/src/main/kotlin/com/courier/errors/CourierInvalidDataException.kt) only if you directly access the property.
 
 If you would prefer to check that the response is completely well-typed upfront, then either call `validate()`:
 
 ```java
-import com.courier.api.models.send.SendMessageResponse;
+import com.courier.models.send.SendMessageResponse;
 
 SendMessageResponse response = client.send().message(params).validate();
 ```
@@ -613,7 +613,7 @@ SendMessageResponse response = client.send().message(params).validate();
 Or configure the method call to validate the response using the `responseValidation` method:
 
 ```java
-import com.courier.api.models.send.SendMessageResponse;
+import com.courier.models.send.SendMessageResponse;
 
 SendMessageResponse response = client.send().message(
   params, RequestOptions.builder().responseValidation(true).build()
@@ -623,8 +623,8 @@ SendMessageResponse response = client.send().message(
 Or configure the default for all method calls at the client level:
 
 ```java
-import com.courier.api.client.CourierClient;
-import com.courier.api.client.okhttp.CourierOkHttpClient;
+import com.courier.client.CourierClient;
+import com.courier.client.okhttp.CourierOkHttpClient;
 
 CourierClient client = CourierOkHttpClient.builder()
     .fromEnv()
