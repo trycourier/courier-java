@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.7.0 (2025-11-03)
+
+Full Changelog: [v3.7.0-alpha7...v3.7.0](https://github.com/trycourier/courier-java/compare/v3.7.0-alpha7...v3.7.0)
+
+### Features
+
+* Organization update ([6eb3c51](https://github.com/trycourier/courier-java/commit/6eb3c519ff7c2f7c08fe55a01c57bdf753eb811a))
+
 ## 3.7.0-alpha7 (2025-10-31)
 
 Full Changelog: [v3.7.0-alpha6...v3.7.0-alpha7](https://github.com/trycourier/courier-java/compare/v3.7.0-alpha6...v3.7.0-alpha7)
