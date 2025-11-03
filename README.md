@@ -7,13 +7,13 @@
 
 <!-- x-release-please-end -->
 
-The Courier Java SDK provides convenient access to the Courier REST API from applications written in Java.
+The Courier Java SDK provides convenient access to the [Courier REST API](https://www.courier.com/docs) from applications written in Java.
 
 It is generated with [Stainless](https://www.stainless.com/).
 
 <!-- x-release-please-start-version -->
 
-Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.courier/courier-java/3.7.0-alpha7).
+The REST API documentation can be found on [www.courier.com](https://www.courier.com/docs). Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.courier/courier-java/3.7.0-alpha7).
 
 <!-- x-release-please-end -->
 

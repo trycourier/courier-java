@@ -30,8 +30,8 @@ configure<MavenPublishBaseExtension> {
 
     pom {
         name.set("Courier")
-        description.set("An SDK library for courier")
-        url.set("https://www.github.com/trycourier/courier-java")
+        description.set("An SDK library for Courier")
+        url.set("https://www.courier.com/docs")
 
         licenses {
             license {
@@ -42,6 +42,7 @@ configure<MavenPublishBaseExtension> {
         developers {
             developer {
                 name.set("Courier")
+                email.set("support@courier.com")
             }
         }
 
