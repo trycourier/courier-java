@@ -2,8 +2,8 @@
 
 <!-- x-release-please-start-version -->
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.courier/courier-java)](https://central.sonatype.com/artifact/com.courier/courier-java/3.7.0)
-[![javadoc](https://javadoc.io/badge2/com.courier/courier-java/3.7.0/javadoc.svg)](https://javadoc.io/doc/com.courier/courier-java/3.7.0)
+[![Maven Central](https://img.shields.io/maven-central/v/com.courier/courier-java)](https://central.sonatype.com/artifact/com.courier/courier-java/3.7.1)
+[![javadoc](https://javadoc.io/badge2/com.courier/courier-java/3.7.1/javadoc.svg)](https://javadoc.io/doc/com.courier/courier-java/3.7.1)
 
 <!-- x-release-please-end -->
 
@@ -13,7 +13,7 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 <!-- x-release-please-start-version -->
 
-The REST API documentation can be found on [www.courier.com](https://www.courier.com/docs). Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.courier/courier-java/3.7.0).
+The REST API documentation can be found on [www.courier.com](https://www.courier.com/docs). Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.courier/courier-java/3.7.1).
 
 <!-- x-release-please-end -->
 
@@ -24,7 +24,7 @@ The REST API documentation can be found on [www.courier.com](https://www.courier
 ### Gradle
 
 ```kotlin
-implementation("com.courier:courier-java:3.7.0")
+implementation("com.courier:courier-java:3.7.1")
 ```
 
 ### Maven
@@ -33,7 +33,7 @@ implementation("com.courier:courier-java:3.7.0")
 <dependency>
   <groupId>com.courier</groupId>
   <artifactId>courier-java</artifactId>
-  <version>3.7.0</version>
+  <version>3.7.1</version>
 </dependency>
 ```
 
@@ -62,7 +62,7 @@ SendMessageParams params = SendMessageParams.builder()
         .to(UserRecipient.builder()
             .userId("your_user_id")
             .build())
-        .template("your_template")
+        .template("your_template_id")
         .data(SendMessageParams.Message.Data.builder()
             .putAdditionalProperty("foo", JsonValue.from("bar"))
             .build())
@@ -173,7 +173,7 @@ SendMessageParams params = SendMessageParams.builder()
         .to(UserRecipient.builder()
             .userId("your_user_id")
             .build())
-        .template("your_template")
+        .template("your_template_id")
         .data(SendMessageParams.Message.Data.builder()
             .putAdditionalProperty("foo", JsonValue.from("bar"))
             .build())
@@ -202,7 +202,7 @@ SendMessageParams params = SendMessageParams.builder()
         .to(UserRecipient.builder()
             .userId("your_user_id")
             .build())
-        .template("your_template")
+        .template("your_template_id")
         .data(SendMessageParams.Message.Data.builder()
             .putAdditionalProperty("foo", JsonValue.from("bar"))
             .build())
@@ -232,7 +232,7 @@ SendMessageParams params = SendMessageParams.builder()
         .to(UserRecipient.builder()
             .userId("your_user_id")
             .build())
-        .template("your_template")
+        .template("your_template_id")
         .data(SendMessageParams.Message.Data.builder()
             .putAdditionalProperty("foo", JsonValue.from("bar"))
             .build())

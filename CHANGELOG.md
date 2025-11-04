@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.7.1 (2025-11-04)
+
+Full Changelog: [v3.7.0...v3.7.1](https://github.com/trycourier/courier-java/compare/v3.7.0...v3.7.1)
+
+### Features
+
+* Attempt kick off again ([fadbcb6](https://github.com/trycourier/courier-java/commit/fadbcb687966348aafeafd7d2dec123ecde91260))
+
 ## 3.7.0 (2025-11-03)
 
 Full Changelog: [v3.7.0-alpha7...v3.7.0](https://github.com/trycourier/courier-java/compare/v3.7.0-alpha7...v3.7.0)
