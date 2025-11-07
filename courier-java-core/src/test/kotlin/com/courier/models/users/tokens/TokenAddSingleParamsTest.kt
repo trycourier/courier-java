@@ -15,8 +15,8 @@ internal class TokenAddSingleParamsTest {
             .pathToken("token")
             .userToken(
                 UserToken.builder()
-                    .providerKey(UserToken.ProviderKey.FIREBASE_FCM)
                     .token("token")
+                    .providerKey(UserToken.ProviderKey.FIREBASE_FCM)
                     .device(
                         UserToken.Device.builder()
                             .adId("ad_id")
@@ -49,7 +49,10 @@ internal class TokenAddSingleParamsTest {
                 .userId("user_id")
                 .pathToken("token")
                 .userToken(
-                    UserToken.builder().providerKey(UserToken.ProviderKey.FIREBASE_FCM).build()
+                    UserToken.builder()
+                        .token("token")
+                        .providerKey(UserToken.ProviderKey.FIREBASE_FCM)
+                        .build()
                 )
                 .build()
 
@@ -67,8 +70,8 @@ internal class TokenAddSingleParamsTest {
                 .pathToken("token")
                 .userToken(
                     UserToken.builder()
-                        .providerKey(UserToken.ProviderKey.FIREBASE_FCM)
                         .token("token")
+                        .providerKey(UserToken.ProviderKey.FIREBASE_FCM)
                         .device(
                             UserToken.Device.builder()
                                 .adId("ad_id")
@@ -98,8 +101,8 @@ internal class TokenAddSingleParamsTest {
         assertThat(body)
             .isEqualTo(
                 UserToken.builder()
-                    .providerKey(UserToken.ProviderKey.FIREBASE_FCM)
                     .token("token")
+                    .providerKey(UserToken.ProviderKey.FIREBASE_FCM)
                     .device(
                         UserToken.Device.builder()
                             .adId("ad_id")
@@ -131,13 +134,21 @@ internal class TokenAddSingleParamsTest {
                 .userId("user_id")
                 .pathToken("token")
                 .userToken(
-                    UserToken.builder().providerKey(UserToken.ProviderKey.FIREBASE_FCM).build()
+                    UserToken.builder()
+                        .token("token")
+                        .providerKey(UserToken.ProviderKey.FIREBASE_FCM)
+                        .build()
                 )
                 .build()
 
         val body = params._body()
 
         assertThat(body)
-            .isEqualTo(UserToken.builder().providerKey(UserToken.ProviderKey.FIREBASE_FCM).build())
+            .isEqualTo(
+                UserToken.builder()
+                    .token("token")
+                    .providerKey(UserToken.ProviderKey.FIREBASE_FCM)
+                    .build()
+            )
     }
 }

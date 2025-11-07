@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.7.2 (2025-11-07)
+
+Full Changelog: [v3.7.1...v3.7.2](https://github.com/trycourier/courier-java/compare/v3.7.1...v3.7.2)
+
+### Bug Fixes
+
+* Better Python Samples + Updates to naming ([bcfaab7](https://github.com/trycourier/courier-java/commit/bcfaab71bfebcd63089bdc85916d4f493f30479f))
+
 ## 3.7.1 (2025-11-04)
 
 Full Changelog: [v3.7.0...v3.7.1](https://github.com/trycourier/courier-java/compare/v3.7.0...v3.7.1)

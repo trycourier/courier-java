@@ -1,13 +1,13 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.services.blocking.tenants.tenantdefaultpreferences
+package com.courier.services.blocking.tenants.preferences
 
 import com.courier.TestServerExtension
 import com.courier.client.okhttp.CourierOkHttpClient
 import com.courier.models.ChannelClassification
 import com.courier.models.tenants.SubscriptionTopicNew
-import com.courier.models.tenants.tenantdefaultpreferences.items.ItemDeleteParams
-import com.courier.models.tenants.tenantdefaultpreferences.items.ItemUpdateParams
+import com.courier.models.tenants.preferences.items.ItemDeleteParams
+import com.courier.models.tenants.preferences.items.ItemUpdateParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -23,7 +23,7 @@ internal class ItemServiceTest {
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val itemService = client.tenants().tenantDefaultPreferences().items()
+        val itemService = client.tenants().preferences().items()
 
         itemService.update(
             ItemUpdateParams.builder()
@@ -48,7 +48,7 @@ internal class ItemServiceTest {
                 .baseUrl(TestServerExtension.BASE_URL)
                 .apiKey("My API Key")
                 .build()
-        val itemService = client.tenants().tenantDefaultPreferences().items()
+        val itemService = client.tenants().preferences().items()
 
         itemService.delete(
             ItemDeleteParams.builder().tenantId("tenant_id").topicId("topic_id").build()
