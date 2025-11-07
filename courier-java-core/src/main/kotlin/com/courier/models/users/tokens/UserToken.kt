@@ -70,7 +70,7 @@ private constructor(
     fun providerKey(): ProviderKey = providerKey.getRequired("provider_key")
 
     /**
-     * Information about the device the token is associated with.
+     * Information about the device the token came from.
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -90,7 +90,7 @@ private constructor(
     @JsonProperty("properties") @ExcludeMissing fun _properties(): JsonValue = properties
 
     /**
-     * Information about the device the token is associated with.
+     * Tracking information about the device the token came from.
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -208,7 +208,7 @@ private constructor(
             this.providerKey = providerKey
         }
 
-        /** Information about the device the token is associated with. */
+        /** Information about the device the token came from. */
         fun device(device: Device?) = device(JsonField.ofNullable(device))
 
         /** Alias for calling [Builder.device] with `device.orElse(null)`. */
@@ -249,7 +249,7 @@ private constructor(
         /** Properties sent to the provider along with the token */
         fun properties(properties: JsonValue) = apply { this.properties = properties }
 
-        /** Information about the device the token is associated with. */
+        /** Tracking information about the device the token came from. */
         fun tracking(tracking: Tracking?) = tracking(JsonField.ofNullable(tracking))
 
         /** Alias for calling [Builder.tracking] with `tracking.orElse(null)`. */
@@ -484,7 +484,7 @@ private constructor(
         override fun toString() = value.toString()
     }
 
-    /** Information about the device the token is associated with. */
+    /** Information about the device the token came from. */
     class Device
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
@@ -1011,7 +1011,7 @@ private constructor(
         }
     }
 
-    /** Information about the device the token is associated with. */
+    /** Tracking information about the device the token came from. */
     class Tracking
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
