@@ -89,7 +89,7 @@ private constructor(
     fun providerKey(): UserToken.ProviderKey = providerKey.getRequired("provider_key")
 
     /**
-     * Information about the device the token is associated with.
+     * Information about the device the token came from.
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -109,7 +109,7 @@ private constructor(
     @JsonProperty("properties") @ExcludeMissing fun _properties(): JsonValue = properties
 
     /**
-     * Information about the device the token is associated with.
+     * Tracking information about the device the token came from.
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -263,7 +263,7 @@ private constructor(
             this.providerKey = providerKey
         }
 
-        /** Information about the device the token is associated with. */
+        /** Information about the device the token came from. */
         fun device(device: UserToken.Device?) = device(JsonField.ofNullable(device))
 
         /** Alias for calling [Builder.device] with `device.orElse(null)`. */
@@ -309,7 +309,7 @@ private constructor(
         /** Properties sent to the provider along with the token */
         fun properties(properties: JsonValue) = apply { this.properties = properties }
 
-        /** Information about the device the token is associated with. */
+        /** Tracking information about the device the token came from. */
         fun tracking(tracking: UserToken.Tracking?) = tracking(JsonField.ofNullable(tracking))
 
         /** Alias for calling [Builder.tracking] with `tracking.orElse(null)`. */
