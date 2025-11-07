@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.models.tenants.tenantdefaultpreferences.items
+package com.courier.models.tenants.preferences.items
 
 import com.courier.models.ChannelClassification
 import com.courier.models.tenants.SubscriptionTopicNew

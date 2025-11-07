@@ -32,8 +32,8 @@ import kotlin.jvm.optionals.getOrNull
 class UserToken
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    private val providerKey: JsonField<ProviderKey>,
     private val token: JsonField<String>,
+    private val providerKey: JsonField<ProviderKey>,
     private val device: JsonField<Device>,
     private val expiryDate: JsonField<ExpiryDate>,
     private val properties: JsonValue,
@@ -43,31 +43,31 @@ private constructor(
 
     @JsonCreator
     private constructor(
+        @JsonProperty("token") @ExcludeMissing token: JsonField<String> = JsonMissing.of(),
         @JsonProperty("provider_key")
         @ExcludeMissing
         providerKey: JsonField<ProviderKey> = JsonMissing.of(),
-        @JsonProperty("token") @ExcludeMissing token: JsonField<String> = JsonMissing.of(),
         @JsonProperty("device") @ExcludeMissing device: JsonField<Device> = JsonMissing.of(),
         @JsonProperty("expiry_date")
         @ExcludeMissing
         expiryDate: JsonField<ExpiryDate> = JsonMissing.of(),
         @JsonProperty("properties") @ExcludeMissing properties: JsonValue = JsonMissing.of(),
         @JsonProperty("tracking") @ExcludeMissing tracking: JsonField<Tracking> = JsonMissing.of(),
-    ) : this(providerKey, token, device, expiryDate, properties, tracking, mutableMapOf())
+    ) : this(token, providerKey, device, expiryDate, properties, tracking, mutableMapOf())
+
+    /**
+     * Full body of the token. Must match token in URL path parameter.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun token(): String = token.getRequired("token")
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun providerKey(): ProviderKey = providerKey.getRequired("provider_key")
-
-    /**
-     * Full body of the token. Must match token in URL.
-     *
-     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
-    fun token(): Optional<String> = token.getOptional("token")
 
     /**
      * Information about the device the token is associated with.
@@ -98,6 +98,13 @@ private constructor(
     fun tracking(): Optional<Tracking> = tracking.getOptional("tracking")
 
     /**
+     * Returns the raw JSON value of [token].
+     *
+     * Unlike [token], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("token") @ExcludeMissing fun _token(): JsonField<String> = token
+
+    /**
      * Returns the raw JSON value of [providerKey].
      *
      * Unlike [providerKey], this method doesn't throw if the JSON field has an unexpected type.
@@ -105,13 +112,6 @@ private constructor(
     @JsonProperty("provider_key")
     @ExcludeMissing
     fun _providerKey(): JsonField<ProviderKey> = providerKey
-
-    /**
-     * Returns the raw JSON value of [token].
-     *
-     * Unlike [token], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("token") @ExcludeMissing fun _token(): JsonField<String> = token
 
     /**
      * Returns the raw JSON value of [device].
@@ -155,6 +155,7 @@ private constructor(
          *
          * The following fields are required:
          * ```java
+         * .token()
          * .providerKey()
          * ```
          */
@@ -164,8 +165,8 @@ private constructor(
     /** A builder for [UserToken]. */
     class Builder internal constructor() {
 
+        private var token: JsonField<String>? = null
         private var providerKey: JsonField<ProviderKey>? = null
-        private var token: JsonField<String> = JsonMissing.of()
         private var device: JsonField<Device> = JsonMissing.of()
         private var expiryDate: JsonField<ExpiryDate> = JsonMissing.of()
         private var properties: JsonValue = JsonMissing.of()
@@ -174,14 +175,25 @@ private constructor(
 
         @JvmSynthetic
         internal fun from(userToken: UserToken) = apply {
-            providerKey = userToken.providerKey
             token = userToken.token
+            providerKey = userToken.providerKey
             device = userToken.device
             expiryDate = userToken.expiryDate
             properties = userToken.properties
             tracking = userToken.tracking
             additionalProperties = userToken.additionalProperties.toMutableMap()
         }
+
+        /** Full body of the token. Must match token in URL path parameter. */
+        fun token(token: String) = token(JsonField.of(token))
+
+        /**
+         * Sets [Builder.token] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.token] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun token(token: JsonField<String>) = apply { this.token = token }
 
         fun providerKey(providerKey: ProviderKey) = providerKey(JsonField.of(providerKey))
 
@@ -195,20 +207,6 @@ private constructor(
         fun providerKey(providerKey: JsonField<ProviderKey>) = apply {
             this.providerKey = providerKey
         }
-
-        /** Full body of the token. Must match token in URL. */
-        fun token(token: String?) = token(JsonField.ofNullable(token))
-
-        /** Alias for calling [Builder.token] with `token.orElse(null)`. */
-        fun token(token: Optional<String>) = token(token.getOrNull())
-
-        /**
-         * Sets [Builder.token] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.token] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun token(token: JsonField<String>) = apply { this.token = token }
 
         /** Information about the device the token is associated with. */
         fun device(device: Device?) = device(JsonField.ofNullable(device))
@@ -292,6 +290,7 @@ private constructor(
          *
          * The following fields are required:
          * ```java
+         * .token()
          * .providerKey()
          * ```
          *
@@ -299,8 +298,8 @@ private constructor(
          */
         fun build(): UserToken =
             UserToken(
+                checkRequired("token", token),
                 checkRequired("providerKey", providerKey),
-                token,
                 device,
                 expiryDate,
                 properties,
@@ -316,8 +315,8 @@ private constructor(
             return@apply
         }
 
-        providerKey().validate()
         token()
+        providerKey().validate()
         device().ifPresent { it.validate() }
         expiryDate().ifPresent { it.validate() }
         tracking().ifPresent { it.validate() }
@@ -339,8 +338,8 @@ private constructor(
      */
     @JvmSynthetic
     internal fun validity(): Int =
-        (providerKey.asKnown().getOrNull()?.validity() ?: 0) +
-            (if (token.asKnown().isPresent) 1 else 0) +
+        (if (token.asKnown().isPresent) 1 else 0) +
+            (providerKey.asKnown().getOrNull()?.validity() ?: 0) +
             (device.asKnown().getOrNull()?.validity() ?: 0) +
             (expiryDate.asKnown().getOrNull()?.validity() ?: 0) +
             (tracking.asKnown().getOrNull()?.validity() ?: 0)
@@ -1281,8 +1280,8 @@ private constructor(
         }
 
         return other is UserToken &&
-            providerKey == other.providerKey &&
             token == other.token &&
+            providerKey == other.providerKey &&
             device == other.device &&
             expiryDate == other.expiryDate &&
             properties == other.properties &&
@@ -1292,8 +1291,8 @@ private constructor(
 
     private val hashCode: Int by lazy {
         Objects.hash(
-            providerKey,
             token,
+            providerKey,
             device,
             expiryDate,
             properties,
@@ -1305,5 +1304,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "UserToken{providerKey=$providerKey, token=$token, device=$device, expiryDate=$expiryDate, properties=$properties, tracking=$tracking, additionalProperties=$additionalProperties}"
+        "UserToken{token=$token, providerKey=$providerKey, device=$device, expiryDate=$expiryDate, properties=$properties, tracking=$tracking, additionalProperties=$additionalProperties}"
 }

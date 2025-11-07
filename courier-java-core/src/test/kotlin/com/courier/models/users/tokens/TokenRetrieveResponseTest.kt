@@ -14,8 +14,8 @@ internal class TokenRetrieveResponseTest {
     fun create() {
         val tokenRetrieveResponse =
             TokenRetrieveResponse.builder()
-                .providerKey(UserToken.ProviderKey.FIREBASE_FCM)
                 .token("token")
+                .providerKey(UserToken.ProviderKey.FIREBASE_FCM)
                 .device(
                     UserToken.Device.builder()
                         .adId("ad_id")
@@ -40,9 +40,9 @@ internal class TokenRetrieveResponseTest {
                 .statusReason("status_reason")
                 .build()
 
+        assertThat(tokenRetrieveResponse.token()).isEqualTo("token")
         assertThat(tokenRetrieveResponse.providerKey())
             .isEqualTo(UserToken.ProviderKey.FIREBASE_FCM)
-        assertThat(tokenRetrieveResponse.token()).contains("token")
         assertThat(tokenRetrieveResponse.device())
             .contains(
                 UserToken.Device.builder()
@@ -76,8 +76,8 @@ internal class TokenRetrieveResponseTest {
         val jsonMapper = jsonMapper()
         val tokenRetrieveResponse =
             TokenRetrieveResponse.builder()
-                .providerKey(UserToken.ProviderKey.FIREBASE_FCM)
                 .token("token")
+                .providerKey(UserToken.ProviderKey.FIREBASE_FCM)
                 .device(
                     UserToken.Device.builder()
                         .adId("ad_id")

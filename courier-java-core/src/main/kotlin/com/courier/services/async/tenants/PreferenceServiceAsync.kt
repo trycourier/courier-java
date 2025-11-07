@@ -3,10 +3,10 @@
 package com.courier.services.async.tenants
 
 import com.courier.core.ClientOptions
-import com.courier.services.async.tenants.tenantdefaultpreferences.ItemServiceAsync
+import com.courier.services.async.tenants.preferences.ItemServiceAsync
 import java.util.function.Consumer
 
-interface TenantDefaultPreferenceServiceAsync {
+interface PreferenceServiceAsync {
 
     /**
      * Returns a view of this service that provides access to raw HTTP responses for each method.
@@ -18,13 +18,13 @@ interface TenantDefaultPreferenceServiceAsync {
      *
      * The original service is not modified.
      */
-    fun withOptions(modifier: Consumer<ClientOptions.Builder>): TenantDefaultPreferenceServiceAsync
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): PreferenceServiceAsync
 
     fun items(): ItemServiceAsync
 
     /**
-     * A view of [TenantDefaultPreferenceServiceAsync] that provides access to raw HTTP responses
-     * for each method.
+     * A view of [PreferenceServiceAsync] that provides access to raw HTTP responses for each
+     * method.
      */
     interface WithRawResponse {
 
@@ -35,7 +35,7 @@ interface TenantDefaultPreferenceServiceAsync {
          */
         fun withOptions(
             modifier: Consumer<ClientOptions.Builder>
-        ): TenantDefaultPreferenceServiceAsync.WithRawResponse
+        ): PreferenceServiceAsync.WithRawResponse
 
         fun items(): ItemServiceAsync.WithRawResponse
     }

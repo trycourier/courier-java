@@ -14,8 +14,8 @@ internal class UserTokenTest {
     fun create() {
         val userToken =
             UserToken.builder()
-                .providerKey(UserToken.ProviderKey.FIREBASE_FCM)
                 .token("token")
+                .providerKey(UserToken.ProviderKey.FIREBASE_FCM)
                 .device(
                     UserToken.Device.builder()
                         .adId("ad_id")
@@ -38,8 +38,8 @@ internal class UserTokenTest {
                 )
                 .build()
 
+        assertThat(userToken.token()).isEqualTo("token")
         assertThat(userToken.providerKey()).isEqualTo(UserToken.ProviderKey.FIREBASE_FCM)
-        assertThat(userToken.token()).contains("token")
         assertThat(userToken.device())
             .contains(
                 UserToken.Device.builder()
@@ -69,8 +69,8 @@ internal class UserTokenTest {
         val jsonMapper = jsonMapper()
         val userToken =
             UserToken.builder()
-                .providerKey(UserToken.ProviderKey.FIREBASE_FCM)
                 .token("token")
+                .providerKey(UserToken.ProviderKey.FIREBASE_FCM)
                 .device(
                     UserToken.Device.builder()
                         .adId("ad_id")
