@@ -14,8 +14,8 @@ import com.courier.models.tenants.TenantListUsersParams
 import com.courier.models.tenants.TenantListUsersResponse
 import com.courier.models.tenants.TenantRetrieveParams
 import com.courier.models.tenants.TenantUpdateParams
+import com.courier.services.blocking.tenants.PreferenceService
 import com.courier.services.blocking.tenants.TemplateService
-import com.courier.services.blocking.tenants.TenantDefaultPreferenceService
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
@@ -33,7 +33,7 @@ interface TenantService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): TenantService
 
-    fun tenantDefaultPreferences(): TenantDefaultPreferenceService
+    fun preferences(): PreferenceService
 
     fun templates(): TemplateService
 
@@ -169,7 +169,7 @@ interface TenantService {
          */
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): TenantService.WithRawResponse
 
-        fun tenantDefaultPreferences(): TenantDefaultPreferenceService.WithRawResponse
+        fun preferences(): PreferenceService.WithRawResponse
 
         fun templates(): TemplateService.WithRawResponse
 

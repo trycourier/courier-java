@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.models.tenants.tenantdefaultpreferences.items
+package com.courier.models.tenants.preferences.items
 
 import com.courier.core.JsonValue
 import com.courier.core.Params

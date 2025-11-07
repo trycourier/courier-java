@@ -130,8 +130,8 @@ internal class TokenServiceAsyncTest {
                     .pathToken("token")
                     .userToken(
                         UserToken.builder()
-                            .providerKey(UserToken.ProviderKey.FIREBASE_FCM)
                             .token("token")
+                            .providerKey(UserToken.ProviderKey.FIREBASE_FCM)
                             .device(
                                 UserToken.Device.builder()
                                     .adId("ad_id")
