@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.8.0 (2025-11-07)
+
+Full Changelog: [v3.7.2...v3.8.0](https://github.com/trycourier/courier-java/compare/v3.7.2...v3.8.0)
+
+### Features
+
+* Spec Comment Change ([4a95534](https://github.com/trycourier/courier-java/commit/4a955346ee45fa23a2db253c750916c879d130c3))
+
 ## 3.7.2 (2025-11-07)
 
 Full Changelog: [v3.7.1...v3.7.2](https://github.com/trycourier/courier-java/compare/v3.7.1...v3.7.2)
