@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.0.0 (2025-11-08)
+
+Full Changelog: [v3.8.0...v4.0.0](https://github.com/trycourier/courier-java/compare/v3.8.0...v4.0.0)
+
+### Features
+
+* Token Prop Description Change ([7087c01](https://github.com/trycourier/courier-java/commit/7087c010d372844abfab7310aa52e6fa9729ae39))
+
 ## 3.8.0 (2025-11-07)
 
 Full Changelog: [v3.7.2...v3.8.0](https://github.com/trycourier/courier-java/compare/v3.7.2...v3.8.0)
