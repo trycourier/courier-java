@@ -86,7 +86,7 @@ private constructor(
      */
     fun expiryDate(): Optional<ExpiryDate> = expiryDate.getOptional("expiry_date")
 
-    /** Properties sent to the provider along with the token */
+    /** Properties about the token. */
     @JsonProperty("properties") @ExcludeMissing fun _properties(): JsonValue = properties
 
     /**
@@ -246,7 +246,7 @@ private constructor(
         /** Alias for calling [expiryDate] with `ExpiryDate.ofBool(bool)`. */
         fun expiryDate(bool: Boolean) = expiryDate(ExpiryDate.ofBool(bool))
 
-        /** Properties sent to the provider along with the token */
+        /** Properties about the token. */
         fun properties(properties: JsonValue) = apply { this.properties = properties }
 
         /** Tracking information about the device the token came from. */
