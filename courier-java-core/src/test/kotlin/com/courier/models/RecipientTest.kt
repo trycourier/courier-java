@@ -22,6 +22,7 @@ internal class RecipientTest {
                         .build()
                 )
                 .email("email")
+                .listId("list_id")
                 .locale("locale")
                 .phoneNumber("phone_number")
                 .preferences(
@@ -79,6 +80,7 @@ internal class RecipientTest {
                 Recipient.Data.builder().putAdditionalProperty("foo", JsonValue.from("bar")).build()
             )
         assertThat(recipient.email()).contains("email")
+        assertThat(recipient.listId()).contains("list_id")
         assertThat(recipient.locale()).contains("locale")
         assertThat(recipient.phoneNumber()).contains("phone_number")
         assertThat(recipient.preferences())
@@ -138,6 +140,7 @@ internal class RecipientTest {
                         .build()
                 )
                 .email("email")
+                .listId("list_id")
                 .locale("locale")
                 .phoneNumber("phone_number")
                 .preferences(

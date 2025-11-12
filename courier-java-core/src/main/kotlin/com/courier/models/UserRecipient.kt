@@ -25,6 +25,7 @@ private constructor(
     private val context: JsonField<MessageContext>,
     private val data: JsonField<Data>,
     private val email: JsonField<String>,
+    private val listId: JsonField<String>,
     private val locale: JsonField<String>,
     private val phoneNumber: JsonField<String>,
     private val preferences: JsonField<Preferences>,
@@ -41,6 +42,7 @@ private constructor(
         context: JsonField<MessageContext> = JsonMissing.of(),
         @JsonProperty("data") @ExcludeMissing data: JsonField<Data> = JsonMissing.of(),
         @JsonProperty("email") @ExcludeMissing email: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("list_id") @ExcludeMissing listId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("locale") @ExcludeMissing locale: JsonField<String> = JsonMissing.of(),
         @JsonProperty("phone_number")
         @ExcludeMissing
@@ -55,6 +57,7 @@ private constructor(
         context,
         data,
         email,
+        listId,
         locale,
         phoneNumber,
         preferences,
@@ -92,6 +95,14 @@ private constructor(
      *   server responded with an unexpected value).
      */
     fun email(): Optional<String> = email.getOptional("email")
+
+    /**
+     * The id of the list to send the message to.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun listId(): Optional<String> = listId.getOptional("list_id")
 
     /**
      * The user's preferred ISO 639-1 language code.
@@ -161,6 +172,13 @@ private constructor(
     @JsonProperty("email") @ExcludeMissing fun _email(): JsonField<String> = email
 
     /**
+     * Returns the raw JSON value of [listId].
+     *
+     * Unlike [listId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("list_id") @ExcludeMissing fun _listId(): JsonField<String> = listId
+
+    /**
      * Returns the raw JSON value of [locale].
      *
      * Unlike [locale], this method doesn't throw if the JSON field has an unexpected type.
@@ -224,6 +242,7 @@ private constructor(
         private var context: JsonField<MessageContext> = JsonMissing.of()
         private var data: JsonField<Data> = JsonMissing.of()
         private var email: JsonField<String> = JsonMissing.of()
+        private var listId: JsonField<String> = JsonMissing.of()
         private var locale: JsonField<String> = JsonMissing.of()
         private var phoneNumber: JsonField<String> = JsonMissing.of()
         private var preferences: JsonField<Preferences> = JsonMissing.of()
@@ -237,6 +256,7 @@ private constructor(
             context = userRecipient.context
             data = userRecipient.data
             email = userRecipient.email
+            listId = userRecipient.listId
             locale = userRecipient.locale
             phoneNumber = userRecipient.phoneNumber
             preferences = userRecipient.preferences
@@ -301,6 +321,20 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun email(email: JsonField<String>) = apply { this.email = email }
+
+        /** The id of the list to send the message to. */
+        fun listId(listId: String?) = listId(JsonField.ofNullable(listId))
+
+        /** Alias for calling [Builder.listId] with `listId.orElse(null)`. */
+        fun listId(listId: Optional<String>) = listId(listId.getOrNull())
+
+        /**
+         * Sets [Builder.listId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.listId] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun listId(listId: JsonField<String>) = apply { this.listId = listId }
 
         /** The user's preferred ISO 639-1 language code. */
         fun locale(locale: String?) = locale(JsonField.ofNullable(locale))
@@ -408,6 +442,7 @@ private constructor(
                 context,
                 data,
                 email,
+                listId,
                 locale,
                 phoneNumber,
                 preferences,
@@ -428,6 +463,7 @@ private constructor(
         context().ifPresent { it.validate() }
         data().ifPresent { it.validate() }
         email()
+        listId()
         locale()
         phoneNumber()
         preferences().ifPresent { it.validate() }
@@ -455,6 +491,7 @@ private constructor(
             (context.asKnown().getOrNull()?.validity() ?: 0) +
             (data.asKnown().getOrNull()?.validity() ?: 0) +
             (if (email.asKnown().isPresent) 1 else 0) +
+            (if (listId.asKnown().isPresent) 1 else 0) +
             (if (locale.asKnown().isPresent) 1 else 0) +
             (if (phoneNumber.asKnown().isPresent) 1 else 0) +
             (preferences.asKnown().getOrNull()?.validity() ?: 0) +
@@ -1022,6 +1059,7 @@ private constructor(
             context == other.context &&
             data == other.data &&
             email == other.email &&
+            listId == other.listId &&
             locale == other.locale &&
             phoneNumber == other.phoneNumber &&
             preferences == other.preferences &&
@@ -1036,6 +1074,7 @@ private constructor(
             context,
             data,
             email,
+            listId,
             locale,
             phoneNumber,
             preferences,
@@ -1048,5 +1087,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "UserRecipient{accountId=$accountId, context=$context, data=$data, email=$email, locale=$locale, phoneNumber=$phoneNumber, preferences=$preferences, tenantId=$tenantId, userId=$userId, additionalProperties=$additionalProperties}"
+        "UserRecipient{accountId=$accountId, context=$context, data=$data, email=$email, listId=$listId, locale=$locale, phoneNumber=$phoneNumber, preferences=$preferences, tenantId=$tenantId, userId=$userId, additionalProperties=$additionalProperties}"
 }

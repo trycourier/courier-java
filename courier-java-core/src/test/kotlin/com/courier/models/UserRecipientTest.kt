@@ -22,6 +22,7 @@ internal class UserRecipientTest {
                         .build()
                 )
                 .email("email")
+                .listId("list_id")
                 .locale("locale")
                 .phoneNumber("phone_number")
                 .preferences(
@@ -81,6 +82,7 @@ internal class UserRecipientTest {
                     .build()
             )
         assertThat(userRecipient.email()).contains("email")
+        assertThat(userRecipient.listId()).contains("list_id")
         assertThat(userRecipient.locale()).contains("locale")
         assertThat(userRecipient.phoneNumber()).contains("phone_number")
         assertThat(userRecipient.preferences())
@@ -140,6 +142,7 @@ internal class UserRecipientTest {
                         .build()
                 )
                 .email("email")
+                .listId("list_id")
                 .locale("locale")
                 .phoneNumber("phone_number")
                 .preferences(
