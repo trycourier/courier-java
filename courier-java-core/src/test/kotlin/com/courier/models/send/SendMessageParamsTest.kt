@@ -145,6 +145,7 @@ internal class SendMessageParamsTest {
                                     .build()
                             )
                             .email("email")
+                            .listId("list_id")
                             .locale("locale")
                             .phoneNumber("phone_number")
                             .preferences(
@@ -345,6 +346,7 @@ internal class SendMessageParamsTest {
                                         .build()
                                 )
                                 .email("email")
+                                .listId("list_id")
                                 .locale("locale")
                                 .phoneNumber("phone_number")
                                 .preferences(
@@ -547,6 +549,7 @@ internal class SendMessageParamsTest {
                                     .build()
                             )
                             .email("email")
+                            .listId("list_id")
                             .locale("locale")
                             .phoneNumber("phone_number")
                             .preferences(
