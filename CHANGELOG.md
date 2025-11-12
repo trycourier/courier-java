@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.0.1 (2025-11-12)
+
+Full Changelog: [v4.0.0...v4.0.1](https://github.com/trycourier/courier-java/compare/v4.0.0...v4.0.1)
+
+### Chores
+
+* update SDK settings ([b7ac3e7](https://github.com/trycourier/courier-java/commit/b7ac3e7b7af7c54afc7071395db34293cdc356db))
+
 ## 4.0.0 (2025-11-08)
 
 Full Changelog: [v3.8.0...v4.0.0](https://github.com/trycourier/courier-java/compare/v3.8.0...v4.0.0)
