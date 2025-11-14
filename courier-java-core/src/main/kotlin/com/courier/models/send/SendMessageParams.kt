@@ -42,7 +42,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** API to send a message to one or more recipients. */
+/** Send a message to one or more recipients. */
 class SendMessageParams
 private constructor(
     private val body: Body,

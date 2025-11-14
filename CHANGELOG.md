@@ -1,5 +1,18 @@
 # Changelog
 
+## 4.1.0 (2025-11-14)
+
+Full Changelog: [v4.0.1...v4.1.0](https://github.com/trycourier/courier-java/compare/v4.0.1...v4.1.0)
+
+### Features
+
+* NPM enabled ([8e4f4d9](https://github.com/trycourier/courier-java/commit/8e4f4d9d89652f1c41867eae9b0048c8ce5c0ad6))
+
+
+### Bug Fixes
+
+* **client:** multi-value header serialization ([82763dd](https://github.com/trycourier/courier-java/commit/82763ddd160ebb38c45bf9cdc09fb7b596b77c2e))
+
 ## 4.0.1 (2025-11-12)
 
 Full Changelog: [v4.0.0...v4.0.1](https://github.com/trycourier/courier-java/compare/v4.0.0...v4.0.1)
