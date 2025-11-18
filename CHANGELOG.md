@@ -1,5 +1,20 @@
 # Changelog
 
+## 4.1.0 (2025-11-18)
+
+Full Changelog: [v4.0.1...v4.1.0](https://github.com/trycourier/courier-java/compare/v4.0.1...v4.1.0)
+
+### Features
+
+* JWT scope updates ([6b86ae2](https://github.com/trycourier/courier-java/commit/6b86ae2db80aedb1e2659c79d1182f250de5e0ac))
+* NPM enabled ([8e4f4d9](https://github.com/trycourier/courier-java/commit/8e4f4d9d89652f1c41867eae9b0048c8ce5c0ad6))
+* Test ([849aabb](https://github.com/trycourier/courier-java/commit/849aabb30345aa0f2ee9efcb11242992743934bb))
+
+
+### Bug Fixes
+
+* **client:** multi-value header serialization ([82763dd](https://github.com/trycourier/courier-java/commit/82763ddd160ebb38c45bf9cdc09fb7b596b77c2e))
+
 ## 4.0.1 (2025-11-12)
 
 Full Changelog: [v4.0.0...v4.0.1](https://github.com/trycourier/courier-java/compare/v4.0.0...v4.0.1)
