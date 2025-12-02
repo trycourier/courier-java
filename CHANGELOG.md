@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.1.1 (2025-12-02)
+
+Full Changelog: [v4.1.0...v4.1.1](https://github.com/trycourier/courier-java/compare/v4.1.0...v4.1.1)
+
+### Bug Fixes
+
+* **client:** cancel okhttp call when future cancelled ([a9dd41b](https://github.com/trycourier/courier-java/commit/a9dd41bced8c09a8c786a53ef000a5eb3d806116))
+
 ## 4.1.0 (2025-11-18)
 
 Full Changelog: [v4.0.1...v4.1.0](https://github.com/trycourier/courier-java/compare/v4.0.1...v4.1.0)
