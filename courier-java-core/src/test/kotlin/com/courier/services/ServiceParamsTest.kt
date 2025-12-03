@@ -7,6 +7,7 @@ import com.courier.client.okhttp.CourierOkHttpClient
 import com.courier.core.JsonValue
 import com.courier.models.ElementalContentSugar
 import com.courier.models.MessageContext
+import com.courier.models.ProfilePreferences
 import com.courier.models.UserRecipient
 import com.courier.models.Utm
 import com.courier.models.send.SendMessageParams
@@ -184,9 +185,9 @@ internal class ServiceParamsTest {
                                 .locale("locale")
                                 .phoneNumber("phone_number")
                                 .preferences(
-                                    UserRecipient.Preferences.builder()
+                                    ProfilePreferences.builder()
                                         .notifications(
-                                            UserRecipient.Preferences.Notifications.builder()
+                                            ProfilePreferences.Notifications.builder()
                                                 .putAdditionalProperty(
                                                     "foo",
                                                     JsonValue.from(
@@ -213,7 +214,7 @@ internal class ServiceParamsTest {
                                                 .build()
                                         )
                                         .categories(
-                                            UserRecipient.Preferences.Categories.builder()
+                                            ProfilePreferences.Categories.builder()
                                                 .putAdditionalProperty(
                                                     "foo",
                                                     JsonValue.from(
