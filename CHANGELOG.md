@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.1.2 (2025-12-03)
+
+Full Changelog: [v4.1.1...v4.1.2](https://github.com/trycourier/courier-java/compare/v4.1.1...v4.1.2)
+
+### Documentation
+
+* remove `$` for better copy-pasteabality ([ed4b896](https://github.com/trycourier/courier-java/commit/ed4b8969289ea8559fa436a706b6d5c177e925f5))
+
 ## 4.1.1 (2025-12-02)
 
 Full Changelog: [v4.1.0...v4.1.1](https://github.com/trycourier/courier-java/compare/v4.1.0...v4.1.1)
