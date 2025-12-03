@@ -6,6 +6,7 @@ import com.courier.TestServerExtension
 import com.courier.client.okhttp.CourierOkHttpClient
 import com.courier.core.JsonValue
 import com.courier.models.MessageContext
+import com.courier.models.ProfilePreferences
 import com.courier.models.RecipientPreferences
 import com.courier.models.UserRecipient
 import com.courier.models.bulk.BulkAddUsersParams
@@ -102,9 +103,9 @@ internal class BulkServiceTest {
                                 .locale("locale")
                                 .phoneNumber("phone_number")
                                 .preferences(
-                                    UserRecipient.Preferences.builder()
+                                    ProfilePreferences.builder()
                                         .notifications(
-                                            UserRecipient.Preferences.Notifications.builder()
+                                            ProfilePreferences.Notifications.builder()
                                                 .putAdditionalProperty(
                                                     "foo",
                                                     JsonValue.from(
@@ -131,7 +132,7 @@ internal class BulkServiceTest {
                                                 .build()
                                         )
                                         .categories(
-                                            UserRecipient.Preferences.Categories.builder()
+                                            ProfilePreferences.Categories.builder()
                                                 .putAdditionalProperty(
                                                     "foo",
                                                     JsonValue.from(
