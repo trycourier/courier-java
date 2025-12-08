@@ -211,6 +211,7 @@ private constructor(
     private constructor(
         private val id: JsonField<String>,
         private val createdAt: JsonField<Long>,
+        private val eventIds: JsonField<List<String>>,
         private val note: JsonField<String>,
         private val routing: JsonField<MessageRouting>,
         private val topicId: JsonField<String>,
@@ -226,6 +227,9 @@ private constructor(
             @JsonProperty("created_at")
             @ExcludeMissing
             createdAt: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("event_ids")
+            @ExcludeMissing
+            eventIds: JsonField<List<String>> = JsonMissing.of(),
             @JsonProperty("note") @ExcludeMissing note: JsonField<String> = JsonMissing.of(),
             @JsonProperty("routing")
             @ExcludeMissing
@@ -236,7 +240,18 @@ private constructor(
             updatedAt: JsonField<Long> = JsonMissing.of(),
             @JsonProperty("tags") @ExcludeMissing tags: JsonField<Tags> = JsonMissing.of(),
             @JsonProperty("title") @ExcludeMissing title: JsonField<String> = JsonMissing.of(),
-        ) : this(id, createdAt, note, routing, topicId, updatedAt, tags, title, mutableMapOf())
+        ) : this(
+            id,
+            createdAt,
+            eventIds,
+            note,
+            routing,
+            topicId,
+            updatedAt,
+            tags,
+            title,
+            mutableMapOf(),
+        )
 
         /**
          * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
@@ -249,6 +264,14 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun createdAt(): Long = createdAt.getRequired("created_at")
+
+        /**
+         * Array of event IDs associated with this notification
+         *
+         * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun eventIds(): List<String> = eventIds.getRequired("event_ids")
 
         /**
          * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
@@ -299,6 +322,15 @@ private constructor(
          * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("created_at") @ExcludeMissing fun _createdAt(): JsonField<Long> = createdAt
+
+        /**
+         * Returns the raw JSON value of [eventIds].
+         *
+         * Unlike [eventIds], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("event_ids")
+        @ExcludeMissing
+        fun _eventIds(): JsonField<List<String>> = eventIds
 
         /**
          * Returns the raw JSON value of [note].
@@ -363,6 +395,7 @@ private constructor(
              * ```java
              * .id()
              * .createdAt()
+             * .eventIds()
              * .note()
              * .routing()
              * .topicId()
@@ -377,6 +410,7 @@ private constructor(
 
             private var id: JsonField<String>? = null
             private var createdAt: JsonField<Long>? = null
+            private var eventIds: JsonField<MutableList<String>>? = null
             private var note: JsonField<String>? = null
             private var routing: JsonField<MessageRouting>? = null
             private var topicId: JsonField<String>? = null
@@ -389,6 +423,7 @@ private constructor(
             internal fun from(result: Result) = apply {
                 id = result.id
                 createdAt = result.createdAt
+                eventIds = result.eventIds.map { it.toMutableList() }
                 note = result.note
                 routing = result.routing
                 topicId = result.topicId
@@ -419,6 +454,32 @@ private constructor(
              * supported value.
              */
             fun createdAt(createdAt: JsonField<Long>) = apply { this.createdAt = createdAt }
+
+            /** Array of event IDs associated with this notification */
+            fun eventIds(eventIds: List<String>) = eventIds(JsonField.of(eventIds))
+
+            /**
+             * Sets [Builder.eventIds] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.eventIds] with a well-typed `List<String>` value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun eventIds(eventIds: JsonField<List<String>>) = apply {
+                this.eventIds = eventIds.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [String] to [eventIds].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addEventId(eventId: String) = apply {
+                eventIds =
+                    (eventIds ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("eventIds", it).add(eventId)
+                    }
+            }
 
             fun note(note: String) = note(JsonField.of(note))
 
@@ -520,6 +581,7 @@ private constructor(
              * ```java
              * .id()
              * .createdAt()
+             * .eventIds()
              * .note()
              * .routing()
              * .topicId()
@@ -532,6 +594,7 @@ private constructor(
                 Result(
                     checkRequired("id", id),
                     checkRequired("createdAt", createdAt),
+                    checkRequired("eventIds", eventIds).map { it.toImmutable() },
                     checkRequired("note", note),
                     checkRequired("routing", routing),
                     checkRequired("topicId", topicId),
@@ -551,6 +614,7 @@ private constructor(
 
             id()
             createdAt()
+            eventIds()
             note()
             routing().validate()
             topicId()
@@ -578,6 +642,7 @@ private constructor(
         internal fun validity(): Int =
             (if (id.asKnown().isPresent) 1 else 0) +
                 (if (createdAt.asKnown().isPresent) 1 else 0) +
+                (eventIds.asKnown().getOrNull()?.size ?: 0) +
                 (if (note.asKnown().isPresent) 1 else 0) +
                 (routing.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (topicId.asKnown().isPresent) 1 else 0) +
@@ -966,6 +1031,7 @@ private constructor(
             return other is Result &&
                 id == other.id &&
                 createdAt == other.createdAt &&
+                eventIds == other.eventIds &&
                 note == other.note &&
                 routing == other.routing &&
                 topicId == other.topicId &&
@@ -979,6 +1045,7 @@ private constructor(
             Objects.hash(
                 id,
                 createdAt,
+                eventIds,
                 note,
                 routing,
                 topicId,
@@ -992,7 +1059,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Result{id=$id, createdAt=$createdAt, note=$note, routing=$routing, topicId=$topicId, updatedAt=$updatedAt, tags=$tags, title=$title, additionalProperties=$additionalProperties}"
+            "Result{id=$id, createdAt=$createdAt, eventIds=$eventIds, note=$note, routing=$routing, topicId=$topicId, updatedAt=$updatedAt, tags=$tags, title=$title, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

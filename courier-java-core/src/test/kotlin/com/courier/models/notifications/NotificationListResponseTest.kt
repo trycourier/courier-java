@@ -20,6 +20,7 @@ internal class NotificationListResponseTest {
                     NotificationListResponse.Result.builder()
                         .id("id")
                         .createdAt(0L)
+                        .addEventId("string")
                         .note("note")
                         .routing(
                             MessageRouting.builder()
@@ -51,6 +52,7 @@ internal class NotificationListResponseTest {
                 NotificationListResponse.Result.builder()
                     .id("id")
                     .createdAt(0L)
+                    .addEventId("string")
                     .note("note")
                     .routing(
                         MessageRouting.builder()
@@ -85,6 +87,7 @@ internal class NotificationListResponseTest {
                     NotificationListResponse.Result.builder()
                         .id("id")
                         .createdAt(0L)
+                        .addEventId("string")
                         .note("note")
                         .routing(
                             MessageRouting.builder()
