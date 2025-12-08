@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.3.0 (2025-12-08)
+
+Full Changelog: [v4.2.0...v4.3.0](https://github.com/trycourier/courier-java/compare/v4.2.0...v4.3.0)
+
+### Features
+
+* Fix UsersGetAllTokensResponse to return object with tokens property i… ([d714e73](https://github.com/trycourier/courier-java/commit/d714e730131147eeed7f17a7b7732021bfe6b2c2))
+
 ## 4.2.0 (2025-12-08)
 
 Full Changelog: [v4.1.1...v4.2.0](https://github.com/trycourier/courier-java/compare/v4.1.1...v4.2.0)

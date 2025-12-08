@@ -74,10 +74,10 @@ internal class TokenServiceAsyncTest {
                 .build()
         val tokenServiceAsync = client.users().tokens()
 
-        val userTokensFuture = tokenServiceAsync.list("user_id")
+        val tokensFuture = tokenServiceAsync.list("user_id")
 
-        val userTokens = userTokensFuture.get()
-        userTokens.forEach { it.validate() }
+        val tokens = tokensFuture.get()
+        tokens.validate()
     }
 
     @Disabled("Prism tests are disabled")

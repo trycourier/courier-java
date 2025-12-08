@@ -21,10 +21,10 @@ import com.courier.models.users.tokens.TokenAddMultipleParams
 import com.courier.models.users.tokens.TokenAddSingleParams
 import com.courier.models.users.tokens.TokenDeleteParams
 import com.courier.models.users.tokens.TokenListParams
+import com.courier.models.users.tokens.TokenListResponse
 import com.courier.models.users.tokens.TokenRetrieveParams
 import com.courier.models.users.tokens.TokenRetrieveResponse
 import com.courier.models.users.tokens.TokenUpdateParams
-import com.courier.models.users.tokens.UserToken
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
@@ -52,7 +52,7 @@ class TokenServiceImpl internal constructor(private val clientOptions: ClientOpt
         withRawResponse().update(params, requestOptions)
     }
 
-    override fun list(params: TokenListParams, requestOptions: RequestOptions): List<UserToken> =
+    override fun list(params: TokenListParams, requestOptions: RequestOptions): TokenListResponse =
         // get /users/{user_id}/tokens
         withRawResponse().list(params, requestOptions).parse()
 
@@ -138,13 +138,13 @@ class TokenServiceImpl internal constructor(private val clientOptions: ClientOpt
             }
         }
 
-        private val listHandler: Handler<List<UserToken>> =
-            jsonHandler<List<UserToken>>(clientOptions.jsonMapper)
+        private val listHandler: Handler<TokenListResponse> =
+            jsonHandler<TokenListResponse>(clientOptions.jsonMapper)
 
         override fun list(
             params: TokenListParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<List<UserToken>> {
+        ): HttpResponseFor<TokenListResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("userId", params.userId().getOrNull())
@@ -162,7 +162,7 @@ class TokenServiceImpl internal constructor(private val clientOptions: ClientOpt
                     .use { listHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
-                            it.forEach { it.validate() }
+                            it.validate()
                         }
                     }
             }
