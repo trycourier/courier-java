@@ -26,9 +26,9 @@ internal class UserRecipientTest {
                 .locale("locale")
                 .phoneNumber("phone_number")
                 .preferences(
-                    UserRecipient.Preferences.builder()
+                    ProfilePreferences.builder()
                         .notifications(
-                            UserRecipient.Preferences.Notifications.builder()
+                            ProfilePreferences.Notifications.builder()
                                 .putAdditionalProperty(
                                     "foo",
                                     JsonValue.from(
@@ -47,7 +47,7 @@ internal class UserRecipientTest {
                                 .build()
                         )
                         .categories(
-                            UserRecipient.Preferences.Categories.builder()
+                            ProfilePreferences.Categories.builder()
                                 .putAdditionalProperty(
                                     "foo",
                                     JsonValue.from(
@@ -87,9 +87,9 @@ internal class UserRecipientTest {
         assertThat(userRecipient.phoneNumber()).contains("phone_number")
         assertThat(userRecipient.preferences())
             .contains(
-                UserRecipient.Preferences.builder()
+                ProfilePreferences.builder()
                     .notifications(
-                        UserRecipient.Preferences.Notifications.builder()
+                        ProfilePreferences.Notifications.builder()
                             .putAdditionalProperty(
                                 "foo",
                                 JsonValue.from(
@@ -106,7 +106,7 @@ internal class UserRecipientTest {
                             .build()
                     )
                     .categories(
-                        UserRecipient.Preferences.Categories.builder()
+                        ProfilePreferences.Categories.builder()
                             .putAdditionalProperty(
                                 "foo",
                                 JsonValue.from(
@@ -146,9 +146,9 @@ internal class UserRecipientTest {
                 .locale("locale")
                 .phoneNumber("phone_number")
                 .preferences(
-                    UserRecipient.Preferences.builder()
+                    ProfilePreferences.builder()
                         .notifications(
-                            UserRecipient.Preferences.Notifications.builder()
+                            ProfilePreferences.Notifications.builder()
                                 .putAdditionalProperty(
                                     "foo",
                                     JsonValue.from(
@@ -167,7 +167,7 @@ internal class UserRecipientTest {
                                 .build()
                         )
                         .categories(
-                            UserRecipient.Preferences.Categories.builder()
+                            ProfilePreferences.Categories.builder()
                                 .putAdditionalProperty(
                                     "foo",
                                     JsonValue.from(

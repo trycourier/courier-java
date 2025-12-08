@@ -4,6 +4,7 @@ package com.courier.models.bulk
 
 import com.courier.core.JsonValue
 import com.courier.models.MessageContext
+import com.courier.models.ProfilePreferences
 import com.courier.models.RecipientPreferences
 import com.courier.models.UserRecipient
 import org.assertj.core.api.Assertions.assertThat
@@ -80,9 +81,9 @@ internal class BulkAddUsersParamsTest {
                             .locale("locale")
                             .phoneNumber("phone_number")
                             .preferences(
-                                UserRecipient.Preferences.builder()
+                                ProfilePreferences.builder()
                                     .notifications(
-                                        UserRecipient.Preferences.Notifications.builder()
+                                        ProfilePreferences.Notifications.builder()
                                             .putAdditionalProperty(
                                                 "foo",
                                                 JsonValue.from(
@@ -106,7 +107,7 @@ internal class BulkAddUsersParamsTest {
                                             .build()
                                     )
                                     .categories(
-                                        UserRecipient.Preferences.Categories.builder()
+                                        ProfilePreferences.Categories.builder()
                                             .putAdditionalProperty(
                                                 "foo",
                                                 JsonValue.from(
@@ -228,9 +229,9 @@ internal class BulkAddUsersParamsTest {
                                 .locale("locale")
                                 .phoneNumber("phone_number")
                                 .preferences(
-                                    UserRecipient.Preferences.builder()
+                                    ProfilePreferences.builder()
                                         .notifications(
-                                            UserRecipient.Preferences.Notifications.builder()
+                                            ProfilePreferences.Notifications.builder()
                                                 .putAdditionalProperty(
                                                     "foo",
                                                     JsonValue.from(
@@ -257,7 +258,7 @@ internal class BulkAddUsersParamsTest {
                                                 .build()
                                         )
                                         .categories(
-                                            UserRecipient.Preferences.Categories.builder()
+                                            ProfilePreferences.Categories.builder()
                                                 .putAdditionalProperty(
                                                     "foo",
                                                     JsonValue.from(
@@ -362,9 +363,9 @@ internal class BulkAddUsersParamsTest {
                             .locale("locale")
                             .phoneNumber("phone_number")
                             .preferences(
-                                UserRecipient.Preferences.builder()
+                                ProfilePreferences.builder()
                                     .notifications(
-                                        UserRecipient.Preferences.Notifications.builder()
+                                        ProfilePreferences.Notifications.builder()
                                             .putAdditionalProperty(
                                                 "foo",
                                                 JsonValue.from(
@@ -388,7 +389,7 @@ internal class BulkAddUsersParamsTest {
                                             .build()
                                     )
                                     .categories(
-                                        UserRecipient.Preferences.Categories.builder()
+                                        ProfilePreferences.Categories.builder()
                                             .putAdditionalProperty(
                                                 "foo",
                                                 JsonValue.from(
