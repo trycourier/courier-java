@@ -10,10 +10,10 @@ import com.courier.models.users.tokens.TokenAddMultipleParams
 import com.courier.models.users.tokens.TokenAddSingleParams
 import com.courier.models.users.tokens.TokenDeleteParams
 import com.courier.models.users.tokens.TokenListParams
+import com.courier.models.users.tokens.TokenListResponse
 import com.courier.models.users.tokens.TokenRetrieveParams
 import com.courier.models.users.tokens.TokenRetrieveResponse
 import com.courier.models.users.tokens.TokenUpdateParams
-import com.courier.models.users.tokens.UserToken
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
@@ -77,7 +77,7 @@ interface TokenServiceAsync {
     ): CompletableFuture<Void?>
 
     /** Gets all tokens available for a :user_id */
-    fun list(userId: String): CompletableFuture<List<UserToken>> =
+    fun list(userId: String): CompletableFuture<TokenListResponse> =
         list(userId, TokenListParams.none())
 
     /** @see list */
@@ -85,27 +85,27 @@ interface TokenServiceAsync {
         userId: String,
         params: TokenListParams = TokenListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<List<UserToken>> =
+    ): CompletableFuture<TokenListResponse> =
         list(params.toBuilder().userId(userId).build(), requestOptions)
 
     /** @see list */
     fun list(
         userId: String,
         params: TokenListParams = TokenListParams.none(),
-    ): CompletableFuture<List<UserToken>> = list(userId, params, RequestOptions.none())
+    ): CompletableFuture<TokenListResponse> = list(userId, params, RequestOptions.none())
 
     /** @see list */
     fun list(
         params: TokenListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<List<UserToken>>
+    ): CompletableFuture<TokenListResponse>
 
     /** @see list */
-    fun list(params: TokenListParams): CompletableFuture<List<UserToken>> =
+    fun list(params: TokenListParams): CompletableFuture<TokenListResponse> =
         list(params, RequestOptions.none())
 
     /** @see list */
-    fun list(userId: String, requestOptions: RequestOptions): CompletableFuture<List<UserToken>> =
+    fun list(userId: String, requestOptions: RequestOptions): CompletableFuture<TokenListResponse> =
         list(userId, TokenListParams.none(), requestOptions)
 
     /** Delete User Token */
@@ -254,7 +254,7 @@ interface TokenServiceAsync {
          * Returns a raw HTTP response for `get /users/{user_id}/tokens`, but is otherwise the same
          * as [TokenServiceAsync.list].
          */
-        fun list(userId: String): CompletableFuture<HttpResponseFor<List<UserToken>>> =
+        fun list(userId: String): CompletableFuture<HttpResponseFor<TokenListResponse>> =
             list(userId, TokenListParams.none())
 
         /** @see list */
@@ -262,31 +262,31 @@ interface TokenServiceAsync {
             userId: String,
             params: TokenListParams = TokenListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<List<UserToken>>> =
+        ): CompletableFuture<HttpResponseFor<TokenListResponse>> =
             list(params.toBuilder().userId(userId).build(), requestOptions)
 
         /** @see list */
         fun list(
             userId: String,
             params: TokenListParams = TokenListParams.none(),
-        ): CompletableFuture<HttpResponseFor<List<UserToken>>> =
+        ): CompletableFuture<HttpResponseFor<TokenListResponse>> =
             list(userId, params, RequestOptions.none())
 
         /** @see list */
         fun list(
             params: TokenListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<List<UserToken>>>
+        ): CompletableFuture<HttpResponseFor<TokenListResponse>>
 
         /** @see list */
-        fun list(params: TokenListParams): CompletableFuture<HttpResponseFor<List<UserToken>>> =
+        fun list(params: TokenListParams): CompletableFuture<HttpResponseFor<TokenListResponse>> =
             list(params, RequestOptions.none())
 
         /** @see list */
         fun list(
             userId: String,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<List<UserToken>>> =
+        ): CompletableFuture<HttpResponseFor<TokenListResponse>> =
             list(userId, TokenListParams.none(), requestOptions)
 
         /**

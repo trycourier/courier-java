@@ -10,10 +10,10 @@ import com.courier.models.users.tokens.TokenAddMultipleParams
 import com.courier.models.users.tokens.TokenAddSingleParams
 import com.courier.models.users.tokens.TokenDeleteParams
 import com.courier.models.users.tokens.TokenListParams
+import com.courier.models.users.tokens.TokenListResponse
 import com.courier.models.users.tokens.TokenRetrieveParams
 import com.courier.models.users.tokens.TokenRetrieveResponse
 import com.courier.models.users.tokens.TokenUpdateParams
-import com.courier.models.users.tokens.UserToken
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
@@ -70,30 +70,30 @@ interface TokenService {
     fun update(params: TokenUpdateParams, requestOptions: RequestOptions = RequestOptions.none())
 
     /** Gets all tokens available for a :user_id */
-    fun list(userId: String): List<UserToken> = list(userId, TokenListParams.none())
+    fun list(userId: String): TokenListResponse = list(userId, TokenListParams.none())
 
     /** @see list */
     fun list(
         userId: String,
         params: TokenListParams = TokenListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): List<UserToken> = list(params.toBuilder().userId(userId).build(), requestOptions)
+    ): TokenListResponse = list(params.toBuilder().userId(userId).build(), requestOptions)
 
     /** @see list */
-    fun list(userId: String, params: TokenListParams = TokenListParams.none()): List<UserToken> =
+    fun list(userId: String, params: TokenListParams = TokenListParams.none()): TokenListResponse =
         list(userId, params, RequestOptions.none())
 
     /** @see list */
     fun list(
         params: TokenListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): List<UserToken>
+    ): TokenListResponse
 
     /** @see list */
-    fun list(params: TokenListParams): List<UserToken> = list(params, RequestOptions.none())
+    fun list(params: TokenListParams): TokenListResponse = list(params, RequestOptions.none())
 
     /** @see list */
-    fun list(userId: String, requestOptions: RequestOptions): List<UserToken> =
+    fun list(userId: String, requestOptions: RequestOptions): TokenListResponse =
         list(userId, TokenListParams.none(), requestOptions)
 
     /** Delete User Token */
@@ -235,7 +235,7 @@ interface TokenService {
          * as [TokenService.list].
          */
         @MustBeClosed
-        fun list(userId: String): HttpResponseFor<List<UserToken>> =
+        fun list(userId: String): HttpResponseFor<TokenListResponse> =
             list(userId, TokenListParams.none())
 
         /** @see list */
@@ -244,7 +244,7 @@ interface TokenService {
             userId: String,
             params: TokenListParams = TokenListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<List<UserToken>> =
+        ): HttpResponseFor<TokenListResponse> =
             list(params.toBuilder().userId(userId).build(), requestOptions)
 
         /** @see list */
@@ -252,24 +252,26 @@ interface TokenService {
         fun list(
             userId: String,
             params: TokenListParams = TokenListParams.none(),
-        ): HttpResponseFor<List<UserToken>> = list(userId, params, RequestOptions.none())
+        ): HttpResponseFor<TokenListResponse> = list(userId, params, RequestOptions.none())
 
         /** @see list */
         @MustBeClosed
         fun list(
             params: TokenListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<List<UserToken>>
+        ): HttpResponseFor<TokenListResponse>
 
         /** @see list */
         @MustBeClosed
-        fun list(params: TokenListParams): HttpResponseFor<List<UserToken>> =
+        fun list(params: TokenListParams): HttpResponseFor<TokenListResponse> =
             list(params, RequestOptions.none())
 
         /** @see list */
         @MustBeClosed
-        fun list(userId: String, requestOptions: RequestOptions): HttpResponseFor<List<UserToken>> =
-            list(userId, TokenListParams.none(), requestOptions)
+        fun list(
+            userId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<TokenListResponse> = list(userId, TokenListParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `delete /users/{user_id}/tokens/{token}`, but is
