@@ -66,9 +66,9 @@ internal class TokenServiceTest {
                 .build()
         val tokenService = client.users().tokens()
 
-        val userTokens = tokenService.list("user_id")
+        val tokens = tokenService.list("user_id")
 
-        userTokens.forEach { it.validate() }
+        tokens.validate()
     }
 
     @Disabled("Prism tests are disabled")
