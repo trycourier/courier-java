@@ -1,5 +1,23 @@
 # Changelog
 
+## 4.2.0 (2025-12-08)
+
+Full Changelog: [v4.1.1...v4.2.0](https://github.com/trycourier/courier-java/compare/v4.1.1...v4.2.0)
+
+### Features
+
+* Add event_ids field to Notification schema ([7c1f965](https://github.com/trycourier/courier-java/commit/7c1f9658796281d891f340cbe0773a01ea0883d9))
+
+
+### Bug Fixes
+
+* **client:** fix duplicate Go struct resulting from name derivations schema ([6af2591](https://github.com/trycourier/courier-java/commit/6af25911aa81ad591d3b2a34e77045394abfbf21))
+
+
+### Documentation
+
+* remove `$` for better copy-pasteabality ([ed4b896](https://github.com/trycourier/courier-java/commit/ed4b8969289ea8559fa436a706b6d5c177e925f5))
+
 ## 4.1.1 (2025-12-02)
 
 Full Changelog: [v4.1.0...v4.1.1](https://github.com/trycourier/courier-java/compare/v4.1.0...v4.1.1)
