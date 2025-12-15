@@ -91,6 +91,7 @@ internal class ServiceParamsTest {
                         .delay(
                             SendMessageParams.Message.Delay.builder()
                                 .duration(0L)
+                                .timezone("timezone")
                                 .until("until")
                                 .build()
                         )

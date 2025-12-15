@@ -1476,6 +1476,7 @@ private constructor(
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val duration: JsonField<Long>,
+            private val timezone: JsonField<String>,
             private val until: JsonField<String>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
@@ -1485,8 +1486,11 @@ private constructor(
                 @JsonProperty("duration")
                 @ExcludeMissing
                 duration: JsonField<Long> = JsonMissing.of(),
+                @JsonProperty("timezone")
+                @ExcludeMissing
+                timezone: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("until") @ExcludeMissing until: JsonField<String> = JsonMissing.of(),
-            ) : this(duration, until, mutableMapOf())
+            ) : this(duration, timezone, until, mutableMapOf())
 
             /**
              * The duration of the delay in milliseconds.
@@ -1495,6 +1499,15 @@ private constructor(
              *   the server responded with an unexpected value).
              */
             fun duration(): Optional<Long> = duration.getOptional("duration")
+
+            /**
+             * IANA timezone identifier (e.g., "America/Los_Angeles", "UTC"). Used when resolving
+             * opening hours expressions. Takes precedence over user profile timezone settings.
+             *
+             * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
+            fun timezone(): Optional<String> = timezone.getOptional("timezone")
 
             /**
              * ISO 8601 timestamp or opening_hours-like format.
@@ -1511,6 +1524,14 @@ private constructor(
              * type.
              */
             @JsonProperty("duration") @ExcludeMissing fun _duration(): JsonField<Long> = duration
+
+            /**
+             * Returns the raw JSON value of [timezone].
+             *
+             * Unlike [timezone], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("timezone") @ExcludeMissing fun _timezone(): JsonField<String> = timezone
 
             /**
              * Returns the raw JSON value of [until].
@@ -1541,12 +1562,14 @@ private constructor(
             class Builder internal constructor() {
 
                 private var duration: JsonField<Long> = JsonMissing.of()
+                private var timezone: JsonField<String> = JsonMissing.of()
                 private var until: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(delay: Delay) = apply {
                     duration = delay.duration
+                    timezone = delay.timezone
                     until = delay.until
                     additionalProperties = delay.additionalProperties.toMutableMap()
                 }
@@ -1572,6 +1595,25 @@ private constructor(
                  * yet supported value.
                  */
                 fun duration(duration: JsonField<Long>) = apply { this.duration = duration }
+
+                /**
+                 * IANA timezone identifier (e.g., "America/Los_Angeles", "UTC"). Used when
+                 * resolving opening hours expressions. Takes precedence over user profile timezone
+                 * settings.
+                 */
+                fun timezone(timezone: String?) = timezone(JsonField.ofNullable(timezone))
+
+                /** Alias for calling [Builder.timezone] with `timezone.orElse(null)`. */
+                fun timezone(timezone: Optional<String>) = timezone(timezone.getOrNull())
+
+                /**
+                 * Sets [Builder.timezone] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.timezone] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun timezone(timezone: JsonField<String>) = apply { this.timezone = timezone }
 
                 /** ISO 8601 timestamp or opening_hours-like format. */
                 fun until(until: String?) = until(JsonField.ofNullable(until))
@@ -1615,7 +1657,8 @@ private constructor(
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  */
-                fun build(): Delay = Delay(duration, until, additionalProperties.toMutableMap())
+                fun build(): Delay =
+                    Delay(duration, timezone, until, additionalProperties.toMutableMap())
             }
 
             private var validated: Boolean = false
@@ -1626,6 +1669,7 @@ private constructor(
                 }
 
                 duration()
+                timezone()
                 until()
                 validated = true
             }
@@ -1647,6 +1691,7 @@ private constructor(
             @JvmSynthetic
             internal fun validity(): Int =
                 (if (duration.asKnown().isPresent) 1 else 0) +
+                    (if (timezone.asKnown().isPresent) 1 else 0) +
                     (if (until.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
@@ -1656,18 +1701,19 @@ private constructor(
 
                 return other is Delay &&
                     duration == other.duration &&
+                    timezone == other.timezone &&
                     until == other.until &&
                     additionalProperties == other.additionalProperties
             }
 
             private val hashCode: Int by lazy {
-                Objects.hash(duration, until, additionalProperties)
+                Objects.hash(duration, timezone, until, additionalProperties)
             }
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Delay{duration=$duration, until=$until, additionalProperties=$additionalProperties}"
+                "Delay{duration=$duration, timezone=$timezone, until=$until, additionalProperties=$additionalProperties}"
         }
 
         class Expiry
