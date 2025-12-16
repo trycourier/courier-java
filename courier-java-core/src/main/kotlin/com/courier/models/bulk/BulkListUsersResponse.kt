@@ -211,7 +211,7 @@ private constructor(
     private constructor(
         private val data: JsonValue,
         private val preferences: JsonField<RecipientPreferences>,
-        private val profile: JsonValue,
+        private val profile: JsonField<InboundBulkMessageUser.Profile>,
         private val recipient: JsonField<String>,
         private val to: JsonField<UserRecipient>,
         private val status: JsonField<Status>,
@@ -225,7 +225,9 @@ private constructor(
             @JsonProperty("preferences")
             @ExcludeMissing
             preferences: JsonField<RecipientPreferences> = JsonMissing.of(),
-            @JsonProperty("profile") @ExcludeMissing profile: JsonValue = JsonMissing.of(),
+            @JsonProperty("profile")
+            @ExcludeMissing
+            profile: JsonField<InboundBulkMessageUser.Profile> = JsonMissing.of(),
             @JsonProperty("recipient")
             @ExcludeMissing
             recipient: JsonField<String> = JsonMissing.of(),
@@ -245,6 +247,7 @@ private constructor(
                 .to(to)
                 .build()
 
+        /** User-specific data that will be merged with message.data */
         @JsonProperty("data") @ExcludeMissing fun _data(): JsonValue = data
 
         /**
@@ -253,15 +256,29 @@ private constructor(
          */
         fun preferences(): Optional<RecipientPreferences> = preferences.getOptional("preferences")
 
-        @JsonProperty("profile") @ExcludeMissing fun _profile(): JsonValue = profile
+        /**
+         * User profile information. For email-based bulk jobs, `profile.email` is required for
+         * provider routing to determine if the message can be delivered. The email address should
+         * be provided here rather than in `to.email`.
+         *
+         * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun profile(): Optional<InboundBulkMessageUser.Profile> = profile.getOptional("profile")
 
         /**
+         * User ID (legacy field, use profile or to.user_id instead)
+         *
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
         fun recipient(): Optional<String> = recipient.getOptional("recipient")
 
         /**
+         * Optional recipient information. Note: For email provider routing, use `profile.email`
+         * instead of `to.email`. The `to` field is primarily used for recipient identification and
+         * data merging.
+         *
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
@@ -287,6 +304,15 @@ private constructor(
         @JsonProperty("preferences")
         @ExcludeMissing
         fun _preferences(): JsonField<RecipientPreferences> = preferences
+
+        /**
+         * Returns the raw JSON value of [profile].
+         *
+         * Unlike [profile], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("profile")
+        @ExcludeMissing
+        fun _profile(): JsonField<InboundBulkMessageUser.Profile> = profile
 
         /**
          * Returns the raw JSON value of [recipient].
@@ -346,7 +372,7 @@ private constructor(
 
             private var data: JsonValue = JsonMissing.of()
             private var preferences: JsonField<RecipientPreferences> = JsonMissing.of()
-            private var profile: JsonValue = JsonMissing.of()
+            private var profile: JsonField<InboundBulkMessageUser.Profile> = JsonMissing.of()
             private var recipient: JsonField<String> = JsonMissing.of()
             private var to: JsonField<UserRecipient> = JsonMissing.of()
             private var status: JsonField<Status>? = null
@@ -365,6 +391,7 @@ private constructor(
                 additionalProperties = item.additionalProperties.toMutableMap()
             }
 
+            /** User-specific data that will be merged with message.data */
             fun data(data: JsonValue) = apply { this.data = data }
 
             fun preferences(preferences: RecipientPreferences?) =
@@ -385,8 +412,30 @@ private constructor(
                 this.preferences = preferences
             }
 
-            fun profile(profile: JsonValue) = apply { this.profile = profile }
+            /**
+             * User profile information. For email-based bulk jobs, `profile.email` is required for
+             * provider routing to determine if the message can be delivered. The email address
+             * should be provided here rather than in `to.email`.
+             */
+            fun profile(profile: InboundBulkMessageUser.Profile?) =
+                profile(JsonField.ofNullable(profile))
 
+            /** Alias for calling [Builder.profile] with `profile.orElse(null)`. */
+            fun profile(profile: Optional<InboundBulkMessageUser.Profile>) =
+                profile(profile.getOrNull())
+
+            /**
+             * Sets [Builder.profile] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.profile] with a well-typed
+             * [InboundBulkMessageUser.Profile] value instead. This method is primarily for setting
+             * the field to an undocumented or not yet supported value.
+             */
+            fun profile(profile: JsonField<InboundBulkMessageUser.Profile>) = apply {
+                this.profile = profile
+            }
+
+            /** User ID (legacy field, use profile or to.user_id instead) */
             fun recipient(recipient: String?) = recipient(JsonField.ofNullable(recipient))
 
             /** Alias for calling [Builder.recipient] with `recipient.orElse(null)`. */
@@ -401,6 +450,11 @@ private constructor(
              */
             fun recipient(recipient: JsonField<String>) = apply { this.recipient = recipient }
 
+            /**
+             * Optional recipient information. Note: For email provider routing, use `profile.email`
+             * instead of `to.email`. The `to` field is primarily used for recipient identification
+             * and data merging.
+             */
             fun to(to: UserRecipient?) = to(JsonField.ofNullable(to))
 
             /** Alias for calling [Builder.to] with `to.orElse(null)`. */
@@ -492,6 +546,7 @@ private constructor(
             }
 
             preferences().ifPresent { it.validate() }
+            profile().ifPresent { it.validate() }
             recipient()
             to().ifPresent { it.validate() }
             status().validate()
@@ -516,6 +571,7 @@ private constructor(
         @JvmSynthetic
         internal fun validity(): Int =
             (preferences.asKnown().getOrNull()?.validity() ?: 0) +
+                (profile.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (recipient.asKnown().isPresent) 1 else 0) +
                 (to.asKnown().getOrNull()?.validity() ?: 0) +
                 (status.asKnown().getOrNull()?.validity() ?: 0) +

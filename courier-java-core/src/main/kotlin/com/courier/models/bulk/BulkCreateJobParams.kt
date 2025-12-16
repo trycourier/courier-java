@@ -19,7 +19,14 @@ import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
-/** Create a bulk job */
+/**
+ * Creates a new bulk job for sending messages to multiple recipients.
+ *
+ * **Required**: `message.event` (event ID or notification ID)
+ *
+ * **Optional (V2 format)**: `message.template` (notification ID) or `message.content` (Elemental
+ * content) can be provided to override the notification associated with the event.
+ */
 class BulkCreateJobParams
 private constructor(
     private val body: Body,
@@ -28,6 +35,11 @@ private constructor(
 ) : Params {
 
     /**
+     * Bulk message definition. Supports two formats:
+     * - V1 format: Requires `event` field (event ID or notification ID)
+     * - V2 format: Optionally use `template` (notification ID) or `content` (Elemental content) in
+     *   addition to `event`
+     *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -86,6 +98,12 @@ private constructor(
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
+        /**
+         * Bulk message definition. Supports two formats:
+         * - V1 format: Requires `event` field (event ID or notification ID)
+         * - V2 format: Optionally use `template` (notification ID) or `content` (Elemental content)
+         *   in addition to `event`
+         */
         fun message(message: InboundBulkMessage) = apply { body.message(message) }
 
         /**
@@ -96,16 +114,6 @@ private constructor(
          * supported value.
          */
         fun message(message: JsonField<InboundBulkMessage>) = apply { body.message(message) }
-
-        /** Alias for calling [message] with `InboundBulkMessage.ofTemplate(template)`. */
-        fun message(template: InboundBulkMessage.InboundBulkTemplateMessage) = apply {
-            body.message(template)
-        }
-
-        /** Alias for calling [message] with `InboundBulkMessage.ofContent(content)`. */
-        fun message(content: InboundBulkMessage.InboundBulkContentMessage) = apply {
-            body.message(content)
-        }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
@@ -265,6 +273,11 @@ private constructor(
         ) : this(message, mutableMapOf())
 
         /**
+         * Bulk message definition. Supports two formats:
+         * - V1 format: Requires `event` field (event ID or notification ID)
+         * - V2 format: Optionally use `template` (notification ID) or `content` (Elemental content)
+         *   in addition to `event`
+         *
          * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
@@ -316,6 +329,12 @@ private constructor(
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
+            /**
+             * Bulk message definition. Supports two formats:
+             * - V1 format: Requires `event` field (event ID or notification ID)
+             * - V2 format: Optionally use `template` (notification ID) or `content` (Elemental
+             *   content) in addition to `event`
+             */
             fun message(message: InboundBulkMessage) = message(JsonField.of(message))
 
             /**
@@ -326,14 +345,6 @@ private constructor(
              * not yet supported value.
              */
             fun message(message: JsonField<InboundBulkMessage>) = apply { this.message = message }
-
-            /** Alias for calling [message] with `InboundBulkMessage.ofTemplate(template)`. */
-            fun message(template: InboundBulkMessage.InboundBulkTemplateMessage) =
-                message(InboundBulkMessage.ofTemplate(template))
-
-            /** Alias for calling [message] with `InboundBulkMessage.ofContent(content)`. */
-            fun message(content: InboundBulkMessage.InboundBulkContentMessage) =
-                message(InboundBulkMessage.ofContent(content))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()

@@ -5,6 +5,7 @@ package com.courier.services.async
 import com.courier.TestServerExtension
 import com.courier.client.okhttp.CourierOkHttpClientAsync
 import com.courier.core.JsonValue
+import com.courier.models.ElementalContentSugar
 import com.courier.models.MessageContext
 import com.courier.models.RecipientPreferences
 import com.courier.models.UserRecipient
@@ -87,7 +88,11 @@ internal class BulkServiceAsyncTest {
                                     )
                                     .build()
                             )
-                            .profile(JsonValue.from(mapOf<String, Any>()))
+                            .profile(
+                                InboundBulkMessageUser.Profile.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                    .build()
+                            )
                             .recipient("recipient")
                             .to(
                                 UserRecipient.builder()
@@ -187,17 +192,19 @@ internal class BulkServiceAsyncTest {
             bulkServiceAsync.createJob(
                 BulkCreateJobParams.builder()
                     .message(
-                        InboundBulkMessage.InboundBulkTemplateMessage.builder()
-                            .template("template")
+                        InboundBulkMessage.builder()
+                            .event("event")
                             .brand("brand")
+                            .content(
+                                ElementalContentSugar.builder().body("body").title("title").build()
+                            )
                             .data(
-                                InboundBulkMessage.InboundBulkTemplateMessage.Data.builder()
+                                InboundBulkMessage.Data.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("bar"))
                                     .build()
                             )
-                            .event("event")
                             .locale(
-                                InboundBulkMessage.InboundBulkTemplateMessage.Locale.builder()
+                                InboundBulkMessage.Locale.builder()
                                     .putAdditionalProperty(
                                         "foo",
                                         JsonValue.from(mapOf("foo" to "bar")),
@@ -205,10 +212,11 @@ internal class BulkServiceAsyncTest {
                                     .build()
                             )
                             .override(
-                                InboundBulkMessage.InboundBulkTemplateMessage.Override.builder()
+                                InboundBulkMessage.Override.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("bar"))
                                     .build()
                             )
+                            .template("template")
                             .build()
                     )
                     .build()

@@ -3,6 +3,7 @@
 package com.courier.models.bulk
 
 import com.courier.core.JsonValue
+import com.courier.models.ElementalContentSugar
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -12,25 +13,26 @@ internal class BulkCreateJobParamsTest {
     fun create() {
         BulkCreateJobParams.builder()
             .message(
-                InboundBulkMessage.InboundBulkTemplateMessage.builder()
-                    .template("template")
+                InboundBulkMessage.builder()
+                    .event("event")
                     .brand("brand")
+                    .content(ElementalContentSugar.builder().body("body").title("title").build())
                     .data(
-                        InboundBulkMessage.InboundBulkTemplateMessage.Data.builder()
+                        InboundBulkMessage.Data.builder()
                             .putAdditionalProperty("foo", JsonValue.from("bar"))
                             .build()
                     )
-                    .event("event")
                     .locale(
-                        InboundBulkMessage.InboundBulkTemplateMessage.Locale.builder()
+                        InboundBulkMessage.Locale.builder()
                             .putAdditionalProperty("foo", JsonValue.from(mapOf("foo" to "bar")))
                             .build()
                     )
                     .override(
-                        InboundBulkMessage.InboundBulkTemplateMessage.Override.builder()
+                        InboundBulkMessage.Override.builder()
                             .putAdditionalProperty("foo", JsonValue.from("bar"))
                             .build()
                     )
+                    .template("template")
                     .build()
             )
             .build()
@@ -41,25 +43,28 @@ internal class BulkCreateJobParamsTest {
         val params =
             BulkCreateJobParams.builder()
                 .message(
-                    InboundBulkMessage.InboundBulkTemplateMessage.builder()
-                        .template("template")
+                    InboundBulkMessage.builder()
+                        .event("event")
                         .brand("brand")
+                        .content(
+                            ElementalContentSugar.builder().body("body").title("title").build()
+                        )
                         .data(
-                            InboundBulkMessage.InboundBulkTemplateMessage.Data.builder()
+                            InboundBulkMessage.Data.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                 .build()
                         )
-                        .event("event")
                         .locale(
-                            InboundBulkMessage.InboundBulkTemplateMessage.Locale.builder()
+                            InboundBulkMessage.Locale.builder()
                                 .putAdditionalProperty("foo", JsonValue.from(mapOf("foo" to "bar")))
                                 .build()
                         )
                         .override(
-                            InboundBulkMessage.InboundBulkTemplateMessage.Override.builder()
+                            InboundBulkMessage.Override.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                 .build()
                         )
+                        .template("template")
                         .build()
                 )
                 .build()
@@ -68,28 +73,27 @@ internal class BulkCreateJobParamsTest {
 
         assertThat(body.message())
             .isEqualTo(
-                InboundBulkMessage.ofTemplate(
-                    InboundBulkMessage.InboundBulkTemplateMessage.builder()
-                        .template("template")
-                        .brand("brand")
-                        .data(
-                            InboundBulkMessage.InboundBulkTemplateMessage.Data.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("bar"))
-                                .build()
-                        )
-                        .event("event")
-                        .locale(
-                            InboundBulkMessage.InboundBulkTemplateMessage.Locale.builder()
-                                .putAdditionalProperty("foo", JsonValue.from(mapOf("foo" to "bar")))
-                                .build()
-                        )
-                        .override(
-                            InboundBulkMessage.InboundBulkTemplateMessage.Override.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("bar"))
-                                .build()
-                        )
-                        .build()
-                )
+                InboundBulkMessage.builder()
+                    .event("event")
+                    .brand("brand")
+                    .content(ElementalContentSugar.builder().body("body").title("title").build())
+                    .data(
+                        InboundBulkMessage.Data.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
+                    .locale(
+                        InboundBulkMessage.Locale.builder()
+                            .putAdditionalProperty("foo", JsonValue.from(mapOf("foo" to "bar")))
+                            .build()
+                    )
+                    .override(
+                        InboundBulkMessage.Override.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
+                    .template("template")
+                    .build()
             )
     }
 
@@ -97,22 +101,11 @@ internal class BulkCreateJobParamsTest {
     fun bodyWithoutOptionalFields() {
         val params =
             BulkCreateJobParams.builder()
-                .message(
-                    InboundBulkMessage.InboundBulkTemplateMessage.builder()
-                        .template("template")
-                        .build()
-                )
+                .message(InboundBulkMessage.builder().event("event").build())
                 .build()
 
         val body = params._body()
 
-        assertThat(body.message())
-            .isEqualTo(
-                InboundBulkMessage.ofTemplate(
-                    InboundBulkMessage.InboundBulkTemplateMessage.builder()
-                        .template("template")
-                        .build()
-                )
-            )
+        assertThat(body.message()).isEqualTo(InboundBulkMessage.builder().event("event").build())
     }
 }

@@ -173,6 +173,11 @@ private constructor(
         ) : this(definition, enqueued, failures, received, status, mutableMapOf())
 
         /**
+         * Bulk message definition. Supports two formats:
+         * - V1 format: Requires `event` field (event ID or notification ID)
+         * - V2 format: Optionally use `template` (notification ID) or `content` (Elemental content)
+         *   in addition to `event`
+         *
          * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
@@ -288,6 +293,12 @@ private constructor(
                 additionalProperties = job.additionalProperties.toMutableMap()
             }
 
+            /**
+             * Bulk message definition. Supports two formats:
+             * - V1 format: Requires `event` field (event ID or notification ID)
+             * - V2 format: Optionally use `template` (notification ID) or `content` (Elemental
+             *   content) in addition to `event`
+             */
             fun definition(definition: InboundBulkMessage) = definition(JsonField.of(definition))
 
             /**
@@ -300,14 +311,6 @@ private constructor(
             fun definition(definition: JsonField<InboundBulkMessage>) = apply {
                 this.definition = definition
             }
-
-            /** Alias for calling [definition] with `InboundBulkMessage.ofTemplate(template)`. */
-            fun definition(template: InboundBulkMessage.InboundBulkTemplateMessage) =
-                definition(InboundBulkMessage.ofTemplate(template))
-
-            /** Alias for calling [definition] with `InboundBulkMessage.ofContent(content)`. */
-            fun definition(content: InboundBulkMessage.InboundBulkContentMessage) =
-                definition(InboundBulkMessage.ofContent(content))
 
             fun enqueued(enqueued: Long) = enqueued(JsonField.of(enqueued))
 
