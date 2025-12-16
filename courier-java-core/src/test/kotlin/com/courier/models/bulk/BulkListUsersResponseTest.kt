@@ -71,7 +71,11 @@ internal class BulkListUsersResponseTest {
                                 )
                                 .build()
                         )
-                        .profile(JsonValue.from(mapOf<String, Any>()))
+                        .profile(
+                            InboundBulkMessageUser.Profile.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
+                        )
                         .recipient("recipient")
                         .to(
                             UserRecipient.builder()
@@ -206,7 +210,11 @@ internal class BulkListUsersResponseTest {
                             )
                             .build()
                     )
-                    .profile(JsonValue.from(mapOf<String, Any>()))
+                    .profile(
+                        InboundBulkMessageUser.Profile.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
                     .recipient("recipient")
                     .to(
                         UserRecipient.builder()
@@ -344,7 +352,11 @@ internal class BulkListUsersResponseTest {
                                 )
                                 .build()
                         )
-                        .profile(JsonValue.from(mapOf<String, Any>()))
+                        .profile(
+                            InboundBulkMessageUser.Profile.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
+                        )
                         .recipient("recipient")
                         .to(
                             UserRecipient.builder()

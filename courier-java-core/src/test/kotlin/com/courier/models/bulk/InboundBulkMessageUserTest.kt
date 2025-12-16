@@ -58,7 +58,11 @@ internal class InboundBulkMessageUserTest {
                         )
                         .build()
                 )
-                .profile(JsonValue.from(mapOf<String, Any>()))
+                .profile(
+                    InboundBulkMessageUser.Profile.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .build()
+                )
                 .recipient("recipient")
                 .to(
                     UserRecipient.builder()
@@ -170,8 +174,12 @@ internal class InboundBulkMessageUserTest {
                     )
                     .build()
             )
-        assertThat(inboundBulkMessageUser._profile())
-            .isEqualTo(JsonValue.from(mapOf<String, Any>()))
+        assertThat(inboundBulkMessageUser.profile())
+            .contains(
+                InboundBulkMessageUser.Profile.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                    .build()
+            )
         assertThat(inboundBulkMessageUser.recipient()).contains("recipient")
         assertThat(inboundBulkMessageUser.to())
             .contains(
@@ -288,7 +296,11 @@ internal class InboundBulkMessageUserTest {
                         )
                         .build()
                 )
-                .profile(JsonValue.from(mapOf<String, Any>()))
+                .profile(
+                    InboundBulkMessageUser.Profile.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .build()
+                )
                 .recipient("recipient")
                 .to(
                     UserRecipient.builder()

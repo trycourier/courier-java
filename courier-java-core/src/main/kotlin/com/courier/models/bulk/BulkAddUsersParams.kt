@@ -22,7 +22,12 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Ingest user data into a Bulk Job */
+/**
+ * Ingest user data into a Bulk Job.
+ *
+ * **Important**: For email-based bulk jobs, each user must include `profile.email` for provider
+ * routing to work correctly. The `to.email` field is not sufficient for email provider routing.
+ */
 class BulkAddUsersParams
 private constructor(
     private val jobId: String?,
