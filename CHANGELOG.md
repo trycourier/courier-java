@@ -1,5 +1,14 @@
 # Changelog
 
+## 4.4.0 (2025-12-16)
+
+Full Changelog: [v4.3.0...v4.4.0](https://github.com/trycourier/courier-java/compare/v4.3.0...v4.4.0)
+
+### Features
+
+* Add timezone field to Delay schema ([46d1671](https://github.com/trycourier/courier-java/commit/46d16713aeb86a15fe73de9c9e2aea168872a7c0))
+* Update bulk API spec: make event required, document profile.email req… ([e436dcd](https://github.com/trycourier/courier-java/commit/e436dcd0a916911f366d3016333b8a6a2cdc947d))
+
 ## 4.3.0 (2025-12-08)
 
 Full Changelog: [v4.2.0...v4.3.0](https://github.com/trycourier/courier-java/compare/v4.2.0...v4.3.0)
