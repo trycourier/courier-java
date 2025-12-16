@@ -31,7 +31,12 @@ interface BulkService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): BulkService
 
-    /** Ingest user data into a Bulk Job */
+    /**
+     * Ingest user data into a Bulk Job.
+     *
+     * **Important**: For email-based bulk jobs, each user must include `profile.email` for provider
+     * routing to work correctly. The `to.email` field is not sufficient for email provider routing.
+     */
     fun addUsers(jobId: String, params: BulkAddUsersParams) =
         addUsers(jobId, params, RequestOptions.none())
 
@@ -48,7 +53,14 @@ interface BulkService {
     /** @see addUsers */
     fun addUsers(params: BulkAddUsersParams, requestOptions: RequestOptions = RequestOptions.none())
 
-    /** Create a bulk job */
+    /**
+     * Creates a new bulk job for sending messages to multiple recipients.
+     *
+     * **Required**: `message.event` (event ID or notification ID)
+     *
+     * **Optional (V2 format)**: `message.template` (notification ID) or `message.content`
+     * (Elemental content) can be provided to override the notification associated with the event.
+     */
     fun createJob(params: BulkCreateJobParams): BulkCreateJobResponse =
         createJob(params, RequestOptions.none())
 

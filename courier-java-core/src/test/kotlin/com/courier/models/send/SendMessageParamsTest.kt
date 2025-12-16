@@ -56,6 +56,7 @@ internal class SendMessageParamsTest {
                     .delay(
                         SendMessageParams.Message.Delay.builder()
                             .duration(0L)
+                            .timezone("timezone")
                             .until("until")
                             .build()
                     )
@@ -257,6 +258,7 @@ internal class SendMessageParamsTest {
                         .delay(
                             SendMessageParams.Message.Delay.builder()
                                 .duration(0L)
+                                .timezone("timezone")
                                 .until("until")
                                 .build()
                         )
@@ -460,6 +462,7 @@ internal class SendMessageParamsTest {
                     .delay(
                         SendMessageParams.Message.Delay.builder()
                             .duration(0L)
+                            .timezone("timezone")
                             .until("until")
                             .build()
                     )
