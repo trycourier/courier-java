@@ -13,8 +13,8 @@ internal class AudienceUpdateParamsTest {
             .audienceId("audience_id")
             .description("description")
             .filter(
-                Filter.builder()
-                    .operator(Filter.Operator.ENDS_WITH)
+                SingleFilterConfig.builder()
+                    .operator(SingleFilterConfig.Operator.ENDS_WITH)
                     .path("path")
                     .value("value")
                     .build()
@@ -39,8 +39,8 @@ internal class AudienceUpdateParamsTest {
                 .audienceId("audience_id")
                 .description("description")
                 .filter(
-                    Filter.builder()
-                        .operator(Filter.Operator.ENDS_WITH)
+                    SingleFilterConfig.builder()
+                        .operator(SingleFilterConfig.Operator.ENDS_WITH)
                         .path("path")
                         .value("value")
                         .build()
@@ -53,11 +53,13 @@ internal class AudienceUpdateParamsTest {
         assertThat(body.description()).contains("description")
         assertThat(body.filter())
             .contains(
-                Filter.builder()
-                    .operator(Filter.Operator.ENDS_WITH)
-                    .path("path")
-                    .value("value")
-                    .build()
+                Filter.ofSingleFilterConfig(
+                    SingleFilterConfig.builder()
+                        .operator(SingleFilterConfig.Operator.ENDS_WITH)
+                        .path("path")
+                        .value("value")
+                        .build()
+                )
             )
         assertThat(body.name()).contains("name")
     }

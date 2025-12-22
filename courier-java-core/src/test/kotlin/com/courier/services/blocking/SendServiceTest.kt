@@ -228,7 +228,7 @@ internal class SendServiceTest {
                                             .build()
                                     )
                                     .tenantId("tenant_id")
-                                    .userId("example_user")
+                                    .userId("user_id")
                                     .build()
                             )
                             .build()
