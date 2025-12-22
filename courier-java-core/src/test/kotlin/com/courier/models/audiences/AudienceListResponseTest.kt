@@ -20,8 +20,8 @@ internal class AudienceListResponseTest {
                         .createdAt("created_at")
                         .description("description")
                         .filter(
-                            Filter.builder()
-                                .operator(Filter.Operator.ENDS_WITH)
+                            SingleFilterConfig.builder()
+                                .operator(SingleFilterConfig.Operator.ENDS_WITH)
                                 .path("path")
                                 .value("value")
                                 .build()
@@ -40,8 +40,8 @@ internal class AudienceListResponseTest {
                     .createdAt("created_at")
                     .description("description")
                     .filter(
-                        Filter.builder()
-                            .operator(Filter.Operator.ENDS_WITH)
+                        SingleFilterConfig.builder()
+                            .operator(SingleFilterConfig.Operator.ENDS_WITH)
                             .path("path")
                             .value("value")
                             .build()
@@ -65,8 +65,8 @@ internal class AudienceListResponseTest {
                         .createdAt("created_at")
                         .description("description")
                         .filter(
-                            Filter.builder()
-                                .operator(Filter.Operator.ENDS_WITH)
+                            SingleFilterConfig.builder()
+                                .operator(SingleFilterConfig.Operator.ENDS_WITH)
                                 .path("path")
                                 .value("value")
                                 .build()

@@ -5,8 +5,8 @@ package com.courier.proguard
 import com.courier.client.okhttp.CourierOkHttpClient
 import com.courier.core.jsonMapper
 import com.courier.models.Alignment
-import com.courier.models.ElementalNode
-import com.courier.models.ElementalTextNodeWithType
+import com.courier.models.Discord
+import com.courier.models.SendToChannel
 import com.courier.models.send.SendMessageResponse
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import kotlin.reflect.full.memberFunctions
@@ -84,26 +84,15 @@ internal class ProGuardCompatibilityTest {
     }
 
     @Test
-    fun elementalNodeRoundtrip() {
+    fun discordRoundtrip() {
         val jsonMapper = jsonMapper()
-        val elementalNode =
-            ElementalNode.ofTextNodeWithType(
-                ElementalTextNodeWithType.builder()
-                    .addChannel("string")
-                    .if_("if")
-                    .loop("loop")
-                    .ref("ref")
-                    .type(ElementalTextNodeWithType.Type.TEXT)
-                    .build()
-            )
+        val discord =
+            Discord.ofSendToChannel(SendToChannel.builder().channelId("channel_id").build())
 
-        val roundtrippedElementalNode =
-            jsonMapper.readValue(
-                jsonMapper.writeValueAsString(elementalNode),
-                jacksonTypeRef<ElementalNode>(),
-            )
+        val roundtrippedDiscord =
+            jsonMapper.readValue(jsonMapper.writeValueAsString(discord), jacksonTypeRef<Discord>())
 
-        assertThat(roundtrippedElementalNode).isEqualTo(elementalNode)
+        assertThat(roundtrippedDiscord).isEqualTo(discord)
     }
 
     @Test
