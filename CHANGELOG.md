@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.5.0 (2025-12-29)
+
+Full Changelog: [v4.4.0...v4.5.0](https://github.com/trycourier/courier-java/compare/v4.4.0...v4.5.0)
+
+### Features
+
+* **api:** add audience/list/slack/msTeams/pagerduty/webhook recipients, restructure to union ([46de0d2](https://github.com/trycourier/courier-java/commit/46de0d2d85f59c4d1d220dc3e3028c7e6760c769))
+
 ## 4.4.0 (2025-12-16)
 
 Full Changelog: [v4.3.0...v4.4.0](https://github.com/trycourier/courier-java/compare/v4.3.0...v4.4.0)

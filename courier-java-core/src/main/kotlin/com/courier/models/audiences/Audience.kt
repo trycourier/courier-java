@@ -223,6 +223,14 @@ private constructor(
          */
         fun filter(filter: JsonField<Filter>) = apply { this.filter = filter }
 
+        /** Alias for calling [filter] with `Filter.ofSingleFilterConfig(singleFilterConfig)`. */
+        fun filter(singleFilterConfig: SingleFilterConfig) =
+            filter(Filter.ofSingleFilterConfig(singleFilterConfig))
+
+        /** Alias for calling [filter] with `Filter.ofNestedFilterConfig(nestedFilterConfig)`. */
+        fun filter(nestedFilterConfig: NestedFilterConfig) =
+            filter(Filter.ofNestedFilterConfig(nestedFilterConfig))
+
         /** The name of the audience */
         fun name(name: String) = name(JsonField.of(name))
 
