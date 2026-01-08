@@ -1,5 +1,14 @@
 # Changelog
 
+## 4.6.0 (2026-01-08)
+
+Full Changelog: [v4.5.0...v4.6.0](https://github.com/trycourier/courier-java/compare/v4.5.0...v4.6.0)
+
+### Features
+
+* Add automation list endpoint to API spec ([d325774](https://github.com/trycourier/courier-java/commit/d32577416aac404f5252240814411027720f9b7e))
+* **client:** add `HttpRequest#url()` method ([68fea18](https://github.com/trycourier/courier-java/commit/68fea18aaff857c538d86a74f17c3655a7815817))
+
 ## 4.5.0 (2025-12-29)
 
 Full Changelog: [v4.4.0...v4.5.0](https://github.com/trycourier/courier-java/compare/v4.4.0...v4.5.0)
