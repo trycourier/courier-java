@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.7.0 (2026-01-09)
+
+Full Changelog: [v4.6.0...v4.7.0](https://github.com/trycourier/courier-java/compare/v4.6.0...v4.7.0)
+
+### Features
+
+* **client:** allow configuring dispatcher executor service ([86008d9](https://github.com/trycourier/courier-java/commit/86008d9281207c5dff33942f841fcf57fe9ac543))
+
 ## 4.6.0 (2026-01-08)
 
 Full Changelog: [v4.5.0...v4.6.0](https://github.com/trycourier/courier-java/compare/v4.5.0...v4.6.0)
