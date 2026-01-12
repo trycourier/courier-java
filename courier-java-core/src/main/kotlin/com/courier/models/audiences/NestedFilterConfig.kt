@@ -23,16 +23,14 @@ class NestedFilterConfig
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val operator: JsonField<Operator>,
-    private val rules: JsonField<List<FilterConfig>>,
+    private val rules: JsonField<List<Filter>>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
         @JsonProperty("operator") @ExcludeMissing operator: JsonField<Operator> = JsonMissing.of(),
-        @JsonProperty("rules")
-        @ExcludeMissing
-        rules: JsonField<List<FilterConfig>> = JsonMissing.of(),
+        @JsonProperty("rules") @ExcludeMissing rules: JsonField<List<Filter>> = JsonMissing.of(),
     ) : this(operator, rules, mutableMapOf())
 
     /**
@@ -47,7 +45,7 @@ private constructor(
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun rules(): List<FilterConfig> = rules.getRequired("rules")
+    fun rules(): List<Filter> = rules.getRequired("rules")
 
     /**
      * Returns the raw JSON value of [operator].
@@ -61,7 +59,7 @@ private constructor(
      *
      * Unlike [rules], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("rules") @ExcludeMissing fun _rules(): JsonField<List<FilterConfig>> = rules
+    @JsonProperty("rules") @ExcludeMissing fun _rules(): JsonField<List<Filter>> = rules
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -93,7 +91,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var operator: JsonField<Operator>? = null
-        private var rules: JsonField<MutableList<FilterConfig>>? = null
+        private var rules: JsonField<MutableList<Filter>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -115,34 +113,36 @@ private constructor(
          */
         fun operator(operator: JsonField<Operator>) = apply { this.operator = operator }
 
-        fun rules(rules: List<FilterConfig>) = rules(JsonField.of(rules))
+        fun rules(rules: List<Filter>) = rules(JsonField.of(rules))
 
         /**
          * Sets [Builder.rules] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.rules] with a well-typed `List<FilterConfig>` value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.rules] with a well-typed `List<Filter>` value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
-        fun rules(rules: JsonField<List<FilterConfig>>) = apply {
+        fun rules(rules: JsonField<List<Filter>>) = apply {
             this.rules = rules.map { it.toMutableList() }
         }
 
         /**
-         * Adds a single [FilterConfig] to [rules].
+         * Adds a single [Filter] to [rules].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addRule(rule: FilterConfig) = apply {
+        fun addRule(rule: Filter) = apply {
             rules =
                 (rules ?: JsonField.of(mutableListOf())).also { checkKnown("rules", it).add(rule) }
         }
 
-        /** Alias for calling [addRule] with `FilterConfig.ofSingle(single)`. */
-        fun addRule(single: SingleFilterConfig) = addRule(FilterConfig.ofSingle(single))
+        /** Alias for calling [addRule] with `Filter.ofSingleFilterConfig(singleFilterConfig)`. */
+        fun addRule(singleFilterConfig: SingleFilterConfig) =
+            addRule(Filter.ofSingleFilterConfig(singleFilterConfig))
 
-        /** Alias for calling [addRule] with `FilterConfig.ofNested(nested)`. */
-        fun addRule(nested: NestedFilterConfig) = addRule(FilterConfig.ofNested(nested))
+        /** Alias for calling [addRule] with `Filter.ofNestedFilterConfig(nestedFilterConfig)`. */
+        fun addRule(nestedFilterConfig: NestedFilterConfig) =
+            addRule(Filter.ofNestedFilterConfig(nestedFilterConfig))
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
