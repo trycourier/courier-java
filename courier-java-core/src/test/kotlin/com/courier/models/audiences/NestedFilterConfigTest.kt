@@ -26,7 +26,7 @@ internal class NestedFilterConfigTest {
         assertThat(nestedFilterConfig.operator()).isEqualTo(NestedFilterConfig.Operator.ENDS_WITH)
         assertThat(nestedFilterConfig.rules())
             .containsExactly(
-                FilterConfig.ofSingle(
+                Filter.ofSingleFilterConfig(
                     SingleFilterConfig.builder()
                         .operator(SingleFilterConfig.Operator.ENDS_WITH)
                         .path("path")
