@@ -57,7 +57,7 @@ private constructor(
         customRouting.getOptional("custom_routing")
 
     /**
-     * Override channel routing with custom preferences. This will override any template prefernces
+     * Override channel routing with custom preferences. This will override any template preferences
      * that are set, but a user can still customize their preferences
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -175,7 +175,7 @@ private constructor(
 
         /**
          * Override channel routing with custom preferences. This will override any template
-         * prefernces that are set, but a user can still customize their preferences
+         * preferences that are set, but a user can still customize their preferences
          */
         fun hasCustomRouting(hasCustomRouting: Boolean?) =
             hasCustomRouting(JsonField.ofNullable(hasCustomRouting))
