@@ -1,5 +1,23 @@
 # Changelog
 
+## 4.7.0 (2026-01-12)
+
+Full Changelog: [v4.6.0...v4.7.0](https://github.com/trycourier/courier-java/compare/v4.6.0...v4.7.0)
+
+### Features
+
+* **client:** allow configuring dispatcher executor service ([86008d9](https://github.com/trycourier/courier-java/commit/86008d9281207c5dff33942f841fcf57fe9ac543))
+
+
+### Bug Fixes
+
+* **types:** change rules type from FilterConfig to Filter in NestedFilterConfig ([49ad2a8](https://github.com/trycourier/courier-java/commit/49ad2a877f281961289abaa1a00e38e52921a825))
+
+
+### Chores
+
+* **internal:** regenerate SDK with no functional changes ([1267b56](https://github.com/trycourier/courier-java/commit/1267b5646869806f1df16eb24b19ad1c988a0be6))
+
 ## 4.6.0 (2026-01-08)
 
 Full Changelog: [v4.5.0...v4.6.0](https://github.com/trycourier/courier-java/compare/v4.5.0...v4.6.0)
