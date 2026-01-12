@@ -61,7 +61,7 @@ private constructor(
     fun type(): Type = body.type()
 
     /**
-     * The user id associatiated with the track
+     * The user id associated with the track
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -207,7 +207,7 @@ private constructor(
          */
         fun type(type: JsonField<Type>) = apply { body.type(type) }
 
-        /** The user id associatiated with the track */
+        /** The user id associated with the track */
         fun userId(userId: String?) = apply { body.userId(userId) }
 
         /** Alias for calling [Builder.userId] with `userId.orElse(null)`. */
@@ -422,7 +422,7 @@ private constructor(
         fun type(): Type = type.getRequired("type")
 
         /**
-         * The user id associatiated with the track
+         * The user id associated with the track
          *
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -568,7 +568,7 @@ private constructor(
              */
             fun type(type: JsonField<Type>) = apply { this.type = type }
 
-            /** The user id associatiated with the track */
+            /** The user id associated with the track */
             fun userId(userId: String?) = userId(JsonField.ofNullable(userId))
 
             /** Alias for calling [Builder.userId] with `userId.orElse(null)`. */

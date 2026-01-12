@@ -42,7 +42,7 @@ private constructor(
     fun operator(): Operator = operator.getRequired("operator")
 
     /**
-     * The attribe name from profile whose value will be operated against the filter value
+     * The attribute name from profile whose value will be operated against the filter value
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -133,7 +133,7 @@ private constructor(
          */
         fun operator(operator: JsonField<Operator>) = apply { this.operator = operator }
 
-        /** The attribe name from profile whose value will be operated against the filter value */
+        /** The attribute name from profile whose value will be operated against the filter value */
         fun path(path: String) = path(JsonField.of(path))
 
         /**
