@@ -2,58 +2,155 @@
 
 package com.courier.models.audiences
 
-import com.courier.core.BaseDeserializer
-import com.courier.core.BaseSerializer
+import com.courier.core.ExcludeMissing
+import com.courier.core.JsonField
+import com.courier.core.JsonMissing
 import com.courier.core.JsonValue
-import com.courier.core.allMaxBy
-import com.courier.core.getOrThrow
+import com.courier.core.checkKnown
+import com.courier.core.checkRequired
+import com.courier.core.toImmutable
 import com.courier.errors.CourierInvalidDataException
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.ObjectCodec
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.SerializerProvider
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.fasterxml.jackson.annotation.JsonAnyGetter
+import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
-import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
-/** A single filter to use for filtering */
-@JsonDeserialize(using = Filter.Deserializer::class)
-@JsonSerialize(using = Filter.Serializer::class)
+/** Filter that contains an array of FilterConfig items */
 class Filter
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    private val singleFilterConfig: SingleFilterConfig? = null,
-    private val nestedFilterConfig: NestedFilterConfig? = null,
-    private val _json: JsonValue? = null,
+    private val filters: JsonField<List<FilterConfig>>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
-    /** A single filter to use for filtering */
-    fun singleFilterConfig(): Optional<SingleFilterConfig> = Optional.ofNullable(singleFilterConfig)
+    @JsonCreator
+    private constructor(
+        @JsonProperty("filters")
+        @ExcludeMissing
+        filters: JsonField<List<FilterConfig>> = JsonMissing.of()
+    ) : this(filters, mutableMapOf())
 
-    /** The operator to use for filtering */
-    fun nestedFilterConfig(): Optional<NestedFilterConfig> = Optional.ofNullable(nestedFilterConfig)
+    /**
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun filters(): List<FilterConfig> = filters.getRequired("filters")
 
-    fun isSingleFilterConfig(): Boolean = singleFilterConfig != null
+    /**
+     * Returns the raw JSON value of [filters].
+     *
+     * Unlike [filters], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("filters") @ExcludeMissing fun _filters(): JsonField<List<FilterConfig>> = filters
 
-    fun isNestedFilterConfig(): Boolean = nestedFilterConfig != null
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
 
-    /** A single filter to use for filtering */
-    fun asSingleFilterConfig(): SingleFilterConfig =
-        singleFilterConfig.getOrThrow("singleFilterConfig")
+    @JsonAnyGetter
+    @ExcludeMissing
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
-    /** The operator to use for filtering */
-    fun asNestedFilterConfig(): NestedFilterConfig =
-        nestedFilterConfig.getOrThrow("nestedFilterConfig")
+    fun toBuilder() = Builder().from(this)
 
-    fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
+    companion object {
 
-    fun <T> accept(visitor: Visitor<T>): T =
-        when {
-            singleFilterConfig != null -> visitor.visitSingleFilterConfig(singleFilterConfig)
-            nestedFilterConfig != null -> visitor.visitNestedFilterConfig(nestedFilterConfig)
-            else -> visitor.unknown(_json)
+        /**
+         * Returns a mutable builder for constructing an instance of [Filter].
+         *
+         * The following fields are required:
+         * ```java
+         * .filters()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [Filter]. */
+    class Builder internal constructor() {
+
+        private var filters: JsonField<MutableList<FilterConfig>>? = null
+        private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+        @JvmSynthetic
+        internal fun from(filter: Filter) = apply {
+            filters = filter.filters.map { it.toMutableList() }
+            additionalProperties = filter.additionalProperties.toMutableMap()
         }
+
+        fun filters(filters: List<FilterConfig>) = filters(JsonField.of(filters))
+
+        /**
+         * Sets [Builder.filters] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.filters] with a well-typed `List<FilterConfig>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun filters(filters: JsonField<List<FilterConfig>>) = apply {
+            this.filters = filters.map { it.toMutableList() }
+        }
+
+        /**
+         * Adds a single [FilterConfig] to [filters].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addFilter(filter: FilterConfig) = apply {
+            filters =
+                (filters ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("filters", it).add(filter)
+                }
+        }
+
+        /** Alias for calling [addFilter] with `FilterConfig.ofSingle(single)`. */
+        fun addFilter(single: SingleFilterConfig) = addFilter(FilterConfig.ofSingle(single))
+
+        /** Alias for calling [addFilter] with `FilterConfig.ofNested(nested)`. */
+        fun addFilter(nested: NestedFilterConfig) = addFilter(FilterConfig.ofNested(nested))
+
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.clear()
+            putAllAdditionalProperties(additionalProperties)
+        }
+
+        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+            additionalProperties.put(key, value)
+        }
+
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.putAll(additionalProperties)
+        }
+
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
+
+        /**
+         * Returns an immutable instance of [Filter].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .filters()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): Filter =
+            Filter(
+                checkRequired("filters", filters).map { it.toImmutable() },
+                additionalProperties.toMutableMap(),
+            )
+    }
 
     private var validated: Boolean = false
 
@@ -62,17 +159,7 @@ private constructor(
             return@apply
         }
 
-        accept(
-            object : Visitor<Unit> {
-                override fun visitSingleFilterConfig(singleFilterConfig: SingleFilterConfig) {
-                    singleFilterConfig.validate()
-                }
-
-                override fun visitNestedFilterConfig(nestedFilterConfig: NestedFilterConfig) {
-                    nestedFilterConfig.validate()
-                }
-            }
-        )
+        filters().forEach { it.validate() }
         validated = true
     }
 
@@ -91,17 +178,7 @@ private constructor(
      */
     @JvmSynthetic
     internal fun validity(): Int =
-        accept(
-            object : Visitor<Int> {
-                override fun visitSingleFilterConfig(singleFilterConfig: SingleFilterConfig) =
-                    singleFilterConfig.validity()
-
-                override fun visitNestedFilterConfig(nestedFilterConfig: NestedFilterConfig) =
-                    nestedFilterConfig.validity()
-
-                override fun unknown(json: JsonValue?) = 0
-            }
-        )
+        (filters.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -109,98 +186,13 @@ private constructor(
         }
 
         return other is Filter &&
-            singleFilterConfig == other.singleFilterConfig &&
-            nestedFilterConfig == other.nestedFilterConfig
+            filters == other.filters &&
+            additionalProperties == other.additionalProperties
     }
 
-    override fun hashCode(): Int = Objects.hash(singleFilterConfig, nestedFilterConfig)
+    private val hashCode: Int by lazy { Objects.hash(filters, additionalProperties) }
 
-    override fun toString(): String =
-        when {
-            singleFilterConfig != null -> "Filter{singleFilterConfig=$singleFilterConfig}"
-            nestedFilterConfig != null -> "Filter{nestedFilterConfig=$nestedFilterConfig}"
-            _json != null -> "Filter{_unknown=$_json}"
-            else -> throw IllegalStateException("Invalid Filter")
-        }
+    override fun hashCode(): Int = hashCode
 
-    companion object {
-
-        /** A single filter to use for filtering */
-        @JvmStatic
-        fun ofSingleFilterConfig(singleFilterConfig: SingleFilterConfig) =
-            Filter(singleFilterConfig = singleFilterConfig)
-
-        /** The operator to use for filtering */
-        @JvmStatic
-        fun ofNestedFilterConfig(nestedFilterConfig: NestedFilterConfig) =
-            Filter(nestedFilterConfig = nestedFilterConfig)
-    }
-
-    /** An interface that defines how to map each variant of [Filter] to a value of type [T]. */
-    interface Visitor<out T> {
-
-        /** A single filter to use for filtering */
-        fun visitSingleFilterConfig(singleFilterConfig: SingleFilterConfig): T
-
-        /** The operator to use for filtering */
-        fun visitNestedFilterConfig(nestedFilterConfig: NestedFilterConfig): T
-
-        /**
-         * Maps an unknown variant of [Filter] to a value of type [T].
-         *
-         * An instance of [Filter] can contain an unknown variant if it was deserialized from data
-         * that doesn't match any known variant. For example, if the SDK is on an older version than
-         * the API, then the API may respond with new variants that the SDK is unaware of.
-         *
-         * @throws CourierInvalidDataException in the default implementation.
-         */
-        fun unknown(json: JsonValue?): T {
-            throw CourierInvalidDataException("Unknown Filter: $json")
-        }
-    }
-
-    internal class Deserializer : BaseDeserializer<Filter>(Filter::class) {
-
-        override fun ObjectCodec.deserialize(node: JsonNode): Filter {
-            val json = JsonValue.fromJsonNode(node)
-
-            val bestMatches =
-                sequenceOf(
-                        tryDeserialize(node, jacksonTypeRef<SingleFilterConfig>())?.let {
-                            Filter(singleFilterConfig = it, _json = json)
-                        },
-                        tryDeserialize(node, jacksonTypeRef<NestedFilterConfig>())?.let {
-                            Filter(nestedFilterConfig = it, _json = json)
-                        },
-                    )
-                    .filterNotNull()
-                    .allMaxBy { it.validity() }
-                    .toList()
-            return when (bestMatches.size) {
-                // This can happen if what we're deserializing is completely incompatible with all
-                // the possible variants (e.g. deserializing from boolean).
-                0 -> Filter(_json = json)
-                1 -> bestMatches.single()
-                // If there's more than one match with the highest validity, then use the first
-                // completely valid match, or simply the first match if none are completely valid.
-                else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
-            }
-        }
-    }
-
-    internal class Serializer : BaseSerializer<Filter>(Filter::class) {
-
-        override fun serialize(
-            value: Filter,
-            generator: JsonGenerator,
-            provider: SerializerProvider,
-        ) {
-            when {
-                value.singleFilterConfig != null -> generator.writeObject(value.singleFilterConfig)
-                value.nestedFilterConfig != null -> generator.writeObject(value.nestedFilterConfig)
-                value._json != null -> generator.writeObject(value._json)
-                else -> throw IllegalStateException("Invalid Filter")
-            }
-        }
-    }
+    override fun toString() = "Filter{filters=$filters, additionalProperties=$additionalProperties}"
 }

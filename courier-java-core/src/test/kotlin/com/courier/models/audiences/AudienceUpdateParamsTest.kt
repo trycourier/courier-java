@@ -13,13 +13,18 @@ internal class AudienceUpdateParamsTest {
             .audienceId("audience_id")
             .description("description")
             .filter(
-                SingleFilterConfig.builder()
-                    .operator(SingleFilterConfig.Operator.ENDS_WITH)
-                    .path("path")
-                    .value("value")
+                Filter.builder()
+                    .addFilter(
+                        SingleFilterConfig.builder()
+                            .operator(SingleFilterConfig.Operator.ENDS_WITH)
+                            .path("path")
+                            .value("value")
+                            .build()
+                    )
                     .build()
             )
             .name("name")
+            .operator(AudienceUpdateParams.Operator.AND)
             .build()
     }
 
@@ -39,13 +44,18 @@ internal class AudienceUpdateParamsTest {
                 .audienceId("audience_id")
                 .description("description")
                 .filter(
-                    SingleFilterConfig.builder()
-                        .operator(SingleFilterConfig.Operator.ENDS_WITH)
-                        .path("path")
-                        .value("value")
+                    Filter.builder()
+                        .addFilter(
+                            SingleFilterConfig.builder()
+                                .operator(SingleFilterConfig.Operator.ENDS_WITH)
+                                .path("path")
+                                .value("value")
+                                .build()
+                        )
                         .build()
                 )
                 .name("name")
+                .operator(AudienceUpdateParams.Operator.AND)
                 .build()
 
         val body = params._body()
@@ -53,15 +63,18 @@ internal class AudienceUpdateParamsTest {
         assertThat(body.description()).contains("description")
         assertThat(body.filter())
             .contains(
-                Filter.ofSingleFilterConfig(
-                    SingleFilterConfig.builder()
-                        .operator(SingleFilterConfig.Operator.ENDS_WITH)
-                        .path("path")
-                        .value("value")
-                        .build()
-                )
+                Filter.builder()
+                    .addFilter(
+                        SingleFilterConfig.builder()
+                            .operator(SingleFilterConfig.Operator.ENDS_WITH)
+                            .path("path")
+                            .value("value")
+                            .build()
+                    )
+                    .build()
             )
         assertThat(body.name()).contains("name")
+        assertThat(body.operator()).contains(AudienceUpdateParams.Operator.AND)
     }
 
     @Test
