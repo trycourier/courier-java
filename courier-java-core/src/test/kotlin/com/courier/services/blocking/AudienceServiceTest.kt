@@ -7,6 +7,7 @@ import com.courier.client.okhttp.CourierOkHttpClient
 import com.courier.models.audiences.AudienceListMembersParams
 import com.courier.models.audiences.AudienceListParams
 import com.courier.models.audiences.AudienceUpdateParams
+import com.courier.models.audiences.Filter
 import com.courier.models.audiences.SingleFilterConfig
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -46,13 +47,18 @@ internal class AudienceServiceTest {
                     .audienceId("audience_id")
                     .description("description")
                     .filter(
-                        SingleFilterConfig.builder()
-                            .operator(SingleFilterConfig.Operator.ENDS_WITH)
-                            .path("path")
-                            .value("value")
+                        Filter.builder()
+                            .addFilter(
+                                SingleFilterConfig.builder()
+                                    .operator(SingleFilterConfig.Operator.ENDS_WITH)
+                                    .path("path")
+                                    .value("value")
+                                    .build()
+                            )
                             .build()
                     )
                     .name("name")
+                    .operator(AudienceUpdateParams.Operator.AND)
                     .build()
             )
 

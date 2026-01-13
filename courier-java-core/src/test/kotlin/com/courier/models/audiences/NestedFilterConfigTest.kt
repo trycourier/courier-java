@@ -13,20 +13,19 @@ internal class NestedFilterConfigTest {
     fun create() {
         val nestedFilterConfig =
             NestedFilterConfig.builder()
-                .operator(NestedFilterConfig.Operator.ENDS_WITH)
-                .addRule(
+                .addFilter(
                     SingleFilterConfig.builder()
                         .operator(SingleFilterConfig.Operator.ENDS_WITH)
                         .path("path")
                         .value("value")
                         .build()
                 )
+                .operator(NestedFilterConfig.Operator.ENDS_WITH)
                 .build()
 
-        assertThat(nestedFilterConfig.operator()).isEqualTo(NestedFilterConfig.Operator.ENDS_WITH)
-        assertThat(nestedFilterConfig.rules())
+        assertThat(nestedFilterConfig.filters())
             .containsExactly(
-                Filter.ofSingleFilterConfig(
+                FilterConfig.ofSingle(
                     SingleFilterConfig.builder()
                         .operator(SingleFilterConfig.Operator.ENDS_WITH)
                         .path("path")
@@ -34,6 +33,7 @@ internal class NestedFilterConfigTest {
                         .build()
                 )
             )
+        assertThat(nestedFilterConfig.operator()).isEqualTo(NestedFilterConfig.Operator.ENDS_WITH)
     }
 
     @Test
@@ -41,14 +41,14 @@ internal class NestedFilterConfigTest {
         val jsonMapper = jsonMapper()
         val nestedFilterConfig =
             NestedFilterConfig.builder()
-                .operator(NestedFilterConfig.Operator.ENDS_WITH)
-                .addRule(
+                .addFilter(
                     SingleFilterConfig.builder()
                         .operator(SingleFilterConfig.Operator.ENDS_WITH)
                         .path("path")
                         .value("value")
                         .build()
                 )
+                .operator(NestedFilterConfig.Operator.ENDS_WITH)
                 .build()
 
         val roundtrippedNestedFilterConfig =
