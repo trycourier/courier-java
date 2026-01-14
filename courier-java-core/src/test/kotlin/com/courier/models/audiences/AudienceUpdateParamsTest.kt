@@ -2,6 +2,8 @@
 
 package com.courier.models.audiences
 
+import com.courier.models.AudienceFilterConfig
+import com.courier.models.FilterConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -13,13 +15,19 @@ internal class AudienceUpdateParamsTest {
             .audienceId("audience_id")
             .description("description")
             .filter(
-                SingleFilterConfig.builder()
-                    .operator(SingleFilterConfig.Operator.ENDS_WITH)
-                    .path("path")
-                    .value("value")
+                AudienceFilterConfig.builder()
+                    .addFilter(
+                        FilterConfig.builder()
+                            .operator("operator")
+                            .filters(listOf())
+                            .path("path")
+                            .value("value")
+                            .build()
+                    )
                     .build()
             )
             .name("name")
+            .operator(AudienceUpdateParams.Operator.AND)
             .build()
     }
 
@@ -39,13 +47,19 @@ internal class AudienceUpdateParamsTest {
                 .audienceId("audience_id")
                 .description("description")
                 .filter(
-                    SingleFilterConfig.builder()
-                        .operator(SingleFilterConfig.Operator.ENDS_WITH)
-                        .path("path")
-                        .value("value")
+                    AudienceFilterConfig.builder()
+                        .addFilter(
+                            FilterConfig.builder()
+                                .operator("operator")
+                                .filters(listOf())
+                                .path("path")
+                                .value("value")
+                                .build()
+                        )
                         .build()
                 )
                 .name("name")
+                .operator(AudienceUpdateParams.Operator.AND)
                 .build()
 
         val body = params._body()
@@ -53,15 +67,19 @@ internal class AudienceUpdateParamsTest {
         assertThat(body.description()).contains("description")
         assertThat(body.filter())
             .contains(
-                Filter.ofSingleFilterConfig(
-                    SingleFilterConfig.builder()
-                        .operator(SingleFilterConfig.Operator.ENDS_WITH)
-                        .path("path")
-                        .value("value")
-                        .build()
-                )
+                AudienceFilterConfig.builder()
+                    .addFilter(
+                        FilterConfig.builder()
+                            .operator("operator")
+                            .filters(listOf())
+                            .path("path")
+                            .value("value")
+                            .build()
+                    )
+                    .build()
             )
         assertThat(body.name()).contains("name")
+        assertThat(body.operator()).contains(AudienceUpdateParams.Operator.AND)
     }
 
     @Test

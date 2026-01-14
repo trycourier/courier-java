@@ -1,5 +1,15 @@
 # Changelog
 
+## 4.7.1 (2026-01-14)
+
+Full Changelog: [v4.7.0...v4.7.1](https://github.com/trycourier/courier-java/compare/v4.7.0...v4.7.1)
+
+### Chores
+
+* **internal:** regenerate SDK with no functional changes ([227578d](https://github.com/trycourier/courier-java/commit/227578dc96d7114cd01e4cac20567f46008364ec))
+* **internal:** regenerate SDK with no functional changes ([49599e7](https://github.com/trycourier/courier-java/commit/49599e729b1ed313141734486e484ca4b88cd8d9))
+* **internal:** support uploading Maven repo artifacts to stainless package server ([4a21584](https://github.com/trycourier/courier-java/commit/4a21584ee2daff5c18cf9ca259cce3a9920005ba))
+
 ## 4.7.0 (2026-01-12)
 
 Full Changelog: [v4.6.0...v4.7.0](https://github.com/trycourier/courier-java/compare/v4.6.0...v4.7.0)

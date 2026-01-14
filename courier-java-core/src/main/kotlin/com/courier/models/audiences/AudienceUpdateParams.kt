@@ -2,6 +2,7 @@
 
 package com.courier.models.audiences
 
+import com.courier.core.Enum
 import com.courier.core.ExcludeMissing
 import com.courier.core.JsonField
 import com.courier.core.JsonMissing
@@ -10,6 +11,7 @@ import com.courier.core.Params
 import com.courier.core.http.Headers
 import com.courier.core.http.QueryParams
 import com.courier.errors.CourierInvalidDataException
+import com.courier.models.AudienceFilterConfig
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -39,12 +41,12 @@ private constructor(
     fun description(): Optional<String> = body.description()
 
     /**
-     * A single filter to use for filtering
+     * Filter configuration for audience membership containing an array of filter rules
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun filter(): Optional<Filter> = body.filter()
+    fun filter(): Optional<AudienceFilterConfig> = body.filter()
 
     /**
      * The name of the audience
@@ -53,6 +55,14 @@ private constructor(
      *   server responded with an unexpected value).
      */
     fun name(): Optional<String> = body.name()
+
+    /**
+     * The logical operator (AND/OR) for the top-level filter
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun operator(): Optional<Operator> = body.operator()
 
     /**
      * Returns the raw JSON value of [description].
@@ -66,7 +76,7 @@ private constructor(
      *
      * Unlike [filter], this method doesn't throw if the JSON field has an unexpected type.
      */
-    fun _filter(): JsonField<Filter> = body._filter()
+    fun _filter(): JsonField<AudienceFilterConfig> = body._filter()
 
     /**
      * Returns the raw JSON value of [name].
@@ -74,6 +84,13 @@ private constructor(
      * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _name(): JsonField<String> = body._name()
+
+    /**
+     * Returns the raw JSON value of [operator].
+     *
+     * Unlike [operator], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _operator(): JsonField<Operator> = body._operator()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -122,6 +139,7 @@ private constructor(
          * - [description]
          * - [filter]
          * - [name]
+         * - [operator]
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
@@ -140,29 +158,20 @@ private constructor(
          */
         fun description(description: JsonField<String>) = apply { body.description(description) }
 
-        /** A single filter to use for filtering */
-        fun filter(filter: Filter?) = apply { body.filter(filter) }
+        /** Filter configuration for audience membership containing an array of filter rules */
+        fun filter(filter: AudienceFilterConfig?) = apply { body.filter(filter) }
 
         /** Alias for calling [Builder.filter] with `filter.orElse(null)`. */
-        fun filter(filter: Optional<Filter>) = filter(filter.getOrNull())
+        fun filter(filter: Optional<AudienceFilterConfig>) = filter(filter.getOrNull())
 
         /**
          * Sets [Builder.filter] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.filter] with a well-typed [Filter] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
+         * You should usually call [Builder.filter] with a well-typed [AudienceFilterConfig] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun filter(filter: JsonField<Filter>) = apply { body.filter(filter) }
-
-        /** Alias for calling [filter] with `Filter.ofSingleFilterConfig(singleFilterConfig)`. */
-        fun filter(singleFilterConfig: SingleFilterConfig) = apply {
-            body.filter(singleFilterConfig)
-        }
-
-        /** Alias for calling [filter] with `Filter.ofNestedFilterConfig(nestedFilterConfig)`. */
-        fun filter(nestedFilterConfig: NestedFilterConfig) = apply {
-            body.filter(nestedFilterConfig)
-        }
+        fun filter(filter: JsonField<AudienceFilterConfig>) = apply { body.filter(filter) }
 
         /** The name of the audience */
         fun name(name: String?) = apply { body.name(name) }
@@ -177,6 +186,21 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun name(name: JsonField<String>) = apply { body.name(name) }
+
+        /** The logical operator (AND/OR) for the top-level filter */
+        fun operator(operator: Operator?) = apply { body.operator(operator) }
+
+        /** Alias for calling [Builder.operator] with `operator.orElse(null)`. */
+        fun operator(operator: Optional<Operator>) = operator(operator.getOrNull())
+
+        /**
+         * Sets [Builder.operator] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.operator] with a well-typed [Operator] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun operator(operator: JsonField<Operator>) = apply { body.operator(operator) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
@@ -325,8 +349,9 @@ private constructor(
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val description: JsonField<String>,
-        private val filter: JsonField<Filter>,
+        private val filter: JsonField<AudienceFilterConfig>,
         private val name: JsonField<String>,
+        private val operator: JsonField<Operator>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -335,9 +360,14 @@ private constructor(
             @JsonProperty("description")
             @ExcludeMissing
             description: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("filter") @ExcludeMissing filter: JsonField<Filter> = JsonMissing.of(),
+            @JsonProperty("filter")
+            @ExcludeMissing
+            filter: JsonField<AudienceFilterConfig> = JsonMissing.of(),
             @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
-        ) : this(description, filter, name, mutableMapOf())
+            @JsonProperty("operator")
+            @ExcludeMissing
+            operator: JsonField<Operator> = JsonMissing.of(),
+        ) : this(description, filter, name, operator, mutableMapOf())
 
         /**
          * A description of the audience
@@ -348,12 +378,12 @@ private constructor(
         fun description(): Optional<String> = description.getOptional("description")
 
         /**
-         * A single filter to use for filtering
+         * Filter configuration for audience membership containing an array of filter rules
          *
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun filter(): Optional<Filter> = filter.getOptional("filter")
+        fun filter(): Optional<AudienceFilterConfig> = filter.getOptional("filter")
 
         /**
          * The name of the audience
@@ -362,6 +392,14 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun name(): Optional<String> = name.getOptional("name")
+
+        /**
+         * The logical operator (AND/OR) for the top-level filter
+         *
+         * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun operator(): Optional<Operator> = operator.getOptional("operator")
 
         /**
          * Returns the raw JSON value of [description].
@@ -377,7 +415,9 @@ private constructor(
          *
          * Unlike [filter], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("filter") @ExcludeMissing fun _filter(): JsonField<Filter> = filter
+        @JsonProperty("filter")
+        @ExcludeMissing
+        fun _filter(): JsonField<AudienceFilterConfig> = filter
 
         /**
          * Returns the raw JSON value of [name].
@@ -385,6 +425,13 @@ private constructor(
          * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+        /**
+         * Returns the raw JSON value of [operator].
+         *
+         * Unlike [operator], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("operator") @ExcludeMissing fun _operator(): JsonField<Operator> = operator
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -408,8 +455,9 @@ private constructor(
         class Builder internal constructor() {
 
             private var description: JsonField<String> = JsonMissing.of()
-            private var filter: JsonField<Filter> = JsonMissing.of()
+            private var filter: JsonField<AudienceFilterConfig> = JsonMissing.of()
             private var name: JsonField<String> = JsonMissing.of()
+            private var operator: JsonField<Operator> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -417,6 +465,7 @@ private constructor(
                 description = body.description
                 filter = body.filter
                 name = body.name
+                operator = body.operator
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
@@ -437,32 +486,20 @@ private constructor(
                 this.description = description
             }
 
-            /** A single filter to use for filtering */
-            fun filter(filter: Filter?) = filter(JsonField.ofNullable(filter))
+            /** Filter configuration for audience membership containing an array of filter rules */
+            fun filter(filter: AudienceFilterConfig?) = filter(JsonField.ofNullable(filter))
 
             /** Alias for calling [Builder.filter] with `filter.orElse(null)`. */
-            fun filter(filter: Optional<Filter>) = filter(filter.getOrNull())
+            fun filter(filter: Optional<AudienceFilterConfig>) = filter(filter.getOrNull())
 
             /**
              * Sets [Builder.filter] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.filter] with a well-typed [Filter] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.filter] with a well-typed [AudienceFilterConfig]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
-            fun filter(filter: JsonField<Filter>) = apply { this.filter = filter }
-
-            /**
-             * Alias for calling [filter] with `Filter.ofSingleFilterConfig(singleFilterConfig)`.
-             */
-            fun filter(singleFilterConfig: SingleFilterConfig) =
-                filter(Filter.ofSingleFilterConfig(singleFilterConfig))
-
-            /**
-             * Alias for calling [filter] with `Filter.ofNestedFilterConfig(nestedFilterConfig)`.
-             */
-            fun filter(nestedFilterConfig: NestedFilterConfig) =
-                filter(Filter.ofNestedFilterConfig(nestedFilterConfig))
+            fun filter(filter: JsonField<AudienceFilterConfig>) = apply { this.filter = filter }
 
             /** The name of the audience */
             fun name(name: String?) = name(JsonField.ofNullable(name))
@@ -478,6 +515,21 @@ private constructor(
              * value.
              */
             fun name(name: JsonField<String>) = apply { this.name = name }
+
+            /** The logical operator (AND/OR) for the top-level filter */
+            fun operator(operator: Operator?) = operator(JsonField.ofNullable(operator))
+
+            /** Alias for calling [Builder.operator] with `operator.orElse(null)`. */
+            fun operator(operator: Optional<Operator>) = operator(operator.getOrNull())
+
+            /**
+             * Sets [Builder.operator] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.operator] with a well-typed [Operator] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun operator(operator: JsonField<Operator>) = apply { this.operator = operator }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -503,7 +555,8 @@ private constructor(
              *
              * Further updates to this [Builder] will not mutate the returned instance.
              */
-            fun build(): Body = Body(description, filter, name, additionalProperties.toMutableMap())
+            fun build(): Body =
+                Body(description, filter, name, operator, additionalProperties.toMutableMap())
         }
 
         private var validated: Boolean = false
@@ -516,6 +569,7 @@ private constructor(
             description()
             filter().ifPresent { it.validate() }
             name()
+            operator().ifPresent { it.validate() }
             validated = true
         }
 
@@ -537,7 +591,8 @@ private constructor(
         internal fun validity(): Int =
             (if (description.asKnown().isPresent) 1 else 0) +
                 (filter.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (name.asKnown().isPresent) 1 else 0)
+                (if (name.asKnown().isPresent) 1 else 0) +
+                (operator.asKnown().getOrNull()?.validity() ?: 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -548,17 +603,144 @@ private constructor(
                 description == other.description &&
                 filter == other.filter &&
                 name == other.name &&
+                operator == other.operator &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(description, filter, name, additionalProperties)
+            Objects.hash(description, filter, name, operator, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{description=$description, filter=$filter, name=$name, additionalProperties=$additionalProperties}"
+            "Body{description=$description, filter=$filter, name=$name, operator=$operator, additionalProperties=$additionalProperties}"
+    }
+
+    /** The logical operator (AND/OR) for the top-level filter */
+    class Operator @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+
+        /**
+         * Returns this class instance's raw value.
+         *
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
+         */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            @JvmField val AND = of("AND")
+
+            @JvmField val OR = of("OR")
+
+            @JvmStatic fun of(value: String) = Operator(JsonField.of(value))
+        }
+
+        /** An enum containing [Operator]'s known values. */
+        enum class Known {
+            AND,
+            OR,
+        }
+
+        /**
+         * An enum containing [Operator]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [Operator] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            AND,
+            OR,
+            /** An enum member indicating that [Operator] was instantiated with an unknown value. */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         *
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
+         */
+        fun value(): Value =
+            when (this) {
+                AND -> Value.AND
+                OR -> Value.OR
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
+         *
+         * @throws CourierInvalidDataException if this class instance's value is a not a known
+         *   member.
+         */
+        fun known(): Known =
+            when (this) {
+                AND -> Known.AND
+                OR -> Known.OR
+                else -> throw CourierInvalidDataException("Unknown Operator: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws CourierInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow { CourierInvalidDataException("Value is not a String") }
+
+        private var validated: Boolean = false
+
+        fun validate(): Operator = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: CourierInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Operator && value == other.value
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
     }
 
     override fun equals(other: Any?): Boolean {

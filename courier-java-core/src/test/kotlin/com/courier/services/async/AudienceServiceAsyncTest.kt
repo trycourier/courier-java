@@ -4,10 +4,11 @@ package com.courier.services.async
 
 import com.courier.TestServerExtension
 import com.courier.client.okhttp.CourierOkHttpClientAsync
+import com.courier.models.AudienceFilterConfig
+import com.courier.models.FilterConfig
 import com.courier.models.audiences.AudienceListMembersParams
 import com.courier.models.audiences.AudienceListParams
 import com.courier.models.audiences.AudienceUpdateParams
-import com.courier.models.audiences.SingleFilterConfig
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -47,13 +48,19 @@ internal class AudienceServiceAsyncTest {
                     .audienceId("audience_id")
                     .description("description")
                     .filter(
-                        SingleFilterConfig.builder()
-                            .operator(SingleFilterConfig.Operator.ENDS_WITH)
-                            .path("path")
-                            .value("value")
+                        AudienceFilterConfig.builder()
+                            .addFilter(
+                                FilterConfig.builder()
+                                    .operator("operator")
+                                    .filters(listOf())
+                                    .path("path")
+                                    .value("value")
+                                    .build()
+                            )
                             .build()
                     )
                     .name("name")
+                    .operator(AudienceUpdateParams.Operator.AND)
                     .build()
             )
 

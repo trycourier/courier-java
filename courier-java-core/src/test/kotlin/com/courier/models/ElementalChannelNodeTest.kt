@@ -31,7 +31,7 @@ internal class ElementalChannelNodeTest {
         assertThat(elementalChannelNode.if_()).contains("if")
         assertThat(elementalChannelNode.loop()).contains("loop")
         assertThat(elementalChannelNode.ref()).contains("ref")
-        assertThat(elementalChannelNode.channel()).isEqualTo("email")
+        assertThat(elementalChannelNode.channel()).contains("email")
         assertThat(elementalChannelNode.raw())
             .contains(
                 ElementalChannelNode.Raw.builder()

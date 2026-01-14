@@ -3,6 +3,8 @@
 package com.courier.models.audiences
 
 import com.courier.core.jsonMapper
+import com.courier.models.AudienceFilterConfig
+import com.courier.models.FilterConfig
 import com.courier.models.Paging
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
@@ -19,15 +21,21 @@ internal class AudienceListResponseTest {
                         .id("id")
                         .createdAt("created_at")
                         .description("description")
-                        .filter(
-                            SingleFilterConfig.builder()
-                                .operator(SingleFilterConfig.Operator.ENDS_WITH)
-                                .path("path")
-                                .value("value")
-                                .build()
-                        )
                         .name("name")
                         .updatedAt("updated_at")
+                        .filter(
+                            AudienceFilterConfig.builder()
+                                .addFilter(
+                                    FilterConfig.builder()
+                                        .operator("operator")
+                                        .filters(listOf())
+                                        .path("path")
+                                        .value("value")
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .operator(Audience.Operator.AND)
                         .build()
                 )
                 .paging(Paging.builder().more(true).cursor("cursor").build())
@@ -39,15 +47,21 @@ internal class AudienceListResponseTest {
                     .id("id")
                     .createdAt("created_at")
                     .description("description")
-                    .filter(
-                        SingleFilterConfig.builder()
-                            .operator(SingleFilterConfig.Operator.ENDS_WITH)
-                            .path("path")
-                            .value("value")
-                            .build()
-                    )
                     .name("name")
                     .updatedAt("updated_at")
+                    .filter(
+                        AudienceFilterConfig.builder()
+                            .addFilter(
+                                FilterConfig.builder()
+                                    .operator("operator")
+                                    .filters(listOf())
+                                    .path("path")
+                                    .value("value")
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .operator(Audience.Operator.AND)
                     .build()
             )
         assertThat(audienceListResponse.paging())
@@ -64,15 +78,21 @@ internal class AudienceListResponseTest {
                         .id("id")
                         .createdAt("created_at")
                         .description("description")
-                        .filter(
-                            SingleFilterConfig.builder()
-                                .operator(SingleFilterConfig.Operator.ENDS_WITH)
-                                .path("path")
-                                .value("value")
-                                .build()
-                        )
                         .name("name")
                         .updatedAt("updated_at")
+                        .filter(
+                            AudienceFilterConfig.builder()
+                                .addFilter(
+                                    FilterConfig.builder()
+                                        .operator("operator")
+                                        .filters(listOf())
+                                        .path("path")
+                                        .value("value")
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .operator(Audience.Operator.AND)
                         .build()
                 )
                 .paging(Paging.builder().more(true).cursor("cursor").build())

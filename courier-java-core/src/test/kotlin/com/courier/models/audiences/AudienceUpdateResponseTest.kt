@@ -3,6 +3,8 @@
 package com.courier.models.audiences
 
 import com.courier.core.jsonMapper
+import com.courier.models.AudienceFilterConfig
+import com.courier.models.FilterConfig
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -18,15 +20,21 @@ internal class AudienceUpdateResponseTest {
                         .id("id")
                         .createdAt("created_at")
                         .description("description")
-                        .filter(
-                            SingleFilterConfig.builder()
-                                .operator(SingleFilterConfig.Operator.ENDS_WITH)
-                                .path("path")
-                                .value("value")
-                                .build()
-                        )
                         .name("name")
                         .updatedAt("updated_at")
+                        .filter(
+                            AudienceFilterConfig.builder()
+                                .addFilter(
+                                    FilterConfig.builder()
+                                        .operator("operator")
+                                        .filters(listOf())
+                                        .path("path")
+                                        .value("value")
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .operator(Audience.Operator.AND)
                         .build()
                 )
                 .build()
@@ -37,15 +45,21 @@ internal class AudienceUpdateResponseTest {
                     .id("id")
                     .createdAt("created_at")
                     .description("description")
-                    .filter(
-                        SingleFilterConfig.builder()
-                            .operator(SingleFilterConfig.Operator.ENDS_WITH)
-                            .path("path")
-                            .value("value")
-                            .build()
-                    )
                     .name("name")
                     .updatedAt("updated_at")
+                    .filter(
+                        AudienceFilterConfig.builder()
+                            .addFilter(
+                                FilterConfig.builder()
+                                    .operator("operator")
+                                    .filters(listOf())
+                                    .path("path")
+                                    .value("value")
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .operator(Audience.Operator.AND)
                     .build()
             )
     }
@@ -60,15 +74,21 @@ internal class AudienceUpdateResponseTest {
                         .id("id")
                         .createdAt("created_at")
                         .description("description")
-                        .filter(
-                            SingleFilterConfig.builder()
-                                .operator(SingleFilterConfig.Operator.ENDS_WITH)
-                                .path("path")
-                                .value("value")
-                                .build()
-                        )
                         .name("name")
                         .updatedAt("updated_at")
+                        .filter(
+                            AudienceFilterConfig.builder()
+                                .addFilter(
+                                    FilterConfig.builder()
+                                        .operator("operator")
+                                        .filters(listOf())
+                                        .path("path")
+                                        .value("value")
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .operator(Audience.Operator.AND)
                         .build()
                 )
                 .build()
