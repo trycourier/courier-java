@@ -3,6 +3,8 @@
 package com.courier.models.audiences
 
 import com.courier.core.jsonMapper
+import com.courier.models.AudienceFilterConfig
+import com.courier.models.FilterConfig
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -21,10 +23,11 @@ internal class AudienceUpdateResponseTest {
                         .name("name")
                         .updatedAt("updated_at")
                         .filter(
-                            Filter.builder()
+                            AudienceFilterConfig.builder()
                                 .addFilter(
-                                    SingleFilterConfig.builder()
-                                        .operator(SingleFilterConfig.Operator.ENDS_WITH)
+                                    FilterConfig.builder()
+                                        .operator("operator")
+                                        .filters(listOf())
                                         .path("path")
                                         .value("value")
                                         .build()
@@ -45,10 +48,11 @@ internal class AudienceUpdateResponseTest {
                     .name("name")
                     .updatedAt("updated_at")
                     .filter(
-                        Filter.builder()
+                        AudienceFilterConfig.builder()
                             .addFilter(
-                                SingleFilterConfig.builder()
-                                    .operator(SingleFilterConfig.Operator.ENDS_WITH)
+                                FilterConfig.builder()
+                                    .operator("operator")
+                                    .filters(listOf())
                                     .path("path")
                                     .value("value")
                                     .build()
@@ -73,10 +77,11 @@ internal class AudienceUpdateResponseTest {
                         .name("name")
                         .updatedAt("updated_at")
                         .filter(
-                            Filter.builder()
+                            AudienceFilterConfig.builder()
                                 .addFilter(
-                                    SingleFilterConfig.builder()
-                                        .operator(SingleFilterConfig.Operator.ENDS_WITH)
+                                    FilterConfig.builder()
+                                        .operator("operator")
+                                        .filters(listOf())
                                         .path("path")
                                         .value("value")
                                         .build()

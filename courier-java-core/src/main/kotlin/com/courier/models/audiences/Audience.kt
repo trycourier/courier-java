@@ -9,6 +9,7 @@ import com.courier.core.JsonMissing
 import com.courier.core.JsonValue
 import com.courier.core.checkRequired
 import com.courier.errors.CourierInvalidDataException
+import com.courier.models.AudienceFilterConfig
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -26,7 +27,7 @@ private constructor(
     private val description: JsonField<String>,
     private val name: JsonField<String>,
     private val updatedAt: JsonField<String>,
-    private val filter: JsonField<Filter>,
+    private val filter: JsonField<AudienceFilterConfig>,
     private val operator: JsonField<Operator>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
@@ -40,7 +41,9 @@ private constructor(
         description: JsonField<String> = JsonMissing.of(),
         @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
         @JsonProperty("updated_at") @ExcludeMissing updatedAt: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("filter") @ExcludeMissing filter: JsonField<Filter> = JsonMissing.of(),
+        @JsonProperty("filter")
+        @ExcludeMissing
+        filter: JsonField<AudienceFilterConfig> = JsonMissing.of(),
         @JsonProperty("operator") @ExcludeMissing operator: JsonField<Operator> = JsonMissing.of(),
     ) : this(id, createdAt, description, name, updatedAt, filter, operator, mutableMapOf())
 
@@ -81,12 +84,12 @@ private constructor(
     fun updatedAt(): String = updatedAt.getRequired("updated_at")
 
     /**
-     * Filter that contains an array of FilterConfig items
+     * Filter configuration for audience membership containing an array of filter rules
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun filter(): Optional<Filter> = filter.getOptional("filter")
+    fun filter(): Optional<AudienceFilterConfig> = filter.getOptional("filter")
 
     /**
      * The logical operator (AND/OR) for the top-level filter
@@ -136,7 +139,7 @@ private constructor(
      *
      * Unlike [filter], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("filter") @ExcludeMissing fun _filter(): JsonField<Filter> = filter
+    @JsonProperty("filter") @ExcludeMissing fun _filter(): JsonField<AudienceFilterConfig> = filter
 
     /**
      * Returns the raw JSON value of [operator].
@@ -182,7 +185,7 @@ private constructor(
         private var description: JsonField<String>? = null
         private var name: JsonField<String>? = null
         private var updatedAt: JsonField<String>? = null
-        private var filter: JsonField<Filter> = JsonMissing.of()
+        private var filter: JsonField<AudienceFilterConfig> = JsonMissing.of()
         private var operator: JsonField<Operator> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -254,19 +257,20 @@ private constructor(
          */
         fun updatedAt(updatedAt: JsonField<String>) = apply { this.updatedAt = updatedAt }
 
-        /** Filter that contains an array of FilterConfig items */
-        fun filter(filter: Filter?) = filter(JsonField.ofNullable(filter))
+        /** Filter configuration for audience membership containing an array of filter rules */
+        fun filter(filter: AudienceFilterConfig?) = filter(JsonField.ofNullable(filter))
 
         /** Alias for calling [Builder.filter] with `filter.orElse(null)`. */
-        fun filter(filter: Optional<Filter>) = filter(filter.getOrNull())
+        fun filter(filter: Optional<AudienceFilterConfig>) = filter(filter.getOrNull())
 
         /**
          * Sets [Builder.filter] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.filter] with a well-typed [Filter] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
+         * You should usually call [Builder.filter] with a well-typed [AudienceFilterConfig] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun filter(filter: JsonField<Filter>) = apply { this.filter = filter }
+        fun filter(filter: JsonField<AudienceFilterConfig>) = apply { this.filter = filter }
 
         /** The logical operator (AND/OR) for the top-level filter */
         fun operator(operator: Operator) = operator(JsonField.of(operator))
