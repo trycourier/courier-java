@@ -11,6 +11,7 @@ import com.courier.core.Params
 import com.courier.core.http.Headers
 import com.courier.core.http.QueryParams
 import com.courier.errors.CourierInvalidDataException
+import com.courier.models.AudienceFilterConfig
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -40,12 +41,12 @@ private constructor(
     fun description(): Optional<String> = body.description()
 
     /**
-     * Filter that contains an array of FilterConfig items
+     * Filter configuration for audience membership containing an array of filter rules
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun filter(): Optional<Filter> = body.filter()
+    fun filter(): Optional<AudienceFilterConfig> = body.filter()
 
     /**
      * The name of the audience
@@ -75,7 +76,7 @@ private constructor(
      *
      * Unlike [filter], this method doesn't throw if the JSON field has an unexpected type.
      */
-    fun _filter(): JsonField<Filter> = body._filter()
+    fun _filter(): JsonField<AudienceFilterConfig> = body._filter()
 
     /**
      * Returns the raw JSON value of [name].
@@ -157,19 +158,20 @@ private constructor(
          */
         fun description(description: JsonField<String>) = apply { body.description(description) }
 
-        /** Filter that contains an array of FilterConfig items */
-        fun filter(filter: Filter?) = apply { body.filter(filter) }
+        /** Filter configuration for audience membership containing an array of filter rules */
+        fun filter(filter: AudienceFilterConfig?) = apply { body.filter(filter) }
 
         /** Alias for calling [Builder.filter] with `filter.orElse(null)`. */
-        fun filter(filter: Optional<Filter>) = filter(filter.getOrNull())
+        fun filter(filter: Optional<AudienceFilterConfig>) = filter(filter.getOrNull())
 
         /**
          * Sets [Builder.filter] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.filter] with a well-typed [Filter] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
+         * You should usually call [Builder.filter] with a well-typed [AudienceFilterConfig] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun filter(filter: JsonField<Filter>) = apply { body.filter(filter) }
+        fun filter(filter: JsonField<AudienceFilterConfig>) = apply { body.filter(filter) }
 
         /** The name of the audience */
         fun name(name: String?) = apply { body.name(name) }
@@ -347,7 +349,7 @@ private constructor(
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val description: JsonField<String>,
-        private val filter: JsonField<Filter>,
+        private val filter: JsonField<AudienceFilterConfig>,
         private val name: JsonField<String>,
         private val operator: JsonField<Operator>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -358,7 +360,9 @@ private constructor(
             @JsonProperty("description")
             @ExcludeMissing
             description: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("filter") @ExcludeMissing filter: JsonField<Filter> = JsonMissing.of(),
+            @JsonProperty("filter")
+            @ExcludeMissing
+            filter: JsonField<AudienceFilterConfig> = JsonMissing.of(),
             @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
             @JsonProperty("operator")
             @ExcludeMissing
@@ -374,12 +378,12 @@ private constructor(
         fun description(): Optional<String> = description.getOptional("description")
 
         /**
-         * Filter that contains an array of FilterConfig items
+         * Filter configuration for audience membership containing an array of filter rules
          *
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun filter(): Optional<Filter> = filter.getOptional("filter")
+        fun filter(): Optional<AudienceFilterConfig> = filter.getOptional("filter")
 
         /**
          * The name of the audience
@@ -411,7 +415,9 @@ private constructor(
          *
          * Unlike [filter], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("filter") @ExcludeMissing fun _filter(): JsonField<Filter> = filter
+        @JsonProperty("filter")
+        @ExcludeMissing
+        fun _filter(): JsonField<AudienceFilterConfig> = filter
 
         /**
          * Returns the raw JSON value of [name].
@@ -449,7 +455,7 @@ private constructor(
         class Builder internal constructor() {
 
             private var description: JsonField<String> = JsonMissing.of()
-            private var filter: JsonField<Filter> = JsonMissing.of()
+            private var filter: JsonField<AudienceFilterConfig> = JsonMissing.of()
             private var name: JsonField<String> = JsonMissing.of()
             private var operator: JsonField<Operator> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -480,20 +486,20 @@ private constructor(
                 this.description = description
             }
 
-            /** Filter that contains an array of FilterConfig items */
-            fun filter(filter: Filter?) = filter(JsonField.ofNullable(filter))
+            /** Filter configuration for audience membership containing an array of filter rules */
+            fun filter(filter: AudienceFilterConfig?) = filter(JsonField.ofNullable(filter))
 
             /** Alias for calling [Builder.filter] with `filter.orElse(null)`. */
-            fun filter(filter: Optional<Filter>) = filter(filter.getOrNull())
+            fun filter(filter: Optional<AudienceFilterConfig>) = filter(filter.getOrNull())
 
             /**
              * Sets [Builder.filter] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.filter] with a well-typed [Filter] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.filter] with a well-typed [AudienceFilterConfig]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
-            fun filter(filter: JsonField<Filter>) = apply { this.filter = filter }
+            fun filter(filter: JsonField<AudienceFilterConfig>) = apply { this.filter = filter }
 
             /** The name of the audience */
             fun name(name: String?) = name(JsonField.ofNullable(name))

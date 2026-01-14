@@ -7,7 +7,6 @@ import com.courier.core.JsonField
 import com.courier.core.JsonMissing
 import com.courier.core.JsonValue
 import com.courier.core.checkKnown
-import com.courier.core.checkRequired
 import com.courier.core.toImmutable
 import com.courier.errors.CourierInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -85,10 +84,10 @@ private constructor(
      * The channel the contents of this element should be applied to. Can be `email`, `push`,
      * `direct_message`, `sms` or a provider such as slack
      *
-     * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
-    fun channel(): String = channel.getRequired("channel")
+    fun channel(): Optional<String> = channel.getOptional("channel")
 
     /**
      * Raw data to apply to the channel. If `elements` has not been specified, `raw` is required.
@@ -154,14 +153,7 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [ElementalChannelNode].
-         *
-         * The following fields are required:
-         * ```java
-         * .channel()
-         * ```
-         */
+        /** Returns a mutable builder for constructing an instance of [ElementalChannelNode]. */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -172,7 +164,7 @@ private constructor(
         private var if_: JsonField<String> = JsonMissing.of()
         private var loop: JsonField<String> = JsonMissing.of()
         private var ref: JsonField<String> = JsonMissing.of()
-        private var channel: JsonField<String>? = null
+        private var channel: JsonField<String> = JsonMissing.of()
         private var raw: JsonField<Raw> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -308,13 +300,6 @@ private constructor(
          * Returns an immutable instance of [ElementalChannelNode].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .channel()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): ElementalChannelNode =
             ElementalChannelNode(
@@ -322,7 +307,7 @@ private constructor(
                 if_,
                 loop,
                 ref,
-                checkRequired("channel", channel),
+                channel,
                 raw,
                 additionalProperties.toMutableMap(),
             )

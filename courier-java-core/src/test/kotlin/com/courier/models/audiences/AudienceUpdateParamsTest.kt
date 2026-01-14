@@ -2,6 +2,8 @@
 
 package com.courier.models.audiences
 
+import com.courier.models.AudienceFilterConfig
+import com.courier.models.FilterConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -13,10 +15,11 @@ internal class AudienceUpdateParamsTest {
             .audienceId("audience_id")
             .description("description")
             .filter(
-                Filter.builder()
+                AudienceFilterConfig.builder()
                     .addFilter(
-                        SingleFilterConfig.builder()
-                            .operator(SingleFilterConfig.Operator.ENDS_WITH)
+                        FilterConfig.builder()
+                            .operator("operator")
+                            .filters(listOf())
                             .path("path")
                             .value("value")
                             .build()
@@ -44,10 +47,11 @@ internal class AudienceUpdateParamsTest {
                 .audienceId("audience_id")
                 .description("description")
                 .filter(
-                    Filter.builder()
+                    AudienceFilterConfig.builder()
                         .addFilter(
-                            SingleFilterConfig.builder()
-                                .operator(SingleFilterConfig.Operator.ENDS_WITH)
+                            FilterConfig.builder()
+                                .operator("operator")
+                                .filters(listOf())
                                 .path("path")
                                 .value("value")
                                 .build()
@@ -63,10 +67,11 @@ internal class AudienceUpdateParamsTest {
         assertThat(body.description()).contains("description")
         assertThat(body.filter())
             .contains(
-                Filter.builder()
+                AudienceFilterConfig.builder()
                     .addFilter(
-                        SingleFilterConfig.builder()
-                            .operator(SingleFilterConfig.Operator.ENDS_WITH)
+                        FilterConfig.builder()
+                            .operator("operator")
+                            .filters(listOf())
                             .path("path")
                             .value("value")
                             .build()

@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.models.audiences
+package com.courier.models
 
 import com.courier.core.ExcludeMissing
 import com.courier.core.JsonField
@@ -18,8 +18,8 @@ import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
-/** Filter that contains an array of FilterConfig items */
-class Filter
+/** Filter configuration for audience membership containing an array of filter rules */
+class AudienceFilterConfig
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val filters: JsonField<List<FilterConfig>>,
@@ -34,6 +34,8 @@ private constructor(
     ) : this(filters, mutableMapOf())
 
     /**
+     * Array of filter rules (single conditions or nested groups)
+     *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -61,7 +63,7 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [Filter].
+         * Returns a mutable builder for constructing an instance of [AudienceFilterConfig].
          *
          * The following fields are required:
          * ```java
@@ -71,18 +73,19 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [Filter]. */
+    /** A builder for [AudienceFilterConfig]. */
     class Builder internal constructor() {
 
         private var filters: JsonField<MutableList<FilterConfig>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(filter: Filter) = apply {
-            filters = filter.filters.map { it.toMutableList() }
-            additionalProperties = filter.additionalProperties.toMutableMap()
+        internal fun from(audienceFilterConfig: AudienceFilterConfig) = apply {
+            filters = audienceFilterConfig.filters.map { it.toMutableList() }
+            additionalProperties = audienceFilterConfig.additionalProperties.toMutableMap()
         }
 
+        /** Array of filter rules (single conditions or nested groups) */
         fun filters(filters: List<FilterConfig>) = filters(JsonField.of(filters))
 
         /**
@@ -108,12 +111,6 @@ private constructor(
                 }
         }
 
-        /** Alias for calling [addFilter] with `FilterConfig.ofSingle(single)`. */
-        fun addFilter(single: SingleFilterConfig) = addFilter(FilterConfig.ofSingle(single))
-
-        /** Alias for calling [addFilter] with `FilterConfig.ofNested(nested)`. */
-        fun addFilter(nested: NestedFilterConfig) = addFilter(FilterConfig.ofNested(nested))
-
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -134,7 +131,7 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [Filter].
+         * Returns an immutable instance of [AudienceFilterConfig].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
@@ -145,8 +142,8 @@ private constructor(
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): Filter =
-            Filter(
+        fun build(): AudienceFilterConfig =
+            AudienceFilterConfig(
                 checkRequired("filters", filters).map { it.toImmutable() },
                 additionalProperties.toMutableMap(),
             )
@@ -154,7 +151,7 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): Filter = apply {
+    fun validate(): AudienceFilterConfig = apply {
         if (validated) {
             return@apply
         }
@@ -185,7 +182,7 @@ private constructor(
             return true
         }
 
-        return other is Filter &&
+        return other is AudienceFilterConfig &&
             filters == other.filters &&
             additionalProperties == other.additionalProperties
     }
@@ -194,5 +191,6 @@ private constructor(
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() = "Filter{filters=$filters, additionalProperties=$additionalProperties}"
+    override fun toString() =
+        "AudienceFilterConfig{filters=$filters, additionalProperties=$additionalProperties}"
 }
