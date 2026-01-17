@@ -1,5 +1,26 @@
 # Changelog
 
+## 4.7.2 (2026-01-17)
+
+Full Changelog: [v4.7.1...v4.7.2](https://github.com/trycourier/courier-java/compare/v4.7.1...v4.7.2)
+
+### Bug Fixes
+
+* **client:** disallow coercion from float to int ([5263a13](https://github.com/trycourier/courier-java/commit/5263a1385622f70224b69681b7f75661d89107ef))
+* **client:** fully respect max retries ([33cdc16](https://github.com/trycourier/courier-java/commit/33cdc16ed453f885b62c996480751a45035e0afd))
+* **client:** send retry count header for max retries 0 ([33cdc16](https://github.com/trycourier/courier-java/commit/33cdc16ed453f885b62c996480751a45035e0afd))
+* date time deserialization leniency ([fa50329](https://github.com/trycourier/courier-java/commit/fa50329d5f5e1cd2c555d5deb71b4dd4d8a57c4a))
+
+
+### Chores
+
+* **ci:** upgrade `actions/setup-java` ([01049af](https://github.com/trycourier/courier-java/commit/01049af97f49ca7d1ad74d09017838263e24735f))
+* **internal:** clean up maven repo artifact script and add html documentation to repo root ([e1937ab](https://github.com/trycourier/courier-java/commit/e1937aba76551a3e486cb8961c3f1e0981d9a57f))
+* **internal:** depend on packages directly in example ([33cdc16](https://github.com/trycourier/courier-java/commit/33cdc16ed453f885b62c996480751a45035e0afd))
+* **internal:** improve maven repo docs ([af0c83b](https://github.com/trycourier/courier-java/commit/af0c83b582d3d26589a0f1176405a365df1e26b5))
+* **internal:** update `actions/checkout` version ([337fcd7](https://github.com/trycourier/courier-java/commit/337fcd7a6f5f7d5747ab6f48e74287e58d18eca0))
+* test on Jackson 2.14.0 to avoid encountering FasterXML/jackson-databind[#3240](https://github.com/trycourier/courier-java/issues/3240) in tests ([fa50329](https://github.com/trycourier/courier-java/commit/fa50329d5f5e1cd2c555d5deb71b4dd4d8a57c4a))
+
 ## 4.7.1 (2026-01-14)
 
 Full Changelog: [v4.7.0...v4.7.1](https://github.com/trycourier/courier-java/compare/v4.7.0...v4.7.1)
