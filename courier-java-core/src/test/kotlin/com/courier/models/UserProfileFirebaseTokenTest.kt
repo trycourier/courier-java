@@ -9,6 +9,8 @@ import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.EnumSource
 
 internal class UserProfileFirebaseTokenTest {
 
@@ -60,11 +62,18 @@ internal class UserProfileFirebaseTokenTest {
         assertThat(roundtrippedUserProfileFirebaseToken).isEqualTo(userProfileFirebaseToken)
     }
 
-    @Test
-    fun incompatibleJsonShapeDeserializesToUnknown() {
-        val value = JsonValue.from(mapOf("invalid" to "object"))
+    enum class IncompatibleJsonShapeTestCase(val value: JsonValue) {
+        BOOLEAN(JsonValue.from(false)),
+        INTEGER(JsonValue.from(-1)),
+        FLOAT(JsonValue.from(3.14)),
+        OBJECT(JsonValue.from(mapOf("invalid" to "object"))),
+    }
+
+    @ParameterizedTest
+    @EnumSource
+    fun incompatibleJsonShapeDeserializesToUnknown(testCase: IncompatibleJsonShapeTestCase) {
         val userProfileFirebaseToken =
-            jsonMapper().convertValue(value, jacksonTypeRef<UserProfileFirebaseToken>())
+            jsonMapper().convertValue(testCase.value, jacksonTypeRef<UserProfileFirebaseToken>())
 
         val e = assertThrows<CourierInvalidDataException> { userProfileFirebaseToken.validate() }
         assertThat(e).hasMessageStartingWith("Unknown ")
