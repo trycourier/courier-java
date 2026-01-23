@@ -41,7 +41,14 @@ private constructor(
         @JsonProperty("to") @ExcludeMissing to: JsonField<UserRecipient> = JsonMissing.of(),
     ) : this(data, preferences, profile, recipient, to, mutableMapOf())
 
-    /** User-specific data that will be merged with message.data */
+    /**
+     * User-specific data that will be merged with message.data
+     *
+     * This arbitrary value can be deserialized into a custom type using the `convert` method:
+     * ```java
+     * MyClass myObject = inboundBulkMessageUser.data().convert(MyClass.class);
+     * ```
+     */
     @JsonProperty("data") @ExcludeMissing fun _data(): JsonValue = data
 
     /**
