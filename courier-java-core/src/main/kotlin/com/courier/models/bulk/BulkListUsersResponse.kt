@@ -247,7 +247,14 @@ private constructor(
                 .to(to)
                 .build()
 
-        /** User-specific data that will be merged with message.data */
+        /**
+         * User-specific data that will be merged with message.data
+         *
+         * This arbitrary value can be deserialized into a custom type using the `convert` method:
+         * ```java
+         * MyClass myObject = item.data().convert(MyClass.class);
+         * ```
+         */
         @JsonProperty("data") @ExcludeMissing fun _data(): JsonValue = data
 
         /**

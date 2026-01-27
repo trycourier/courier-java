@@ -105,7 +105,14 @@ private constructor(
      */
     fun expiryDate(): Optional<UserToken.ExpiryDate> = expiryDate.getOptional("expiry_date")
 
-    /** Properties about the token. */
+    /**
+     * Properties about the token.
+     *
+     * This arbitrary value can be deserialized into a custom type using the `convert` method:
+     * ```java
+     * MyClass myObject = tokenRetrieveResponse.properties().convert(MyClass.class);
+     * ```
+     */
     @JsonProperty("properties") @ExcludeMissing fun _properties(): JsonValue = properties
 
     /**

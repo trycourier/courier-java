@@ -86,7 +86,14 @@ private constructor(
      */
     fun expiryDate(): Optional<ExpiryDate> = expiryDate.getOptional("expiry_date")
 
-    /** Properties about the token. */
+    /**
+     * Properties about the token.
+     *
+     * This arbitrary value can be deserialized into a custom type using the `convert` method:
+     * ```java
+     * MyClass myObject = userToken.properties().convert(MyClass.class);
+     * ```
+     */
     @JsonProperty("properties") @ExcludeMissing fun _properties(): JsonValue = properties
 
     /**
@@ -983,7 +990,7 @@ private constructor(
                         .toList()
                 return when (bestMatches.size) {
                     // This can happen if what we're deserializing is completely incompatible with
-                    // all the possible variants (e.g. deserializing from object).
+                    // all the possible variants (e.g. deserializing from integer).
                     0 -> ExpiryDate(_json = json)
                     1 -> bestMatches.single()
                     // If there's more than one match with the highest validity, then use the first
