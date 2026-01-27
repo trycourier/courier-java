@@ -1,5 +1,41 @@
 # Changelog
 
+## 4.8.0 (2026-01-27)
+
+Full Changelog: [v4.7.1...v4.8.0](https://github.com/trycourier/courier-java/compare/v4.7.1...v4.8.0)
+
+### Features
+
+* **client:** send `X-Stainless-Kotlin-Version` header ([11e5765](https://github.com/trycourier/courier-java/commit/11e5765a138fa78d8aaf0abc3df4dffd1493d3b4))
+
+
+### Bug Fixes
+
+* **client:** disallow coercion from float to int ([5263a13](https://github.com/trycourier/courier-java/commit/5263a1385622f70224b69681b7f75661d89107ef))
+* **client:** fully respect max retries ([33cdc16](https://github.com/trycourier/courier-java/commit/33cdc16ed453f885b62c996480751a45035e0afd))
+* **client:** preserve time zone in lenient date-time parsing ([07887c9](https://github.com/trycourier/courier-java/commit/07887c919084244ae3805068e13aa7c7a6604aec))
+* **client:** send retry count header for max retries 0 ([33cdc16](https://github.com/trycourier/courier-java/commit/33cdc16ed453f885b62c996480751a45035e0afd))
+* date time deserialization leniency ([fa50329](https://github.com/trycourier/courier-java/commit/fa50329d5f5e1cd2c555d5deb71b4dd4d8a57c4a))
+
+
+### Chores
+
+* **ci:** upgrade `actions/github-script` ([b428743](https://github.com/trycourier/courier-java/commit/b428743ceed1201f44ca1ae23ddae0c10a323a86))
+* **ci:** upgrade `actions/setup-java` ([01049af](https://github.com/trycourier/courier-java/commit/01049af97f49ca7d1ad74d09017838263e24735f))
+* **internal:** clean up maven repo artifact script and add html documentation to repo root ([e1937ab](https://github.com/trycourier/courier-java/commit/e1937aba76551a3e486cb8961c3f1e0981d9a57f))
+* **internal:** correct cache invalidation for `SKIP_MOCK_TESTS` ([3bc2faa](https://github.com/trycourier/courier-java/commit/3bc2faa7b3d346e8c4466a58039947f2cebe04ca))
+* **internal:** depend on packages directly in example ([33cdc16](https://github.com/trycourier/courier-java/commit/33cdc16ed453f885b62c996480751a45035e0afd))
+* **internal:** improve maven repo docs ([af0c83b](https://github.com/trycourier/courier-java/commit/af0c83b582d3d26589a0f1176405a365df1e26b5))
+* **internal:** update `actions/checkout` version ([337fcd7](https://github.com/trycourier/courier-java/commit/337fcd7a6f5f7d5747ab6f48e74287e58d18eca0))
+* **internal:** update maven repo doc to include authentication ([dbf1829](https://github.com/trycourier/courier-java/commit/dbf182983acea01de5784fe9df85f1d43482de5a))
+* test on Jackson 2.14.0 to avoid encountering FasterXML/jackson-databind[#3240](https://github.com/trycourier/courier-java/issues/3240) in tests ([fa50329](https://github.com/trycourier/courier-java/commit/fa50329d5f5e1cd2c555d5deb71b4dd4d8a57c4a))
+
+
+### Documentation
+
+* add comment for arbitrary value fields ([20bc1ec](https://github.com/trycourier/courier-java/commit/20bc1ecfa8818a7f6eb6669352d74306b308cf21))
+* clarify version field description in AutomationTemplate ([d853521](https://github.com/trycourier/courier-java/commit/d8535218c37e9315c2bbe6b5161caaa2d66fb603))
+
 ## 4.7.1 (2026-01-14)
 
 Full Changelog: [v4.7.0...v4.7.1](https://github.com/trycourier/courier-java/compare/v4.7.0...v4.7.1)
