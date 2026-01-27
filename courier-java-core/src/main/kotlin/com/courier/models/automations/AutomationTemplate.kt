@@ -60,7 +60,7 @@ private constructor(
     fun name(): String = name.getRequired("name")
 
     /**
-     * The version of the template published, draft.
+     * The version of the template published or drafted.
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -191,7 +191,7 @@ private constructor(
          */
         fun name(name: JsonField<String>) = apply { this.name = name }
 
-        /** The version of the template published, draft. */
+        /** The version of the template published or drafted. */
         fun version(version: Version) = version(JsonField.of(version))
 
         /**
@@ -306,7 +306,7 @@ private constructor(
             (if (createdAt.asKnown().isPresent) 1 else 0) +
             (if (updatedAt.asKnown().isPresent) 1 else 0)
 
-    /** The version of the template published, draft. */
+    /** The version of the template published or drafted. */
     class Version @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
