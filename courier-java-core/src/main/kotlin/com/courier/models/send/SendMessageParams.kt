@@ -998,6 +998,9 @@ private constructor(
             /** Alias for calling [to] with `To.ofWebhookRecipient(webhookRecipient)`. */
             fun to(webhookRecipient: WebhookRecipient) = to(To.ofWebhookRecipient(webhookRecipient))
 
+            /** Alias for calling [to] with `To.ofRecipients(recipients)`. */
+            fun toOfRecipients(recipients: List<To.Recipient>) = to(To.ofRecipients(recipients))
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -3743,6 +3746,7 @@ private constructor(
             private val msTeamsRecipient: MsTeamsRecipient? = null,
             private val pagerdutyRecipient: PagerdutyRecipient? = null,
             private val webhookRecipient: WebhookRecipient? = null,
+            private val recipients: List<Recipient>? = null,
             private val _json: JsonValue? = null,
         ) {
 
@@ -3775,6 +3779,8 @@ private constructor(
             fun webhookRecipient(): Optional<WebhookRecipient> =
                 Optional.ofNullable(webhookRecipient)
 
+            fun recipients(): Optional<List<Recipient>> = Optional.ofNullable(recipients)
+
             fun isUserRecipient(): Boolean = userRecipient != null
 
             fun isAudienceRecipient(): Boolean = audienceRecipient != null
@@ -3790,6 +3796,8 @@ private constructor(
             fun isPagerdutyRecipient(): Boolean = pagerdutyRecipient != null
 
             fun isWebhookRecipient(): Boolean = webhookRecipient != null
+
+            fun isRecipients(): Boolean = recipients != null
 
             /** Send to a specific user by user_id, email, phone_number, or list_id */
             fun asUserRecipient(): UserRecipient = userRecipient.getOrThrow("userRecipient")
@@ -3820,6 +3828,8 @@ private constructor(
             fun asWebhookRecipient(): WebhookRecipient =
                 webhookRecipient.getOrThrow("webhookRecipient")
 
+            fun asRecipients(): List<Recipient> = recipients.getOrThrow("recipients")
+
             fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
             fun <T> accept(visitor: Visitor<T>): T =
@@ -3834,6 +3844,7 @@ private constructor(
                     pagerdutyRecipient != null ->
                         visitor.visitPagerdutyRecipient(pagerdutyRecipient)
                     webhookRecipient != null -> visitor.visitWebhookRecipient(webhookRecipient)
+                    recipients != null -> visitor.visitRecipients(recipients)
                     else -> visitor.unknown(_json)
                 }
 
@@ -3880,6 +3891,10 @@ private constructor(
 
                         override fun visitWebhookRecipient(webhookRecipient: WebhookRecipient) {
                             webhookRecipient.validate()
+                        }
+
+                        override fun visitRecipients(recipients: List<Recipient>) {
+                            recipients.forEach { it.validate() }
                         }
                     }
                 )
@@ -3930,6 +3945,9 @@ private constructor(
                         override fun visitWebhookRecipient(webhookRecipient: WebhookRecipient) =
                             webhookRecipient.validity()
 
+                        override fun visitRecipients(recipients: List<Recipient>) =
+                            recipients.sumOf { it.validity().toInt() }
+
                         override fun unknown(json: JsonValue?) = 0
                     }
                 )
@@ -3947,7 +3965,8 @@ private constructor(
                     slackRecipient == other.slackRecipient &&
                     msTeamsRecipient == other.msTeamsRecipient &&
                     pagerdutyRecipient == other.pagerdutyRecipient &&
-                    webhookRecipient == other.webhookRecipient
+                    webhookRecipient == other.webhookRecipient &&
+                    recipients == other.recipients
             }
 
             override fun hashCode(): Int =
@@ -3960,6 +3979,7 @@ private constructor(
                     msTeamsRecipient,
                     pagerdutyRecipient,
                     webhookRecipient,
+                    recipients,
                 )
 
             override fun toString(): String =
@@ -3972,6 +3992,7 @@ private constructor(
                     msTeamsRecipient != null -> "To{msTeamsRecipient=$msTeamsRecipient}"
                     pagerdutyRecipient != null -> "To{pagerdutyRecipient=$pagerdutyRecipient}"
                     webhookRecipient != null -> "To{webhookRecipient=$webhookRecipient}"
+                    recipients != null -> "To{recipients=$recipients}"
                     _json != null -> "To{_unknown=$_json}"
                     else -> throw IllegalStateException("Invalid To")
                 }
@@ -4017,6 +4038,10 @@ private constructor(
                 @JvmStatic
                 fun ofWebhookRecipient(webhookRecipient: WebhookRecipient) =
                     To(webhookRecipient = webhookRecipient)
+
+                @JvmStatic
+                fun ofRecipients(recipients: List<Recipient>) =
+                    To(recipients = recipients.toImmutable())
             }
 
             /** An interface that defines how to map each variant of [To] to a value of type [T]. */
@@ -4045,6 +4070,8 @@ private constructor(
 
                 /** Send via webhook */
                 fun visitWebhookRecipient(webhookRecipient: WebhookRecipient): T
+
+                fun visitRecipients(recipients: List<Recipient>): T
 
                 /**
                  * Maps an unknown variant of [To] to a value of type [T].
@@ -4092,6 +4119,9 @@ private constructor(
                                 tryDeserialize(node, jacksonTypeRef<WebhookRecipient>())?.let {
                                     To(webhookRecipient = it, _json = json)
                                 },
+                                tryDeserialize(node, jacksonTypeRef<List<Recipient>>())?.let {
+                                    To(recipients = it, _json = json)
+                                },
                             )
                             .filterNotNull()
                             .allMaxBy { it.validity() }
@@ -4130,8 +4160,391 @@ private constructor(
                             generator.writeObject(value.pagerdutyRecipient)
                         value.webhookRecipient != null ->
                             generator.writeObject(value.webhookRecipient)
+                        value.recipients != null -> generator.writeObject(value.recipients)
                         value._json != null -> generator.writeObject(value._json)
                         else -> throw IllegalStateException("Invalid To")
+                    }
+                }
+            }
+
+            /**
+             * A single recipient of the message. Choose one of the following types based on how you
+             * want to identify the recipient: - **User**: Send to a specific user by user_id,
+             * email, or phone number - **Audience**: Send to all users in an audience - **List**:
+             * Send to all users in a list - **List Pattern**: Send to users in lists matching a
+             * pattern - **Slack**: Send via Slack (channel, email, or user_id) - **MS Teams**: Send
+             * via Microsoft Teams - **PagerDuty**: Send via PagerDuty - **Webhook**: Send via
+             * webhook
+             */
+            @JsonDeserialize(using = Recipient.Deserializer::class)
+            @JsonSerialize(using = Recipient.Serializer::class)
+            class Recipient
+            private constructor(
+                private val user: UserRecipient? = null,
+                private val audience: AudienceRecipient? = null,
+                private val list: ListRecipient? = null,
+                private val listPattern: ListPatternRecipient? = null,
+                private val slack: SlackRecipient? = null,
+                private val msTeams: MsTeamsRecipient? = null,
+                private val pagerduty: PagerdutyRecipient? = null,
+                private val webhook: WebhookRecipient? = null,
+                private val _json: JsonValue? = null,
+            ) {
+
+                /** Send to a specific user by user_id, email, phone_number, or list_id */
+                fun user(): Optional<UserRecipient> = Optional.ofNullable(user)
+
+                /** Send to all users in an audience */
+                fun audience(): Optional<AudienceRecipient> = Optional.ofNullable(audience)
+
+                /** Send to all users in a specific list */
+                fun list(): Optional<ListRecipient> = Optional.ofNullable(list)
+
+                /** Send to users in lists matching a pattern */
+                fun listPattern(): Optional<ListPatternRecipient> = Optional.ofNullable(listPattern)
+
+                /** Send via Slack (channel, email, or user_id) */
+                fun slack(): Optional<SlackRecipient> = Optional.ofNullable(slack)
+
+                /** Send via Microsoft Teams */
+                fun msTeams(): Optional<MsTeamsRecipient> = Optional.ofNullable(msTeams)
+
+                /** Send via PagerDuty */
+                fun pagerduty(): Optional<PagerdutyRecipient> = Optional.ofNullable(pagerduty)
+
+                /** Send via webhook */
+                fun webhook(): Optional<WebhookRecipient> = Optional.ofNullable(webhook)
+
+                fun isUser(): Boolean = user != null
+
+                fun isAudience(): Boolean = audience != null
+
+                fun isList(): Boolean = list != null
+
+                fun isListPattern(): Boolean = listPattern != null
+
+                fun isSlack(): Boolean = slack != null
+
+                fun isMsTeams(): Boolean = msTeams != null
+
+                fun isPagerduty(): Boolean = pagerduty != null
+
+                fun isWebhook(): Boolean = webhook != null
+
+                /** Send to a specific user by user_id, email, phone_number, or list_id */
+                fun asUser(): UserRecipient = user.getOrThrow("user")
+
+                /** Send to all users in an audience */
+                fun asAudience(): AudienceRecipient = audience.getOrThrow("audience")
+
+                /** Send to all users in a specific list */
+                fun asList(): ListRecipient = list.getOrThrow("list")
+
+                /** Send to users in lists matching a pattern */
+                fun asListPattern(): ListPatternRecipient = listPattern.getOrThrow("listPattern")
+
+                /** Send via Slack (channel, email, or user_id) */
+                fun asSlack(): SlackRecipient = slack.getOrThrow("slack")
+
+                /** Send via Microsoft Teams */
+                fun asMsTeams(): MsTeamsRecipient = msTeams.getOrThrow("msTeams")
+
+                /** Send via PagerDuty */
+                fun asPagerduty(): PagerdutyRecipient = pagerduty.getOrThrow("pagerduty")
+
+                /** Send via webhook */
+                fun asWebhook(): WebhookRecipient = webhook.getOrThrow("webhook")
+
+                fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
+
+                fun <T> accept(visitor: Visitor<T>): T =
+                    when {
+                        user != null -> visitor.visitUser(user)
+                        audience != null -> visitor.visitAudience(audience)
+                        list != null -> visitor.visitList(list)
+                        listPattern != null -> visitor.visitListPattern(listPattern)
+                        slack != null -> visitor.visitSlack(slack)
+                        msTeams != null -> visitor.visitMsTeams(msTeams)
+                        pagerduty != null -> visitor.visitPagerduty(pagerduty)
+                        webhook != null -> visitor.visitWebhook(webhook)
+                        else -> visitor.unknown(_json)
+                    }
+
+                private var validated: Boolean = false
+
+                fun validate(): Recipient = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    accept(
+                        object : Visitor<Unit> {
+                            override fun visitUser(user: UserRecipient) {
+                                user.validate()
+                            }
+
+                            override fun visitAudience(audience: AudienceRecipient) {
+                                audience.validate()
+                            }
+
+                            override fun visitList(list: ListRecipient) {
+                                list.validate()
+                            }
+
+                            override fun visitListPattern(listPattern: ListPatternRecipient) {
+                                listPattern.validate()
+                            }
+
+                            override fun visitSlack(slack: SlackRecipient) {
+                                slack.validate()
+                            }
+
+                            override fun visitMsTeams(msTeams: MsTeamsRecipient) {
+                                msTeams.validate()
+                            }
+
+                            override fun visitPagerduty(pagerduty: PagerdutyRecipient) {
+                                pagerduty.validate()
+                            }
+
+                            override fun visitWebhook(webhook: WebhookRecipient) {
+                                webhook.validate()
+                            }
+                        }
+                    )
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: CourierInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic
+                internal fun validity(): Int =
+                    accept(
+                        object : Visitor<Int> {
+                            override fun visitUser(user: UserRecipient) = user.validity()
+
+                            override fun visitAudience(audience: AudienceRecipient) =
+                                audience.validity()
+
+                            override fun visitList(list: ListRecipient) = list.validity()
+
+                            override fun visitListPattern(listPattern: ListPatternRecipient) =
+                                listPattern.validity()
+
+                            override fun visitSlack(slack: SlackRecipient) = slack.validity()
+
+                            override fun visitMsTeams(msTeams: MsTeamsRecipient) =
+                                msTeams.validity()
+
+                            override fun visitPagerduty(pagerduty: PagerdutyRecipient) =
+                                pagerduty.validity()
+
+                            override fun visitWebhook(webhook: WebhookRecipient) =
+                                webhook.validity()
+
+                            override fun unknown(json: JsonValue?) = 0
+                        }
+                    )
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is Recipient &&
+                        user == other.user &&
+                        audience == other.audience &&
+                        list == other.list &&
+                        listPattern == other.listPattern &&
+                        slack == other.slack &&
+                        msTeams == other.msTeams &&
+                        pagerduty == other.pagerduty &&
+                        webhook == other.webhook
+                }
+
+                override fun hashCode(): Int =
+                    Objects.hash(
+                        user,
+                        audience,
+                        list,
+                        listPattern,
+                        slack,
+                        msTeams,
+                        pagerduty,
+                        webhook,
+                    )
+
+                override fun toString(): String =
+                    when {
+                        user != null -> "Recipient{user=$user}"
+                        audience != null -> "Recipient{audience=$audience}"
+                        list != null -> "Recipient{list=$list}"
+                        listPattern != null -> "Recipient{listPattern=$listPattern}"
+                        slack != null -> "Recipient{slack=$slack}"
+                        msTeams != null -> "Recipient{msTeams=$msTeams}"
+                        pagerduty != null -> "Recipient{pagerduty=$pagerduty}"
+                        webhook != null -> "Recipient{webhook=$webhook}"
+                        _json != null -> "Recipient{_unknown=$_json}"
+                        else -> throw IllegalStateException("Invalid Recipient")
+                    }
+
+                companion object {
+
+                    /** Send to a specific user by user_id, email, phone_number, or list_id */
+                    @JvmStatic fun ofUser(user: UserRecipient) = Recipient(user = user)
+
+                    /** Send to all users in an audience */
+                    @JvmStatic
+                    fun ofAudience(audience: AudienceRecipient) = Recipient(audience = audience)
+
+                    /** Send to all users in a specific list */
+                    @JvmStatic fun ofList(list: ListRecipient) = Recipient(list = list)
+
+                    /** Send to users in lists matching a pattern */
+                    @JvmStatic
+                    fun ofListPattern(listPattern: ListPatternRecipient) =
+                        Recipient(listPattern = listPattern)
+
+                    /** Send via Slack (channel, email, or user_id) */
+                    @JvmStatic fun ofSlack(slack: SlackRecipient) = Recipient(slack = slack)
+
+                    /** Send via Microsoft Teams */
+                    @JvmStatic
+                    fun ofMsTeams(msTeams: MsTeamsRecipient) = Recipient(msTeams = msTeams)
+
+                    /** Send via PagerDuty */
+                    @JvmStatic
+                    fun ofPagerduty(pagerduty: PagerdutyRecipient) =
+                        Recipient(pagerduty = pagerduty)
+
+                    /** Send via webhook */
+                    @JvmStatic
+                    fun ofWebhook(webhook: WebhookRecipient) = Recipient(webhook = webhook)
+                }
+
+                /**
+                 * An interface that defines how to map each variant of [Recipient] to a value of
+                 * type [T].
+                 */
+                interface Visitor<out T> {
+
+                    /** Send to a specific user by user_id, email, phone_number, or list_id */
+                    fun visitUser(user: UserRecipient): T
+
+                    /** Send to all users in an audience */
+                    fun visitAudience(audience: AudienceRecipient): T
+
+                    /** Send to all users in a specific list */
+                    fun visitList(list: ListRecipient): T
+
+                    /** Send to users in lists matching a pattern */
+                    fun visitListPattern(listPattern: ListPatternRecipient): T
+
+                    /** Send via Slack (channel, email, or user_id) */
+                    fun visitSlack(slack: SlackRecipient): T
+
+                    /** Send via Microsoft Teams */
+                    fun visitMsTeams(msTeams: MsTeamsRecipient): T
+
+                    /** Send via PagerDuty */
+                    fun visitPagerduty(pagerduty: PagerdutyRecipient): T
+
+                    /** Send via webhook */
+                    fun visitWebhook(webhook: WebhookRecipient): T
+
+                    /**
+                     * Maps an unknown variant of [Recipient] to a value of type [T].
+                     *
+                     * An instance of [Recipient] can contain an unknown variant if it was
+                     * deserialized from data that doesn't match any known variant. For example, if
+                     * the SDK is on an older version than the API, then the API may respond with
+                     * new variants that the SDK is unaware of.
+                     *
+                     * @throws CourierInvalidDataException in the default implementation.
+                     */
+                    fun unknown(json: JsonValue?): T {
+                        throw CourierInvalidDataException("Unknown Recipient: $json")
+                    }
+                }
+
+                internal class Deserializer : BaseDeserializer<Recipient>(Recipient::class) {
+
+                    override fun ObjectCodec.deserialize(node: JsonNode): Recipient {
+                        val json = JsonValue.fromJsonNode(node)
+
+                        val bestMatches =
+                            sequenceOf(
+                                    tryDeserialize(node, jacksonTypeRef<UserRecipient>())?.let {
+                                        Recipient(user = it, _json = json)
+                                    },
+                                    tryDeserialize(node, jacksonTypeRef<AudienceRecipient>())?.let {
+                                        Recipient(audience = it, _json = json)
+                                    },
+                                    tryDeserialize(node, jacksonTypeRef<ListRecipient>())?.let {
+                                        Recipient(list = it, _json = json)
+                                    },
+                                    tryDeserialize(node, jacksonTypeRef<ListPatternRecipient>())
+                                        ?.let { Recipient(listPattern = it, _json = json) },
+                                    tryDeserialize(node, jacksonTypeRef<SlackRecipient>())?.let {
+                                        Recipient(slack = it, _json = json)
+                                    },
+                                    tryDeserialize(node, jacksonTypeRef<MsTeamsRecipient>())?.let {
+                                        Recipient(msTeams = it, _json = json)
+                                    },
+                                    tryDeserialize(node, jacksonTypeRef<PagerdutyRecipient>())
+                                        ?.let { Recipient(pagerduty = it, _json = json) },
+                                    tryDeserialize(node, jacksonTypeRef<WebhookRecipient>())?.let {
+                                        Recipient(webhook = it, _json = json)
+                                    },
+                                )
+                                .filterNotNull()
+                                .allMaxBy { it.validity() }
+                                .toList()
+                        return when (bestMatches.size) {
+                            // This can happen if what we're deserializing is completely
+                            // incompatible with all the possible variants (e.g. deserializing from
+                            // boolean).
+                            0 -> Recipient(_json = json)
+                            1 -> bestMatches.single()
+                            // If there's more than one match with the highest validity, then use
+                            // the first completely valid match, or simply the first match if none
+                            // are completely valid.
+                            else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
+                        }
+                    }
+                }
+
+                internal class Serializer : BaseSerializer<Recipient>(Recipient::class) {
+
+                    override fun serialize(
+                        value: Recipient,
+                        generator: JsonGenerator,
+                        provider: SerializerProvider,
+                    ) {
+                        when {
+                            value.user != null -> generator.writeObject(value.user)
+                            value.audience != null -> generator.writeObject(value.audience)
+                            value.list != null -> generator.writeObject(value.list)
+                            value.listPattern != null -> generator.writeObject(value.listPattern)
+                            value.slack != null -> generator.writeObject(value.slack)
+                            value.msTeams != null -> generator.writeObject(value.msTeams)
+                            value.pagerduty != null -> generator.writeObject(value.pagerduty)
+                            value.webhook != null -> generator.writeObject(value.webhook)
+                            value._json != null -> generator.writeObject(value._json)
+                            else -> throw IllegalStateException("Invalid Recipient")
+                        }
                     }
                 }
             }

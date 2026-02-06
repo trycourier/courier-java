@@ -6,9 +6,14 @@ import com.courier.core.ClientOptions
 import com.courier.core.RequestOptions
 import com.courier.core.http.HttpResponseFor
 import com.courier.models.tenants.BaseTemplateTenantAssociation
+import com.courier.models.tenants.PostTenantTemplatePublishResponse
+import com.courier.models.tenants.PutTenantTemplateResponse
 import com.courier.models.tenants.templates.TemplateListParams
 import com.courier.models.tenants.templates.TemplateListResponse
+import com.courier.models.tenants.templates.TemplatePublishParams
+import com.courier.models.tenants.templates.TemplateReplaceParams
 import com.courier.models.tenants.templates.TemplateRetrieveParams
+import com.courier.services.blocking.tenants.templates.VersionService
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
@@ -25,6 +30,8 @@ interface TemplateService {
      * The original service is not modified.
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): TemplateService
+
+    fun versions(): VersionService
 
     /** Get a Template in Tenant */
     fun retrieve(
@@ -79,6 +86,64 @@ interface TemplateService {
     fun list(tenantId: String, requestOptions: RequestOptions): TemplateListResponse =
         list(tenantId, TemplateListParams.none(), requestOptions)
 
+    /**
+     * Publishes a specific version of a notification template for a tenant.
+     *
+     * The template must already exist in the tenant's notification map. If no version is specified,
+     * defaults to publishing the "latest" version.
+     */
+    fun publish(
+        templateId: String,
+        params: TemplatePublishParams,
+    ): PostTenantTemplatePublishResponse = publish(templateId, params, RequestOptions.none())
+
+    /** @see publish */
+    fun publish(
+        templateId: String,
+        params: TemplatePublishParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): PostTenantTemplatePublishResponse =
+        publish(params.toBuilder().templateId(templateId).build(), requestOptions)
+
+    /** @see publish */
+    fun publish(params: TemplatePublishParams): PostTenantTemplatePublishResponse =
+        publish(params, RequestOptions.none())
+
+    /** @see publish */
+    fun publish(
+        params: TemplatePublishParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): PostTenantTemplatePublishResponse
+
+    /**
+     * Creates or updates a notification template for a tenant.
+     *
+     * If the template already exists for the tenant, it will be updated (200). Otherwise, a new
+     * template is created (201).
+     *
+     * Optionally publishes the template immediately if the `published` flag is set to true.
+     */
+    fun replace(templateId: String, params: TemplateReplaceParams): PutTenantTemplateResponse =
+        replace(templateId, params, RequestOptions.none())
+
+    /** @see replace */
+    fun replace(
+        templateId: String,
+        params: TemplateReplaceParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): PutTenantTemplateResponse =
+        replace(params.toBuilder().templateId(templateId).build(), requestOptions)
+
+    /** @see replace */
+    fun replace(params: TemplateReplaceParams): PutTenantTemplateResponse =
+        replace(params, RequestOptions.none())
+
+    /** @see replace */
+    fun replace(
+        params: TemplateReplaceParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): PutTenantTemplateResponse
+
     /** A view of [TemplateService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
 
@@ -88,6 +153,8 @@ interface TemplateService {
          * The original service is not modified.
          */
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): TemplateService.WithRawResponse
+
+        fun versions(): VersionService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `get /tenants/{tenant_id}/templates/{template_id}`, but
@@ -165,5 +232,72 @@ interface TemplateService {
             requestOptions: RequestOptions,
         ): HttpResponseFor<TemplateListResponse> =
             list(tenantId, TemplateListParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post
+         * /tenants/{tenant_id}/templates/{template_id}/publish`, but is otherwise the same as
+         * [TemplateService.publish].
+         */
+        @MustBeClosed
+        fun publish(
+            templateId: String,
+            params: TemplatePublishParams,
+        ): HttpResponseFor<PostTenantTemplatePublishResponse> =
+            publish(templateId, params, RequestOptions.none())
+
+        /** @see publish */
+        @MustBeClosed
+        fun publish(
+            templateId: String,
+            params: TemplatePublishParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<PostTenantTemplatePublishResponse> =
+            publish(params.toBuilder().templateId(templateId).build(), requestOptions)
+
+        /** @see publish */
+        @MustBeClosed
+        fun publish(
+            params: TemplatePublishParams
+        ): HttpResponseFor<PostTenantTemplatePublishResponse> =
+            publish(params, RequestOptions.none())
+
+        /** @see publish */
+        @MustBeClosed
+        fun publish(
+            params: TemplatePublishParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<PostTenantTemplatePublishResponse>
+
+        /**
+         * Returns a raw HTTP response for `put /tenants/{tenant_id}/templates/{template_id}`, but
+         * is otherwise the same as [TemplateService.replace].
+         */
+        @MustBeClosed
+        fun replace(
+            templateId: String,
+            params: TemplateReplaceParams,
+        ): HttpResponseFor<PutTenantTemplateResponse> =
+            replace(templateId, params, RequestOptions.none())
+
+        /** @see replace */
+        @MustBeClosed
+        fun replace(
+            templateId: String,
+            params: TemplateReplaceParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<PutTenantTemplateResponse> =
+            replace(params.toBuilder().templateId(templateId).build(), requestOptions)
+
+        /** @see replace */
+        @MustBeClosed
+        fun replace(params: TemplateReplaceParams): HttpResponseFor<PutTenantTemplateResponse> =
+            replace(params, RequestOptions.none())
+
+        /** @see replace */
+        @MustBeClosed
+        fun replace(
+            params: TemplateReplaceParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<PutTenantTemplateResponse>
     }
 }

@@ -1,5 +1,19 @@
 # Changelog
 
+## 4.9.0 (2026-02-06)
+
+Full Changelog: [v4.8.0...v4.9.0](https://github.com/trycourier/courier-java/compare/v4.8.0...v4.9.0)
+
+### Features
+
+* **api:** add publish/replace methods, versions resource to tenant templates ([41fbfe5](https://github.com/trycourier/courier-java/commit/41fbfe5dd327a8a142da5ac65ba72f777f9794a9))
+* **api:** add toOfRecipients method to send message ([35df215](https://github.com/trycourier/courier-java/commit/35df2154e48a5e158285cda871f506202d9199c6))
+
+
+### Chores
+
+* **internal:** allow passing args to `./scripts/test` ([a809582](https://github.com/trycourier/courier-java/commit/a8095821586036d00c3543929e6eef860fabdd3a))
+
 ## 4.8.0 (2026-01-27)
 
 Full Changelog: [v4.7.1...v4.8.0](https://github.com/trycourier/courier-java/compare/v4.7.1...v4.8.0)
