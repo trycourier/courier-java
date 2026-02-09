@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.9.1 (2026-02-07)
+
+Full Changelog: [v4.9.0...v4.9.1](https://github.com/trycourier/courier-java/compare/v4.9.0...v4.9.1)
+
+### Chores
+
+* **internal:** upgrade AssertJ ([afe545e](https://github.com/trycourier/courier-java/commit/afe545eaebadf882a5bea38b08d2a31fc8c8289b))
+
 ## 4.9.0 (2026-02-06)
 
 Full Changelog: [v4.8.0...v4.9.0](https://github.com/trycourier/courier-java/compare/v4.8.0...v4.9.0)
