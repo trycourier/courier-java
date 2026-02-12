@@ -31,7 +31,6 @@ internal class PutTenantTemplateRequestTest {
                                         .build()
                                 )
                                 .version("version")
-                                .brand("brand")
                                 .build()
                         )
                         .channels(
@@ -113,7 +112,6 @@ internal class PutTenantTemplateRequestTest {
                                     .build()
                             )
                             .version("version")
-                            .brand("brand")
                             .build()
                     )
                     .channels(
@@ -199,7 +197,6 @@ internal class PutTenantTemplateRequestTest {
                                         .build()
                                 )
                                 .version("version")
-                                .brand("brand")
                                 .build()
                         )
                         .channels(

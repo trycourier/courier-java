@@ -23,7 +23,6 @@ internal class ElementalContentTest {
                         .build()
                 )
                 .version("version")
-                .brand("brand")
                 .build()
 
         assertThat(elementalContent.elements())
@@ -39,7 +38,6 @@ internal class ElementalContentTest {
                 )
             )
         assertThat(elementalContent.version()).isEqualTo("version")
-        assertThat(elementalContent.brand()).contains("brand")
     }
 
     @Test
@@ -57,7 +55,6 @@ internal class ElementalContentTest {
                         .build()
                 )
                 .version("version")
-                .brand("brand")
                 .build()
 
         val roundtrippedElementalContent =
