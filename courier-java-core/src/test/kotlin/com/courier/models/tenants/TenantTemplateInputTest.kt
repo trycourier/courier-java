@@ -29,7 +29,6 @@ internal class TenantTemplateInputTest {
                                 .build()
                         )
                         .version("version")
-                        .brand("brand")
                         .build()
                 )
                 .channels(
@@ -106,7 +105,6 @@ internal class TenantTemplateInputTest {
                             .build()
                     )
                     .version("version")
-                    .brand("brand")
                     .build()
             )
         assertThat(tenantTemplateInput.channels())
@@ -190,7 +188,6 @@ internal class TenantTemplateInputTest {
                                 .build()
                         )
                         .version("version")
-                        .brand("brand")
                         .build()
                 )
                 .channels(

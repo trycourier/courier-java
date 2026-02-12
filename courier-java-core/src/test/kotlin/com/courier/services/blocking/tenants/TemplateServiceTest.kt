@@ -120,7 +120,6 @@ internal class TemplateServiceTest {
                                                     .build()
                                             )
                                             .version("version")
-                                            .brand("brand")
                                             .build()
                                     )
                                     .channels(
