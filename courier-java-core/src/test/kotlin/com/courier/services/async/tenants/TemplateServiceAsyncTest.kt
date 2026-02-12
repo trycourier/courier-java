@@ -123,7 +123,6 @@ internal class TemplateServiceAsyncTest {
                                                     .build()
                                             )
                                             .version("version")
-                                            .brand("brand")
                                             .build()
                                     )
                                     .channels(

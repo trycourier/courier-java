@@ -34,7 +34,6 @@ internal class TemplateReplaceParamsTest {
                                             .build()
                                     )
                                     .version("version")
-                                    .brand("brand")
                                     .build()
                             )
                             .channels(
@@ -154,7 +153,6 @@ internal class TemplateReplaceParamsTest {
                                                 .build()
                                         )
                                         .version("version")
-                                        .brand("brand")
                                         .build()
                                 )
                                 .channels(
@@ -243,7 +241,6 @@ internal class TemplateReplaceParamsTest {
                                             .build()
                                     )
                                     .version("version")
-                                    .brand("brand")
                                     .build()
                             )
                             .channels(

@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.9.2 (2026-02-12)
+
+Full Changelog: [v4.9.1...v4.9.2](https://github.com/trycourier/courier-java/compare/v4.9.1...v4.9.2)
+
+### Bug Fixes
+
+* **types:** remove brand field from ElementalContent model ([d83efc4](https://github.com/trycourier/courier-java/commit/d83efc457327b2747602f8e028afbe0d24eb1d7d))
+
 ## 4.9.1 (2026-02-07)
 
 Full Changelog: [v4.9.0...v4.9.1](https://github.com/trycourier/courier-java/compare/v4.9.0...v4.9.1)
