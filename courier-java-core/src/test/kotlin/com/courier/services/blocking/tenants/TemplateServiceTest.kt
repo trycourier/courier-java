@@ -2,7 +2,6 @@
 
 package com.courier.services.blocking.tenants
 
-import com.courier.TestServerExtension
 import com.courier.client.okhttp.CourierOkHttpClient
 import com.courier.core.JsonValue
 import com.courier.models.ElementalContent
@@ -17,19 +16,13 @@ import com.courier.models.tenants.templates.TemplateReplaceParams
 import com.courier.models.tenants.templates.TemplateRetrieveParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 
-@ExtendWith(TestServerExtension::class)
 internal class TemplateServiceTest {
 
     @Disabled("Prism tests are disabled")
     @Test
     fun retrieve() {
-        val client =
-            CourierOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
         val templateService = client.tenants().templates()
 
         val baseTemplateTenantAssociation =
@@ -46,11 +39,7 @@ internal class TemplateServiceTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun list() {
-        val client =
-            CourierOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
         val templateService = client.tenants().templates()
 
         val templates =
@@ -68,11 +57,7 @@ internal class TemplateServiceTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun publish() {
-        val client =
-            CourierOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
         val templateService = client.tenants().templates()
 
         val postTenantTemplatePublishResponse =
@@ -92,11 +77,7 @@ internal class TemplateServiceTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun replace() {
-        val client =
-            CourierOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
         val templateService = client.tenants().templates()
 
         val putTenantTemplateResponse =

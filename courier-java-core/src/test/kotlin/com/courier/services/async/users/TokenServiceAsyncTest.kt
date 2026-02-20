@@ -2,7 +2,6 @@
 
 package com.courier.services.async.users
 
-import com.courier.TestServerExtension
 import com.courier.client.okhttp.CourierOkHttpClientAsync
 import com.courier.core.JsonValue
 import com.courier.models.users.tokens.TokenAddSingleParams
@@ -12,19 +11,13 @@ import com.courier.models.users.tokens.TokenUpdateParams
 import com.courier.models.users.tokens.UserToken
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 
-@ExtendWith(TestServerExtension::class)
 internal class TokenServiceAsyncTest {
 
     @Disabled("Prism tests are disabled")
     @Test
     fun retrieve() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val tokenServiceAsync = client.users().tokens()
 
         val tokenFuture =
@@ -39,11 +32,7 @@ internal class TokenServiceAsyncTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun update() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val tokenServiceAsync = client.users().tokens()
 
         val future =
@@ -67,11 +56,7 @@ internal class TokenServiceAsyncTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun list() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val tokenServiceAsync = client.users().tokens()
 
         val tokensFuture = tokenServiceAsync.list("user_id")
@@ -83,11 +68,7 @@ internal class TokenServiceAsyncTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun delete() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val tokenServiceAsync = client.users().tokens()
 
         val future =
@@ -101,11 +82,7 @@ internal class TokenServiceAsyncTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun addMultiple() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val tokenServiceAsync = client.users().tokens()
 
         val future = tokenServiceAsync.addMultiple("user_id")
@@ -116,11 +93,7 @@ internal class TokenServiceAsyncTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun addSingle() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val tokenServiceAsync = client.users().tokens()
 
         val future =

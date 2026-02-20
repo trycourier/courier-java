@@ -2,7 +2,6 @@
 
 package com.courier.services.blocking
 
-import com.courier.TestServerExtension
 import com.courier.client.okhttp.CourierOkHttpClient
 import com.courier.models.AudienceFilterConfig
 import com.courier.models.FilterConfig
@@ -11,19 +10,13 @@ import com.courier.models.audiences.AudienceListParams
 import com.courier.models.audiences.AudienceUpdateParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 
-@ExtendWith(TestServerExtension::class)
 internal class AudienceServiceTest {
 
     @Disabled("Prism tests are disabled")
     @Test
     fun retrieve() {
-        val client =
-            CourierOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
         val audienceService = client.audiences()
 
         val audience = audienceService.retrieve("audience_id")
@@ -34,11 +27,7 @@ internal class AudienceServiceTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun update() {
-        val client =
-            CourierOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
         val audienceService = client.audiences()
 
         val audience =
@@ -69,11 +58,7 @@ internal class AudienceServiceTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun list() {
-        val client =
-            CourierOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
         val audienceService = client.audiences()
 
         val audiences = audienceService.list(AudienceListParams.builder().cursor("cursor").build())
@@ -84,11 +69,7 @@ internal class AudienceServiceTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun delete() {
-        val client =
-            CourierOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
         val audienceService = client.audiences()
 
         audienceService.delete("audience_id")
@@ -97,11 +78,7 @@ internal class AudienceServiceTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun listMembers() {
-        val client =
-            CourierOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
         val audienceService = client.audiences()
 
         val response =

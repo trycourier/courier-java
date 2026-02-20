@@ -2,7 +2,6 @@
 
 package com.courier.services.async
 
-import com.courier.TestServerExtension
 import com.courier.client.okhttp.CourierOkHttpClientAsync
 import com.courier.core.JsonValue
 import com.courier.models.profiles.ProfileCreateParams
@@ -10,19 +9,13 @@ import com.courier.models.profiles.ProfileReplaceParams
 import com.courier.models.profiles.ProfileUpdateParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 
-@ExtendWith(TestServerExtension::class)
 internal class ProfileServiceAsyncTest {
 
     @Disabled("Prism tests are disabled")
     @Test
     fun create() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val profileServiceAsync = client.profiles()
 
         val profileFuture =
@@ -44,11 +37,7 @@ internal class ProfileServiceAsyncTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun retrieve() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val profileServiceAsync = client.profiles()
 
         val profileFuture = profileServiceAsync.retrieve("user_id")
@@ -60,11 +49,7 @@ internal class ProfileServiceAsyncTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun update() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val profileServiceAsync = client.profiles()
 
         val future =
@@ -87,11 +72,7 @@ internal class ProfileServiceAsyncTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun delete() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val profileServiceAsync = client.profiles()
 
         val future = profileServiceAsync.delete("user_id")
@@ -102,11 +83,7 @@ internal class ProfileServiceAsyncTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun replace() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val profileServiceAsync = client.profiles()
 
         val responseFuture =

@@ -2,25 +2,18 @@
 
 package com.courier.services.async
 
-import com.courier.TestServerExtension
 import com.courier.client.okhttp.CourierOkHttpClientAsync
 import com.courier.core.JsonValue
 import com.courier.models.inbound.InboundTrackEventParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 
-@ExtendWith(TestServerExtension::class)
 internal class InboundServiceAsyncTest {
 
     @Disabled("Prism tests are disabled")
     @Test
     fun trackEvent() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val inboundServiceAsync = client.inbound()
 
         val responseFuture =

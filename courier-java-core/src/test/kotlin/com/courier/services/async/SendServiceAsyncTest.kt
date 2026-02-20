@@ -2,7 +2,6 @@
 
 package com.courier.services.async
 
-import com.courier.TestServerExtension
 import com.courier.client.okhttp.CourierOkHttpClientAsync
 import com.courier.core.JsonValue
 import com.courier.models.ElementalContentSugar
@@ -12,19 +11,13 @@ import com.courier.models.Utm
 import com.courier.models.send.SendMessageParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 
-@ExtendWith(TestServerExtension::class)
 internal class SendServiceAsyncTest {
 
     @Disabled("Prism tests are disabled")
     @Test
     fun message() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val sendServiceAsync = client.send()
 
         val responseFuture =

@@ -2,7 +2,6 @@
 
 package com.courier.services.blocking
 
-import com.courier.TestServerExtension
 import com.courier.client.okhttp.CourierOkHttpClient
 import com.courier.models.brands.BrandColors
 import com.courier.models.brands.BrandCreateParams
@@ -22,19 +21,13 @@ import com.courier.models.brands.Logo
 import com.courier.models.brands.WidgetBackground
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 
-@ExtendWith(TestServerExtension::class)
 internal class BrandServiceTest {
 
     @Disabled("Prism tests are disabled")
     @Test
     fun create() {
-        val client =
-            CourierOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
         val brandService = client.brands()
 
         val brand =
@@ -136,11 +129,7 @@ internal class BrandServiceTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun retrieve() {
-        val client =
-            CourierOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
         val brandService = client.brands()
 
         val brand = brandService.retrieve("brand_id")
@@ -151,11 +140,7 @@ internal class BrandServiceTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun update() {
-        val client =
-            CourierOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
         val brandService = client.brands()
 
         val brand =
@@ -257,11 +242,7 @@ internal class BrandServiceTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun list() {
-        val client =
-            CourierOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
         val brandService = client.brands()
 
         val brands = brandService.list(BrandListParams.builder().cursor("cursor").build())
@@ -272,11 +253,7 @@ internal class BrandServiceTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun delete() {
-        val client =
-            CourierOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
         val brandService = client.brands()
 
         brandService.delete("brand_id")

@@ -2,7 +2,6 @@
 
 package com.courier.services.async
 
-import com.courier.TestServerExtension
 import com.courier.client.okhttp.CourierOkHttpClientAsync
 import com.courier.core.JsonValue
 import com.courier.models.ElementalContentSugar
@@ -16,19 +15,13 @@ import com.courier.models.bulk.InboundBulkMessage
 import com.courier.models.bulk.InboundBulkMessageUser
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 
-@ExtendWith(TestServerExtension::class)
 internal class BulkServiceAsyncTest {
 
     @Disabled("Prism tests are disabled")
     @Test
     fun addUsers() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val bulkServiceAsync = client.bulk()
 
         val future =
@@ -181,11 +174,7 @@ internal class BulkServiceAsyncTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun createJob() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val bulkServiceAsync = client.bulk()
 
         val responseFuture =
@@ -229,11 +218,7 @@ internal class BulkServiceAsyncTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun listUsers() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val bulkServiceAsync = client.bulk()
 
         val responseFuture =
@@ -248,11 +233,7 @@ internal class BulkServiceAsyncTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun retrieveJob() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val bulkServiceAsync = client.bulk()
 
         val responseFuture = bulkServiceAsync.retrieveJob("job_id")
@@ -264,11 +245,7 @@ internal class BulkServiceAsyncTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun runJob() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val bulkServiceAsync = client.bulk()
 
         val future = bulkServiceAsync.runJob("job_id")
