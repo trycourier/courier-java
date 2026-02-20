@@ -2,7 +2,6 @@
 
 package com.courier.services.async.lists
 
-import com.courier.TestServerExtension
 import com.courier.client.okhttp.CourierOkHttpClientAsync
 import com.courier.core.JsonValue
 import com.courier.models.RecipientPreferences
@@ -14,19 +13,13 @@ import com.courier.models.lists.subscriptions.SubscriptionSubscribeUserParams
 import com.courier.models.lists.subscriptions.SubscriptionUnsubscribeUserParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 
-@ExtendWith(TestServerExtension::class)
 internal class SubscriptionServiceAsyncTest {
 
     @Disabled("Prism tests are disabled")
     @Test
     fun list() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val subscriptionServiceAsync = client.lists().subscriptions()
 
         val subscriptionsFuture =
@@ -41,11 +34,7 @@ internal class SubscriptionServiceAsyncTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun add() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val subscriptionServiceAsync = client.lists().subscriptions()
 
         val future =
@@ -116,11 +105,7 @@ internal class SubscriptionServiceAsyncTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun subscribe() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val subscriptionServiceAsync = client.lists().subscriptions()
 
         val future =
@@ -191,11 +176,7 @@ internal class SubscriptionServiceAsyncTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun subscribeUser() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val subscriptionServiceAsync = client.lists().subscriptions()
 
         val future =
@@ -258,11 +239,7 @@ internal class SubscriptionServiceAsyncTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun unsubscribeUser() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val subscriptionServiceAsync = client.lists().subscriptions()
 
         val future =

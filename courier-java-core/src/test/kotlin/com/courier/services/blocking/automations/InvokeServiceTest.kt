@@ -2,26 +2,19 @@
 
 package com.courier.services.blocking.automations
 
-import com.courier.TestServerExtension
 import com.courier.client.okhttp.CourierOkHttpClient
 import com.courier.core.JsonValue
 import com.courier.models.automations.invoke.InvokeInvokeAdHocParams
 import com.courier.models.automations.invoke.InvokeInvokeByTemplateParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 
-@ExtendWith(TestServerExtension::class)
 internal class InvokeServiceTest {
 
     @Disabled("Prism tests are disabled")
     @Test
     fun invokeAdHoc() {
-        val client =
-            CourierOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
         val invokeService = client.automations().invoke()
 
         val automationInvokeResponse =
@@ -92,11 +85,7 @@ internal class InvokeServiceTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun invokeByTemplate() {
-        val client =
-            CourierOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
         val invokeService = client.automations().invoke()
 
         val automationInvokeResponse =

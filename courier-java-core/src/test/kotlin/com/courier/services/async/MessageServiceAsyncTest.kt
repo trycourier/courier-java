@@ -2,25 +2,18 @@
 
 package com.courier.services.async
 
-import com.courier.TestServerExtension
 import com.courier.client.okhttp.CourierOkHttpClientAsync
 import com.courier.models.messages.MessageHistoryParams
 import com.courier.models.messages.MessageListParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 
-@ExtendWith(TestServerExtension::class)
 internal class MessageServiceAsyncTest {
 
     @Disabled("Prism tests are disabled")
     @Test
     fun retrieve() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val messageServiceAsync = client.messages()
 
         val messageFuture = messageServiceAsync.retrieve("message_id")
@@ -32,11 +25,7 @@ internal class MessageServiceAsyncTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun list() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val messageServiceAsync = client.messages()
 
         val messagesFuture =
@@ -66,11 +55,7 @@ internal class MessageServiceAsyncTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun cancel() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val messageServiceAsync = client.messages()
 
         val messageDetailsFuture = messageServiceAsync.cancel("message_id")
@@ -82,11 +67,7 @@ internal class MessageServiceAsyncTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun content() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val messageServiceAsync = client.messages()
 
         val responseFuture = messageServiceAsync.content("message_id")
@@ -98,11 +79,7 @@ internal class MessageServiceAsyncTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun history() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val messageServiceAsync = client.messages()
 
         val responseFuture =

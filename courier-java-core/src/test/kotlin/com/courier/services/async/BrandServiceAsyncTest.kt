@@ -2,7 +2,6 @@
 
 package com.courier.services.async
 
-import com.courier.TestServerExtension
 import com.courier.client.okhttp.CourierOkHttpClientAsync
 import com.courier.models.brands.BrandColors
 import com.courier.models.brands.BrandCreateParams
@@ -22,19 +21,13 @@ import com.courier.models.brands.Logo
 import com.courier.models.brands.WidgetBackground
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 
-@ExtendWith(TestServerExtension::class)
 internal class BrandServiceAsyncTest {
 
     @Disabled("Prism tests are disabled")
     @Test
     fun create() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val brandServiceAsync = client.brands()
 
         val brandFuture =
@@ -137,11 +130,7 @@ internal class BrandServiceAsyncTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun retrieve() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val brandServiceAsync = client.brands()
 
         val brandFuture = brandServiceAsync.retrieve("brand_id")
@@ -153,11 +142,7 @@ internal class BrandServiceAsyncTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun update() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val brandServiceAsync = client.brands()
 
         val brandFuture =
@@ -260,11 +245,7 @@ internal class BrandServiceAsyncTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun list() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val brandServiceAsync = client.brands()
 
         val brandsFuture =
@@ -277,11 +258,7 @@ internal class BrandServiceAsyncTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun delete() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val brandServiceAsync = client.brands()
 
         val future = brandServiceAsync.delete("brand_id")
