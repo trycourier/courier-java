@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
 
 internal class TokenServiceAsyncTest {
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun retrieve() {
         val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
@@ -29,7 +29,7 @@ internal class TokenServiceAsyncTest {
         token.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun update() {
         val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
@@ -53,7 +53,7 @@ internal class TokenServiceAsyncTest {
         val response = future.get()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun list() {
         val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
@@ -65,7 +65,7 @@ internal class TokenServiceAsyncTest {
         tokens.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun delete() {
         val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
@@ -79,7 +79,7 @@ internal class TokenServiceAsyncTest {
         val response = future.get()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun addMultiple() {
         val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
@@ -90,7 +90,7 @@ internal class TokenServiceAsyncTest {
         val response = future.get()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun addSingle() {
         val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()

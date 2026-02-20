@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test
 
 internal class BulkServiceTest {
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun addUsers() {
         val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
@@ -168,7 +168,7 @@ internal class BulkServiceTest {
         )
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun createJob() {
         val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
@@ -211,7 +211,7 @@ internal class BulkServiceTest {
         response.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun listUsers() {
         val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
@@ -225,7 +225,7 @@ internal class BulkServiceTest {
         response.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun retrieveJob() {
         val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
@@ -236,7 +236,7 @@ internal class BulkServiceTest {
         response.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun runJob() {
         val client = CourierOkHttpClient.builder().apiKey("My API Key").build()

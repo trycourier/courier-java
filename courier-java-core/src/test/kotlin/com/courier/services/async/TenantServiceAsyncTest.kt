@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test
 
 internal class TenantServiceAsyncTest {
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun retrieve() {
         val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
@@ -27,7 +27,7 @@ internal class TenantServiceAsyncTest {
         tenant.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun update() {
         val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
@@ -69,7 +69,7 @@ internal class TenantServiceAsyncTest {
         tenant.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun list() {
         val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
@@ -88,7 +88,7 @@ internal class TenantServiceAsyncTest {
         tenants.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun delete() {
         val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
@@ -99,7 +99,7 @@ internal class TenantServiceAsyncTest {
         val response = future.get()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun listUsers() {
         val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()

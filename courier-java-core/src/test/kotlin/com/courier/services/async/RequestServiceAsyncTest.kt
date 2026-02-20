@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 
 internal class RequestServiceAsyncTest {
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun archive() {
         val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()

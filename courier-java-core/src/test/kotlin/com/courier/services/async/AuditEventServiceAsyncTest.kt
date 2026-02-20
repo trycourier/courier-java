@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 internal class AuditEventServiceAsyncTest {
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun retrieve() {
         val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
@@ -21,7 +21,7 @@ internal class AuditEventServiceAsyncTest {
         auditEvent.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun list() {
         val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()

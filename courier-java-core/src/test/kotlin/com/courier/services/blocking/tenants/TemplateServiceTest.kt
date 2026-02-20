@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test
 
 internal class TemplateServiceTest {
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun retrieve() {
         val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
@@ -36,7 +36,7 @@ internal class TemplateServiceTest {
         baseTemplateTenantAssociation.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun list() {
         val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
@@ -54,7 +54,7 @@ internal class TemplateServiceTest {
         templates.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun publish() {
         val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
@@ -74,7 +74,7 @@ internal class TemplateServiceTest {
         postTenantTemplatePublishResponse.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun replace() {
         val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
