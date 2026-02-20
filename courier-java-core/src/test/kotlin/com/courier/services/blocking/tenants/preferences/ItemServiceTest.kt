@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 
 internal class ItemServiceTest {
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun update() {
         val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
@@ -33,7 +33,7 @@ internal class ItemServiceTest {
         )
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun delete() {
         val client = CourierOkHttpClient.builder().apiKey("My API Key").build()

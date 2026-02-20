@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test
 
 internal class SubscriptionServiceTest {
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun list() {
         val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
@@ -30,7 +30,7 @@ internal class SubscriptionServiceTest {
         subscriptions.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun add() {
         val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
@@ -98,7 +98,7 @@ internal class SubscriptionServiceTest {
         )
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun subscribe() {
         val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
@@ -166,7 +166,7 @@ internal class SubscriptionServiceTest {
         )
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun subscribeUser() {
         val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
@@ -220,7 +220,7 @@ internal class SubscriptionServiceTest {
         )
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun unsubscribeUser() {
         val client = CourierOkHttpClient.builder().apiKey("My API Key").build()

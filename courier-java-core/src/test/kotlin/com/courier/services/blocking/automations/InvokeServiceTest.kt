@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 
 internal class InvokeServiceTest {
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun invokeAdHoc() {
         val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
@@ -82,7 +82,7 @@ internal class InvokeServiceTest {
         automationInvokeResponse.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun invokeByTemplate() {
         val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
