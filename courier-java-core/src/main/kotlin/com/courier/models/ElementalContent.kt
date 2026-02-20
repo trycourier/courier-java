@@ -16,7 +16,6 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Collections
 import java.util.Objects
-import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class ElementalContent
@@ -24,7 +23,6 @@ class ElementalContent
 private constructor(
     private val elements: JsonField<List<ElementalNode>>,
     private val version: JsonField<String>,
-    private val brand: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -34,8 +32,7 @@ private constructor(
         @ExcludeMissing
         elements: JsonField<List<ElementalNode>> = JsonMissing.of(),
         @JsonProperty("version") @ExcludeMissing version: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("brand") @ExcludeMissing brand: JsonField<String> = JsonMissing.of(),
-    ) : this(elements, version, brand, mutableMapOf())
+    ) : this(elements, version, mutableMapOf())
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
@@ -52,12 +49,6 @@ private constructor(
     fun version(): String = version.getRequired("version")
 
     /**
-     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
-    fun brand(): Optional<String> = brand.getOptional("brand")
-
-    /**
      * Returns the raw JSON value of [elements].
      *
      * Unlike [elements], this method doesn't throw if the JSON field has an unexpected type.
@@ -72,13 +63,6 @@ private constructor(
      * Unlike [version], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("version") @ExcludeMissing fun _version(): JsonField<String> = version
-
-    /**
-     * Returns the raw JSON value of [brand].
-     *
-     * Unlike [brand], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("brand") @ExcludeMissing fun _brand(): JsonField<String> = brand
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -111,14 +95,12 @@ private constructor(
 
         private var elements: JsonField<MutableList<ElementalNode>>? = null
         private var version: JsonField<String>? = null
-        private var brand: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(elementalContent: ElementalContent) = apply {
             elements = elementalContent.elements.map { it.toMutableList() }
             version = elementalContent.version
-            brand = elementalContent.brand
             additionalProperties = elementalContent.additionalProperties.toMutableMap()
         }
 
@@ -205,19 +187,6 @@ private constructor(
          */
         fun version(version: JsonField<String>) = apply { this.version = version }
 
-        fun brand(brand: String?) = brand(JsonField.ofNullable(brand))
-
-        /** Alias for calling [Builder.brand] with `brand.orElse(null)`. */
-        fun brand(brand: Optional<String>) = brand(brand.getOrNull())
-
-        /**
-         * Sets [Builder.brand] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.brand] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun brand(brand: JsonField<String>) = apply { this.brand = brand }
-
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -254,7 +223,6 @@ private constructor(
             ElementalContent(
                 checkRequired("elements", elements).map { it.toImmutable() },
                 checkRequired("version", version),
-                brand,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -268,7 +236,6 @@ private constructor(
 
         elements().forEach { it.validate() }
         version()
-        brand()
         validated = true
     }
 
@@ -288,8 +255,7 @@ private constructor(
     @JvmSynthetic
     internal fun validity(): Int =
         (elements.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
-            (if (version.asKnown().isPresent) 1 else 0) +
-            (if (brand.asKnown().isPresent) 1 else 0)
+            (if (version.asKnown().isPresent) 1 else 0)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -299,16 +265,13 @@ private constructor(
         return other is ElementalContent &&
             elements == other.elements &&
             version == other.version &&
-            brand == other.brand &&
             additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy {
-        Objects.hash(elements, version, brand, additionalProperties)
-    }
+    private val hashCode: Int by lazy { Objects.hash(elements, version, additionalProperties) }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ElementalContent{elements=$elements, version=$version, brand=$brand, additionalProperties=$additionalProperties}"
+        "ElementalContent{elements=$elements, version=$version, additionalProperties=$additionalProperties}"
 }

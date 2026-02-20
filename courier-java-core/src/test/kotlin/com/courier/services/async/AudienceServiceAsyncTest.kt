@@ -2,7 +2,6 @@
 
 package com.courier.services.async
 
-import com.courier.TestServerExtension
 import com.courier.client.okhttp.CourierOkHttpClientAsync
 import com.courier.models.AudienceFilterConfig
 import com.courier.models.FilterConfig
@@ -11,19 +10,13 @@ import com.courier.models.audiences.AudienceListParams
 import com.courier.models.audiences.AudienceUpdateParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 
-@ExtendWith(TestServerExtension::class)
 internal class AudienceServiceAsyncTest {
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun retrieve() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val audienceServiceAsync = client.audiences()
 
         val audienceFuture = audienceServiceAsync.retrieve("audience_id")
@@ -32,14 +25,10 @@ internal class AudienceServiceAsyncTest {
         audience.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun update() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val audienceServiceAsync = client.audiences()
 
         val audienceFuture =
@@ -68,14 +57,10 @@ internal class AudienceServiceAsyncTest {
         audience.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun list() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val audienceServiceAsync = client.audiences()
 
         val audiencesFuture =
@@ -85,14 +70,10 @@ internal class AudienceServiceAsyncTest {
         audiences.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun delete() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val audienceServiceAsync = client.audiences()
 
         val future = audienceServiceAsync.delete("audience_id")
@@ -100,14 +81,10 @@ internal class AudienceServiceAsyncTest {
         val response = future.get()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun listMembers() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val audienceServiceAsync = client.audiences()
 
         val responseFuture =

@@ -2,7 +2,6 @@
 
 package com.courier.services.async.users
 
-import com.courier.TestServerExtension
 import com.courier.client.okhttp.CourierOkHttpClientAsync
 import com.courier.core.JsonValue
 import com.courier.models.tenants.TenantAssociation
@@ -12,19 +11,13 @@ import com.courier.models.users.tenants.TenantListParams
 import com.courier.models.users.tenants.TenantRemoveSingleParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 
-@ExtendWith(TestServerExtension::class)
 internal class TenantServiceAsyncTest {
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun list() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val tenantServiceAsync = client.users().tenants()
 
         val tenantsFuture =
@@ -36,14 +29,10 @@ internal class TenantServiceAsyncTest {
         tenants.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun addMultiple() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val tenantServiceAsync = client.users().tenants()
 
         val future =
@@ -68,14 +57,10 @@ internal class TenantServiceAsyncTest {
         val response = future.get()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun addSingle() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val tenantServiceAsync = client.users().tenants()
 
         val future =
@@ -94,14 +79,10 @@ internal class TenantServiceAsyncTest {
         val response = future.get()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun removeAll() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val tenantServiceAsync = client.users().tenants()
 
         val future = tenantServiceAsync.removeAll("user_id")
@@ -109,14 +90,10 @@ internal class TenantServiceAsyncTest {
         val response = future.get()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun removeSingle() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val tenantServiceAsync = client.users().tenants()
 
         val future =
