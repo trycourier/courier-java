@@ -1,3 +1,4 @@
+<!-- AUTO-GENERATED-OVERVIEW:START — Do not edit this section. It is synced from mintlify-docs. -->
 # Courier Java API Library
 
 <!-- x-release-please-start-version -->
@@ -673,3 +674,4 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
 We are keen for your feedback; please open an [issue](https://www.github.com/trycourier/courier-java/issues) with questions, bugs, or suggestions.
+<!-- AUTO-GENERATED-OVERVIEW:END -->
