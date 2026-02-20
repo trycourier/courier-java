@@ -1,5 +1,31 @@
 # Changelog
 
+## 4.10.0 (2026-02-20)
+
+Full Changelog: [v4.9.1...v4.10.0](https://github.com/trycourier/courier-java/compare/v4.9.1...v4.10.0)
+
+### Features
+
+* **client:** add connection pooling option ([b2e1bcb](https://github.com/trycourier/courier-java/commit/b2e1bcbd856bbe7d247497b2296dd8f368fdc6da))
+
+
+### Bug Fixes
+
+* **types:** remove brand field from ElementalContent model ([cb336a3](https://github.com/trycourier/courier-java/commit/cb336a3bb81b5e2bd25483be06c45bdfd518fe2b))
+
+
+### Chores
+
+* **internal:** make `OkHttp` constructor internal ([4e39320](https://github.com/trycourier/courier-java/commit/4e393200781dd186e45a32ff8d18be7083e83b31))
+* **internal:** remove mock server code ([b63945e](https://github.com/trycourier/courier-java/commit/b63945ee56673ba3e736de9d2170b0a27e7dcd82))
+* **internal:** update `TestServerExtension` comment ([26b5aed](https://github.com/trycourier/courier-java/commit/26b5aede00f47e7a0bae77e058e36a00361060b0))
+* update mock server docs ([ff62ef0](https://github.com/trycourier/courier-java/commit/ff62ef0c2c8c232f96a3b3e5ade9c6ac22a1b248))
+
+
+### Documentation
+
+* add AUTO-GENERATED-OVERVIEW markers for README sync ([#92](https://github.com/trycourier/courier-java/issues/92)) ([4bc2f46](https://github.com/trycourier/courier-java/commit/4bc2f4661c8c7d35d72234c1f5520eec71a39bcc))
+
 ## 4.9.1 (2026-02-07)
 
 Full Changelog: [v4.9.0...v4.9.1](https://github.com/trycourier/courier-java/compare/v4.9.0...v4.9.1)
