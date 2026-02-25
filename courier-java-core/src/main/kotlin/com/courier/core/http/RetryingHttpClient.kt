@@ -1,3 +1,5 @@
+// File generated from our OpenAPI spec by Stainless.
+
 package com.courier.core.http
 
 import com.courier.core.DefaultSleeper
