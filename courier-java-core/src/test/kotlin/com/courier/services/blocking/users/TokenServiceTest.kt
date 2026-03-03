@@ -8,7 +8,6 @@ import com.courier.models.users.tokens.TokenAddSingleParams
 import com.courier.models.users.tokens.TokenDeleteParams
 import com.courier.models.users.tokens.TokenRetrieveParams
 import com.courier.models.users.tokens.TokenUpdateParams
-import com.courier.models.users.tokens.UserToken
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
@@ -83,31 +82,26 @@ internal class TokenServiceTest {
         tokenService.addSingle(
             TokenAddSingleParams.builder()
                 .userId("user_id")
-                .pathToken("token")
-                .userToken(
-                    UserToken.builder()
-                        .token("token")
-                        .providerKey(UserToken.ProviderKey.FIREBASE_FCM)
-                        .device(
-                            UserToken.Device.builder()
-                                .adId("ad_id")
-                                .appId("app_id")
-                                .deviceId("device_id")
-                                .manufacturer("manufacturer")
-                                .model("model")
-                                .platform("platform")
-                                .build()
-                        )
-                        .expiryDate("string")
-                        .properties(JsonValue.from(mapOf<String, Any>()))
-                        .tracking(
-                            UserToken.Tracking.builder()
-                                .ip("ip")
-                                .lat("lat")
-                                .long_("long")
-                                .osVersion("os_version")
-                                .build()
-                        )
+                .token("token")
+                .providerKey(TokenAddSingleParams.ProviderKey.FIREBASE_FCM)
+                .device(
+                    TokenAddSingleParams.Device.builder()
+                        .adId("ad_id")
+                        .appId("app_id")
+                        .deviceId("device_id")
+                        .manufacturer("manufacturer")
+                        .model("model")
+                        .platform("platform")
+                        .build()
+                )
+                .expiryDate("string")
+                .properties(JsonValue.from(mapOf<String, Any>()))
+                .tracking(
+                    TokenAddSingleParams.Tracking.builder()
+                        .ip("ip")
+                        .lat("lat")
+                        .long_("long")
+                        .osVersion("os_version")
                         .build()
                 )
                 .build()
