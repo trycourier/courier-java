@@ -143,15 +143,15 @@ interface TokenService {
         addMultiple(userId, TokenAddMultipleParams.none(), requestOptions)
 
     /** Adds a single token to a user and overwrites a matching existing token. */
-    fun addSingle(pathToken: String, params: TokenAddSingleParams) =
-        addSingle(pathToken, params, RequestOptions.none())
+    fun addSingle(token: String, params: TokenAddSingleParams) =
+        addSingle(token, params, RequestOptions.none())
 
     /** @see addSingle */
     fun addSingle(
-        pathToken: String,
+        token: String,
         params: TokenAddSingleParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ) = addSingle(params.toBuilder().pathToken(pathToken).build(), requestOptions)
+    ) = addSingle(params.toBuilder().token(token).build(), requestOptions)
 
     /** @see addSingle */
     fun addSingle(params: TokenAddSingleParams) = addSingle(params, RequestOptions.none())
@@ -345,16 +345,16 @@ interface TokenService {
          * the same as [TokenService.addSingle].
          */
         @MustBeClosed
-        fun addSingle(pathToken: String, params: TokenAddSingleParams): HttpResponse =
-            addSingle(pathToken, params, RequestOptions.none())
+        fun addSingle(token: String, params: TokenAddSingleParams): HttpResponse =
+            addSingle(token, params, RequestOptions.none())
 
         /** @see addSingle */
         @MustBeClosed
         fun addSingle(
-            pathToken: String,
+            token: String,
             params: TokenAddSingleParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponse = addSingle(params.toBuilder().pathToken(pathToken).build(), requestOptions)
+        ): HttpResponse = addSingle(params.toBuilder().token(token).build(), requestOptions)
 
         /** @see addSingle */
         @MustBeClosed

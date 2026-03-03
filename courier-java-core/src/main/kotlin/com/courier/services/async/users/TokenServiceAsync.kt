@@ -162,16 +162,15 @@ interface TokenServiceAsync {
         addMultiple(userId, TokenAddMultipleParams.none(), requestOptions)
 
     /** Adds a single token to a user and overwrites a matching existing token. */
-    fun addSingle(pathToken: String, params: TokenAddSingleParams): CompletableFuture<Void?> =
-        addSingle(pathToken, params, RequestOptions.none())
+    fun addSingle(token: String, params: TokenAddSingleParams): CompletableFuture<Void?> =
+        addSingle(token, params, RequestOptions.none())
 
     /** @see addSingle */
     fun addSingle(
-        pathToken: String,
+        token: String,
         params: TokenAddSingleParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<Void?> =
-        addSingle(params.toBuilder().pathToken(pathToken).build(), requestOptions)
+    ): CompletableFuture<Void?> = addSingle(params.toBuilder().token(token).build(), requestOptions)
 
     /** @see addSingle */
     fun addSingle(params: TokenAddSingleParams): CompletableFuture<Void?> =
@@ -357,17 +356,17 @@ interface TokenServiceAsync {
          * the same as [TokenServiceAsync.addSingle].
          */
         fun addSingle(
-            pathToken: String,
+            token: String,
             params: TokenAddSingleParams,
-        ): CompletableFuture<HttpResponse> = addSingle(pathToken, params, RequestOptions.none())
+        ): CompletableFuture<HttpResponse> = addSingle(token, params, RequestOptions.none())
 
         /** @see addSingle */
         fun addSingle(
-            pathToken: String,
+            token: String,
             params: TokenAddSingleParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponse> =
-            addSingle(params.toBuilder().pathToken(pathToken).build(), requestOptions)
+            addSingle(params.toBuilder().token(token).build(), requestOptions)
 
         /** @see addSingle */
         fun addSingle(params: TokenAddSingleParams): CompletableFuture<HttpResponse> =
