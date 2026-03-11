@@ -18,6 +18,8 @@ import com.courier.services.async.BulkServiceAsync
 import com.courier.services.async.BulkServiceAsyncImpl
 import com.courier.services.async.InboundServiceAsync
 import com.courier.services.async.InboundServiceAsyncImpl
+import com.courier.services.async.JourneyServiceAsync
+import com.courier.services.async.JourneyServiceAsyncImpl
 import com.courier.services.async.ListServiceAsync
 import com.courier.services.async.ListServiceAsyncImpl
 import com.courier.services.async.MessageServiceAsync
@@ -69,6 +71,10 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
 
     private val automations: AutomationServiceAsync by lazy {
         AutomationServiceAsyncImpl(clientOptionsWithUserAgent)
+    }
+
+    private val journeys: JourneyServiceAsync by lazy {
+        JourneyServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
     private val brands: BrandServiceAsync by lazy {
@@ -126,6 +132,8 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
 
     override fun automations(): AutomationServiceAsync = automations
 
+    override fun journeys(): JourneyServiceAsync = journeys
+
     override fun brands(): BrandServiceAsync = brands
 
     override fun bulk(): BulkServiceAsync = bulk
@@ -171,6 +179,10 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
 
         private val automations: AutomationServiceAsync.WithRawResponse by lazy {
             AutomationServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val journeys: JourneyServiceAsync.WithRawResponse by lazy {
+            JourneyServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
         private val brands: BrandServiceAsync.WithRawResponse by lazy {
@@ -233,6 +245,8 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
         override fun auth(): AuthServiceAsync.WithRawResponse = auth
 
         override fun automations(): AutomationServiceAsync.WithRawResponse = automations
+
+        override fun journeys(): JourneyServiceAsync.WithRawResponse = journeys
 
         override fun brands(): BrandServiceAsync.WithRawResponse = brands
 
