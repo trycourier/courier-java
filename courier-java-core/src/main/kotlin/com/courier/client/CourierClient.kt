@@ -10,6 +10,7 @@ import com.courier.services.blocking.AutomationService
 import com.courier.services.blocking.BrandService
 import com.courier.services.blocking.BulkService
 import com.courier.services.blocking.InboundService
+import com.courier.services.blocking.JourneyService
 import com.courier.services.blocking.ListService
 import com.courier.services.blocking.MessageService
 import com.courier.services.blocking.NotificationService
@@ -67,6 +68,8 @@ interface CourierClient {
 
     fun automations(): AutomationService
 
+    fun journeys(): JourneyService
+
     fun brands(): BrandService
 
     fun bulk(): BulkService
@@ -121,6 +124,8 @@ interface CourierClient {
         fun auth(): AuthService.WithRawResponse
 
         fun automations(): AutomationService.WithRawResponse
+
+        fun journeys(): JourneyService.WithRawResponse
 
         fun brands(): BrandService.WithRawResponse
 
