@@ -23,17 +23,17 @@ class MessageRetrieveResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
-    private val clicked: JsonField<Long>,
-    private val delivered: JsonField<Long>,
     private val enqueued: JsonField<Long>,
     private val event: JsonField<String>,
     private val notification: JsonField<String>,
-    private val opened: JsonField<Long>,
     private val recipient: JsonField<String>,
-    private val sent: JsonField<Long>,
     private val status: JsonField<MessageDetails.Status>,
+    private val clicked: JsonField<Long>,
+    private val delivered: JsonField<Long>,
     private val error: JsonField<String>,
+    private val opened: JsonField<Long>,
     private val reason: JsonField<MessageDetails.Reason>,
+    private val sent: JsonField<Long>,
     private val providers: JsonField<List<Provider>>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
@@ -41,39 +41,39 @@ private constructor(
     @JsonCreator
     private constructor(
         @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("clicked") @ExcludeMissing clicked: JsonField<Long> = JsonMissing.of(),
-        @JsonProperty("delivered") @ExcludeMissing delivered: JsonField<Long> = JsonMissing.of(),
         @JsonProperty("enqueued") @ExcludeMissing enqueued: JsonField<Long> = JsonMissing.of(),
         @JsonProperty("event") @ExcludeMissing event: JsonField<String> = JsonMissing.of(),
         @JsonProperty("notification")
         @ExcludeMissing
         notification: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("opened") @ExcludeMissing opened: JsonField<Long> = JsonMissing.of(),
         @JsonProperty("recipient") @ExcludeMissing recipient: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("sent") @ExcludeMissing sent: JsonField<Long> = JsonMissing.of(),
         @JsonProperty("status")
         @ExcludeMissing
         status: JsonField<MessageDetails.Status> = JsonMissing.of(),
+        @JsonProperty("clicked") @ExcludeMissing clicked: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("delivered") @ExcludeMissing delivered: JsonField<Long> = JsonMissing.of(),
         @JsonProperty("error") @ExcludeMissing error: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("opened") @ExcludeMissing opened: JsonField<Long> = JsonMissing.of(),
         @JsonProperty("reason")
         @ExcludeMissing
         reason: JsonField<MessageDetails.Reason> = JsonMissing.of(),
+        @JsonProperty("sent") @ExcludeMissing sent: JsonField<Long> = JsonMissing.of(),
         @JsonProperty("providers")
         @ExcludeMissing
         providers: JsonField<List<Provider>> = JsonMissing.of(),
     ) : this(
         id,
-        clicked,
-        delivered,
         enqueued,
         event,
         notification,
-        opened,
         recipient,
-        sent,
         status,
+        clicked,
+        delivered,
         error,
+        opened,
         reason,
+        sent,
         providers,
         mutableMapOf(),
     )
@@ -81,17 +81,17 @@ private constructor(
     fun toMessageDetails(): MessageDetails =
         MessageDetails.builder()
             .id(id)
-            .clicked(clicked)
-            .delivered(delivered)
             .enqueued(enqueued)
             .event(event)
             .notification(notification)
-            .opened(opened)
             .recipient(recipient)
-            .sent(sent)
             .status(status)
+            .clicked(clicked)
+            .delivered(delivered)
             .error(error)
+            .opened(opened)
             .reason(reason)
+            .sent(sent)
             .build()
 
     /**
@@ -101,24 +101,6 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun id(): String = id.getRequired("id")
-
-    /**
-     * A UTC timestamp at which the recipient clicked on a tracked link for the first time. Stored
-     * as a millisecond representation of the Unix epoch.
-     *
-     * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
-    fun clicked(): Long = clicked.getRequired("clicked")
-
-    /**
-     * A UTC timestamp at which the Integration provider delivered the message. Stored as a
-     * millisecond representation of the Unix epoch.
-     *
-     * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
-    fun delivered(): Long = delivered.getRequired("delivered")
 
     /**
      * A UTC timestamp at which Courier received the message request. Stored as a millisecond
@@ -146,30 +128,12 @@ private constructor(
     fun notification(): String = notification.getRequired("notification")
 
     /**
-     * A UTC timestamp at which the recipient opened a message for the first time. Stored as a
-     * millisecond representation of the Unix epoch.
-     *
-     * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
-    fun opened(): Long = opened.getRequired("opened")
-
-    /**
      * A unique identifier associated with the recipient of the delivered message.
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun recipient(): String = recipient.getRequired("recipient")
-
-    /**
-     * A UTC timestamp at which Courier passed the message to the Integration provider. Stored as a
-     * millisecond representation of the Unix epoch.
-     *
-     * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
-    fun sent(): Long = sent.getRequired("sent")
 
     /**
      * The current status of the message.
@@ -180,6 +144,24 @@ private constructor(
     fun status(): MessageDetails.Status = status.getRequired("status")
 
     /**
+     * A UTC timestamp at which the recipient clicked on a tracked link for the first time. Stored
+     * as a millisecond representation of the Unix epoch.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun clicked(): Optional<Long> = clicked.getOptional("clicked")
+
+    /**
+     * A UTC timestamp at which the Integration provider delivered the message. Stored as a
+     * millisecond representation of the Unix epoch.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun delivered(): Optional<Long> = delivered.getOptional("delivered")
+
+    /**
      * A message describing the error that occurred.
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -188,12 +170,30 @@ private constructor(
     fun error(): Optional<String> = error.getOptional("error")
 
     /**
+     * A UTC timestamp at which the recipient opened a message for the first time. Stored as a
+     * millisecond representation of the Unix epoch.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun opened(): Optional<Long> = opened.getOptional("opened")
+
+    /**
      * The reason for the current status of the message.
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun reason(): Optional<MessageDetails.Reason> = reason.getOptional("reason")
+
+    /**
+     * A UTC timestamp at which Courier passed the message to the Integration provider. Stored as a
+     * millisecond representation of the Unix epoch.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun sent(): Optional<Long> = sent.getOptional("sent")
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -207,20 +207,6 @@ private constructor(
      * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
-
-    /**
-     * Returns the raw JSON value of [clicked].
-     *
-     * Unlike [clicked], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("clicked") @ExcludeMissing fun _clicked(): JsonField<Long> = clicked
-
-    /**
-     * Returns the raw JSON value of [delivered].
-     *
-     * Unlike [delivered], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("delivered") @ExcludeMissing fun _delivered(): JsonField<Long> = delivered
 
     /**
      * Returns the raw JSON value of [enqueued].
@@ -246,25 +232,11 @@ private constructor(
     fun _notification(): JsonField<String> = notification
 
     /**
-     * Returns the raw JSON value of [opened].
-     *
-     * Unlike [opened], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("opened") @ExcludeMissing fun _opened(): JsonField<Long> = opened
-
-    /**
      * Returns the raw JSON value of [recipient].
      *
      * Unlike [recipient], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("recipient") @ExcludeMissing fun _recipient(): JsonField<String> = recipient
-
-    /**
-     * Returns the raw JSON value of [sent].
-     *
-     * Unlike [sent], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("sent") @ExcludeMissing fun _sent(): JsonField<Long> = sent
 
     /**
      * Returns the raw JSON value of [status].
@@ -274,6 +246,20 @@ private constructor(
     @JsonProperty("status") @ExcludeMissing fun _status(): JsonField<MessageDetails.Status> = status
 
     /**
+     * Returns the raw JSON value of [clicked].
+     *
+     * Unlike [clicked], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("clicked") @ExcludeMissing fun _clicked(): JsonField<Long> = clicked
+
+    /**
+     * Returns the raw JSON value of [delivered].
+     *
+     * Unlike [delivered], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("delivered") @ExcludeMissing fun _delivered(): JsonField<Long> = delivered
+
+    /**
      * Returns the raw JSON value of [error].
      *
      * Unlike [error], this method doesn't throw if the JSON field has an unexpected type.
@@ -281,11 +267,25 @@ private constructor(
     @JsonProperty("error") @ExcludeMissing fun _error(): JsonField<String> = error
 
     /**
+     * Returns the raw JSON value of [opened].
+     *
+     * Unlike [opened], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("opened") @ExcludeMissing fun _opened(): JsonField<Long> = opened
+
+    /**
      * Returns the raw JSON value of [reason].
      *
      * Unlike [reason], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("reason") @ExcludeMissing fun _reason(): JsonField<MessageDetails.Reason> = reason
+
+    /**
+     * Returns the raw JSON value of [sent].
+     *
+     * Unlike [sent], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("sent") @ExcludeMissing fun _sent(): JsonField<Long> = sent
 
     /**
      * Returns the raw JSON value of [providers].
@@ -316,14 +316,10 @@ private constructor(
          * The following fields are required:
          * ```java
          * .id()
-         * .clicked()
-         * .delivered()
          * .enqueued()
          * .event()
          * .notification()
-         * .opened()
          * .recipient()
-         * .sent()
          * .status()
          * ```
          */
@@ -334,34 +330,34 @@ private constructor(
     class Builder internal constructor() {
 
         private var id: JsonField<String>? = null
-        private var clicked: JsonField<Long>? = null
-        private var delivered: JsonField<Long>? = null
         private var enqueued: JsonField<Long>? = null
         private var event: JsonField<String>? = null
         private var notification: JsonField<String>? = null
-        private var opened: JsonField<Long>? = null
         private var recipient: JsonField<String>? = null
-        private var sent: JsonField<Long>? = null
         private var status: JsonField<MessageDetails.Status>? = null
+        private var clicked: JsonField<Long> = JsonMissing.of()
+        private var delivered: JsonField<Long> = JsonMissing.of()
         private var error: JsonField<String> = JsonMissing.of()
+        private var opened: JsonField<Long> = JsonMissing.of()
         private var reason: JsonField<MessageDetails.Reason> = JsonMissing.of()
+        private var sent: JsonField<Long> = JsonMissing.of()
         private var providers: JsonField<MutableList<Provider>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(messageRetrieveResponse: MessageRetrieveResponse) = apply {
             id = messageRetrieveResponse.id
-            clicked = messageRetrieveResponse.clicked
-            delivered = messageRetrieveResponse.delivered
             enqueued = messageRetrieveResponse.enqueued
             event = messageRetrieveResponse.event
             notification = messageRetrieveResponse.notification
-            opened = messageRetrieveResponse.opened
             recipient = messageRetrieveResponse.recipient
-            sent = messageRetrieveResponse.sent
             status = messageRetrieveResponse.status
+            clicked = messageRetrieveResponse.clicked
+            delivered = messageRetrieveResponse.delivered
             error = messageRetrieveResponse.error
+            opened = messageRetrieveResponse.opened
             reason = messageRetrieveResponse.reason
+            sent = messageRetrieveResponse.sent
             providers = messageRetrieveResponse.providers.map { it.toMutableList() }
             additionalProperties = messageRetrieveResponse.additionalProperties.toMutableMap()
         }
@@ -379,34 +375,6 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun id(id: JsonField<String>) = apply { this.id = id }
-
-        /**
-         * A UTC timestamp at which the recipient clicked on a tracked link for the first time.
-         * Stored as a millisecond representation of the Unix epoch.
-         */
-        fun clicked(clicked: Long) = clicked(JsonField.of(clicked))
-
-        /**
-         * Sets [Builder.clicked] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.clicked] with a well-typed [Long] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun clicked(clicked: JsonField<Long>) = apply { this.clicked = clicked }
-
-        /**
-         * A UTC timestamp at which the Integration provider delivered the message. Stored as a
-         * millisecond representation of the Unix epoch.
-         */
-        fun delivered(delivered: Long) = delivered(JsonField.of(delivered))
-
-        /**
-         * Sets [Builder.delivered] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.delivered] with a well-typed [Long] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun delivered(delivered: JsonField<Long>) = apply { this.delivered = delivered }
 
         /**
          * A UTC timestamp at which Courier received the message request. Stored as a millisecond
@@ -447,20 +415,6 @@ private constructor(
             this.notification = notification
         }
 
-        /**
-         * A UTC timestamp at which the recipient opened a message for the first time. Stored as a
-         * millisecond representation of the Unix epoch.
-         */
-        fun opened(opened: Long) = opened(JsonField.of(opened))
-
-        /**
-         * Sets [Builder.opened] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.opened] with a well-typed [Long] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun opened(opened: JsonField<Long>) = apply { this.opened = opened }
-
         /** A unique identifier associated with the recipient of the delivered message. */
         fun recipient(recipient: String) = recipient(JsonField.of(recipient))
 
@@ -473,20 +427,6 @@ private constructor(
          */
         fun recipient(recipient: JsonField<String>) = apply { this.recipient = recipient }
 
-        /**
-         * A UTC timestamp at which Courier passed the message to the Integration provider. Stored
-         * as a millisecond representation of the Unix epoch.
-         */
-        fun sent(sent: Long) = sent(JsonField.of(sent))
-
-        /**
-         * Sets [Builder.sent] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.sent] with a well-typed [Long] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun sent(sent: JsonField<Long>) = apply { this.sent = sent }
-
         /** The current status of the message. */
         fun status(status: MessageDetails.Status) = status(JsonField.of(status))
 
@@ -498,6 +438,34 @@ private constructor(
          * supported value.
          */
         fun status(status: JsonField<MessageDetails.Status>) = apply { this.status = status }
+
+        /**
+         * A UTC timestamp at which the recipient clicked on a tracked link for the first time.
+         * Stored as a millisecond representation of the Unix epoch.
+         */
+        fun clicked(clicked: Long) = clicked(JsonField.of(clicked))
+
+        /**
+         * Sets [Builder.clicked] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.clicked] with a well-typed [Long] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun clicked(clicked: JsonField<Long>) = apply { this.clicked = clicked }
+
+        /**
+         * A UTC timestamp at which the Integration provider delivered the message. Stored as a
+         * millisecond representation of the Unix epoch.
+         */
+        fun delivered(delivered: Long) = delivered(JsonField.of(delivered))
+
+        /**
+         * Sets [Builder.delivered] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.delivered] with a well-typed [Long] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun delivered(delivered: JsonField<Long>) = apply { this.delivered = delivered }
 
         /** A message describing the error that occurred. */
         fun error(error: String?) = error(JsonField.ofNullable(error))
@@ -513,6 +481,20 @@ private constructor(
          */
         fun error(error: JsonField<String>) = apply { this.error = error }
 
+        /**
+         * A UTC timestamp at which the recipient opened a message for the first time. Stored as a
+         * millisecond representation of the Unix epoch.
+         */
+        fun opened(opened: Long) = opened(JsonField.of(opened))
+
+        /**
+         * Sets [Builder.opened] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.opened] with a well-typed [Long] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun opened(opened: JsonField<Long>) = apply { this.opened = opened }
+
         /** The reason for the current status of the message. */
         fun reason(reason: MessageDetails.Reason?) = reason(JsonField.ofNullable(reason))
 
@@ -527,6 +509,20 @@ private constructor(
          * supported value.
          */
         fun reason(reason: JsonField<MessageDetails.Reason>) = apply { this.reason = reason }
+
+        /**
+         * A UTC timestamp at which Courier passed the message to the Integration provider. Stored
+         * as a millisecond representation of the Unix epoch.
+         */
+        fun sent(sent: Long) = sent(JsonField.of(sent))
+
+        /**
+         * Sets [Builder.sent] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.sent] with a well-typed [Long] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun sent(sent: JsonField<Long>) = apply { this.sent = sent }
 
         fun providers(providers: List<Provider>?) = providers(JsonField.ofNullable(providers))
 
@@ -583,14 +579,10 @@ private constructor(
          * The following fields are required:
          * ```java
          * .id()
-         * .clicked()
-         * .delivered()
          * .enqueued()
          * .event()
          * .notification()
-         * .opened()
          * .recipient()
-         * .sent()
          * .status()
          * ```
          *
@@ -599,17 +591,17 @@ private constructor(
         fun build(): MessageRetrieveResponse =
             MessageRetrieveResponse(
                 checkRequired("id", id),
-                checkRequired("clicked", clicked),
-                checkRequired("delivered", delivered),
                 checkRequired("enqueued", enqueued),
                 checkRequired("event", event),
                 checkRequired("notification", notification),
-                checkRequired("opened", opened),
                 checkRequired("recipient", recipient),
-                checkRequired("sent", sent),
                 checkRequired("status", status),
+                clicked,
+                delivered,
                 error,
+                opened,
                 reason,
+                sent,
                 (providers ?: JsonMissing.of()).map { it.toImmutable() },
                 additionalProperties.toMutableMap(),
             )
@@ -623,17 +615,17 @@ private constructor(
         }
 
         id()
-        clicked()
-        delivered()
         enqueued()
         event()
         notification()
-        opened()
         recipient()
-        sent()
         status().validate()
+        clicked()
+        delivered()
         error()
+        opened()
         reason().ifPresent { it.validate() }
+        sent()
         providers().ifPresent { it.forEach { it.validate() } }
         validated = true
     }
@@ -654,17 +646,17 @@ private constructor(
     @JvmSynthetic
     internal fun validity(): Int =
         (if (id.asKnown().isPresent) 1 else 0) +
-            (if (clicked.asKnown().isPresent) 1 else 0) +
-            (if (delivered.asKnown().isPresent) 1 else 0) +
             (if (enqueued.asKnown().isPresent) 1 else 0) +
             (if (event.asKnown().isPresent) 1 else 0) +
             (if (notification.asKnown().isPresent) 1 else 0) +
-            (if (opened.asKnown().isPresent) 1 else 0) +
             (if (recipient.asKnown().isPresent) 1 else 0) +
-            (if (sent.asKnown().isPresent) 1 else 0) +
             (status.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (clicked.asKnown().isPresent) 1 else 0) +
+            (if (delivered.asKnown().isPresent) 1 else 0) +
             (if (error.asKnown().isPresent) 1 else 0) +
+            (if (opened.asKnown().isPresent) 1 else 0) +
             (reason.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (sent.asKnown().isPresent) 1 else 0) +
             (providers.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
 
     class Provider
@@ -773,17 +765,17 @@ private constructor(
 
         return other is MessageRetrieveResponse &&
             id == other.id &&
-            clicked == other.clicked &&
-            delivered == other.delivered &&
             enqueued == other.enqueued &&
             event == other.event &&
             notification == other.notification &&
-            opened == other.opened &&
             recipient == other.recipient &&
-            sent == other.sent &&
             status == other.status &&
+            clicked == other.clicked &&
+            delivered == other.delivered &&
             error == other.error &&
+            opened == other.opened &&
             reason == other.reason &&
+            sent == other.sent &&
             providers == other.providers &&
             additionalProperties == other.additionalProperties
     }
@@ -791,17 +783,17 @@ private constructor(
     private val hashCode: Int by lazy {
         Objects.hash(
             id,
-            clicked,
-            delivered,
             enqueued,
             event,
             notification,
-            opened,
             recipient,
-            sent,
             status,
+            clicked,
+            delivered,
             error,
+            opened,
             reason,
+            sent,
             providers,
             additionalProperties,
         )
@@ -810,5 +802,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "MessageRetrieveResponse{id=$id, clicked=$clicked, delivered=$delivered, enqueued=$enqueued, event=$event, notification=$notification, opened=$opened, recipient=$recipient, sent=$sent, status=$status, error=$error, reason=$reason, providers=$providers, additionalProperties=$additionalProperties}"
+        "MessageRetrieveResponse{id=$id, enqueued=$enqueued, event=$event, notification=$notification, recipient=$recipient, status=$status, clicked=$clicked, delivered=$delivered, error=$error, opened=$opened, reason=$reason, sent=$sent, providers=$providers, additionalProperties=$additionalProperties}"
 }
