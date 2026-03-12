@@ -224,7 +224,7 @@ class TokenServiceImpl internal constructor(private val clientOptions: ClientOpt
         ): HttpResponse {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
-            checkRequired("pathToken", params.pathToken().getOrNull())
+            checkRequired("token", params.token().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)

@@ -2,7 +2,6 @@
 
 package com.courier.services.blocking.lists
 
-import com.courier.TestServerExtension
 import com.courier.client.okhttp.CourierOkHttpClient
 import com.courier.core.JsonValue
 import com.courier.models.RecipientPreferences
@@ -14,19 +13,13 @@ import com.courier.models.lists.subscriptions.SubscriptionSubscribeUserParams
 import com.courier.models.lists.subscriptions.SubscriptionUnsubscribeUserParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 
-@ExtendWith(TestServerExtension::class)
 internal class SubscriptionServiceTest {
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun list() {
-        val client =
-            CourierOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
         val subscriptionService = client.lists().subscriptions()
 
         val subscriptions =
@@ -37,14 +30,10 @@ internal class SubscriptionServiceTest {
         subscriptions.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun add() {
-        val client =
-            CourierOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
         val subscriptionService = client.lists().subscriptions()
 
         subscriptionService.add(
@@ -109,14 +98,10 @@ internal class SubscriptionServiceTest {
         )
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun subscribe() {
-        val client =
-            CourierOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
         val subscriptionService = client.lists().subscriptions()
 
         subscriptionService.subscribe(
@@ -181,14 +166,10 @@ internal class SubscriptionServiceTest {
         )
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun subscribeUser() {
-        val client =
-            CourierOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
         val subscriptionService = client.lists().subscriptions()
 
         subscriptionService.subscribeUser(
@@ -239,14 +220,10 @@ internal class SubscriptionServiceTest {
         )
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun unsubscribeUser() {
-        val client =
-            CourierOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
         val subscriptionService = client.lists().subscriptions()
 
         subscriptionService.unsubscribeUser(

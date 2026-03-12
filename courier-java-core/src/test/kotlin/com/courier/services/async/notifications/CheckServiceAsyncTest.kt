@@ -2,7 +2,6 @@
 
 package com.courier.services.async.notifications
 
-import com.courier.TestServerExtension
 import com.courier.client.okhttp.CourierOkHttpClientAsync
 import com.courier.models.notifications.BaseCheck
 import com.courier.models.notifications.checks.CheckDeleteParams
@@ -10,19 +9,13 @@ import com.courier.models.notifications.checks.CheckListParams
 import com.courier.models.notifications.checks.CheckUpdateParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 
-@ExtendWith(TestServerExtension::class)
 internal class CheckServiceAsyncTest {
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun update() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val checkServiceAsync = client.notifications().checks()
 
         val checkFuture =
@@ -44,14 +37,10 @@ internal class CheckServiceAsyncTest {
         check.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun list() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val checkServiceAsync = client.notifications().checks()
 
         val checksFuture =
@@ -63,14 +52,10 @@ internal class CheckServiceAsyncTest {
         checks.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun delete() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val checkServiceAsync = client.notifications().checks()
 
         val future =

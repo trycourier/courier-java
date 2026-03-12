@@ -2,7 +2,6 @@
 
 package com.courier.services.async.users
 
-import com.courier.TestServerExtension
 import com.courier.client.okhttp.CourierOkHttpClientAsync
 import com.courier.models.ChannelClassification
 import com.courier.models.PreferenceStatus
@@ -11,19 +10,13 @@ import com.courier.models.users.preferences.PreferenceRetrieveTopicParams
 import com.courier.models.users.preferences.PreferenceUpdateOrCreateTopicParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 
-@ExtendWith(TestServerExtension::class)
 internal class PreferenceServiceAsyncTest {
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun retrieve() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val preferenceServiceAsync = client.users().preferences()
 
         val preferenceFuture =
@@ -35,14 +28,10 @@ internal class PreferenceServiceAsyncTest {
         preference.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun retrieveTopic() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val preferenceServiceAsync = client.users().preferences()
 
         val responseFuture =
@@ -58,14 +47,10 @@ internal class PreferenceServiceAsyncTest {
         response.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun updateOrCreateTopic() {
-        val client =
-            CourierOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val preferenceServiceAsync = client.users().preferences()
 
         val responseFuture =
