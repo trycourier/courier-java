@@ -8,7 +8,7 @@ The Courier Java SDK provides typed access to the Courier REST API from applicat
 ### Gradle
 
 ```kotlin
-implementation("com.courier:courier-java:4.10.0")
+implementation("com.courier:courier-java:LATEST_VERSION")
 ```
 
 ### Maven
@@ -17,9 +17,11 @@ implementation("com.courier:courier-java:4.10.0")
 <dependency>
   <groupId>com.courier</groupId>
   <artifactId>courier-java</artifactId>
-  <version>4.10.0</version>
+  <version>LATEST_VERSION</version>
 </dependency>
 ```
+
+Find the latest version on [Maven Central](https://central.sonatype.com/artifact/com.courier/courier-java).
 
 ## Quick Start
 
