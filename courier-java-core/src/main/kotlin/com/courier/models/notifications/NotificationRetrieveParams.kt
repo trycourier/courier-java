@@ -9,24 +9,25 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** List notification templates in your workspace. */
-class NotificationListParams
+/**
+ * Retrieve a notification template by ID. Returns the published version by default. Pass
+ * version=draft to retrieve an unpublished template.
+ */
+class NotificationRetrieveParams
 private constructor(
-    private val cursor: String?,
-    private val eventId: String?,
-    private val notes: Boolean?,
+    private val id: String?,
+    private val version: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    /** Opaque pagination cursor from a previous response. Omit for the first page. */
-    fun cursor(): Optional<String> = Optional.ofNullable(cursor)
+    fun id(): Optional<String> = Optional.ofNullable(id)
 
-    /** Filter to templates linked to this event map ID. */
-    fun eventId(): Optional<String> = Optional.ofNullable(eventId)
-
-    /** Include template notes in the response. Only applies to legacy templates. */
-    fun notes(): Optional<Boolean> = Optional.ofNullable(notes)
+    /**
+     * Version to retrieve. One of "draft", "published", or a version string like "v001". Defaults
+     * to "published".
+     */
+    fun version(): Optional<String> = Optional.ofNullable(version)
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -38,54 +39,43 @@ private constructor(
 
     companion object {
 
-        @JvmStatic fun none(): NotificationListParams = builder().build()
+        @JvmStatic fun none(): NotificationRetrieveParams = builder().build()
 
-        /** Returns a mutable builder for constructing an instance of [NotificationListParams]. */
+        /**
+         * Returns a mutable builder for constructing an instance of [NotificationRetrieveParams].
+         */
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [NotificationListParams]. */
+    /** A builder for [NotificationRetrieveParams]. */
     class Builder internal constructor() {
 
-        private var cursor: String? = null
-        private var eventId: String? = null
-        private var notes: Boolean? = null
+        private var id: String? = null
+        private var version: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(notificationListParams: NotificationListParams) = apply {
-            cursor = notificationListParams.cursor
-            eventId = notificationListParams.eventId
-            notes = notificationListParams.notes
-            additionalHeaders = notificationListParams.additionalHeaders.toBuilder()
-            additionalQueryParams = notificationListParams.additionalQueryParams.toBuilder()
+        internal fun from(notificationRetrieveParams: NotificationRetrieveParams) = apply {
+            id = notificationRetrieveParams.id
+            version = notificationRetrieveParams.version
+            additionalHeaders = notificationRetrieveParams.additionalHeaders.toBuilder()
+            additionalQueryParams = notificationRetrieveParams.additionalQueryParams.toBuilder()
         }
 
-        /** Opaque pagination cursor from a previous response. Omit for the first page. */
-        fun cursor(cursor: String?) = apply { this.cursor = cursor }
+        fun id(id: String?) = apply { this.id = id }
 
-        /** Alias for calling [Builder.cursor] with `cursor.orElse(null)`. */
-        fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
-
-        /** Filter to templates linked to this event map ID. */
-        fun eventId(eventId: String?) = apply { this.eventId = eventId }
-
-        /** Alias for calling [Builder.eventId] with `eventId.orElse(null)`. */
-        fun eventId(eventId: Optional<String>) = eventId(eventId.getOrNull())
-
-        /** Include template notes in the response. Only applies to legacy templates. */
-        fun notes(notes: Boolean?) = apply { this.notes = notes }
+        /** Alias for calling [Builder.id] with `id.orElse(null)`. */
+        fun id(id: Optional<String>) = id(id.getOrNull())
 
         /**
-         * Alias for [Builder.notes].
-         *
-         * This unboxed primitive overload exists for backwards compatibility.
+         * Version to retrieve. One of "draft", "published", or a version string like "v001".
+         * Defaults to "published".
          */
-        fun notes(notes: Boolean) = notes(notes as Boolean?)
+        fun version(version: String?) = apply { this.version = version }
 
-        /** Alias for calling [Builder.notes] with `notes.orElse(null)`. */
-        fun notes(notes: Optional<Boolean>) = notes(notes.getOrNull())
+        /** Alias for calling [Builder.version] with `version.orElse(null)`. */
+        fun version(version: Optional<String>) = version(version.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -186,28 +176,31 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [NotificationListParams].
+         * Returns an immutable instance of [NotificationRetrieveParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          */
-        fun build(): NotificationListParams =
-            NotificationListParams(
-                cursor,
-                eventId,
-                notes,
+        fun build(): NotificationRetrieveParams =
+            NotificationRetrieveParams(
+                id,
+                version,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
     }
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> id ?: ""
+            else -> ""
+        }
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams =
         QueryParams.builder()
             .apply {
-                cursor?.let { put("cursor", it) }
-                eventId?.let { put("event_id", it) }
-                notes?.let { put("notes", it.toString()) }
+                version?.let { put("version", it) }
                 putAll(additionalQueryParams)
             }
             .build()
@@ -217,17 +210,16 @@ private constructor(
             return true
         }
 
-        return other is NotificationListParams &&
-            cursor == other.cursor &&
-            eventId == other.eventId &&
-            notes == other.notes &&
+        return other is NotificationRetrieveParams &&
+            id == other.id &&
+            version == other.version &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(cursor, eventId, notes, additionalHeaders, additionalQueryParams)
+        Objects.hash(id, version, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "NotificationListParams{cursor=$cursor, eventId=$eventId, notes=$notes, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "NotificationRetrieveParams{id=$id, version=$version, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
