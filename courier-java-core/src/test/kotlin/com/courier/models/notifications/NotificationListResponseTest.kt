@@ -17,7 +17,7 @@ internal class NotificationListResponseTest {
             NotificationListResponse.builder()
                 .paging(Paging.builder().more(true).cursor("cursor").build())
                 .addResult(
-                    NotificationListResponse.Result.builder()
+                    NotificationListResponse.Result.Notification.builder()
                         .id("id")
                         .createdAt(0L)
                         .addEventId("string")
@@ -31,9 +31,9 @@ internal class NotificationListResponseTest {
                         .topicId("topic_id")
                         .updatedAt(0L)
                         .tags(
-                            NotificationListResponse.Result.Tags.builder()
+                            NotificationListResponse.Result.Notification.Tags.builder()
                                 .addData(
-                                    NotificationListResponse.Result.Tags.Data.builder()
+                                    NotificationListResponse.Result.Notification.Tags.Data.builder()
                                         .id("id")
                                         .name("name")
                                         .build()
@@ -49,42 +49,8 @@ internal class NotificationListResponseTest {
             .isEqualTo(Paging.builder().more(true).cursor("cursor").build())
         assertThat(notificationListResponse.results())
             .containsExactly(
-                NotificationListResponse.Result.builder()
-                    .id("id")
-                    .createdAt(0L)
-                    .addEventId("string")
-                    .note("note")
-                    .routing(
-                        MessageRouting.builder()
-                            .addChannel("string")
-                            .method(MessageRouting.Method.ALL)
-                            .build()
-                    )
-                    .topicId("topic_id")
-                    .updatedAt(0L)
-                    .tags(
-                        NotificationListResponse.Result.Tags.builder()
-                            .addData(
-                                NotificationListResponse.Result.Tags.Data.builder()
-                                    .id("id")
-                                    .name("name")
-                                    .build()
-                            )
-                            .build()
-                    )
-                    .title("title")
-                    .build()
-            )
-    }
-
-    @Test
-    fun roundtrip() {
-        val jsonMapper = jsonMapper()
-        val notificationListResponse =
-            NotificationListResponse.builder()
-                .paging(Paging.builder().more(true).cursor("cursor").build())
-                .addResult(
-                    NotificationListResponse.Result.builder()
+                NotificationListResponse.Result.ofNotification(
+                    NotificationListResponse.Result.Notification.builder()
                         .id("id")
                         .createdAt(0L)
                         .addEventId("string")
@@ -98,9 +64,45 @@ internal class NotificationListResponseTest {
                         .topicId("topic_id")
                         .updatedAt(0L)
                         .tags(
-                            NotificationListResponse.Result.Tags.builder()
+                            NotificationListResponse.Result.Notification.Tags.builder()
                                 .addData(
-                                    NotificationListResponse.Result.Tags.Data.builder()
+                                    NotificationListResponse.Result.Notification.Tags.Data.builder()
+                                        .id("id")
+                                        .name("name")
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .title("title")
+                        .build()
+                )
+            )
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val notificationListResponse =
+            NotificationListResponse.builder()
+                .paging(Paging.builder().more(true).cursor("cursor").build())
+                .addResult(
+                    NotificationListResponse.Result.Notification.builder()
+                        .id("id")
+                        .createdAt(0L)
+                        .addEventId("string")
+                        .note("note")
+                        .routing(
+                            MessageRouting.builder()
+                                .addChannel("string")
+                                .method(MessageRouting.Method.ALL)
+                                .build()
+                        )
+                        .topicId("topic_id")
+                        .updatedAt(0L)
+                        .tags(
+                            NotificationListResponse.Result.Notification.Tags.builder()
+                                .addData(
+                                    NotificationListResponse.Result.Notification.Tags.Data.builder()
                                         .id("id")
                                         .name("name")
                                         .build()

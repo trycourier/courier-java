@@ -2,31 +2,28 @@
 
 package com.courier.models.notifications
 
+import com.courier.core.JsonValue
 import com.courier.core.Params
 import com.courier.core.http.Headers
 import com.courier.core.http.QueryParams
+import com.courier.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** List notification templates in your workspace. */
-class NotificationListParams
+/** Archive a notification template. */
+class NotificationArchiveParams
 private constructor(
-    private val cursor: String?,
-    private val eventId: String?,
-    private val notes: Boolean?,
+    private val id: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
+    private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
-    /** Opaque pagination cursor from a previous response. Omit for the first page. */
-    fun cursor(): Optional<String> = Optional.ofNullable(cursor)
+    fun id(): Optional<String> = Optional.ofNullable(id)
 
-    /** Filter to templates linked to this event map ID. */
-    fun eventId(): Optional<String> = Optional.ofNullable(eventId)
-
-    /** Include template notes in the response. Only applies to legacy templates. */
-    fun notes(): Optional<Boolean> = Optional.ofNullable(notes)
+    /** Additional body properties to send with the request. */
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -38,54 +35,35 @@ private constructor(
 
     companion object {
 
-        @JvmStatic fun none(): NotificationListParams = builder().build()
+        @JvmStatic fun none(): NotificationArchiveParams = builder().build()
 
-        /** Returns a mutable builder for constructing an instance of [NotificationListParams]. */
+        /**
+         * Returns a mutable builder for constructing an instance of [NotificationArchiveParams].
+         */
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [NotificationListParams]. */
+    /** A builder for [NotificationArchiveParams]. */
     class Builder internal constructor() {
 
-        private var cursor: String? = null
-        private var eventId: String? = null
-        private var notes: Boolean? = null
+        private var id: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
+        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(notificationListParams: NotificationListParams) = apply {
-            cursor = notificationListParams.cursor
-            eventId = notificationListParams.eventId
-            notes = notificationListParams.notes
-            additionalHeaders = notificationListParams.additionalHeaders.toBuilder()
-            additionalQueryParams = notificationListParams.additionalQueryParams.toBuilder()
+        internal fun from(notificationArchiveParams: NotificationArchiveParams) = apply {
+            id = notificationArchiveParams.id
+            additionalHeaders = notificationArchiveParams.additionalHeaders.toBuilder()
+            additionalQueryParams = notificationArchiveParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                notificationArchiveParams.additionalBodyProperties.toMutableMap()
         }
 
-        /** Opaque pagination cursor from a previous response. Omit for the first page. */
-        fun cursor(cursor: String?) = apply { this.cursor = cursor }
+        fun id(id: String?) = apply { this.id = id }
 
-        /** Alias for calling [Builder.cursor] with `cursor.orElse(null)`. */
-        fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
-
-        /** Filter to templates linked to this event map ID. */
-        fun eventId(eventId: String?) = apply { this.eventId = eventId }
-
-        /** Alias for calling [Builder.eventId] with `eventId.orElse(null)`. */
-        fun eventId(eventId: Optional<String>) = eventId(eventId.getOrNull())
-
-        /** Include template notes in the response. Only applies to legacy templates. */
-        fun notes(notes: Boolean?) = apply { this.notes = notes }
-
-        /**
-         * Alias for [Builder.notes].
-         *
-         * This unboxed primitive overload exists for backwards compatibility.
-         */
-        fun notes(notes: Boolean) = notes(notes as Boolean?)
-
-        /** Alias for calling [Builder.notes] with `notes.orElse(null)`. */
-        fun notes(notes: Optional<Boolean>) = notes(notes.getOrNull())
+        /** Alias for calling [Builder.id] with `id.orElse(null)`. */
+        fun id(id: Optional<String>) = id(id.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -185,49 +163,70 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            this.additionalBodyProperties.clear()
+            putAllAdditionalBodyProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            additionalBodyProperties.put(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalBodyProperties.putAll(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply {
+            additionalBodyProperties.remove(key)
+        }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalBodyProperty)
+        }
+
         /**
-         * Returns an immutable instance of [NotificationListParams].
+         * Returns an immutable instance of [NotificationArchiveParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          */
-        fun build(): NotificationListParams =
-            NotificationListParams(
-                cursor,
-                eventId,
-                notes,
+        fun build(): NotificationArchiveParams =
+            NotificationArchiveParams(
+                id,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 
+    fun _body(): Optional<Map<String, JsonValue>> =
+        Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> id ?: ""
+            else -> ""
+        }
+
     override fun _headers(): Headers = additionalHeaders
 
-    override fun _queryParams(): QueryParams =
-        QueryParams.builder()
-            .apply {
-                cursor?.let { put("cursor", it) }
-                eventId?.let { put("event_id", it) }
-                notes?.let { put("notes", it.toString()) }
-                putAll(additionalQueryParams)
-            }
-            .build()
+    override fun _queryParams(): QueryParams = additionalQueryParams
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return other is NotificationListParams &&
-            cursor == other.cursor &&
-            eventId == other.eventId &&
-            notes == other.notes &&
+        return other is NotificationArchiveParams &&
+            id == other.id &&
             additionalHeaders == other.additionalHeaders &&
-            additionalQueryParams == other.additionalQueryParams
+            additionalQueryParams == other.additionalQueryParams &&
+            additionalBodyProperties == other.additionalBodyProperties
     }
 
     override fun hashCode(): Int =
-        Objects.hash(cursor, eventId, notes, additionalHeaders, additionalQueryParams)
+        Objects.hash(id, additionalHeaders, additionalQueryParams, additionalBodyProperties)
 
     override fun toString() =
-        "NotificationListParams{cursor=$cursor, eventId=$eventId, notes=$notes, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "NotificationArchiveParams{id=$id, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }
