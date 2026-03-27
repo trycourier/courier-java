@@ -22,12 +22,14 @@ import com.courier.models.notifications.NotificationCreateParams
 import com.courier.models.notifications.NotificationGetContent
 import com.courier.models.notifications.NotificationListParams
 import com.courier.models.notifications.NotificationListResponse
+import com.courier.models.notifications.NotificationListVersionsParams
 import com.courier.models.notifications.NotificationPublishParams
 import com.courier.models.notifications.NotificationReplaceParams
 import com.courier.models.notifications.NotificationRetrieveContentParams
 import com.courier.models.notifications.NotificationRetrieveParams
 import com.courier.models.notifications.NotificationTemplateGetResponse
 import com.courier.models.notifications.NotificationTemplateMutationResponse
+import com.courier.models.notifications.NotificationTemplateVersionListResponse
 import com.courier.services.async.notifications.CheckServiceAsync
 import com.courier.services.async.notifications.CheckServiceAsyncImpl
 import com.courier.services.async.notifications.DraftServiceAsync
@@ -83,6 +85,13 @@ class NotificationServiceAsyncImpl internal constructor(private val clientOption
     ): CompletableFuture<Void?> =
         // delete /notifications/{id}
         withRawResponse().archive(params, requestOptions).thenAccept {}
+
+    override fun listVersions(
+        params: NotificationListVersionsParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<NotificationTemplateVersionListResponse> =
+        // get /notifications/{id}/versions
+        withRawResponse().listVersions(params, requestOptions).thenApply { it.parse() }
 
     override fun publish(
         params: NotificationPublishParams,
@@ -247,6 +256,39 @@ class NotificationServiceAsyncImpl internal constructor(private val clientOption
                 .thenApply { response ->
                     errorHandler.handle(response).parseable {
                         response.use { archiveHandler.handle(it) }
+                    }
+                }
+        }
+
+        private val listVersionsHandler: Handler<NotificationTemplateVersionListResponse> =
+            jsonHandler<NotificationTemplateVersionListResponse>(clientOptions.jsonMapper)
+
+        override fun listVersions(
+            params: NotificationListVersionsParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<NotificationTemplateVersionListResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("notifications", params._pathParam(0), "versions")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { listVersionsHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
                     }
                 }
         }

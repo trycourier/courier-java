@@ -34,6 +34,7 @@ internal class ElementalNodeTest {
         assertThat(elementalNode.actionNodeWithType()).isEmpty
         assertThat(elementalNode.dividerNodeWithType()).isEmpty
         assertThat(elementalNode.quoteNodeWithType()).isEmpty
+        assertThat(elementalNode.unionMember7()).isEmpty
     }
 
     @Test
@@ -79,6 +80,7 @@ internal class ElementalNodeTest {
         assertThat(elementalNode.actionNodeWithType()).isEmpty
         assertThat(elementalNode.dividerNodeWithType()).isEmpty
         assertThat(elementalNode.quoteNodeWithType()).isEmpty
+        assertThat(elementalNode.unionMember7()).isEmpty
     }
 
     @Test
@@ -121,6 +123,7 @@ internal class ElementalNodeTest {
         assertThat(elementalNode.actionNodeWithType()).isEmpty
         assertThat(elementalNode.dividerNodeWithType()).isEmpty
         assertThat(elementalNode.quoteNodeWithType()).isEmpty
+        assertThat(elementalNode.unionMember7()).isEmpty
     }
 
     @Test
@@ -163,6 +166,7 @@ internal class ElementalNodeTest {
         assertThat(elementalNode.actionNodeWithType()).isEmpty
         assertThat(elementalNode.dividerNodeWithType()).isEmpty
         assertThat(elementalNode.quoteNodeWithType()).isEmpty
+        assertThat(elementalNode.unionMember7()).isEmpty
     }
 
     @Test
@@ -208,6 +212,7 @@ internal class ElementalNodeTest {
         assertThat(elementalNode.actionNodeWithType()).contains(actionNodeWithType)
         assertThat(elementalNode.dividerNodeWithType()).isEmpty
         assertThat(elementalNode.quoteNodeWithType()).isEmpty
+        assertThat(elementalNode.unionMember7()).isEmpty
     }
 
     @Test
@@ -253,6 +258,7 @@ internal class ElementalNodeTest {
         assertThat(elementalNode.actionNodeWithType()).isEmpty
         assertThat(elementalNode.dividerNodeWithType()).contains(dividerNodeWithType)
         assertThat(elementalNode.quoteNodeWithType()).isEmpty
+        assertThat(elementalNode.unionMember7()).isEmpty
     }
 
     @Test
@@ -298,6 +304,7 @@ internal class ElementalNodeTest {
         assertThat(elementalNode.actionNodeWithType()).isEmpty
         assertThat(elementalNode.dividerNodeWithType()).isEmpty
         assertThat(elementalNode.quoteNodeWithType()).contains(quoteNodeWithType)
+        assertThat(elementalNode.unionMember7()).isEmpty
     }
 
     @Test
@@ -311,6 +318,52 @@ internal class ElementalNodeTest {
                     .loop("loop")
                     .ref("ref")
                     .type(ElementalQuoteNodeWithType.Type.QUOTE)
+                    .build()
+            )
+
+        val roundtrippedElementalNode =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(elementalNode),
+                jacksonTypeRef<ElementalNode>(),
+            )
+
+        assertThat(roundtrippedElementalNode).isEqualTo(elementalNode)
+    }
+
+    @Test
+    fun ofUnionMember7() {
+        val unionMember7 =
+            ElementalNode.UnionMember7.builder()
+                .addChannel("string")
+                .if_("if")
+                .loop("loop")
+                .ref("ref")
+                .type(ElementalNode.UnionMember7.Type.HTML)
+                .build()
+
+        val elementalNode = ElementalNode.ofUnionMember7(unionMember7)
+
+        assertThat(elementalNode.textNodeWithType()).isEmpty
+        assertThat(elementalNode.metaNodeWithType()).isEmpty
+        assertThat(elementalNode.channelNodeWithType()).isEmpty
+        assertThat(elementalNode.imageNodeWithType()).isEmpty
+        assertThat(elementalNode.actionNodeWithType()).isEmpty
+        assertThat(elementalNode.dividerNodeWithType()).isEmpty
+        assertThat(elementalNode.quoteNodeWithType()).isEmpty
+        assertThat(elementalNode.unionMember7()).contains(unionMember7)
+    }
+
+    @Test
+    fun ofUnionMember7Roundtrip() {
+        val jsonMapper = jsonMapper()
+        val elementalNode =
+            ElementalNode.ofUnionMember7(
+                ElementalNode.UnionMember7.builder()
+                    .addChannel("string")
+                    .if_("if")
+                    .loop("loop")
+                    .ref("ref")
+                    .type(ElementalNode.UnionMember7.Type.HTML)
                     .build()
             )
 
