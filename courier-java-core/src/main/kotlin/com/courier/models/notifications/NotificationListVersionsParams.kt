@@ -2,38 +2,30 @@
 
 package com.courier.models.notifications
 
-import com.courier.core.JsonValue
 import com.courier.core.Params
 import com.courier.core.http.Headers
 import com.courier.core.http.QueryParams
-import com.courier.core.immutableEmptyMap
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/**
- * Publish a notification template. Publishes the current draft by default. Pass a version in the
- * request body to publish a specific historical version.
- */
-class NotificationPublishParams
+/** List versions of a notification template. */
+class NotificationListVersionsParams
 private constructor(
     private val id: String?,
-    private val notificationTemplatePublishRequest: NotificationTemplatePublishRequest?,
+    private val cursor: String?,
+    private val limit: Long?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     fun id(): Optional<String> = Optional.ofNullable(id)
 
-    /**
-     * Optional request body for publishing a notification template. Omit or send an empty object to
-     * publish the current draft.
-     */
-    fun notificationTemplatePublishRequest(): Optional<NotificationTemplatePublishRequest> =
-        Optional.ofNullable(notificationTemplatePublishRequest)
+    /** Opaque pagination cursor from a previous response. Omit for the first page. */
+    fun cursor(): Optional<String> = Optional.ofNullable(cursor)
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> =
-        notificationTemplatePublishRequest?._additionalProperties() ?: immutableEmptyMap()
+    /** Maximum number of versions to return per page. Default 10, max 10. */
+    fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -45,29 +37,31 @@ private constructor(
 
     companion object {
 
-        @JvmStatic fun none(): NotificationPublishParams = builder().build()
+        @JvmStatic fun none(): NotificationListVersionsParams = builder().build()
 
         /**
-         * Returns a mutable builder for constructing an instance of [NotificationPublishParams].
+         * Returns a mutable builder for constructing an instance of
+         * [NotificationListVersionsParams].
          */
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [NotificationPublishParams]. */
+    /** A builder for [NotificationListVersionsParams]. */
     class Builder internal constructor() {
 
         private var id: String? = null
-        private var notificationTemplatePublishRequest: NotificationTemplatePublishRequest? = null
+        private var cursor: String? = null
+        private var limit: Long? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(notificationPublishParams: NotificationPublishParams) = apply {
-            id = notificationPublishParams.id
-            notificationTemplatePublishRequest =
-                notificationPublishParams.notificationTemplatePublishRequest
-            additionalHeaders = notificationPublishParams.additionalHeaders.toBuilder()
-            additionalQueryParams = notificationPublishParams.additionalQueryParams.toBuilder()
+        internal fun from(notificationListVersionsParams: NotificationListVersionsParams) = apply {
+            id = notificationListVersionsParams.id
+            cursor = notificationListVersionsParams.cursor
+            limit = notificationListVersionsParams.limit
+            additionalHeaders = notificationListVersionsParams.additionalHeaders.toBuilder()
+            additionalQueryParams = notificationListVersionsParams.additionalQueryParams.toBuilder()
         }
 
         fun id(id: String?) = apply { this.id = id }
@@ -75,21 +69,24 @@ private constructor(
         /** Alias for calling [Builder.id] with `id.orElse(null)`. */
         fun id(id: Optional<String>) = id(id.getOrNull())
 
-        /**
-         * Optional request body for publishing a notification template. Omit or send an empty
-         * object to publish the current draft.
-         */
-        fun notificationTemplatePublishRequest(
-            notificationTemplatePublishRequest: NotificationTemplatePublishRequest?
-        ) = apply { this.notificationTemplatePublishRequest = notificationTemplatePublishRequest }
+        /** Opaque pagination cursor from a previous response. Omit for the first page. */
+        fun cursor(cursor: String?) = apply { this.cursor = cursor }
+
+        /** Alias for calling [Builder.cursor] with `cursor.orElse(null)`. */
+        fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
+
+        /** Maximum number of versions to return per page. Default 10, max 10. */
+        fun limit(limit: Long?) = apply { this.limit = limit }
 
         /**
-         * Alias for calling [Builder.notificationTemplatePublishRequest] with
-         * `notificationTemplatePublishRequest.orElse(null)`.
+         * Alias for [Builder.limit].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
          */
-        fun notificationTemplatePublishRequest(
-            notificationTemplatePublishRequest: Optional<NotificationTemplatePublishRequest>
-        ) = notificationTemplatePublishRequest(notificationTemplatePublishRequest.getOrNull())
+        fun limit(limit: Long) = limit(limit as Long?)
+
+        /** Alias for calling [Builder.limit] with `limit.orElse(null)`. */
+        fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -190,21 +187,19 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [NotificationPublishParams].
+         * Returns an immutable instance of [NotificationListVersionsParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          */
-        fun build(): NotificationPublishParams =
-            NotificationPublishParams(
+        fun build(): NotificationListVersionsParams =
+            NotificationListVersionsParams(
                 id,
-                notificationTemplatePublishRequest,
+                cursor,
+                limit,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
     }
-
-    fun _body(): Optional<NotificationTemplatePublishRequest> =
-        Optional.ofNullable(notificationTemplatePublishRequest)
 
     fun _pathParam(index: Int): String =
         when (index) {
@@ -214,28 +209,31 @@ private constructor(
 
     override fun _headers(): Headers = additionalHeaders
 
-    override fun _queryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                cursor?.let { put("cursor", it) }
+                limit?.let { put("limit", it.toString()) }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return other is NotificationPublishParams &&
+        return other is NotificationListVersionsParams &&
             id == other.id &&
-            notificationTemplatePublishRequest == other.notificationTemplatePublishRequest &&
+            cursor == other.cursor &&
+            limit == other.limit &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(
-            id,
-            notificationTemplatePublishRequest,
-            additionalHeaders,
-            additionalQueryParams,
-        )
+        Objects.hash(id, cursor, limit, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "NotificationPublishParams{id=$id, notificationTemplatePublishRequest=$notificationTemplatePublishRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "NotificationListVersionsParams{id=$id, cursor=$cursor, limit=$limit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

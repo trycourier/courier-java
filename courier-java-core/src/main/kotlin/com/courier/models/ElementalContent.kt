@@ -176,6 +176,10 @@ private constructor(
         fun addElement(quoteNodeWithType: ElementalQuoteNodeWithType) =
             addElement(ElementalNode.ofQuoteNodeWithType(quoteNodeWithType))
 
+        /** Alias for calling [addElement] with `ElementalNode.ofUnionMember7(unionMember7)`. */
+        fun addElement(unionMember7: ElementalNode.UnionMember7) =
+            addElement(ElementalNode.ofUnionMember7(unionMember7))
+
         /** For example, "2022-01-01" */
         fun version(version: String) = version(JsonField.of(version))
 

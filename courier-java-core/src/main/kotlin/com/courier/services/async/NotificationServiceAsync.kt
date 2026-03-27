@@ -11,6 +11,7 @@ import com.courier.models.notifications.NotificationCreateParams
 import com.courier.models.notifications.NotificationGetContent
 import com.courier.models.notifications.NotificationListParams
 import com.courier.models.notifications.NotificationListResponse
+import com.courier.models.notifications.NotificationListVersionsParams
 import com.courier.models.notifications.NotificationPublishParams
 import com.courier.models.notifications.NotificationReplaceParams
 import com.courier.models.notifications.NotificationRetrieveContentParams
@@ -18,6 +19,7 @@ import com.courier.models.notifications.NotificationRetrieveParams
 import com.courier.models.notifications.NotificationTemplateCreateRequest
 import com.courier.models.notifications.NotificationTemplateGetResponse
 import com.courier.models.notifications.NotificationTemplateMutationResponse
+import com.courier.models.notifications.NotificationTemplateVersionListResponse
 import com.courier.services.async.notifications.CheckServiceAsync
 import com.courier.services.async.notifications.DraftServiceAsync
 import java.util.concurrent.CompletableFuture
@@ -163,7 +165,48 @@ interface NotificationServiceAsync {
     fun archive(id: String, requestOptions: RequestOptions): CompletableFuture<Void?> =
         archive(id, NotificationArchiveParams.none(), requestOptions)
 
-    /** Publish the current draft of a notification template. */
+    /** List versions of a notification template. */
+    fun listVersions(id: String): CompletableFuture<NotificationTemplateVersionListResponse> =
+        listVersions(id, NotificationListVersionsParams.none())
+
+    /** @see listVersions */
+    fun listVersions(
+        id: String,
+        params: NotificationListVersionsParams = NotificationListVersionsParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<NotificationTemplateVersionListResponse> =
+        listVersions(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see listVersions */
+    fun listVersions(
+        id: String,
+        params: NotificationListVersionsParams = NotificationListVersionsParams.none(),
+    ): CompletableFuture<NotificationTemplateVersionListResponse> =
+        listVersions(id, params, RequestOptions.none())
+
+    /** @see listVersions */
+    fun listVersions(
+        params: NotificationListVersionsParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<NotificationTemplateVersionListResponse>
+
+    /** @see listVersions */
+    fun listVersions(
+        params: NotificationListVersionsParams
+    ): CompletableFuture<NotificationTemplateVersionListResponse> =
+        listVersions(params, RequestOptions.none())
+
+    /** @see listVersions */
+    fun listVersions(
+        id: String,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<NotificationTemplateVersionListResponse> =
+        listVersions(id, NotificationListVersionsParams.none(), requestOptions)
+
+    /**
+     * Publish a notification template. Publishes the current draft by default. Pass a version in
+     * the request body to publish a specific historical version.
+     */
     fun publish(id: String): CompletableFuture<Void?> =
         publish(id, NotificationPublishParams.none())
 
@@ -411,6 +454,49 @@ interface NotificationServiceAsync {
         /** @see archive */
         fun archive(id: String, requestOptions: RequestOptions): CompletableFuture<HttpResponse> =
             archive(id, NotificationArchiveParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `get /notifications/{id}/versions`, but is otherwise the
+         * same as [NotificationServiceAsync.listVersions].
+         */
+        fun listVersions(
+            id: String
+        ): CompletableFuture<HttpResponseFor<NotificationTemplateVersionListResponse>> =
+            listVersions(id, NotificationListVersionsParams.none())
+
+        /** @see listVersions */
+        fun listVersions(
+            id: String,
+            params: NotificationListVersionsParams = NotificationListVersionsParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<NotificationTemplateVersionListResponse>> =
+            listVersions(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see listVersions */
+        fun listVersions(
+            id: String,
+            params: NotificationListVersionsParams = NotificationListVersionsParams.none(),
+        ): CompletableFuture<HttpResponseFor<NotificationTemplateVersionListResponse>> =
+            listVersions(id, params, RequestOptions.none())
+
+        /** @see listVersions */
+        fun listVersions(
+            params: NotificationListVersionsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<NotificationTemplateVersionListResponse>>
+
+        /** @see listVersions */
+        fun listVersions(
+            params: NotificationListVersionsParams
+        ): CompletableFuture<HttpResponseFor<NotificationTemplateVersionListResponse>> =
+            listVersions(params, RequestOptions.none())
+
+        /** @see listVersions */
+        fun listVersions(
+            id: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<NotificationTemplateVersionListResponse>> =
+            listVersions(id, NotificationListVersionsParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `post /notifications/{id}/publish`, but is otherwise the

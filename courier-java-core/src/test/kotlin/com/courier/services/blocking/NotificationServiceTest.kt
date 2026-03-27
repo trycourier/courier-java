@@ -6,10 +6,13 @@ import com.courier.client.okhttp.CourierOkHttpClient
 import com.courier.models.ElementalChannelNodeWithType
 import com.courier.models.ElementalContent
 import com.courier.models.notifications.NotificationListParams
+import com.courier.models.notifications.NotificationListVersionsParams
+import com.courier.models.notifications.NotificationPublishParams
 import com.courier.models.notifications.NotificationReplaceParams
 import com.courier.models.notifications.NotificationRetrieveParams
 import com.courier.models.notifications.NotificationTemplateCreateRequest
 import com.courier.models.notifications.NotificationTemplatePayload
+import com.courier.models.notifications.NotificationTemplatePublishRequest
 import com.courier.models.notifications.NotificationTemplateUpdateRequest
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -105,11 +108,36 @@ internal class NotificationServiceTest {
 
     @Disabled("Mock server tests are disabled")
     @Test
+    fun listVersions() {
+        val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
+        val notificationService = client.notifications()
+
+        val notificationTemplateVersionListResponse =
+            notificationService.listVersions(
+                NotificationListVersionsParams.builder()
+                    .id("id")
+                    .cursor("cursor")
+                    .limit(10L)
+                    .build()
+            )
+
+        notificationTemplateVersionListResponse.validate()
+    }
+
+    @Disabled("Mock server tests are disabled")
+    @Test
     fun publish() {
         val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
         val notificationService = client.notifications()
 
-        notificationService.publish("id")
+        notificationService.publish(
+            NotificationPublishParams.builder()
+                .id("id")
+                .notificationTemplatePublishRequest(
+                    NotificationTemplatePublishRequest.builder().version("v321669910225").build()
+                )
+                .build()
+        )
     }
 
     @Disabled("Mock server tests are disabled")
