@@ -34,7 +34,7 @@ internal class ElementalNodeTest {
         assertThat(elementalNode.actionNodeWithType()).isEmpty
         assertThat(elementalNode.dividerNodeWithType()).isEmpty
         assertThat(elementalNode.quoteNodeWithType()).isEmpty
-        assertThat(elementalNode.unionMember7()).isEmpty
+        assertThat(elementalNode.htmlNodeWithType()).isEmpty
     }
 
     @Test
@@ -80,7 +80,7 @@ internal class ElementalNodeTest {
         assertThat(elementalNode.actionNodeWithType()).isEmpty
         assertThat(elementalNode.dividerNodeWithType()).isEmpty
         assertThat(elementalNode.quoteNodeWithType()).isEmpty
-        assertThat(elementalNode.unionMember7()).isEmpty
+        assertThat(elementalNode.htmlNodeWithType()).isEmpty
     }
 
     @Test
@@ -122,7 +122,7 @@ internal class ElementalNodeTest {
         assertThat(elementalNode.actionNodeWithType()).isEmpty
         assertThat(elementalNode.dividerNodeWithType()).isEmpty
         assertThat(elementalNode.quoteNodeWithType()).isEmpty
-        assertThat(elementalNode.unionMember7()).isEmpty
+        assertThat(elementalNode.htmlNodeWithType()).isEmpty
     }
 
     @Test
@@ -164,7 +164,7 @@ internal class ElementalNodeTest {
         assertThat(elementalNode.actionNodeWithType()).isEmpty
         assertThat(elementalNode.dividerNodeWithType()).isEmpty
         assertThat(elementalNode.quoteNodeWithType()).isEmpty
-        assertThat(elementalNode.unionMember7()).isEmpty
+        assertThat(elementalNode.htmlNodeWithType()).isEmpty
     }
 
     @Test
@@ -210,7 +210,7 @@ internal class ElementalNodeTest {
         assertThat(elementalNode.actionNodeWithType()).contains(actionNodeWithType)
         assertThat(elementalNode.dividerNodeWithType()).isEmpty
         assertThat(elementalNode.quoteNodeWithType()).isEmpty
-        assertThat(elementalNode.unionMember7()).isEmpty
+        assertThat(elementalNode.htmlNodeWithType()).isEmpty
     }
 
     @Test
@@ -256,7 +256,7 @@ internal class ElementalNodeTest {
         assertThat(elementalNode.actionNodeWithType()).isEmpty
         assertThat(elementalNode.dividerNodeWithType()).contains(dividerNodeWithType)
         assertThat(elementalNode.quoteNodeWithType()).isEmpty
-        assertThat(elementalNode.unionMember7()).isEmpty
+        assertThat(elementalNode.htmlNodeWithType()).isEmpty
     }
 
     @Test
@@ -302,7 +302,7 @@ internal class ElementalNodeTest {
         assertThat(elementalNode.actionNodeWithType()).isEmpty
         assertThat(elementalNode.dividerNodeWithType()).isEmpty
         assertThat(elementalNode.quoteNodeWithType()).contains(quoteNodeWithType)
-        assertThat(elementalNode.unionMember7()).isEmpty
+        assertThat(elementalNode.htmlNodeWithType()).isEmpty
     }
 
     @Test
@@ -329,17 +329,17 @@ internal class ElementalNodeTest {
     }
 
     @Test
-    fun ofUnionMember7() {
-        val unionMember7 =
-            ElementalNode.UnionMember7.builder()
+    fun ofHtmlNodeWithType() {
+        val htmlNodeWithType =
+            ElementalHtmlNodeWithType.builder()
                 .addChannel("string")
                 .if_("if")
                 .loop("loop")
                 .ref("ref")
-                .type(ElementalNode.UnionMember7.Type.HTML)
+                .type(ElementalHtmlNodeWithType.Type.HTML)
                 .build()
 
-        val elementalNode = ElementalNode.ofUnionMember7(unionMember7)
+        val elementalNode = ElementalNode.ofHtmlNodeWithType(htmlNodeWithType)
 
         assertThat(elementalNode.textNodeWithType()).isEmpty
         assertThat(elementalNode.metaNodeWithType()).isEmpty
@@ -348,20 +348,20 @@ internal class ElementalNodeTest {
         assertThat(elementalNode.actionNodeWithType()).isEmpty
         assertThat(elementalNode.dividerNodeWithType()).isEmpty
         assertThat(elementalNode.quoteNodeWithType()).isEmpty
-        assertThat(elementalNode.unionMember7()).contains(unionMember7)
+        assertThat(elementalNode.htmlNodeWithType()).contains(htmlNodeWithType)
     }
 
     @Test
-    fun ofUnionMember7Roundtrip() {
+    fun ofHtmlNodeWithTypeRoundtrip() {
         val jsonMapper = jsonMapper()
         val elementalNode =
-            ElementalNode.ofUnionMember7(
-                ElementalNode.UnionMember7.builder()
+            ElementalNode.ofHtmlNodeWithType(
+                ElementalHtmlNodeWithType.builder()
                     .addChannel("string")
                     .if_("if")
                     .loop("loop")
                     .ref("ref")
-                    .type(ElementalNode.UnionMember7.Type.HTML)
+                    .type(ElementalHtmlNodeWithType.Type.HTML)
                     .build()
             )
 
