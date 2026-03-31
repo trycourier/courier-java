@@ -17,7 +17,9 @@ import com.courier.errors.UnauthorizedException
 import com.courier.errors.UnexpectedStatusCodeException
 import com.courier.errors.UnprocessableEntityException
 import com.courier.models.ElementalContentSugar
+import com.courier.models.MessageChannels
 import com.courier.models.MessageContext
+import com.courier.models.MessageProviders
 import com.courier.models.UserRecipient
 import com.courier.models.Utm
 import com.courier.models.send.SendMessageParams
@@ -80,7 +82,7 @@ internal class ErrorHandlingTest {
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
                                 .channels(
-                                    SendMessageParams.Message.Channels.builder()
+                                    MessageChannels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -155,7 +157,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .providers(
-                                    SendMessageParams.Message.Providers.builder()
+                                    MessageProviders.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -313,7 +315,7 @@ internal class ErrorHandlingTest {
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
                                 .channels(
-                                    SendMessageParams.Message.Channels.builder()
+                                    MessageChannels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -388,7 +390,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .providers(
-                                    SendMessageParams.Message.Providers.builder()
+                                    MessageProviders.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -546,7 +548,7 @@ internal class ErrorHandlingTest {
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
                                 .channels(
-                                    SendMessageParams.Message.Channels.builder()
+                                    MessageChannels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -621,7 +623,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .providers(
-                                    SendMessageParams.Message.Providers.builder()
+                                    MessageProviders.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -779,7 +781,7 @@ internal class ErrorHandlingTest {
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
                                 .channels(
-                                    SendMessageParams.Message.Channels.builder()
+                                    MessageChannels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -854,7 +856,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .providers(
-                                    SendMessageParams.Message.Providers.builder()
+                                    MessageProviders.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -1012,7 +1014,7 @@ internal class ErrorHandlingTest {
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
                                 .channels(
-                                    SendMessageParams.Message.Channels.builder()
+                                    MessageChannels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -1087,7 +1089,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .providers(
-                                    SendMessageParams.Message.Providers.builder()
+                                    MessageProviders.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -1245,7 +1247,7 @@ internal class ErrorHandlingTest {
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
                                 .channels(
-                                    SendMessageParams.Message.Channels.builder()
+                                    MessageChannels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -1320,7 +1322,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .providers(
-                                    SendMessageParams.Message.Providers.builder()
+                                    MessageProviders.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -1478,7 +1480,7 @@ internal class ErrorHandlingTest {
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
                                 .channels(
-                                    SendMessageParams.Message.Channels.builder()
+                                    MessageChannels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -1553,7 +1555,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .providers(
-                                    SendMessageParams.Message.Providers.builder()
+                                    MessageProviders.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -1711,7 +1713,7 @@ internal class ErrorHandlingTest {
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
                                 .channels(
-                                    SendMessageParams.Message.Channels.builder()
+                                    MessageChannels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -1786,7 +1788,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .providers(
-                                    SendMessageParams.Message.Providers.builder()
+                                    MessageProviders.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -1944,7 +1946,7 @@ internal class ErrorHandlingTest {
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
                                 .channels(
-                                    SendMessageParams.Message.Channels.builder()
+                                    MessageChannels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -2019,7 +2021,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .providers(
-                                    SendMessageParams.Message.Providers.builder()
+                                    MessageProviders.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -2177,7 +2179,7 @@ internal class ErrorHandlingTest {
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
                                 .channels(
-                                    SendMessageParams.Message.Channels.builder()
+                                    MessageChannels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -2252,7 +2254,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .providers(
-                                    SendMessageParams.Message.Providers.builder()
+                                    MessageProviders.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -2410,7 +2412,7 @@ internal class ErrorHandlingTest {
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
                                 .channels(
-                                    SendMessageParams.Message.Channels.builder()
+                                    MessageChannels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -2485,7 +2487,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .providers(
-                                    SendMessageParams.Message.Providers.builder()
+                                    MessageProviders.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -2643,7 +2645,7 @@ internal class ErrorHandlingTest {
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
                                 .channels(
-                                    SendMessageParams.Message.Channels.builder()
+                                    MessageChannels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -2718,7 +2720,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .providers(
-                                    SendMessageParams.Message.Providers.builder()
+                                    MessageProviders.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -2876,7 +2878,7 @@ internal class ErrorHandlingTest {
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
                                 .channels(
-                                    SendMessageParams.Message.Channels.builder()
+                                    MessageChannels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -2951,7 +2953,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .providers(
-                                    SendMessageParams.Message.Providers.builder()
+                                    MessageProviders.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -3109,7 +3111,7 @@ internal class ErrorHandlingTest {
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
                                 .channels(
-                                    SendMessageParams.Message.Channels.builder()
+                                    MessageChannels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -3184,7 +3186,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .providers(
-                                    SendMessageParams.Message.Providers.builder()
+                                    MessageProviders.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -3342,7 +3344,7 @@ internal class ErrorHandlingTest {
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
                                 .channels(
-                                    SendMessageParams.Message.Channels.builder()
+                                    MessageChannels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -3417,7 +3419,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .providers(
-                                    SendMessageParams.Message.Providers.builder()
+                                    MessageProviders.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -3575,7 +3577,7 @@ internal class ErrorHandlingTest {
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
                                 .channels(
-                                    SendMessageParams.Message.Channels.builder()
+                                    MessageChannels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -3650,7 +3652,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .providers(
-                                    SendMessageParams.Message.Providers.builder()
+                                    MessageProviders.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -3806,7 +3808,7 @@ internal class ErrorHandlingTest {
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
                                 .channels(
-                                    SendMessageParams.Message.Channels.builder()
+                                    MessageChannels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -3881,7 +3883,7 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .providers(
-                                    SendMessageParams.Message.Providers.builder()
+                                    MessageProviders.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(

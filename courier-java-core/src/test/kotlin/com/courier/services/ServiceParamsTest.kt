@@ -6,7 +6,9 @@ import com.courier.client.CourierClient
 import com.courier.client.okhttp.CourierOkHttpClient
 import com.courier.core.JsonValue
 import com.courier.models.ElementalContentSugar
+import com.courier.models.MessageChannels
 import com.courier.models.MessageContext
+import com.courier.models.MessageProviders
 import com.courier.models.UserRecipient
 import com.courier.models.Utm
 import com.courier.models.send.SendMessageParams
@@ -52,7 +54,7 @@ internal class ServiceParamsTest {
                     SendMessageParams.Message.builder()
                         .brandId("brand_id")
                         .channels(
-                            SendMessageParams.Message.Channels.builder()
+                            MessageChannels.builder()
                                 .putAdditionalProperty(
                                     "foo",
                                     JsonValue.from(
@@ -123,7 +125,7 @@ internal class ServiceParamsTest {
                                 .build()
                         )
                         .providers(
-                            SendMessageParams.Message.Providers.builder()
+                            MessageProviders.builder()
                                 .putAdditionalProperty(
                                     "foo",
                                     JsonValue.from(

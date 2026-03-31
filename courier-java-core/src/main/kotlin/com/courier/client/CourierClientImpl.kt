@@ -30,6 +30,8 @@ import com.courier.services.blocking.ProfileService
 import com.courier.services.blocking.ProfileServiceImpl
 import com.courier.services.blocking.RequestService
 import com.courier.services.blocking.RequestServiceImpl
+import com.courier.services.blocking.RoutingStrategyService
+import com.courier.services.blocking.RoutingStrategyServiceImpl
 import com.courier.services.blocking.SendService
 import com.courier.services.blocking.SendServiceImpl
 import com.courier.services.blocking.TenantService
@@ -91,6 +93,10 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
         NotificationServiceImpl(clientOptionsWithUserAgent)
     }
 
+    private val routingStrategies: RoutingStrategyService by lazy {
+        RoutingStrategyServiceImpl(clientOptionsWithUserAgent)
+    }
+
     private val profiles: ProfileService by lazy { ProfileServiceImpl(clientOptionsWithUserAgent) }
 
     private val tenants: TenantService by lazy { TenantServiceImpl(clientOptionsWithUserAgent) }
@@ -133,6 +139,8 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
     override fun requests(): RequestService = requests
 
     override fun notifications(): NotificationService = notifications
+
+    override fun routingStrategies(): RoutingStrategyService = routingStrategies
 
     override fun profiles(): ProfileService = profiles
 
@@ -199,6 +207,10 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
             NotificationServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val routingStrategies: RoutingStrategyService.WithRawResponse by lazy {
+            RoutingStrategyServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
         private val profiles: ProfileService.WithRawResponse by lazy {
             ProfileServiceImpl.WithRawResponseImpl(clientOptions)
         }
@@ -247,6 +259,8 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
         override fun requests(): RequestService.WithRawResponse = requests
 
         override fun notifications(): NotificationService.WithRawResponse = notifications
+
+        override fun routingStrategies(): RoutingStrategyService.WithRawResponse = routingStrategies
 
         override fun profiles(): ProfileService.WithRawResponse = profiles
 

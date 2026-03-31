@@ -63,6 +63,7 @@ internal class ProGuardCompatibilityTest {
         assertThat(client.messages()).isNotNull()
         assertThat(client.requests()).isNotNull()
         assertThat(client.notifications()).isNotNull()
+        assertThat(client.routingStrategies()).isNotNull()
         assertThat(client.profiles()).isNotNull()
         assertThat(client.tenants()).isNotNull()
         assertThat(client.translations()).isNotNull()

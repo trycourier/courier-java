@@ -5,7 +5,9 @@ package com.courier.services.async
 import com.courier.client.okhttp.CourierOkHttpClientAsync
 import com.courier.core.JsonValue
 import com.courier.models.ElementalContentSugar
+import com.courier.models.MessageChannels
 import com.courier.models.MessageContext
+import com.courier.models.MessageProviders
 import com.courier.models.UserRecipient
 import com.courier.models.Utm
 import com.courier.models.send.SendMessageParams
@@ -27,7 +29,7 @@ internal class SendServiceAsyncTest {
                         SendMessageParams.Message.builder()
                             .brandId("brand_id")
                             .channels(
-                                SendMessageParams.Message.Channels.builder()
+                                MessageChannels.builder()
                                     .putAdditionalProperty(
                                         "foo",
                                         JsonValue.from(
@@ -98,7 +100,7 @@ internal class SendServiceAsyncTest {
                                     .build()
                             )
                             .providers(
-                                SendMessageParams.Message.Providers.builder()
+                                MessageProviders.builder()
                                     .putAdditionalProperty(
                                         "foo",
                                         JsonValue.from(

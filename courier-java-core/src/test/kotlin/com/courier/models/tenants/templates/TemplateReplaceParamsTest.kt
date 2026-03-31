@@ -5,6 +5,8 @@ package com.courier.models.tenants.templates
 import com.courier.core.JsonValue
 import com.courier.models.ElementalContent
 import com.courier.models.ElementalTextNodeWithType
+import com.courier.models.MessageChannels
+import com.courier.models.MessageProviders
 import com.courier.models.MessageRouting
 import com.courier.models.tenants.PutTenantTemplateRequest
 import com.courier.models.tenants.TenantTemplateInput
@@ -37,7 +39,7 @@ internal class TemplateReplaceParamsTest {
                                     .build()
                             )
                             .channels(
-                                TenantTemplateInput.Channels.builder()
+                                MessageChannels.builder()
                                     .putAdditionalProperty(
                                         "foo",
                                         JsonValue.from(
@@ -65,7 +67,7 @@ internal class TemplateReplaceParamsTest {
                                     .build()
                             )
                             .providers(
-                                TenantTemplateInput.Providers.builder()
+                                MessageProviders.builder()
                                     .putAdditionalProperty(
                                         "foo",
                                         JsonValue.from(
@@ -156,7 +158,7 @@ internal class TemplateReplaceParamsTest {
                                         .build()
                                 )
                                 .channels(
-                                    TenantTemplateInput.Channels.builder()
+                                    MessageChannels.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -185,7 +187,7 @@ internal class TemplateReplaceParamsTest {
                                         .build()
                                 )
                                 .providers(
-                                    TenantTemplateInput.Providers.builder()
+                                    MessageProviders.builder()
                                         .putAdditionalProperty(
                                             "foo",
                                             JsonValue.from(
@@ -244,7 +246,7 @@ internal class TemplateReplaceParamsTest {
                                     .build()
                             )
                             .channels(
-                                TenantTemplateInput.Channels.builder()
+                                MessageChannels.builder()
                                     .putAdditionalProperty(
                                         "foo",
                                         JsonValue.from(
@@ -272,7 +274,7 @@ internal class TemplateReplaceParamsTest {
                                     .build()
                             )
                             .providers(
-                                TenantTemplateInput.Providers.builder()
+                                MessageProviders.builder()
                                     .putAdditionalProperty(
                                         "foo",
                                         JsonValue.from(
