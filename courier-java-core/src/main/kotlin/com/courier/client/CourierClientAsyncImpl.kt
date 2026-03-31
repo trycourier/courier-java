@@ -30,6 +30,8 @@ import com.courier.services.async.ProfileServiceAsync
 import com.courier.services.async.ProfileServiceAsyncImpl
 import com.courier.services.async.RequestServiceAsync
 import com.courier.services.async.RequestServiceAsyncImpl
+import com.courier.services.async.RoutingStrategyServiceAsync
+import com.courier.services.async.RoutingStrategyServiceAsyncImpl
 import com.courier.services.async.SendServiceAsync
 import com.courier.services.async.SendServiceAsyncImpl
 import com.courier.services.async.TenantServiceAsync
@@ -101,6 +103,10 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
         NotificationServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
+    private val routingStrategies: RoutingStrategyServiceAsync by lazy {
+        RoutingStrategyServiceAsyncImpl(clientOptionsWithUserAgent)
+    }
+
     private val profiles: ProfileServiceAsync by lazy {
         ProfileServiceAsyncImpl(clientOptionsWithUserAgent)
     }
@@ -147,6 +153,8 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
     override fun requests(): RequestServiceAsync = requests
 
     override fun notifications(): NotificationServiceAsync = notifications
+
+    override fun routingStrategies(): RoutingStrategyServiceAsync = routingStrategies
 
     override fun profiles(): ProfileServiceAsync = profiles
 
@@ -213,6 +221,10 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
             NotificationServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val routingStrategies: RoutingStrategyServiceAsync.WithRawResponse by lazy {
+            RoutingStrategyServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
         private val profiles: ProfileServiceAsync.WithRawResponse by lazy {
             ProfileServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
@@ -261,6 +273,9 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
         override fun requests(): RequestServiceAsync.WithRawResponse = requests
 
         override fun notifications(): NotificationServiceAsync.WithRawResponse = notifications
+
+        override fun routingStrategies(): RoutingStrategyServiceAsync.WithRawResponse =
+            routingStrategies
 
         override fun profiles(): ProfileServiceAsync.WithRawResponse = profiles
 

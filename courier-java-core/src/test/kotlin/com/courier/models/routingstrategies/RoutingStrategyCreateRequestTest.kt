@@ -1,36 +1,28 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.models.tenants
+package com.courier.models.routingstrategies
 
 import com.courier.core.JsonValue
 import com.courier.core.jsonMapper
-import com.courier.models.ElementalContent
-import com.courier.models.ElementalTextNodeWithType
 import com.courier.models.MessageChannels
 import com.courier.models.MessageProviders
 import com.courier.models.MessageRouting
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-internal class TenantTemplateInputTest {
+internal class RoutingStrategyCreateRequestTest {
 
     @Test
     fun create() {
-        val tenantTemplateInput =
-            TenantTemplateInput.builder()
-                .content(
-                    ElementalContent.builder()
-                        .addElement(
-                            ElementalTextNodeWithType.builder()
-                                .addChannel("string")
-                                .if_("if")
-                                .loop("loop")
-                                .ref("ref")
-                                .type(ElementalTextNodeWithType.Type.TEXT)
-                                .build()
-                        )
-                        .version("version")
+        val routingStrategyCreateRequest =
+            RoutingStrategyCreateRequest.builder()
+                .name("name")
+                .routing(
+                    MessageRouting.builder()
+                        .addChannel("string")
+                        .method(MessageRouting.Method.ALL)
                         .build()
                 )
                 .channels(
@@ -61,6 +53,7 @@ internal class TenantTemplateInputTest {
                         )
                         .build()
                 )
+                .description("description")
                 .providers(
                     MessageProviders.builder()
                         .putAdditionalProperty(
@@ -86,30 +79,18 @@ internal class TenantTemplateInputTest {
                         )
                         .build()
                 )
-                .routing(
-                    MessageRouting.builder()
-                        .addChannel("string")
-                        .method(MessageRouting.Method.ALL)
-                        .build()
-                )
+                .addTag("string")
                 .build()
 
-        assertThat(tenantTemplateInput.content())
+        assertThat(routingStrategyCreateRequest.name()).isEqualTo("name")
+        assertThat(routingStrategyCreateRequest.routing())
             .isEqualTo(
-                ElementalContent.builder()
-                    .addElement(
-                        ElementalTextNodeWithType.builder()
-                            .addChannel("string")
-                            .if_("if")
-                            .loop("loop")
-                            .ref("ref")
-                            .type(ElementalTextNodeWithType.Type.TEXT)
-                            .build()
-                    )
-                    .version("version")
+                MessageRouting.builder()
+                    .addChannel("string")
+                    .method(MessageRouting.Method.ALL)
                     .build()
             )
-        assertThat(tenantTemplateInput.channels())
+        assertThat(routingStrategyCreateRequest.channels())
             .contains(
                 MessageChannels.builder()
                     .putAdditionalProperty(
@@ -138,7 +119,8 @@ internal class TenantTemplateInputTest {
                     )
                     .build()
             )
-        assertThat(tenantTemplateInput.providers())
+        assertThat(routingStrategyCreateRequest.description()).contains("description")
+        assertThat(routingStrategyCreateRequest.providers())
             .contains(
                 MessageProviders.builder()
                     .putAdditionalProperty(
@@ -164,32 +146,19 @@ internal class TenantTemplateInputTest {
                     )
                     .build()
             )
-        assertThat(tenantTemplateInput.routing())
-            .contains(
-                MessageRouting.builder()
-                    .addChannel("string")
-                    .method(MessageRouting.Method.ALL)
-                    .build()
-            )
+        assertThat(routingStrategyCreateRequest.tags().getOrNull()).containsExactly("string")
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val tenantTemplateInput =
-            TenantTemplateInput.builder()
-                .content(
-                    ElementalContent.builder()
-                        .addElement(
-                            ElementalTextNodeWithType.builder()
-                                .addChannel("string")
-                                .if_("if")
-                                .loop("loop")
-                                .ref("ref")
-                                .type(ElementalTextNodeWithType.Type.TEXT)
-                                .build()
-                        )
-                        .version("version")
+        val routingStrategyCreateRequest =
+            RoutingStrategyCreateRequest.builder()
+                .name("name")
+                .routing(
+                    MessageRouting.builder()
+                        .addChannel("string")
+                        .method(MessageRouting.Method.ALL)
                         .build()
                 )
                 .channels(
@@ -220,6 +189,7 @@ internal class TenantTemplateInputTest {
                         )
                         .build()
                 )
+                .description("description")
                 .providers(
                     MessageProviders.builder()
                         .putAdditionalProperty(
@@ -245,20 +215,15 @@ internal class TenantTemplateInputTest {
                         )
                         .build()
                 )
-                .routing(
-                    MessageRouting.builder()
-                        .addChannel("string")
-                        .method(MessageRouting.Method.ALL)
-                        .build()
-                )
+                .addTag("string")
                 .build()
 
-        val roundtrippedTenantTemplateInput =
+        val roundtrippedRoutingStrategyCreateRequest =
             jsonMapper.readValue(
-                jsonMapper.writeValueAsString(tenantTemplateInput),
-                jacksonTypeRef<TenantTemplateInput>(),
+                jsonMapper.writeValueAsString(routingStrategyCreateRequest),
+                jacksonTypeRef<RoutingStrategyCreateRequest>(),
             )
 
-        assertThat(roundtrippedTenantTemplateInput).isEqualTo(tenantTemplateInput)
+        assertThat(roundtrippedRoutingStrategyCreateRequest).isEqualTo(routingStrategyCreateRequest)
     }
 }
