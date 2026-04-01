@@ -1,5 +1,37 @@
 # Changelog
 
+## 4.11.0 (2026-04-01)
+
+Full Changelog: [v4.10.0...v4.11.0](https://github.com/trycourier/courier-java/compare/v4.10.0...v4.11.0)
+
+### Features
+
+* **api:** add create/retrieve/archive/publish/replace methods, event_id param to notifications ([358631e](https://github.com/trycourier/courier-java/commit/358631e09af79a2e56e5b4288876e4e0e2607400))
+* **api:** add ElementalHtmlNodeWithType model, rename unionMember7 to htmlNodeWithType ([0dc22ef](https://github.com/trycourier/courier-java/commit/0dc22efec476f5683a8e228fcdf22bfe3965c2b3))
+* **api:** add providers CRUD endpoints and catalog ([419447b](https://github.com/trycourier/courier-java/commit/419447b8cc5ca1ea3087316f3a1efdd12520221e))
+* **api:** add routing strategies resource ([9f329c9](https://github.com/trycourier/courier-java/commit/9f329c99cfe8439e7bec445491e8899e6dff18e2))
+* **api:** add UnionMember7 variant to ElementalNode ([6746b6c](https://github.com/trycourier/courier-java/commit/6746b6c0e0d54c6f7c5329957a7ebdb81dd14915))
+
+
+### Bug Fixes
+
+* **client:** allow updating header/query affecting fields in `toBuilder()` ([70b3261](https://github.com/trycourier/courier-java/commit/70b3261bbfad022f214911ebc59e9bd0fd012f19))
+
+
+### Chores
+
+* **ci:** skip lint on metadata-only changes ([a55e12c](https://github.com/trycourier/courier-java/commit/a55e12c7b01fd705297d77e31917f420d1b63239))
+* **internal:** bump ktfmt ([fabae89](https://github.com/trycourier/courier-java/commit/fabae89dc835ea37f424d9b7c1abbd29b96f41e2))
+* **internal:** tweak CI branches ([9103b5e](https://github.com/trycourier/courier-java/commit/9103b5e9e1ac35ba2864920f1c445018a4ecc738))
+* **internal:** update gitignore ([0c97939](https://github.com/trycourier/courier-java/commit/0c9793956c168087be4ab867d9e3a563666fccde))
+* **internal:** update retry delay tests ([41453e1](https://github.com/trycourier/courier-java/commit/41453e1486ea0a27a268ffdc6f1220ceab69db8d))
+
+
+### Documentation
+
+* add AGENTS.md for AI coding assistants ([#96](https://github.com/trycourier/courier-java/issues/96)) ([873304d](https://github.com/trycourier/courier-java/commit/873304dfb2534679904292a2ad49dadc46234050))
+* sync README from mintlify-docs (2026-03-23 19:31 UTC) ([#95](https://github.com/trycourier/courier-java/issues/95)) ([8efc854](https://github.com/trycourier/courier-java/commit/8efc8542cbe37b8ba7673d53a37995625e574785))
+
 ## 4.10.0 (2026-03-12)
 
 Full Changelog: [v4.9.1...v4.10.0](https://github.com/trycourier/courier-java/compare/v4.9.1...v4.10.0)
