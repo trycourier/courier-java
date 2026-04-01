@@ -28,6 +28,8 @@ import com.courier.services.blocking.NotificationService
 import com.courier.services.blocking.NotificationServiceImpl
 import com.courier.services.blocking.ProfileService
 import com.courier.services.blocking.ProfileServiceImpl
+import com.courier.services.blocking.ProviderService
+import com.courier.services.blocking.ProviderServiceImpl
 import com.courier.services.blocking.RequestService
 import com.courier.services.blocking.RequestServiceImpl
 import com.courier.services.blocking.RoutingStrategyService
@@ -63,6 +65,10 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
 
     private val audiences: AudienceService by lazy {
         AudienceServiceImpl(clientOptionsWithUserAgent)
+    }
+
+    private val providers: ProviderService by lazy {
+        ProviderServiceImpl(clientOptionsWithUserAgent)
     }
 
     private val auditEvents: AuditEventService by lazy {
@@ -118,6 +124,8 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
 
     override fun audiences(): AudienceService = audiences
 
+    override fun providers(): ProviderService = providers
+
     override fun auditEvents(): AuditEventService = auditEvents
 
     override fun auth(): AuthService = auth
@@ -161,6 +169,10 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
 
         private val audiences: AudienceService.WithRawResponse by lazy {
             AudienceServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val providers: ProviderService.WithRawResponse by lazy {
+            ProviderServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
         private val auditEvents: AuditEventService.WithRawResponse by lazy {
@@ -237,6 +249,8 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
         override fun send(): SendService.WithRawResponse = send
 
         override fun audiences(): AudienceService.WithRawResponse = audiences
+
+        override fun providers(): ProviderService.WithRawResponse = providers
 
         override fun auditEvents(): AuditEventService.WithRawResponse = auditEvents
 

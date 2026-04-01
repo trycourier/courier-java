@@ -28,6 +28,8 @@ import com.courier.services.async.NotificationServiceAsync
 import com.courier.services.async.NotificationServiceAsyncImpl
 import com.courier.services.async.ProfileServiceAsync
 import com.courier.services.async.ProfileServiceAsyncImpl
+import com.courier.services.async.ProviderServiceAsync
+import com.courier.services.async.ProviderServiceAsyncImpl
 import com.courier.services.async.RequestServiceAsync
 import com.courier.services.async.RequestServiceAsyncImpl
 import com.courier.services.async.RoutingStrategyServiceAsync
@@ -63,6 +65,10 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
 
     private val audiences: AudienceServiceAsync by lazy {
         AudienceServiceAsyncImpl(clientOptionsWithUserAgent)
+    }
+
+    private val providers: ProviderServiceAsync by lazy {
+        ProviderServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
     private val auditEvents: AuditEventServiceAsync by lazy {
@@ -132,6 +138,8 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
 
     override fun audiences(): AudienceServiceAsync = audiences
 
+    override fun providers(): ProviderServiceAsync = providers
+
     override fun auditEvents(): AuditEventServiceAsync = auditEvents
 
     override fun auth(): AuthServiceAsync = auth
@@ -175,6 +183,10 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
 
         private val audiences: AudienceServiceAsync.WithRawResponse by lazy {
             AudienceServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val providers: ProviderServiceAsync.WithRawResponse by lazy {
+            ProviderServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
         private val auditEvents: AuditEventServiceAsync.WithRawResponse by lazy {
@@ -251,6 +263,8 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
         override fun send(): SendServiceAsync.WithRawResponse = send
 
         override fun audiences(): AudienceServiceAsync.WithRawResponse = audiences
+
+        override fun providers(): ProviderServiceAsync.WithRawResponse = providers
 
         override fun auditEvents(): AuditEventServiceAsync.WithRawResponse = auditEvents
 

@@ -15,6 +15,7 @@ import com.courier.services.async.ListServiceAsync
 import com.courier.services.async.MessageServiceAsync
 import com.courier.services.async.NotificationServiceAsync
 import com.courier.services.async.ProfileServiceAsync
+import com.courier.services.async.ProviderServiceAsync
 import com.courier.services.async.RequestServiceAsync
 import com.courier.services.async.RoutingStrategyServiceAsync
 import com.courier.services.async.SendServiceAsync
@@ -62,6 +63,8 @@ interface CourierClientAsync {
     fun send(): SendServiceAsync
 
     fun audiences(): AudienceServiceAsync
+
+    fun providers(): ProviderServiceAsync
 
     fun auditEvents(): AuditEventServiceAsync
 
@@ -125,6 +128,8 @@ interface CourierClientAsync {
         fun send(): SendServiceAsync.WithRawResponse
 
         fun audiences(): AudienceServiceAsync.WithRawResponse
+
+        fun providers(): ProviderServiceAsync.WithRawResponse
 
         fun auditEvents(): AuditEventServiceAsync.WithRawResponse
 
