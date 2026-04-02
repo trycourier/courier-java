@@ -9,17 +9,23 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
+/** List notification templates in your workspace. */
 class NotificationListParams
 private constructor(
     private val cursor: String?,
+    private val eventId: String?,
     private val notes: Boolean?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
+    /** Opaque pagination cursor from a previous response. Omit for the first page. */
     fun cursor(): Optional<String> = Optional.ofNullable(cursor)
 
-    /** Retrieve the notes from the Notification template settings. */
+    /** Filter to templates linked to this event map ID. */
+    fun eventId(): Optional<String> = Optional.ofNullable(eventId)
+
+    /** Include template notes in the response. Only applies to legacy templates. */
     fun notes(): Optional<Boolean> = Optional.ofNullable(notes)
 
     /** Additional headers to send with the request. */
@@ -42,6 +48,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var cursor: String? = null
+        private var eventId: String? = null
         private var notes: Boolean? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
@@ -49,17 +56,25 @@ private constructor(
         @JvmSynthetic
         internal fun from(notificationListParams: NotificationListParams) = apply {
             cursor = notificationListParams.cursor
+            eventId = notificationListParams.eventId
             notes = notificationListParams.notes
             additionalHeaders = notificationListParams.additionalHeaders.toBuilder()
             additionalQueryParams = notificationListParams.additionalQueryParams.toBuilder()
         }
 
+        /** Opaque pagination cursor from a previous response. Omit for the first page. */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
         /** Alias for calling [Builder.cursor] with `cursor.orElse(null)`. */
         fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
 
-        /** Retrieve the notes from the Notification template settings. */
+        /** Filter to templates linked to this event map ID. */
+        fun eventId(eventId: String?) = apply { this.eventId = eventId }
+
+        /** Alias for calling [Builder.eventId] with `eventId.orElse(null)`. */
+        fun eventId(eventId: Optional<String>) = eventId(eventId.getOrNull())
+
+        /** Include template notes in the response. Only applies to legacy templates. */
         fun notes(notes: Boolean?) = apply { this.notes = notes }
 
         /**
@@ -178,6 +193,7 @@ private constructor(
         fun build(): NotificationListParams =
             NotificationListParams(
                 cursor,
+                eventId,
                 notes,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -190,6 +206,7 @@ private constructor(
         QueryParams.builder()
             .apply {
                 cursor?.let { put("cursor", it) }
+                eventId?.let { put("event_id", it) }
                 notes?.let { put("notes", it.toString()) }
                 putAll(additionalQueryParams)
             }
@@ -202,14 +219,15 @@ private constructor(
 
         return other is NotificationListParams &&
             cursor == other.cursor &&
+            eventId == other.eventId &&
             notes == other.notes &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(cursor, notes, additionalHeaders, additionalQueryParams)
+        Objects.hash(cursor, eventId, notes, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "NotificationListParams{cursor=$cursor, notes=$notes, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "NotificationListParams{cursor=$cursor, eventId=$eventId, notes=$notes, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

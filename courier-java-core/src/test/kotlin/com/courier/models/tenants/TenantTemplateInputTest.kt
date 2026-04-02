@@ -6,6 +6,8 @@ import com.courier.core.JsonValue
 import com.courier.core.jsonMapper
 import com.courier.models.ElementalContent
 import com.courier.models.ElementalTextNodeWithType
+import com.courier.models.MessageChannels
+import com.courier.models.MessageProviders
 import com.courier.models.MessageRouting
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
@@ -32,7 +34,7 @@ internal class TenantTemplateInputTest {
                         .build()
                 )
                 .channels(
-                    TenantTemplateInput.Channels.builder()
+                    MessageChannels.builder()
                         .putAdditionalProperty(
                             "foo",
                             JsonValue.from(
@@ -60,7 +62,7 @@ internal class TenantTemplateInputTest {
                         .build()
                 )
                 .providers(
-                    TenantTemplateInput.Providers.builder()
+                    MessageProviders.builder()
                         .putAdditionalProperty(
                             "foo",
                             JsonValue.from(
@@ -109,7 +111,7 @@ internal class TenantTemplateInputTest {
             )
         assertThat(tenantTemplateInput.channels())
             .contains(
-                TenantTemplateInput.Channels.builder()
+                MessageChannels.builder()
                     .putAdditionalProperty(
                         "foo",
                         JsonValue.from(
@@ -138,7 +140,7 @@ internal class TenantTemplateInputTest {
             )
         assertThat(tenantTemplateInput.providers())
             .contains(
-                TenantTemplateInput.Providers.builder()
+                MessageProviders.builder()
                     .putAdditionalProperty(
                         "foo",
                         JsonValue.from(
@@ -191,7 +193,7 @@ internal class TenantTemplateInputTest {
                         .build()
                 )
                 .channels(
-                    TenantTemplateInput.Channels.builder()
+                    MessageChannels.builder()
                         .putAdditionalProperty(
                             "foo",
                             JsonValue.from(
@@ -219,7 +221,7 @@ internal class TenantTemplateInputTest {
                         .build()
                 )
                 .providers(
-                    TenantTemplateInput.Providers.builder()
+                    MessageProviders.builder()
                         .putAdditionalProperty(
                             "foo",
                             JsonValue.from(

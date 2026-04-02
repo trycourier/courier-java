@@ -40,6 +40,7 @@ private constructor(
     private val actionNodeWithType: ElementalActionNodeWithType? = null,
     private val dividerNodeWithType: ElementalDividerNodeWithType? = null,
     private val quoteNodeWithType: ElementalQuoteNodeWithType? = null,
+    private val htmlNodeWithType: ElementalHtmlNodeWithType? = null,
     private val _json: JsonValue? = null,
 ) {
 
@@ -75,6 +76,9 @@ private constructor(
     fun quoteNodeWithType(): Optional<ElementalQuoteNodeWithType> =
         Optional.ofNullable(quoteNodeWithType)
 
+    fun htmlNodeWithType(): Optional<ElementalHtmlNodeWithType> =
+        Optional.ofNullable(htmlNodeWithType)
+
     fun isTextNodeWithType(): Boolean = textNodeWithType != null
 
     fun isMetaNodeWithType(): Boolean = metaNodeWithType != null
@@ -88,6 +92,8 @@ private constructor(
     fun isDividerNodeWithType(): Boolean = dividerNodeWithType != null
 
     fun isQuoteNodeWithType(): Boolean = quoteNodeWithType != null
+
+    fun isHtmlNodeWithType(): Boolean = htmlNodeWithType != null
 
     fun asTextNodeWithType(): ElementalTextNodeWithType =
         textNodeWithType.getOrThrow("textNodeWithType")
@@ -121,6 +127,9 @@ private constructor(
     fun asQuoteNodeWithType(): ElementalQuoteNodeWithType =
         quoteNodeWithType.getOrThrow("quoteNodeWithType")
 
+    fun asHtmlNodeWithType(): ElementalHtmlNodeWithType =
+        htmlNodeWithType.getOrThrow("htmlNodeWithType")
+
     fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
     fun <T> accept(visitor: Visitor<T>): T =
@@ -132,6 +141,7 @@ private constructor(
             actionNodeWithType != null -> visitor.visitActionNodeWithType(actionNodeWithType)
             dividerNodeWithType != null -> visitor.visitDividerNodeWithType(dividerNodeWithType)
             quoteNodeWithType != null -> visitor.visitQuoteNodeWithType(quoteNodeWithType)
+            htmlNodeWithType != null -> visitor.visitHtmlNodeWithType(htmlNodeWithType)
             else -> visitor.unknown(_json)
         }
 
@@ -176,6 +186,10 @@ private constructor(
 
                 override fun visitQuoteNodeWithType(quoteNodeWithType: ElementalQuoteNodeWithType) {
                     quoteNodeWithType.validate()
+                }
+
+                override fun visitHtmlNodeWithType(htmlNodeWithType: ElementalHtmlNodeWithType) {
+                    htmlNodeWithType.validate()
                 }
             }
         )
@@ -223,6 +237,9 @@ private constructor(
                 override fun visitQuoteNodeWithType(quoteNodeWithType: ElementalQuoteNodeWithType) =
                     quoteNodeWithType.validity()
 
+                override fun visitHtmlNodeWithType(htmlNodeWithType: ElementalHtmlNodeWithType) =
+                    htmlNodeWithType.validity()
+
                 override fun unknown(json: JsonValue?) = 0
             }
         )
@@ -239,7 +256,8 @@ private constructor(
             imageNodeWithType == other.imageNodeWithType &&
             actionNodeWithType == other.actionNodeWithType &&
             dividerNodeWithType == other.dividerNodeWithType &&
-            quoteNodeWithType == other.quoteNodeWithType
+            quoteNodeWithType == other.quoteNodeWithType &&
+            htmlNodeWithType == other.htmlNodeWithType
     }
 
     override fun hashCode(): Int =
@@ -251,6 +269,7 @@ private constructor(
             actionNodeWithType,
             dividerNodeWithType,
             quoteNodeWithType,
+            htmlNodeWithType,
         )
 
     override fun toString(): String =
@@ -262,6 +281,7 @@ private constructor(
             actionNodeWithType != null -> "ElementalNode{actionNodeWithType=$actionNodeWithType}"
             dividerNodeWithType != null -> "ElementalNode{dividerNodeWithType=$dividerNodeWithType}"
             quoteNodeWithType != null -> "ElementalNode{quoteNodeWithType=$quoteNodeWithType}"
+            htmlNodeWithType != null -> "ElementalNode{htmlNodeWithType=$htmlNodeWithType}"
             _json != null -> "ElementalNode{_unknown=$_json}"
             else -> throw IllegalStateException("Invalid ElementalNode")
         }
@@ -307,6 +327,10 @@ private constructor(
         @JvmStatic
         fun ofQuoteNodeWithType(quoteNodeWithType: ElementalQuoteNodeWithType) =
             ElementalNode(quoteNodeWithType = quoteNodeWithType)
+
+        @JvmStatic
+        fun ofHtmlNodeWithType(htmlNodeWithType: ElementalHtmlNodeWithType) =
+            ElementalNode(htmlNodeWithType = htmlNodeWithType)
     }
 
     /**
@@ -339,6 +363,8 @@ private constructor(
         fun visitDividerNodeWithType(dividerNodeWithType: ElementalDividerNodeWithType): T
 
         fun visitQuoteNodeWithType(quoteNodeWithType: ElementalQuoteNodeWithType): T
+
+        fun visitHtmlNodeWithType(htmlNodeWithType: ElementalHtmlNodeWithType): T
 
         /**
          * Maps an unknown variant of [ElementalNode] to a value of type [T].
@@ -382,6 +408,9 @@ private constructor(
                         tryDeserialize(node, jacksonTypeRef<ElementalQuoteNodeWithType>())?.let {
                             ElementalNode(quoteNodeWithType = it, _json = json)
                         },
+                        tryDeserialize(node, jacksonTypeRef<ElementalHtmlNodeWithType>())?.let {
+                            ElementalNode(htmlNodeWithType = it, _json = json)
+                        },
                     )
                     .filterNotNull()
                     .allMaxBy { it.validity() }
@@ -415,6 +444,7 @@ private constructor(
                 value.dividerNodeWithType != null ->
                     generator.writeObject(value.dividerNodeWithType)
                 value.quoteNodeWithType != null -> generator.writeObject(value.quoteNodeWithType)
+                value.htmlNodeWithType != null -> generator.writeObject(value.htmlNodeWithType)
                 value._json != null -> generator.writeObject(value._json)
                 else -> throw IllegalStateException("Invalid ElementalNode")
             }

@@ -176,6 +176,12 @@ private constructor(
         fun addElement(quoteNodeWithType: ElementalQuoteNodeWithType) =
             addElement(ElementalNode.ofQuoteNodeWithType(quoteNodeWithType))
 
+        /**
+         * Alias for calling [addElement] with `ElementalNode.ofHtmlNodeWithType(htmlNodeWithType)`.
+         */
+        fun addElement(htmlNodeWithType: ElementalHtmlNodeWithType) =
+            addElement(ElementalNode.ofHtmlNodeWithType(htmlNodeWithType))
+
         /** For example, "2022-01-01" */
         fun version(version: String) = version(JsonField.of(version))
 

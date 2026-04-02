@@ -15,7 +15,9 @@ import com.courier.services.async.ListServiceAsync
 import com.courier.services.async.MessageServiceAsync
 import com.courier.services.async.NotificationServiceAsync
 import com.courier.services.async.ProfileServiceAsync
+import com.courier.services.async.ProviderServiceAsync
 import com.courier.services.async.RequestServiceAsync
+import com.courier.services.async.RoutingStrategyServiceAsync
 import com.courier.services.async.SendServiceAsync
 import com.courier.services.async.TenantServiceAsync
 import com.courier.services.async.TranslationServiceAsync
@@ -62,6 +64,8 @@ interface CourierClientAsync {
 
     fun audiences(): AudienceServiceAsync
 
+    fun providers(): ProviderServiceAsync
+
     fun auditEvents(): AuditEventServiceAsync
 
     fun auth(): AuthServiceAsync
@@ -83,6 +87,8 @@ interface CourierClientAsync {
     fun requests(): RequestServiceAsync
 
     fun notifications(): NotificationServiceAsync
+
+    fun routingStrategies(): RoutingStrategyServiceAsync
 
     fun profiles(): ProfileServiceAsync
 
@@ -123,6 +129,8 @@ interface CourierClientAsync {
 
         fun audiences(): AudienceServiceAsync.WithRawResponse
 
+        fun providers(): ProviderServiceAsync.WithRawResponse
+
         fun auditEvents(): AuditEventServiceAsync.WithRawResponse
 
         fun auth(): AuthServiceAsync.WithRawResponse
@@ -144,6 +152,8 @@ interface CourierClientAsync {
         fun requests(): RequestServiceAsync.WithRawResponse
 
         fun notifications(): NotificationServiceAsync.WithRawResponse
+
+        fun routingStrategies(): RoutingStrategyServiceAsync.WithRawResponse
 
         fun profiles(): ProfileServiceAsync.WithRawResponse
 

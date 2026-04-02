@@ -6,6 +6,8 @@ import com.courier.client.okhttp.CourierOkHttpClientAsync
 import com.courier.core.JsonValue
 import com.courier.models.ElementalContent
 import com.courier.models.ElementalTextNodeWithType
+import com.courier.models.MessageChannels
+import com.courier.models.MessageProviders
 import com.courier.models.MessageRouting
 import com.courier.models.tenants.PostTenantTemplatePublishRequest
 import com.courier.models.tenants.PutTenantTemplateRequest
@@ -107,7 +109,7 @@ internal class TemplateServiceAsyncTest {
                                             .build()
                                     )
                                     .channels(
-                                        TenantTemplateInput.Channels.builder()
+                                        MessageChannels.builder()
                                             .putAdditionalProperty(
                                                 "foo",
                                                 JsonValue.from(
@@ -136,7 +138,7 @@ internal class TemplateServiceAsyncTest {
                                             .build()
                                     )
                                     .providers(
-                                        TenantTemplateInput.Providers.builder()
+                                        MessageProviders.builder()
                                             .putAdditionalProperty(
                                                 "foo",
                                                 JsonValue.from(

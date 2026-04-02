@@ -34,6 +34,7 @@ internal class ElementalNodeTest {
         assertThat(elementalNode.actionNodeWithType()).isEmpty
         assertThat(elementalNode.dividerNodeWithType()).isEmpty
         assertThat(elementalNode.quoteNodeWithType()).isEmpty
+        assertThat(elementalNode.htmlNodeWithType()).isEmpty
     }
 
     @Test
@@ -79,6 +80,7 @@ internal class ElementalNodeTest {
         assertThat(elementalNode.actionNodeWithType()).isEmpty
         assertThat(elementalNode.dividerNodeWithType()).isEmpty
         assertThat(elementalNode.quoteNodeWithType()).isEmpty
+        assertThat(elementalNode.htmlNodeWithType()).isEmpty
     }
 
     @Test
@@ -121,6 +123,7 @@ internal class ElementalNodeTest {
         assertThat(elementalNode.actionNodeWithType()).isEmpty
         assertThat(elementalNode.dividerNodeWithType()).isEmpty
         assertThat(elementalNode.quoteNodeWithType()).isEmpty
+        assertThat(elementalNode.htmlNodeWithType()).isEmpty
     }
 
     @Test
@@ -163,6 +166,7 @@ internal class ElementalNodeTest {
         assertThat(elementalNode.actionNodeWithType()).isEmpty
         assertThat(elementalNode.dividerNodeWithType()).isEmpty
         assertThat(elementalNode.quoteNodeWithType()).isEmpty
+        assertThat(elementalNode.htmlNodeWithType()).isEmpty
     }
 
     @Test
@@ -208,6 +212,7 @@ internal class ElementalNodeTest {
         assertThat(elementalNode.actionNodeWithType()).contains(actionNodeWithType)
         assertThat(elementalNode.dividerNodeWithType()).isEmpty
         assertThat(elementalNode.quoteNodeWithType()).isEmpty
+        assertThat(elementalNode.htmlNodeWithType()).isEmpty
     }
 
     @Test
@@ -253,6 +258,7 @@ internal class ElementalNodeTest {
         assertThat(elementalNode.actionNodeWithType()).isEmpty
         assertThat(elementalNode.dividerNodeWithType()).contains(dividerNodeWithType)
         assertThat(elementalNode.quoteNodeWithType()).isEmpty
+        assertThat(elementalNode.htmlNodeWithType()).isEmpty
     }
 
     @Test
@@ -298,6 +304,7 @@ internal class ElementalNodeTest {
         assertThat(elementalNode.actionNodeWithType()).isEmpty
         assertThat(elementalNode.dividerNodeWithType()).isEmpty
         assertThat(elementalNode.quoteNodeWithType()).contains(quoteNodeWithType)
+        assertThat(elementalNode.htmlNodeWithType()).isEmpty
     }
 
     @Test
@@ -311,6 +318,52 @@ internal class ElementalNodeTest {
                     .loop("loop")
                     .ref("ref")
                     .type(ElementalQuoteNodeWithType.Type.QUOTE)
+                    .build()
+            )
+
+        val roundtrippedElementalNode =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(elementalNode),
+                jacksonTypeRef<ElementalNode>(),
+            )
+
+        assertThat(roundtrippedElementalNode).isEqualTo(elementalNode)
+    }
+
+    @Test
+    fun ofHtmlNodeWithType() {
+        val htmlNodeWithType =
+            ElementalHtmlNodeWithType.builder()
+                .addChannel("string")
+                .if_("if")
+                .loop("loop")
+                .ref("ref")
+                .type(ElementalHtmlNodeWithType.Type.HTML)
+                .build()
+
+        val elementalNode = ElementalNode.ofHtmlNodeWithType(htmlNodeWithType)
+
+        assertThat(elementalNode.textNodeWithType()).isEmpty
+        assertThat(elementalNode.metaNodeWithType()).isEmpty
+        assertThat(elementalNode.channelNodeWithType()).isEmpty
+        assertThat(elementalNode.imageNodeWithType()).isEmpty
+        assertThat(elementalNode.actionNodeWithType()).isEmpty
+        assertThat(elementalNode.dividerNodeWithType()).isEmpty
+        assertThat(elementalNode.quoteNodeWithType()).isEmpty
+        assertThat(elementalNode.htmlNodeWithType()).contains(htmlNodeWithType)
+    }
+
+    @Test
+    fun ofHtmlNodeWithTypeRoundtrip() {
+        val jsonMapper = jsonMapper()
+        val elementalNode =
+            ElementalNode.ofHtmlNodeWithType(
+                ElementalHtmlNodeWithType.builder()
+                    .addChannel("string")
+                    .if_("if")
+                    .loop("loop")
+                    .ref("ref")
+                    .type(ElementalHtmlNodeWithType.Type.HTML)
                     .build()
             )
 

@@ -15,7 +15,9 @@ import com.courier.services.blocking.ListService
 import com.courier.services.blocking.MessageService
 import com.courier.services.blocking.NotificationService
 import com.courier.services.blocking.ProfileService
+import com.courier.services.blocking.ProviderService
 import com.courier.services.blocking.RequestService
+import com.courier.services.blocking.RoutingStrategyService
 import com.courier.services.blocking.SendService
 import com.courier.services.blocking.TenantService
 import com.courier.services.blocking.TranslationService
@@ -62,6 +64,8 @@ interface CourierClient {
 
     fun audiences(): AudienceService
 
+    fun providers(): ProviderService
+
     fun auditEvents(): AuditEventService
 
     fun auth(): AuthService
@@ -83,6 +87,8 @@ interface CourierClient {
     fun requests(): RequestService
 
     fun notifications(): NotificationService
+
+    fun routingStrategies(): RoutingStrategyService
 
     fun profiles(): ProfileService
 
@@ -119,6 +125,8 @@ interface CourierClient {
 
         fun audiences(): AudienceService.WithRawResponse
 
+        fun providers(): ProviderService.WithRawResponse
+
         fun auditEvents(): AuditEventService.WithRawResponse
 
         fun auth(): AuthService.WithRawResponse
@@ -140,6 +148,8 @@ interface CourierClient {
         fun requests(): RequestService.WithRawResponse
 
         fun notifications(): NotificationService.WithRawResponse
+
+        fun routingStrategies(): RoutingStrategyService.WithRawResponse
 
         fun profiles(): ProfileService.WithRawResponse
 

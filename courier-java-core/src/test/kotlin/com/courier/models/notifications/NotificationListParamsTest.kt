@@ -10,17 +10,28 @@ internal class NotificationListParamsTest {
 
     @Test
     fun create() {
-        NotificationListParams.builder().cursor("cursor").notes(true).build()
+        NotificationListParams.builder().cursor("cursor").eventId("event_id").notes(true).build()
     }
 
     @Test
     fun queryParams() {
-        val params = NotificationListParams.builder().cursor("cursor").notes(true).build()
+        val params =
+            NotificationListParams.builder()
+                .cursor("cursor")
+                .eventId("event_id")
+                .notes(true)
+                .build()
 
         val queryParams = params._queryParams()
 
         assertThat(queryParams)
-            .isEqualTo(QueryParams.builder().put("cursor", "cursor").put("notes", "true").build())
+            .isEqualTo(
+                QueryParams.builder()
+                    .put("cursor", "cursor")
+                    .put("event_id", "event_id")
+                    .put("notes", "true")
+                    .build()
+            )
     }
 
     @Test
