@@ -1,5 +1,14 @@
 # Changelog
 
+## 4.12.0 (2026-04-08)
+
+Full Changelog: [v4.11.0...v4.12.0](https://github.com/trycourier/courier-java/compare/v4.11.0...v4.12.0)
+
+### Features
+
+* **api:** add content/element/locale put methods, remove draft service, update types ([5a00765](https://github.com/trycourier/courier-java/commit/5a007658c70362a4a5fee9a26720fa6620a8f56e))
+* **api:** add listNotifications method to routing_strategies ([8d98990](https://github.com/trycourier/courier-java/commit/8d98990e8fa4307a4a3037d57460f0770da649e4))
+
 ## 4.11.0 (2026-04-01)
 
 Full Changelog: [v4.10.0...v4.11.0](https://github.com/trycourier/courier-java/compare/v4.10.0...v4.11.0)
