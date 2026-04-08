@@ -17,9 +17,11 @@ import com.courier.core.http.HttpResponseFor
 import com.courier.core.http.json
 import com.courier.core.http.parseable
 import com.courier.core.prepare
+import com.courier.models.routingstrategies.AssociatedNotificationListResponse
 import com.courier.models.routingstrategies.RoutingStrategyArchiveParams
 import com.courier.models.routingstrategies.RoutingStrategyCreateParams
 import com.courier.models.routingstrategies.RoutingStrategyGetResponse
+import com.courier.models.routingstrategies.RoutingStrategyListNotificationsParams
 import com.courier.models.routingstrategies.RoutingStrategyListParams
 import com.courier.models.routingstrategies.RoutingStrategyListResponse
 import com.courier.models.routingstrategies.RoutingStrategyMutationResponse
@@ -65,6 +67,13 @@ class RoutingStrategyServiceImpl internal constructor(private val clientOptions:
         // delete /routing-strategies/{id}
         withRawResponse().archive(params, requestOptions)
     }
+
+    override fun listNotifications(
+        params: RoutingStrategyListNotificationsParams,
+        requestOptions: RequestOptions,
+    ): AssociatedNotificationListResponse =
+        // get /routing-strategies/{id}/notifications
+        withRawResponse().listNotifications(params, requestOptions).parse()
 
     override fun replace(
         params: RoutingStrategyReplaceParams,
@@ -192,6 +201,36 @@ class RoutingStrategyServiceImpl internal constructor(private val clientOptions:
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return errorHandler.handle(response).parseable {
                 response.use { archiveHandler.handle(it) }
+            }
+        }
+
+        private val listNotificationsHandler: Handler<AssociatedNotificationListResponse> =
+            jsonHandler<AssociatedNotificationListResponse>(clientOptions.jsonMapper)
+
+        override fun listNotifications(
+            params: RoutingStrategyListNotificationsParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<AssociatedNotificationListResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("routing-strategies", params._pathParam(0), "notifications")
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { listNotificationsHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
             }
         }
 

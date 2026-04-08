@@ -8,6 +8,7 @@ import com.courier.models.MessageChannels
 import com.courier.models.MessageProviders
 import com.courier.models.MessageRouting
 import com.courier.models.routingstrategies.RoutingStrategyCreateRequest
+import com.courier.models.routingstrategies.RoutingStrategyListNotificationsParams
 import com.courier.models.routingstrategies.RoutingStrategyListParams
 import com.courier.models.routingstrategies.RoutingStrategyReplaceParams
 import com.courier.models.routingstrategies.RoutingStrategyReplaceRequest
@@ -131,6 +132,25 @@ internal class RoutingStrategyServiceAsyncTest {
         val future = routingStrategyServiceAsync.archive("id")
 
         val response = future.get()
+    }
+
+    @Disabled("Mock server tests are disabled")
+    @Test
+    fun listNotifications() {
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val routingStrategyServiceAsync = client.routingStrategies()
+
+        val associatedNotificationListResponseFuture =
+            routingStrategyServiceAsync.listNotifications(
+                RoutingStrategyListNotificationsParams.builder()
+                    .id("id")
+                    .cursor("cursor")
+                    .limit(1L)
+                    .build()
+            )
+
+        val associatedNotificationListResponse = associatedNotificationListResponseFuture.get()
+        associatedNotificationListResponse.validate()
     }
 
     @Disabled("Mock server tests are disabled")
