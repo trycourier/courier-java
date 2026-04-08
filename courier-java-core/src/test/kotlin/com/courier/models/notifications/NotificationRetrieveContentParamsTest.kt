@@ -2,6 +2,7 @@
 
 package com.courier.models.notifications
 
+import com.courier.core.http.QueryParams
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -9,7 +10,7 @@ internal class NotificationRetrieveContentParamsTest {
 
     @Test
     fun create() {
-        NotificationRetrieveContentParams.builder().id("id").build()
+        NotificationRetrieveContentParams.builder().id("id").version("version").build()
     }
 
     @Test
@@ -19,5 +20,23 @@ internal class NotificationRetrieveContentParamsTest {
         assertThat(params._pathParam(0)).isEqualTo("id")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
+    }
+
+    @Test
+    fun queryParams() {
+        val params = NotificationRetrieveContentParams.builder().id("id").version("version").build()
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams).isEqualTo(QueryParams.builder().put("version", "version").build())
+    }
+
+    @Test
+    fun queryParamsWithoutOptionalFields() {
+        val params = NotificationRetrieveContentParams.builder().id("id").build()
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams).isEqualTo(QueryParams.builder().build())
     }
 }

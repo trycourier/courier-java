@@ -7,21 +7,24 @@ import com.courier.core.RequestOptions
 import com.courier.core.http.HttpResponse
 import com.courier.core.http.HttpResponseFor
 import com.courier.models.notifications.NotificationArchiveParams
+import com.courier.models.notifications.NotificationContentMutationResponse
 import com.courier.models.notifications.NotificationCreateParams
-import com.courier.models.notifications.NotificationGetContent
 import com.courier.models.notifications.NotificationListParams
 import com.courier.models.notifications.NotificationListResponse
 import com.courier.models.notifications.NotificationListVersionsParams
 import com.courier.models.notifications.NotificationPublishParams
+import com.courier.models.notifications.NotificationPutContentParams
+import com.courier.models.notifications.NotificationPutElementParams
+import com.courier.models.notifications.NotificationPutLocaleParams
 import com.courier.models.notifications.NotificationReplaceParams
 import com.courier.models.notifications.NotificationRetrieveContentParams
+import com.courier.models.notifications.NotificationRetrieveContentResponse
 import com.courier.models.notifications.NotificationRetrieveParams
 import com.courier.models.notifications.NotificationTemplateCreateRequest
 import com.courier.models.notifications.NotificationTemplateGetResponse
 import com.courier.models.notifications.NotificationTemplateMutationResponse
 import com.courier.models.notifications.NotificationTemplateVersionListResponse
 import com.courier.services.async.notifications.CheckServiceAsync
-import com.courier.services.async.notifications.DraftServiceAsync
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
@@ -38,8 +41,6 @@ interface NotificationServiceAsync {
      * The original service is not modified.
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): NotificationServiceAsync
-
-    fun draft(): DraftServiceAsync
 
     fun checks(): CheckServiceAsync
 
@@ -237,6 +238,96 @@ interface NotificationServiceAsync {
     fun publish(id: String, requestOptions: RequestOptions): CompletableFuture<Void?> =
         publish(id, NotificationPublishParams.none(), requestOptions)
 
+    /**
+     * Replace the elemental content of a notification template. Overwrites all elements in the
+     * template with the provided content. Only supported for V2 (elemental) templates.
+     */
+    fun putContent(
+        id: String,
+        params: NotificationPutContentParams,
+    ): CompletableFuture<NotificationContentMutationResponse> =
+        putContent(id, params, RequestOptions.none())
+
+    /** @see putContent */
+    fun putContent(
+        id: String,
+        params: NotificationPutContentParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<NotificationContentMutationResponse> =
+        putContent(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see putContent */
+    fun putContent(
+        params: NotificationPutContentParams
+    ): CompletableFuture<NotificationContentMutationResponse> =
+        putContent(params, RequestOptions.none())
+
+    /** @see putContent */
+    fun putContent(
+        params: NotificationPutContentParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<NotificationContentMutationResponse>
+
+    /**
+     * Update a single element within a notification template. Only supported for V2 (elemental)
+     * templates.
+     */
+    fun putElement(
+        elementId: String,
+        params: NotificationPutElementParams,
+    ): CompletableFuture<NotificationContentMutationResponse> =
+        putElement(elementId, params, RequestOptions.none())
+
+    /** @see putElement */
+    fun putElement(
+        elementId: String,
+        params: NotificationPutElementParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<NotificationContentMutationResponse> =
+        putElement(params.toBuilder().elementId(elementId).build(), requestOptions)
+
+    /** @see putElement */
+    fun putElement(
+        params: NotificationPutElementParams
+    ): CompletableFuture<NotificationContentMutationResponse> =
+        putElement(params, RequestOptions.none())
+
+    /** @see putElement */
+    fun putElement(
+        params: NotificationPutElementParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<NotificationContentMutationResponse>
+
+    /**
+     * Set locale-specific content overrides for a notification template. Each element override must
+     * reference an existing element by ID. Only supported for V2 (elemental) templates.
+     */
+    fun putLocale(
+        localeId: String,
+        params: NotificationPutLocaleParams,
+    ): CompletableFuture<NotificationContentMutationResponse> =
+        putLocale(localeId, params, RequestOptions.none())
+
+    /** @see putLocale */
+    fun putLocale(
+        localeId: String,
+        params: NotificationPutLocaleParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<NotificationContentMutationResponse> =
+        putLocale(params.toBuilder().localeId(localeId).build(), requestOptions)
+
+    /** @see putLocale */
+    fun putLocale(
+        params: NotificationPutLocaleParams
+    ): CompletableFuture<NotificationContentMutationResponse> =
+        putLocale(params, RequestOptions.none())
+
+    /** @see putLocale */
+    fun putLocale(
+        params: NotificationPutLocaleParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<NotificationContentMutationResponse>
+
     /** Replace a notification template. All fields are required. */
     fun replace(
         id: String,
@@ -264,7 +355,12 @@ interface NotificationServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<NotificationTemplateMutationResponse>
 
-    fun retrieveContent(id: String): CompletableFuture<NotificationGetContent> =
+    /**
+     * Retrieve the content of a notification template. The response shape depends on whether the
+     * template uses V1 (blocks/channels) or V2 (elemental) content. Use the `version` query
+     * parameter to select draft, published, or a specific historical version.
+     */
+    fun retrieveContent(id: String): CompletableFuture<NotificationRetrieveContentResponse> =
         retrieveContent(id, NotificationRetrieveContentParams.none())
 
     /** @see retrieveContent */
@@ -272,32 +368,33 @@ interface NotificationServiceAsync {
         id: String,
         params: NotificationRetrieveContentParams = NotificationRetrieveContentParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<NotificationGetContent> =
+    ): CompletableFuture<NotificationRetrieveContentResponse> =
         retrieveContent(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see retrieveContent */
     fun retrieveContent(
         id: String,
         params: NotificationRetrieveContentParams = NotificationRetrieveContentParams.none(),
-    ): CompletableFuture<NotificationGetContent> =
+    ): CompletableFuture<NotificationRetrieveContentResponse> =
         retrieveContent(id, params, RequestOptions.none())
 
     /** @see retrieveContent */
     fun retrieveContent(
         params: NotificationRetrieveContentParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<NotificationGetContent>
+    ): CompletableFuture<NotificationRetrieveContentResponse>
 
     /** @see retrieveContent */
     fun retrieveContent(
         params: NotificationRetrieveContentParams
-    ): CompletableFuture<NotificationGetContent> = retrieveContent(params, RequestOptions.none())
+    ): CompletableFuture<NotificationRetrieveContentResponse> =
+        retrieveContent(params, RequestOptions.none())
 
     /** @see retrieveContent */
     fun retrieveContent(
         id: String,
         requestOptions: RequestOptions,
-    ): CompletableFuture<NotificationGetContent> =
+    ): CompletableFuture<NotificationRetrieveContentResponse> =
         retrieveContent(id, NotificationRetrieveContentParams.none(), requestOptions)
 
     /**
@@ -314,8 +411,6 @@ interface NotificationServiceAsync {
         fun withOptions(
             modifier: Consumer<ClientOptions.Builder>
         ): NotificationServiceAsync.WithRawResponse
-
-        fun draft(): DraftServiceAsync.WithRawResponse
 
         fun checks(): CheckServiceAsync.WithRawResponse
 
@@ -534,6 +629,96 @@ interface NotificationServiceAsync {
             publish(id, NotificationPublishParams.none(), requestOptions)
 
         /**
+         * Returns a raw HTTP response for `put /notifications/{id}/content`, but is otherwise the
+         * same as [NotificationServiceAsync.putContent].
+         */
+        fun putContent(
+            id: String,
+            params: NotificationPutContentParams,
+        ): CompletableFuture<HttpResponseFor<NotificationContentMutationResponse>> =
+            putContent(id, params, RequestOptions.none())
+
+        /** @see putContent */
+        fun putContent(
+            id: String,
+            params: NotificationPutContentParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<NotificationContentMutationResponse>> =
+            putContent(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see putContent */
+        fun putContent(
+            params: NotificationPutContentParams
+        ): CompletableFuture<HttpResponseFor<NotificationContentMutationResponse>> =
+            putContent(params, RequestOptions.none())
+
+        /** @see putContent */
+        fun putContent(
+            params: NotificationPutContentParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<NotificationContentMutationResponse>>
+
+        /**
+         * Returns a raw HTTP response for `put /notifications/{id}/elements/{elementId}`, but is
+         * otherwise the same as [NotificationServiceAsync.putElement].
+         */
+        fun putElement(
+            elementId: String,
+            params: NotificationPutElementParams,
+        ): CompletableFuture<HttpResponseFor<NotificationContentMutationResponse>> =
+            putElement(elementId, params, RequestOptions.none())
+
+        /** @see putElement */
+        fun putElement(
+            elementId: String,
+            params: NotificationPutElementParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<NotificationContentMutationResponse>> =
+            putElement(params.toBuilder().elementId(elementId).build(), requestOptions)
+
+        /** @see putElement */
+        fun putElement(
+            params: NotificationPutElementParams
+        ): CompletableFuture<HttpResponseFor<NotificationContentMutationResponse>> =
+            putElement(params, RequestOptions.none())
+
+        /** @see putElement */
+        fun putElement(
+            params: NotificationPutElementParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<NotificationContentMutationResponse>>
+
+        /**
+         * Returns a raw HTTP response for `put /notifications/{id}/locales/{localeId}`, but is
+         * otherwise the same as [NotificationServiceAsync.putLocale].
+         */
+        fun putLocale(
+            localeId: String,
+            params: NotificationPutLocaleParams,
+        ): CompletableFuture<HttpResponseFor<NotificationContentMutationResponse>> =
+            putLocale(localeId, params, RequestOptions.none())
+
+        /** @see putLocale */
+        fun putLocale(
+            localeId: String,
+            params: NotificationPutLocaleParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<NotificationContentMutationResponse>> =
+            putLocale(params.toBuilder().localeId(localeId).build(), requestOptions)
+
+        /** @see putLocale */
+        fun putLocale(
+            params: NotificationPutLocaleParams
+        ): CompletableFuture<HttpResponseFor<NotificationContentMutationResponse>> =
+            putLocale(params, RequestOptions.none())
+
+        /** @see putLocale */
+        fun putLocale(
+            params: NotificationPutLocaleParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<NotificationContentMutationResponse>>
+
+        /**
          * Returns a raw HTTP response for `put /notifications/{id}`, but is otherwise the same as
          * [NotificationServiceAsync.replace].
          */
@@ -569,7 +754,7 @@ interface NotificationServiceAsync {
          */
         fun retrieveContent(
             id: String
-        ): CompletableFuture<HttpResponseFor<NotificationGetContent>> =
+        ): CompletableFuture<HttpResponseFor<NotificationRetrieveContentResponse>> =
             retrieveContent(id, NotificationRetrieveContentParams.none())
 
         /** @see retrieveContent */
@@ -577,33 +762,33 @@ interface NotificationServiceAsync {
             id: String,
             params: NotificationRetrieveContentParams = NotificationRetrieveContentParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<NotificationGetContent>> =
+        ): CompletableFuture<HttpResponseFor<NotificationRetrieveContentResponse>> =
             retrieveContent(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see retrieveContent */
         fun retrieveContent(
             id: String,
             params: NotificationRetrieveContentParams = NotificationRetrieveContentParams.none(),
-        ): CompletableFuture<HttpResponseFor<NotificationGetContent>> =
+        ): CompletableFuture<HttpResponseFor<NotificationRetrieveContentResponse>> =
             retrieveContent(id, params, RequestOptions.none())
 
         /** @see retrieveContent */
         fun retrieveContent(
             params: NotificationRetrieveContentParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<NotificationGetContent>>
+        ): CompletableFuture<HttpResponseFor<NotificationRetrieveContentResponse>>
 
         /** @see retrieveContent */
         fun retrieveContent(
             params: NotificationRetrieveContentParams
-        ): CompletableFuture<HttpResponseFor<NotificationGetContent>> =
+        ): CompletableFuture<HttpResponseFor<NotificationRetrieveContentResponse>> =
             retrieveContent(params, RequestOptions.none())
 
         /** @see retrieveContent */
         fun retrieveContent(
             id: String,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<NotificationGetContent>> =
+        ): CompletableFuture<HttpResponseFor<NotificationRetrieveContentResponse>> =
             retrieveContent(id, NotificationRetrieveContentParams.none(), requestOptions)
     }
 }
