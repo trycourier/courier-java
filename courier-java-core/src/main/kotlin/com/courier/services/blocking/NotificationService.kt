@@ -7,21 +7,24 @@ import com.courier.core.RequestOptions
 import com.courier.core.http.HttpResponse
 import com.courier.core.http.HttpResponseFor
 import com.courier.models.notifications.NotificationArchiveParams
+import com.courier.models.notifications.NotificationContentMutationResponse
 import com.courier.models.notifications.NotificationCreateParams
-import com.courier.models.notifications.NotificationGetContent
 import com.courier.models.notifications.NotificationListParams
 import com.courier.models.notifications.NotificationListResponse
 import com.courier.models.notifications.NotificationListVersionsParams
 import com.courier.models.notifications.NotificationPublishParams
+import com.courier.models.notifications.NotificationPutContentParams
+import com.courier.models.notifications.NotificationPutElementParams
+import com.courier.models.notifications.NotificationPutLocaleParams
 import com.courier.models.notifications.NotificationReplaceParams
 import com.courier.models.notifications.NotificationRetrieveContentParams
+import com.courier.models.notifications.NotificationRetrieveContentResponse
 import com.courier.models.notifications.NotificationRetrieveParams
 import com.courier.models.notifications.NotificationTemplateCreateRequest
 import com.courier.models.notifications.NotificationTemplateGetResponse
 import com.courier.models.notifications.NotificationTemplateMutationResponse
 import com.courier.models.notifications.NotificationTemplateVersionListResponse
 import com.courier.services.blocking.notifications.CheckService
-import com.courier.services.blocking.notifications.DraftService
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
@@ -38,8 +41,6 @@ interface NotificationService {
      * The original service is not modified.
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): NotificationService
-
-    fun draft(): DraftService
 
     fun checks(): CheckService
 
@@ -219,6 +220,87 @@ interface NotificationService {
     fun publish(id: String, requestOptions: RequestOptions) =
         publish(id, NotificationPublishParams.none(), requestOptions)
 
+    /**
+     * Replace the elemental content of a notification template. Overwrites all elements in the
+     * template with the provided content. Only supported for V2 (elemental) templates.
+     */
+    fun putContent(
+        id: String,
+        params: NotificationPutContentParams,
+    ): NotificationContentMutationResponse = putContent(id, params, RequestOptions.none())
+
+    /** @see putContent */
+    fun putContent(
+        id: String,
+        params: NotificationPutContentParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): NotificationContentMutationResponse =
+        putContent(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see putContent */
+    fun putContent(params: NotificationPutContentParams): NotificationContentMutationResponse =
+        putContent(params, RequestOptions.none())
+
+    /** @see putContent */
+    fun putContent(
+        params: NotificationPutContentParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): NotificationContentMutationResponse
+
+    /**
+     * Update a single element within a notification template. Only supported for V2 (elemental)
+     * templates.
+     */
+    fun putElement(
+        elementId: String,
+        params: NotificationPutElementParams,
+    ): NotificationContentMutationResponse = putElement(elementId, params, RequestOptions.none())
+
+    /** @see putElement */
+    fun putElement(
+        elementId: String,
+        params: NotificationPutElementParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): NotificationContentMutationResponse =
+        putElement(params.toBuilder().elementId(elementId).build(), requestOptions)
+
+    /** @see putElement */
+    fun putElement(params: NotificationPutElementParams): NotificationContentMutationResponse =
+        putElement(params, RequestOptions.none())
+
+    /** @see putElement */
+    fun putElement(
+        params: NotificationPutElementParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): NotificationContentMutationResponse
+
+    /**
+     * Set locale-specific content overrides for a notification template. Each element override must
+     * reference an existing element by ID. Only supported for V2 (elemental) templates.
+     */
+    fun putLocale(
+        localeId: String,
+        params: NotificationPutLocaleParams,
+    ): NotificationContentMutationResponse = putLocale(localeId, params, RequestOptions.none())
+
+    /** @see putLocale */
+    fun putLocale(
+        localeId: String,
+        params: NotificationPutLocaleParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): NotificationContentMutationResponse =
+        putLocale(params.toBuilder().localeId(localeId).build(), requestOptions)
+
+    /** @see putLocale */
+    fun putLocale(params: NotificationPutLocaleParams): NotificationContentMutationResponse =
+        putLocale(params, RequestOptions.none())
+
+    /** @see putLocale */
+    fun putLocale(
+        params: NotificationPutLocaleParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): NotificationContentMutationResponse
+
     /** Replace a notification template. All fields are required. */
     fun replace(
         id: String,
@@ -243,7 +325,12 @@ interface NotificationService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): NotificationTemplateMutationResponse
 
-    fun retrieveContent(id: String): NotificationGetContent =
+    /**
+     * Retrieve the content of a notification template. The response shape depends on whether the
+     * template uses V1 (blocks/channels) or V2 (elemental) content. Use the `version` query
+     * parameter to select draft, published, or a specific historical version.
+     */
+    fun retrieveContent(id: String): NotificationRetrieveContentResponse =
         retrieveContent(id, NotificationRetrieveContentParams.none())
 
     /** @see retrieveContent */
@@ -251,26 +338,31 @@ interface NotificationService {
         id: String,
         params: NotificationRetrieveContentParams = NotificationRetrieveContentParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): NotificationGetContent = retrieveContent(params.toBuilder().id(id).build(), requestOptions)
+    ): NotificationRetrieveContentResponse =
+        retrieveContent(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see retrieveContent */
     fun retrieveContent(
         id: String,
         params: NotificationRetrieveContentParams = NotificationRetrieveContentParams.none(),
-    ): NotificationGetContent = retrieveContent(id, params, RequestOptions.none())
+    ): NotificationRetrieveContentResponse = retrieveContent(id, params, RequestOptions.none())
 
     /** @see retrieveContent */
     fun retrieveContent(
         params: NotificationRetrieveContentParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): NotificationGetContent
+    ): NotificationRetrieveContentResponse
 
     /** @see retrieveContent */
-    fun retrieveContent(params: NotificationRetrieveContentParams): NotificationGetContent =
-        retrieveContent(params, RequestOptions.none())
+    fun retrieveContent(
+        params: NotificationRetrieveContentParams
+    ): NotificationRetrieveContentResponse = retrieveContent(params, RequestOptions.none())
 
     /** @see retrieveContent */
-    fun retrieveContent(id: String, requestOptions: RequestOptions): NotificationGetContent =
+    fun retrieveContent(
+        id: String,
+        requestOptions: RequestOptions,
+    ): NotificationRetrieveContentResponse =
         retrieveContent(id, NotificationRetrieveContentParams.none(), requestOptions)
 
     /**
@@ -286,8 +378,6 @@ interface NotificationService {
         fun withOptions(
             modifier: Consumer<ClientOptions.Builder>
         ): NotificationService.WithRawResponse
-
-        fun draft(): DraftService.WithRawResponse
 
         fun checks(): CheckService.WithRawResponse
 
@@ -526,6 +616,108 @@ interface NotificationService {
             publish(id, NotificationPublishParams.none(), requestOptions)
 
         /**
+         * Returns a raw HTTP response for `put /notifications/{id}/content`, but is otherwise the
+         * same as [NotificationService.putContent].
+         */
+        @MustBeClosed
+        fun putContent(
+            id: String,
+            params: NotificationPutContentParams,
+        ): HttpResponseFor<NotificationContentMutationResponse> =
+            putContent(id, params, RequestOptions.none())
+
+        /** @see putContent */
+        @MustBeClosed
+        fun putContent(
+            id: String,
+            params: NotificationPutContentParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<NotificationContentMutationResponse> =
+            putContent(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see putContent */
+        @MustBeClosed
+        fun putContent(
+            params: NotificationPutContentParams
+        ): HttpResponseFor<NotificationContentMutationResponse> =
+            putContent(params, RequestOptions.none())
+
+        /** @see putContent */
+        @MustBeClosed
+        fun putContent(
+            params: NotificationPutContentParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<NotificationContentMutationResponse>
+
+        /**
+         * Returns a raw HTTP response for `put /notifications/{id}/elements/{elementId}`, but is
+         * otherwise the same as [NotificationService.putElement].
+         */
+        @MustBeClosed
+        fun putElement(
+            elementId: String,
+            params: NotificationPutElementParams,
+        ): HttpResponseFor<NotificationContentMutationResponse> =
+            putElement(elementId, params, RequestOptions.none())
+
+        /** @see putElement */
+        @MustBeClosed
+        fun putElement(
+            elementId: String,
+            params: NotificationPutElementParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<NotificationContentMutationResponse> =
+            putElement(params.toBuilder().elementId(elementId).build(), requestOptions)
+
+        /** @see putElement */
+        @MustBeClosed
+        fun putElement(
+            params: NotificationPutElementParams
+        ): HttpResponseFor<NotificationContentMutationResponse> =
+            putElement(params, RequestOptions.none())
+
+        /** @see putElement */
+        @MustBeClosed
+        fun putElement(
+            params: NotificationPutElementParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<NotificationContentMutationResponse>
+
+        /**
+         * Returns a raw HTTP response for `put /notifications/{id}/locales/{localeId}`, but is
+         * otherwise the same as [NotificationService.putLocale].
+         */
+        @MustBeClosed
+        fun putLocale(
+            localeId: String,
+            params: NotificationPutLocaleParams,
+        ): HttpResponseFor<NotificationContentMutationResponse> =
+            putLocale(localeId, params, RequestOptions.none())
+
+        /** @see putLocale */
+        @MustBeClosed
+        fun putLocale(
+            localeId: String,
+            params: NotificationPutLocaleParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<NotificationContentMutationResponse> =
+            putLocale(params.toBuilder().localeId(localeId).build(), requestOptions)
+
+        /** @see putLocale */
+        @MustBeClosed
+        fun putLocale(
+            params: NotificationPutLocaleParams
+        ): HttpResponseFor<NotificationContentMutationResponse> =
+            putLocale(params, RequestOptions.none())
+
+        /** @see putLocale */
+        @MustBeClosed
+        fun putLocale(
+            params: NotificationPutLocaleParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<NotificationContentMutationResponse>
+
+        /**
          * Returns a raw HTTP response for `put /notifications/{id}`, but is otherwise the same as
          * [NotificationService.replace].
          */
@@ -564,7 +756,7 @@ interface NotificationService {
          * same as [NotificationService.retrieveContent].
          */
         @MustBeClosed
-        fun retrieveContent(id: String): HttpResponseFor<NotificationGetContent> =
+        fun retrieveContent(id: String): HttpResponseFor<NotificationRetrieveContentResponse> =
             retrieveContent(id, NotificationRetrieveContentParams.none())
 
         /** @see retrieveContent */
@@ -573,7 +765,7 @@ interface NotificationService {
             id: String,
             params: NotificationRetrieveContentParams = NotificationRetrieveContentParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<NotificationGetContent> =
+        ): HttpResponseFor<NotificationRetrieveContentResponse> =
             retrieveContent(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see retrieveContent */
@@ -581,7 +773,7 @@ interface NotificationService {
         fun retrieveContent(
             id: String,
             params: NotificationRetrieveContentParams = NotificationRetrieveContentParams.none(),
-        ): HttpResponseFor<NotificationGetContent> =
+        ): HttpResponseFor<NotificationRetrieveContentResponse> =
             retrieveContent(id, params, RequestOptions.none())
 
         /** @see retrieveContent */
@@ -589,20 +781,21 @@ interface NotificationService {
         fun retrieveContent(
             params: NotificationRetrieveContentParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<NotificationGetContent>
+        ): HttpResponseFor<NotificationRetrieveContentResponse>
 
         /** @see retrieveContent */
         @MustBeClosed
         fun retrieveContent(
             params: NotificationRetrieveContentParams
-        ): HttpResponseFor<NotificationGetContent> = retrieveContent(params, RequestOptions.none())
+        ): HttpResponseFor<NotificationRetrieveContentResponse> =
+            retrieveContent(params, RequestOptions.none())
 
         /** @see retrieveContent */
         @MustBeClosed
         fun retrieveContent(
             id: String,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<NotificationGetContent> =
+        ): HttpResponseFor<NotificationRetrieveContentResponse> =
             retrieveContent(id, NotificationRetrieveContentParams.none(), requestOptions)
     }
 }

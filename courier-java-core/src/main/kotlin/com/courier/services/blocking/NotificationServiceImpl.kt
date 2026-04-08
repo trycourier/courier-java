@@ -18,22 +18,24 @@ import com.courier.core.http.json
 import com.courier.core.http.parseable
 import com.courier.core.prepare
 import com.courier.models.notifications.NotificationArchiveParams
+import com.courier.models.notifications.NotificationContentMutationResponse
 import com.courier.models.notifications.NotificationCreateParams
-import com.courier.models.notifications.NotificationGetContent
 import com.courier.models.notifications.NotificationListParams
 import com.courier.models.notifications.NotificationListResponse
 import com.courier.models.notifications.NotificationListVersionsParams
 import com.courier.models.notifications.NotificationPublishParams
+import com.courier.models.notifications.NotificationPutContentParams
+import com.courier.models.notifications.NotificationPutElementParams
+import com.courier.models.notifications.NotificationPutLocaleParams
 import com.courier.models.notifications.NotificationReplaceParams
 import com.courier.models.notifications.NotificationRetrieveContentParams
+import com.courier.models.notifications.NotificationRetrieveContentResponse
 import com.courier.models.notifications.NotificationRetrieveParams
 import com.courier.models.notifications.NotificationTemplateGetResponse
 import com.courier.models.notifications.NotificationTemplateMutationResponse
 import com.courier.models.notifications.NotificationTemplateVersionListResponse
 import com.courier.services.blocking.notifications.CheckService
 import com.courier.services.blocking.notifications.CheckServiceImpl
-import com.courier.services.blocking.notifications.DraftService
-import com.courier.services.blocking.notifications.DraftServiceImpl
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
@@ -44,16 +46,12 @@ class NotificationServiceImpl internal constructor(private val clientOptions: Cl
         WithRawResponseImpl(clientOptions)
     }
 
-    private val draft: DraftService by lazy { DraftServiceImpl(clientOptions) }
-
     private val checks: CheckService by lazy { CheckServiceImpl(clientOptions) }
 
     override fun withRawResponse(): NotificationService.WithRawResponse = withRawResponse
 
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): NotificationService =
         NotificationServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
-
-    override fun draft(): DraftService = draft
 
     override fun checks(): CheckService = checks
 
@@ -95,6 +93,27 @@ class NotificationServiceImpl internal constructor(private val clientOptions: Cl
         withRawResponse().publish(params, requestOptions)
     }
 
+    override fun putContent(
+        params: NotificationPutContentParams,
+        requestOptions: RequestOptions,
+    ): NotificationContentMutationResponse =
+        // put /notifications/{id}/content
+        withRawResponse().putContent(params, requestOptions).parse()
+
+    override fun putElement(
+        params: NotificationPutElementParams,
+        requestOptions: RequestOptions,
+    ): NotificationContentMutationResponse =
+        // put /notifications/{id}/elements/{elementId}
+        withRawResponse().putElement(params, requestOptions).parse()
+
+    override fun putLocale(
+        params: NotificationPutLocaleParams,
+        requestOptions: RequestOptions,
+    ): NotificationContentMutationResponse =
+        // put /notifications/{id}/locales/{localeId}
+        withRawResponse().putLocale(params, requestOptions).parse()
+
     override fun replace(
         params: NotificationReplaceParams,
         requestOptions: RequestOptions,
@@ -105,7 +124,7 @@ class NotificationServiceImpl internal constructor(private val clientOptions: Cl
     override fun retrieveContent(
         params: NotificationRetrieveContentParams,
         requestOptions: RequestOptions,
-    ): NotificationGetContent =
+    ): NotificationRetrieveContentResponse =
         // get /notifications/{id}/content
         withRawResponse().retrieveContent(params, requestOptions).parse()
 
@@ -114,10 +133,6 @@ class NotificationServiceImpl internal constructor(private val clientOptions: Cl
 
         private val errorHandler: Handler<HttpResponse> =
             errorHandler(errorBodyHandler(clientOptions.jsonMapper))
-
-        private val draft: DraftService.WithRawResponse by lazy {
-            DraftServiceImpl.WithRawResponseImpl(clientOptions)
-        }
 
         private val checks: CheckService.WithRawResponse by lazy {
             CheckServiceImpl.WithRawResponseImpl(clientOptions)
@@ -129,8 +144,6 @@ class NotificationServiceImpl internal constructor(private val clientOptions: Cl
             NotificationServiceImpl.WithRawResponseImpl(
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
-
-        override fun draft(): DraftService.WithRawResponse = draft
 
         override fun checks(): CheckService.WithRawResponse = checks
 
@@ -297,6 +310,109 @@ class NotificationServiceImpl internal constructor(private val clientOptions: Cl
             }
         }
 
+        private val putContentHandler: Handler<NotificationContentMutationResponse> =
+            jsonHandler<NotificationContentMutationResponse>(clientOptions.jsonMapper)
+
+        override fun putContent(
+            params: NotificationPutContentParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<NotificationContentMutationResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PUT)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("notifications", params._pathParam(0), "content")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { putContentHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val putElementHandler: Handler<NotificationContentMutationResponse> =
+            jsonHandler<NotificationContentMutationResponse>(clientOptions.jsonMapper)
+
+        override fun putElement(
+            params: NotificationPutElementParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<NotificationContentMutationResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("elementId", params.elementId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PUT)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments(
+                        "notifications",
+                        params._pathParam(0),
+                        "elements",
+                        params._pathParam(1),
+                    )
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { putElementHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val putLocaleHandler: Handler<NotificationContentMutationResponse> =
+            jsonHandler<NotificationContentMutationResponse>(clientOptions.jsonMapper)
+
+        override fun putLocale(
+            params: NotificationPutLocaleParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<NotificationContentMutationResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("localeId", params.localeId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PUT)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments(
+                        "notifications",
+                        params._pathParam(0),
+                        "locales",
+                        params._pathParam(1),
+                    )
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { putLocaleHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
         private val replaceHandler: Handler<NotificationTemplateMutationResponse> =
             jsonHandler<NotificationTemplateMutationResponse>(clientOptions.jsonMapper)
 
@@ -328,13 +444,13 @@ class NotificationServiceImpl internal constructor(private val clientOptions: Cl
             }
         }
 
-        private val retrieveContentHandler: Handler<NotificationGetContent> =
-            jsonHandler<NotificationGetContent>(clientOptions.jsonMapper)
+        private val retrieveContentHandler: Handler<NotificationRetrieveContentResponse> =
+            jsonHandler<NotificationRetrieveContentResponse>(clientOptions.jsonMapper)
 
         override fun retrieveContent(
             params: NotificationRetrieveContentParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<NotificationGetContent> {
+        ): HttpResponseFor<NotificationRetrieveContentResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id().getOrNull())

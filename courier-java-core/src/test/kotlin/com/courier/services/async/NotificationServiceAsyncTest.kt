@@ -3,16 +3,25 @@
 package com.courier.services.async
 
 import com.courier.client.okhttp.CourierOkHttpClientAsync
+import com.courier.core.JsonValue
 import com.courier.models.ElementalChannelNodeWithType
 import com.courier.models.ElementalContent
+import com.courier.models.notifications.NotificationContentPutRequest
+import com.courier.models.notifications.NotificationElementPutRequest
 import com.courier.models.notifications.NotificationListParams
 import com.courier.models.notifications.NotificationListVersionsParams
+import com.courier.models.notifications.NotificationLocalePutRequest
 import com.courier.models.notifications.NotificationPublishParams
+import com.courier.models.notifications.NotificationPutContentParams
+import com.courier.models.notifications.NotificationPutElementParams
+import com.courier.models.notifications.NotificationPutLocaleParams
 import com.courier.models.notifications.NotificationReplaceParams
+import com.courier.models.notifications.NotificationRetrieveContentParams
 import com.courier.models.notifications.NotificationRetrieveParams
 import com.courier.models.notifications.NotificationTemplateCreateRequest
 import com.courier.models.notifications.NotificationTemplatePayload
 import com.courier.models.notifications.NotificationTemplatePublishRequest
+import com.courier.models.notifications.NotificationTemplateState
 import com.courier.models.notifications.NotificationTemplateUpdateRequest
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -154,6 +163,100 @@ internal class NotificationServiceAsyncTest {
 
     @Disabled("Mock server tests are disabled")
     @Test
+    fun putContent() {
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val notificationServiceAsync = client.notifications()
+
+        val notificationContentMutationResponseFuture =
+            notificationServiceAsync.putContent(
+                NotificationPutContentParams.builder()
+                    .id("id")
+                    .notificationContentPutRequest(
+                        NotificationContentPutRequest.builder()
+                            .content(
+                                NotificationContentPutRequest.Content.builder()
+                                    .addElement(
+                                        ElementalChannelNodeWithType.builder()
+                                            .type(ElementalChannelNodeWithType.Type.CHANNEL)
+                                            .build()
+                                    )
+                                    .version("2022-01-01")
+                                    .build()
+                            )
+                            .state(NotificationTemplateState.DRAFT)
+                            .build()
+                    )
+                    .build()
+            )
+
+        val notificationContentMutationResponse = notificationContentMutationResponseFuture.get()
+        notificationContentMutationResponse.validate()
+    }
+
+    @Disabled("Mock server tests are disabled")
+    @Test
+    fun putElement() {
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val notificationServiceAsync = client.notifications()
+
+        val notificationContentMutationResponseFuture =
+            notificationServiceAsync.putElement(
+                NotificationPutElementParams.builder()
+                    .id("id")
+                    .elementId("elementId")
+                    .notificationElementPutRequest(
+                        NotificationElementPutRequest.builder()
+                            .type("text")
+                            .addChannel("string")
+                            .data(
+                                NotificationElementPutRequest.Data.builder()
+                                    .putAdditionalProperty("content", JsonValue.from("bar"))
+                                    .build()
+                            )
+                            .if_("if")
+                            .loop("loop")
+                            .ref("ref")
+                            .state(NotificationTemplateState.DRAFT)
+                            .build()
+                    )
+                    .build()
+            )
+
+        val notificationContentMutationResponse = notificationContentMutationResponseFuture.get()
+        notificationContentMutationResponse.validate()
+    }
+
+    @Disabled("Mock server tests are disabled")
+    @Test
+    fun putLocale() {
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val notificationServiceAsync = client.notifications()
+
+        val notificationContentMutationResponseFuture =
+            notificationServiceAsync.putLocale(
+                NotificationPutLocaleParams.builder()
+                    .id("id")
+                    .localeId("localeId")
+                    .notificationLocalePutRequest(
+                        NotificationLocalePutRequest.builder()
+                            .addElement(
+                                NotificationLocalePutRequest.Element.builder().id("elem_1").build()
+                            )
+                            .addElement(
+                                NotificationLocalePutRequest.Element.builder().id("elem_2").build()
+                            )
+                            .state(NotificationTemplateState.DRAFT)
+                            .build()
+                    )
+                    .build()
+            )
+
+        val notificationContentMutationResponse = notificationContentMutationResponseFuture.get()
+        notificationContentMutationResponse.validate()
+    }
+
+    @Disabled("Mock server tests are disabled")
+    @Test
     fun replace() {
         val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val notificationServiceAsync = client.notifications()
@@ -209,9 +312,12 @@ internal class NotificationServiceAsyncTest {
         val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val notificationServiceAsync = client.notifications()
 
-        val notificationGetContentFuture = notificationServiceAsync.retrieveContent("id")
+        val responseFuture =
+            notificationServiceAsync.retrieveContent(
+                NotificationRetrieveContentParams.builder().id("id").version("version").build()
+            )
 
-        val notificationGetContent = notificationGetContentFuture.get()
-        notificationGetContent.validate()
+        val response = responseFuture.get()
+        response.validate()
     }
 }
