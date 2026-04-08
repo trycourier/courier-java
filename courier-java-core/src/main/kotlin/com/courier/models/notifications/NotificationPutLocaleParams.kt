@@ -2,7 +2,9 @@
 
 package com.courier.models.notifications
 
+import com.courier.core.JsonValue
 import com.courier.core.Params
+import com.courier.core.checkRequired
 import com.courier.core.http.Headers
 import com.courier.core.http.QueryParams
 import java.util.Objects
@@ -10,24 +12,30 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Retrieve the content of a notification template. The response shape depends on whether the
- * template uses V1 (blocks/channels) or V2 (elemental) content. Use the `version` query parameter
- * to select draft, published, or a specific historical version.
+ * Set locale-specific content overrides for a notification template. Each element override must
+ * reference an existing element by ID. Only supported for V2 (elemental) templates.
  */
-class NotificationRetrieveContentParams
+class NotificationPutLocaleParams
 private constructor(
-    private val id: String?,
-    private val version: String?,
+    private val id: String,
+    private val localeId: String?,
+    private val notificationLocalePutRequest: NotificationLocalePutRequest,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun id(): Optional<String> = Optional.ofNullable(id)
+    fun id(): String = id
+
+    fun localeId(): Optional<String> = Optional.ofNullable(localeId)
 
     /**
-     * Accepts `draft`, `published`, or a version string (e.g., `v001`). Defaults to `published`.
+     * Request body for setting locale-specific content overrides. Each element override must
+     * include the target element ID.
      */
-    fun version(): Optional<String> = Optional.ofNullable(version)
+    fun notificationLocalePutRequest(): NotificationLocalePutRequest = notificationLocalePutRequest
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> =
+        notificationLocalePutRequest._additionalProperties()
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -39,46 +47,50 @@ private constructor(
 
     companion object {
 
-        @JvmStatic fun none(): NotificationRetrieveContentParams = builder().build()
-
         /**
-         * Returns a mutable builder for constructing an instance of
-         * [NotificationRetrieveContentParams].
+         * Returns a mutable builder for constructing an instance of [NotificationPutLocaleParams].
+         *
+         * The following fields are required:
+         * ```java
+         * .id()
+         * .notificationLocalePutRequest()
+         * ```
          */
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [NotificationRetrieveContentParams]. */
+    /** A builder for [NotificationPutLocaleParams]. */
     class Builder internal constructor() {
 
         private var id: String? = null
-        private var version: String? = null
+        private var localeId: String? = null
+        private var notificationLocalePutRequest: NotificationLocalePutRequest? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(notificationRetrieveContentParams: NotificationRetrieveContentParams) =
-            apply {
-                id = notificationRetrieveContentParams.id
-                version = notificationRetrieveContentParams.version
-                additionalHeaders = notificationRetrieveContentParams.additionalHeaders.toBuilder()
-                additionalQueryParams =
-                    notificationRetrieveContentParams.additionalQueryParams.toBuilder()
-            }
+        internal fun from(notificationPutLocaleParams: NotificationPutLocaleParams) = apply {
+            id = notificationPutLocaleParams.id
+            localeId = notificationPutLocaleParams.localeId
+            notificationLocalePutRequest = notificationPutLocaleParams.notificationLocalePutRequest
+            additionalHeaders = notificationPutLocaleParams.additionalHeaders.toBuilder()
+            additionalQueryParams = notificationPutLocaleParams.additionalQueryParams.toBuilder()
+        }
 
-        fun id(id: String?) = apply { this.id = id }
+        fun id(id: String) = apply { this.id = id }
 
-        /** Alias for calling [Builder.id] with `id.orElse(null)`. */
-        fun id(id: Optional<String>) = id(id.getOrNull())
+        fun localeId(localeId: String?) = apply { this.localeId = localeId }
+
+        /** Alias for calling [Builder.localeId] with `localeId.orElse(null)`. */
+        fun localeId(localeId: Optional<String>) = localeId(localeId.getOrNull())
 
         /**
-         * Accepts `draft`, `published`, or a version string (e.g., `v001`). Defaults to
-         * `published`.
+         * Request body for setting locale-specific content overrides. Each element override must
+         * include the target element ID.
          */
-        fun version(version: String?) = apply { this.version = version }
-
-        /** Alias for calling [Builder.version] with `version.orElse(null)`. */
-        fun version(version: Optional<String>) = version(version.getOrNull())
+        fun notificationLocalePutRequest(
+            notificationLocalePutRequest: NotificationLocalePutRequest
+        ) = apply { this.notificationLocalePutRequest = notificationLocalePutRequest }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -179,50 +191,63 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [NotificationRetrieveContentParams].
+         * Returns an immutable instance of [NotificationPutLocaleParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .id()
+         * .notificationLocalePutRequest()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): NotificationRetrieveContentParams =
-            NotificationRetrieveContentParams(
-                id,
-                version,
+        fun build(): NotificationPutLocaleParams =
+            NotificationPutLocaleParams(
+                checkRequired("id", id),
+                localeId,
+                checkRequired("notificationLocalePutRequest", notificationLocalePutRequest),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
     }
 
+    fun _body(): NotificationLocalePutRequest = notificationLocalePutRequest
+
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> id ?: ""
+            0 -> id
+            1 -> localeId ?: ""
             else -> ""
         }
 
     override fun _headers(): Headers = additionalHeaders
 
-    override fun _queryParams(): QueryParams =
-        QueryParams.builder()
-            .apply {
-                version?.let { put("version", it) }
-                putAll(additionalQueryParams)
-            }
-            .build()
+    override fun _queryParams(): QueryParams = additionalQueryParams
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return other is NotificationRetrieveContentParams &&
+        return other is NotificationPutLocaleParams &&
             id == other.id &&
-            version == other.version &&
+            localeId == other.localeId &&
+            notificationLocalePutRequest == other.notificationLocalePutRequest &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(id, version, additionalHeaders, additionalQueryParams)
+        Objects.hash(
+            id,
+            localeId,
+            notificationLocalePutRequest,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
     override fun toString() =
-        "NotificationRetrieveContentParams{id=$id, version=$version, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "NotificationPutLocaleParams{id=$id, localeId=$localeId, notificationLocalePutRequest=$notificationLocalePutRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

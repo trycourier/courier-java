@@ -1,22 +1,39 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.models.notifications.draft
+package com.courier.models.notifications
 
+import com.courier.core.JsonValue
 import com.courier.core.Params
+import com.courier.core.checkRequired
 import com.courier.core.http.Headers
 import com.courier.core.http.QueryParams
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-class DraftRetrieveContentParams
+/**
+ * Update a single element within a notification template. Only supported for V2 (elemental)
+ * templates.
+ */
+class NotificationPutElementParams
 private constructor(
-    private val id: String?,
+    private val id: String,
+    private val elementId: String?,
+    private val notificationElementPutRequest: NotificationElementPutRequest,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun id(): Optional<String> = Optional.ofNullable(id)
+    fun id(): String = id
+
+    fun elementId(): Optional<String> = Optional.ofNullable(elementId)
+
+    /** Request body for updating a single element. Additional type-specific fields are allowed. */
+    fun notificationElementPutRequest(): NotificationElementPutRequest =
+        notificationElementPutRequest
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> =
+        notificationElementPutRequest._additionalProperties()
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -28,32 +45,50 @@ private constructor(
 
     companion object {
 
-        @JvmStatic fun none(): DraftRetrieveContentParams = builder().build()
-
         /**
-         * Returns a mutable builder for constructing an instance of [DraftRetrieveContentParams].
+         * Returns a mutable builder for constructing an instance of [NotificationPutElementParams].
+         *
+         * The following fields are required:
+         * ```java
+         * .id()
+         * .notificationElementPutRequest()
+         * ```
          */
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [DraftRetrieveContentParams]. */
+    /** A builder for [NotificationPutElementParams]. */
     class Builder internal constructor() {
 
         private var id: String? = null
+        private var elementId: String? = null
+        private var notificationElementPutRequest: NotificationElementPutRequest? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(draftRetrieveContentParams: DraftRetrieveContentParams) = apply {
-            id = draftRetrieveContentParams.id
-            additionalHeaders = draftRetrieveContentParams.additionalHeaders.toBuilder()
-            additionalQueryParams = draftRetrieveContentParams.additionalQueryParams.toBuilder()
+        internal fun from(notificationPutElementParams: NotificationPutElementParams) = apply {
+            id = notificationPutElementParams.id
+            elementId = notificationPutElementParams.elementId
+            notificationElementPutRequest =
+                notificationPutElementParams.notificationElementPutRequest
+            additionalHeaders = notificationPutElementParams.additionalHeaders.toBuilder()
+            additionalQueryParams = notificationPutElementParams.additionalQueryParams.toBuilder()
         }
 
-        fun id(id: String?) = apply { this.id = id }
+        fun id(id: String) = apply { this.id = id }
 
-        /** Alias for calling [Builder.id] with `id.orElse(null)`. */
-        fun id(id: Optional<String>) = id(id.getOrNull())
+        fun elementId(elementId: String?) = apply { this.elementId = elementId }
+
+        /** Alias for calling [Builder.elementId] with `elementId.orElse(null)`. */
+        fun elementId(elementId: Optional<String>) = elementId(elementId.getOrNull())
+
+        /**
+         * Request body for updating a single element. Additional type-specific fields are allowed.
+         */
+        fun notificationElementPutRequest(
+            notificationElementPutRequest: NotificationElementPutRequest
+        ) = apply { this.notificationElementPutRequest = notificationElementPutRequest }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -154,17 +189,34 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [DraftRetrieveContentParams].
+         * Returns an immutable instance of [NotificationPutElementParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .id()
+         * .notificationElementPutRequest()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): DraftRetrieveContentParams =
-            DraftRetrieveContentParams(id, additionalHeaders.build(), additionalQueryParams.build())
+        fun build(): NotificationPutElementParams =
+            NotificationPutElementParams(
+                checkRequired("id", id),
+                elementId,
+                checkRequired("notificationElementPutRequest", notificationElementPutRequest),
+                additionalHeaders.build(),
+                additionalQueryParams.build(),
+            )
     }
+
+    fun _body(): NotificationElementPutRequest = notificationElementPutRequest
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> id ?: ""
+            0 -> id
+            1 -> elementId ?: ""
             else -> ""
         }
 
@@ -177,14 +229,23 @@ private constructor(
             return true
         }
 
-        return other is DraftRetrieveContentParams &&
+        return other is NotificationPutElementParams &&
             id == other.id &&
+            elementId == other.elementId &&
+            notificationElementPutRequest == other.notificationElementPutRequest &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = Objects.hash(id, additionalHeaders, additionalQueryParams)
+    override fun hashCode(): Int =
+        Objects.hash(
+            id,
+            elementId,
+            notificationElementPutRequest,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
     override fun toString() =
-        "DraftRetrieveContentParams{id=$id, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "NotificationPutElementParams{id=$id, elementId=$elementId, notificationElementPutRequest=$notificationElementPutRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

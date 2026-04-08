@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.models.notifications
+package com.courier.models.routingstrategies
 
 import com.courier.core.Params
 import com.courier.core.http.Headers
@@ -10,24 +10,25 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Retrieve the content of a notification template. The response shape depends on whether the
- * template uses V1 (blocks/channels) or V2 (elemental) content. Use the `version` query parameter
- * to select draft, published, or a specific historical version.
+ * List notification templates associated with a routing strategy. Includes template metadata only,
+ * not full content.
  */
-class NotificationRetrieveContentParams
+class RoutingStrategyListNotificationsParams
 private constructor(
     private val id: String?,
-    private val version: String?,
+    private val cursor: String?,
+    private val limit: Long?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     fun id(): Optional<String> = Optional.ofNullable(id)
 
-    /**
-     * Accepts `draft`, `published`, or a version string (e.g., `v001`). Defaults to `published`.
-     */
-    fun version(): Optional<String> = Optional.ofNullable(version)
+    /** Opaque pagination cursor from a previous response. Omit for the first page. */
+    fun cursor(): Optional<String> = Optional.ofNullable(cursor)
+
+    /** Maximum number of results per page. Default 20, max 100. */
+    fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -39,46 +40,59 @@ private constructor(
 
     companion object {
 
-        @JvmStatic fun none(): NotificationRetrieveContentParams = builder().build()
+        @JvmStatic fun none(): RoutingStrategyListNotificationsParams = builder().build()
 
         /**
          * Returns a mutable builder for constructing an instance of
-         * [NotificationRetrieveContentParams].
+         * [RoutingStrategyListNotificationsParams].
          */
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [NotificationRetrieveContentParams]. */
+    /** A builder for [RoutingStrategyListNotificationsParams]. */
     class Builder internal constructor() {
 
         private var id: String? = null
-        private var version: String? = null
+        private var cursor: String? = null
+        private var limit: Long? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(notificationRetrieveContentParams: NotificationRetrieveContentParams) =
-            apply {
-                id = notificationRetrieveContentParams.id
-                version = notificationRetrieveContentParams.version
-                additionalHeaders = notificationRetrieveContentParams.additionalHeaders.toBuilder()
-                additionalQueryParams =
-                    notificationRetrieveContentParams.additionalQueryParams.toBuilder()
-            }
+        internal fun from(
+            routingStrategyListNotificationsParams: RoutingStrategyListNotificationsParams
+        ) = apply {
+            id = routingStrategyListNotificationsParams.id
+            cursor = routingStrategyListNotificationsParams.cursor
+            limit = routingStrategyListNotificationsParams.limit
+            additionalHeaders = routingStrategyListNotificationsParams.additionalHeaders.toBuilder()
+            additionalQueryParams =
+                routingStrategyListNotificationsParams.additionalQueryParams.toBuilder()
+        }
 
         fun id(id: String?) = apply { this.id = id }
 
         /** Alias for calling [Builder.id] with `id.orElse(null)`. */
         fun id(id: Optional<String>) = id(id.getOrNull())
 
-        /**
-         * Accepts `draft`, `published`, or a version string (e.g., `v001`). Defaults to
-         * `published`.
-         */
-        fun version(version: String?) = apply { this.version = version }
+        /** Opaque pagination cursor from a previous response. Omit for the first page. */
+        fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
-        /** Alias for calling [Builder.version] with `version.orElse(null)`. */
-        fun version(version: Optional<String>) = version(version.getOrNull())
+        /** Alias for calling [Builder.cursor] with `cursor.orElse(null)`. */
+        fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
+
+        /** Maximum number of results per page. Default 20, max 100. */
+        fun limit(limit: Long?) = apply { this.limit = limit }
+
+        /**
+         * Alias for [Builder.limit].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun limit(limit: Long) = limit(limit as Long?)
+
+        /** Alias for calling [Builder.limit] with `limit.orElse(null)`. */
+        fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -179,14 +193,15 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [NotificationRetrieveContentParams].
+         * Returns an immutable instance of [RoutingStrategyListNotificationsParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          */
-        fun build(): NotificationRetrieveContentParams =
-            NotificationRetrieveContentParams(
+        fun build(): RoutingStrategyListNotificationsParams =
+            RoutingStrategyListNotificationsParams(
                 id,
-                version,
+                cursor,
+                limit,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -203,7 +218,8 @@ private constructor(
     override fun _queryParams(): QueryParams =
         QueryParams.builder()
             .apply {
-                version?.let { put("version", it) }
+                cursor?.let { put("cursor", it) }
+                limit?.let { put("limit", it.toString()) }
                 putAll(additionalQueryParams)
             }
             .build()
@@ -213,16 +229,17 @@ private constructor(
             return true
         }
 
-        return other is NotificationRetrieveContentParams &&
+        return other is RoutingStrategyListNotificationsParams &&
             id == other.id &&
-            version == other.version &&
+            cursor == other.cursor &&
+            limit == other.limit &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(id, version, additionalHeaders, additionalQueryParams)
+        Objects.hash(id, cursor, limit, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "NotificationRetrieveContentParams{id=$id, version=$version, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "RoutingStrategyListNotificationsParams{id=$id, cursor=$cursor, limit=$limit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

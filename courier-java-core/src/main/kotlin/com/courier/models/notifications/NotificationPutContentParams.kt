@@ -2,7 +2,9 @@
 
 package com.courier.models.notifications
 
+import com.courier.core.JsonValue
 import com.courier.core.Params
+import com.courier.core.checkRequired
 import com.courier.core.http.Headers
 import com.courier.core.http.QueryParams
 import java.util.Objects
@@ -10,24 +12,25 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Retrieve the content of a notification template. The response shape depends on whether the
- * template uses V1 (blocks/channels) or V2 (elemental) content. Use the `version` query parameter
- * to select draft, published, or a specific historical version.
+ * Replace the elemental content of a notification template. Overwrites all elements in the template
+ * with the provided content. Only supported for V2 (elemental) templates.
  */
-class NotificationRetrieveContentParams
+class NotificationPutContentParams
 private constructor(
     private val id: String?,
-    private val version: String?,
+    private val notificationContentPutRequest: NotificationContentPutRequest,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     fun id(): Optional<String> = Optional.ofNullable(id)
 
-    /**
-     * Accepts `draft`, `published`, or a version string (e.g., `v001`). Defaults to `published`.
-     */
-    fun version(): Optional<String> = Optional.ofNullable(version)
+    /** Request body for replacing the elemental content of a notification template. */
+    fun notificationContentPutRequest(): NotificationContentPutRequest =
+        notificationContentPutRequest
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> =
+        notificationContentPutRequest._additionalProperties()
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -39,46 +42,43 @@ private constructor(
 
     companion object {
 
-        @JvmStatic fun none(): NotificationRetrieveContentParams = builder().build()
-
         /**
-         * Returns a mutable builder for constructing an instance of
-         * [NotificationRetrieveContentParams].
+         * Returns a mutable builder for constructing an instance of [NotificationPutContentParams].
+         *
+         * The following fields are required:
+         * ```java
+         * .notificationContentPutRequest()
+         * ```
          */
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [NotificationRetrieveContentParams]. */
+    /** A builder for [NotificationPutContentParams]. */
     class Builder internal constructor() {
 
         private var id: String? = null
-        private var version: String? = null
+        private var notificationContentPutRequest: NotificationContentPutRequest? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(notificationRetrieveContentParams: NotificationRetrieveContentParams) =
-            apply {
-                id = notificationRetrieveContentParams.id
-                version = notificationRetrieveContentParams.version
-                additionalHeaders = notificationRetrieveContentParams.additionalHeaders.toBuilder()
-                additionalQueryParams =
-                    notificationRetrieveContentParams.additionalQueryParams.toBuilder()
-            }
+        internal fun from(notificationPutContentParams: NotificationPutContentParams) = apply {
+            id = notificationPutContentParams.id
+            notificationContentPutRequest =
+                notificationPutContentParams.notificationContentPutRequest
+            additionalHeaders = notificationPutContentParams.additionalHeaders.toBuilder()
+            additionalQueryParams = notificationPutContentParams.additionalQueryParams.toBuilder()
+        }
 
         fun id(id: String?) = apply { this.id = id }
 
         /** Alias for calling [Builder.id] with `id.orElse(null)`. */
         fun id(id: Optional<String>) = id(id.getOrNull())
 
-        /**
-         * Accepts `draft`, `published`, or a version string (e.g., `v001`). Defaults to
-         * `published`.
-         */
-        fun version(version: String?) = apply { this.version = version }
-
-        /** Alias for calling [Builder.version] with `version.orElse(null)`. */
-        fun version(version: Optional<String>) = version(version.getOrNull())
+        /** Request body for replacing the elemental content of a notification template. */
+        fun notificationContentPutRequest(
+            notificationContentPutRequest: NotificationContentPutRequest
+        ) = apply { this.notificationContentPutRequest = notificationContentPutRequest }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -179,18 +179,27 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [NotificationRetrieveContentParams].
+         * Returns an immutable instance of [NotificationPutContentParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .notificationContentPutRequest()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): NotificationRetrieveContentParams =
-            NotificationRetrieveContentParams(
+        fun build(): NotificationPutContentParams =
+            NotificationPutContentParams(
                 id,
-                version,
+                checkRequired("notificationContentPutRequest", notificationContentPutRequest),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
     }
+
+    fun _body(): NotificationContentPutRequest = notificationContentPutRequest
 
     fun _pathParam(index: Int): String =
         when (index) {
@@ -200,29 +209,23 @@ private constructor(
 
     override fun _headers(): Headers = additionalHeaders
 
-    override fun _queryParams(): QueryParams =
-        QueryParams.builder()
-            .apply {
-                version?.let { put("version", it) }
-                putAll(additionalQueryParams)
-            }
-            .build()
+    override fun _queryParams(): QueryParams = additionalQueryParams
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return other is NotificationRetrieveContentParams &&
+        return other is NotificationPutContentParams &&
             id == other.id &&
-            version == other.version &&
+            notificationContentPutRequest == other.notificationContentPutRequest &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(id, version, additionalHeaders, additionalQueryParams)
+        Objects.hash(id, notificationContentPutRequest, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "NotificationRetrieveContentParams{id=$id, version=$version, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "NotificationPutContentParams{id=$id, notificationContentPutRequest=$notificationContentPutRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

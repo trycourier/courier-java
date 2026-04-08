@@ -6,10 +6,12 @@ import com.courier.core.ClientOptions
 import com.courier.core.RequestOptions
 import com.courier.core.http.HttpResponse
 import com.courier.core.http.HttpResponseFor
+import com.courier.models.routingstrategies.AssociatedNotificationListResponse
 import com.courier.models.routingstrategies.RoutingStrategyArchiveParams
 import com.courier.models.routingstrategies.RoutingStrategyCreateParams
 import com.courier.models.routingstrategies.RoutingStrategyCreateRequest
 import com.courier.models.routingstrategies.RoutingStrategyGetResponse
+import com.courier.models.routingstrategies.RoutingStrategyListNotificationsParams
 import com.courier.models.routingstrategies.RoutingStrategyListParams
 import com.courier.models.routingstrategies.RoutingStrategyListResponse
 import com.courier.models.routingstrategies.RoutingStrategyMutationResponse
@@ -158,6 +160,49 @@ interface RoutingStrategyServiceAsync {
     /** @see archive */
     fun archive(id: String, requestOptions: RequestOptions): CompletableFuture<Void?> =
         archive(id, RoutingStrategyArchiveParams.none(), requestOptions)
+
+    /**
+     * List notification templates associated with a routing strategy. Includes template metadata
+     * only, not full content.
+     */
+    fun listNotifications(id: String): CompletableFuture<AssociatedNotificationListResponse> =
+        listNotifications(id, RoutingStrategyListNotificationsParams.none())
+
+    /** @see listNotifications */
+    fun listNotifications(
+        id: String,
+        params: RoutingStrategyListNotificationsParams =
+            RoutingStrategyListNotificationsParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<AssociatedNotificationListResponse> =
+        listNotifications(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see listNotifications */
+    fun listNotifications(
+        id: String,
+        params: RoutingStrategyListNotificationsParams =
+            RoutingStrategyListNotificationsParams.none(),
+    ): CompletableFuture<AssociatedNotificationListResponse> =
+        listNotifications(id, params, RequestOptions.none())
+
+    /** @see listNotifications */
+    fun listNotifications(
+        params: RoutingStrategyListNotificationsParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<AssociatedNotificationListResponse>
+
+    /** @see listNotifications */
+    fun listNotifications(
+        params: RoutingStrategyListNotificationsParams
+    ): CompletableFuture<AssociatedNotificationListResponse> =
+        listNotifications(params, RequestOptions.none())
+
+    /** @see listNotifications */
+    fun listNotifications(
+        id: String,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<AssociatedNotificationListResponse> =
+        listNotifications(id, RoutingStrategyListNotificationsParams.none(), requestOptions)
 
     /**
      * Replace a routing strategy. Full document replacement; the caller must send the complete
@@ -336,6 +381,51 @@ interface RoutingStrategyServiceAsync {
         /** @see archive */
         fun archive(id: String, requestOptions: RequestOptions): CompletableFuture<HttpResponse> =
             archive(id, RoutingStrategyArchiveParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `get /routing-strategies/{id}/notifications`, but is
+         * otherwise the same as [RoutingStrategyServiceAsync.listNotifications].
+         */
+        fun listNotifications(
+            id: String
+        ): CompletableFuture<HttpResponseFor<AssociatedNotificationListResponse>> =
+            listNotifications(id, RoutingStrategyListNotificationsParams.none())
+
+        /** @see listNotifications */
+        fun listNotifications(
+            id: String,
+            params: RoutingStrategyListNotificationsParams =
+                RoutingStrategyListNotificationsParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<AssociatedNotificationListResponse>> =
+            listNotifications(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see listNotifications */
+        fun listNotifications(
+            id: String,
+            params: RoutingStrategyListNotificationsParams =
+                RoutingStrategyListNotificationsParams.none(),
+        ): CompletableFuture<HttpResponseFor<AssociatedNotificationListResponse>> =
+            listNotifications(id, params, RequestOptions.none())
+
+        /** @see listNotifications */
+        fun listNotifications(
+            params: RoutingStrategyListNotificationsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<AssociatedNotificationListResponse>>
+
+        /** @see listNotifications */
+        fun listNotifications(
+            params: RoutingStrategyListNotificationsParams
+        ): CompletableFuture<HttpResponseFor<AssociatedNotificationListResponse>> =
+            listNotifications(params, RequestOptions.none())
+
+        /** @see listNotifications */
+        fun listNotifications(
+            id: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<AssociatedNotificationListResponse>> =
+            listNotifications(id, RoutingStrategyListNotificationsParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `put /routing-strategies/{id}`, but is otherwise the same
