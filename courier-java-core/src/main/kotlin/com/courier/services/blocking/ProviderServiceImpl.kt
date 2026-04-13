@@ -57,7 +57,7 @@ class ProviderServiceImpl internal constructor(private val clientOptions: Client
         withRawResponse().retrieve(params, requestOptions).parse()
 
     override fun update(params: ProviderUpdateParams, requestOptions: RequestOptions): Provider =
-        // post /providers/{id}
+        // put /providers/{id}
         withRawResponse().update(params, requestOptions).parse()
 
     override fun list(
@@ -161,7 +161,7 @@ class ProviderServiceImpl internal constructor(private val clientOptions: Client
             checkRequired("id", params.id().getOrNull())
             val request =
                 HttpRequest.builder()
-                    .method(HttpMethod.POST)
+                    .method(HttpMethod.PUT)
                     .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("providers", params._pathParam(0))
                     .body(json(clientOptions.jsonMapper, params._body()))

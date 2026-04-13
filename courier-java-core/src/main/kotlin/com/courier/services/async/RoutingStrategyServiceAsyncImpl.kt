@@ -24,7 +24,6 @@ import com.courier.models.routingstrategies.RoutingStrategyGetResponse
 import com.courier.models.routingstrategies.RoutingStrategyListNotificationsParams
 import com.courier.models.routingstrategies.RoutingStrategyListParams
 import com.courier.models.routingstrategies.RoutingStrategyListResponse
-import com.courier.models.routingstrategies.RoutingStrategyMutationResponse
 import com.courier.models.routingstrategies.RoutingStrategyReplaceParams
 import com.courier.models.routingstrategies.RoutingStrategyRetrieveParams
 import java.util.concurrent.CompletableFuture
@@ -48,7 +47,7 @@ internal constructor(private val clientOptions: ClientOptions) : RoutingStrategy
     override fun create(
         params: RoutingStrategyCreateParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<RoutingStrategyMutationResponse> =
+    ): CompletableFuture<RoutingStrategyGetResponse> =
         // post /routing-strategies
         withRawResponse().create(params, requestOptions).thenApply { it.parse() }
 
@@ -83,7 +82,7 @@ internal constructor(private val clientOptions: ClientOptions) : RoutingStrategy
     override fun replace(
         params: RoutingStrategyReplaceParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<RoutingStrategyMutationResponse> =
+    ): CompletableFuture<RoutingStrategyGetResponse> =
         // put /routing-strategies/{id}
         withRawResponse().replace(params, requestOptions).thenApply { it.parse() }
 
@@ -100,13 +99,13 @@ internal constructor(private val clientOptions: ClientOptions) : RoutingStrategy
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
-        private val createHandler: Handler<RoutingStrategyMutationResponse> =
-            jsonHandler<RoutingStrategyMutationResponse>(clientOptions.jsonMapper)
+        private val createHandler: Handler<RoutingStrategyGetResponse> =
+            jsonHandler<RoutingStrategyGetResponse>(clientOptions.jsonMapper)
 
         override fun create(
             params: RoutingStrategyCreateParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<RoutingStrategyMutationResponse>> {
+        ): CompletableFuture<HttpResponseFor<RoutingStrategyGetResponse>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -254,13 +253,13 @@ internal constructor(private val clientOptions: ClientOptions) : RoutingStrategy
                 }
         }
 
-        private val replaceHandler: Handler<RoutingStrategyMutationResponse> =
-            jsonHandler<RoutingStrategyMutationResponse>(clientOptions.jsonMapper)
+        private val replaceHandler: Handler<RoutingStrategyGetResponse> =
+            jsonHandler<RoutingStrategyGetResponse>(clientOptions.jsonMapper)
 
         override fun replace(
             params: RoutingStrategyReplaceParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<RoutingStrategyMutationResponse>> {
+        ): CompletableFuture<HttpResponseFor<RoutingStrategyGetResponse>> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id().getOrNull())

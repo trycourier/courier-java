@@ -24,7 +24,6 @@ import com.courier.models.routingstrategies.RoutingStrategyGetResponse
 import com.courier.models.routingstrategies.RoutingStrategyListNotificationsParams
 import com.courier.models.routingstrategies.RoutingStrategyListParams
 import com.courier.models.routingstrategies.RoutingStrategyListResponse
-import com.courier.models.routingstrategies.RoutingStrategyMutationResponse
 import com.courier.models.routingstrategies.RoutingStrategyReplaceParams
 import com.courier.models.routingstrategies.RoutingStrategyRetrieveParams
 import java.util.function.Consumer
@@ -45,7 +44,7 @@ class RoutingStrategyServiceImpl internal constructor(private val clientOptions:
     override fun create(
         params: RoutingStrategyCreateParams,
         requestOptions: RequestOptions,
-    ): RoutingStrategyMutationResponse =
+    ): RoutingStrategyGetResponse =
         // post /routing-strategies
         withRawResponse().create(params, requestOptions).parse()
 
@@ -78,7 +77,7 @@ class RoutingStrategyServiceImpl internal constructor(private val clientOptions:
     override fun replace(
         params: RoutingStrategyReplaceParams,
         requestOptions: RequestOptions,
-    ): RoutingStrategyMutationResponse =
+    ): RoutingStrategyGetResponse =
         // put /routing-strategies/{id}
         withRawResponse().replace(params, requestOptions).parse()
 
@@ -95,13 +94,13 @@ class RoutingStrategyServiceImpl internal constructor(private val clientOptions:
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
-        private val createHandler: Handler<RoutingStrategyMutationResponse> =
-            jsonHandler<RoutingStrategyMutationResponse>(clientOptions.jsonMapper)
+        private val createHandler: Handler<RoutingStrategyGetResponse> =
+            jsonHandler<RoutingStrategyGetResponse>(clientOptions.jsonMapper)
 
         override fun create(
             params: RoutingStrategyCreateParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<RoutingStrategyMutationResponse> {
+        ): HttpResponseFor<RoutingStrategyGetResponse> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -234,13 +233,13 @@ class RoutingStrategyServiceImpl internal constructor(private val clientOptions:
             }
         }
 
-        private val replaceHandler: Handler<RoutingStrategyMutationResponse> =
-            jsonHandler<RoutingStrategyMutationResponse>(clientOptions.jsonMapper)
+        private val replaceHandler: Handler<RoutingStrategyGetResponse> =
+            jsonHandler<RoutingStrategyGetResponse>(clientOptions.jsonMapper)
 
         override fun replace(
             params: RoutingStrategyReplaceParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<RoutingStrategyMutationResponse> {
+        ): HttpResponseFor<RoutingStrategyGetResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id().getOrNull())

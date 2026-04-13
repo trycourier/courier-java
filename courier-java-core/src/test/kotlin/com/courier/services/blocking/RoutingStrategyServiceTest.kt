@@ -23,7 +23,7 @@ internal class RoutingStrategyServiceTest {
         val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
         val routingStrategyService = client.routingStrategies()
 
-        val routingStrategyMutationResponse =
+        val routingStrategyGetResponse =
             routingStrategyService.create(
                 RoutingStrategyCreateRequest.builder()
                     .name("Email via SendGrid")
@@ -92,7 +92,7 @@ internal class RoutingStrategyServiceTest {
                     .build()
             )
 
-        routingStrategyMutationResponse.validate()
+        routingStrategyGetResponse.validate()
     }
 
     @Disabled("Mock server tests are disabled")
@@ -153,7 +153,7 @@ internal class RoutingStrategyServiceTest {
         val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
         val routingStrategyService = client.routingStrategies()
 
-        val routingStrategyMutationResponse =
+        val routingStrategyGetResponse =
             routingStrategyService.replace(
                 RoutingStrategyReplaceParams.builder()
                     .id("id")
@@ -226,6 +226,6 @@ internal class RoutingStrategyServiceTest {
                     .build()
             )
 
-        routingStrategyMutationResponse.validate()
+        routingStrategyGetResponse.validate()
     }
 }

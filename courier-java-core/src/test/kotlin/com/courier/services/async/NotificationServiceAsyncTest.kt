@@ -34,7 +34,7 @@ internal class NotificationServiceAsyncTest {
         val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val notificationServiceAsync = client.notifications()
 
-        val notificationTemplateMutationResponseFuture =
+        val notificationTemplateGetResponseFuture =
             notificationServiceAsync.create(
                 NotificationTemplateCreateRequest.builder()
                     .notification(
@@ -71,8 +71,8 @@ internal class NotificationServiceAsyncTest {
                     .build()
             )
 
-        val notificationTemplateMutationResponse = notificationTemplateMutationResponseFuture.get()
-        notificationTemplateMutationResponse.validate()
+        val notificationTemplateGetResponse = notificationTemplateGetResponseFuture.get()
+        notificationTemplateGetResponse.validate()
     }
 
     @Disabled("Mock server tests are disabled")
@@ -261,7 +261,7 @@ internal class NotificationServiceAsyncTest {
         val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val notificationServiceAsync = client.notifications()
 
-        val notificationTemplateMutationResponseFuture =
+        val notificationTemplateGetResponseFuture =
             notificationServiceAsync.replace(
                 NotificationReplaceParams.builder()
                     .id("id")
@@ -302,8 +302,8 @@ internal class NotificationServiceAsyncTest {
                     .build()
             )
 
-        val notificationTemplateMutationResponse = notificationTemplateMutationResponseFuture.get()
-        notificationTemplateMutationResponse.validate()
+        val notificationTemplateGetResponse = notificationTemplateGetResponseFuture.get()
+        notificationTemplateGetResponse.validate()
     }
 
     @Disabled("Mock server tests are disabled")

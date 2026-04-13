@@ -14,7 +14,6 @@ import com.courier.models.routingstrategies.RoutingStrategyGetResponse
 import com.courier.models.routingstrategies.RoutingStrategyListNotificationsParams
 import com.courier.models.routingstrategies.RoutingStrategyListParams
 import com.courier.models.routingstrategies.RoutingStrategyListResponse
-import com.courier.models.routingstrategies.RoutingStrategyMutationResponse
 import com.courier.models.routingstrategies.RoutingStrategyReplaceParams
 import com.courier.models.routingstrategies.RoutingStrategyRetrieveParams
 import com.google.errorprone.annotations.MustBeClosed
@@ -38,20 +37,20 @@ interface RoutingStrategyService {
      * Create a routing strategy. Requires a name and routing configuration at minimum. Channels and
      * providers default to empty if omitted.
      */
-    fun create(params: RoutingStrategyCreateParams): RoutingStrategyMutationResponse =
+    fun create(params: RoutingStrategyCreateParams): RoutingStrategyGetResponse =
         create(params, RequestOptions.none())
 
     /** @see create */
     fun create(
         params: RoutingStrategyCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): RoutingStrategyMutationResponse
+    ): RoutingStrategyGetResponse
 
     /** @see create */
     fun create(
         routingStrategyCreateRequest: RoutingStrategyCreateRequest,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): RoutingStrategyMutationResponse =
+    ): RoutingStrategyGetResponse =
         create(
             RoutingStrategyCreateParams.builder()
                 .routingStrategyCreateRequest(routingStrategyCreateRequest)
@@ -62,7 +61,7 @@ interface RoutingStrategyService {
     /** @see create */
     fun create(
         routingStrategyCreateRequest: RoutingStrategyCreateRequest
-    ): RoutingStrategyMutationResponse = create(routingStrategyCreateRequest, RequestOptions.none())
+    ): RoutingStrategyGetResponse = create(routingStrategyCreateRequest, RequestOptions.none())
 
     /**
      * Retrieve a routing strategy by ID. Returns the full entity including routing content and
@@ -196,7 +195,7 @@ interface RoutingStrategyService {
      * Replace a routing strategy. Full document replacement; the caller must send the complete
      * desired state. Missing optional fields are cleared.
      */
-    fun replace(id: String, params: RoutingStrategyReplaceParams): RoutingStrategyMutationResponse =
+    fun replace(id: String, params: RoutingStrategyReplaceParams): RoutingStrategyGetResponse =
         replace(id, params, RequestOptions.none())
 
     /** @see replace */
@@ -204,17 +203,17 @@ interface RoutingStrategyService {
         id: String,
         params: RoutingStrategyReplaceParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): RoutingStrategyMutationResponse = replace(params.toBuilder().id(id).build(), requestOptions)
+    ): RoutingStrategyGetResponse = replace(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see replace */
-    fun replace(params: RoutingStrategyReplaceParams): RoutingStrategyMutationResponse =
+    fun replace(params: RoutingStrategyReplaceParams): RoutingStrategyGetResponse =
         replace(params, RequestOptions.none())
 
     /** @see replace */
     fun replace(
         params: RoutingStrategyReplaceParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): RoutingStrategyMutationResponse
+    ): RoutingStrategyGetResponse
 
     /**
      * A view of [RoutingStrategyService] that provides access to raw HTTP responses for each
@@ -238,21 +237,21 @@ interface RoutingStrategyService {
         @MustBeClosed
         fun create(
             params: RoutingStrategyCreateParams
-        ): HttpResponseFor<RoutingStrategyMutationResponse> = create(params, RequestOptions.none())
+        ): HttpResponseFor<RoutingStrategyGetResponse> = create(params, RequestOptions.none())
 
         /** @see create */
         @MustBeClosed
         fun create(
             params: RoutingStrategyCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<RoutingStrategyMutationResponse>
+        ): HttpResponseFor<RoutingStrategyGetResponse>
 
         /** @see create */
         @MustBeClosed
         fun create(
             routingStrategyCreateRequest: RoutingStrategyCreateRequest,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<RoutingStrategyMutationResponse> =
+        ): HttpResponseFor<RoutingStrategyGetResponse> =
             create(
                 RoutingStrategyCreateParams.builder()
                     .routingStrategyCreateRequest(routingStrategyCreateRequest)
@@ -264,7 +263,7 @@ interface RoutingStrategyService {
         @MustBeClosed
         fun create(
             routingStrategyCreateRequest: RoutingStrategyCreateRequest
-        ): HttpResponseFor<RoutingStrategyMutationResponse> =
+        ): HttpResponseFor<RoutingStrategyGetResponse> =
             create(routingStrategyCreateRequest, RequestOptions.none())
 
         /**
@@ -434,8 +433,7 @@ interface RoutingStrategyService {
         fun replace(
             id: String,
             params: RoutingStrategyReplaceParams,
-        ): HttpResponseFor<RoutingStrategyMutationResponse> =
-            replace(id, params, RequestOptions.none())
+        ): HttpResponseFor<RoutingStrategyGetResponse> = replace(id, params, RequestOptions.none())
 
         /** @see replace */
         @MustBeClosed
@@ -443,20 +441,20 @@ interface RoutingStrategyService {
             id: String,
             params: RoutingStrategyReplaceParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<RoutingStrategyMutationResponse> =
+        ): HttpResponseFor<RoutingStrategyGetResponse> =
             replace(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see replace */
         @MustBeClosed
         fun replace(
             params: RoutingStrategyReplaceParams
-        ): HttpResponseFor<RoutingStrategyMutationResponse> = replace(params, RequestOptions.none())
+        ): HttpResponseFor<RoutingStrategyGetResponse> = replace(params, RequestOptions.none())
 
         /** @see replace */
         @MustBeClosed
         fun replace(
             params: RoutingStrategyReplaceParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<RoutingStrategyMutationResponse>
+        ): HttpResponseFor<RoutingStrategyGetResponse>
     }
 }

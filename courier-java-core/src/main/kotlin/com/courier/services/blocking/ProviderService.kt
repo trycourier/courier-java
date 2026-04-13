@@ -75,9 +75,10 @@ interface ProviderService {
         retrieve(id, ProviderRetrieveParams.none(), requestOptions)
 
     /**
-     * Update an existing provider configuration. The `provider` key is required. All other fields
-     * are optional — omitted fields are cleared from the stored configuration (this is a full
-     * replacement, not a partial merge).
+     * Replace an existing provider configuration. The `provider` key is required and determines
+     * which provider-specific settings schema is applied. All other fields are optional — omitted
+     * fields are cleared from the stored configuration (this is a full replacement, not a partial
+     * merge). Changing the provider type for an existing configuration is not supported.
      */
     fun update(id: String, params: ProviderUpdateParams): Provider =
         update(id, params, RequestOptions.none())
@@ -213,7 +214,7 @@ interface ProviderService {
             retrieve(id, ProviderRetrieveParams.none(), requestOptions)
 
         /**
-         * Returns a raw HTTP response for `post /providers/{id}`, but is otherwise the same as
+         * Returns a raw HTTP response for `put /providers/{id}`, but is otherwise the same as
          * [ProviderService.update].
          */
         @MustBeClosed
