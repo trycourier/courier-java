@@ -22,7 +22,6 @@ import com.courier.models.notifications.NotificationRetrieveContentResponse
 import com.courier.models.notifications.NotificationRetrieveParams
 import com.courier.models.notifications.NotificationTemplateCreateRequest
 import com.courier.models.notifications.NotificationTemplateGetResponse
-import com.courier.models.notifications.NotificationTemplateMutationResponse
 import com.courier.models.notifications.NotificationTemplateVersionListResponse
 import com.courier.services.async.notifications.CheckServiceAsync
 import java.util.concurrent.CompletableFuture
@@ -50,20 +49,19 @@ interface NotificationServiceAsync {
      */
     fun create(
         params: NotificationCreateParams
-    ): CompletableFuture<NotificationTemplateMutationResponse> =
-        create(params, RequestOptions.none())
+    ): CompletableFuture<NotificationTemplateGetResponse> = create(params, RequestOptions.none())
 
     /** @see create */
     fun create(
         params: NotificationCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<NotificationTemplateMutationResponse>
+    ): CompletableFuture<NotificationTemplateGetResponse>
 
     /** @see create */
     fun create(
         notificationTemplateCreateRequest: NotificationTemplateCreateRequest,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<NotificationTemplateMutationResponse> =
+    ): CompletableFuture<NotificationTemplateGetResponse> =
         create(
             NotificationCreateParams.builder()
                 .notificationTemplateCreateRequest(notificationTemplateCreateRequest)
@@ -74,7 +72,7 @@ interface NotificationServiceAsync {
     /** @see create */
     fun create(
         notificationTemplateCreateRequest: NotificationTemplateCreateRequest
-    ): CompletableFuture<NotificationTemplateMutationResponse> =
+    ): CompletableFuture<NotificationTemplateGetResponse> =
         create(notificationTemplateCreateRequest, RequestOptions.none())
 
     /**
@@ -332,7 +330,7 @@ interface NotificationServiceAsync {
     fun replace(
         id: String,
         params: NotificationReplaceParams,
-    ): CompletableFuture<NotificationTemplateMutationResponse> =
+    ): CompletableFuture<NotificationTemplateGetResponse> =
         replace(id, params, RequestOptions.none())
 
     /** @see replace */
@@ -340,20 +338,19 @@ interface NotificationServiceAsync {
         id: String,
         params: NotificationReplaceParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<NotificationTemplateMutationResponse> =
+    ): CompletableFuture<NotificationTemplateGetResponse> =
         replace(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see replace */
     fun replace(
         params: NotificationReplaceParams
-    ): CompletableFuture<NotificationTemplateMutationResponse> =
-        replace(params, RequestOptions.none())
+    ): CompletableFuture<NotificationTemplateGetResponse> = replace(params, RequestOptions.none())
 
     /** @see replace */
     fun replace(
         params: NotificationReplaceParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<NotificationTemplateMutationResponse>
+    ): CompletableFuture<NotificationTemplateGetResponse>
 
     /**
      * Retrieve the content of a notification template. The response shape depends on whether the
@@ -420,20 +417,20 @@ interface NotificationServiceAsync {
          */
         fun create(
             params: NotificationCreateParams
-        ): CompletableFuture<HttpResponseFor<NotificationTemplateMutationResponse>> =
+        ): CompletableFuture<HttpResponseFor<NotificationTemplateGetResponse>> =
             create(params, RequestOptions.none())
 
         /** @see create */
         fun create(
             params: NotificationCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<NotificationTemplateMutationResponse>>
+        ): CompletableFuture<HttpResponseFor<NotificationTemplateGetResponse>>
 
         /** @see create */
         fun create(
             notificationTemplateCreateRequest: NotificationTemplateCreateRequest,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<NotificationTemplateMutationResponse>> =
+        ): CompletableFuture<HttpResponseFor<NotificationTemplateGetResponse>> =
             create(
                 NotificationCreateParams.builder()
                     .notificationTemplateCreateRequest(notificationTemplateCreateRequest)
@@ -444,7 +441,7 @@ interface NotificationServiceAsync {
         /** @see create */
         fun create(
             notificationTemplateCreateRequest: NotificationTemplateCreateRequest
-        ): CompletableFuture<HttpResponseFor<NotificationTemplateMutationResponse>> =
+        ): CompletableFuture<HttpResponseFor<NotificationTemplateGetResponse>> =
             create(notificationTemplateCreateRequest, RequestOptions.none())
 
         /**
@@ -725,7 +722,7 @@ interface NotificationServiceAsync {
         fun replace(
             id: String,
             params: NotificationReplaceParams,
-        ): CompletableFuture<HttpResponseFor<NotificationTemplateMutationResponse>> =
+        ): CompletableFuture<HttpResponseFor<NotificationTemplateGetResponse>> =
             replace(id, params, RequestOptions.none())
 
         /** @see replace */
@@ -733,20 +730,20 @@ interface NotificationServiceAsync {
             id: String,
             params: NotificationReplaceParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<NotificationTemplateMutationResponse>> =
+        ): CompletableFuture<HttpResponseFor<NotificationTemplateGetResponse>> =
             replace(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see replace */
         fun replace(
             params: NotificationReplaceParams
-        ): CompletableFuture<HttpResponseFor<NotificationTemplateMutationResponse>> =
+        ): CompletableFuture<HttpResponseFor<NotificationTemplateGetResponse>> =
             replace(params, RequestOptions.none())
 
         /** @see replace */
         fun replace(
             params: NotificationReplaceParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<NotificationTemplateMutationResponse>>
+        ): CompletableFuture<HttpResponseFor<NotificationTemplateGetResponse>>
 
         /**
          * Returns a raw HTTP response for `get /notifications/{id}/content`, but is otherwise the

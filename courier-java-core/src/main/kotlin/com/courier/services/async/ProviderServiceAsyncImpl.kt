@@ -64,7 +64,7 @@ class ProviderServiceAsyncImpl internal constructor(private val clientOptions: C
         params: ProviderUpdateParams,
         requestOptions: RequestOptions,
     ): CompletableFuture<Provider> =
-        // post /providers/{id}
+        // put /providers/{id}
         withRawResponse().update(params, requestOptions).thenApply { it.parse() }
 
     override fun list(
@@ -176,7 +176,7 @@ class ProviderServiceAsyncImpl internal constructor(private val clientOptions: C
             checkRequired("id", params.id().getOrNull())
             val request =
                 HttpRequest.builder()
-                    .method(HttpMethod.POST)
+                    .method(HttpMethod.PUT)
                     .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("providers", params._pathParam(0))
                     .body(json(clientOptions.jsonMapper, params._body()))
