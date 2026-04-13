@@ -14,7 +14,6 @@ import com.courier.models.routingstrategies.RoutingStrategyGetResponse
 import com.courier.models.routingstrategies.RoutingStrategyListNotificationsParams
 import com.courier.models.routingstrategies.RoutingStrategyListParams
 import com.courier.models.routingstrategies.RoutingStrategyListResponse
-import com.courier.models.routingstrategies.RoutingStrategyMutationResponse
 import com.courier.models.routingstrategies.RoutingStrategyReplaceParams
 import com.courier.models.routingstrategies.RoutingStrategyRetrieveParams
 import java.util.concurrent.CompletableFuture
@@ -38,21 +37,20 @@ interface RoutingStrategyServiceAsync {
      * Create a routing strategy. Requires a name and routing configuration at minimum. Channels and
      * providers default to empty if omitted.
      */
-    fun create(
-        params: RoutingStrategyCreateParams
-    ): CompletableFuture<RoutingStrategyMutationResponse> = create(params, RequestOptions.none())
+    fun create(params: RoutingStrategyCreateParams): CompletableFuture<RoutingStrategyGetResponse> =
+        create(params, RequestOptions.none())
 
     /** @see create */
     fun create(
         params: RoutingStrategyCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<RoutingStrategyMutationResponse>
+    ): CompletableFuture<RoutingStrategyGetResponse>
 
     /** @see create */
     fun create(
         routingStrategyCreateRequest: RoutingStrategyCreateRequest,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<RoutingStrategyMutationResponse> =
+    ): CompletableFuture<RoutingStrategyGetResponse> =
         create(
             RoutingStrategyCreateParams.builder()
                 .routingStrategyCreateRequest(routingStrategyCreateRequest)
@@ -63,7 +61,7 @@ interface RoutingStrategyServiceAsync {
     /** @see create */
     fun create(
         routingStrategyCreateRequest: RoutingStrategyCreateRequest
-    ): CompletableFuture<RoutingStrategyMutationResponse> =
+    ): CompletableFuture<RoutingStrategyGetResponse> =
         create(routingStrategyCreateRequest, RequestOptions.none())
 
     /**
@@ -211,27 +209,26 @@ interface RoutingStrategyServiceAsync {
     fun replace(
         id: String,
         params: RoutingStrategyReplaceParams,
-    ): CompletableFuture<RoutingStrategyMutationResponse> =
-        replace(id, params, RequestOptions.none())
+    ): CompletableFuture<RoutingStrategyGetResponse> = replace(id, params, RequestOptions.none())
 
     /** @see replace */
     fun replace(
         id: String,
         params: RoutingStrategyReplaceParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<RoutingStrategyMutationResponse> =
+    ): CompletableFuture<RoutingStrategyGetResponse> =
         replace(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see replace */
     fun replace(
         params: RoutingStrategyReplaceParams
-    ): CompletableFuture<RoutingStrategyMutationResponse> = replace(params, RequestOptions.none())
+    ): CompletableFuture<RoutingStrategyGetResponse> = replace(params, RequestOptions.none())
 
     /** @see replace */
     fun replace(
         params: RoutingStrategyReplaceParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<RoutingStrategyMutationResponse>
+    ): CompletableFuture<RoutingStrategyGetResponse>
 
     /**
      * A view of [RoutingStrategyServiceAsync] that provides access to raw HTTP responses for each
@@ -254,20 +251,20 @@ interface RoutingStrategyServiceAsync {
          */
         fun create(
             params: RoutingStrategyCreateParams
-        ): CompletableFuture<HttpResponseFor<RoutingStrategyMutationResponse>> =
+        ): CompletableFuture<HttpResponseFor<RoutingStrategyGetResponse>> =
             create(params, RequestOptions.none())
 
         /** @see create */
         fun create(
             params: RoutingStrategyCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<RoutingStrategyMutationResponse>>
+        ): CompletableFuture<HttpResponseFor<RoutingStrategyGetResponse>>
 
         /** @see create */
         fun create(
             routingStrategyCreateRequest: RoutingStrategyCreateRequest,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<RoutingStrategyMutationResponse>> =
+        ): CompletableFuture<HttpResponseFor<RoutingStrategyGetResponse>> =
             create(
                 RoutingStrategyCreateParams.builder()
                     .routingStrategyCreateRequest(routingStrategyCreateRequest)
@@ -278,7 +275,7 @@ interface RoutingStrategyServiceAsync {
         /** @see create */
         fun create(
             routingStrategyCreateRequest: RoutingStrategyCreateRequest
-        ): CompletableFuture<HttpResponseFor<RoutingStrategyMutationResponse>> =
+        ): CompletableFuture<HttpResponseFor<RoutingStrategyGetResponse>> =
             create(routingStrategyCreateRequest, RequestOptions.none())
 
         /**
@@ -434,7 +431,7 @@ interface RoutingStrategyServiceAsync {
         fun replace(
             id: String,
             params: RoutingStrategyReplaceParams,
-        ): CompletableFuture<HttpResponseFor<RoutingStrategyMutationResponse>> =
+        ): CompletableFuture<HttpResponseFor<RoutingStrategyGetResponse>> =
             replace(id, params, RequestOptions.none())
 
         /** @see replace */
@@ -442,19 +439,19 @@ interface RoutingStrategyServiceAsync {
             id: String,
             params: RoutingStrategyReplaceParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<RoutingStrategyMutationResponse>> =
+        ): CompletableFuture<HttpResponseFor<RoutingStrategyGetResponse>> =
             replace(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see replace */
         fun replace(
             params: RoutingStrategyReplaceParams
-        ): CompletableFuture<HttpResponseFor<RoutingStrategyMutationResponse>> =
+        ): CompletableFuture<HttpResponseFor<RoutingStrategyGetResponse>> =
             replace(params, RequestOptions.none())
 
         /** @see replace */
         fun replace(
             params: RoutingStrategyReplaceParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<RoutingStrategyMutationResponse>>
+        ): CompletableFuture<HttpResponseFor<RoutingStrategyGetResponse>>
     }
 }

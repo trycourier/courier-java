@@ -22,9 +22,10 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Update an existing provider configuration. The `provider` key is required. All other fields are
- * optional — omitted fields are cleared from the stored configuration (this is a full replacement,
- * not a partial merge).
+ * Replace an existing provider configuration. The `provider` key is required and determines which
+ * provider-specific settings schema is applied. All other fields are optional — omitted fields are
+ * cleared from the stored configuration (this is a full replacement, not a partial merge). Changing
+ * the provider type for an existing configuration is not supported.
  */
 class ProviderUpdateParams
 private constructor(
@@ -37,7 +38,8 @@ private constructor(
     fun id(): Optional<String> = Optional.ofNullable(id)
 
     /**
-     * The provider key identifying the type.
+     * The provider key identifying the type. Required on every request because it selects the
+     * provider-specific settings schema for validation.
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -153,7 +155,10 @@ private constructor(
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
-        /** The provider key identifying the type. */
+        /**
+         * The provider key identifying the type. Required on every request because it selects the
+         * provider-specific settings schema for validation.
+         */
         fun provider(provider: String) = apply { body.provider(provider) }
 
         /**
@@ -352,9 +357,11 @@ private constructor(
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     /**
-     * Request body for updating an existing provider configuration. The `provider` key is required.
-     * All other fields are optional — omitted fields are cleared from the stored configuration
-     * (this is a full replacement, not a partial merge).
+     * Request body for replacing an existing provider configuration. The `provider` key is required
+     * because it determines which provider-specific settings schema is validated against. Changing
+     * the provider type for an existing configuration is not supported. All other fields are
+     * optional — omitted fields are cleared from the stored configuration (this is a full
+     * replacement, not a partial merge).
      */
     class Body
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
@@ -379,7 +386,8 @@ private constructor(
         ) : this(provider, alias, settings, title, mutableMapOf())
 
         /**
-         * The provider key identifying the type.
+         * The provider key identifying the type. Required on every request because it selects the
+         * provider-specific settings schema for validation.
          *
          * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -482,7 +490,10 @@ private constructor(
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
-            /** The provider key identifying the type. */
+            /**
+             * The provider key identifying the type. Required on every request because it selects
+             * the provider-specific settings schema for validation.
+             */
             fun provider(provider: String) = provider(JsonField.of(provider))
 
             /**

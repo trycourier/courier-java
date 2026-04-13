@@ -22,7 +22,6 @@ import com.courier.models.notifications.NotificationRetrieveContentResponse
 import com.courier.models.notifications.NotificationRetrieveParams
 import com.courier.models.notifications.NotificationTemplateCreateRequest
 import com.courier.models.notifications.NotificationTemplateGetResponse
-import com.courier.models.notifications.NotificationTemplateMutationResponse
 import com.courier.models.notifications.NotificationTemplateVersionListResponse
 import com.courier.services.blocking.notifications.CheckService
 import com.google.errorprone.annotations.MustBeClosed
@@ -48,20 +47,20 @@ interface NotificationService {
      * Create a notification template. Requires all fields in the notification object. Templates are
      * created in draft state by default.
      */
-    fun create(params: NotificationCreateParams): NotificationTemplateMutationResponse =
+    fun create(params: NotificationCreateParams): NotificationTemplateGetResponse =
         create(params, RequestOptions.none())
 
     /** @see create */
     fun create(
         params: NotificationCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): NotificationTemplateMutationResponse
+    ): NotificationTemplateGetResponse
 
     /** @see create */
     fun create(
         notificationTemplateCreateRequest: NotificationTemplateCreateRequest,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): NotificationTemplateMutationResponse =
+    ): NotificationTemplateGetResponse =
         create(
             NotificationCreateParams.builder()
                 .notificationTemplateCreateRequest(notificationTemplateCreateRequest)
@@ -72,7 +71,7 @@ interface NotificationService {
     /** @see create */
     fun create(
         notificationTemplateCreateRequest: NotificationTemplateCreateRequest
-    ): NotificationTemplateMutationResponse =
+    ): NotificationTemplateGetResponse =
         create(notificationTemplateCreateRequest, RequestOptions.none())
 
     /**
@@ -302,28 +301,25 @@ interface NotificationService {
     ): NotificationContentMutationResponse
 
     /** Replace a notification template. All fields are required. */
-    fun replace(
-        id: String,
-        params: NotificationReplaceParams,
-    ): NotificationTemplateMutationResponse = replace(id, params, RequestOptions.none())
+    fun replace(id: String, params: NotificationReplaceParams): NotificationTemplateGetResponse =
+        replace(id, params, RequestOptions.none())
 
     /** @see replace */
     fun replace(
         id: String,
         params: NotificationReplaceParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): NotificationTemplateMutationResponse =
-        replace(params.toBuilder().id(id).build(), requestOptions)
+    ): NotificationTemplateGetResponse = replace(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see replace */
-    fun replace(params: NotificationReplaceParams): NotificationTemplateMutationResponse =
+    fun replace(params: NotificationReplaceParams): NotificationTemplateGetResponse =
         replace(params, RequestOptions.none())
 
     /** @see replace */
     fun replace(
         params: NotificationReplaceParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): NotificationTemplateMutationResponse
+    ): NotificationTemplateGetResponse
 
     /**
      * Retrieve the content of a notification template. The response shape depends on whether the
@@ -388,22 +384,21 @@ interface NotificationService {
         @MustBeClosed
         fun create(
             params: NotificationCreateParams
-        ): HttpResponseFor<NotificationTemplateMutationResponse> =
-            create(params, RequestOptions.none())
+        ): HttpResponseFor<NotificationTemplateGetResponse> = create(params, RequestOptions.none())
 
         /** @see create */
         @MustBeClosed
         fun create(
             params: NotificationCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<NotificationTemplateMutationResponse>
+        ): HttpResponseFor<NotificationTemplateGetResponse>
 
         /** @see create */
         @MustBeClosed
         fun create(
             notificationTemplateCreateRequest: NotificationTemplateCreateRequest,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<NotificationTemplateMutationResponse> =
+        ): HttpResponseFor<NotificationTemplateGetResponse> =
             create(
                 NotificationCreateParams.builder()
                     .notificationTemplateCreateRequest(notificationTemplateCreateRequest)
@@ -415,7 +410,7 @@ interface NotificationService {
         @MustBeClosed
         fun create(
             notificationTemplateCreateRequest: NotificationTemplateCreateRequest
-        ): HttpResponseFor<NotificationTemplateMutationResponse> =
+        ): HttpResponseFor<NotificationTemplateGetResponse> =
             create(notificationTemplateCreateRequest, RequestOptions.none())
 
         /**
@@ -725,7 +720,7 @@ interface NotificationService {
         fun replace(
             id: String,
             params: NotificationReplaceParams,
-        ): HttpResponseFor<NotificationTemplateMutationResponse> =
+        ): HttpResponseFor<NotificationTemplateGetResponse> =
             replace(id, params, RequestOptions.none())
 
         /** @see replace */
@@ -734,22 +729,21 @@ interface NotificationService {
             id: String,
             params: NotificationReplaceParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<NotificationTemplateMutationResponse> =
+        ): HttpResponseFor<NotificationTemplateGetResponse> =
             replace(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see replace */
         @MustBeClosed
         fun replace(
             params: NotificationReplaceParams
-        ): HttpResponseFor<NotificationTemplateMutationResponse> =
-            replace(params, RequestOptions.none())
+        ): HttpResponseFor<NotificationTemplateGetResponse> = replace(params, RequestOptions.none())
 
         /** @see replace */
         @MustBeClosed
         fun replace(
             params: NotificationReplaceParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<NotificationTemplateMutationResponse>
+        ): HttpResponseFor<NotificationTemplateGetResponse>
 
         /**
          * Returns a raw HTTP response for `get /notifications/{id}/content`, but is otherwise the
