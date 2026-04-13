@@ -1,5 +1,18 @@
 # Changelog
 
+## 4.13.0 (2026-04-13)
+
+Full Changelog: [v4.12.0...v4.13.0](https://github.com/trycourier/courier-java/compare/v4.12.0...v4.13.0)
+
+### Features
+
+* **api:** update notifications/routing_strategies return types, change providers update to PUT ([a83b773](https://github.com/trycourier/courier-java/commit/a83b7735114f5eb5fee33770b70d561f64ec1c64))
+
+
+### Chores
+
+* **internal:** regenerate SDK with no functional changes ([42f49e4](https://github.com/trycourier/courier-java/commit/42f49e4f9dba28b99404bfa2e00baf83d6cc2ce9))
+
 ## 4.12.0 (2026-04-08)
 
 Full Changelog: [v4.11.0...v4.12.0](https://github.com/trycourier/courier-java/compare/v4.11.0...v4.12.0)
