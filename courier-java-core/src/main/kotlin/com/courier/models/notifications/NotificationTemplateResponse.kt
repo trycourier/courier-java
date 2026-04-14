@@ -22,15 +22,21 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Response for GET /notifications/{id}, POST /notifications, and PUT /notifications/{id}. Wraps the
- * template payload inside a `notification` key alongside metadata.
+ * Response for GET /notifications/{id}, POST /notifications, and PUT /notifications/{id}. Returns
+ * all template fields at the top level.
  */
 class NotificationTemplateResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
+    private val brand: JsonField<NotificationTemplatePayload.Brand>,
+    private val content: JsonField<ElementalContent>,
+    private val name: JsonField<String>,
+    private val routing: JsonField<NotificationTemplatePayload.Routing>,
+    private val subscription: JsonField<NotificationTemplatePayload.Subscription>,
+    private val tags: JsonField<List<String>>,
+    private val id: JsonField<String>,
     private val created: JsonField<Long>,
     private val creator: JsonField<String>,
-    private val notification: JsonField<Notification>,
     private val state: JsonField<State>,
     private val updated: JsonField<Long>,
     private val updater: JsonField<String>,
@@ -39,15 +45,108 @@ private constructor(
 
     @JsonCreator
     private constructor(
+        @JsonProperty("brand")
+        @ExcludeMissing
+        brand: JsonField<NotificationTemplatePayload.Brand> = JsonMissing.of(),
+        @JsonProperty("content")
+        @ExcludeMissing
+        content: JsonField<ElementalContent> = JsonMissing.of(),
+        @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("routing")
+        @ExcludeMissing
+        routing: JsonField<NotificationTemplatePayload.Routing> = JsonMissing.of(),
+        @JsonProperty("subscription")
+        @ExcludeMissing
+        subscription: JsonField<NotificationTemplatePayload.Subscription> = JsonMissing.of(),
+        @JsonProperty("tags") @ExcludeMissing tags: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
         @JsonProperty("created") @ExcludeMissing created: JsonField<Long> = JsonMissing.of(),
         @JsonProperty("creator") @ExcludeMissing creator: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("notification")
-        @ExcludeMissing
-        notification: JsonField<Notification> = JsonMissing.of(),
         @JsonProperty("state") @ExcludeMissing state: JsonField<State> = JsonMissing.of(),
         @JsonProperty("updated") @ExcludeMissing updated: JsonField<Long> = JsonMissing.of(),
         @JsonProperty("updater") @ExcludeMissing updater: JsonField<String> = JsonMissing.of(),
-    ) : this(created, creator, notification, state, updated, updater, mutableMapOf())
+    ) : this(
+        brand,
+        content,
+        name,
+        routing,
+        subscription,
+        tags,
+        id,
+        created,
+        creator,
+        state,
+        updated,
+        updater,
+        mutableMapOf(),
+    )
+
+    fun toNotificationTemplatePayload(): NotificationTemplatePayload =
+        NotificationTemplatePayload.builder()
+            .brand(brand)
+            .content(content)
+            .name(name)
+            .routing(routing)
+            .subscription(subscription)
+            .tags(tags)
+            .build()
+
+    /**
+     * Brand reference, or null for no brand.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun brand(): Optional<NotificationTemplatePayload.Brand> = brand.getOptional("brand")
+
+    /**
+     * Elemental content definition.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun content(): ElementalContent = content.getRequired("content")
+
+    /**
+     * Display name for the template.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun name(): String = name.getRequired("name")
+
+    /**
+     * Routing strategy reference, or null for none.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun routing(): Optional<NotificationTemplatePayload.Routing> = routing.getOptional("routing")
+
+    /**
+     * Subscription topic reference, or null for none.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun subscription(): Optional<NotificationTemplatePayload.Subscription> =
+        subscription.getOptional("subscription")
+
+    /**
+     * Tags for categorization. Send empty array for none.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun tags(): List<String> = tags.getRequired("tags")
+
+    /**
+     * The template ID.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun id(): String = id.getRequired("id")
 
     /**
      * Epoch milliseconds when the template was created.
@@ -64,15 +163,6 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun creator(): String = creator.getRequired("creator")
-
-    /**
-     * Full document shape used in POST and PUT request bodies, and returned inside the GET response
-     * envelope.
-     *
-     * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
-    fun notification(): Notification = notification.getRequired("notification")
 
     /**
      * The template state. Always uppercase.
@@ -99,6 +189,61 @@ private constructor(
     fun updater(): Optional<String> = updater.getOptional("updater")
 
     /**
+     * Returns the raw JSON value of [brand].
+     *
+     * Unlike [brand], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("brand")
+    @ExcludeMissing
+    fun _brand(): JsonField<NotificationTemplatePayload.Brand> = brand
+
+    /**
+     * Returns the raw JSON value of [content].
+     *
+     * Unlike [content], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("content") @ExcludeMissing fun _content(): JsonField<ElementalContent> = content
+
+    /**
+     * Returns the raw JSON value of [name].
+     *
+     * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+    /**
+     * Returns the raw JSON value of [routing].
+     *
+     * Unlike [routing], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("routing")
+    @ExcludeMissing
+    fun _routing(): JsonField<NotificationTemplatePayload.Routing> = routing
+
+    /**
+     * Returns the raw JSON value of [subscription].
+     *
+     * Unlike [subscription], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("subscription")
+    @ExcludeMissing
+    fun _subscription(): JsonField<NotificationTemplatePayload.Subscription> = subscription
+
+    /**
+     * Returns the raw JSON value of [tags].
+     *
+     * Unlike [tags], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("tags") @ExcludeMissing fun _tags(): JsonField<List<String>> = tags
+
+    /**
+     * Returns the raw JSON value of [id].
+     *
+     * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+    /**
      * Returns the raw JSON value of [created].
      *
      * Unlike [created], this method doesn't throw if the JSON field has an unexpected type.
@@ -111,15 +256,6 @@ private constructor(
      * Unlike [creator], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("creator") @ExcludeMissing fun _creator(): JsonField<String> = creator
-
-    /**
-     * Returns the raw JSON value of [notification].
-     *
-     * Unlike [notification], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("notification")
-    @ExcludeMissing
-    fun _notification(): JsonField<Notification> = notification
 
     /**
      * Returns the raw JSON value of [state].
@@ -161,9 +297,15 @@ private constructor(
          *
          * The following fields are required:
          * ```java
+         * .brand()
+         * .content()
+         * .name()
+         * .routing()
+         * .subscription()
+         * .tags()
+         * .id()
          * .created()
          * .creator()
-         * .notification()
          * .state()
          * ```
          */
@@ -173,9 +315,15 @@ private constructor(
     /** A builder for [NotificationTemplateResponse]. */
     class Builder internal constructor() {
 
+        private var brand: JsonField<NotificationTemplatePayload.Brand>? = null
+        private var content: JsonField<ElementalContent>? = null
+        private var name: JsonField<String>? = null
+        private var routing: JsonField<NotificationTemplatePayload.Routing>? = null
+        private var subscription: JsonField<NotificationTemplatePayload.Subscription>? = null
+        private var tags: JsonField<MutableList<String>>? = null
+        private var id: JsonField<String>? = null
         private var created: JsonField<Long>? = null
         private var creator: JsonField<String>? = null
-        private var notification: JsonField<Notification>? = null
         private var state: JsonField<State>? = null
         private var updated: JsonField<Long> = JsonMissing.of()
         private var updater: JsonField<String> = JsonMissing.of()
@@ -183,14 +331,133 @@ private constructor(
 
         @JvmSynthetic
         internal fun from(notificationTemplateResponse: NotificationTemplateResponse) = apply {
+            brand = notificationTemplateResponse.brand
+            content = notificationTemplateResponse.content
+            name = notificationTemplateResponse.name
+            routing = notificationTemplateResponse.routing
+            subscription = notificationTemplateResponse.subscription
+            tags = notificationTemplateResponse.tags.map { it.toMutableList() }
+            id = notificationTemplateResponse.id
             created = notificationTemplateResponse.created
             creator = notificationTemplateResponse.creator
-            notification = notificationTemplateResponse.notification
             state = notificationTemplateResponse.state
             updated = notificationTemplateResponse.updated
             updater = notificationTemplateResponse.updater
             additionalProperties = notificationTemplateResponse.additionalProperties.toMutableMap()
         }
+
+        /** Brand reference, or null for no brand. */
+        fun brand(brand: NotificationTemplatePayload.Brand?) = brand(JsonField.ofNullable(brand))
+
+        /** Alias for calling [Builder.brand] with `brand.orElse(null)`. */
+        fun brand(brand: Optional<NotificationTemplatePayload.Brand>) = brand(brand.getOrNull())
+
+        /**
+         * Sets [Builder.brand] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.brand] with a well-typed
+         * [NotificationTemplatePayload.Brand] value instead. This method is primarily for setting
+         * the field to an undocumented or not yet supported value.
+         */
+        fun brand(brand: JsonField<NotificationTemplatePayload.Brand>) = apply {
+            this.brand = brand
+        }
+
+        /** Elemental content definition. */
+        fun content(content: ElementalContent) = content(JsonField.of(content))
+
+        /**
+         * Sets [Builder.content] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.content] with a well-typed [ElementalContent] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun content(content: JsonField<ElementalContent>) = apply { this.content = content }
+
+        /** Display name for the template. */
+        fun name(name: String) = name(JsonField.of(name))
+
+        /**
+         * Sets [Builder.name] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.name] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun name(name: JsonField<String>) = apply { this.name = name }
+
+        /** Routing strategy reference, or null for none. */
+        fun routing(routing: NotificationTemplatePayload.Routing?) =
+            routing(JsonField.ofNullable(routing))
+
+        /** Alias for calling [Builder.routing] with `routing.orElse(null)`. */
+        fun routing(routing: Optional<NotificationTemplatePayload.Routing>) =
+            routing(routing.getOrNull())
+
+        /**
+         * Sets [Builder.routing] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.routing] with a well-typed
+         * [NotificationTemplatePayload.Routing] value instead. This method is primarily for setting
+         * the field to an undocumented or not yet supported value.
+         */
+        fun routing(routing: JsonField<NotificationTemplatePayload.Routing>) = apply {
+            this.routing = routing
+        }
+
+        /** Subscription topic reference, or null for none. */
+        fun subscription(subscription: NotificationTemplatePayload.Subscription?) =
+            subscription(JsonField.ofNullable(subscription))
+
+        /** Alias for calling [Builder.subscription] with `subscription.orElse(null)`. */
+        fun subscription(subscription: Optional<NotificationTemplatePayload.Subscription>) =
+            subscription(subscription.getOrNull())
+
+        /**
+         * Sets [Builder.subscription] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.subscription] with a well-typed
+         * [NotificationTemplatePayload.Subscription] value instead. This method is primarily for
+         * setting the field to an undocumented or not yet supported value.
+         */
+        fun subscription(subscription: JsonField<NotificationTemplatePayload.Subscription>) =
+            apply {
+                this.subscription = subscription
+            }
+
+        /** Tags for categorization. Send empty array for none. */
+        fun tags(tags: List<String>) = tags(JsonField.of(tags))
+
+        /**
+         * Sets [Builder.tags] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.tags] with a well-typed `List<String>` value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun tags(tags: JsonField<List<String>>) = apply {
+            this.tags = tags.map { it.toMutableList() }
+        }
+
+        /**
+         * Adds a single [String] to [tags].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addTag(tag: String) = apply {
+            tags = (tags ?: JsonField.of(mutableListOf())).also { checkKnown("tags", it).add(tag) }
+        }
+
+        /** The template ID. */
+        fun id(id: String) = id(JsonField.of(id))
+
+        /**
+         * Sets [Builder.id] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.id] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun id(id: JsonField<String>) = apply { this.id = id }
 
         /** Epoch milliseconds when the template was created. */
         fun created(created: Long) = created(JsonField.of(created))
@@ -213,23 +480,6 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun creator(creator: JsonField<String>) = apply { this.creator = creator }
-
-        /**
-         * Full document shape used in POST and PUT request bodies, and returned inside the GET
-         * response envelope.
-         */
-        fun notification(notification: Notification) = notification(JsonField.of(notification))
-
-        /**
-         * Sets [Builder.notification] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.notification] with a well-typed [Notification] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun notification(notification: JsonField<Notification>) = apply {
-            this.notification = notification
-        }
 
         /** The template state. Always uppercase. */
         fun state(state: State) = state(JsonField.of(state))
@@ -290,9 +540,15 @@ private constructor(
          *
          * The following fields are required:
          * ```java
+         * .brand()
+         * .content()
+         * .name()
+         * .routing()
+         * .subscription()
+         * .tags()
+         * .id()
          * .created()
          * .creator()
-         * .notification()
          * .state()
          * ```
          *
@@ -300,9 +556,15 @@ private constructor(
          */
         fun build(): NotificationTemplateResponse =
             NotificationTemplateResponse(
+                checkRequired("brand", brand),
+                checkRequired("content", content),
+                checkRequired("name", name),
+                checkRequired("routing", routing),
+                checkRequired("subscription", subscription),
+                checkRequired("tags", tags).map { it.toImmutable() },
+                checkRequired("id", id),
                 checkRequired("created", created),
                 checkRequired("creator", creator),
-                checkRequired("notification", notification),
                 checkRequired("state", state),
                 updated,
                 updater,
@@ -317,9 +579,15 @@ private constructor(
             return@apply
         }
 
+        brand().ifPresent { it.validate() }
+        content().validate()
+        name()
+        routing().ifPresent { it.validate() }
+        subscription().ifPresent { it.validate() }
+        tags()
+        id()
         created()
         creator()
-        notification().validate()
         state().validate()
         updated()
         updater()
@@ -341,472 +609,18 @@ private constructor(
      */
     @JvmSynthetic
     internal fun validity(): Int =
-        (if (created.asKnown().isPresent) 1 else 0) +
+        (brand.asKnown().getOrNull()?.validity() ?: 0) +
+            (content.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (name.asKnown().isPresent) 1 else 0) +
+            (routing.asKnown().getOrNull()?.validity() ?: 0) +
+            (subscription.asKnown().getOrNull()?.validity() ?: 0) +
+            (tags.asKnown().getOrNull()?.size ?: 0) +
+            (if (id.asKnown().isPresent) 1 else 0) +
+            (if (created.asKnown().isPresent) 1 else 0) +
             (if (creator.asKnown().isPresent) 1 else 0) +
-            (notification.asKnown().getOrNull()?.validity() ?: 0) +
             (state.asKnown().getOrNull()?.validity() ?: 0) +
             (if (updated.asKnown().isPresent) 1 else 0) +
             (if (updater.asKnown().isPresent) 1 else 0)
-
-    /**
-     * Full document shape used in POST and PUT request bodies, and returned inside the GET response
-     * envelope.
-     */
-    class Notification
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
-        private val brand: JsonField<NotificationTemplatePayload.Brand>,
-        private val content: JsonField<ElementalContent>,
-        private val name: JsonField<String>,
-        private val routing: JsonField<NotificationTemplatePayload.Routing>,
-        private val subscription: JsonField<NotificationTemplatePayload.Subscription>,
-        private val tags: JsonField<List<String>>,
-        private val id: JsonField<String>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("brand")
-            @ExcludeMissing
-            brand: JsonField<NotificationTemplatePayload.Brand> = JsonMissing.of(),
-            @JsonProperty("content")
-            @ExcludeMissing
-            content: JsonField<ElementalContent> = JsonMissing.of(),
-            @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("routing")
-            @ExcludeMissing
-            routing: JsonField<NotificationTemplatePayload.Routing> = JsonMissing.of(),
-            @JsonProperty("subscription")
-            @ExcludeMissing
-            subscription: JsonField<NotificationTemplatePayload.Subscription> = JsonMissing.of(),
-            @JsonProperty("tags") @ExcludeMissing tags: JsonField<List<String>> = JsonMissing.of(),
-            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
-        ) : this(brand, content, name, routing, subscription, tags, id, mutableMapOf())
-
-        fun toNotificationTemplatePayload(): NotificationTemplatePayload =
-            NotificationTemplatePayload.builder()
-                .brand(brand)
-                .content(content)
-                .name(name)
-                .routing(routing)
-                .subscription(subscription)
-                .tags(tags)
-                .build()
-
-        /**
-         * Brand reference, or null for no brand.
-         *
-         * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun brand(): Optional<NotificationTemplatePayload.Brand> = brand.getOptional("brand")
-
-        /**
-         * Elemental content definition.
-         *
-         * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun content(): ElementalContent = content.getRequired("content")
-
-        /**
-         * Display name for the template.
-         *
-         * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun name(): String = name.getRequired("name")
-
-        /**
-         * Routing strategy reference, or null for none.
-         *
-         * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun routing(): Optional<NotificationTemplatePayload.Routing> =
-            routing.getOptional("routing")
-
-        /**
-         * Subscription topic reference, or null for none.
-         *
-         * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun subscription(): Optional<NotificationTemplatePayload.Subscription> =
-            subscription.getOptional("subscription")
-
-        /**
-         * Tags for categorization. Send empty array for none.
-         *
-         * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun tags(): List<String> = tags.getRequired("tags")
-
-        /**
-         * The template ID.
-         *
-         * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun id(): String = id.getRequired("id")
-
-        /**
-         * Returns the raw JSON value of [brand].
-         *
-         * Unlike [brand], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("brand")
-        @ExcludeMissing
-        fun _brand(): JsonField<NotificationTemplatePayload.Brand> = brand
-
-        /**
-         * Returns the raw JSON value of [content].
-         *
-         * Unlike [content], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("content")
-        @ExcludeMissing
-        fun _content(): JsonField<ElementalContent> = content
-
-        /**
-         * Returns the raw JSON value of [name].
-         *
-         * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
-
-        /**
-         * Returns the raw JSON value of [routing].
-         *
-         * Unlike [routing], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("routing")
-        @ExcludeMissing
-        fun _routing(): JsonField<NotificationTemplatePayload.Routing> = routing
-
-        /**
-         * Returns the raw JSON value of [subscription].
-         *
-         * Unlike [subscription], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("subscription")
-        @ExcludeMissing
-        fun _subscription(): JsonField<NotificationTemplatePayload.Subscription> = subscription
-
-        /**
-         * Returns the raw JSON value of [tags].
-         *
-         * Unlike [tags], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("tags") @ExcludeMissing fun _tags(): JsonField<List<String>> = tags
-
-        /**
-         * Returns the raw JSON value of [id].
-         *
-         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [Notification].
-             *
-             * The following fields are required:
-             * ```java
-             * .brand()
-             * .content()
-             * .name()
-             * .routing()
-             * .subscription()
-             * .tags()
-             * .id()
-             * ```
-             */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        /** A builder for [Notification]. */
-        class Builder internal constructor() {
-
-            private var brand: JsonField<NotificationTemplatePayload.Brand>? = null
-            private var content: JsonField<ElementalContent>? = null
-            private var name: JsonField<String>? = null
-            private var routing: JsonField<NotificationTemplatePayload.Routing>? = null
-            private var subscription: JsonField<NotificationTemplatePayload.Subscription>? = null
-            private var tags: JsonField<MutableList<String>>? = null
-            private var id: JsonField<String>? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(notification: Notification) = apply {
-                brand = notification.brand
-                content = notification.content
-                name = notification.name
-                routing = notification.routing
-                subscription = notification.subscription
-                tags = notification.tags.map { it.toMutableList() }
-                id = notification.id
-                additionalProperties = notification.additionalProperties.toMutableMap()
-            }
-
-            /** Brand reference, or null for no brand. */
-            fun brand(brand: NotificationTemplatePayload.Brand?) =
-                brand(JsonField.ofNullable(brand))
-
-            /** Alias for calling [Builder.brand] with `brand.orElse(null)`. */
-            fun brand(brand: Optional<NotificationTemplatePayload.Brand>) = brand(brand.getOrNull())
-
-            /**
-             * Sets [Builder.brand] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.brand] with a well-typed
-             * [NotificationTemplatePayload.Brand] value instead. This method is primarily for
-             * setting the field to an undocumented or not yet supported value.
-             */
-            fun brand(brand: JsonField<NotificationTemplatePayload.Brand>) = apply {
-                this.brand = brand
-            }
-
-            /** Elemental content definition. */
-            fun content(content: ElementalContent) = content(JsonField.of(content))
-
-            /**
-             * Sets [Builder.content] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.content] with a well-typed [ElementalContent] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun content(content: JsonField<ElementalContent>) = apply { this.content = content }
-
-            /** Display name for the template. */
-            fun name(name: String) = name(JsonField.of(name))
-
-            /**
-             * Sets [Builder.name] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.name] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
-            fun name(name: JsonField<String>) = apply { this.name = name }
-
-            /** Routing strategy reference, or null for none. */
-            fun routing(routing: NotificationTemplatePayload.Routing?) =
-                routing(JsonField.ofNullable(routing))
-
-            /** Alias for calling [Builder.routing] with `routing.orElse(null)`. */
-            fun routing(routing: Optional<NotificationTemplatePayload.Routing>) =
-                routing(routing.getOrNull())
-
-            /**
-             * Sets [Builder.routing] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.routing] with a well-typed
-             * [NotificationTemplatePayload.Routing] value instead. This method is primarily for
-             * setting the field to an undocumented or not yet supported value.
-             */
-            fun routing(routing: JsonField<NotificationTemplatePayload.Routing>) = apply {
-                this.routing = routing
-            }
-
-            /** Subscription topic reference, or null for none. */
-            fun subscription(subscription: NotificationTemplatePayload.Subscription?) =
-                subscription(JsonField.ofNullable(subscription))
-
-            /** Alias for calling [Builder.subscription] with `subscription.orElse(null)`. */
-            fun subscription(subscription: Optional<NotificationTemplatePayload.Subscription>) =
-                subscription(subscription.getOrNull())
-
-            /**
-             * Sets [Builder.subscription] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.subscription] with a well-typed
-             * [NotificationTemplatePayload.Subscription] value instead. This method is primarily
-             * for setting the field to an undocumented or not yet supported value.
-             */
-            fun subscription(subscription: JsonField<NotificationTemplatePayload.Subscription>) =
-                apply {
-                    this.subscription = subscription
-                }
-
-            /** Tags for categorization. Send empty array for none. */
-            fun tags(tags: List<String>) = tags(JsonField.of(tags))
-
-            /**
-             * Sets [Builder.tags] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.tags] with a well-typed `List<String>` value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun tags(tags: JsonField<List<String>>) = apply {
-                this.tags = tags.map { it.toMutableList() }
-            }
-
-            /**
-             * Adds a single [String] to [tags].
-             *
-             * @throws IllegalStateException if the field was previously set to a non-list.
-             */
-            fun addTag(tag: String) = apply {
-                tags =
-                    (tags ?: JsonField.of(mutableListOf())).also { checkKnown("tags", it).add(tag) }
-            }
-
-            /** The template ID. */
-            fun id(id: String) = id(JsonField.of(id))
-
-            /**
-             * Sets [Builder.id] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.id] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
-            fun id(id: JsonField<String>) = apply { this.id = id }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Notification].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```java
-             * .brand()
-             * .content()
-             * .name()
-             * .routing()
-             * .subscription()
-             * .tags()
-             * .id()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
-             */
-            fun build(): Notification =
-                Notification(
-                    checkRequired("brand", brand),
-                    checkRequired("content", content),
-                    checkRequired("name", name),
-                    checkRequired("routing", routing),
-                    checkRequired("subscription", subscription),
-                    checkRequired("tags", tags).map { it.toImmutable() },
-                    checkRequired("id", id),
-                    additionalProperties.toMutableMap(),
-                )
-        }
-
-        private var validated: Boolean = false
-
-        fun validate(): Notification = apply {
-            if (validated) {
-                return@apply
-            }
-
-            brand().ifPresent { it.validate() }
-            content().validate()
-            name()
-            routing().ifPresent { it.validate() }
-            subscription().ifPresent { it.validate() }
-            tags()
-            id()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: CourierInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        @JvmSynthetic
-        internal fun validity(): Int =
-            (brand.asKnown().getOrNull()?.validity() ?: 0) +
-                (content.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (name.asKnown().isPresent) 1 else 0) +
-                (routing.asKnown().getOrNull()?.validity() ?: 0) +
-                (subscription.asKnown().getOrNull()?.validity() ?: 0) +
-                (tags.asKnown().getOrNull()?.size ?: 0) +
-                (if (id.asKnown().isPresent) 1 else 0)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Notification &&
-                brand == other.brand &&
-                content == other.content &&
-                name == other.name &&
-                routing == other.routing &&
-                subscription == other.subscription &&
-                tags == other.tags &&
-                id == other.id &&
-                additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy {
-            Objects.hash(
-                brand,
-                content,
-                name,
-                routing,
-                subscription,
-                tags,
-                id,
-                additionalProperties,
-            )
-        }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "Notification{brand=$brand, content=$content, name=$name, routing=$routing, subscription=$subscription, tags=$tags, id=$id, additionalProperties=$additionalProperties}"
-    }
 
     /** The template state. Always uppercase. */
     class State @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
@@ -940,9 +754,15 @@ private constructor(
         }
 
         return other is NotificationTemplateResponse &&
+            brand == other.brand &&
+            content == other.content &&
+            name == other.name &&
+            routing == other.routing &&
+            subscription == other.subscription &&
+            tags == other.tags &&
+            id == other.id &&
             created == other.created &&
             creator == other.creator &&
-            notification == other.notification &&
             state == other.state &&
             updated == other.updated &&
             updater == other.updater &&
@@ -950,11 +770,25 @@ private constructor(
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(created, creator, notification, state, updated, updater, additionalProperties)
+        Objects.hash(
+            brand,
+            content,
+            name,
+            routing,
+            subscription,
+            tags,
+            id,
+            created,
+            creator,
+            state,
+            updated,
+            updater,
+            additionalProperties,
+        )
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "NotificationTemplateResponse{created=$created, creator=$creator, notification=$notification, state=$state, updated=$updated, updater=$updater, additionalProperties=$additionalProperties}"
+        "NotificationTemplateResponse{brand=$brand, content=$content, name=$name, routing=$routing, subscription=$subscription, tags=$tags, id=$id, created=$created, creator=$creator, state=$state, updated=$updated, updater=$updater, additionalProperties=$additionalProperties}"
 }
