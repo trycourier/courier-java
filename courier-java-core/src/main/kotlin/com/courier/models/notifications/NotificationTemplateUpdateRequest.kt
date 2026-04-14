@@ -39,8 +39,8 @@ private constructor(
     ) : this(notification, state, mutableMapOf())
 
     /**
-     * Full document shape used in POST and PUT request bodies, and returned inside the GET response
-     * envelope.
+     * Core template fields used in POST and PUT request bodies (nested under a `notification` key)
+     * and returned at the top level in responses.
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -115,8 +115,8 @@ private constructor(
             }
 
         /**
-         * Full document shape used in POST and PUT request bodies, and returned inside the GET
-         * response envelope.
+         * Core template fields used in POST and PUT request bodies (nested under a `notification`
+         * key) and returned at the top level in responses.
          */
         fun notification(notification: NotificationTemplatePayload) =
             notification(JsonField.of(notification))
