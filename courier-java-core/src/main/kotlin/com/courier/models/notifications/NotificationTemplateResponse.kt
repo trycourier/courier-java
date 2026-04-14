@@ -22,10 +22,10 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Envelope response for GET /notifications/{id}. The notification object mirrors the POST/PUT input
- * shape. Nullable fields return null when unset.
+ * Response for GET /notifications/{id}, POST /notifications, and PUT /notifications/{id}. Wraps the
+ * template payload inside a `notification` key alongside metadata.
  */
-class NotificationTemplateGetResponse
+class NotificationTemplateResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val created: JsonField<Long>,
@@ -157,8 +157,7 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of
-         * [NotificationTemplateGetResponse].
+         * Returns a mutable builder for constructing an instance of [NotificationTemplateResponse].
          *
          * The following fields are required:
          * ```java
@@ -171,7 +170,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [NotificationTemplateGetResponse]. */
+    /** A builder for [NotificationTemplateResponse]. */
     class Builder internal constructor() {
 
         private var created: JsonField<Long>? = null
@@ -183,17 +182,15 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(notificationTemplateGetResponse: NotificationTemplateGetResponse) =
-            apply {
-                created = notificationTemplateGetResponse.created
-                creator = notificationTemplateGetResponse.creator
-                notification = notificationTemplateGetResponse.notification
-                state = notificationTemplateGetResponse.state
-                updated = notificationTemplateGetResponse.updated
-                updater = notificationTemplateGetResponse.updater
-                additionalProperties =
-                    notificationTemplateGetResponse.additionalProperties.toMutableMap()
-            }
+        internal fun from(notificationTemplateResponse: NotificationTemplateResponse) = apply {
+            created = notificationTemplateResponse.created
+            creator = notificationTemplateResponse.creator
+            notification = notificationTemplateResponse.notification
+            state = notificationTemplateResponse.state
+            updated = notificationTemplateResponse.updated
+            updater = notificationTemplateResponse.updater
+            additionalProperties = notificationTemplateResponse.additionalProperties.toMutableMap()
+        }
 
         /** Epoch milliseconds when the template was created. */
         fun created(created: Long) = created(JsonField.of(created))
@@ -287,7 +284,7 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [NotificationTemplateGetResponse].
+         * Returns an immutable instance of [NotificationTemplateResponse].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
@@ -301,8 +298,8 @@ private constructor(
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): NotificationTemplateGetResponse =
-            NotificationTemplateGetResponse(
+        fun build(): NotificationTemplateResponse =
+            NotificationTemplateResponse(
                 checkRequired("created", created),
                 checkRequired("creator", creator),
                 checkRequired("notification", notification),
@@ -315,7 +312,7 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): NotificationTemplateGetResponse = apply {
+    fun validate(): NotificationTemplateResponse = apply {
         if (validated) {
             return@apply
         }
@@ -942,7 +939,7 @@ private constructor(
             return true
         }
 
-        return other is NotificationTemplateGetResponse &&
+        return other is NotificationTemplateResponse &&
             created == other.created &&
             creator == other.creator &&
             notification == other.notification &&
@@ -959,5 +956,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "NotificationTemplateGetResponse{created=$created, creator=$creator, notification=$notification, state=$state, updated=$updated, updater=$updater, additionalProperties=$additionalProperties}"
+        "NotificationTemplateResponse{created=$created, creator=$creator, notification=$notification, state=$state, updated=$updated, updater=$updater, additionalProperties=$additionalProperties}"
 }
