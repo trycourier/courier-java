@@ -10,6 +10,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
+/** Retrieve the checks for a notification template submission. */
 class CheckListParams
 private constructor(
     private val id: String,

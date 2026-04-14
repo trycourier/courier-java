@@ -28,6 +28,7 @@ interface CheckServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): CheckServiceAsync
 
+    /** Replace the checks for a notification template submission. */
     fun update(
         submissionId: String,
         params: CheckUpdateParams,
@@ -51,6 +52,7 @@ interface CheckServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CheckUpdateResponse>
 
+    /** Retrieve the checks for a notification template submission. */
     fun list(submissionId: String, params: CheckListParams): CompletableFuture<CheckListResponse> =
         list(submissionId, params, RequestOptions.none())
 
@@ -72,6 +74,7 @@ interface CheckServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CheckListResponse>
 
+    /** Cancel a notification template submission. */
     fun delete(submissionId: String, params: CheckDeleteParams): CompletableFuture<Void?> =
         delete(submissionId, params, RequestOptions.none())
 

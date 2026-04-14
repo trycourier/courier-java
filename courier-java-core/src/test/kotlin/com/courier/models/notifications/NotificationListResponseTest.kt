@@ -21,7 +21,6 @@ internal class NotificationListResponseTest {
                         .id("id")
                         .createdAt(0L)
                         .addEventId("string")
-                        .note("note")
                         .routing(
                             MessageRouting.builder()
                                 .addChannel("string")
@@ -30,6 +29,7 @@ internal class NotificationListResponseTest {
                         )
                         .topicId("topic_id")
                         .updatedAt(0L)
+                        .note("note")
                         .tags(
                             NotificationListResponse.Result.Notification.Tags.builder()
                                 .addData(
@@ -54,7 +54,6 @@ internal class NotificationListResponseTest {
                         .id("id")
                         .createdAt(0L)
                         .addEventId("string")
-                        .note("note")
                         .routing(
                             MessageRouting.builder()
                                 .addChannel("string")
@@ -63,6 +62,7 @@ internal class NotificationListResponseTest {
                         )
                         .topicId("topic_id")
                         .updatedAt(0L)
+                        .note("note")
                         .tags(
                             NotificationListResponse.Result.Notification.Tags.builder()
                                 .addData(
@@ -90,7 +90,6 @@ internal class NotificationListResponseTest {
                         .id("id")
                         .createdAt(0L)
                         .addEventId("string")
-                        .note("note")
                         .routing(
                             MessageRouting.builder()
                                 .addChannel("string")
@@ -99,6 +98,7 @@ internal class NotificationListResponseTest {
                         )
                         .topicId("topic_id")
                         .updatedAt(0L)
+                        .note("note")
                         .tags(
                             NotificationListResponse.Result.Notification.Tags.builder()
                                 .addData(

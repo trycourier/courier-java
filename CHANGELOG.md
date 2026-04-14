@@ -1,5 +1,14 @@
 # Changelog
 
+## 4.13.1 (2026-04-14)
+
+Full Changelog: [v4.13.0...v4.13.1](https://github.com/trycourier/courier-java/compare/v4.13.0...v4.13.1)
+
+### Bug Fixes
+
+* **types:** flatten response structure in NotificationTemplateResponse ([38b5307](https://github.com/trycourier/courier-java/commit/38b53079bd65f9813756e45cfbe7f8d4d5b27c99))
+* **types:** make note optional in notifications, flatten template response ([ba686ac](https://github.com/trycourier/courier-java/commit/ba686ac91e66e3f6979623246a9f9b01607839aa))
+
 ## 4.13.0 (2026-04-13)
 
 Full Changelog: [v4.12.0...v4.13.0](https://github.com/trycourier/courier-java/compare/v4.12.0...v4.13.0)
