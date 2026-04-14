@@ -21,7 +21,7 @@ import com.courier.models.notifications.NotificationRetrieveContentParams
 import com.courier.models.notifications.NotificationRetrieveContentResponse
 import com.courier.models.notifications.NotificationRetrieveParams
 import com.courier.models.notifications.NotificationTemplateCreateRequest
-import com.courier.models.notifications.NotificationTemplateGetResponse
+import com.courier.models.notifications.NotificationTemplateResponse
 import com.courier.models.notifications.NotificationTemplateVersionListResponse
 import com.courier.services.blocking.notifications.CheckService
 import com.google.errorprone.annotations.MustBeClosed
@@ -47,20 +47,20 @@ interface NotificationService {
      * Create a notification template. Requires all fields in the notification object. Templates are
      * created in draft state by default.
      */
-    fun create(params: NotificationCreateParams): NotificationTemplateGetResponse =
+    fun create(params: NotificationCreateParams): NotificationTemplateResponse =
         create(params, RequestOptions.none())
 
     /** @see create */
     fun create(
         params: NotificationCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): NotificationTemplateGetResponse
+    ): NotificationTemplateResponse
 
     /** @see create */
     fun create(
         notificationTemplateCreateRequest: NotificationTemplateCreateRequest,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): NotificationTemplateGetResponse =
+    ): NotificationTemplateResponse =
         create(
             NotificationCreateParams.builder()
                 .notificationTemplateCreateRequest(notificationTemplateCreateRequest)
@@ -71,14 +71,14 @@ interface NotificationService {
     /** @see create */
     fun create(
         notificationTemplateCreateRequest: NotificationTemplateCreateRequest
-    ): NotificationTemplateGetResponse =
+    ): NotificationTemplateResponse =
         create(notificationTemplateCreateRequest, RequestOptions.none())
 
     /**
      * Retrieve a notification template by ID. Returns the published version by default. Pass
      * version=draft to retrieve an unpublished template.
      */
-    fun retrieve(id: String): NotificationTemplateGetResponse =
+    fun retrieve(id: String): NotificationTemplateResponse =
         retrieve(id, NotificationRetrieveParams.none())
 
     /** @see retrieve */
@@ -86,26 +86,26 @@ interface NotificationService {
         id: String,
         params: NotificationRetrieveParams = NotificationRetrieveParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): NotificationTemplateGetResponse = retrieve(params.toBuilder().id(id).build(), requestOptions)
+    ): NotificationTemplateResponse = retrieve(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see retrieve */
     fun retrieve(
         id: String,
         params: NotificationRetrieveParams = NotificationRetrieveParams.none(),
-    ): NotificationTemplateGetResponse = retrieve(id, params, RequestOptions.none())
+    ): NotificationTemplateResponse = retrieve(id, params, RequestOptions.none())
 
     /** @see retrieve */
     fun retrieve(
         params: NotificationRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): NotificationTemplateGetResponse
+    ): NotificationTemplateResponse
 
     /** @see retrieve */
-    fun retrieve(params: NotificationRetrieveParams): NotificationTemplateGetResponse =
+    fun retrieve(params: NotificationRetrieveParams): NotificationTemplateResponse =
         retrieve(params, RequestOptions.none())
 
     /** @see retrieve */
-    fun retrieve(id: String, requestOptions: RequestOptions): NotificationTemplateGetResponse =
+    fun retrieve(id: String, requestOptions: RequestOptions): NotificationTemplateResponse =
         retrieve(id, NotificationRetrieveParams.none(), requestOptions)
 
     /** List notification templates in your workspace. */
@@ -301,7 +301,7 @@ interface NotificationService {
     ): NotificationContentMutationResponse
 
     /** Replace a notification template. All fields are required. */
-    fun replace(id: String, params: NotificationReplaceParams): NotificationTemplateGetResponse =
+    fun replace(id: String, params: NotificationReplaceParams): NotificationTemplateResponse =
         replace(id, params, RequestOptions.none())
 
     /** @see replace */
@@ -309,17 +309,17 @@ interface NotificationService {
         id: String,
         params: NotificationReplaceParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): NotificationTemplateGetResponse = replace(params.toBuilder().id(id).build(), requestOptions)
+    ): NotificationTemplateResponse = replace(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see replace */
-    fun replace(params: NotificationReplaceParams): NotificationTemplateGetResponse =
+    fun replace(params: NotificationReplaceParams): NotificationTemplateResponse =
         replace(params, RequestOptions.none())
 
     /** @see replace */
     fun replace(
         params: NotificationReplaceParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): NotificationTemplateGetResponse
+    ): NotificationTemplateResponse
 
     /**
      * Retrieve the content of a notification template. The response shape depends on whether the
@@ -384,21 +384,21 @@ interface NotificationService {
         @MustBeClosed
         fun create(
             params: NotificationCreateParams
-        ): HttpResponseFor<NotificationTemplateGetResponse> = create(params, RequestOptions.none())
+        ): HttpResponseFor<NotificationTemplateResponse> = create(params, RequestOptions.none())
 
         /** @see create */
         @MustBeClosed
         fun create(
             params: NotificationCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<NotificationTemplateGetResponse>
+        ): HttpResponseFor<NotificationTemplateResponse>
 
         /** @see create */
         @MustBeClosed
         fun create(
             notificationTemplateCreateRequest: NotificationTemplateCreateRequest,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<NotificationTemplateGetResponse> =
+        ): HttpResponseFor<NotificationTemplateResponse> =
             create(
                 NotificationCreateParams.builder()
                     .notificationTemplateCreateRequest(notificationTemplateCreateRequest)
@@ -410,7 +410,7 @@ interface NotificationService {
         @MustBeClosed
         fun create(
             notificationTemplateCreateRequest: NotificationTemplateCreateRequest
-        ): HttpResponseFor<NotificationTemplateGetResponse> =
+        ): HttpResponseFor<NotificationTemplateResponse> =
             create(notificationTemplateCreateRequest, RequestOptions.none())
 
         /**
@@ -418,7 +418,7 @@ interface NotificationService {
          * [NotificationService.retrieve].
          */
         @MustBeClosed
-        fun retrieve(id: String): HttpResponseFor<NotificationTemplateGetResponse> =
+        fun retrieve(id: String): HttpResponseFor<NotificationTemplateResponse> =
             retrieve(id, NotificationRetrieveParams.none())
 
         /** @see retrieve */
@@ -427,7 +427,7 @@ interface NotificationService {
             id: String,
             params: NotificationRetrieveParams = NotificationRetrieveParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<NotificationTemplateGetResponse> =
+        ): HttpResponseFor<NotificationTemplateResponse> =
             retrieve(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see retrieve */
@@ -435,7 +435,7 @@ interface NotificationService {
         fun retrieve(
             id: String,
             params: NotificationRetrieveParams = NotificationRetrieveParams.none(),
-        ): HttpResponseFor<NotificationTemplateGetResponse> =
+        ): HttpResponseFor<NotificationTemplateResponse> =
             retrieve(id, params, RequestOptions.none())
 
         /** @see retrieve */
@@ -443,21 +443,20 @@ interface NotificationService {
         fun retrieve(
             params: NotificationRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<NotificationTemplateGetResponse>
+        ): HttpResponseFor<NotificationTemplateResponse>
 
         /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             params: NotificationRetrieveParams
-        ): HttpResponseFor<NotificationTemplateGetResponse> =
-            retrieve(params, RequestOptions.none())
+        ): HttpResponseFor<NotificationTemplateResponse> = retrieve(params, RequestOptions.none())
 
         /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             id: String,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<NotificationTemplateGetResponse> =
+        ): HttpResponseFor<NotificationTemplateResponse> =
             retrieve(id, NotificationRetrieveParams.none(), requestOptions)
 
         /**
@@ -720,7 +719,7 @@ interface NotificationService {
         fun replace(
             id: String,
             params: NotificationReplaceParams,
-        ): HttpResponseFor<NotificationTemplateGetResponse> =
+        ): HttpResponseFor<NotificationTemplateResponse> =
             replace(id, params, RequestOptions.none())
 
         /** @see replace */
@@ -729,21 +728,21 @@ interface NotificationService {
             id: String,
             params: NotificationReplaceParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<NotificationTemplateGetResponse> =
+        ): HttpResponseFor<NotificationTemplateResponse> =
             replace(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see replace */
         @MustBeClosed
         fun replace(
             params: NotificationReplaceParams
-        ): HttpResponseFor<NotificationTemplateGetResponse> = replace(params, RequestOptions.none())
+        ): HttpResponseFor<NotificationTemplateResponse> = replace(params, RequestOptions.none())
 
         /** @see replace */
         @MustBeClosed
         fun replace(
             params: NotificationReplaceParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<NotificationTemplateGetResponse>
+        ): HttpResponseFor<NotificationTemplateResponse>
 
         /**
          * Returns a raw HTTP response for `get /notifications/{id}/content`, but is otherwise the

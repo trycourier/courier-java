@@ -31,7 +31,7 @@ import com.courier.models.notifications.NotificationReplaceParams
 import com.courier.models.notifications.NotificationRetrieveContentParams
 import com.courier.models.notifications.NotificationRetrieveContentResponse
 import com.courier.models.notifications.NotificationRetrieveParams
-import com.courier.models.notifications.NotificationTemplateGetResponse
+import com.courier.models.notifications.NotificationTemplateResponse
 import com.courier.models.notifications.NotificationTemplateVersionListResponse
 import com.courier.services.async.notifications.CheckServiceAsync
 import com.courier.services.async.notifications.CheckServiceAsyncImpl
@@ -58,14 +58,14 @@ class NotificationServiceAsyncImpl internal constructor(private val clientOption
     override fun create(
         params: NotificationCreateParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<NotificationTemplateGetResponse> =
+    ): CompletableFuture<NotificationTemplateResponse> =
         // post /notifications
         withRawResponse().create(params, requestOptions).thenApply { it.parse() }
 
     override fun retrieve(
         params: NotificationRetrieveParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<NotificationTemplateGetResponse> =
+    ): CompletableFuture<NotificationTemplateResponse> =
         // get /notifications/{id}
         withRawResponse().retrieve(params, requestOptions).thenApply { it.parse() }
 
@@ -121,7 +121,7 @@ class NotificationServiceAsyncImpl internal constructor(private val clientOption
     override fun replace(
         params: NotificationReplaceParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<NotificationTemplateGetResponse> =
+    ): CompletableFuture<NotificationTemplateResponse> =
         // put /notifications/{id}
         withRawResponse().replace(params, requestOptions).thenApply { it.parse() }
 
@@ -151,13 +151,13 @@ class NotificationServiceAsyncImpl internal constructor(private val clientOption
 
         override fun checks(): CheckServiceAsync.WithRawResponse = checks
 
-        private val createHandler: Handler<NotificationTemplateGetResponse> =
-            jsonHandler<NotificationTemplateGetResponse>(clientOptions.jsonMapper)
+        private val createHandler: Handler<NotificationTemplateResponse> =
+            jsonHandler<NotificationTemplateResponse>(clientOptions.jsonMapper)
 
         override fun create(
             params: NotificationCreateParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<NotificationTemplateGetResponse>> {
+        ): CompletableFuture<HttpResponseFor<NotificationTemplateResponse>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -182,13 +182,13 @@ class NotificationServiceAsyncImpl internal constructor(private val clientOption
                 }
         }
 
-        private val retrieveHandler: Handler<NotificationTemplateGetResponse> =
-            jsonHandler<NotificationTemplateGetResponse>(clientOptions.jsonMapper)
+        private val retrieveHandler: Handler<NotificationTemplateResponse> =
+            jsonHandler<NotificationTemplateResponse>(clientOptions.jsonMapper)
 
         override fun retrieve(
             params: NotificationRetrieveParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<NotificationTemplateGetResponse>> {
+        ): CompletableFuture<HttpResponseFor<NotificationTemplateResponse>> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id().getOrNull())
@@ -444,13 +444,13 @@ class NotificationServiceAsyncImpl internal constructor(private val clientOption
                 }
         }
 
-        private val replaceHandler: Handler<NotificationTemplateGetResponse> =
-            jsonHandler<NotificationTemplateGetResponse>(clientOptions.jsonMapper)
+        private val replaceHandler: Handler<NotificationTemplateResponse> =
+            jsonHandler<NotificationTemplateResponse>(clientOptions.jsonMapper)
 
         override fun replace(
             params: NotificationReplaceParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<NotificationTemplateGetResponse>> {
+        ): CompletableFuture<HttpResponseFor<NotificationTemplateResponse>> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id().getOrNull())

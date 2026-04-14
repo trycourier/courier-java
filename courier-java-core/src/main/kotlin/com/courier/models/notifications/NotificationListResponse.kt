@@ -429,10 +429,10 @@ private constructor(
             private val id: JsonField<String>,
             private val createdAt: JsonField<Long>,
             private val eventIds: JsonField<List<String>>,
-            private val note: JsonField<String>,
             private val routing: JsonField<MessageRouting>,
             private val topicId: JsonField<String>,
             private val updatedAt: JsonField<Long>,
+            private val note: JsonField<String>,
             private val tags: JsonField<Tags>,
             private val title: JsonField<String>,
             private val additionalProperties: MutableMap<String, JsonValue>,
@@ -447,7 +447,6 @@ private constructor(
                 @JsonProperty("event_ids")
                 @ExcludeMissing
                 eventIds: JsonField<List<String>> = JsonMissing.of(),
-                @JsonProperty("note") @ExcludeMissing note: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("routing")
                 @ExcludeMissing
                 routing: JsonField<MessageRouting> = JsonMissing.of(),
@@ -457,16 +456,17 @@ private constructor(
                 @JsonProperty("updated_at")
                 @ExcludeMissing
                 updatedAt: JsonField<Long> = JsonMissing.of(),
+                @JsonProperty("note") @ExcludeMissing note: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("tags") @ExcludeMissing tags: JsonField<Tags> = JsonMissing.of(),
                 @JsonProperty("title") @ExcludeMissing title: JsonField<String> = JsonMissing.of(),
             ) : this(
                 id,
                 createdAt,
                 eventIds,
-                note,
                 routing,
                 topicId,
                 updatedAt,
+                note,
                 tags,
                 title,
                 mutableMapOf(),
@@ -500,13 +500,6 @@ private constructor(
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
              */
-            fun note(): String = note.getRequired("note")
-
-            /**
-             * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
-             */
             fun routing(): MessageRouting = routing.getRequired("routing")
 
             /**
@@ -522,6 +515,12 @@ private constructor(
              *   value).
              */
             fun updatedAt(): Long = updatedAt.getRequired("updated_at")
+
+            /**
+             * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
+            fun note(): Optional<String> = note.getOptional("note")
 
             /**
              * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -563,13 +562,6 @@ private constructor(
             fun _eventIds(): JsonField<List<String>> = eventIds
 
             /**
-             * Returns the raw JSON value of [note].
-             *
-             * Unlike [note], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("note") @ExcludeMissing fun _note(): JsonField<String> = note
-
-            /**
              * Returns the raw JSON value of [routing].
              *
              * Unlike [routing], this method doesn't throw if the JSON field has an unexpected type.
@@ -594,6 +586,13 @@ private constructor(
             @JsonProperty("updated_at")
             @ExcludeMissing
             fun _updatedAt(): JsonField<Long> = updatedAt
+
+            /**
+             * Returns the raw JSON value of [note].
+             *
+             * Unlike [note], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("note") @ExcludeMissing fun _note(): JsonField<String> = note
 
             /**
              * Returns the raw JSON value of [tags].
@@ -631,7 +630,6 @@ private constructor(
                  * .id()
                  * .createdAt()
                  * .eventIds()
-                 * .note()
                  * .routing()
                  * .topicId()
                  * .updatedAt()
@@ -646,10 +644,10 @@ private constructor(
                 private var id: JsonField<String>? = null
                 private var createdAt: JsonField<Long>? = null
                 private var eventIds: JsonField<MutableList<String>>? = null
-                private var note: JsonField<String>? = null
                 private var routing: JsonField<MessageRouting>? = null
                 private var topicId: JsonField<String>? = null
                 private var updatedAt: JsonField<Long>? = null
+                private var note: JsonField<String> = JsonMissing.of()
                 private var tags: JsonField<Tags> = JsonMissing.of()
                 private var title: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -659,10 +657,10 @@ private constructor(
                     id = notification.id
                     createdAt = notification.createdAt
                     eventIds = notification.eventIds.map { it.toMutableList() }
-                    note = notification.note
                     routing = notification.routing
                     topicId = notification.topicId
                     updatedAt = notification.updatedAt
+                    note = notification.note
                     tags = notification.tags
                     title = notification.title
                     additionalProperties = notification.additionalProperties.toMutableMap()
@@ -716,17 +714,6 @@ private constructor(
                         }
                 }
 
-                fun note(note: String) = note(JsonField.of(note))
-
-                /**
-                 * Sets [Builder.note] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.note] with a well-typed [String] value instead.
-                 * This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
-                 */
-                fun note(note: JsonField<String>) = apply { this.note = note }
-
                 fun routing(routing: MessageRouting) = routing(JsonField.of(routing))
 
                 /**
@@ -759,6 +746,17 @@ private constructor(
                  * yet supported value.
                  */
                 fun updatedAt(updatedAt: JsonField<Long>) = apply { this.updatedAt = updatedAt }
+
+                fun note(note: String) = note(JsonField.of(note))
+
+                /**
+                 * Sets [Builder.note] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.note] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
+                fun note(note: JsonField<String>) = apply { this.note = note }
 
                 fun tags(tags: Tags?) = tags(JsonField.ofNullable(tags))
 
@@ -820,7 +818,6 @@ private constructor(
                  * .id()
                  * .createdAt()
                  * .eventIds()
-                 * .note()
                  * .routing()
                  * .topicId()
                  * .updatedAt()
@@ -833,10 +830,10 @@ private constructor(
                         checkRequired("id", id),
                         checkRequired("createdAt", createdAt),
                         checkRequired("eventIds", eventIds).map { it.toImmutable() },
-                        checkRequired("note", note),
                         checkRequired("routing", routing),
                         checkRequired("topicId", topicId),
                         checkRequired("updatedAt", updatedAt),
+                        note,
                         tags,
                         title,
                         additionalProperties.toMutableMap(),
@@ -853,10 +850,10 @@ private constructor(
                 id()
                 createdAt()
                 eventIds()
-                note()
                 routing().validate()
                 topicId()
                 updatedAt()
+                note()
                 tags().ifPresent { it.validate() }
                 title()
                 validated = true
@@ -881,10 +878,10 @@ private constructor(
                 (if (id.asKnown().isPresent) 1 else 0) +
                     (if (createdAt.asKnown().isPresent) 1 else 0) +
                     (eventIds.asKnown().getOrNull()?.size ?: 0) +
-                    (if (note.asKnown().isPresent) 1 else 0) +
                     (routing.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (topicId.asKnown().isPresent) 1 else 0) +
                     (if (updatedAt.asKnown().isPresent) 1 else 0) +
+                    (if (note.asKnown().isPresent) 1 else 0) +
                     (tags.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (title.asKnown().isPresent) 1 else 0)
 
@@ -1282,10 +1279,10 @@ private constructor(
                     id == other.id &&
                     createdAt == other.createdAt &&
                     eventIds == other.eventIds &&
-                    note == other.note &&
                     routing == other.routing &&
                     topicId == other.topicId &&
                     updatedAt == other.updatedAt &&
+                    note == other.note &&
                     tags == other.tags &&
                     title == other.title &&
                     additionalProperties == other.additionalProperties
@@ -1296,10 +1293,10 @@ private constructor(
                     id,
                     createdAt,
                     eventIds,
-                    note,
                     routing,
                     topicId,
                     updatedAt,
+                    note,
                     tags,
                     title,
                     additionalProperties,
@@ -1309,7 +1306,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Notification{id=$id, createdAt=$createdAt, eventIds=$eventIds, note=$note, routing=$routing, topicId=$topicId, updatedAt=$updatedAt, tags=$tags, title=$title, additionalProperties=$additionalProperties}"
+                "Notification{id=$id, createdAt=$createdAt, eventIds=$eventIds, routing=$routing, topicId=$topicId, updatedAt=$updatedAt, note=$note, tags=$tags, title=$title, additionalProperties=$additionalProperties}"
         }
     }
 
