@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.14.0 (2026-04-28)
+
+Full Changelog: [v4.13.1...v4.14.0](https://github.com/trycourier/courier-java/compare/v4.13.1...v4.14.0)
+
+### Features
+
+* support setting headers via env ([0daaeb0](https://github.com/trycourier/courier-java/commit/0daaeb00073c63b431948f08180a83ba8103e74a))
+
 ## 4.13.1 (2026-04-14)
 
 Full Changelog: [v4.13.0...v4.13.1](https://github.com/trycourier/courier-java/compare/v4.13.0...v4.13.1)
