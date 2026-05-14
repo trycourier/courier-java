@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.services.async
+package com.courier.services.async.journeys
 
 import com.courier.core.ClientOptions
 import com.courier.core.RequestOptions
@@ -17,127 +17,109 @@ import com.courier.core.http.HttpResponseFor
 import com.courier.core.http.json
 import com.courier.core.http.parseable
 import com.courier.core.prepareAsync
-import com.courier.models.journeys.JourneyArchiveParams
-import com.courier.models.journeys.JourneyCreateParams
-import com.courier.models.journeys.JourneyInvokeParams
-import com.courier.models.journeys.JourneyListParams
-import com.courier.models.journeys.JourneyListVersionsParams
-import com.courier.models.journeys.JourneyPublishParams
-import com.courier.models.journeys.JourneyReplaceParams
-import com.courier.models.journeys.JourneyResponse
-import com.courier.models.journeys.JourneyRetrieveParams
-import com.courier.models.journeys.JourneyVersionsListResponse
-import com.courier.models.journeys.JourneysInvokeResponse
-import com.courier.models.journeys.JourneysListResponse
-import com.courier.services.async.journeys.TemplateServiceAsync
-import com.courier.services.async.journeys.TemplateServiceAsyncImpl
+import com.courier.models.journeys.JourneyTemplateGetResponse
+import com.courier.models.journeys.JourneyTemplateListResponse
+import com.courier.models.journeys.templates.TemplateArchiveParams
+import com.courier.models.journeys.templates.TemplateCreateParams
+import com.courier.models.journeys.templates.TemplateListParams
+import com.courier.models.journeys.templates.TemplateListVersionsParams
+import com.courier.models.journeys.templates.TemplatePublishParams
+import com.courier.models.journeys.templates.TemplateReplaceParams
+import com.courier.models.journeys.templates.TemplateRetrieveParams
+import com.courier.models.notifications.NotificationTemplateVersionListResponse
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
-class JourneyServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
-    JourneyServiceAsync {
+class TemplateServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    TemplateServiceAsync {
 
-    private val withRawResponse: JourneyServiceAsync.WithRawResponse by lazy {
+    private val withRawResponse: TemplateServiceAsync.WithRawResponse by lazy {
         WithRawResponseImpl(clientOptions)
     }
 
-    private val templates: TemplateServiceAsync by lazy { TemplateServiceAsyncImpl(clientOptions) }
+    override fun withRawResponse(): TemplateServiceAsync.WithRawResponse = withRawResponse
 
-    override fun withRawResponse(): JourneyServiceAsync.WithRawResponse = withRawResponse
-
-    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): JourneyServiceAsync =
-        JourneyServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
-
-    override fun templates(): TemplateServiceAsync = templates
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): TemplateServiceAsync =
+        TemplateServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun create(
-        params: JourneyCreateParams,
+        params: TemplateCreateParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<JourneyResponse> =
-        // post /journeys
+    ): CompletableFuture<JourneyTemplateGetResponse> =
+        // post /journeys/{templateId}/templates
         withRawResponse().create(params, requestOptions).thenApply { it.parse() }
 
     override fun retrieve(
-        params: JourneyRetrieveParams,
+        params: TemplateRetrieveParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<JourneyResponse> =
-        // get /journeys/{templateId}
+    ): CompletableFuture<JourneyTemplateGetResponse> =
+        // get /journeys/{templateId}/templates/{notificationId}
         withRawResponse().retrieve(params, requestOptions).thenApply { it.parse() }
 
     override fun list(
-        params: JourneyListParams,
+        params: TemplateListParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<JourneysListResponse> =
-        // get /journeys
+    ): CompletableFuture<JourneyTemplateListResponse> =
+        // get /journeys/{templateId}/templates
         withRawResponse().list(params, requestOptions).thenApply { it.parse() }
 
     override fun archive(
-        params: JourneyArchiveParams,
+        params: TemplateArchiveParams,
         requestOptions: RequestOptions,
     ): CompletableFuture<Void?> =
-        // delete /journeys/{templateId}
+        // delete /journeys/{templateId}/templates/{notificationId}
         withRawResponse().archive(params, requestOptions).thenAccept {}
 
-    override fun invoke(
-        params: JourneyInvokeParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<JourneysInvokeResponse> =
-        // post /journeys/{templateId}/invoke
-        withRawResponse().invoke(params, requestOptions).thenApply { it.parse() }
-
     override fun listVersions(
-        params: JourneyListVersionsParams,
+        params: TemplateListVersionsParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<JourneyVersionsListResponse> =
-        // get /journeys/{templateId}/versions
+    ): CompletableFuture<NotificationTemplateVersionListResponse> =
+        // get /journeys/{templateId}/templates/{notificationId}/versions
         withRawResponse().listVersions(params, requestOptions).thenApply { it.parse() }
 
     override fun publish(
-        params: JourneyPublishParams,
+        params: TemplatePublishParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<JourneyResponse> =
-        // post /journeys/{templateId}/publish
-        withRawResponse().publish(params, requestOptions).thenApply { it.parse() }
+    ): CompletableFuture<Void?> =
+        // post /journeys/{templateId}/templates/{notificationId}/publish
+        withRawResponse().publish(params, requestOptions).thenAccept {}
 
     override fun replace(
-        params: JourneyReplaceParams,
+        params: TemplateReplaceParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<JourneyResponse> =
-        // put /journeys/{templateId}
+    ): CompletableFuture<JourneyTemplateGetResponse> =
+        // put /journeys/{templateId}/templates/{notificationId}
         withRawResponse().replace(params, requestOptions).thenApply { it.parse() }
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        JourneyServiceAsync.WithRawResponse {
+        TemplateServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<HttpResponse> =
             errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
-        private val templates: TemplateServiceAsync.WithRawResponse by lazy {
-            TemplateServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
-
         override fun withOptions(
             modifier: Consumer<ClientOptions.Builder>
-        ): JourneyServiceAsync.WithRawResponse =
-            JourneyServiceAsyncImpl.WithRawResponseImpl(
+        ): TemplateServiceAsync.WithRawResponse =
+            TemplateServiceAsyncImpl.WithRawResponseImpl(
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
-        override fun templates(): TemplateServiceAsync.WithRawResponse = templates
-
-        private val createHandler: Handler<JourneyResponse> =
-            jsonHandler<JourneyResponse>(clientOptions.jsonMapper)
+        private val createHandler: Handler<JourneyTemplateGetResponse> =
+            jsonHandler<JourneyTemplateGetResponse>(clientOptions.jsonMapper)
 
         override fun create(
-            params: JourneyCreateParams,
+            params: TemplateCreateParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<JourneyResponse>> {
+        ): CompletableFuture<HttpResponseFor<JourneyTemplateGetResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("templateId", params.templateId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
                     .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("journeys")
+                    .addPathSegments("journeys", params._pathParam(0), "templates")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -157,21 +139,26 @@ class JourneyServiceAsyncImpl internal constructor(private val clientOptions: Cl
                 }
         }
 
-        private val retrieveHandler: Handler<JourneyResponse> =
-            jsonHandler<JourneyResponse>(clientOptions.jsonMapper)
+        private val retrieveHandler: Handler<JourneyTemplateGetResponse> =
+            jsonHandler<JourneyTemplateGetResponse>(clientOptions.jsonMapper)
 
         override fun retrieve(
-            params: JourneyRetrieveParams,
+            params: TemplateRetrieveParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<JourneyResponse>> {
+        ): CompletableFuture<HttpResponseFor<JourneyTemplateGetResponse>> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
-            checkRequired("templateId", params.templateId().getOrNull())
+            checkRequired("notificationId", params.notificationId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
                     .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("journeys", params._pathParam(0))
+                    .addPathSegments(
+                        "journeys",
+                        params._pathParam(0),
+                        "templates",
+                        params._pathParam(1),
+                    )
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -190,18 +177,21 @@ class JourneyServiceAsyncImpl internal constructor(private val clientOptions: Cl
                 }
         }
 
-        private val listHandler: Handler<JourneysListResponse> =
-            jsonHandler<JourneysListResponse>(clientOptions.jsonMapper)
+        private val listHandler: Handler<JourneyTemplateListResponse> =
+            jsonHandler<JourneyTemplateListResponse>(clientOptions.jsonMapper)
 
         override fun list(
-            params: JourneyListParams,
+            params: TemplateListParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<JourneysListResponse>> {
+        ): CompletableFuture<HttpResponseFor<JourneyTemplateListResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("templateId", params.templateId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
                     .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("journeys")
+                    .addPathSegments("journeys", params._pathParam(0), "templates")
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -223,17 +213,22 @@ class JourneyServiceAsyncImpl internal constructor(private val clientOptions: Cl
         private val archiveHandler: Handler<Void?> = emptyHandler()
 
         override fun archive(
-            params: JourneyArchiveParams,
+            params: TemplateArchiveParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
-            checkRequired("templateId", params.templateId().getOrNull())
+            checkRequired("notificationId", params.notificationId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
                     .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("journeys", params._pathParam(0))
+                    .addPathSegments(
+                        "journeys",
+                        params._pathParam(0),
+                        "templates",
+                        params._pathParam(1),
+                    )
                     .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -247,55 +242,27 @@ class JourneyServiceAsyncImpl internal constructor(private val clientOptions: Cl
                 }
         }
 
-        private val invokeHandler: Handler<JourneysInvokeResponse> =
-            jsonHandler<JourneysInvokeResponse>(clientOptions.jsonMapper)
-
-        override fun invoke(
-            params: JourneyInvokeParams,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<JourneysInvokeResponse>> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
-            checkRequired("templateId", params.templateId().getOrNull())
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("journeys", params._pathParam(0), "invoke")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            return request
-                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-                .thenApply { response ->
-                    errorHandler.handle(response).parseable {
-                        response
-                            .use { invokeHandler.handle(it) }
-                            .also {
-                                if (requestOptions.responseValidation!!) {
-                                    it.validate()
-                                }
-                            }
-                    }
-                }
-        }
-
-        private val listVersionsHandler: Handler<JourneyVersionsListResponse> =
-            jsonHandler<JourneyVersionsListResponse>(clientOptions.jsonMapper)
+        private val listVersionsHandler: Handler<NotificationTemplateVersionListResponse> =
+            jsonHandler<NotificationTemplateVersionListResponse>(clientOptions.jsonMapper)
 
         override fun listVersions(
-            params: JourneyListVersionsParams,
+            params: TemplateListVersionsParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<JourneyVersionsListResponse>> {
+        ): CompletableFuture<HttpResponseFor<NotificationTemplateVersionListResponse>> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
-            checkRequired("templateId", params.templateId().getOrNull())
+            checkRequired("notificationId", params.notificationId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
                     .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("journeys", params._pathParam(0), "versions")
+                    .addPathSegments(
+                        "journeys",
+                        params._pathParam(0),
+                        "templates",
+                        params._pathParam(1),
+                        "versions",
+                    )
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -314,21 +281,26 @@ class JourneyServiceAsyncImpl internal constructor(private val clientOptions: Cl
                 }
         }
 
-        private val publishHandler: Handler<JourneyResponse> =
-            jsonHandler<JourneyResponse>(clientOptions.jsonMapper)
+        private val publishHandler: Handler<Void?> = emptyHandler()
 
         override fun publish(
-            params: JourneyPublishParams,
+            params: TemplatePublishParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<JourneyResponse>> {
+        ): CompletableFuture<HttpResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
-            checkRequired("templateId", params.templateId().getOrNull())
+            checkRequired("notificationId", params.notificationId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
                     .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("journeys", params._pathParam(0), "publish")
+                    .addPathSegments(
+                        "journeys",
+                        params._pathParam(0),
+                        "templates",
+                        params._pathParam(1),
+                        "publish",
+                    )
                     .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -337,32 +309,31 @@ class JourneyServiceAsyncImpl internal constructor(private val clientOptions: Cl
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
                     errorHandler.handle(response).parseable {
-                        response
-                            .use { publishHandler.handle(it) }
-                            .also {
-                                if (requestOptions.responseValidation!!) {
-                                    it.validate()
-                                }
-                            }
+                        response.use { publishHandler.handle(it) }
                     }
                 }
         }
 
-        private val replaceHandler: Handler<JourneyResponse> =
-            jsonHandler<JourneyResponse>(clientOptions.jsonMapper)
+        private val replaceHandler: Handler<JourneyTemplateGetResponse> =
+            jsonHandler<JourneyTemplateGetResponse>(clientOptions.jsonMapper)
 
         override fun replace(
-            params: JourneyReplaceParams,
+            params: TemplateReplaceParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<JourneyResponse>> {
+        ): CompletableFuture<HttpResponseFor<JourneyTemplateGetResponse>> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
-            checkRequired("templateId", params.templateId().getOrNull())
+            checkRequired("notificationId", params.notificationId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
                     .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("journeys", params._pathParam(0))
+                    .addPathSegments(
+                        "journeys",
+                        params._pathParam(0),
+                        "templates",
+                        params._pathParam(1),
+                    )
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepareAsync(clientOptions, params)
