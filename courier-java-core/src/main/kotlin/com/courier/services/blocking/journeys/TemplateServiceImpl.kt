@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.services.blocking
+package com.courier.services.blocking.journeys
 
 import com.courier.core.ClientOptions
 import com.courier.core.RequestOptions
@@ -17,124 +17,104 @@ import com.courier.core.http.HttpResponseFor
 import com.courier.core.http.json
 import com.courier.core.http.parseable
 import com.courier.core.prepare
-import com.courier.models.journeys.JourneyArchiveParams
-import com.courier.models.journeys.JourneyCreateParams
-import com.courier.models.journeys.JourneyInvokeParams
-import com.courier.models.journeys.JourneyListParams
-import com.courier.models.journeys.JourneyListVersionsParams
-import com.courier.models.journeys.JourneyPublishParams
-import com.courier.models.journeys.JourneyReplaceParams
-import com.courier.models.journeys.JourneyResponse
-import com.courier.models.journeys.JourneyRetrieveParams
-import com.courier.models.journeys.JourneyVersionsListResponse
-import com.courier.models.journeys.JourneysInvokeResponse
-import com.courier.models.journeys.JourneysListResponse
-import com.courier.services.blocking.journeys.TemplateService
-import com.courier.services.blocking.journeys.TemplateServiceImpl
+import com.courier.models.journeys.JourneyTemplateGetResponse
+import com.courier.models.journeys.JourneyTemplateListResponse
+import com.courier.models.journeys.templates.TemplateArchiveParams
+import com.courier.models.journeys.templates.TemplateCreateParams
+import com.courier.models.journeys.templates.TemplateListParams
+import com.courier.models.journeys.templates.TemplateListVersionsParams
+import com.courier.models.journeys.templates.TemplatePublishParams
+import com.courier.models.journeys.templates.TemplateReplaceParams
+import com.courier.models.journeys.templates.TemplateRetrieveParams
+import com.courier.models.notifications.NotificationTemplateVersionListResponse
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
-class JourneyServiceImpl internal constructor(private val clientOptions: ClientOptions) :
-    JourneyService {
+class TemplateServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    TemplateService {
 
-    private val withRawResponse: JourneyService.WithRawResponse by lazy {
+    private val withRawResponse: TemplateService.WithRawResponse by lazy {
         WithRawResponseImpl(clientOptions)
     }
 
-    private val templates: TemplateService by lazy { TemplateServiceImpl(clientOptions) }
+    override fun withRawResponse(): TemplateService.WithRawResponse = withRawResponse
 
-    override fun withRawResponse(): JourneyService.WithRawResponse = withRawResponse
-
-    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): JourneyService =
-        JourneyServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
-
-    override fun templates(): TemplateService = templates
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): TemplateService =
+        TemplateServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun create(
-        params: JourneyCreateParams,
+        params: TemplateCreateParams,
         requestOptions: RequestOptions,
-    ): JourneyResponse =
-        // post /journeys
+    ): JourneyTemplateGetResponse =
+        // post /journeys/{templateId}/templates
         withRawResponse().create(params, requestOptions).parse()
 
     override fun retrieve(
-        params: JourneyRetrieveParams,
+        params: TemplateRetrieveParams,
         requestOptions: RequestOptions,
-    ): JourneyResponse =
-        // get /journeys/{templateId}
+    ): JourneyTemplateGetResponse =
+        // get /journeys/{templateId}/templates/{notificationId}
         withRawResponse().retrieve(params, requestOptions).parse()
 
     override fun list(
-        params: JourneyListParams,
+        params: TemplateListParams,
         requestOptions: RequestOptions,
-    ): JourneysListResponse =
-        // get /journeys
+    ): JourneyTemplateListResponse =
+        // get /journeys/{templateId}/templates
         withRawResponse().list(params, requestOptions).parse()
 
-    override fun archive(params: JourneyArchiveParams, requestOptions: RequestOptions) {
-        // delete /journeys/{templateId}
+    override fun archive(params: TemplateArchiveParams, requestOptions: RequestOptions) {
+        // delete /journeys/{templateId}/templates/{notificationId}
         withRawResponse().archive(params, requestOptions)
     }
 
-    override fun invoke(
-        params: JourneyInvokeParams,
-        requestOptions: RequestOptions,
-    ): JourneysInvokeResponse =
-        // post /journeys/{templateId}/invoke
-        withRawResponse().invoke(params, requestOptions).parse()
-
     override fun listVersions(
-        params: JourneyListVersionsParams,
+        params: TemplateListVersionsParams,
         requestOptions: RequestOptions,
-    ): JourneyVersionsListResponse =
-        // get /journeys/{templateId}/versions
+    ): NotificationTemplateVersionListResponse =
+        // get /journeys/{templateId}/templates/{notificationId}/versions
         withRawResponse().listVersions(params, requestOptions).parse()
 
-    override fun publish(
-        params: JourneyPublishParams,
-        requestOptions: RequestOptions,
-    ): JourneyResponse =
-        // post /journeys/{templateId}/publish
-        withRawResponse().publish(params, requestOptions).parse()
+    override fun publish(params: TemplatePublishParams, requestOptions: RequestOptions) {
+        // post /journeys/{templateId}/templates/{notificationId}/publish
+        withRawResponse().publish(params, requestOptions)
+    }
 
     override fun replace(
-        params: JourneyReplaceParams,
+        params: TemplateReplaceParams,
         requestOptions: RequestOptions,
-    ): JourneyResponse =
-        // put /journeys/{templateId}
+    ): JourneyTemplateGetResponse =
+        // put /journeys/{templateId}/templates/{notificationId}
         withRawResponse().replace(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        JourneyService.WithRawResponse {
+        TemplateService.WithRawResponse {
 
         private val errorHandler: Handler<HttpResponse> =
             errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
-        private val templates: TemplateService.WithRawResponse by lazy {
-            TemplateServiceImpl.WithRawResponseImpl(clientOptions)
-        }
-
         override fun withOptions(
             modifier: Consumer<ClientOptions.Builder>
-        ): JourneyService.WithRawResponse =
-            JourneyServiceImpl.WithRawResponseImpl(
+        ): TemplateService.WithRawResponse =
+            TemplateServiceImpl.WithRawResponseImpl(
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
-        override fun templates(): TemplateService.WithRawResponse = templates
-
-        private val createHandler: Handler<JourneyResponse> =
-            jsonHandler<JourneyResponse>(clientOptions.jsonMapper)
+        private val createHandler: Handler<JourneyTemplateGetResponse> =
+            jsonHandler<JourneyTemplateGetResponse>(clientOptions.jsonMapper)
 
         override fun create(
-            params: JourneyCreateParams,
+            params: TemplateCreateParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<JourneyResponse> {
+        ): HttpResponseFor<JourneyTemplateGetResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("templateId", params.templateId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
                     .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("journeys")
+                    .addPathSegments("journeys", params._pathParam(0), "templates")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepare(clientOptions, params)
@@ -151,21 +131,26 @@ class JourneyServiceImpl internal constructor(private val clientOptions: ClientO
             }
         }
 
-        private val retrieveHandler: Handler<JourneyResponse> =
-            jsonHandler<JourneyResponse>(clientOptions.jsonMapper)
+        private val retrieveHandler: Handler<JourneyTemplateGetResponse> =
+            jsonHandler<JourneyTemplateGetResponse>(clientOptions.jsonMapper)
 
         override fun retrieve(
-            params: JourneyRetrieveParams,
+            params: TemplateRetrieveParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<JourneyResponse> {
+        ): HttpResponseFor<JourneyTemplateGetResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
-            checkRequired("templateId", params.templateId().getOrNull())
+            checkRequired("notificationId", params.notificationId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
                     .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("journeys", params._pathParam(0))
+                    .addPathSegments(
+                        "journeys",
+                        params._pathParam(0),
+                        "templates",
+                        params._pathParam(1),
+                    )
                     .build()
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -181,18 +166,21 @@ class JourneyServiceImpl internal constructor(private val clientOptions: ClientO
             }
         }
 
-        private val listHandler: Handler<JourneysListResponse> =
-            jsonHandler<JourneysListResponse>(clientOptions.jsonMapper)
+        private val listHandler: Handler<JourneyTemplateListResponse> =
+            jsonHandler<JourneyTemplateListResponse>(clientOptions.jsonMapper)
 
         override fun list(
-            params: JourneyListParams,
+            params: TemplateListParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<JourneysListResponse> {
+        ): HttpResponseFor<JourneyTemplateListResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("templateId", params.templateId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
                     .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("journeys")
+                    .addPathSegments("journeys", params._pathParam(0), "templates")
                     .build()
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -211,17 +199,22 @@ class JourneyServiceImpl internal constructor(private val clientOptions: ClientO
         private val archiveHandler: Handler<Void?> = emptyHandler()
 
         override fun archive(
-            params: JourneyArchiveParams,
+            params: TemplateArchiveParams,
             requestOptions: RequestOptions,
         ): HttpResponse {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
-            checkRequired("templateId", params.templateId().getOrNull())
+            checkRequired("notificationId", params.notificationId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
                     .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("journeys", params._pathParam(0))
+                    .addPathSegments(
+                        "journeys",
+                        params._pathParam(0),
+                        "templates",
+                        params._pathParam(1),
+                    )
                     .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
                     .prepare(clientOptions, params)
@@ -232,52 +225,27 @@ class JourneyServiceImpl internal constructor(private val clientOptions: ClientO
             }
         }
 
-        private val invokeHandler: Handler<JourneysInvokeResponse> =
-            jsonHandler<JourneysInvokeResponse>(clientOptions.jsonMapper)
-
-        override fun invoke(
-            params: JourneyInvokeParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<JourneysInvokeResponse> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
-            checkRequired("templateId", params.templateId().getOrNull())
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("journeys", params._pathParam(0), "invoke")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return errorHandler.handle(response).parseable {
-                response
-                    .use { invokeHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
-        }
-
-        private val listVersionsHandler: Handler<JourneyVersionsListResponse> =
-            jsonHandler<JourneyVersionsListResponse>(clientOptions.jsonMapper)
+        private val listVersionsHandler: Handler<NotificationTemplateVersionListResponse> =
+            jsonHandler<NotificationTemplateVersionListResponse>(clientOptions.jsonMapper)
 
         override fun listVersions(
-            params: JourneyListVersionsParams,
+            params: TemplateListVersionsParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<JourneyVersionsListResponse> {
+        ): HttpResponseFor<NotificationTemplateVersionListResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
-            checkRequired("templateId", params.templateId().getOrNull())
+            checkRequired("notificationId", params.notificationId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
                     .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("journeys", params._pathParam(0), "versions")
+                    .addPathSegments(
+                        "journeys",
+                        params._pathParam(0),
+                        "templates",
+                        params._pathParam(1),
+                        "versions",
+                    )
                     .build()
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -293,52 +261,56 @@ class JourneyServiceImpl internal constructor(private val clientOptions: ClientO
             }
         }
 
-        private val publishHandler: Handler<JourneyResponse> =
-            jsonHandler<JourneyResponse>(clientOptions.jsonMapper)
+        private val publishHandler: Handler<Void?> = emptyHandler()
 
         override fun publish(
-            params: JourneyPublishParams,
+            params: TemplatePublishParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<JourneyResponse> {
+        ): HttpResponse {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
-            checkRequired("templateId", params.templateId().getOrNull())
+            checkRequired("notificationId", params.notificationId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
                     .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("journeys", params._pathParam(0), "publish")
+                    .addPathSegments(
+                        "journeys",
+                        params._pathParam(0),
+                        "templates",
+                        params._pathParam(1),
+                        "publish",
+                    )
                     .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return errorHandler.handle(response).parseable {
-                response
-                    .use { publishHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
+                response.use { publishHandler.handle(it) }
             }
         }
 
-        private val replaceHandler: Handler<JourneyResponse> =
-            jsonHandler<JourneyResponse>(clientOptions.jsonMapper)
+        private val replaceHandler: Handler<JourneyTemplateGetResponse> =
+            jsonHandler<JourneyTemplateGetResponse>(clientOptions.jsonMapper)
 
         override fun replace(
-            params: JourneyReplaceParams,
+            params: TemplateReplaceParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<JourneyResponse> {
+        ): HttpResponseFor<JourneyTemplateGetResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
-            checkRequired("templateId", params.templateId().getOrNull())
+            checkRequired("notificationId", params.notificationId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
                     .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("journeys", params._pathParam(0))
+                    .addPathSegments(
+                        "journeys",
+                        params._pathParam(0),
+                        "templates",
+                        params._pathParam(1),
+                    )
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepare(clientOptions, params)
