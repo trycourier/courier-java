@@ -5,6 +5,7 @@ package com.courier.services.blocking.tenants
 import com.courier.core.ClientOptions
 import com.courier.core.RequestOptions
 import com.courier.core.checkRequired
+import com.courier.core.handlers.emptyHandler
 import com.courier.core.handlers.errorBodyHandler
 import com.courier.core.handlers.errorHandler
 import com.courier.core.handlers.jsonHandler
@@ -19,6 +20,7 @@ import com.courier.core.prepare
 import com.courier.models.tenants.BaseTemplateTenantAssociation
 import com.courier.models.tenants.PostTenantTemplatePublishResponse
 import com.courier.models.tenants.PutTenantTemplateResponse
+import com.courier.models.tenants.templates.TemplateDeleteParams
 import com.courier.models.tenants.templates.TemplateListParams
 import com.courier.models.tenants.templates.TemplateListResponse
 import com.courier.models.tenants.templates.TemplatePublishParams
@@ -58,6 +60,11 @@ class TemplateServiceImpl internal constructor(private val clientOptions: Client
     ): TemplateListResponse =
         // get /tenants/{tenant_id}/templates
         withRawResponse().list(params, requestOptions).parse()
+
+    override fun delete(params: TemplateDeleteParams, requestOptions: RequestOptions) {
+        // delete /tenants/{tenant_id}/templates/{template_id}
+        withRawResponse().delete(params, requestOptions)
+    }
 
     override fun publish(
         params: TemplatePublishParams,
@@ -154,6 +161,35 @@ class TemplateServiceImpl internal constructor(private val clientOptions: Client
                             it.validate()
                         }
                     }
+            }
+        }
+
+        private val deleteHandler: Handler<Void?> = emptyHandler()
+
+        override fun delete(
+            params: TemplateDeleteParams,
+            requestOptions: RequestOptions,
+        ): HttpResponse {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("templateId", params.templateId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.DELETE)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments(
+                        "tenants",
+                        params._pathParam(0),
+                        "templates",
+                        params._pathParam(1),
+                    )
+                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response.use { deleteHandler.handle(it) }
             }
         }
 

@@ -12,6 +12,7 @@ import com.courier.models.MessageRouting
 import com.courier.models.tenants.PostTenantTemplatePublishRequest
 import com.courier.models.tenants.PutTenantTemplateRequest
 import com.courier.models.tenants.TenantTemplateInput
+import com.courier.models.tenants.templates.TemplateDeleteParams
 import com.courier.models.tenants.templates.TemplateListParams
 import com.courier.models.tenants.templates.TemplatePublishParams
 import com.courier.models.tenants.templates.TemplateReplaceParams
@@ -56,6 +57,23 @@ internal class TemplateServiceAsyncTest {
 
         val templates = templatesFuture.get()
         templates.validate()
+    }
+
+    @Disabled("Mock server tests are disabled")
+    @Test
+    fun delete() {
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val templateServiceAsync = client.tenants().templates()
+
+        val future =
+            templateServiceAsync.delete(
+                TemplateDeleteParams.builder()
+                    .tenantId("tenant_id")
+                    .templateId("template_id")
+                    .build()
+            )
+
+        val response = future.get()
     }
 
     @Disabled("Mock server tests are disabled")
