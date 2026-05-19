@@ -75,7 +75,7 @@ internal class ProGuardCompatibilityTest {
     fun sendMessageResponseRoundtrip() {
         val jsonMapper = jsonMapper()
         val sendMessageResponse =
-            SendMessageResponse.builder().requestId("1-68f450c2-69c8c342ea596f01deb1b49c").build()
+            SendMessageResponse.builder().requestId("1-69f561d3-7ad9d453fb6a7012efc2c5ad").build()
 
         val roundtrippedSendMessageResponse =
             jsonMapper.readValue(
