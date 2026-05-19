@@ -17,6 +17,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
+/** A published version of a journey. */
 class JourneyVersionItem
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(

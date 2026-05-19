@@ -19,6 +19,7 @@ import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
+/** Paged list of published journey versions, most recent first. */
 class JourneyVersionsListResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(

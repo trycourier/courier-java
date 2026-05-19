@@ -13,7 +13,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Publish the current draft of a journey-scoped notification template. */
+/**
+ * Publish the current draft of the journey-scoped notification template as a new version.
+ * Optionally roll back to a prior version by passing `{ "version": "vN" }`.
+ */
 class TemplatePublishParams
 private constructor(
     private val templateId: String,
@@ -27,6 +30,10 @@ private constructor(
 
     fun notificationId(): Optional<String> = Optional.ofNullable(notificationId)
 
+    /**
+     * Request body for publishing a journey-scoped notification template. Pass `version` to roll
+     * back to a prior version; omit to publish the current draft.
+     */
     fun journeyTemplatePublishRequest(): Optional<JourneyTemplatePublishRequest> =
         Optional.ofNullable(journeyTemplatePublishRequest)
 
@@ -80,6 +87,10 @@ private constructor(
         fun notificationId(notificationId: Optional<String>) =
             notificationId(notificationId.getOrNull())
 
+        /**
+         * Request body for publishing a journey-scoped notification template. Pass `version` to
+         * roll back to a prior version; omit to publish the current draft.
+         */
         fun journeyTemplatePublishRequest(
             journeyTemplatePublishRequest: JourneyTemplatePublishRequest?
         ) = apply { this.journeyTemplatePublishRequest = journeyTemplatePublishRequest }

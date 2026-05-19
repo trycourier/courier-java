@@ -18,6 +18,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
+/** Terminate the journey run. */
 class JourneyExitNode
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(

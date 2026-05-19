@@ -19,6 +19,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * Issue an HTTP GET or DELETE request and merge the response into the journey state per
+ * `merge_strategy`.
+ */
 class JourneyFetchGetDeleteNode
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
@@ -67,6 +71,8 @@ private constructor(
     )
 
     /**
+     * Strategy for merging a fetch response into the journey run state.
+     *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -252,6 +258,7 @@ private constructor(
             additionalProperties = journeyFetchGetDeleteNode.additionalProperties.toMutableMap()
         }
 
+        /** Strategy for merging a fetch response into the journey run state. */
         fun mergeStrategy(mergeStrategy: JourneyMergeStrategy) =
             mergeStrategy(JsonField.of(mergeStrategy))
 

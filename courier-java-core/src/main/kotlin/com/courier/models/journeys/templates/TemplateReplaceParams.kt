@@ -12,7 +12,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Replace a journey-scoped notification template draft. */
+/** Replace the journey-scoped notification template draft. */
 class TemplateReplaceParams
 private constructor(
     private val templateId: String,
@@ -26,6 +26,7 @@ private constructor(
 
     fun notificationId(): Optional<String> = Optional.ofNullable(notificationId)
 
+    /** Request body for replacing a journey-scoped notification template draft. */
     fun journeyTemplateReplaceRequest(): JourneyTemplateReplaceRequest =
         journeyTemplateReplaceRequest
 
@@ -80,6 +81,7 @@ private constructor(
         fun notificationId(notificationId: Optional<String>) =
             notificationId(notificationId.getOrNull())
 
+        /** Request body for replacing a journey-scoped notification template draft. */
         fun journeyTemplateReplaceRequest(
             journeyTemplateReplaceRequest: JourneyTemplateReplaceRequest
         ) = apply { this.journeyTemplateReplaceRequest = journeyTemplateReplaceRequest }

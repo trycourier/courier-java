@@ -10,8 +10,8 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * List notification templates scoped to this journey. Templates scoped to a journey can only be
- * referenced from `send` nodes of the same journey.
+ * List notification templates scoped to this journey. Journey-scoped notification templates can
+ * only be referenced from `send` nodes within the same journey.
  */
 class TemplateListParams
 private constructor(
@@ -24,8 +24,10 @@ private constructor(
 
     fun templateId(): Optional<String> = Optional.ofNullable(templateId)
 
+    /** Pagination cursor from a prior response. */
     fun cursor(): Optional<String> = Optional.ofNullable(cursor)
 
+    /** Page size. Minimum 1, maximum 100. */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
     /** Additional headers to send with the request. */
@@ -67,11 +69,13 @@ private constructor(
         /** Alias for calling [Builder.templateId] with `templateId.orElse(null)`. */
         fun templateId(templateId: Optional<String>) = templateId(templateId.getOrNull())
 
+        /** Pagination cursor from a prior response. */
         fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
         /** Alias for calling [Builder.cursor] with `cursor.orElse(null)`. */
         fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
 
+        /** Page size. Minimum 1, maximum 100. */
         fun limit(limit: Long?) = apply { this.limit = limit }
 
         /**

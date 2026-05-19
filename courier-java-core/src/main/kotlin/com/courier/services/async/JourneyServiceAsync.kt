@@ -40,8 +40,11 @@ interface JourneyServiceAsync {
     fun templates(): TemplateServiceAsync
 
     /**
-     * Create a new journey. The journey is created in DRAFT state. Use POST
-     * /journeys/{templateId}/publish to make it live.
+     * Create a journey. Defaults to `DRAFT` state; pass `state: "PUBLISHED"` to publish on create.
+     * Send nodes are not allowed on `POST`. The standard flow is: create the journey shell here,
+     * add notification templates with `POST /journeys/{templateId}/templates`, then wire them into
+     * the journey with `PUT /journeys/{templateId}`. Call `POST /journeys/{templateId}/publish` to
+     * publish a draft after the fact.
      */
     fun create(params: JourneyCreateParams): CompletableFuture<JourneyResponse> =
         create(params, RequestOptions.none())
@@ -157,7 +160,10 @@ interface JourneyServiceAsync {
     fun archive(templateId: String, requestOptions: RequestOptions): CompletableFuture<Void?> =
         archive(templateId, JourneyArchiveParams.none(), requestOptions)
 
-    /** Invoke a journey run from a journey template. */
+    /**
+     * Invoke a journey by id or alias to start a new run. The response includes a `runId`
+     * identifying the run.
+     */
     fun invoke(
         templateId: String,
         params: JourneyInvokeParams,
@@ -219,8 +225,8 @@ interface JourneyServiceAsync {
         listVersions(templateId, JourneyListVersionsParams.none(), requestOptions)
 
     /**
-     * Publish the current draft as a new version. Optionally rollback to a prior version by passing
-     * `{ version: 'vN' }`.
+     * Publish the current draft as a new version. Body is optional; pass `{ "version": "vN" }` to
+     * roll back to a prior version instead. Returns 404 if the journey has no draft to publish.
      */
     fun publish(templateId: String): CompletableFuture<JourneyResponse> =
         publish(templateId, JourneyPublishParams.none())
@@ -257,8 +263,10 @@ interface JourneyServiceAsync {
         publish(templateId, JourneyPublishParams.none(), requestOptions)
 
     /**
-     * Replace the journey draft. Updates the working draft only; call POST
-     * /journeys/{templateId}/publish to make it live.
+     * Replace the journey draft. Updates the working draft only; call `POST
+     * /journeys/{templateId}/publish` to make it live, or pass `state: "PUBLISHED"` in this request
+     * to publish immediately. Send-node `template` ids must already exist and be scoped to this
+     * journey, and node ids must not be claimed by another journey.
      */
     fun replace(
         templateId: String,

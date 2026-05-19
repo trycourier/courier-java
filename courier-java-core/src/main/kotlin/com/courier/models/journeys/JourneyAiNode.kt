@@ -19,6 +19,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * Invoke an AI step with `user_prompt` and optional `web_search`. Returns a structured response
+ * conforming to `output_schema`.
+ */
 class JourneyAiNode
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(

@@ -19,6 +19,7 @@ import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
+/** Paged list of journey-scoped notification templates. */
 class JourneyTemplateListResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(

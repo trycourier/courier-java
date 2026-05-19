@@ -7,6 +7,7 @@ import com.courier.core.JsonField
 import com.courier.errors.CourierInvalidDataException
 import com.fasterxml.jackson.annotation.JsonCreator
 
+/** Lifecycle state of a journey. */
 class JourneyState @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
     /**

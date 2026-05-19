@@ -19,6 +19,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
+/** Summary fields of a journey-scoped notification template returned in list responses. */
 class JourneyTemplateSummary
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(

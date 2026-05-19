@@ -29,6 +29,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
+/** Request body for creating a notification template scoped to a journey. */
 class JourneyTemplateCreateRequest
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(

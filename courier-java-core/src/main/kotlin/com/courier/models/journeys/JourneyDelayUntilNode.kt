@@ -18,6 +18,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
+/** Pause the journey run `until` a specific time. */
 class JourneyDelayUntilNode
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(

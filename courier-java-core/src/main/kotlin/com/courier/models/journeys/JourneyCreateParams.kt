@@ -10,8 +10,11 @@ import com.courier.core.http.QueryParams
 import java.util.Objects
 
 /**
- * Create a new journey. The journey is created in DRAFT state. Use POST
- * /journeys/{templateId}/publish to make it live.
+ * Create a journey. Defaults to `DRAFT` state; pass `state: "PUBLISHED"` to publish on create. Send
+ * nodes are not allowed on `POST`. The standard flow is: create the journey shell here, add
+ * notification templates with `POST /journeys/{templateId}/templates`, then wire them into the
+ * journey with `PUT /journeys/{templateId}`. Call `POST /journeys/{templateId}/publish` to publish
+ * a draft after the fact.
  */
 class JourneyCreateParams
 private constructor(
@@ -20,6 +23,7 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
+    /** Request body for creating a journey. */
     fun createJourneyRequest(): CreateJourneyRequest = createJourneyRequest
 
     fun _additionalBodyProperties(): Map<String, JsonValue> =
@@ -60,6 +64,7 @@ private constructor(
             additionalQueryParams = journeyCreateParams.additionalQueryParams.toBuilder()
         }
 
+        /** Request body for creating a journey. */
         fun createJourneyRequest(createJourneyRequest: CreateJourneyRequest) = apply {
             this.createJourneyRequest = createJourneyRequest
         }

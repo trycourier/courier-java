@@ -18,6 +18,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
+/** Pause the journey run for a fixed `duration`. */
 class JourneyDelayDurationNode
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(

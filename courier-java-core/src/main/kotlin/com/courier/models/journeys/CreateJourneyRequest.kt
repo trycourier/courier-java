@@ -19,6 +19,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
+/** Request body for creating a journey. */
 class CreateJourneyRequest
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
@@ -58,6 +59,8 @@ private constructor(
     fun enabled(): Optional<Boolean> = enabled.getOptional("enabled")
 
     /**
+     * Lifecycle state of a journey.
+     *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -222,6 +225,7 @@ private constructor(
          */
         fun enabled(enabled: JsonField<Boolean>) = apply { this.enabled = enabled }
 
+        /** Lifecycle state of a journey. */
         fun state(state: JourneyState) = state(JsonField.of(state))
 
         /**
