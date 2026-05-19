@@ -12,16 +12,16 @@ internal class SendMessageResponseTest {
     @Test
     fun create() {
         val sendMessageResponse =
-            SendMessageResponse.builder().requestId("1-68f450c2-69c8c342ea596f01deb1b49c").build()
+            SendMessageResponse.builder().requestId("1-69f561d3-7ad9d453fb6a7012efc2c5ad").build()
 
-        assertThat(sendMessageResponse.requestId()).isEqualTo("1-68f450c2-69c8c342ea596f01deb1b49c")
+        assertThat(sendMessageResponse.requestId()).isEqualTo("1-69f561d3-7ad9d453fb6a7012efc2c5ad")
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
         val sendMessageResponse =
-            SendMessageResponse.builder().requestId("1-68f450c2-69c8c342ea596f01deb1b49c").build()
+            SendMessageResponse.builder().requestId("1-69f561d3-7ad9d453fb6a7012efc2c5ad").build()
 
         val roundtrippedSendMessageResponse =
             jsonMapper.readValue(
