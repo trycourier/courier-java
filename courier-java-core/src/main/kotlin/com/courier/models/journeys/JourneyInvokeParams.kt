@@ -11,7 +11,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Invoke a journey run from a journey template. */
+/**
+ * Invoke a journey by id or alias to start a new run. The response includes a `runId` identifying
+ * the run.
+ */
 class JourneyInvokeParams
 private constructor(
     private val templateId: String?,

@@ -12,8 +12,10 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Replace the journey draft. Updates the working draft only; call POST
- * /journeys/{templateId}/publish to make it live.
+ * Replace the journey draft. Updates the working draft only; call `POST
+ * /journeys/{templateId}/publish` to make it live, or pass `state: "PUBLISHED"` in this request to
+ * publish immediately. Send-node `template` ids must already exist and be scoped to this journey,
+ * and node ids must not be claimed by another journey.
  */
 class JourneyReplaceParams
 private constructor(
@@ -25,6 +27,7 @@ private constructor(
 
     fun templateId(): Optional<String> = Optional.ofNullable(templateId)
 
+    /** Request body for creating a journey. */
     fun createJourneyRequest(): CreateJourneyRequest = createJourneyRequest
 
     fun _additionalBodyProperties(): Map<String, JsonValue> =
@@ -72,6 +75,7 @@ private constructor(
         /** Alias for calling [Builder.templateId] with `templateId.orElse(null)`. */
         fun templateId(templateId: Optional<String>) = templateId(templateId.getOrNull())
 
+        /** Request body for creating a journey. */
         fun createJourneyRequest(createJourneyRequest: CreateJourneyRequest) = apply {
             this.createJourneyRequest = createJourneyRequest
         }

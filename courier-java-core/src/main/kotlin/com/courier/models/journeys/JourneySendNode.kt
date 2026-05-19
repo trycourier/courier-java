@@ -19,6 +19,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * Send a notification template to the recipient. Optionally override the recipient address, delay
+ * the send, or attach `data`.
+ */
 class JourneySendNode
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(

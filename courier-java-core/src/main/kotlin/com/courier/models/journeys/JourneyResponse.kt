@@ -19,6 +19,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
+/** A journey, with its current draft or published nodes and metadata. */
 class JourneyResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
@@ -106,6 +107,8 @@ private constructor(
     fun published(): Optional<Long> = published.getOptional("published")
 
     /**
+     * Lifecycle state of a journey.
+     *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -407,6 +410,7 @@ private constructor(
          */
         fun published(published: JsonField<Long>) = apply { this.published = published }
 
+        /** Lifecycle state of a journey. */
         fun state(state: JourneyState) = state(JsonField.of(state))
 
         /**

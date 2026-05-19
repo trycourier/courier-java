@@ -12,7 +12,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Archive a journey-scoped notification template. Archived templates cannot be sent. */
+/** Archive the journey-scoped notification template. Archived templates cannot be sent. */
 class TemplateArchiveParams
 private constructor(
     private val templateId: String,

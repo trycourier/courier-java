@@ -7,6 +7,7 @@ import com.courier.core.JsonField
 import com.courier.errors.CourierInvalidDataException
 import com.fasterxml.jackson.annotation.JsonCreator
 
+/** Strategy for merging a fetch response into the journey run state. */
 class JourneyMergeStrategy @JsonCreator private constructor(private val value: JsonField<String>) :
     Enum {
 

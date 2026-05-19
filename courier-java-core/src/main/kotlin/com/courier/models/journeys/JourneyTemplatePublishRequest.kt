@@ -15,6 +15,10 @@ import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 
+/**
+ * Request body for publishing a journey-scoped notification template. Pass `version` to roll back
+ * to a prior version; omit to publish the current draft.
+ */
 class JourneyTemplatePublishRequest
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(

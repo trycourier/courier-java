@@ -32,9 +32,9 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * A single node in a journey DAG. Discriminated by `type` plus a secondary discriminator on some
+ * A single node in a journey DAG. Discriminated by `type`, with a secondary discriminator on some
  * variants (`trigger_type` for trigger, `mode` for delay, `method` for fetch, `scope` for
- * throttle). Each variant is exported as a separate schema for SDK type quality.
+ * throttle).
  */
 @JsonDeserialize(using = JourneyNode.Deserializer::class)
 @JsonSerialize(using = JourneyNode.Serializer::class)
@@ -55,35 +55,65 @@ private constructor(
     private val _json: JsonValue? = null,
 ) {
 
+    /**
+     * Trigger fired when the journey is invoked via the API. The optional `schema` field is a JSON
+     * Schema that validates the invocation payload.
+     */
     fun apiInvokeTrigger(): Optional<JourneyApiInvokeTriggerNode> =
         Optional.ofNullable(apiInvokeTrigger)
 
+    /** Trigger fired by a segment event (`identify`, `group`, or `track`). */
     fun segmentTrigger(): Optional<JourneySegmentTriggerNode> = Optional.ofNullable(segmentTrigger)
 
+    /**
+     * Send a notification template to the recipient. Optionally override the recipient address,
+     * delay the send, or attach `data`.
+     */
     fun send(): Optional<JourneySendNode> = Optional.ofNullable(send)
 
+    /** Pause the journey run for a fixed `duration`. */
     fun delayDuration(): Optional<JourneyDelayDurationNode> = Optional.ofNullable(delayDuration)
 
+    /** Pause the journey run `until` a specific time. */
     fun delayUntil(): Optional<JourneyDelayUntilNode> = Optional.ofNullable(delayUntil)
 
+    /**
+     * Issue an HTTP GET or DELETE request and merge the response into the journey state per
+     * `merge_strategy`.
+     */
     fun fetchGetDelete(): Optional<JourneyFetchGetDeleteNode> = Optional.ofNullable(fetchGetDelete)
 
+    /**
+     * Issue an HTTP POST or PUT request with a `body` and merge the response into the journey state
+     * per `merge_strategy`.
+     */
     fun fetchPostPut(): Optional<JourneyFetchPostPutNode> = Optional.ofNullable(fetchPostPut)
 
+    /**
+     * Invoke an AI step with `user_prompt` and optional `web_search`. Returns a structured response
+     * conforming to `output_schema`.
+     */
     fun ai(): Optional<JourneyAiNode> = Optional.ofNullable(ai)
 
+    /**
+     * Throttle the journey by a static `scope` (`user` or `global`), allowing at most `max_allowed`
+     * invocations per `period`.
+     */
     fun throttleStatic(): Optional<JourneyThrottleStaticNode> = Optional.ofNullable(throttleStatic)
 
+    /**
+     * Throttle the journey by a dynamic `throttle_key`, allowing at most `max_allowed` invocations
+     * per `period`.
+     */
     fun throttleDynamic(): Optional<JourneyThrottleDynamicNode> =
         Optional.ofNullable(throttleDynamic)
 
+    /** Terminate the journey run. */
     fun exit(): Optional<JourneyExitNode> = Optional.ofNullable(exit)
 
     /**
-     * Branch node. Routes to one of `paths[]` whose `conditions` match, else falls through to
-     * `default.nodes`. Inlined rather than referenced so the recursive `nodes: JourneyNode[]` cycle
-     * stays within a single generated module (Stainless Python forward-ref resolution does not span
-     * modules well for this recursion shape).
+     * Branch node. Routes to the first entry in `paths[]` whose `conditions` match, else falls
+     * through to `default.nodes`.
      */
     fun branch(): Optional<JourneyBranchNode> = Optional.ofNullable(branch)
 
@@ -111,35 +141,65 @@ private constructor(
 
     fun isBranch(): Boolean = branch != null
 
+    /**
+     * Trigger fired when the journey is invoked via the API. The optional `schema` field is a JSON
+     * Schema that validates the invocation payload.
+     */
     fun asApiInvokeTrigger(): JourneyApiInvokeTriggerNode =
         apiInvokeTrigger.getOrThrow("apiInvokeTrigger")
 
+    /** Trigger fired by a segment event (`identify`, `group`, or `track`). */
     fun asSegmentTrigger(): JourneySegmentTriggerNode = segmentTrigger.getOrThrow("segmentTrigger")
 
+    /**
+     * Send a notification template to the recipient. Optionally override the recipient address,
+     * delay the send, or attach `data`.
+     */
     fun asSend(): JourneySendNode = send.getOrThrow("send")
 
+    /** Pause the journey run for a fixed `duration`. */
     fun asDelayDuration(): JourneyDelayDurationNode = delayDuration.getOrThrow("delayDuration")
 
+    /** Pause the journey run `until` a specific time. */
     fun asDelayUntil(): JourneyDelayUntilNode = delayUntil.getOrThrow("delayUntil")
 
+    /**
+     * Issue an HTTP GET or DELETE request and merge the response into the journey state per
+     * `merge_strategy`.
+     */
     fun asFetchGetDelete(): JourneyFetchGetDeleteNode = fetchGetDelete.getOrThrow("fetchGetDelete")
 
+    /**
+     * Issue an HTTP POST or PUT request with a `body` and merge the response into the journey state
+     * per `merge_strategy`.
+     */
     fun asFetchPostPut(): JourneyFetchPostPutNode = fetchPostPut.getOrThrow("fetchPostPut")
 
+    /**
+     * Invoke an AI step with `user_prompt` and optional `web_search`. Returns a structured response
+     * conforming to `output_schema`.
+     */
     fun asAi(): JourneyAiNode = ai.getOrThrow("ai")
 
+    /**
+     * Throttle the journey by a static `scope` (`user` or `global`), allowing at most `max_allowed`
+     * invocations per `period`.
+     */
     fun asThrottleStatic(): JourneyThrottleStaticNode = throttleStatic.getOrThrow("throttleStatic")
 
+    /**
+     * Throttle the journey by a dynamic `throttle_key`, allowing at most `max_allowed` invocations
+     * per `period`.
+     */
     fun asThrottleDynamic(): JourneyThrottleDynamicNode =
         throttleDynamic.getOrThrow("throttleDynamic")
 
+    /** Terminate the journey run. */
     fun asExit(): JourneyExitNode = exit.getOrThrow("exit")
 
     /**
-     * Branch node. Routes to one of `paths[]` whose `conditions` match, else falls through to
-     * `default.nodes`. Inlined rather than referenced so the recursive `nodes: JourneyNode[]` cycle
-     * stays within a single generated module (Stainless Python forward-ref resolution does not span
-     * modules well for this recursion shape).
+     * Branch node. Routes to the first entry in `paths[]` whose `conditions` match, else falls
+     * through to `default.nodes`.
      */
     fun asBranch(): JourneyBranchNode = branch.getOrThrow("branch")
 
@@ -369,48 +429,78 @@ private constructor(
 
     companion object {
 
+        /**
+         * Trigger fired when the journey is invoked via the API. The optional `schema` field is a
+         * JSON Schema that validates the invocation payload.
+         */
         @JvmStatic
         fun ofApiInvokeTrigger(apiInvokeTrigger: JourneyApiInvokeTriggerNode) =
             JourneyNode(apiInvokeTrigger = apiInvokeTrigger)
 
+        /** Trigger fired by a segment event (`identify`, `group`, or `track`). */
         @JvmStatic
         fun ofSegmentTrigger(segmentTrigger: JourneySegmentTriggerNode) =
             JourneyNode(segmentTrigger = segmentTrigger)
 
+        /**
+         * Send a notification template to the recipient. Optionally override the recipient address,
+         * delay the send, or attach `data`.
+         */
         @JvmStatic fun ofSend(send: JourneySendNode) = JourneyNode(send = send)
 
+        /** Pause the journey run for a fixed `duration`. */
         @JvmStatic
         fun ofDelayDuration(delayDuration: JourneyDelayDurationNode) =
             JourneyNode(delayDuration = delayDuration)
 
+        /** Pause the journey run `until` a specific time. */
         @JvmStatic
         fun ofDelayUntil(delayUntil: JourneyDelayUntilNode) = JourneyNode(delayUntil = delayUntil)
 
+        /**
+         * Issue an HTTP GET or DELETE request and merge the response into the journey state per
+         * `merge_strategy`.
+         */
         @JvmStatic
         fun ofFetchGetDelete(fetchGetDelete: JourneyFetchGetDeleteNode) =
             JourneyNode(fetchGetDelete = fetchGetDelete)
 
+        /**
+         * Issue an HTTP POST or PUT request with a `body` and merge the response into the journey
+         * state per `merge_strategy`.
+         */
         @JvmStatic
         fun ofFetchPostPut(fetchPostPut: JourneyFetchPostPutNode) =
             JourneyNode(fetchPostPut = fetchPostPut)
 
+        /**
+         * Invoke an AI step with `user_prompt` and optional `web_search`. Returns a structured
+         * response conforming to `output_schema`.
+         */
         @JvmStatic fun ofAi(ai: JourneyAiNode) = JourneyNode(ai = ai)
 
+        /**
+         * Throttle the journey by a static `scope` (`user` or `global`), allowing at most
+         * `max_allowed` invocations per `period`.
+         */
         @JvmStatic
         fun ofThrottleStatic(throttleStatic: JourneyThrottleStaticNode) =
             JourneyNode(throttleStatic = throttleStatic)
 
+        /**
+         * Throttle the journey by a dynamic `throttle_key`, allowing at most `max_allowed`
+         * invocations per `period`.
+         */
         @JvmStatic
         fun ofThrottleDynamic(throttleDynamic: JourneyThrottleDynamicNode) =
             JourneyNode(throttleDynamic = throttleDynamic)
 
+        /** Terminate the journey run. */
         @JvmStatic fun ofExit(exit: JourneyExitNode) = JourneyNode(exit = exit)
 
         /**
-         * Branch node. Routes to one of `paths[]` whose `conditions` match, else falls through to
-         * `default.nodes`. Inlined rather than referenced so the recursive `nodes: JourneyNode[]`
-         * cycle stays within a single generated module (Stainless Python forward-ref resolution
-         * does not span modules well for this recursion shape).
+         * Branch node. Routes to the first entry in `paths[]` whose `conditions` match, else falls
+         * through to `default.nodes`.
          */
         @JvmStatic fun ofBranch(branch: JourneyBranchNode) = JourneyNode(branch = branch)
     }
@@ -420,33 +510,63 @@ private constructor(
      */
     interface Visitor<out T> {
 
+        /**
+         * Trigger fired when the journey is invoked via the API. The optional `schema` field is a
+         * JSON Schema that validates the invocation payload.
+         */
         fun visitApiInvokeTrigger(apiInvokeTrigger: JourneyApiInvokeTriggerNode): T
 
+        /** Trigger fired by a segment event (`identify`, `group`, or `track`). */
         fun visitSegmentTrigger(segmentTrigger: JourneySegmentTriggerNode): T
 
+        /**
+         * Send a notification template to the recipient. Optionally override the recipient address,
+         * delay the send, or attach `data`.
+         */
         fun visitSend(send: JourneySendNode): T
 
+        /** Pause the journey run for a fixed `duration`. */
         fun visitDelayDuration(delayDuration: JourneyDelayDurationNode): T
 
+        /** Pause the journey run `until` a specific time. */
         fun visitDelayUntil(delayUntil: JourneyDelayUntilNode): T
 
+        /**
+         * Issue an HTTP GET or DELETE request and merge the response into the journey state per
+         * `merge_strategy`.
+         */
         fun visitFetchGetDelete(fetchGetDelete: JourneyFetchGetDeleteNode): T
 
+        /**
+         * Issue an HTTP POST or PUT request with a `body` and merge the response into the journey
+         * state per `merge_strategy`.
+         */
         fun visitFetchPostPut(fetchPostPut: JourneyFetchPostPutNode): T
 
+        /**
+         * Invoke an AI step with `user_prompt` and optional `web_search`. Returns a structured
+         * response conforming to `output_schema`.
+         */
         fun visitAi(ai: JourneyAiNode): T
 
+        /**
+         * Throttle the journey by a static `scope` (`user` or `global`), allowing at most
+         * `max_allowed` invocations per `period`.
+         */
         fun visitThrottleStatic(throttleStatic: JourneyThrottleStaticNode): T
 
+        /**
+         * Throttle the journey by a dynamic `throttle_key`, allowing at most `max_allowed`
+         * invocations per `period`.
+         */
         fun visitThrottleDynamic(throttleDynamic: JourneyThrottleDynamicNode): T
 
+        /** Terminate the journey run. */
         fun visitExit(exit: JourneyExitNode): T
 
         /**
-         * Branch node. Routes to one of `paths[]` whose `conditions` match, else falls through to
-         * `default.nodes`. Inlined rather than referenced so the recursive `nodes: JourneyNode[]`
-         * cycle stays within a single generated module (Stainless Python forward-ref resolution
-         * does not span modules well for this recursion shape).
+         * Branch node. Routes to the first entry in `paths[]` whose `conditions` match, else falls
+         * through to `default.nodes`.
          */
         fun visitBranch(branch: JourneyBranchNode): T
 
@@ -550,10 +670,8 @@ private constructor(
     }
 
     /**
-     * Branch node. Routes to one of `paths[]` whose `conditions` match, else falls through to
-     * `default.nodes`. Inlined rather than referenced so the recursive `nodes: JourneyNode[]` cycle
-     * stays within a single generated module (Stainless Python forward-ref resolution does not span
-     * modules well for this recursion shape).
+     * Branch node. Routes to the first entry in `paths[]` whose `conditions` match, else falls
+     * through to `default.nodes`.
      */
     class JourneyBranchNode
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)

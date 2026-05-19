@@ -29,6 +29,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
+/** A journey-scoped notification template. */
 class JourneyTemplateGetResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(

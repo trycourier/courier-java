@@ -13,7 +13,8 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Create a notification template scoped to this journey. The template is created in DRAFT state.
+ * Create a notification template scoped to this journey. Defaults to `DRAFT` state; pass `state:
+ * "PUBLISHED"` to publish on create.
  */
 class TemplateCreateParams
 private constructor(
@@ -25,6 +26,7 @@ private constructor(
 
     fun templateId(): Optional<String> = Optional.ofNullable(templateId)
 
+    /** Request body for creating a notification template scoped to a journey. */
     fun journeyTemplateCreateRequest(): JourneyTemplateCreateRequest = journeyTemplateCreateRequest
 
     fun _additionalBodyProperties(): Map<String, JsonValue> =
@@ -72,6 +74,7 @@ private constructor(
         /** Alias for calling [Builder.templateId] with `templateId.orElse(null)`. */
         fun templateId(templateId: Optional<String>) = templateId(templateId.getOrNull())
 
+        /** Request body for creating a notification template scoped to a journey. */
         fun journeyTemplateCreateRequest(
             journeyTemplateCreateRequest: JourneyTemplateCreateRequest
         ) = apply { this.journeyTemplateCreateRequest = journeyTemplateCreateRequest }

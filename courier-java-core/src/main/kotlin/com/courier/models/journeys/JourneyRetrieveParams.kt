@@ -23,6 +23,7 @@ private constructor(
 
     fun templateId(): Optional<String> = Optional.ofNullable(templateId)
 
+    /** Version selector: `draft`, `published` (default), or `vN`. */
     fun version(): Optional<String> = Optional.ofNullable(version)
 
     /** Additional headers to send with the request. */
@@ -62,6 +63,7 @@ private constructor(
         /** Alias for calling [Builder.templateId] with `templateId.orElse(null)`. */
         fun templateId(templateId: Optional<String>) = templateId(templateId.getOrNull())
 
+        /** Version selector: `draft`, `published` (default), or `vN`. */
         fun version(version: String?) = apply { this.version = version }
 
         /** Alias for calling [Builder.version] with `version.orElse(null)`. */

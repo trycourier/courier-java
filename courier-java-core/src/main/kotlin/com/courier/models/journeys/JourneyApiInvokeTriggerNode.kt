@@ -19,6 +19,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * Trigger fired when the journey is invoked via the API. The optional `schema` field is a JSON
+ * Schema that validates the invocation payload.
+ */
 class JourneyApiInvokeTriggerNode
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(

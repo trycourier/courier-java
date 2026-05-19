@@ -34,8 +34,8 @@ interface TemplateServiceAsync {
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): TemplateServiceAsync
 
     /**
-     * Create a notification template scoped to this journey. The template is created in DRAFT
-     * state.
+     * Create a notification template scoped to this journey. Defaults to `DRAFT` state; pass
+     * `state: "PUBLISHED"` to publish on create.
      */
     fun create(
         templateId: String,
@@ -90,8 +90,8 @@ interface TemplateServiceAsync {
     ): CompletableFuture<JourneyTemplateGetResponse>
 
     /**
-     * List notification templates scoped to this journey. Templates scoped to a journey can only be
-     * referenced from `send` nodes of the same journey.
+     * List notification templates scoped to this journey. Journey-scoped notification templates can
+     * only be referenced from `send` nodes within the same journey.
      */
     fun list(templateId: String): CompletableFuture<JourneyTemplateListResponse> =
         list(templateId, TemplateListParams.none())
@@ -128,7 +128,7 @@ interface TemplateServiceAsync {
     ): CompletableFuture<JourneyTemplateListResponse> =
         list(templateId, TemplateListParams.none(), requestOptions)
 
-    /** Archive a journey-scoped notification template. Archived templates cannot be sent. */
+    /** Archive the journey-scoped notification template. Archived templates cannot be sent. */
     fun archive(notificationId: String, params: TemplateArchiveParams): CompletableFuture<Void?> =
         archive(notificationId, params, RequestOptions.none())
 
@@ -151,7 +151,8 @@ interface TemplateServiceAsync {
     ): CompletableFuture<Void?>
 
     /**
-     * List published versions of a journey-scoped notification template, ordered most recent first.
+     * List published versions of the journey-scoped notification template, ordered most recent
+     * first.
      */
     fun listVersions(
         notificationId: String,
@@ -179,7 +180,10 @@ interface TemplateServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<NotificationTemplateVersionListResponse>
 
-    /** Publish the current draft of a journey-scoped notification template. */
+    /**
+     * Publish the current draft of the journey-scoped notification template as a new version.
+     * Optionally roll back to a prior version by passing `{ "version": "vN" }`.
+     */
     fun publish(notificationId: String, params: TemplatePublishParams): CompletableFuture<Void?> =
         publish(notificationId, params, RequestOptions.none())
 
@@ -201,7 +205,7 @@ interface TemplateServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Void?>
 
-    /** Replace a journey-scoped notification template draft. */
+    /** Replace the journey-scoped notification template draft. */
     fun replace(
         notificationId: String,
         params: TemplateReplaceParams,

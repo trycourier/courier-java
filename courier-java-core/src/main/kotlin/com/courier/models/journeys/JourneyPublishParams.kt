@@ -12,8 +12,8 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Publish the current draft as a new version. Optionally rollback to a prior version by passing `{
- * version: 'vN' }`.
+ * Publish the current draft as a new version. Body is optional; pass `{ "version": "vN" }` to roll
+ * back to a prior version instead. Returns 404 if the journey has no draft to publish.
  */
 class JourneyPublishParams
 private constructor(
@@ -25,6 +25,10 @@ private constructor(
 
     fun templateId(): Optional<String> = Optional.ofNullable(templateId)
 
+    /**
+     * Request body for publishing a journey. Pass `version` to roll back to a prior version; omit
+     * to publish the current draft.
+     */
     fun journeyPublishRequest(): Optional<JourneyPublishRequest> =
         Optional.ofNullable(journeyPublishRequest)
 
@@ -68,6 +72,10 @@ private constructor(
         /** Alias for calling [Builder.templateId] with `templateId.orElse(null)`. */
         fun templateId(templateId: Optional<String>) = templateId(templateId.getOrNull())
 
+        /**
+         * Request body for publishing a journey. Pass `version` to roll back to a prior version;
+         * omit to publish the current draft.
+         */
         fun journeyPublishRequest(journeyPublishRequest: JourneyPublishRequest?) = apply {
             this.journeyPublishRequest = journeyPublishRequest
         }

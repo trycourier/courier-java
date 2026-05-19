@@ -18,6 +18,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
+/** Trigger fired by a segment event (`identify`, `group`, or `track`). */
 class JourneySegmentTriggerNode
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(

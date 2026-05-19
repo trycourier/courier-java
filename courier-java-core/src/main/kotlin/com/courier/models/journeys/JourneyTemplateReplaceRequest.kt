@@ -29,6 +29,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
+/** Request body for replacing a journey-scoped notification template draft. */
 class JourneyTemplateReplaceRequest
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
