@@ -30,7 +30,10 @@ interface BrandService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): BrandService
 
-    /** Create a new brand */
+    /**
+     * Create a new brand. Requires `name` and `settings` (with at least `colors.primary` and
+     * `colors.secondary`).
+     */
     fun create(params: BrandCreateParams): Brand = create(params, RequestOptions.none())
 
     /** @see create */

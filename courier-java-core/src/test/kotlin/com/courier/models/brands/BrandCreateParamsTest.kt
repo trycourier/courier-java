@@ -10,11 +10,10 @@ internal class BrandCreateParamsTest {
     @Test
     fun create() {
         BrandCreateParams.builder()
-            .name("name")
-            .id("id")
+            .name("My Brand")
             .settings(
                 BrandSettings.builder()
-                    .colors(BrandColors.builder().primary("primary").secondary("secondary").build())
+                    .colors(BrandColors.builder().primary("#9D3789").secondary("#FFFFFF").build())
                     .email(
                         BrandSettingsEmail.builder()
                             .footer(
@@ -82,6 +81,7 @@ internal class BrandCreateParamsTest {
                     )
                     .build()
             )
+            .id("id")
             .snippets(
                 BrandSnippets.builder()
                     .addItem(BrandSnippet.builder().name("name").value("value").build())
@@ -94,12 +94,11 @@ internal class BrandCreateParamsTest {
     fun body() {
         val params =
             BrandCreateParams.builder()
-                .name("name")
-                .id("id")
+                .name("My Brand")
                 .settings(
                     BrandSettings.builder()
                         .colors(
-                            BrandColors.builder().primary("primary").secondary("secondary").build()
+                            BrandColors.builder().primary("#9D3789").secondary("#FFFFFF").build()
                         )
                         .email(
                             BrandSettingsEmail.builder()
@@ -171,6 +170,7 @@ internal class BrandCreateParamsTest {
                         )
                         .build()
                 )
+                .id("id")
                 .snippets(
                     BrandSnippets.builder()
                         .addItem(BrandSnippet.builder().name("name").value("value").build())
@@ -180,12 +180,11 @@ internal class BrandCreateParamsTest {
 
         val body = params._body()
 
-        assertThat(body.name()).isEqualTo("name")
-        assertThat(body.id()).contains("id")
+        assertThat(body.name()).isEqualTo("My Brand")
         assertThat(body.settings())
-            .contains(
+            .isEqualTo(
                 BrandSettings.builder()
-                    .colors(BrandColors.builder().primary("primary").secondary("secondary").build())
+                    .colors(BrandColors.builder().primary("#9D3789").secondary("#FFFFFF").build())
                     .email(
                         BrandSettingsEmail.builder()
                             .footer(
@@ -253,6 +252,7 @@ internal class BrandCreateParamsTest {
                     )
                     .build()
             )
+        assertThat(body.id()).contains("id")
         assertThat(body.snippets())
             .contains(
                 BrandSnippets.builder()
@@ -263,10 +263,15 @@ internal class BrandCreateParamsTest {
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = BrandCreateParams.builder().name("name").build()
+        val params =
+            BrandCreateParams.builder()
+                .name("My Brand")
+                .settings(BrandSettings.builder().build())
+                .build()
 
         val body = params._body()
 
-        assertThat(body.name()).isEqualTo("name")
+        assertThat(body.name()).isEqualTo("My Brand")
+        assertThat(body.settings()).isEqualTo(BrandSettings.builder().build())
     }
 }

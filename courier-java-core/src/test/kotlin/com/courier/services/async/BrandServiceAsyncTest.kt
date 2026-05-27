@@ -33,14 +33,13 @@ internal class BrandServiceAsyncTest {
         val brandFuture =
             brandServiceAsync.create(
                 BrandCreateParams.builder()
-                    .name("name")
-                    .id("id")
+                    .name("My Brand")
                     .settings(
                         BrandSettings.builder()
                             .colors(
                                 BrandColors.builder()
-                                    .primary("primary")
-                                    .secondary("secondary")
+                                    .primary("#9D3789")
+                                    .secondary("#FFFFFF")
                                     .build()
                             )
                             .email(
@@ -115,6 +114,7 @@ internal class BrandServiceAsyncTest {
                             )
                             .build()
                     )
+                    .id("id")
                     .snippets(
                         BrandSnippets.builder()
                             .addItem(BrandSnippet.builder().name("name").value("value").build())
