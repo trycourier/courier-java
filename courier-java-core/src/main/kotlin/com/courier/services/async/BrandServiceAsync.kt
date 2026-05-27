@@ -30,7 +30,10 @@ interface BrandServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): BrandServiceAsync
 
-    /** Create a new brand */
+    /**
+     * Create a new brand. Requires `name` and `settings` (with at least `colors.primary` and
+     * `colors.secondary`).
+     */
     fun create(params: BrandCreateParams): CompletableFuture<Brand> =
         create(params, RequestOptions.none())
 
