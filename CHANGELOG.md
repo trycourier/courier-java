@@ -1,5 +1,40 @@
 # Changelog
 
+## 4.14.0 (2026-05-28)
+
+Full Changelog: [v4.13.1...v4.14.0](https://github.com/trycourier/courier-java/compare/v4.13.1...v4.14.0)
+
+### Features
+
+* [C-18276] Publish Journeys endpoints + types in openapi.yml ([5525cbd](https://github.com/trycourier/courier-java/commit/5525cbd0de6234ad4e5585a2255380d9f6e34b01))
+* [C-18380] Journeys API reference: copy + naming cleanup ([b0d0a7c](https://github.com/trycourier/courier-java/commit/b0d0a7c3260aa6afe98ae6430ef8485450faa401))
+* C-18612 Add Journeys `batch` node variant to OpenAPI spec ([4524f05](https://github.com/trycourier/courier-java/commit/4524f059908fc674228af2999b56bf3607b301e8))
+* **client:** improve logging ([0ec8146](https://github.com/trycourier/courier-java/commit/0ec8146c41091a5e8a733dcd55796bcfb1e42a2d))
+* **client:** more robust error parsing ([dfddadd](https://github.com/trycourier/courier-java/commit/dfddadd8ab69cc9c7ec54c5a77ab749e6b9ef326))
+* **client:** support proxy authentication ([1970659](https://github.com/trycourier/courier-java/commit/1970659bdff9093f19ba2a0e9fd29e289d097503))
+* Mark `settings` as required on POST /brands ([cc89a65](https://github.com/trycourier/courier-java/commit/cc89a6532cc152eba360002b8e1f83300c393ef7))
+* support setting headers via env ([0daaeb0](https://github.com/trycourier/courier-java/commit/0daaeb00073c63b431948f08180a83ba8103e74a))
+* Update requestId description and example in SendMessageResponse ([544f31a](https://github.com/trycourier/courier-java/commit/544f31a5494056540bd5cabe80d37810438ff580))
+
+
+### Performance Improvements
+
+* **client:** create one json mapper ([a32e5f0](https://github.com/trycourier/courier-java/commit/a32e5f01ad406002ddac7b6948d41ae08be49579))
+
+
+### Chores
+
+* **internal:** regenerate SDK with no functional changes ([ee2263b](https://github.com/trycourier/courier-java/commit/ee2263bb79e91190ef50f87e5fce97abe6600a4e))
+* **openapi:** bump requestId example to re-trigger docs sync ([61f5bd5](https://github.com/trycourier/courier-java/commit/61f5bd517e04455a1f26cbdcb2cc6cae5cfe6a85))
+* **openapi:** bump requestId example to re-trigger docs sync ([d8a85c7](https://github.com/trycourier/courier-java/commit/d8a85c7e81de7bd2b7390984eb421ff061b81b17))
+* redact api-key headers in debug logs ([abe8fea](https://github.com/trycourier/courier-java/commit/abe8feaef46775e0102015b1d34a772d90224f2f))
+* remove duplicated dokka setup ([124dc6d](https://github.com/trycourier/courier-java/commit/124dc6d37161a4cffd310a4ba87588422ee26681))
+
+
+### Documentation
+
+* clarify forwards compat behavior ([b830924](https://github.com/trycourier/courier-java/commit/b830924d986652432d1f063c110e55f32c601bcb))
+
 ## 4.13.1 (2026-04-14)
 
 Full Changelog: [v4.13.0...v4.13.1](https://github.com/trycourier/courier-java/compare/v4.13.0...v4.13.1)
