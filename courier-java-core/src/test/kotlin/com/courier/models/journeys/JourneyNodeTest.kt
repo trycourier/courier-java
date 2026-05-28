@@ -41,6 +41,7 @@ internal class JourneyNodeTest {
         assertThat(journeyNode.ai()).isEmpty
         assertThat(journeyNode.throttleStatic()).isEmpty
         assertThat(journeyNode.throttleDynamic()).isEmpty
+        assertThat(journeyNode.batch()).isEmpty
         assertThat(journeyNode.exit()).isEmpty
         assertThat(journeyNode.branch()).isEmpty
     }
@@ -96,6 +97,7 @@ internal class JourneyNodeTest {
         assertThat(journeyNode.ai()).isEmpty
         assertThat(journeyNode.throttleStatic()).isEmpty
         assertThat(journeyNode.throttleDynamic()).isEmpty
+        assertThat(journeyNode.batch()).isEmpty
         assertThat(journeyNode.exit()).isEmpty
         assertThat(journeyNode.branch()).isEmpty
     }
@@ -165,6 +167,7 @@ internal class JourneyNodeTest {
         assertThat(journeyNode.ai()).isEmpty
         assertThat(journeyNode.throttleStatic()).isEmpty
         assertThat(journeyNode.throttleDynamic()).isEmpty
+        assertThat(journeyNode.batch()).isEmpty
         assertThat(journeyNode.exit()).isEmpty
         assertThat(journeyNode.branch()).isEmpty
     }
@@ -236,6 +239,7 @@ internal class JourneyNodeTest {
         assertThat(journeyNode.ai()).isEmpty
         assertThat(journeyNode.throttleStatic()).isEmpty
         assertThat(journeyNode.throttleDynamic()).isEmpty
+        assertThat(journeyNode.batch()).isEmpty
         assertThat(journeyNode.exit()).isEmpty
         assertThat(journeyNode.branch()).isEmpty
     }
@@ -286,6 +290,7 @@ internal class JourneyNodeTest {
         assertThat(journeyNode.ai()).isEmpty
         assertThat(journeyNode.throttleStatic()).isEmpty
         assertThat(journeyNode.throttleDynamic()).isEmpty
+        assertThat(journeyNode.batch()).isEmpty
         assertThat(journeyNode.exit()).isEmpty
         assertThat(journeyNode.branch()).isEmpty
     }
@@ -352,6 +357,7 @@ internal class JourneyNodeTest {
         assertThat(journeyNode.ai()).isEmpty
         assertThat(journeyNode.throttleStatic()).isEmpty
         assertThat(journeyNode.throttleDynamic()).isEmpty
+        assertThat(journeyNode.batch()).isEmpty
         assertThat(journeyNode.exit()).isEmpty
         assertThat(journeyNode.branch()).isEmpty
     }
@@ -435,6 +441,7 @@ internal class JourneyNodeTest {
         assertThat(journeyNode.ai()).isEmpty
         assertThat(journeyNode.throttleStatic()).isEmpty
         assertThat(journeyNode.throttleDynamic()).isEmpty
+        assertThat(journeyNode.batch()).isEmpty
         assertThat(journeyNode.exit()).isEmpty
         assertThat(journeyNode.branch()).isEmpty
     }
@@ -508,6 +515,7 @@ internal class JourneyNodeTest {
         assertThat(journeyNode.ai()).contains(ai)
         assertThat(journeyNode.throttleStatic()).isEmpty
         assertThat(journeyNode.throttleDynamic()).isEmpty
+        assertThat(journeyNode.batch()).isEmpty
         assertThat(journeyNode.exit()).isEmpty
         assertThat(journeyNode.branch()).isEmpty
     }
@@ -565,6 +573,7 @@ internal class JourneyNodeTest {
         assertThat(journeyNode.ai()).isEmpty
         assertThat(journeyNode.throttleStatic()).contains(throttleStatic)
         assertThat(journeyNode.throttleDynamic()).isEmpty
+        assertThat(journeyNode.batch()).isEmpty
         assertThat(journeyNode.exit()).isEmpty
         assertThat(journeyNode.branch()).isEmpty
     }
@@ -618,6 +627,7 @@ internal class JourneyNodeTest {
         assertThat(journeyNode.ai()).isEmpty
         assertThat(journeyNode.throttleStatic()).isEmpty
         assertThat(journeyNode.throttleDynamic()).contains(throttleDynamic)
+        assertThat(journeyNode.batch()).isEmpty
         assertThat(journeyNode.exit()).isEmpty
         assertThat(journeyNode.branch()).isEmpty
     }
@@ -648,6 +658,77 @@ internal class JourneyNodeTest {
     }
 
     @Test
+    fun ofBatch() {
+        val batch =
+            JourneyNode.JourneyBatchNode.builder()
+                .maxWaitPeriod("x")
+                .retain(
+                    JourneyNode.JourneyBatchNode.Retain.builder()
+                        .count(0L)
+                        .type(JourneyNode.JourneyBatchNode.Retain.Type.FIRST)
+                        .sortKey("x")
+                        .build()
+                )
+                .scope(JourneyNode.JourneyBatchNode.Scope.USER)
+                .type(JourneyNode.JourneyBatchNode.Type.BATCH)
+                .waitPeriod("x")
+                .id("x")
+                .categoryKey("x")
+                .conditionsOfConditionAtom(listOf("string", "string"))
+                .maxItems(1L)
+                .build()
+
+        val journeyNode = JourneyNode.ofBatch(batch)
+
+        assertThat(journeyNode.apiInvokeTrigger()).isEmpty
+        assertThat(journeyNode.segmentTrigger()).isEmpty
+        assertThat(journeyNode.send()).isEmpty
+        assertThat(journeyNode.delayDuration()).isEmpty
+        assertThat(journeyNode.delayUntil()).isEmpty
+        assertThat(journeyNode.fetchGetDelete()).isEmpty
+        assertThat(journeyNode.fetchPostPut()).isEmpty
+        assertThat(journeyNode.ai()).isEmpty
+        assertThat(journeyNode.throttleStatic()).isEmpty
+        assertThat(journeyNode.throttleDynamic()).isEmpty
+        assertThat(journeyNode.batch()).contains(batch)
+        assertThat(journeyNode.exit()).isEmpty
+        assertThat(journeyNode.branch()).isEmpty
+    }
+
+    @Test
+    fun ofBatchRoundtrip() {
+        val jsonMapper = jsonMapper()
+        val journeyNode =
+            JourneyNode.ofBatch(
+                JourneyNode.JourneyBatchNode.builder()
+                    .maxWaitPeriod("x")
+                    .retain(
+                        JourneyNode.JourneyBatchNode.Retain.builder()
+                            .count(0L)
+                            .type(JourneyNode.JourneyBatchNode.Retain.Type.FIRST)
+                            .sortKey("x")
+                            .build()
+                    )
+                    .scope(JourneyNode.JourneyBatchNode.Scope.USER)
+                    .type(JourneyNode.JourneyBatchNode.Type.BATCH)
+                    .waitPeriod("x")
+                    .id("x")
+                    .categoryKey("x")
+                    .conditionsOfConditionAtom(listOf("string", "string"))
+                    .maxItems(1L)
+                    .build()
+            )
+
+        val roundtrippedJourneyNode =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(journeyNode),
+                jacksonTypeRef<JourneyNode>(),
+            )
+
+        assertThat(roundtrippedJourneyNode).isEqualTo(journeyNode)
+    }
+
+    @Test
     fun ofExit() {
         val exit = JourneyExitNode.builder().type(JourneyExitNode.Type.EXIT).id("x").build()
 
@@ -663,6 +744,7 @@ internal class JourneyNodeTest {
         assertThat(journeyNode.ai()).isEmpty
         assertThat(journeyNode.throttleStatic()).isEmpty
         assertThat(journeyNode.throttleDynamic()).isEmpty
+        assertThat(journeyNode.batch()).isEmpty
         assertThat(journeyNode.exit()).contains(exit)
         assertThat(journeyNode.branch()).isEmpty
     }
@@ -729,6 +811,7 @@ internal class JourneyNodeTest {
         assertThat(journeyNode.ai()).isEmpty
         assertThat(journeyNode.throttleStatic()).isEmpty
         assertThat(journeyNode.throttleDynamic()).isEmpty
+        assertThat(journeyNode.batch()).isEmpty
         assertThat(journeyNode.exit()).isEmpty
         assertThat(journeyNode.branch()).contains(branch)
     }

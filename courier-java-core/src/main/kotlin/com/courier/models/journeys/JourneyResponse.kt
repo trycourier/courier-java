@@ -384,6 +384,9 @@ private constructor(
         fun addNode(throttleDynamic: JourneyThrottleDynamicNode) =
             addNode(JourneyNode.ofThrottleDynamic(throttleDynamic))
 
+        /** Alias for calling [addNode] with `JourneyNode.ofBatch(batch)`. */
+        fun addNode(batch: JourneyNode.JourneyBatchNode) = addNode(JourneyNode.ofBatch(batch))
+
         /** Alias for calling [addNode] with `JourneyNode.ofExit(exit)`. */
         fun addNode(exit: JourneyExitNode) = addNode(JourneyNode.ofExit(exit))
 
