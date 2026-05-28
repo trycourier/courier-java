@@ -20,7 +20,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Create a new brand */
+/**
+ * Create a new brand. Requires `name` and `settings` (with at least `colors.primary` and
+ * `colors.secondary`).
+ */
 class BrandCreateParams
 private constructor(
     private val body: Body,
@@ -35,16 +38,16 @@ private constructor(
     fun name(): String = body.name()
 
     /**
-     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun id(): Optional<String> = body.id()
+    fun settings(): BrandSettings = body.settings()
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun settings(): Optional<BrandSettings> = body.settings()
+    fun id(): Optional<String> = body.id()
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -60,18 +63,18 @@ private constructor(
     fun _name(): JsonField<String> = body._name()
 
     /**
-     * Returns the raw JSON value of [id].
-     *
-     * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _id(): JsonField<String> = body._id()
-
-    /**
      * Returns the raw JSON value of [settings].
      *
      * Unlike [settings], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _settings(): JsonField<BrandSettings> = body._settings()
+
+    /**
+     * Returns the raw JSON value of [id].
+     *
+     * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _id(): JsonField<String> = body._id()
 
     /**
      * Returns the raw JSON value of [snippets].
@@ -98,6 +101,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .name()
+         * .settings()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -123,8 +127,8 @@ private constructor(
          * This is generally only useful if you are already constructing the body separately.
          * Otherwise, it's more convenient to use the top-level setters instead:
          * - [name]
-         * - [id]
          * - [settings]
+         * - [id]
          * - [snippets]
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
@@ -139,6 +143,17 @@ private constructor(
          */
         fun name(name: JsonField<String>) = apply { body.name(name) }
 
+        fun settings(settings: BrandSettings) = apply { body.settings(settings) }
+
+        /**
+         * Sets [Builder.settings] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.settings] with a well-typed [BrandSettings] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun settings(settings: JsonField<BrandSettings>) = apply { body.settings(settings) }
+
         fun id(id: String?) = apply { body.id(id) }
 
         /** Alias for calling [Builder.id] with `id.orElse(null)`. */
@@ -151,20 +166,6 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun id(id: JsonField<String>) = apply { body.id(id) }
-
-        fun settings(settings: BrandSettings?) = apply { body.settings(settings) }
-
-        /** Alias for calling [Builder.settings] with `settings.orElse(null)`. */
-        fun settings(settings: Optional<BrandSettings>) = settings(settings.getOrNull())
-
-        /**
-         * Sets [Builder.settings] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.settings] with a well-typed [BrandSettings] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun settings(settings: JsonField<BrandSettings>) = apply { body.settings(settings) }
 
         fun snippets(snippets: BrandSnippets?) = apply { body.snippets(snippets) }
 
@@ -305,6 +306,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .name()
+         * .settings()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
@@ -327,8 +329,8 @@ private constructor(
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val name: JsonField<String>,
-        private val id: JsonField<String>,
         private val settings: JsonField<BrandSettings>,
+        private val id: JsonField<String>,
         private val snippets: JsonField<BrandSnippets>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -336,14 +338,14 @@ private constructor(
         @JsonCreator
         private constructor(
             @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
             @JsonProperty("settings")
             @ExcludeMissing
             settings: JsonField<BrandSettings> = JsonMissing.of(),
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
             @JsonProperty("snippets")
             @ExcludeMissing
             snippets: JsonField<BrandSnippets> = JsonMissing.of(),
-        ) : this(name, id, settings, snippets, mutableMapOf())
+        ) : this(name, settings, id, snippets, mutableMapOf())
 
         /**
          * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
@@ -352,16 +354,16 @@ private constructor(
         fun name(): String = name.getRequired("name")
 
         /**
-         * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
+         * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun id(): Optional<String> = id.getOptional("id")
+        fun settings(): BrandSettings = settings.getRequired("settings")
 
         /**
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun settings(): Optional<BrandSettings> = settings.getOptional("settings")
+        fun id(): Optional<String> = id.getOptional("id")
 
         /**
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -377,13 +379,6 @@ private constructor(
         @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
         /**
-         * Returns the raw JSON value of [id].
-         *
-         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
-
-        /**
          * Returns the raw JSON value of [settings].
          *
          * Unlike [settings], this method doesn't throw if the JSON field has an unexpected type.
@@ -391,6 +386,13 @@ private constructor(
         @JsonProperty("settings")
         @ExcludeMissing
         fun _settings(): JsonField<BrandSettings> = settings
+
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
         /**
          * Returns the raw JSON value of [snippets].
@@ -421,6 +423,7 @@ private constructor(
              * The following fields are required:
              * ```java
              * .name()
+             * .settings()
              * ```
              */
             @JvmStatic fun builder() = Builder()
@@ -430,16 +433,16 @@ private constructor(
         class Builder internal constructor() {
 
             private var name: JsonField<String>? = null
+            private var settings: JsonField<BrandSettings>? = null
             private var id: JsonField<String> = JsonMissing.of()
-            private var settings: JsonField<BrandSettings> = JsonMissing.of()
             private var snippets: JsonField<BrandSnippets> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(body: Body) = apply {
                 name = body.name
-                id = body.id
                 settings = body.settings
+                id = body.id
                 snippets = body.snippets
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
@@ -455,6 +458,17 @@ private constructor(
              */
             fun name(name: JsonField<String>) = apply { this.name = name }
 
+            fun settings(settings: BrandSettings) = settings(JsonField.of(settings))
+
+            /**
+             * Sets [Builder.settings] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.settings] with a well-typed [BrandSettings] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun settings(settings: JsonField<BrandSettings>) = apply { this.settings = settings }
+
             fun id(id: String?) = id(JsonField.ofNullable(id))
 
             /** Alias for calling [Builder.id] with `id.orElse(null)`. */
@@ -468,20 +482,6 @@ private constructor(
              * value.
              */
             fun id(id: JsonField<String>) = apply { this.id = id }
-
-            fun settings(settings: BrandSettings?) = settings(JsonField.ofNullable(settings))
-
-            /** Alias for calling [Builder.settings] with `settings.orElse(null)`. */
-            fun settings(settings: Optional<BrandSettings>) = settings(settings.getOrNull())
-
-            /**
-             * Sets [Builder.settings] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.settings] with a well-typed [BrandSettings] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun settings(settings: JsonField<BrandSettings>) = apply { this.settings = settings }
 
             fun snippets(snippets: BrandSnippets?) = snippets(JsonField.ofNullable(snippets))
 
@@ -524,6 +524,7 @@ private constructor(
              * The following fields are required:
              * ```java
              * .name()
+             * .settings()
              * ```
              *
              * @throws IllegalStateException if any required field is unset.
@@ -531,8 +532,8 @@ private constructor(
             fun build(): Body =
                 Body(
                     checkRequired("name", name),
+                    checkRequired("settings", settings),
                     id,
-                    settings,
                     snippets,
                     additionalProperties.toMutableMap(),
                 )
@@ -540,14 +541,23 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws CourierInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
 
             name()
+            settings().validate()
             id()
-            settings().ifPresent { it.validate() }
             snippets().ifPresent { it.validate() }
             validated = true
         }
@@ -569,8 +579,8 @@ private constructor(
         @JvmSynthetic
         internal fun validity(): Int =
             (if (name.asKnown().isPresent) 1 else 0) +
-                (if (id.asKnown().isPresent) 1 else 0) +
                 (settings.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (id.asKnown().isPresent) 1 else 0) +
                 (snippets.asKnown().getOrNull()?.validity() ?: 0)
 
         override fun equals(other: Any?): Boolean {
@@ -580,20 +590,20 @@ private constructor(
 
             return other is Body &&
                 name == other.name &&
-                id == other.id &&
                 settings == other.settings &&
+                id == other.id &&
                 snippets == other.snippets &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(name, id, settings, snippets, additionalProperties)
+            Objects.hash(name, settings, id, snippets, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{name=$name, id=$id, settings=$settings, snippets=$snippets, additionalProperties=$additionalProperties}"
+            "Body{name=$name, settings=$settings, id=$id, snippets=$snippets, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

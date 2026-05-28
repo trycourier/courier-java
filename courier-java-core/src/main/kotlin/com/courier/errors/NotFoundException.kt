@@ -5,12 +5,16 @@ package com.courier.errors
 import com.courier.core.JsonValue
 import com.courier.core.checkRequired
 import com.courier.core.http.Headers
+import com.courier.core.jsonMapper
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class NotFoundException
 private constructor(private val headers: Headers, private val body: JsonValue, cause: Throwable?) :
-    CourierServiceException("404: $body", cause) {
+    CourierServiceException(
+        "404: ${if (body.isMissing()) "Unknown" else jsonMapper().writeValueAsString(body)}",
+        cause,
+    ) {
 
     override fun statusCode(): Int = 404
 

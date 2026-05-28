@@ -4,10 +4,12 @@ package com.courier.services.blocking.tenants
 
 import com.courier.core.ClientOptions
 import com.courier.core.RequestOptions
+import com.courier.core.http.HttpResponse
 import com.courier.core.http.HttpResponseFor
 import com.courier.models.tenants.BaseTemplateTenantAssociation
 import com.courier.models.tenants.PostTenantTemplatePublishResponse
 import com.courier.models.tenants.PutTenantTemplateResponse
+import com.courier.models.tenants.templates.TemplateDeleteParams
 import com.courier.models.tenants.templates.TemplateListParams
 import com.courier.models.tenants.templates.TemplateListResponse
 import com.courier.models.tenants.templates.TemplatePublishParams
@@ -85,6 +87,30 @@ interface TemplateService {
     /** @see list */
     fun list(tenantId: String, requestOptions: RequestOptions): TemplateListResponse =
         list(tenantId, TemplateListParams.none(), requestOptions)
+
+    /**
+     * Deletes the tenant's notification template with the given `template_id`.
+     *
+     * Returns **204 No Content** with an empty body on success.
+     *
+     * Returns **404** if there is no template with this ID for the tenant, including a second
+     * `DELETE` after a successful removal.
+     */
+    fun delete(templateId: String, params: TemplateDeleteParams) =
+        delete(templateId, params, RequestOptions.none())
+
+    /** @see delete */
+    fun delete(
+        templateId: String,
+        params: TemplateDeleteParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ) = delete(params.toBuilder().templateId(templateId).build(), requestOptions)
+
+    /** @see delete */
+    fun delete(params: TemplateDeleteParams) = delete(params, RequestOptions.none())
+
+    /** @see delete */
+    fun delete(params: TemplateDeleteParams, requestOptions: RequestOptions = RequestOptions.none())
 
     /**
      * Publishes a specific version of a notification template for a tenant.
@@ -232,6 +258,34 @@ interface TemplateService {
             requestOptions: RequestOptions,
         ): HttpResponseFor<TemplateListResponse> =
             list(tenantId, TemplateListParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `delete /tenants/{tenant_id}/templates/{template_id}`,
+         * but is otherwise the same as [TemplateService.delete].
+         */
+        @MustBeClosed
+        fun delete(templateId: String, params: TemplateDeleteParams): HttpResponse =
+            delete(templateId, params, RequestOptions.none())
+
+        /** @see delete */
+        @MustBeClosed
+        fun delete(
+            templateId: String,
+            params: TemplateDeleteParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse = delete(params.toBuilder().templateId(templateId).build(), requestOptions)
+
+        /** @see delete */
+        @MustBeClosed
+        fun delete(params: TemplateDeleteParams): HttpResponse =
+            delete(params, RequestOptions.none())
+
+        /** @see delete */
+        @MustBeClosed
+        fun delete(
+            params: TemplateDeleteParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse
 
         /**
          * Returns a raw HTTP response for `post
