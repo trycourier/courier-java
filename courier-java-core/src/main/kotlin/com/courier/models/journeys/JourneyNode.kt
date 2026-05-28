@@ -50,6 +50,7 @@ private constructor(
     private val ai: JourneyAiNode? = null,
     private val throttleStatic: JourneyThrottleStaticNode? = null,
     private val throttleDynamic: JourneyThrottleDynamicNode? = null,
+    private val batch: JourneyBatchNode? = null,
     private val exit: JourneyExitNode? = null,
     private val branch: JourneyBranchNode? = null,
     private val _json: JsonValue? = null,
@@ -108,6 +109,14 @@ private constructor(
     fun throttleDynamic(): Optional<JourneyThrottleDynamicNode> =
         Optional.ofNullable(throttleDynamic)
 
+    /**
+     * Collect events arriving at the node into a single batch and fire one downstream step with the
+     * aggregated payload. The first event into a batch owns the run; later contributing events
+     * terminate at the batch step. The batch releases when any of `max_items` is reached, a quiet
+     * window of `wait_period` elapses, or the `max_wait_period` ceiling hits.
+     */
+    fun batch(): Optional<JourneyBatchNode> = Optional.ofNullable(batch)
+
     /** Terminate the journey run. */
     fun exit(): Optional<JourneyExitNode> = Optional.ofNullable(exit)
 
@@ -136,6 +145,8 @@ private constructor(
     fun isThrottleStatic(): Boolean = throttleStatic != null
 
     fun isThrottleDynamic(): Boolean = throttleDynamic != null
+
+    fun isBatch(): Boolean = batch != null
 
     fun isExit(): Boolean = exit != null
 
@@ -194,6 +205,14 @@ private constructor(
     fun asThrottleDynamic(): JourneyThrottleDynamicNode =
         throttleDynamic.getOrThrow("throttleDynamic")
 
+    /**
+     * Collect events arriving at the node into a single batch and fire one downstream step with the
+     * aggregated payload. The first event into a batch owns the run; later contributing events
+     * terminate at the batch step. The batch releases when any of `max_items` is reached, a quiet
+     * window of `wait_period` elapses, or the `max_wait_period` ceiling hits.
+     */
+    fun asBatch(): JourneyBatchNode = batch.getOrThrow("batch")
+
     /** Terminate the journey run. */
     fun asExit(): JourneyExitNode = exit.getOrThrow("exit")
 
@@ -246,6 +265,7 @@ private constructor(
             ai != null -> visitor.visitAi(ai)
             throttleStatic != null -> visitor.visitThrottleStatic(throttleStatic)
             throttleDynamic != null -> visitor.visitThrottleDynamic(throttleDynamic)
+            batch != null -> visitor.visitBatch(batch)
             exit != null -> visitor.visitExit(exit)
             branch != null -> visitor.visitBranch(branch)
             else -> visitor.unknown(_json)
@@ -308,6 +328,10 @@ private constructor(
                     throttleDynamic.validate()
                 }
 
+                override fun visitBatch(batch: JourneyBatchNode) {
+                    batch.validate()
+                }
+
                 override fun visitExit(exit: JourneyExitNode) {
                     exit.validate()
                 }
@@ -365,6 +389,8 @@ private constructor(
                 override fun visitThrottleDynamic(throttleDynamic: JourneyThrottleDynamicNode) =
                     throttleDynamic.validity()
 
+                override fun visitBatch(batch: JourneyBatchNode) = batch.validity()
+
                 override fun visitExit(exit: JourneyExitNode) = exit.validity()
 
                 override fun visitBranch(branch: JourneyBranchNode) = branch.validity()
@@ -389,6 +415,7 @@ private constructor(
             ai == other.ai &&
             throttleStatic == other.throttleStatic &&
             throttleDynamic == other.throttleDynamic &&
+            batch == other.batch &&
             exit == other.exit &&
             branch == other.branch
     }
@@ -405,6 +432,7 @@ private constructor(
             ai,
             throttleStatic,
             throttleDynamic,
+            batch,
             exit,
             branch,
         )
@@ -421,6 +449,7 @@ private constructor(
             ai != null -> "JourneyNode{ai=$ai}"
             throttleStatic != null -> "JourneyNode{throttleStatic=$throttleStatic}"
             throttleDynamic != null -> "JourneyNode{throttleDynamic=$throttleDynamic}"
+            batch != null -> "JourneyNode{batch=$batch}"
             exit != null -> "JourneyNode{exit=$exit}"
             branch != null -> "JourneyNode{branch=$branch}"
             _json != null -> "JourneyNode{_unknown=$_json}"
@@ -495,6 +524,14 @@ private constructor(
         fun ofThrottleDynamic(throttleDynamic: JourneyThrottleDynamicNode) =
             JourneyNode(throttleDynamic = throttleDynamic)
 
+        /**
+         * Collect events arriving at the node into a single batch and fire one downstream step with
+         * the aggregated payload. The first event into a batch owns the run; later contributing
+         * events terminate at the batch step. The batch releases when any of `max_items` is
+         * reached, a quiet window of `wait_period` elapses, or the `max_wait_period` ceiling hits.
+         */
+        @JvmStatic fun ofBatch(batch: JourneyBatchNode) = JourneyNode(batch = batch)
+
         /** Terminate the journey run. */
         @JvmStatic fun ofExit(exit: JourneyExitNode) = JourneyNode(exit = exit)
 
@@ -561,6 +598,14 @@ private constructor(
          */
         fun visitThrottleDynamic(throttleDynamic: JourneyThrottleDynamicNode): T
 
+        /**
+         * Collect events arriving at the node into a single batch and fire one downstream step with
+         * the aggregated payload. The first event into a batch owns the run; later contributing
+         * events terminate at the batch step. The batch releases when any of `max_items` is
+         * reached, a quiet window of `wait_period` elapses, or the `max_wait_period` ceiling hits.
+         */
+        fun visitBatch(batch: JourneyBatchNode): T
+
         /** Terminate the journey run. */
         fun visitExit(exit: JourneyExitNode): T
 
@@ -621,6 +666,9 @@ private constructor(
                         tryDeserialize(node, jacksonTypeRef<JourneyThrottleDynamicNode>())?.let {
                             JourneyNode(throttleDynamic = it, _json = json)
                         },
+                        tryDeserialize(node, jacksonTypeRef<JourneyBatchNode>())?.let {
+                            JourneyNode(batch = it, _json = json)
+                        },
                         tryDeserialize(node, jacksonTypeRef<JourneyExitNode>())?.let {
                             JourneyNode(exit = it, _json = json)
                         },
@@ -661,12 +709,1229 @@ private constructor(
                 value.ai != null -> generator.writeObject(value.ai)
                 value.throttleStatic != null -> generator.writeObject(value.throttleStatic)
                 value.throttleDynamic != null -> generator.writeObject(value.throttleDynamic)
+                value.batch != null -> generator.writeObject(value.batch)
                 value.exit != null -> generator.writeObject(value.exit)
                 value.branch != null -> generator.writeObject(value.branch)
                 value._json != null -> generator.writeObject(value._json)
                 else -> throw IllegalStateException("Invalid JourneyNode")
             }
         }
+    }
+
+    /**
+     * Collect events arriving at the node into a single batch and fire one downstream step with the
+     * aggregated payload. The first event into a batch owns the run; later contributing events
+     * terminate at the batch step. The batch releases when any of `max_items` is reached, a quiet
+     * window of `wait_period` elapses, or the `max_wait_period` ceiling hits.
+     */
+    class JourneyBatchNode
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
+        private val maxWaitPeriod: JsonField<String>,
+        private val retain: JsonField<Retain>,
+        private val scope: JsonField<Scope>,
+        private val type: JsonField<Type>,
+        private val waitPeriod: JsonField<String>,
+        private val id: JsonField<String>,
+        private val categoryKey: JsonField<String>,
+        private val conditions: JsonField<JourneyConditionsField>,
+        private val maxItems: JsonField<Long>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("max_wait_period")
+            @ExcludeMissing
+            maxWaitPeriod: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("retain") @ExcludeMissing retain: JsonField<Retain> = JsonMissing.of(),
+            @JsonProperty("scope") @ExcludeMissing scope: JsonField<Scope> = JsonMissing.of(),
+            @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
+            @JsonProperty("wait_period")
+            @ExcludeMissing
+            waitPeriod: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("category_key")
+            @ExcludeMissing
+            categoryKey: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("conditions")
+            @ExcludeMissing
+            conditions: JsonField<JourneyConditionsField> = JsonMissing.of(),
+            @JsonProperty("max_items") @ExcludeMissing maxItems: JsonField<Long> = JsonMissing.of(),
+        ) : this(
+            maxWaitPeriod,
+            retain,
+            scope,
+            type,
+            waitPeriod,
+            id,
+            categoryKey,
+            conditions,
+            maxItems,
+            mutableMapOf(),
+        )
+
+        /**
+         * ISO 8601 duration. Hard ceiling from the first event into the batch; releases the batch
+         * unconditionally when it elapses.
+         *
+         * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun maxWaitPeriod(): String = maxWaitPeriod.getRequired("max_wait_period")
+
+        /**
+         * How to select which collected events to retain in the aggregated payload when the batch
+         * releases.
+         *
+         * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun retain(): Retain = retain.getRequired("retain")
+
+        /**
+         * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun scope(): Scope = scope.getRequired("scope")
+
+        /**
+         * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun type(): Type = type.getRequired("type")
+
+        /**
+         * ISO 8601 duration. Quiet window that releases the batch when it elapses with no new
+         * contributing events. Must be less than `max_wait_period`.
+         *
+         * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun waitPeriod(): String = waitPeriod.getRequired("wait_period")
+
+        /**
+         * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun id(): Optional<String> = id.getOptional("id")
+
+        /**
+         * Optional partition key. Events with the same `category_key` are batched together; events
+         * with different values are batched separately.
+         *
+         * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun categoryKey(): Optional<String> = categoryKey.getOptional("category_key")
+
+        /**
+         * Condition spec for a journey node. Accepts a single condition atom, an AND/OR group, or
+         * an AND/OR nested group. Omit the `conditions` property entirely to express "no
+         * conditions".
+         *
+         * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun conditions(): Optional<JourneyConditionsField> = conditions.getOptional("conditions")
+
+        /**
+         * Releases the batch once this many events have been collected.
+         *
+         * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun maxItems(): Optional<Long> = maxItems.getOptional("max_items")
+
+        /**
+         * Returns the raw JSON value of [maxWaitPeriod].
+         *
+         * Unlike [maxWaitPeriod], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("max_wait_period")
+        @ExcludeMissing
+        fun _maxWaitPeriod(): JsonField<String> = maxWaitPeriod
+
+        /**
+         * Returns the raw JSON value of [retain].
+         *
+         * Unlike [retain], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("retain") @ExcludeMissing fun _retain(): JsonField<Retain> = retain
+
+        /**
+         * Returns the raw JSON value of [scope].
+         *
+         * Unlike [scope], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("scope") @ExcludeMissing fun _scope(): JsonField<Scope> = scope
+
+        /**
+         * Returns the raw JSON value of [type].
+         *
+         * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
+
+        /**
+         * Returns the raw JSON value of [waitPeriod].
+         *
+         * Unlike [waitPeriod], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("wait_period")
+        @ExcludeMissing
+        fun _waitPeriod(): JsonField<String> = waitPeriod
+
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+        /**
+         * Returns the raw JSON value of [categoryKey].
+         *
+         * Unlike [categoryKey], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("category_key")
+        @ExcludeMissing
+        fun _categoryKey(): JsonField<String> = categoryKey
+
+        /**
+         * Returns the raw JSON value of [conditions].
+         *
+         * Unlike [conditions], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("conditions")
+        @ExcludeMissing
+        fun _conditions(): JsonField<JourneyConditionsField> = conditions
+
+        /**
+         * Returns the raw JSON value of [maxItems].
+         *
+         * Unlike [maxItems], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("max_items") @ExcludeMissing fun _maxItems(): JsonField<Long> = maxItems
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [JourneyBatchNode].
+             *
+             * The following fields are required:
+             * ```java
+             * .maxWaitPeriod()
+             * .retain()
+             * .scope()
+             * .type()
+             * .waitPeriod()
+             * ```
+             */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [JourneyBatchNode]. */
+        class Builder internal constructor() {
+
+            private var maxWaitPeriod: JsonField<String>? = null
+            private var retain: JsonField<Retain>? = null
+            private var scope: JsonField<Scope>? = null
+            private var type: JsonField<Type>? = null
+            private var waitPeriod: JsonField<String>? = null
+            private var id: JsonField<String> = JsonMissing.of()
+            private var categoryKey: JsonField<String> = JsonMissing.of()
+            private var conditions: JsonField<JourneyConditionsField> = JsonMissing.of()
+            private var maxItems: JsonField<Long> = JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(journeyBatchNode: JourneyBatchNode) = apply {
+                maxWaitPeriod = journeyBatchNode.maxWaitPeriod
+                retain = journeyBatchNode.retain
+                scope = journeyBatchNode.scope
+                type = journeyBatchNode.type
+                waitPeriod = journeyBatchNode.waitPeriod
+                id = journeyBatchNode.id
+                categoryKey = journeyBatchNode.categoryKey
+                conditions = journeyBatchNode.conditions
+                maxItems = journeyBatchNode.maxItems
+                additionalProperties = journeyBatchNode.additionalProperties.toMutableMap()
+            }
+
+            /**
+             * ISO 8601 duration. Hard ceiling from the first event into the batch; releases the
+             * batch unconditionally when it elapses.
+             */
+            fun maxWaitPeriod(maxWaitPeriod: String) = maxWaitPeriod(JsonField.of(maxWaitPeriod))
+
+            /**
+             * Sets [Builder.maxWaitPeriod] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.maxWaitPeriod] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun maxWaitPeriod(maxWaitPeriod: JsonField<String>) = apply {
+                this.maxWaitPeriod = maxWaitPeriod
+            }
+
+            /**
+             * How to select which collected events to retain in the aggregated payload when the
+             * batch releases.
+             */
+            fun retain(retain: Retain) = retain(JsonField.of(retain))
+
+            /**
+             * Sets [Builder.retain] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.retain] with a well-typed [Retain] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun retain(retain: JsonField<Retain>) = apply { this.retain = retain }
+
+            fun scope(scope: Scope) = scope(JsonField.of(scope))
+
+            /**
+             * Sets [Builder.scope] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.scope] with a well-typed [Scope] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun scope(scope: JsonField<Scope>) = apply { this.scope = scope }
+
+            fun type(type: Type) = type(JsonField.of(type))
+
+            /**
+             * Sets [Builder.type] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.type] with a well-typed [Type] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun type(type: JsonField<Type>) = apply { this.type = type }
+
+            /**
+             * ISO 8601 duration. Quiet window that releases the batch when it elapses with no new
+             * contributing events. Must be less than `max_wait_period`.
+             */
+            fun waitPeriod(waitPeriod: String) = waitPeriod(JsonField.of(waitPeriod))
+
+            /**
+             * Sets [Builder.waitPeriod] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.waitPeriod] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun waitPeriod(waitPeriod: JsonField<String>) = apply { this.waitPeriod = waitPeriod }
+
+            fun id(id: String) = id(JsonField.of(id))
+
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun id(id: JsonField<String>) = apply { this.id = id }
+
+            /**
+             * Optional partition key. Events with the same `category_key` are batched together;
+             * events with different values are batched separately.
+             */
+            fun categoryKey(categoryKey: String) = categoryKey(JsonField.of(categoryKey))
+
+            /**
+             * Sets [Builder.categoryKey] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.categoryKey] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun categoryKey(categoryKey: JsonField<String>) = apply {
+                this.categoryKey = categoryKey
+            }
+
+            /**
+             * Condition spec for a journey node. Accepts a single condition atom, an AND/OR group,
+             * or an AND/OR nested group. Omit the `conditions` property entirely to express "no
+             * conditions".
+             */
+            fun conditions(conditions: JourneyConditionsField) =
+                conditions(JsonField.of(conditions))
+
+            /**
+             * Sets [Builder.conditions] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.conditions] with a well-typed
+             * [JourneyConditionsField] value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun conditions(conditions: JsonField<JourneyConditionsField>) = apply {
+                this.conditions = conditions
+            }
+
+            /**
+             * Alias for calling [conditions] with
+             * `JourneyConditionsField.ofConditionAtom(conditionAtom)`.
+             */
+            fun conditionsOfConditionAtom(conditionAtom: List<String>) =
+                conditions(JourneyConditionsField.ofConditionAtom(conditionAtom))
+
+            /**
+             * Alias for calling [conditions] with
+             * `JourneyConditionsField.ofConditionGroup(conditionGroup)`.
+             */
+            fun conditions(conditionGroup: JourneyConditionGroup) =
+                conditions(JourneyConditionsField.ofConditionGroup(conditionGroup))
+
+            /**
+             * Alias for calling [conditions] with
+             * `JourneyConditionsField.ofConditionNestedGroup(conditionNestedGroup)`.
+             */
+            fun conditions(conditionNestedGroup: JourneyConditionNestedGroup) =
+                conditions(JourneyConditionsField.ofConditionNestedGroup(conditionNestedGroup))
+
+            /** Releases the batch once this many events have been collected. */
+            fun maxItems(maxItems: Long) = maxItems(JsonField.of(maxItems))
+
+            /**
+             * Sets [Builder.maxItems] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.maxItems] with a well-typed [Long] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun maxItems(maxItems: JsonField<Long>) = apply { this.maxItems = maxItems }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [JourneyBatchNode].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .maxWaitPeriod()
+             * .retain()
+             * .scope()
+             * .type()
+             * .waitPeriod()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): JourneyBatchNode =
+                JourneyBatchNode(
+                    checkRequired("maxWaitPeriod", maxWaitPeriod),
+                    checkRequired("retain", retain),
+                    checkRequired("scope", scope),
+                    checkRequired("type", type),
+                    checkRequired("waitPeriod", waitPeriod),
+                    id,
+                    categoryKey,
+                    conditions,
+                    maxItems,
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws CourierInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
+        fun validate(): JourneyBatchNode = apply {
+            if (validated) {
+                return@apply
+            }
+
+            maxWaitPeriod()
+            retain().validate()
+            scope().validate()
+            type().validate()
+            waitPeriod()
+            id()
+            categoryKey()
+            conditions().ifPresent { it.validate() }
+            maxItems()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: CourierInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (maxWaitPeriod.asKnown().isPresent) 1 else 0) +
+                (retain.asKnown().getOrNull()?.validity() ?: 0) +
+                (scope.asKnown().getOrNull()?.validity() ?: 0) +
+                (type.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (waitPeriod.asKnown().isPresent) 1 else 0) +
+                (if (id.asKnown().isPresent) 1 else 0) +
+                (if (categoryKey.asKnown().isPresent) 1 else 0) +
+                (conditions.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (maxItems.asKnown().isPresent) 1 else 0)
+
+        /**
+         * How to select which collected events to retain in the aggregated payload when the batch
+         * releases.
+         */
+        class Retain
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
+            private val count: JsonField<Long>,
+            private val type: JsonField<Type>,
+            private val sortKey: JsonField<String>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("count") @ExcludeMissing count: JsonField<Long> = JsonMissing.of(),
+                @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
+                @JsonProperty("sort_key")
+                @ExcludeMissing
+                sortKey: JsonField<String> = JsonMissing.of(),
+            ) : this(count, type, sortKey, mutableMapOf())
+
+            /**
+             * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun count(): Long = count.getRequired("count")
+
+            /**
+             * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun type(): Type = type.getRequired("type")
+
+            /**
+             * Dot-path into the event payload (e.g. `data.priority`). Required when `type` is
+             * `highest` or `lowest`.
+             *
+             * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
+            fun sortKey(): Optional<String> = sortKey.getOptional("sort_key")
+
+            /**
+             * Returns the raw JSON value of [count].
+             *
+             * Unlike [count], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("count") @ExcludeMissing fun _count(): JsonField<Long> = count
+
+            /**
+             * Returns the raw JSON value of [type].
+             *
+             * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
+
+            /**
+             * Returns the raw JSON value of [sortKey].
+             *
+             * Unlike [sortKey], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("sort_key") @ExcludeMissing fun _sortKey(): JsonField<String> = sortKey
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /**
+                 * Returns a mutable builder for constructing an instance of [Retain].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .count()
+                 * .type()
+                 * ```
+                 */
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [Retain]. */
+            class Builder internal constructor() {
+
+                private var count: JsonField<Long>? = null
+                private var type: JsonField<Type>? = null
+                private var sortKey: JsonField<String> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(retain: Retain) = apply {
+                    count = retain.count
+                    type = retain.type
+                    sortKey = retain.sortKey
+                    additionalProperties = retain.additionalProperties.toMutableMap()
+                }
+
+                fun count(count: Long) = count(JsonField.of(count))
+
+                /**
+                 * Sets [Builder.count] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.count] with a well-typed [Long] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
+                fun count(count: JsonField<Long>) = apply { this.count = count }
+
+                fun type(type: Type) = type(JsonField.of(type))
+
+                /**
+                 * Sets [Builder.type] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.type] with a well-typed [Type] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
+                fun type(type: JsonField<Type>) = apply { this.type = type }
+
+                /**
+                 * Dot-path into the event payload (e.g. `data.priority`). Required when `type` is
+                 * `highest` or `lowest`.
+                 */
+                fun sortKey(sortKey: String) = sortKey(JsonField.of(sortKey))
+
+                /**
+                 * Sets [Builder.sortKey] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.sortKey] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun sortKey(sortKey: JsonField<String>) = apply { this.sortKey = sortKey }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Retain].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .count()
+                 * .type()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
+                fun build(): Retain =
+                    Retain(
+                        checkRequired("count", count),
+                        checkRequired("type", type),
+                        sortKey,
+                        additionalProperties.toMutableMap(),
+                    )
+            }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws CourierInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
+            fun validate(): Retain = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                count()
+                type().validate()
+                sortKey()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: CourierInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (count.asKnown().isPresent) 1 else 0) +
+                    (type.asKnown().getOrNull()?.validity() ?: 0) +
+                    (if (sortKey.asKnown().isPresent) 1 else 0)
+
+            class Type @JsonCreator private constructor(private val value: JsonField<String>) :
+                Enum {
+
+                /**
+                 * Returns this class instance's raw value.
+                 *
+                 * This is usually only useful if this instance was deserialized from data that
+                 * doesn't match any known member, and you want to know that value. For example, if
+                 * the SDK is on an older version than the API, then the API may respond with new
+                 * members that the SDK is unaware of.
+                 */
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                companion object {
+
+                    @JvmField val FIRST = of("first")
+
+                    @JvmField val LAST = of("last")
+
+                    @JvmField val HIGHEST = of("highest")
+
+                    @JvmField val LOWEST = of("lowest")
+
+                    @JvmStatic fun of(value: String) = Type(JsonField.of(value))
+                }
+
+                /** An enum containing [Type]'s known values. */
+                enum class Known {
+                    FIRST,
+                    LAST,
+                    HIGHEST,
+                    LOWEST,
+                }
+
+                /**
+                 * An enum containing [Type]'s known values, as well as an [_UNKNOWN] member.
+                 *
+                 * An instance of [Type] can contain an unknown value in a couple of cases:
+                 * - It was deserialized from data that doesn't match any known member. For example,
+                 *   if the SDK is on an older version than the API, then the API may respond with
+                 *   new members that the SDK is unaware of.
+                 * - It was constructed with an arbitrary value using the [of] method.
+                 */
+                enum class Value {
+                    FIRST,
+                    LAST,
+                    HIGHEST,
+                    LOWEST,
+                    /**
+                     * An enum member indicating that [Type] was instantiated with an unknown value.
+                     */
+                    _UNKNOWN,
+                }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value, or
+                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                 *
+                 * Use the [known] method instead if you're certain the value is always known or if
+                 * you want to throw for the unknown case.
+                 */
+                fun value(): Value =
+                    when (this) {
+                        FIRST -> Value.FIRST
+                        LAST -> Value.LAST
+                        HIGHEST -> Value.HIGHEST
+                        LOWEST -> Value.LOWEST
+                        else -> Value._UNKNOWN
+                    }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value.
+                 *
+                 * Use the [value] method instead if you're uncertain the value is always known and
+                 * don't want to throw for the unknown case.
+                 *
+                 * @throws CourierInvalidDataException if this class instance's value is a not a
+                 *   known member.
+                 */
+                fun known(): Known =
+                    when (this) {
+                        FIRST -> Known.FIRST
+                        LAST -> Known.LAST
+                        HIGHEST -> Known.HIGHEST
+                        LOWEST -> Known.LOWEST
+                        else -> throw CourierInvalidDataException("Unknown Type: $value")
+                    }
+
+                /**
+                 * Returns this class instance's primitive wire representation.
+                 *
+                 * This differs from the [toString] method because that method is primarily for
+                 * debugging and generally doesn't throw.
+                 *
+                 * @throws CourierInvalidDataException if this class instance's value does not have
+                 *   the expected primitive type.
+                 */
+                fun asString(): String =
+                    _value().asString().orElseThrow {
+                        CourierInvalidDataException("Value is not a String")
+                    }
+
+                private var validated: Boolean = false
+
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws CourierInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
+                fun validate(): Type = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: CourierInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is Type && value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Retain &&
+                    count == other.count &&
+                    type == other.type &&
+                    sortKey == other.sortKey &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy {
+                Objects.hash(count, type, sortKey, additionalProperties)
+            }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "Retain{count=$count, type=$type, sortKey=$sortKey, additionalProperties=$additionalProperties}"
+        }
+
+        class Scope @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val USER = of("user")
+
+                @JvmStatic fun of(value: String) = Scope(JsonField.of(value))
+            }
+
+            /** An enum containing [Scope]'s known values. */
+            enum class Known {
+                USER
+            }
+
+            /**
+             * An enum containing [Scope]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [Scope] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                USER,
+                /**
+                 * An enum member indicating that [Scope] was instantiated with an unknown value.
+                 */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    USER -> Value.USER
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws CourierInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    USER -> Known.USER
+                    else -> throw CourierInvalidDataException("Unknown Scope: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws CourierInvalidDataException if this class instance's value does not have the
+             *   expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    CourierInvalidDataException("Value is not a String")
+                }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws CourierInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
+            fun validate(): Scope = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: CourierInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Scope && value == other.value
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+        }
+
+        class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val BATCH = of("batch")
+
+                @JvmStatic fun of(value: String) = Type(JsonField.of(value))
+            }
+
+            /** An enum containing [Type]'s known values. */
+            enum class Known {
+                BATCH
+            }
+
+            /**
+             * An enum containing [Type]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [Type] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                BATCH,
+                /** An enum member indicating that [Type] was instantiated with an unknown value. */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    BATCH -> Value.BATCH
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws CourierInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    BATCH -> Known.BATCH
+                    else -> throw CourierInvalidDataException("Unknown Type: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws CourierInvalidDataException if this class instance's value does not have the
+             *   expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    CourierInvalidDataException("Value is not a String")
+                }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws CourierInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
+            fun validate(): Type = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: CourierInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Type && value == other.value
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is JourneyBatchNode &&
+                maxWaitPeriod == other.maxWaitPeriod &&
+                retain == other.retain &&
+                scope == other.scope &&
+                type == other.type &&
+                waitPeriod == other.waitPeriod &&
+                id == other.id &&
+                categoryKey == other.categoryKey &&
+                conditions == other.conditions &&
+                maxItems == other.maxItems &&
+                additionalProperties == other.additionalProperties
+        }
+
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                maxWaitPeriod,
+                retain,
+                scope,
+                type,
+                waitPeriod,
+                id,
+                categoryKey,
+                conditions,
+                maxItems,
+                additionalProperties,
+            )
+        }
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "JourneyBatchNode{maxWaitPeriod=$maxWaitPeriod, retain=$retain, scope=$scope, type=$type, waitPeriod=$waitPeriod, id=$id, categoryKey=$categoryKey, conditions=$conditions, maxItems=$maxItems, additionalProperties=$additionalProperties}"
     }
 
     /**
@@ -1096,6 +2361,9 @@ private constructor(
                 fun addNode(throttleDynamic: JourneyThrottleDynamicNode) =
                     addNode(JourneyNode.ofThrottleDynamic(throttleDynamic))
 
+                /** Alias for calling [addNode] with `JourneyNode.ofBatch(batch)`. */
+                fun addNode(batch: JourneyBatchNode) = addNode(JourneyNode.ofBatch(batch))
+
                 /** Alias for calling [addNode] with `JourneyNode.ofExit(exit)`. */
                 fun addNode(exit: JourneyExitNode) = addNode(JourneyNode.ofExit(exit))
 
@@ -1443,6 +2711,9 @@ private constructor(
                  */
                 fun addNode(throttleDynamic: JourneyThrottleDynamicNode) =
                     addNode(JourneyNode.ofThrottleDynamic(throttleDynamic))
+
+                /** Alias for calling [addNode] with `JourneyNode.ofBatch(batch)`. */
+                fun addNode(batch: JourneyBatchNode) = addNode(JourneyNode.ofBatch(batch))
 
                 /** Alias for calling [addNode] with `JourneyNode.ofExit(exit)`. */
                 fun addNode(exit: JourneyExitNode) = addNode(JourneyNode.ofExit(exit))
