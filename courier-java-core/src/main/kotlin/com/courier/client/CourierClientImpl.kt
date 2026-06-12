@@ -16,6 +16,8 @@ import com.courier.services.blocking.BrandService
 import com.courier.services.blocking.BrandServiceImpl
 import com.courier.services.blocking.BulkService
 import com.courier.services.blocking.BulkServiceImpl
+import com.courier.services.blocking.DigestService
+import com.courier.services.blocking.DigestServiceImpl
 import com.courier.services.blocking.InboundService
 import com.courier.services.blocking.InboundServiceImpl
 import com.courier.services.blocking.JourneyService
@@ -87,6 +89,8 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
 
     private val bulk: BulkService by lazy { BulkServiceImpl(clientOptionsWithUserAgent) }
 
+    private val digests: DigestService by lazy { DigestServiceImpl(clientOptionsWithUserAgent) }
+
     private val inbound: InboundService by lazy { InboundServiceImpl(clientOptionsWithUserAgent) }
 
     private val lists: ListService by lazy { ListServiceImpl(clientOptionsWithUserAgent) }
@@ -137,6 +141,8 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
     override fun brands(): BrandService = brands
 
     override fun bulk(): BulkService = bulk
+
+    override fun digests(): DigestService = digests
 
     override fun inbound(): InboundService = inbound
 
@@ -197,6 +203,10 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
 
         private val bulk: BulkService.WithRawResponse by lazy {
             BulkServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val digests: DigestService.WithRawResponse by lazy {
+            DigestServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
         private val inbound: InboundService.WithRawResponse by lazy {
@@ -263,6 +273,8 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
         override fun brands(): BrandService.WithRawResponse = brands
 
         override fun bulk(): BulkService.WithRawResponse = bulk
+
+        override fun digests(): DigestService.WithRawResponse = digests
 
         override fun inbound(): InboundService.WithRawResponse = inbound
 
