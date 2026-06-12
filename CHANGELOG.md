@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.15.0 (2026-06-12)
+
+Full Changelog: [v4.14.0...v4.15.0](https://github.com/trycourier/courier-java/compare/v4.14.0...v4.15.0)
+
+### Features
+
+* **digests:** document digest REST endpoints in OpenAPI spec ([e145081](https://github.com/trycourier/courier-java/commit/e145081e4ae5b862290944d7fb5b0c125522b0c0))
+
 ## 4.14.0 (2026-05-28)
 
 Full Changelog: [v4.13.1...v4.14.0](https://github.com/trycourier/courier-java/compare/v4.13.1...v4.14.0)
