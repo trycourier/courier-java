@@ -16,6 +16,8 @@ import com.courier.services.async.BrandServiceAsync
 import com.courier.services.async.BrandServiceAsyncImpl
 import com.courier.services.async.BulkServiceAsync
 import com.courier.services.async.BulkServiceAsyncImpl
+import com.courier.services.async.DigestServiceAsync
+import com.courier.services.async.DigestServiceAsyncImpl
 import com.courier.services.async.InboundServiceAsync
 import com.courier.services.async.InboundServiceAsyncImpl
 import com.courier.services.async.JourneyServiceAsync
@@ -91,6 +93,10 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
 
     private val bulk: BulkServiceAsync by lazy { BulkServiceAsyncImpl(clientOptionsWithUserAgent) }
 
+    private val digests: DigestServiceAsync by lazy {
+        DigestServiceAsyncImpl(clientOptionsWithUserAgent)
+    }
+
     private val inbound: InboundServiceAsync by lazy {
         InboundServiceAsyncImpl(clientOptionsWithUserAgent)
     }
@@ -152,6 +158,8 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
 
     override fun bulk(): BulkServiceAsync = bulk
 
+    override fun digests(): DigestServiceAsync = digests
+
     override fun inbound(): InboundServiceAsync = inbound
 
     override fun lists(): ListServiceAsync = lists
@@ -211,6 +219,10 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
 
         private val bulk: BulkServiceAsync.WithRawResponse by lazy {
             BulkServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val digests: DigestServiceAsync.WithRawResponse by lazy {
+            DigestServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
         private val inbound: InboundServiceAsync.WithRawResponse by lazy {
@@ -277,6 +289,8 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
         override fun brands(): BrandServiceAsync.WithRawResponse = brands
 
         override fun bulk(): BulkServiceAsync.WithRawResponse = bulk
+
+        override fun digests(): DigestServiceAsync.WithRawResponse = digests
 
         override fun inbound(): InboundServiceAsync.WithRawResponse = inbound
 
