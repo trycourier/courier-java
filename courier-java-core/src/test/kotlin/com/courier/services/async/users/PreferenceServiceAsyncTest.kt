@@ -5,6 +5,7 @@ package com.courier.services.async.users
 import com.courier.client.okhttp.CourierOkHttpClientAsync
 import com.courier.models.ChannelClassification
 import com.courier.models.PreferenceStatus
+import com.courier.models.users.preferences.PreferenceDeleteTopicParams
 import com.courier.models.users.preferences.PreferenceRetrieveParams
 import com.courier.models.users.preferences.PreferenceRetrieveTopicParams
 import com.courier.models.users.preferences.PreferenceUpdateOrCreateTopicParams
@@ -26,6 +27,24 @@ internal class PreferenceServiceAsyncTest {
 
         val preference = preferenceFuture.get()
         preference.validate()
+    }
+
+    @Disabled("Mock server tests are disabled")
+    @Test
+    fun deleteTopic() {
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val preferenceServiceAsync = client.users().preferences()
+
+        val future =
+            preferenceServiceAsync.deleteTopic(
+                PreferenceDeleteTopicParams.builder()
+                    .userId("user_id")
+                    .topicId("topic_id")
+                    .tenantId("tenant_id")
+                    .build()
+            )
+
+        val response = future.get()
     }
 
     @Disabled("Mock server tests are disabled")
