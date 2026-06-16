@@ -5,6 +5,7 @@ package com.courier.services.blocking.users
 import com.courier.client.okhttp.CourierOkHttpClient
 import com.courier.models.ChannelClassification
 import com.courier.models.PreferenceStatus
+import com.courier.models.users.preferences.PreferenceDeleteTopicParams
 import com.courier.models.users.preferences.PreferenceRetrieveParams
 import com.courier.models.users.preferences.PreferenceRetrieveTopicParams
 import com.courier.models.users.preferences.PreferenceUpdateOrCreateTopicParams
@@ -25,6 +26,21 @@ internal class PreferenceServiceTest {
             )
 
         preference.validate()
+    }
+
+    @Disabled("Mock server tests are disabled")
+    @Test
+    fun deleteTopic() {
+        val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
+        val preferenceService = client.users().preferences()
+
+        preferenceService.deleteTopic(
+            PreferenceDeleteTopicParams.builder()
+                .userId("user_id")
+                .topicId("topic_id")
+                .tenantId("tenant_id")
+                .build()
+        )
     }
 
     @Disabled("Mock server tests are disabled")

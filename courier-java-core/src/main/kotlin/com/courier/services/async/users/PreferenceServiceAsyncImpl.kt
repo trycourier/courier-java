@@ -5,6 +5,7 @@ package com.courier.services.async.users
 import com.courier.core.ClientOptions
 import com.courier.core.RequestOptions
 import com.courier.core.checkRequired
+import com.courier.core.handlers.emptyHandler
 import com.courier.core.handlers.errorBodyHandler
 import com.courier.core.handlers.errorHandler
 import com.courier.core.handlers.jsonHandler
@@ -16,6 +17,7 @@ import com.courier.core.http.HttpResponseFor
 import com.courier.core.http.json
 import com.courier.core.http.parseable
 import com.courier.core.prepareAsync
+import com.courier.models.users.preferences.PreferenceDeleteTopicParams
 import com.courier.models.users.preferences.PreferenceRetrieveParams
 import com.courier.models.users.preferences.PreferenceRetrieveResponse
 import com.courier.models.users.preferences.PreferenceRetrieveTopicParams
@@ -44,6 +46,13 @@ class PreferenceServiceAsyncImpl internal constructor(private val clientOptions:
     ): CompletableFuture<PreferenceRetrieveResponse> =
         // get /users/{user_id}/preferences
         withRawResponse().retrieve(params, requestOptions).thenApply { it.parse() }
+
+    override fun deleteTopic(
+        params: PreferenceDeleteTopicParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Void?> =
+        // delete /users/{user_id}/preferences/{topic_id}
+        withRawResponse().deleteTopic(params, requestOptions).thenAccept {}
 
     override fun retrieveTopic(
         params: PreferenceRetrieveTopicParams,
@@ -101,6 +110,38 @@ class PreferenceServiceAsyncImpl internal constructor(private val clientOptions:
                                     it.validate()
                                 }
                             }
+                    }
+                }
+        }
+
+        private val deleteTopicHandler: Handler<Void?> = emptyHandler()
+
+        override fun deleteTopic(
+            params: PreferenceDeleteTopicParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("topicId", params.topicId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.DELETE)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments(
+                        "users",
+                        params._pathParam(0),
+                        "preferences",
+                        params._pathParam(1),
+                    )
+                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response.use { deleteTopicHandler.handle(it) }
                     }
                 }
         }
