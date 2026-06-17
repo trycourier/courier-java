@@ -4,7 +4,9 @@ package com.courier.services.blocking.users
 
 import com.courier.core.ClientOptions
 import com.courier.core.RequestOptions
+import com.courier.core.http.HttpResponse
 import com.courier.core.http.HttpResponseFor
+import com.courier.models.users.preferences.PreferenceDeleteTopicParams
 import com.courier.models.users.preferences.PreferenceRetrieveParams
 import com.courier.models.users.preferences.PreferenceRetrieveResponse
 import com.courier.models.users.preferences.PreferenceRetrieveTopicParams
@@ -59,6 +61,31 @@ interface PreferenceService {
     /** @see retrieve */
     fun retrieve(userId: String, requestOptions: RequestOptions): PreferenceRetrieveResponse =
         retrieve(userId, PreferenceRetrieveParams.none(), requestOptions)
+
+    /**
+     * Remove a user's preferences for a specific subscription topic, resetting the topic to its
+     * effective default. This operation is idempotent: deleting a preference that does not exist
+     * succeeds with no error.
+     */
+    fun deleteTopic(topicId: String, params: PreferenceDeleteTopicParams) =
+        deleteTopic(topicId, params, RequestOptions.none())
+
+    /** @see deleteTopic */
+    fun deleteTopic(
+        topicId: String,
+        params: PreferenceDeleteTopicParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ) = deleteTopic(params.toBuilder().topicId(topicId).build(), requestOptions)
+
+    /** @see deleteTopic */
+    fun deleteTopic(params: PreferenceDeleteTopicParams) =
+        deleteTopic(params, RequestOptions.none())
+
+    /** @see deleteTopic */
+    fun deleteTopic(
+        params: PreferenceDeleteTopicParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    )
 
     /** Fetch user preferences for a specific subscription topic. */
     fun retrieveTopic(
@@ -167,6 +194,34 @@ interface PreferenceService {
             requestOptions: RequestOptions,
         ): HttpResponseFor<PreferenceRetrieveResponse> =
             retrieve(userId, PreferenceRetrieveParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `delete /users/{user_id}/preferences/{topic_id}`, but is
+         * otherwise the same as [PreferenceService.deleteTopic].
+         */
+        @MustBeClosed
+        fun deleteTopic(topicId: String, params: PreferenceDeleteTopicParams): HttpResponse =
+            deleteTopic(topicId, params, RequestOptions.none())
+
+        /** @see deleteTopic */
+        @MustBeClosed
+        fun deleteTopic(
+            topicId: String,
+            params: PreferenceDeleteTopicParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse = deleteTopic(params.toBuilder().topicId(topicId).build(), requestOptions)
+
+        /** @see deleteTopic */
+        @MustBeClosed
+        fun deleteTopic(params: PreferenceDeleteTopicParams): HttpResponse =
+            deleteTopic(params, RequestOptions.none())
+
+        /** @see deleteTopic */
+        @MustBeClosed
+        fun deleteTopic(
+            params: PreferenceDeleteTopicParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse
 
         /**
          * Returns a raw HTTP response for `get /users/{user_id}/preferences/{topic_id}`, but is

@@ -212,6 +212,10 @@ private constructor(
         /** Alias for calling [addNode] with `JourneyNode.ofBatch(batch)`. */
         fun addNode(batch: JourneyNode.JourneyBatchNode) = addNode(JourneyNode.ofBatch(batch))
 
+        /** Alias for calling [addNode] with `JourneyNode.ofAddToDigest(addToDigest)`. */
+        fun addNode(addToDigest: JourneyNode.JourneyAddToDigestNode) =
+            addNode(JourneyNode.ofAddToDigest(addToDigest))
+
         /** Alias for calling [addNode] with `JourneyNode.ofExit(exit)`. */
         fun addNode(exit: JourneyExitNode) = addNode(JourneyNode.ofExit(exit))
 
