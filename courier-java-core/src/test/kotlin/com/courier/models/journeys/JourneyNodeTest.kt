@@ -42,6 +42,7 @@ internal class JourneyNodeTest {
         assertThat(journeyNode.throttleStatic()).isEmpty
         assertThat(journeyNode.throttleDynamic()).isEmpty
         assertThat(journeyNode.batch()).isEmpty
+        assertThat(journeyNode.addToDigest()).isEmpty
         assertThat(journeyNode.exit()).isEmpty
         assertThat(journeyNode.branch()).isEmpty
     }
@@ -98,6 +99,7 @@ internal class JourneyNodeTest {
         assertThat(journeyNode.throttleStatic()).isEmpty
         assertThat(journeyNode.throttleDynamic()).isEmpty
         assertThat(journeyNode.batch()).isEmpty
+        assertThat(journeyNode.addToDigest()).isEmpty
         assertThat(journeyNode.exit()).isEmpty
         assertThat(journeyNode.branch()).isEmpty
     }
@@ -168,6 +170,7 @@ internal class JourneyNodeTest {
         assertThat(journeyNode.throttleStatic()).isEmpty
         assertThat(journeyNode.throttleDynamic()).isEmpty
         assertThat(journeyNode.batch()).isEmpty
+        assertThat(journeyNode.addToDigest()).isEmpty
         assertThat(journeyNode.exit()).isEmpty
         assertThat(journeyNode.branch()).isEmpty
     }
@@ -240,6 +243,7 @@ internal class JourneyNodeTest {
         assertThat(journeyNode.throttleStatic()).isEmpty
         assertThat(journeyNode.throttleDynamic()).isEmpty
         assertThat(journeyNode.batch()).isEmpty
+        assertThat(journeyNode.addToDigest()).isEmpty
         assertThat(journeyNode.exit()).isEmpty
         assertThat(journeyNode.branch()).isEmpty
     }
@@ -291,6 +295,7 @@ internal class JourneyNodeTest {
         assertThat(journeyNode.throttleStatic()).isEmpty
         assertThat(journeyNode.throttleDynamic()).isEmpty
         assertThat(journeyNode.batch()).isEmpty
+        assertThat(journeyNode.addToDigest()).isEmpty
         assertThat(journeyNode.exit()).isEmpty
         assertThat(journeyNode.branch()).isEmpty
     }
@@ -358,6 +363,7 @@ internal class JourneyNodeTest {
         assertThat(journeyNode.throttleStatic()).isEmpty
         assertThat(journeyNode.throttleDynamic()).isEmpty
         assertThat(journeyNode.batch()).isEmpty
+        assertThat(journeyNode.addToDigest()).isEmpty
         assertThat(journeyNode.exit()).isEmpty
         assertThat(journeyNode.branch()).isEmpty
     }
@@ -442,6 +448,7 @@ internal class JourneyNodeTest {
         assertThat(journeyNode.throttleStatic()).isEmpty
         assertThat(journeyNode.throttleDynamic()).isEmpty
         assertThat(journeyNode.batch()).isEmpty
+        assertThat(journeyNode.addToDigest()).isEmpty
         assertThat(journeyNode.exit()).isEmpty
         assertThat(journeyNode.branch()).isEmpty
     }
@@ -516,6 +523,7 @@ internal class JourneyNodeTest {
         assertThat(journeyNode.throttleStatic()).isEmpty
         assertThat(journeyNode.throttleDynamic()).isEmpty
         assertThat(journeyNode.batch()).isEmpty
+        assertThat(journeyNode.addToDigest()).isEmpty
         assertThat(journeyNode.exit()).isEmpty
         assertThat(journeyNode.branch()).isEmpty
     }
@@ -574,6 +582,7 @@ internal class JourneyNodeTest {
         assertThat(journeyNode.throttleStatic()).contains(throttleStatic)
         assertThat(journeyNode.throttleDynamic()).isEmpty
         assertThat(journeyNode.batch()).isEmpty
+        assertThat(journeyNode.addToDigest()).isEmpty
         assertThat(journeyNode.exit()).isEmpty
         assertThat(journeyNode.branch()).isEmpty
     }
@@ -628,6 +637,7 @@ internal class JourneyNodeTest {
         assertThat(journeyNode.throttleStatic()).isEmpty
         assertThat(journeyNode.throttleDynamic()).contains(throttleDynamic)
         assertThat(journeyNode.batch()).isEmpty
+        assertThat(journeyNode.addToDigest()).isEmpty
         assertThat(journeyNode.exit()).isEmpty
         assertThat(journeyNode.branch()).isEmpty
     }
@@ -691,6 +701,7 @@ internal class JourneyNodeTest {
         assertThat(journeyNode.throttleStatic()).isEmpty
         assertThat(journeyNode.throttleDynamic()).isEmpty
         assertThat(journeyNode.batch()).contains(batch)
+        assertThat(journeyNode.addToDigest()).isEmpty
         assertThat(journeyNode.exit()).isEmpty
         assertThat(journeyNode.branch()).isEmpty
     }
@@ -729,6 +740,56 @@ internal class JourneyNodeTest {
     }
 
     @Test
+    fun ofAddToDigest() {
+        val addToDigest =
+            JourneyNode.JourneyAddToDigestNode.builder()
+                .subscriptionTopicId("x")
+                .type(JourneyNode.JourneyAddToDigestNode.Type.ADD_TO_DIGEST)
+                .id("x")
+                .conditionsOfConditionAtom(listOf("string", "string"))
+                .build()
+
+        val journeyNode = JourneyNode.ofAddToDigest(addToDigest)
+
+        assertThat(journeyNode.apiInvokeTrigger()).isEmpty
+        assertThat(journeyNode.segmentTrigger()).isEmpty
+        assertThat(journeyNode.send()).isEmpty
+        assertThat(journeyNode.delayDuration()).isEmpty
+        assertThat(journeyNode.delayUntil()).isEmpty
+        assertThat(journeyNode.fetchGetDelete()).isEmpty
+        assertThat(journeyNode.fetchPostPut()).isEmpty
+        assertThat(journeyNode.ai()).isEmpty
+        assertThat(journeyNode.throttleStatic()).isEmpty
+        assertThat(journeyNode.throttleDynamic()).isEmpty
+        assertThat(journeyNode.batch()).isEmpty
+        assertThat(journeyNode.addToDigest()).contains(addToDigest)
+        assertThat(journeyNode.exit()).isEmpty
+        assertThat(journeyNode.branch()).isEmpty
+    }
+
+    @Test
+    fun ofAddToDigestRoundtrip() {
+        val jsonMapper = jsonMapper()
+        val journeyNode =
+            JourneyNode.ofAddToDigest(
+                JourneyNode.JourneyAddToDigestNode.builder()
+                    .subscriptionTopicId("x")
+                    .type(JourneyNode.JourneyAddToDigestNode.Type.ADD_TO_DIGEST)
+                    .id("x")
+                    .conditionsOfConditionAtom(listOf("string", "string"))
+                    .build()
+            )
+
+        val roundtrippedJourneyNode =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(journeyNode),
+                jacksonTypeRef<JourneyNode>(),
+            )
+
+        assertThat(roundtrippedJourneyNode).isEqualTo(journeyNode)
+    }
+
+    @Test
     fun ofExit() {
         val exit = JourneyExitNode.builder().type(JourneyExitNode.Type.EXIT).id("x").build()
 
@@ -745,6 +806,7 @@ internal class JourneyNodeTest {
         assertThat(journeyNode.throttleStatic()).isEmpty
         assertThat(journeyNode.throttleDynamic()).isEmpty
         assertThat(journeyNode.batch()).isEmpty
+        assertThat(journeyNode.addToDigest()).isEmpty
         assertThat(journeyNode.exit()).contains(exit)
         assertThat(journeyNode.branch()).isEmpty
     }
@@ -812,6 +874,7 @@ internal class JourneyNodeTest {
         assertThat(journeyNode.throttleStatic()).isEmpty
         assertThat(journeyNode.throttleDynamic()).isEmpty
         assertThat(journeyNode.batch()).isEmpty
+        assertThat(journeyNode.addToDigest()).isEmpty
         assertThat(journeyNode.exit()).isEmpty
         assertThat(journeyNode.branch()).contains(branch)
     }
