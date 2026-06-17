@@ -1,5 +1,14 @@
 # Changelog
 
+## 4.16.0 (2026-06-17)
+
+Full Changelog: [v4.15.0...v4.16.0](https://github.com/trycourier/courier-java/compare/v4.15.0...v4.16.0)
+
+### Features
+
+* **openapi:** add add-to-digest JourneyNode variant ([01ef61c](https://github.com/trycourier/courier-java/commit/01ef61c19aef27fb6df26735cf5e1d9ee94cc6b6))
+* **openapi:** add DELETE /users/{id}/preferences/{topicId} ([34315dd](https://github.com/trycourier/courier-java/commit/34315ddb9b1b1663efbaf95d9ac9b594039dcd60))
+
 ## 4.15.0 (2026-06-12)
 
 Full Changelog: [v4.14.0...v4.15.0](https://github.com/trycourier/courier-java/compare/v4.14.0...v4.15.0)
