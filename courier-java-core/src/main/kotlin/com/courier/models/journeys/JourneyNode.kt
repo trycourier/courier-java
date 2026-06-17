@@ -51,6 +51,7 @@ private constructor(
     private val throttleStatic: JourneyThrottleStaticNode? = null,
     private val throttleDynamic: JourneyThrottleDynamicNode? = null,
     private val batch: JourneyBatchNode? = null,
+    private val addToDigest: JourneyAddToDigestNode? = null,
     private val exit: JourneyExitNode? = null,
     private val branch: JourneyBranchNode? = null,
     private val _json: JsonValue? = null,
@@ -117,6 +118,12 @@ private constructor(
      */
     fun batch(): Optional<JourneyBatchNode> = Optional.ofNullable(batch)
 
+    /**
+     * Add the current event to a digest keyed by the given subscription topic. The digest
+     * accumulates events and releases them on the schedule configured for the topic.
+     */
+    fun addToDigest(): Optional<JourneyAddToDigestNode> = Optional.ofNullable(addToDigest)
+
     /** Terminate the journey run. */
     fun exit(): Optional<JourneyExitNode> = Optional.ofNullable(exit)
 
@@ -147,6 +154,8 @@ private constructor(
     fun isThrottleDynamic(): Boolean = throttleDynamic != null
 
     fun isBatch(): Boolean = batch != null
+
+    fun isAddToDigest(): Boolean = addToDigest != null
 
     fun isExit(): Boolean = exit != null
 
@@ -213,6 +222,12 @@ private constructor(
      */
     fun asBatch(): JourneyBatchNode = batch.getOrThrow("batch")
 
+    /**
+     * Add the current event to a digest keyed by the given subscription topic. The digest
+     * accumulates events and releases them on the schedule configured for the topic.
+     */
+    fun asAddToDigest(): JourneyAddToDigestNode = addToDigest.getOrThrow("addToDigest")
+
     /** Terminate the journey run. */
     fun asExit(): JourneyExitNode = exit.getOrThrow("exit")
 
@@ -266,6 +281,7 @@ private constructor(
             throttleStatic != null -> visitor.visitThrottleStatic(throttleStatic)
             throttleDynamic != null -> visitor.visitThrottleDynamic(throttleDynamic)
             batch != null -> visitor.visitBatch(batch)
+            addToDigest != null -> visitor.visitAddToDigest(addToDigest)
             exit != null -> visitor.visitExit(exit)
             branch != null -> visitor.visitBranch(branch)
             else -> visitor.unknown(_json)
@@ -332,6 +348,10 @@ private constructor(
                     batch.validate()
                 }
 
+                override fun visitAddToDigest(addToDigest: JourneyAddToDigestNode) {
+                    addToDigest.validate()
+                }
+
                 override fun visitExit(exit: JourneyExitNode) {
                     exit.validate()
                 }
@@ -391,6 +411,9 @@ private constructor(
 
                 override fun visitBatch(batch: JourneyBatchNode) = batch.validity()
 
+                override fun visitAddToDigest(addToDigest: JourneyAddToDigestNode) =
+                    addToDigest.validity()
+
                 override fun visitExit(exit: JourneyExitNode) = exit.validity()
 
                 override fun visitBranch(branch: JourneyBranchNode) = branch.validity()
@@ -416,6 +439,7 @@ private constructor(
             throttleStatic == other.throttleStatic &&
             throttleDynamic == other.throttleDynamic &&
             batch == other.batch &&
+            addToDigest == other.addToDigest &&
             exit == other.exit &&
             branch == other.branch
     }
@@ -433,6 +457,7 @@ private constructor(
             throttleStatic,
             throttleDynamic,
             batch,
+            addToDigest,
             exit,
             branch,
         )
@@ -450,6 +475,7 @@ private constructor(
             throttleStatic != null -> "JourneyNode{throttleStatic=$throttleStatic}"
             throttleDynamic != null -> "JourneyNode{throttleDynamic=$throttleDynamic}"
             batch != null -> "JourneyNode{batch=$batch}"
+            addToDigest != null -> "JourneyNode{addToDigest=$addToDigest}"
             exit != null -> "JourneyNode{exit=$exit}"
             branch != null -> "JourneyNode{branch=$branch}"
             _json != null -> "JourneyNode{_unknown=$_json}"
@@ -532,6 +558,14 @@ private constructor(
          */
         @JvmStatic fun ofBatch(batch: JourneyBatchNode) = JourneyNode(batch = batch)
 
+        /**
+         * Add the current event to a digest keyed by the given subscription topic. The digest
+         * accumulates events and releases them on the schedule configured for the topic.
+         */
+        @JvmStatic
+        fun ofAddToDigest(addToDigest: JourneyAddToDigestNode) =
+            JourneyNode(addToDigest = addToDigest)
+
         /** Terminate the journey run. */
         @JvmStatic fun ofExit(exit: JourneyExitNode) = JourneyNode(exit = exit)
 
@@ -606,6 +640,12 @@ private constructor(
          */
         fun visitBatch(batch: JourneyBatchNode): T
 
+        /**
+         * Add the current event to a digest keyed by the given subscription topic. The digest
+         * accumulates events and releases them on the schedule configured for the topic.
+         */
+        fun visitAddToDigest(addToDigest: JourneyAddToDigestNode): T
+
         /** Terminate the journey run. */
         fun visitExit(exit: JourneyExitNode): T
 
@@ -669,6 +709,9 @@ private constructor(
                         tryDeserialize(node, jacksonTypeRef<JourneyBatchNode>())?.let {
                             JourneyNode(batch = it, _json = json)
                         },
+                        tryDeserialize(node, jacksonTypeRef<JourneyAddToDigestNode>())?.let {
+                            JourneyNode(addToDigest = it, _json = json)
+                        },
                         tryDeserialize(node, jacksonTypeRef<JourneyExitNode>())?.let {
                             JourneyNode(exit = it, _json = json)
                         },
@@ -710,6 +753,7 @@ private constructor(
                 value.throttleStatic != null -> generator.writeObject(value.throttleStatic)
                 value.throttleDynamic != null -> generator.writeObject(value.throttleDynamic)
                 value.batch != null -> generator.writeObject(value.batch)
+                value.addToDigest != null -> generator.writeObject(value.addToDigest)
                 value.exit != null -> generator.writeObject(value.exit)
                 value.branch != null -> generator.writeObject(value.branch)
                 value._json != null -> generator.writeObject(value._json)
@@ -1935,6 +1979,456 @@ private constructor(
     }
 
     /**
+     * Add the current event to a digest keyed by the given subscription topic. The digest
+     * accumulates events and releases them on the schedule configured for the topic.
+     */
+    class JourneyAddToDigestNode
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
+        private val subscriptionTopicId: JsonField<String>,
+        private val type: JsonField<Type>,
+        private val id: JsonField<String>,
+        private val conditions: JsonField<JourneyConditionsField>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("subscription_topic_id")
+            @ExcludeMissing
+            subscriptionTopicId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("conditions")
+            @ExcludeMissing
+            conditions: JsonField<JourneyConditionsField> = JsonMissing.of(),
+        ) : this(subscriptionTopicId, type, id, conditions, mutableMapOf())
+
+        /**
+         * The subscription topic that owns the digest the event is added to.
+         *
+         * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun subscriptionTopicId(): String = subscriptionTopicId.getRequired("subscription_topic_id")
+
+        /**
+         * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun type(): Type = type.getRequired("type")
+
+        /**
+         * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun id(): Optional<String> = id.getOptional("id")
+
+        /**
+         * Condition spec for a journey node. Accepts a single condition atom, an AND/OR group, or
+         * an AND/OR nested group. Omit the `conditions` property entirely to express "no
+         * conditions".
+         *
+         * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun conditions(): Optional<JourneyConditionsField> = conditions.getOptional("conditions")
+
+        /**
+         * Returns the raw JSON value of [subscriptionTopicId].
+         *
+         * Unlike [subscriptionTopicId], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("subscription_topic_id")
+        @ExcludeMissing
+        fun _subscriptionTopicId(): JsonField<String> = subscriptionTopicId
+
+        /**
+         * Returns the raw JSON value of [type].
+         *
+         * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
+
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+        /**
+         * Returns the raw JSON value of [conditions].
+         *
+         * Unlike [conditions], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("conditions")
+        @ExcludeMissing
+        fun _conditions(): JsonField<JourneyConditionsField> = conditions
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [JourneyAddToDigestNode].
+             *
+             * The following fields are required:
+             * ```java
+             * .subscriptionTopicId()
+             * .type()
+             * ```
+             */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [JourneyAddToDigestNode]. */
+        class Builder internal constructor() {
+
+            private var subscriptionTopicId: JsonField<String>? = null
+            private var type: JsonField<Type>? = null
+            private var id: JsonField<String> = JsonMissing.of()
+            private var conditions: JsonField<JourneyConditionsField> = JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(journeyAddToDigestNode: JourneyAddToDigestNode) = apply {
+                subscriptionTopicId = journeyAddToDigestNode.subscriptionTopicId
+                type = journeyAddToDigestNode.type
+                id = journeyAddToDigestNode.id
+                conditions = journeyAddToDigestNode.conditions
+                additionalProperties = journeyAddToDigestNode.additionalProperties.toMutableMap()
+            }
+
+            /** The subscription topic that owns the digest the event is added to. */
+            fun subscriptionTopicId(subscriptionTopicId: String) =
+                subscriptionTopicId(JsonField.of(subscriptionTopicId))
+
+            /**
+             * Sets [Builder.subscriptionTopicId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.subscriptionTopicId] with a well-typed [String]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun subscriptionTopicId(subscriptionTopicId: JsonField<String>) = apply {
+                this.subscriptionTopicId = subscriptionTopicId
+            }
+
+            fun type(type: Type) = type(JsonField.of(type))
+
+            /**
+             * Sets [Builder.type] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.type] with a well-typed [Type] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun type(type: JsonField<Type>) = apply { this.type = type }
+
+            fun id(id: String) = id(JsonField.of(id))
+
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun id(id: JsonField<String>) = apply { this.id = id }
+
+            /**
+             * Condition spec for a journey node. Accepts a single condition atom, an AND/OR group,
+             * or an AND/OR nested group. Omit the `conditions` property entirely to express "no
+             * conditions".
+             */
+            fun conditions(conditions: JourneyConditionsField) =
+                conditions(JsonField.of(conditions))
+
+            /**
+             * Sets [Builder.conditions] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.conditions] with a well-typed
+             * [JourneyConditionsField] value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun conditions(conditions: JsonField<JourneyConditionsField>) = apply {
+                this.conditions = conditions
+            }
+
+            /**
+             * Alias for calling [conditions] with
+             * `JourneyConditionsField.ofConditionAtom(conditionAtom)`.
+             */
+            fun conditionsOfConditionAtom(conditionAtom: List<String>) =
+                conditions(JourneyConditionsField.ofConditionAtom(conditionAtom))
+
+            /**
+             * Alias for calling [conditions] with
+             * `JourneyConditionsField.ofConditionGroup(conditionGroup)`.
+             */
+            fun conditions(conditionGroup: JourneyConditionGroup) =
+                conditions(JourneyConditionsField.ofConditionGroup(conditionGroup))
+
+            /**
+             * Alias for calling [conditions] with
+             * `JourneyConditionsField.ofConditionNestedGroup(conditionNestedGroup)`.
+             */
+            fun conditions(conditionNestedGroup: JourneyConditionNestedGroup) =
+                conditions(JourneyConditionsField.ofConditionNestedGroup(conditionNestedGroup))
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [JourneyAddToDigestNode].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .subscriptionTopicId()
+             * .type()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): JourneyAddToDigestNode =
+                JourneyAddToDigestNode(
+                    checkRequired("subscriptionTopicId", subscriptionTopicId),
+                    checkRequired("type", type),
+                    id,
+                    conditions,
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws CourierInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
+        fun validate(): JourneyAddToDigestNode = apply {
+            if (validated) {
+                return@apply
+            }
+
+            subscriptionTopicId()
+            type().validate()
+            id()
+            conditions().ifPresent { it.validate() }
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: CourierInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (subscriptionTopicId.asKnown().isPresent) 1 else 0) +
+                (type.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (id.asKnown().isPresent) 1 else 0) +
+                (conditions.asKnown().getOrNull()?.validity() ?: 0)
+
+        class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val ADD_TO_DIGEST = of("add-to-digest")
+
+                @JvmStatic fun of(value: String) = Type(JsonField.of(value))
+            }
+
+            /** An enum containing [Type]'s known values. */
+            enum class Known {
+                ADD_TO_DIGEST
+            }
+
+            /**
+             * An enum containing [Type]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [Type] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                ADD_TO_DIGEST,
+                /** An enum member indicating that [Type] was instantiated with an unknown value. */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    ADD_TO_DIGEST -> Value.ADD_TO_DIGEST
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws CourierInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    ADD_TO_DIGEST -> Known.ADD_TO_DIGEST
+                    else -> throw CourierInvalidDataException("Unknown Type: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws CourierInvalidDataException if this class instance's value does not have the
+             *   expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    CourierInvalidDataException("Value is not a String")
+                }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws CourierInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
+            fun validate(): Type = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: CourierInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Type && value == other.value
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is JourneyAddToDigestNode &&
+                subscriptionTopicId == other.subscriptionTopicId &&
+                type == other.type &&
+                id == other.id &&
+                conditions == other.conditions &&
+                additionalProperties == other.additionalProperties
+        }
+
+        private val hashCode: Int by lazy {
+            Objects.hash(subscriptionTopicId, type, id, conditions, additionalProperties)
+        }
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "JourneyAddToDigestNode{subscriptionTopicId=$subscriptionTopicId, type=$type, id=$id, conditions=$conditions, additionalProperties=$additionalProperties}"
+    }
+
+    /**
      * Branch node. Routes to the first entry in `paths[]` whose `conditions` match, else falls
      * through to `default.nodes`.
      */
@@ -2364,6 +2858,10 @@ private constructor(
                 /** Alias for calling [addNode] with `JourneyNode.ofBatch(batch)`. */
                 fun addNode(batch: JourneyBatchNode) = addNode(JourneyNode.ofBatch(batch))
 
+                /** Alias for calling [addNode] with `JourneyNode.ofAddToDigest(addToDigest)`. */
+                fun addNode(addToDigest: JourneyAddToDigestNode) =
+                    addNode(JourneyNode.ofAddToDigest(addToDigest))
+
                 /** Alias for calling [addNode] with `JourneyNode.ofExit(exit)`. */
                 fun addNode(exit: JourneyExitNode) = addNode(JourneyNode.ofExit(exit))
 
@@ -2714,6 +3212,10 @@ private constructor(
 
                 /** Alias for calling [addNode] with `JourneyNode.ofBatch(batch)`. */
                 fun addNode(batch: JourneyBatchNode) = addNode(JourneyNode.ofBatch(batch))
+
+                /** Alias for calling [addNode] with `JourneyNode.ofAddToDigest(addToDigest)`. */
+                fun addNode(addToDigest: JourneyAddToDigestNode) =
+                    addNode(JourneyNode.ofAddToDigest(addToDigest))
 
                 /** Alias for calling [addNode] with `JourneyNode.ofExit(exit)`. */
                 fun addNode(exit: JourneyExitNode) = addNode(JourneyNode.ofExit(exit))
