@@ -13,8 +13,13 @@ import com.courier.models.journeys.templates.TemplateCreateParams
 import com.courier.models.journeys.templates.TemplateListParams
 import com.courier.models.journeys.templates.TemplateListVersionsParams
 import com.courier.models.journeys.templates.TemplatePublishParams
+import com.courier.models.journeys.templates.TemplatePutContentParams
+import com.courier.models.journeys.templates.TemplatePutLocaleParams
 import com.courier.models.journeys.templates.TemplateReplaceParams
+import com.courier.models.journeys.templates.TemplateRetrieveContentParams
 import com.courier.models.journeys.templates.TemplateRetrieveParams
+import com.courier.models.notifications.NotificationContentGetResponse
+import com.courier.models.notifications.NotificationContentMutationResponse
 import com.courier.models.notifications.NotificationTemplateVersionListResponse
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
@@ -205,6 +210,66 @@ interface TemplateServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Void?>
 
+    /**
+     * Replace the elemental content of a journey-scoped notification template. Overwrites all
+     * elements in the template draft with the provided content.
+     */
+    fun putContent(
+        notificationId: String,
+        params: TemplatePutContentParams,
+    ): CompletableFuture<NotificationContentMutationResponse> =
+        putContent(notificationId, params, RequestOptions.none())
+
+    /** @see putContent */
+    fun putContent(
+        notificationId: String,
+        params: TemplatePutContentParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<NotificationContentMutationResponse> =
+        putContent(params.toBuilder().notificationId(notificationId).build(), requestOptions)
+
+    /** @see putContent */
+    fun putContent(
+        params: TemplatePutContentParams
+    ): CompletableFuture<NotificationContentMutationResponse> =
+        putContent(params, RequestOptions.none())
+
+    /** @see putContent */
+    fun putContent(
+        params: TemplatePutContentParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<NotificationContentMutationResponse>
+
+    /**
+     * Set locale-specific content overrides for a journey-scoped notification template. Each
+     * element override must reference an existing element by ID.
+     */
+    fun putLocale(
+        localeId: String,
+        params: TemplatePutLocaleParams,
+    ): CompletableFuture<NotificationContentMutationResponse> =
+        putLocale(localeId, params, RequestOptions.none())
+
+    /** @see putLocale */
+    fun putLocale(
+        localeId: String,
+        params: TemplatePutLocaleParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<NotificationContentMutationResponse> =
+        putLocale(params.toBuilder().localeId(localeId).build(), requestOptions)
+
+    /** @see putLocale */
+    fun putLocale(
+        params: TemplatePutLocaleParams
+    ): CompletableFuture<NotificationContentMutationResponse> =
+        putLocale(params, RequestOptions.none())
+
+    /** @see putLocale */
+    fun putLocale(
+        params: TemplatePutLocaleParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<NotificationContentMutationResponse>
+
     /** Replace the journey-scoped notification template draft. */
     fun replace(
         notificationId: String,
@@ -229,6 +294,37 @@ interface TemplateServiceAsync {
         params: TemplateReplaceParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<JourneyTemplateGetResponse>
+
+    /**
+     * Retrieve the elemental content of a journey-scoped notification template. The response
+     * contains the versioned elements with their content checksums. Pass `?version=draft` (default
+     * `published`) to retrieve the working draft, or `?version=vN` for a historical version.
+     */
+    fun retrieveContent(
+        notificationId: String,
+        params: TemplateRetrieveContentParams,
+    ): CompletableFuture<NotificationContentGetResponse> =
+        retrieveContent(notificationId, params, RequestOptions.none())
+
+    /** @see retrieveContent */
+    fun retrieveContent(
+        notificationId: String,
+        params: TemplateRetrieveContentParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<NotificationContentGetResponse> =
+        retrieveContent(params.toBuilder().notificationId(notificationId).build(), requestOptions)
+
+    /** @see retrieveContent */
+    fun retrieveContent(
+        params: TemplateRetrieveContentParams
+    ): CompletableFuture<NotificationContentGetResponse> =
+        retrieveContent(params, RequestOptions.none())
+
+    /** @see retrieveContent */
+    fun retrieveContent(
+        params: TemplateRetrieveContentParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<NotificationContentGetResponse>
 
     /**
      * A view of [TemplateServiceAsync] that provides access to raw HTTP responses for each method.
@@ -435,6 +531,68 @@ interface TemplateServiceAsync {
         ): CompletableFuture<HttpResponse>
 
         /**
+         * Returns a raw HTTP response for `put
+         * /journeys/{templateId}/templates/{notificationId}/content`, but is otherwise the same as
+         * [TemplateServiceAsync.putContent].
+         */
+        fun putContent(
+            notificationId: String,
+            params: TemplatePutContentParams,
+        ): CompletableFuture<HttpResponseFor<NotificationContentMutationResponse>> =
+            putContent(notificationId, params, RequestOptions.none())
+
+        /** @see putContent */
+        fun putContent(
+            notificationId: String,
+            params: TemplatePutContentParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<NotificationContentMutationResponse>> =
+            putContent(params.toBuilder().notificationId(notificationId).build(), requestOptions)
+
+        /** @see putContent */
+        fun putContent(
+            params: TemplatePutContentParams
+        ): CompletableFuture<HttpResponseFor<NotificationContentMutationResponse>> =
+            putContent(params, RequestOptions.none())
+
+        /** @see putContent */
+        fun putContent(
+            params: TemplatePutContentParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<NotificationContentMutationResponse>>
+
+        /**
+         * Returns a raw HTTP response for `put
+         * /journeys/{templateId}/templates/{notificationId}/locales/{localeId}`, but is otherwise
+         * the same as [TemplateServiceAsync.putLocale].
+         */
+        fun putLocale(
+            localeId: String,
+            params: TemplatePutLocaleParams,
+        ): CompletableFuture<HttpResponseFor<NotificationContentMutationResponse>> =
+            putLocale(localeId, params, RequestOptions.none())
+
+        /** @see putLocale */
+        fun putLocale(
+            localeId: String,
+            params: TemplatePutLocaleParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<NotificationContentMutationResponse>> =
+            putLocale(params.toBuilder().localeId(localeId).build(), requestOptions)
+
+        /** @see putLocale */
+        fun putLocale(
+            params: TemplatePutLocaleParams
+        ): CompletableFuture<HttpResponseFor<NotificationContentMutationResponse>> =
+            putLocale(params, RequestOptions.none())
+
+        /** @see putLocale */
+        fun putLocale(
+            params: TemplatePutLocaleParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<NotificationContentMutationResponse>>
+
+        /**
          * Returns a raw HTTP response for `put /journeys/{templateId}/templates/{notificationId}`,
          * but is otherwise the same as [TemplateServiceAsync.replace].
          */
@@ -463,5 +621,39 @@ interface TemplateServiceAsync {
             params: TemplateReplaceParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<JourneyTemplateGetResponse>>
+
+        /**
+         * Returns a raw HTTP response for `get
+         * /journeys/{templateId}/templates/{notificationId}/content`, but is otherwise the same as
+         * [TemplateServiceAsync.retrieveContent].
+         */
+        fun retrieveContent(
+            notificationId: String,
+            params: TemplateRetrieveContentParams,
+        ): CompletableFuture<HttpResponseFor<NotificationContentGetResponse>> =
+            retrieveContent(notificationId, params, RequestOptions.none())
+
+        /** @see retrieveContent */
+        fun retrieveContent(
+            notificationId: String,
+            params: TemplateRetrieveContentParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<NotificationContentGetResponse>> =
+            retrieveContent(
+                params.toBuilder().notificationId(notificationId).build(),
+                requestOptions,
+            )
+
+        /** @see retrieveContent */
+        fun retrieveContent(
+            params: TemplateRetrieveContentParams
+        ): CompletableFuture<HttpResponseFor<NotificationContentGetResponse>> =
+            retrieveContent(params, RequestOptions.none())
+
+        /** @see retrieveContent */
+        fun retrieveContent(
+            params: TemplateRetrieveContentParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<NotificationContentGetResponse>>
     }
 }

@@ -24,8 +24,13 @@ import com.courier.models.journeys.templates.TemplateCreateParams
 import com.courier.models.journeys.templates.TemplateListParams
 import com.courier.models.journeys.templates.TemplateListVersionsParams
 import com.courier.models.journeys.templates.TemplatePublishParams
+import com.courier.models.journeys.templates.TemplatePutContentParams
+import com.courier.models.journeys.templates.TemplatePutLocaleParams
 import com.courier.models.journeys.templates.TemplateReplaceParams
+import com.courier.models.journeys.templates.TemplateRetrieveContentParams
 import com.courier.models.journeys.templates.TemplateRetrieveParams
+import com.courier.models.notifications.NotificationContentGetResponse
+import com.courier.models.notifications.NotificationContentMutationResponse
 import com.courier.models.notifications.NotificationTemplateVersionListResponse
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
@@ -80,12 +85,33 @@ class TemplateServiceImpl internal constructor(private val clientOptions: Client
         withRawResponse().publish(params, requestOptions)
     }
 
+    override fun putContent(
+        params: TemplatePutContentParams,
+        requestOptions: RequestOptions,
+    ): NotificationContentMutationResponse =
+        // put /journeys/{templateId}/templates/{notificationId}/content
+        withRawResponse().putContent(params, requestOptions).parse()
+
+    override fun putLocale(
+        params: TemplatePutLocaleParams,
+        requestOptions: RequestOptions,
+    ): NotificationContentMutationResponse =
+        // put /journeys/{templateId}/templates/{notificationId}/locales/{localeId}
+        withRawResponse().putLocale(params, requestOptions).parse()
+
     override fun replace(
         params: TemplateReplaceParams,
         requestOptions: RequestOptions,
     ): JourneyTemplateGetResponse =
         // put /journeys/{templateId}/templates/{notificationId}
         withRawResponse().replace(params, requestOptions).parse()
+
+    override fun retrieveContent(
+        params: TemplateRetrieveContentParams,
+        requestOptions: RequestOptions,
+    ): NotificationContentGetResponse =
+        // get /journeys/{templateId}/templates/{notificationId}/content
+        withRawResponse().retrieveContent(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         TemplateService.WithRawResponse {
@@ -291,6 +317,81 @@ class TemplateServiceImpl internal constructor(private val clientOptions: Client
             }
         }
 
+        private val putContentHandler: Handler<NotificationContentMutationResponse> =
+            jsonHandler<NotificationContentMutationResponse>(clientOptions.jsonMapper)
+
+        override fun putContent(
+            params: TemplatePutContentParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<NotificationContentMutationResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("notificationId", params.notificationId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PUT)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments(
+                        "journeys",
+                        params._pathParam(0),
+                        "templates",
+                        params._pathParam(1),
+                        "content",
+                    )
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { putContentHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val putLocaleHandler: Handler<NotificationContentMutationResponse> =
+            jsonHandler<NotificationContentMutationResponse>(clientOptions.jsonMapper)
+
+        override fun putLocale(
+            params: TemplatePutLocaleParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<NotificationContentMutationResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("localeId", params.localeId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PUT)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments(
+                        "journeys",
+                        params._pathParam(0),
+                        "templates",
+                        params._pathParam(1),
+                        "locales",
+                        params._pathParam(2),
+                    )
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { putLocaleHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
         private val replaceHandler: Handler<JourneyTemplateGetResponse> =
             jsonHandler<JourneyTemplateGetResponse>(clientOptions.jsonMapper)
 
@@ -319,6 +420,42 @@ class TemplateServiceImpl internal constructor(private val clientOptions: Client
             return errorHandler.handle(response).parseable {
                 response
                     .use { replaceHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val retrieveContentHandler: Handler<NotificationContentGetResponse> =
+            jsonHandler<NotificationContentGetResponse>(clientOptions.jsonMapper)
+
+        override fun retrieveContent(
+            params: TemplateRetrieveContentParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<NotificationContentGetResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("notificationId", params.notificationId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments(
+                        "journeys",
+                        params._pathParam(0),
+                        "templates",
+                        params._pathParam(1),
+                        "content",
+                    )
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { retrieveContentHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()
