@@ -297,8 +297,9 @@ interface TemplateServiceAsync {
 
     /**
      * Retrieve the elemental content of a journey-scoped notification template. The response
-     * contains the versioned elements with their content checksums. Pass `?version=draft` (default
-     * `published`) to retrieve the working draft, or `?version=vN` for a historical version.
+     * contains the versioned elements along with their content checksums, which can be used to
+     * detect changes between versions. Pass `?version=draft` (default `published`) to retrieve the
+     * working draft, or `?version=vN` for a historical version.
      */
     fun retrieveContent(
         notificationId: String,
