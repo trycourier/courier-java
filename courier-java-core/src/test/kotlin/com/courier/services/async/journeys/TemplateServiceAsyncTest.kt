@@ -3,6 +3,7 @@
 package com.courier.services.async.journeys
 
 import com.courier.client.okhttp.CourierOkHttpClientAsync
+import com.courier.models.ElementalChannelNodeWithType
 import com.courier.models.ElementalTextNodeWithType
 import com.courier.models.journeys.JourneyTemplateCreateRequest
 import com.courier.models.journeys.JourneyTemplatePublishRequest
@@ -12,8 +13,14 @@ import com.courier.models.journeys.templates.TemplateCreateParams
 import com.courier.models.journeys.templates.TemplateListParams
 import com.courier.models.journeys.templates.TemplateListVersionsParams
 import com.courier.models.journeys.templates.TemplatePublishParams
+import com.courier.models.journeys.templates.TemplatePutContentParams
+import com.courier.models.journeys.templates.TemplatePutLocaleParams
 import com.courier.models.journeys.templates.TemplateReplaceParams
+import com.courier.models.journeys.templates.TemplateRetrieveContentParams
 import com.courier.models.journeys.templates.TemplateRetrieveParams
+import com.courier.models.notifications.NotificationContentPutRequest
+import com.courier.models.notifications.NotificationLocalePutRequest
+import com.courier.models.notifications.NotificationTemplateState
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
@@ -165,6 +172,69 @@ internal class TemplateServiceAsyncTest {
 
     @Disabled("Mock server tests are disabled")
     @Test
+    fun putContent() {
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val templateServiceAsync = client.journeys().templates()
+
+        val notificationContentMutationResponseFuture =
+            templateServiceAsync.putContent(
+                TemplatePutContentParams.builder()
+                    .templateId("x")
+                    .notificationId("x")
+                    .notificationContentPutRequest(
+                        NotificationContentPutRequest.builder()
+                            .content(
+                                NotificationContentPutRequest.Content.builder()
+                                    .addElement(
+                                        ElementalChannelNodeWithType.builder()
+                                            .type(ElementalChannelNodeWithType.Type.CHANNEL)
+                                            .build()
+                                    )
+                                    .version("2022-01-01")
+                                    .build()
+                            )
+                            .state(NotificationTemplateState.DRAFT)
+                            .build()
+                    )
+                    .build()
+            )
+
+        val notificationContentMutationResponse = notificationContentMutationResponseFuture.get()
+        notificationContentMutationResponse.validate()
+    }
+
+    @Disabled("Mock server tests are disabled")
+    @Test
+    fun putLocale() {
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val templateServiceAsync = client.journeys().templates()
+
+        val notificationContentMutationResponseFuture =
+            templateServiceAsync.putLocale(
+                TemplatePutLocaleParams.builder()
+                    .templateId("x")
+                    .notificationId("x")
+                    .localeId("x")
+                    .notificationLocalePutRequest(
+                        NotificationLocalePutRequest.builder()
+                            .addElement(
+                                NotificationLocalePutRequest.Element.builder().id("elem_1").build()
+                            )
+                            .addElement(
+                                NotificationLocalePutRequest.Element.builder().id("elem_2").build()
+                            )
+                            .state(NotificationTemplateState.DRAFT)
+                            .build()
+                    )
+                    .build()
+            )
+
+        val notificationContentMutationResponse = notificationContentMutationResponseFuture.get()
+        notificationContentMutationResponse.validate()
+    }
+
+    @Disabled("Mock server tests are disabled")
+    @Test
     fun replace() {
         val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val templateServiceAsync = client.journeys().templates()
@@ -224,5 +294,24 @@ internal class TemplateServiceAsyncTest {
 
         val journeyTemplateGetResponse = journeyTemplateGetResponseFuture.get()
         journeyTemplateGetResponse.validate()
+    }
+
+    @Disabled("Mock server tests are disabled")
+    @Test
+    fun retrieveContent() {
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val templateServiceAsync = client.journeys().templates()
+
+        val notificationContentGetResponseFuture =
+            templateServiceAsync.retrieveContent(
+                TemplateRetrieveContentParams.builder()
+                    .templateId("x")
+                    .notificationId("x")
+                    .version("version")
+                    .build()
+            )
+
+        val notificationContentGetResponse = notificationContentGetResponseFuture.get()
+        notificationContentGetResponse.validate()
     }
 }

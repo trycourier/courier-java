@@ -13,8 +13,13 @@ import com.courier.models.journeys.templates.TemplateCreateParams
 import com.courier.models.journeys.templates.TemplateListParams
 import com.courier.models.journeys.templates.TemplateListVersionsParams
 import com.courier.models.journeys.templates.TemplatePublishParams
+import com.courier.models.journeys.templates.TemplatePutContentParams
+import com.courier.models.journeys.templates.TemplatePutLocaleParams
 import com.courier.models.journeys.templates.TemplateReplaceParams
+import com.courier.models.journeys.templates.TemplateRetrieveContentParams
 import com.courier.models.journeys.templates.TemplateRetrieveParams
+import com.courier.models.notifications.NotificationContentGetResponse
+import com.courier.models.notifications.NotificationContentMutationResponse
 import com.courier.models.notifications.NotificationTemplateVersionListResponse
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
@@ -191,6 +196,61 @@ interface TemplateService {
         requestOptions: RequestOptions = RequestOptions.none(),
     )
 
+    /**
+     * Replace the elemental content of a journey-scoped notification template. Overwrites all
+     * elements in the template draft with the provided content.
+     */
+    fun putContent(
+        notificationId: String,
+        params: TemplatePutContentParams,
+    ): NotificationContentMutationResponse =
+        putContent(notificationId, params, RequestOptions.none())
+
+    /** @see putContent */
+    fun putContent(
+        notificationId: String,
+        params: TemplatePutContentParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): NotificationContentMutationResponse =
+        putContent(params.toBuilder().notificationId(notificationId).build(), requestOptions)
+
+    /** @see putContent */
+    fun putContent(params: TemplatePutContentParams): NotificationContentMutationResponse =
+        putContent(params, RequestOptions.none())
+
+    /** @see putContent */
+    fun putContent(
+        params: TemplatePutContentParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): NotificationContentMutationResponse
+
+    /**
+     * Set locale-specific content overrides for a journey-scoped notification template. Each
+     * element override must reference an existing element by ID.
+     */
+    fun putLocale(
+        localeId: String,
+        params: TemplatePutLocaleParams,
+    ): NotificationContentMutationResponse = putLocale(localeId, params, RequestOptions.none())
+
+    /** @see putLocale */
+    fun putLocale(
+        localeId: String,
+        params: TemplatePutLocaleParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): NotificationContentMutationResponse =
+        putLocale(params.toBuilder().localeId(localeId).build(), requestOptions)
+
+    /** @see putLocale */
+    fun putLocale(params: TemplatePutLocaleParams): NotificationContentMutationResponse =
+        putLocale(params, RequestOptions.none())
+
+    /** @see putLocale */
+    fun putLocale(
+        params: TemplatePutLocaleParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): NotificationContentMutationResponse
+
     /** Replace the journey-scoped notification template draft. */
     fun replace(notificationId: String, params: TemplateReplaceParams): JourneyTemplateGetResponse =
         replace(notificationId, params, RequestOptions.none())
@@ -212,6 +272,36 @@ interface TemplateService {
         params: TemplateReplaceParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): JourneyTemplateGetResponse
+
+    /**
+     * Retrieve the elemental content of a journey-scoped notification template. The response
+     * contains the versioned elements along with their content checksums, which can be used to
+     * detect changes between versions. Pass `?version=draft` (default `published`) to retrieve the
+     * working draft, or `?version=vN` for a historical version.
+     */
+    fun retrieveContent(
+        notificationId: String,
+        params: TemplateRetrieveContentParams,
+    ): NotificationContentGetResponse =
+        retrieveContent(notificationId, params, RequestOptions.none())
+
+    /** @see retrieveContent */
+    fun retrieveContent(
+        notificationId: String,
+        params: TemplateRetrieveContentParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): NotificationContentGetResponse =
+        retrieveContent(params.toBuilder().notificationId(notificationId).build(), requestOptions)
+
+    /** @see retrieveContent */
+    fun retrieveContent(params: TemplateRetrieveContentParams): NotificationContentGetResponse =
+        retrieveContent(params, RequestOptions.none())
+
+    /** @see retrieveContent */
+    fun retrieveContent(
+        params: TemplateRetrieveContentParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): NotificationContentGetResponse
 
     /** A view of [TemplateService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -428,6 +518,76 @@ interface TemplateService {
         ): HttpResponse
 
         /**
+         * Returns a raw HTTP response for `put
+         * /journeys/{templateId}/templates/{notificationId}/content`, but is otherwise the same as
+         * [TemplateService.putContent].
+         */
+        @MustBeClosed
+        fun putContent(
+            notificationId: String,
+            params: TemplatePutContentParams,
+        ): HttpResponseFor<NotificationContentMutationResponse> =
+            putContent(notificationId, params, RequestOptions.none())
+
+        /** @see putContent */
+        @MustBeClosed
+        fun putContent(
+            notificationId: String,
+            params: TemplatePutContentParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<NotificationContentMutationResponse> =
+            putContent(params.toBuilder().notificationId(notificationId).build(), requestOptions)
+
+        /** @see putContent */
+        @MustBeClosed
+        fun putContent(
+            params: TemplatePutContentParams
+        ): HttpResponseFor<NotificationContentMutationResponse> =
+            putContent(params, RequestOptions.none())
+
+        /** @see putContent */
+        @MustBeClosed
+        fun putContent(
+            params: TemplatePutContentParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<NotificationContentMutationResponse>
+
+        /**
+         * Returns a raw HTTP response for `put
+         * /journeys/{templateId}/templates/{notificationId}/locales/{localeId}`, but is otherwise
+         * the same as [TemplateService.putLocale].
+         */
+        @MustBeClosed
+        fun putLocale(
+            localeId: String,
+            params: TemplatePutLocaleParams,
+        ): HttpResponseFor<NotificationContentMutationResponse> =
+            putLocale(localeId, params, RequestOptions.none())
+
+        /** @see putLocale */
+        @MustBeClosed
+        fun putLocale(
+            localeId: String,
+            params: TemplatePutLocaleParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<NotificationContentMutationResponse> =
+            putLocale(params.toBuilder().localeId(localeId).build(), requestOptions)
+
+        /** @see putLocale */
+        @MustBeClosed
+        fun putLocale(
+            params: TemplatePutLocaleParams
+        ): HttpResponseFor<NotificationContentMutationResponse> =
+            putLocale(params, RequestOptions.none())
+
+        /** @see putLocale */
+        @MustBeClosed
+        fun putLocale(
+            params: TemplatePutLocaleParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<NotificationContentMutationResponse>
+
+        /**
          * Returns a raw HTTP response for `put /journeys/{templateId}/templates/{notificationId}`,
          * but is otherwise the same as [TemplateService.replace].
          */
@@ -458,5 +618,43 @@ interface TemplateService {
             params: TemplateReplaceParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<JourneyTemplateGetResponse>
+
+        /**
+         * Returns a raw HTTP response for `get
+         * /journeys/{templateId}/templates/{notificationId}/content`, but is otherwise the same as
+         * [TemplateService.retrieveContent].
+         */
+        @MustBeClosed
+        fun retrieveContent(
+            notificationId: String,
+            params: TemplateRetrieveContentParams,
+        ): HttpResponseFor<NotificationContentGetResponse> =
+            retrieveContent(notificationId, params, RequestOptions.none())
+
+        /** @see retrieveContent */
+        @MustBeClosed
+        fun retrieveContent(
+            notificationId: String,
+            params: TemplateRetrieveContentParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<NotificationContentGetResponse> =
+            retrieveContent(
+                params.toBuilder().notificationId(notificationId).build(),
+                requestOptions,
+            )
+
+        /** @see retrieveContent */
+        @MustBeClosed
+        fun retrieveContent(
+            params: TemplateRetrieveContentParams
+        ): HttpResponseFor<NotificationContentGetResponse> =
+            retrieveContent(params, RequestOptions.none())
+
+        /** @see retrieveContent */
+        @MustBeClosed
+        fun retrieveContent(
+            params: TemplateRetrieveContentParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<NotificationContentGetResponse>
     }
 }

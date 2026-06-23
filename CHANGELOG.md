@@ -1,5 +1,18 @@
 # Changelog
 
+## 4.17.0 (2026-06-23)
+
+Full Changelog: [v4.16.0...v4.17.0](https://github.com/trycourier/courier-java/compare/v4.16.0...v4.17.0)
+
+### Features
+
+* **journeys:** add content + locale endpoints to journey-scoped templates ([b454906](https://github.com/trycourier/courier-java/commit/b4549063b75fc2a81428388b88e3060313560a4d))
+
+
+### Documentation
+
+* **journeys:** clarify checksum usage + re-trigger docs sync for journey content endpoints ([3d0e613](https://github.com/trycourier/courier-java/commit/3d0e613cf81f619a84517be7365c263b079b53d1))
+
 ## 4.16.0 (2026-06-17)
 
 Full Changelog: [v4.15.0...v4.16.0](https://github.com/trycourier/courier-java/compare/v4.15.0...v4.16.0)
