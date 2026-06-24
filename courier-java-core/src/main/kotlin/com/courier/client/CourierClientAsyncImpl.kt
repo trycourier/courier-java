@@ -28,6 +28,8 @@ import com.courier.services.async.MessageServiceAsync
 import com.courier.services.async.MessageServiceAsyncImpl
 import com.courier.services.async.NotificationServiceAsync
 import com.courier.services.async.NotificationServiceAsyncImpl
+import com.courier.services.async.PreferenceSectionServiceAsync
+import com.courier.services.async.PreferenceSectionServiceAsyncImpl
 import com.courier.services.async.ProfileServiceAsync
 import com.courier.services.async.ProfileServiceAsyncImpl
 import com.courier.services.async.ProviderServiceAsync
@@ -119,6 +121,10 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
         RoutingStrategyServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
+    private val preferenceSections: PreferenceSectionServiceAsync by lazy {
+        PreferenceSectionServiceAsyncImpl(clientOptionsWithUserAgent)
+    }
+
     private val profiles: ProfileServiceAsync by lazy {
         ProfileServiceAsyncImpl(clientOptionsWithUserAgent)
     }
@@ -171,6 +177,8 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
     override fun notifications(): NotificationServiceAsync = notifications
 
     override fun routingStrategies(): RoutingStrategyServiceAsync = routingStrategies
+
+    override fun preferenceSections(): PreferenceSectionServiceAsync = preferenceSections
 
     override fun profiles(): ProfileServiceAsync = profiles
 
@@ -249,6 +257,10 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
             RoutingStrategyServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val preferenceSections: PreferenceSectionServiceAsync.WithRawResponse by lazy {
+            PreferenceSectionServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
         private val profiles: ProfileServiceAsync.WithRawResponse by lazy {
             ProfileServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
@@ -304,6 +316,9 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
 
         override fun routingStrategies(): RoutingStrategyServiceAsync.WithRawResponse =
             routingStrategies
+
+        override fun preferenceSections(): PreferenceSectionServiceAsync.WithRawResponse =
+            preferenceSections
 
         override fun profiles(): ProfileServiceAsync.WithRawResponse = profiles
 

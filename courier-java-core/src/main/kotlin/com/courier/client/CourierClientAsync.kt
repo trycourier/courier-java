@@ -15,6 +15,7 @@ import com.courier.services.async.JourneyServiceAsync
 import com.courier.services.async.ListServiceAsync
 import com.courier.services.async.MessageServiceAsync
 import com.courier.services.async.NotificationServiceAsync
+import com.courier.services.async.PreferenceSectionServiceAsync
 import com.courier.services.async.ProfileServiceAsync
 import com.courier.services.async.ProviderServiceAsync
 import com.courier.services.async.RequestServiceAsync
@@ -93,6 +94,8 @@ interface CourierClientAsync {
 
     fun routingStrategies(): RoutingStrategyServiceAsync
 
+    fun preferenceSections(): PreferenceSectionServiceAsync
+
     fun profiles(): ProfileServiceAsync
 
     fun tenants(): TenantServiceAsync
@@ -159,6 +162,8 @@ interface CourierClientAsync {
         fun notifications(): NotificationServiceAsync.WithRawResponse
 
         fun routingStrategies(): RoutingStrategyServiceAsync.WithRawResponse
+
+        fun preferenceSections(): PreferenceSectionServiceAsync.WithRawResponse
 
         fun profiles(): ProfileServiceAsync.WithRawResponse
 
