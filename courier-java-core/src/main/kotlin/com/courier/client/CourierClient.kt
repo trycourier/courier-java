@@ -15,6 +15,7 @@ import com.courier.services.blocking.JourneyService
 import com.courier.services.blocking.ListService
 import com.courier.services.blocking.MessageService
 import com.courier.services.blocking.NotificationService
+import com.courier.services.blocking.PreferenceSectionService
 import com.courier.services.blocking.ProfileService
 import com.courier.services.blocking.ProviderService
 import com.courier.services.blocking.RequestService
@@ -93,6 +94,8 @@ interface CourierClient {
 
     fun routingStrategies(): RoutingStrategyService
 
+    fun preferenceSections(): PreferenceSectionService
+
     fun profiles(): ProfileService
 
     fun tenants(): TenantService
@@ -155,6 +158,8 @@ interface CourierClient {
         fun notifications(): NotificationService.WithRawResponse
 
         fun routingStrategies(): RoutingStrategyService.WithRawResponse
+
+        fun preferenceSections(): PreferenceSectionService.WithRawResponse
 
         fun profiles(): ProfileService.WithRawResponse
 
