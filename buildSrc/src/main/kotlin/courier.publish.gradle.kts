@@ -43,7 +43,7 @@ configure<MavenPublishBaseExtension> {
 
     pom {
         name.set("Courier")
-        description.set("The Courier REST API.")
+        description.set("The Courier REST API for sending and managing notifications across channels.")
         url.set("https://www.courier.com/docs")
 
         licenses {

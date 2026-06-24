@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.18.1 (2026-06-24)
+
+Full Changelog: [v4.18.0...v4.18.1](https://github.com/trycourier/courier-java/compare/v4.18.0...v4.18.1)
+
 ## 4.18.0 (2026-06-24)
 
 Full Changelog: [v4.17.0...v4.18.0](https://github.com/trycourier/courier-java/compare/v4.17.0...v4.18.0)
