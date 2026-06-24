@@ -28,6 +28,8 @@ import com.courier.services.blocking.MessageService
 import com.courier.services.blocking.MessageServiceImpl
 import com.courier.services.blocking.NotificationService
 import com.courier.services.blocking.NotificationServiceImpl
+import com.courier.services.blocking.PreferenceSectionService
+import com.courier.services.blocking.PreferenceSectionServiceImpl
 import com.courier.services.blocking.ProfileService
 import com.courier.services.blocking.ProfileServiceImpl
 import com.courier.services.blocking.ProviderService
@@ -107,6 +109,10 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
         RoutingStrategyServiceImpl(clientOptionsWithUserAgent)
     }
 
+    private val preferenceSections: PreferenceSectionService by lazy {
+        PreferenceSectionServiceImpl(clientOptionsWithUserAgent)
+    }
+
     private val profiles: ProfileService by lazy { ProfileServiceImpl(clientOptionsWithUserAgent) }
 
     private val tenants: TenantService by lazy { TenantServiceImpl(clientOptionsWithUserAgent) }
@@ -155,6 +161,8 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
     override fun notifications(): NotificationService = notifications
 
     override fun routingStrategies(): RoutingStrategyService = routingStrategies
+
+    override fun preferenceSections(): PreferenceSectionService = preferenceSections
 
     override fun profiles(): ProfileService = profiles
 
@@ -233,6 +241,10 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
             RoutingStrategyServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val preferenceSections: PreferenceSectionService.WithRawResponse by lazy {
+            PreferenceSectionServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
         private val profiles: ProfileService.WithRawResponse by lazy {
             ProfileServiceImpl.WithRawResponseImpl(clientOptions)
         }
@@ -287,6 +299,9 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
         override fun notifications(): NotificationService.WithRawResponse = notifications
 
         override fun routingStrategies(): RoutingStrategyService.WithRawResponse = routingStrategies
+
+        override fun preferenceSections(): PreferenceSectionService.WithRawResponse =
+            preferenceSections
 
         override fun profiles(): ProfileService.WithRawResponse = profiles
 
