@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.18.0 (2026-06-24)
+
+Full Changelog: [v4.17.0...v4.18.0](https://github.com/trycourier/courier-java/compare/v4.17.0...v4.18.0)
+
+### Features
+
+* **preferences:** workspace preference sections & nested topics endpoints ([a2e9d20](https://github.com/trycourier/courier-java/commit/a2e9d20128590a3a1487ef3ac17a53c647d9ea14))
+
 ## 4.17.0 (2026-06-23)
 
 Full Changelog: [v4.16.0...v4.17.0](https://github.com/trycourier/courier-java/compare/v4.16.0...v4.17.0)
