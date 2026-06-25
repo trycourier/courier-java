@@ -15,7 +15,6 @@ import com.courier.services.blocking.JourneyService
 import com.courier.services.blocking.ListService
 import com.courier.services.blocking.MessageService
 import com.courier.services.blocking.NotificationService
-import com.courier.services.blocking.PreferenceSectionService
 import com.courier.services.blocking.ProfileService
 import com.courier.services.blocking.ProviderService
 import com.courier.services.blocking.RequestService
@@ -24,6 +23,7 @@ import com.courier.services.blocking.SendService
 import com.courier.services.blocking.TenantService
 import com.courier.services.blocking.TranslationService
 import com.courier.services.blocking.UserService
+import com.courier.services.blocking.WorkspacePreferenceService
 import java.util.function.Consumer
 
 /**
@@ -94,7 +94,7 @@ interface CourierClient {
 
     fun routingStrategies(): RoutingStrategyService
 
-    fun preferenceSections(): PreferenceSectionService
+    fun workspacePreferences(): WorkspacePreferenceService
 
     fun profiles(): ProfileService
 
@@ -159,7 +159,7 @@ interface CourierClient {
 
         fun routingStrategies(): RoutingStrategyService.WithRawResponse
 
-        fun preferenceSections(): PreferenceSectionService.WithRawResponse
+        fun workspacePreferences(): WorkspacePreferenceService.WithRawResponse
 
         fun profiles(): ProfileService.WithRawResponse
 
