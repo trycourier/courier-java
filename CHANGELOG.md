@@ -1,5 +1,16 @@
 # Changelog
 
+## 4.18.2 (2026-06-25)
+
+Full Changelog: [v4.18.1...v4.18.2](https://github.com/trycourier/courier-java/compare/v4.18.1...v4.18.2)
+
+### Documentation
+
+* **openapi:** add full response examples to every endpoint ([210ab8c](https://github.com/trycourier/courier-java/commit/210ab8c3f739ba985d644c099a910d491c4302f9))
+* **openapi:** reword Cancel Submission description ([8be16f8](https://github.com/trycourier/courier-java/commit/8be16f8740cc317d81f7a5ca3b3debaf746b073e))
+* **openapi:** reword Get Submission Checks description ([95daf0b](https://github.com/trycourier/courier-java/commit/95daf0b3f98a989a1c2c7cfc3b88c994936decb8))
+* **openapi:** reword Replace Submission Checks description ([878a8a7](https://github.com/trycourier/courier-java/commit/878a8a7cb71be98ed4490cfad61d4e611467dbfb))
+
 ## 4.18.1 (2026-06-24)
 
 Full Changelog: [v4.18.0...v4.18.1](https://github.com/trycourier/courier-java/compare/v4.18.0...v4.18.1)
