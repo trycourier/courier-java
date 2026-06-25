@@ -52,7 +52,7 @@ interface CheckServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CheckUpdateResponse>
 
-    /** Retrieve the checks for a notification template submission. */
+    /** Retrieve the submission checks for a notification template. */
     fun list(submissionId: String, params: CheckListParams): CompletableFuture<CheckListResponse> =
         list(submissionId, params, RequestOptions.none())
 
