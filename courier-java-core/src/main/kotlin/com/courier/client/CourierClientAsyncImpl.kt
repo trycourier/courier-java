@@ -28,8 +28,6 @@ import com.courier.services.async.MessageServiceAsync
 import com.courier.services.async.MessageServiceAsyncImpl
 import com.courier.services.async.NotificationServiceAsync
 import com.courier.services.async.NotificationServiceAsyncImpl
-import com.courier.services.async.PreferenceSectionServiceAsync
-import com.courier.services.async.PreferenceSectionServiceAsyncImpl
 import com.courier.services.async.ProfileServiceAsync
 import com.courier.services.async.ProfileServiceAsyncImpl
 import com.courier.services.async.ProviderServiceAsync
@@ -46,6 +44,8 @@ import com.courier.services.async.TranslationServiceAsync
 import com.courier.services.async.TranslationServiceAsyncImpl
 import com.courier.services.async.UserServiceAsync
 import com.courier.services.async.UserServiceAsyncImpl
+import com.courier.services.async.WorkspacePreferenceServiceAsync
+import com.courier.services.async.WorkspacePreferenceServiceAsyncImpl
 import java.util.function.Consumer
 
 class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : CourierClientAsync {
@@ -121,8 +121,8 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
         RoutingStrategyServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
-    private val preferenceSections: PreferenceSectionServiceAsync by lazy {
-        PreferenceSectionServiceAsyncImpl(clientOptionsWithUserAgent)
+    private val workspacePreferences: WorkspacePreferenceServiceAsync by lazy {
+        WorkspacePreferenceServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
     private val profiles: ProfileServiceAsync by lazy {
@@ -178,7 +178,7 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
 
     override fun routingStrategies(): RoutingStrategyServiceAsync = routingStrategies
 
-    override fun preferenceSections(): PreferenceSectionServiceAsync = preferenceSections
+    override fun workspacePreferences(): WorkspacePreferenceServiceAsync = workspacePreferences
 
     override fun profiles(): ProfileServiceAsync = profiles
 
@@ -257,8 +257,8 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
             RoutingStrategyServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
-        private val preferenceSections: PreferenceSectionServiceAsync.WithRawResponse by lazy {
-            PreferenceSectionServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        private val workspacePreferences: WorkspacePreferenceServiceAsync.WithRawResponse by lazy {
+            WorkspacePreferenceServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
         private val profiles: ProfileServiceAsync.WithRawResponse by lazy {
@@ -317,8 +317,8 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
         override fun routingStrategies(): RoutingStrategyServiceAsync.WithRawResponse =
             routingStrategies
 
-        override fun preferenceSections(): PreferenceSectionServiceAsync.WithRawResponse =
-            preferenceSections
+        override fun workspacePreferences(): WorkspacePreferenceServiceAsync.WithRawResponse =
+            workspacePreferences
 
         override fun profiles(): ProfileServiceAsync.WithRawResponse = profiles
 

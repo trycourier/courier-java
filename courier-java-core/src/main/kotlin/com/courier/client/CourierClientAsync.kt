@@ -15,7 +15,6 @@ import com.courier.services.async.JourneyServiceAsync
 import com.courier.services.async.ListServiceAsync
 import com.courier.services.async.MessageServiceAsync
 import com.courier.services.async.NotificationServiceAsync
-import com.courier.services.async.PreferenceSectionServiceAsync
 import com.courier.services.async.ProfileServiceAsync
 import com.courier.services.async.ProviderServiceAsync
 import com.courier.services.async.RequestServiceAsync
@@ -24,6 +23,7 @@ import com.courier.services.async.SendServiceAsync
 import com.courier.services.async.TenantServiceAsync
 import com.courier.services.async.TranslationServiceAsync
 import com.courier.services.async.UserServiceAsync
+import com.courier.services.async.WorkspacePreferenceServiceAsync
 import java.util.function.Consumer
 
 /**
@@ -94,7 +94,7 @@ interface CourierClientAsync {
 
     fun routingStrategies(): RoutingStrategyServiceAsync
 
-    fun preferenceSections(): PreferenceSectionServiceAsync
+    fun workspacePreferences(): WorkspacePreferenceServiceAsync
 
     fun profiles(): ProfileServiceAsync
 
@@ -163,7 +163,7 @@ interface CourierClientAsync {
 
         fun routingStrategies(): RoutingStrategyServiceAsync.WithRawResponse
 
-        fun preferenceSections(): PreferenceSectionServiceAsync.WithRawResponse
+        fun workspacePreferences(): WorkspacePreferenceServiceAsync.WithRawResponse
 
         fun profiles(): ProfileServiceAsync.WithRawResponse
 
