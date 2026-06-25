@@ -50,7 +50,7 @@ interface CheckService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CheckUpdateResponse
 
-    /** Retrieve the checks for a notification template submission. */
+    /** Retrieve the submission checks for a notification template. */
     fun list(submissionId: String, params: CheckListParams): CheckListResponse =
         list(submissionId, params, RequestOptions.none())
 
