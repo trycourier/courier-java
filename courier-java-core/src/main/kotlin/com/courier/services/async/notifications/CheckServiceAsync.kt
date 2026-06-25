@@ -28,7 +28,7 @@ interface CheckServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): CheckServiceAsync
 
-    /** Replace the checks for a notification template submission. */
+    /** Replace the submission checks for a notification template. */
     fun update(
         submissionId: String,
         params: CheckUpdateParams,

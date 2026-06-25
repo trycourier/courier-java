@@ -28,7 +28,7 @@ interface CheckService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): CheckService
 
-    /** Replace the checks for a notification template submission. */
+    /** Replace the submission checks for a notification template. */
     fun update(submissionId: String, params: CheckUpdateParams): CheckUpdateResponse =
         update(submissionId, params, RequestOptions.none())
 
