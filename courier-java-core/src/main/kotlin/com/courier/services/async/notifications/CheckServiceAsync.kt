@@ -74,7 +74,7 @@ interface CheckServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<CheckListResponse>
 
-    /** Cancel a notification template submission. */
+    /** Cancel a submission for a notification template. */
     fun delete(submissionId: String, params: CheckDeleteParams): CompletableFuture<Void?> =
         delete(submissionId, params, RequestOptions.none())
 

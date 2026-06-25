@@ -12,7 +12,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Cancel a notification template submission. */
+/** Cancel a submission for a notification template. */
 class CheckDeleteParams
 private constructor(
     private val id: String,

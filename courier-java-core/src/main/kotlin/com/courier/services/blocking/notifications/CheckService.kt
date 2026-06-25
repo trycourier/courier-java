@@ -71,7 +71,7 @@ interface CheckService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CheckListResponse
 
-    /** Cancel a notification template submission. */
+    /** Cancel a submission for a notification template. */
     fun delete(submissionId: String, params: CheckDeleteParams) =
         delete(submissionId, params, RequestOptions.none())
 
