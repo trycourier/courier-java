@@ -28,7 +28,7 @@ interface CheckService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): CheckService
 
-    /** Replace the checks for a notification template submission. */
+    /** Replace the submission checks for a notification template. */
     fun update(submissionId: String, params: CheckUpdateParams): CheckUpdateResponse =
         update(submissionId, params, RequestOptions.none())
 
@@ -50,7 +50,7 @@ interface CheckService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CheckUpdateResponse
 
-    /** Retrieve the checks for a notification template submission. */
+    /** Retrieve the submission checks for a notification template. */
     fun list(submissionId: String, params: CheckListParams): CheckListResponse =
         list(submissionId, params, RequestOptions.none())
 
@@ -71,7 +71,7 @@ interface CheckService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CheckListResponse
 
-    /** Cancel a notification template submission. */
+    /** Cancel a submission for a notification template. */
     fun delete(submissionId: String, params: CheckDeleteParams) =
         delete(submissionId, params, RequestOptions.none())
 

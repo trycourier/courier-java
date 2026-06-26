@@ -1,27 +1,21 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.models.notifications.checks
+package com.courier.models.workspacepreferences
 
 import com.courier.core.Params
-import com.courier.core.checkRequired
 import com.courier.core.http.Headers
 import com.courier.core.http.QueryParams
 import java.util.Objects
-import java.util.Optional
-import kotlin.jvm.optionals.getOrNull
 
-/** Retrieve the submission checks for a notification template. */
-class CheckListParams
+/**
+ * List the workspace's preferences. Each workspace preference embeds its topics. Scoped to the
+ * workspace of the API key.
+ */
+class WorkspacePreferenceListParams
 private constructor(
-    private val id: String,
-    private val submissionId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
-
-    fun id(): String = id
-
-    fun submissionId(): Optional<String> = Optional.ofNullable(submissionId)
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -33,39 +27,26 @@ private constructor(
 
     companion object {
 
+        @JvmStatic fun none(): WorkspacePreferenceListParams = builder().build()
+
         /**
-         * Returns a mutable builder for constructing an instance of [CheckListParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .id()
-         * ```
+         * Returns a mutable builder for constructing an instance of
+         * [WorkspacePreferenceListParams].
          */
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [CheckListParams]. */
+    /** A builder for [WorkspacePreferenceListParams]. */
     class Builder internal constructor() {
 
-        private var id: String? = null
-        private var submissionId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(checkListParams: CheckListParams) = apply {
-            id = checkListParams.id
-            submissionId = checkListParams.submissionId
-            additionalHeaders = checkListParams.additionalHeaders.toBuilder()
-            additionalQueryParams = checkListParams.additionalQueryParams.toBuilder()
+        internal fun from(workspacePreferenceListParams: WorkspacePreferenceListParams) = apply {
+            additionalHeaders = workspacePreferenceListParams.additionalHeaders.toBuilder()
+            additionalQueryParams = workspacePreferenceListParams.additionalQueryParams.toBuilder()
         }
-
-        fun id(id: String) = apply { this.id = id }
-
-        fun submissionId(submissionId: String?) = apply { this.submissionId = submissionId }
-
-        /** Alias for calling [Builder.submissionId] with `submissionId.orElse(null)`. */
-        fun submissionId(submissionId: Optional<String>) = submissionId(submissionId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -166,32 +147,13 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [CheckListParams].
+         * Returns an immutable instance of [WorkspacePreferenceListParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .id()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): CheckListParams =
-            CheckListParams(
-                checkRequired("id", id),
-                submissionId,
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
-            )
+        fun build(): WorkspacePreferenceListParams =
+            WorkspacePreferenceListParams(additionalHeaders.build(), additionalQueryParams.build())
     }
-
-    fun _pathParam(index: Int): String =
-        when (index) {
-            0 -> id
-            1 -> submissionId ?: ""
-            else -> ""
-        }
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -202,16 +164,13 @@ private constructor(
             return true
         }
 
-        return other is CheckListParams &&
-            id == other.id &&
-            submissionId == other.submissionId &&
+        return other is WorkspacePreferenceListParams &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int =
-        Objects.hash(id, submissionId, additionalHeaders, additionalQueryParams)
+    override fun hashCode(): Int = Objects.hash(additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "CheckListParams{id=$id, submissionId=$submissionId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "WorkspacePreferenceListParams{additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

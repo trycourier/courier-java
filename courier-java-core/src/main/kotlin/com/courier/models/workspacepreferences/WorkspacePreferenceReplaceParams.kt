@@ -1,7 +1,8 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.models.notifications.checks
+package com.courier.models.workspacepreferences
 
+import com.courier.core.JsonValue
 import com.courier.core.Params
 import com.courier.core.checkRequired
 import com.courier.core.http.Headers
@@ -10,18 +11,29 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Retrieve the submission checks for a notification template. */
-class CheckListParams
+/**
+ * Replace a workspace preference. Full document replacement; missing optional fields are cleared.
+ * Topics attached to the workspace preference are unaffected.
+ */
+class WorkspacePreferenceReplaceParams
 private constructor(
-    private val id: String,
-    private val submissionId: String?,
+    private val sectionId: String?,
+    private val workspacePreferenceReplaceRequest: WorkspacePreferenceReplaceRequest,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun id(): String = id
+    fun sectionId(): Optional<String> = Optional.ofNullable(sectionId)
 
-    fun submissionId(): Optional<String> = Optional.ofNullable(submissionId)
+    /**
+     * Request body for replacing a workspace preference. Full document replacement; missing
+     * optional fields are cleared.
+     */
+    fun workspacePreferenceReplaceRequest(): WorkspacePreferenceReplaceRequest =
+        workspacePreferenceReplaceRequest
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> =
+        workspacePreferenceReplaceRequest._additionalProperties()
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -34,38 +46,48 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [CheckListParams].
+         * Returns a mutable builder for constructing an instance of
+         * [WorkspacePreferenceReplaceParams].
          *
          * The following fields are required:
          * ```java
-         * .id()
+         * .workspacePreferenceReplaceRequest()
          * ```
          */
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [CheckListParams]. */
+    /** A builder for [WorkspacePreferenceReplaceParams]. */
     class Builder internal constructor() {
 
-        private var id: String? = null
-        private var submissionId: String? = null
+        private var sectionId: String? = null
+        private var workspacePreferenceReplaceRequest: WorkspacePreferenceReplaceRequest? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(checkListParams: CheckListParams) = apply {
-            id = checkListParams.id
-            submissionId = checkListParams.submissionId
-            additionalHeaders = checkListParams.additionalHeaders.toBuilder()
-            additionalQueryParams = checkListParams.additionalQueryParams.toBuilder()
-        }
+        internal fun from(workspacePreferenceReplaceParams: WorkspacePreferenceReplaceParams) =
+            apply {
+                sectionId = workspacePreferenceReplaceParams.sectionId
+                workspacePreferenceReplaceRequest =
+                    workspacePreferenceReplaceParams.workspacePreferenceReplaceRequest
+                additionalHeaders = workspacePreferenceReplaceParams.additionalHeaders.toBuilder()
+                additionalQueryParams =
+                    workspacePreferenceReplaceParams.additionalQueryParams.toBuilder()
+            }
 
-        fun id(id: String) = apply { this.id = id }
+        fun sectionId(sectionId: String?) = apply { this.sectionId = sectionId }
 
-        fun submissionId(submissionId: String?) = apply { this.submissionId = submissionId }
+        /** Alias for calling [Builder.sectionId] with `sectionId.orElse(null)`. */
+        fun sectionId(sectionId: Optional<String>) = sectionId(sectionId.getOrNull())
 
-        /** Alias for calling [Builder.submissionId] with `submissionId.orElse(null)`. */
-        fun submissionId(submissionId: Optional<String>) = submissionId(submissionId.getOrNull())
+        /**
+         * Request body for replacing a workspace preference. Full document replacement; missing
+         * optional fields are cleared.
+         */
+        fun workspacePreferenceReplaceRequest(
+            workspacePreferenceReplaceRequest: WorkspacePreferenceReplaceRequest
+        ) = apply { this.workspacePreferenceReplaceRequest = workspacePreferenceReplaceRequest }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -166,30 +188,34 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [CheckListParams].
+         * Returns an immutable instance of [WorkspacePreferenceReplaceParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
          * ```java
-         * .id()
+         * .workspacePreferenceReplaceRequest()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): CheckListParams =
-            CheckListParams(
-                checkRequired("id", id),
-                submissionId,
+        fun build(): WorkspacePreferenceReplaceParams =
+            WorkspacePreferenceReplaceParams(
+                sectionId,
+                checkRequired(
+                    "workspacePreferenceReplaceRequest",
+                    workspacePreferenceReplaceRequest,
+                ),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
     }
 
+    fun _body(): WorkspacePreferenceReplaceRequest = workspacePreferenceReplaceRequest
+
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> id
-            1 -> submissionId ?: ""
+            0 -> sectionId ?: ""
             else -> ""
         }
 
@@ -202,16 +228,21 @@ private constructor(
             return true
         }
 
-        return other is CheckListParams &&
-            id == other.id &&
-            submissionId == other.submissionId &&
+        return other is WorkspacePreferenceReplaceParams &&
+            sectionId == other.sectionId &&
+            workspacePreferenceReplaceRequest == other.workspacePreferenceReplaceRequest &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(id, submissionId, additionalHeaders, additionalQueryParams)
+        Objects.hash(
+            sectionId,
+            workspacePreferenceReplaceRequest,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
     override fun toString() =
-        "CheckListParams{id=$id, submissionId=$submissionId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "WorkspacePreferenceReplaceParams{sectionId=$sectionId, workspacePreferenceReplaceRequest=$workspacePreferenceReplaceRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

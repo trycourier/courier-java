@@ -1,27 +1,33 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.models.notifications.checks
+package com.courier.models.workspacepreferences.topics
 
+import com.courier.core.JsonValue
 import com.courier.core.Params
 import com.courier.core.checkRequired
 import com.courier.core.http.Headers
 import com.courier.core.http.QueryParams
+import com.courier.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Retrieve the submission checks for a notification template. */
-class CheckListParams
+/** Archive a topic and remove it from its workspace preference. Same 404 rules as GET. */
+class TopicArchiveParams
 private constructor(
-    private val id: String,
-    private val submissionId: String?,
+    private val sectionId: String,
+    private val topicId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
+    private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
-    fun id(): String = id
+    fun sectionId(): String = sectionId
 
-    fun submissionId(): Optional<String> = Optional.ofNullable(submissionId)
+    fun topicId(): Optional<String> = Optional.ofNullable(topicId)
+
+    /** Additional body properties to send with the request. */
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -34,38 +40,40 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [CheckListParams].
+         * Returns a mutable builder for constructing an instance of [TopicArchiveParams].
          *
          * The following fields are required:
          * ```java
-         * .id()
+         * .sectionId()
          * ```
          */
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [CheckListParams]. */
+    /** A builder for [TopicArchiveParams]. */
     class Builder internal constructor() {
 
-        private var id: String? = null
-        private var submissionId: String? = null
+        private var sectionId: String? = null
+        private var topicId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
+        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(checkListParams: CheckListParams) = apply {
-            id = checkListParams.id
-            submissionId = checkListParams.submissionId
-            additionalHeaders = checkListParams.additionalHeaders.toBuilder()
-            additionalQueryParams = checkListParams.additionalQueryParams.toBuilder()
+        internal fun from(topicArchiveParams: TopicArchiveParams) = apply {
+            sectionId = topicArchiveParams.sectionId
+            topicId = topicArchiveParams.topicId
+            additionalHeaders = topicArchiveParams.additionalHeaders.toBuilder()
+            additionalQueryParams = topicArchiveParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties = topicArchiveParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun id(id: String) = apply { this.id = id }
+        fun sectionId(sectionId: String) = apply { this.sectionId = sectionId }
 
-        fun submissionId(submissionId: String?) = apply { this.submissionId = submissionId }
+        fun topicId(topicId: String?) = apply { this.topicId = topicId }
 
-        /** Alias for calling [Builder.submissionId] with `submissionId.orElse(null)`. */
-        fun submissionId(submissionId: Optional<String>) = submissionId(submissionId.getOrNull())
+        /** Alias for calling [Builder.topicId] with `topicId.orElse(null)`. */
+        fun topicId(topicId: Optional<String>) = topicId(topicId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -165,31 +173,57 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            this.additionalBodyProperties.clear()
+            putAllAdditionalBodyProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            additionalBodyProperties.put(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalBodyProperties.putAll(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply {
+            additionalBodyProperties.remove(key)
+        }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalBodyProperty)
+        }
+
         /**
-         * Returns an immutable instance of [CheckListParams].
+         * Returns an immutable instance of [TopicArchiveParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
          * ```java
-         * .id()
+         * .sectionId()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): CheckListParams =
-            CheckListParams(
-                checkRequired("id", id),
-                submissionId,
+        fun build(): TopicArchiveParams =
+            TopicArchiveParams(
+                checkRequired("sectionId", sectionId),
+                topicId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 
+    fun _body(): Optional<Map<String, JsonValue>> =
+        Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
+
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> id
-            1 -> submissionId ?: ""
+            0 -> sectionId
+            1 -> topicId ?: ""
             else -> ""
         }
 
@@ -202,16 +236,23 @@ private constructor(
             return true
         }
 
-        return other is CheckListParams &&
-            id == other.id &&
-            submissionId == other.submissionId &&
+        return other is TopicArchiveParams &&
+            sectionId == other.sectionId &&
+            topicId == other.topicId &&
             additionalHeaders == other.additionalHeaders &&
-            additionalQueryParams == other.additionalQueryParams
+            additionalQueryParams == other.additionalQueryParams &&
+            additionalBodyProperties == other.additionalBodyProperties
     }
 
     override fun hashCode(): Int =
-        Objects.hash(id, submissionId, additionalHeaders, additionalQueryParams)
+        Objects.hash(
+            sectionId,
+            topicId,
+            additionalHeaders,
+            additionalQueryParams,
+            additionalBodyProperties,
+        )
 
     override fun toString() =
-        "CheckListParams{id=$id, submissionId=$submissionId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "TopicArchiveParams{sectionId=$sectionId, topicId=$topicId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

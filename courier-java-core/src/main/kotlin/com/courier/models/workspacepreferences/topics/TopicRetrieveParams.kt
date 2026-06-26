@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.models.notifications.checks
+package com.courier.models.workspacepreferences.topics
 
 import com.courier.core.Params
 import com.courier.core.checkRequired
@@ -10,18 +10,21 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Retrieve the submission checks for a notification template. */
-class CheckListParams
+/**
+ * Retrieve a topic within a workspace preference. Returns 404 if the workspace preference does not
+ * exist, the topic does not exist, or the topic belongs to a different workspace preference.
+ */
+class TopicRetrieveParams
 private constructor(
-    private val id: String,
-    private val submissionId: String?,
+    private val sectionId: String,
+    private val topicId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun id(): String = id
+    fun sectionId(): String = sectionId
 
-    fun submissionId(): Optional<String> = Optional.ofNullable(submissionId)
+    fun topicId(): Optional<String> = Optional.ofNullable(topicId)
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -34,38 +37,38 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [CheckListParams].
+         * Returns a mutable builder for constructing an instance of [TopicRetrieveParams].
          *
          * The following fields are required:
          * ```java
-         * .id()
+         * .sectionId()
          * ```
          */
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [CheckListParams]. */
+    /** A builder for [TopicRetrieveParams]. */
     class Builder internal constructor() {
 
-        private var id: String? = null
-        private var submissionId: String? = null
+        private var sectionId: String? = null
+        private var topicId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(checkListParams: CheckListParams) = apply {
-            id = checkListParams.id
-            submissionId = checkListParams.submissionId
-            additionalHeaders = checkListParams.additionalHeaders.toBuilder()
-            additionalQueryParams = checkListParams.additionalQueryParams.toBuilder()
+        internal fun from(topicRetrieveParams: TopicRetrieveParams) = apply {
+            sectionId = topicRetrieveParams.sectionId
+            topicId = topicRetrieveParams.topicId
+            additionalHeaders = topicRetrieveParams.additionalHeaders.toBuilder()
+            additionalQueryParams = topicRetrieveParams.additionalQueryParams.toBuilder()
         }
 
-        fun id(id: String) = apply { this.id = id }
+        fun sectionId(sectionId: String) = apply { this.sectionId = sectionId }
 
-        fun submissionId(submissionId: String?) = apply { this.submissionId = submissionId }
+        fun topicId(topicId: String?) = apply { this.topicId = topicId }
 
-        /** Alias for calling [Builder.submissionId] with `submissionId.orElse(null)`. */
-        fun submissionId(submissionId: Optional<String>) = submissionId(submissionId.getOrNull())
+        /** Alias for calling [Builder.topicId] with `topicId.orElse(null)`. */
+        fun topicId(topicId: Optional<String>) = topicId(topicId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -166,21 +169,21 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [CheckListParams].
+         * Returns an immutable instance of [TopicRetrieveParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
          * ```java
-         * .id()
+         * .sectionId()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): CheckListParams =
-            CheckListParams(
-                checkRequired("id", id),
-                submissionId,
+        fun build(): TopicRetrieveParams =
+            TopicRetrieveParams(
+                checkRequired("sectionId", sectionId),
+                topicId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -188,8 +191,8 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> id
-            1 -> submissionId ?: ""
+            0 -> sectionId
+            1 -> topicId ?: ""
             else -> ""
         }
 
@@ -202,16 +205,16 @@ private constructor(
             return true
         }
 
-        return other is CheckListParams &&
-            id == other.id &&
-            submissionId == other.submissionId &&
+        return other is TopicRetrieveParams &&
+            sectionId == other.sectionId &&
+            topicId == other.topicId &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(id, submissionId, additionalHeaders, additionalQueryParams)
+        Objects.hash(sectionId, topicId, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "CheckListParams{id=$id, submissionId=$submissionId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "TopicRetrieveParams{sectionId=$sectionId, topicId=$topicId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

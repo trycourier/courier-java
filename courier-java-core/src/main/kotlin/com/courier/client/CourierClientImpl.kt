@@ -28,8 +28,6 @@ import com.courier.services.blocking.MessageService
 import com.courier.services.blocking.MessageServiceImpl
 import com.courier.services.blocking.NotificationService
 import com.courier.services.blocking.NotificationServiceImpl
-import com.courier.services.blocking.PreferenceSectionService
-import com.courier.services.blocking.PreferenceSectionServiceImpl
 import com.courier.services.blocking.ProfileService
 import com.courier.services.blocking.ProfileServiceImpl
 import com.courier.services.blocking.ProviderService
@@ -46,6 +44,8 @@ import com.courier.services.blocking.TranslationService
 import com.courier.services.blocking.TranslationServiceImpl
 import com.courier.services.blocking.UserService
 import com.courier.services.blocking.UserServiceImpl
+import com.courier.services.blocking.WorkspacePreferenceService
+import com.courier.services.blocking.WorkspacePreferenceServiceImpl
 import java.util.function.Consumer
 
 class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClient {
@@ -109,8 +109,8 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
         RoutingStrategyServiceImpl(clientOptionsWithUserAgent)
     }
 
-    private val preferenceSections: PreferenceSectionService by lazy {
-        PreferenceSectionServiceImpl(clientOptionsWithUserAgent)
+    private val workspacePreferences: WorkspacePreferenceService by lazy {
+        WorkspacePreferenceServiceImpl(clientOptionsWithUserAgent)
     }
 
     private val profiles: ProfileService by lazy { ProfileServiceImpl(clientOptionsWithUserAgent) }
@@ -162,7 +162,7 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
 
     override fun routingStrategies(): RoutingStrategyService = routingStrategies
 
-    override fun preferenceSections(): PreferenceSectionService = preferenceSections
+    override fun workspacePreferences(): WorkspacePreferenceService = workspacePreferences
 
     override fun profiles(): ProfileService = profiles
 
@@ -241,8 +241,8 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
             RoutingStrategyServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
-        private val preferenceSections: PreferenceSectionService.WithRawResponse by lazy {
-            PreferenceSectionServiceImpl.WithRawResponseImpl(clientOptions)
+        private val workspacePreferences: WorkspacePreferenceService.WithRawResponse by lazy {
+            WorkspacePreferenceServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
         private val profiles: ProfileService.WithRawResponse by lazy {
@@ -300,8 +300,8 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
 
         override fun routingStrategies(): RoutingStrategyService.WithRawResponse = routingStrategies
 
-        override fun preferenceSections(): PreferenceSectionService.WithRawResponse =
-            preferenceSections
+        override fun workspacePreferences(): WorkspacePreferenceService.WithRawResponse =
+            workspacePreferences
 
         override fun profiles(): ProfileService.WithRawResponse = profiles
 

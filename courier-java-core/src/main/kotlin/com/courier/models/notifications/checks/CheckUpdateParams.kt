@@ -23,7 +23,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Replace the checks for a notification template submission. */
+/** Replace the submission checks for a notification template. */
 class CheckUpdateParams
 private constructor(
     private val id: String,
