@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.19.0 (2026-06-29)
+
+Full Changelog: [v4.18.2...v4.19.0](https://github.com/trycourier/courier-java/compare/v4.18.2...v4.19.0)
+
+### Features
+
+* **openapi:** Journeys cancel-by-token endpoint + send-node experiments (C-18986) ([41c9837](https://github.com/trycourier/courier-java/commit/41c9837633b219c112b05446107960558415d3d5))
+
 ## 4.18.2 (2026-06-25)
 
 Full Changelog: [v4.18.1...v4.18.2](https://github.com/trycourier/courier-java/compare/v4.18.1...v4.18.2)
