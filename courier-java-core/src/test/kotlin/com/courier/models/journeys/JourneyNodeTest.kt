@@ -134,7 +134,6 @@ internal class JourneyNodeTest {
             JourneySendNode.builder()
                 .message(
                     JourneySendNode.Message.builder()
-                        .template("x")
                         .data(
                             JourneySendNode.Message.Data.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -143,6 +142,7 @@ internal class JourneyNodeTest {
                         .delay(
                             JourneySendNode.Message.Delay.builder().until("x").timezone("x").build()
                         )
+                        .template("x")
                         .to(
                             JourneySendNode.Message.To.builder()
                                 .emailOverride("x")
@@ -155,6 +155,29 @@ internal class JourneyNodeTest {
                 .type(JourneySendNode.Type.SEND)
                 .id("x")
                 .conditionsOfConditionAtom(listOf("string", "string"))
+                .experiment(
+                    JourneyExperiment.builder()
+                        .bucketingKey("x")
+                        .addVariant(
+                            JourneyExperimentVariant.builder()
+                                .id("x")
+                                .templateId("x")
+                                .weight(0.0)
+                                .name("name")
+                                .build()
+                        )
+                        .addVariant(
+                            JourneyExperimentVariant.builder()
+                                .id("x")
+                                .templateId("x")
+                                .weight(0.0)
+                                .name("name")
+                                .build()
+                        )
+                        .id("x")
+                        .name("name")
+                        .build()
+                )
                 .build()
 
         val journeyNode = JourneyNode.ofSend(send)
@@ -183,7 +206,6 @@ internal class JourneyNodeTest {
                 JourneySendNode.builder()
                     .message(
                         JourneySendNode.Message.builder()
-                            .template("x")
                             .data(
                                 JourneySendNode.Message.Data.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -195,6 +217,7 @@ internal class JourneyNodeTest {
                                     .timezone("x")
                                     .build()
                             )
+                            .template("x")
                             .to(
                                 JourneySendNode.Message.To.builder()
                                     .emailOverride("x")
@@ -207,6 +230,29 @@ internal class JourneyNodeTest {
                     .type(JourneySendNode.Type.SEND)
                     .id("x")
                     .conditionsOfConditionAtom(listOf("string", "string"))
+                    .experiment(
+                        JourneyExperiment.builder()
+                            .bucketingKey("x")
+                            .addVariant(
+                                JourneyExperimentVariant.builder()
+                                    .id("x")
+                                    .templateId("x")
+                                    .weight(0.0)
+                                    .name("name")
+                                    .build()
+                            )
+                            .addVariant(
+                                JourneyExperimentVariant.builder()
+                                    .id("x")
+                                    .templateId("x")
+                                    .weight(0.0)
+                                    .name("name")
+                                    .build()
+                            )
+                            .id("x")
+                            .name("name")
+                            .build()
+                    )
                     .build()
             )
 

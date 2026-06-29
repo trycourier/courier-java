@@ -20,8 +20,10 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Send a notification template to the recipient. Optionally override the recipient address, delay
- * the send, or attach `data`.
+ * Send to the recipient. A send node sources its content from EXACTLY ONE of `message.template` (a
+ * single notification template) or `experiment` (an A/B split across weighted template variants) —
+ * supplying both, or neither, is rejected. Optionally override the recipient address, delay the
+ * send, or attach `data`.
  */
 class JourneySendNode
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
@@ -30,6 +32,7 @@ private constructor(
     private val type: JsonField<Type>,
     private val id: JsonField<String>,
     private val conditions: JsonField<JourneyConditionsField>,
+    private val experiment: JsonField<JourneyExperiment>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -41,7 +44,10 @@ private constructor(
         @JsonProperty("conditions")
         @ExcludeMissing
         conditions: JsonField<JourneyConditionsField> = JsonMissing.of(),
-    ) : this(message, type, id, conditions, mutableMapOf())
+        @JsonProperty("experiment")
+        @ExcludeMissing
+        experiment: JsonField<JourneyExperiment> = JsonMissing.of(),
+    ) : this(message, type, id, conditions, experiment, mutableMapOf())
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
@@ -69,6 +75,16 @@ private constructor(
      *   server responded with an unexpected value).
      */
     fun conditions(): Optional<JourneyConditionsField> = conditions.getOptional("conditions")
+
+    /**
+     * A/B experiment config for a send node. The recipient is deterministically bucketed by
+     * `bucketingKey` and routed to one of the `variants` in proportion to its `weight`. Present on
+     * a send node INSTEAD OF `message.template`.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun experiment(): Optional<JourneyExperiment> = experiment.getOptional("experiment")
 
     /**
      * Returns the raw JSON value of [message].
@@ -99,6 +115,15 @@ private constructor(
     @JsonProperty("conditions")
     @ExcludeMissing
     fun _conditions(): JsonField<JourneyConditionsField> = conditions
+
+    /**
+     * Returns the raw JSON value of [experiment].
+     *
+     * Unlike [experiment], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("experiment")
+    @ExcludeMissing
+    fun _experiment(): JsonField<JourneyExperiment> = experiment
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -133,6 +158,7 @@ private constructor(
         private var type: JsonField<Type>? = null
         private var id: JsonField<String> = JsonMissing.of()
         private var conditions: JsonField<JourneyConditionsField> = JsonMissing.of()
+        private var experiment: JsonField<JourneyExperiment> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -141,6 +167,7 @@ private constructor(
             type = journeySendNode.type
             id = journeySendNode.id
             conditions = journeySendNode.conditions
+            experiment = journeySendNode.experiment
             additionalProperties = journeySendNode.additionalProperties.toMutableMap()
         }
 
@@ -213,6 +240,24 @@ private constructor(
         fun conditions(conditionNestedGroup: JourneyConditionNestedGroup) =
             conditions(JourneyConditionsField.ofConditionNestedGroup(conditionNestedGroup))
 
+        /**
+         * A/B experiment config for a send node. The recipient is deterministically bucketed by
+         * `bucketingKey` and routed to one of the `variants` in proportion to its `weight`. Present
+         * on a send node INSTEAD OF `message.template`.
+         */
+        fun experiment(experiment: JourneyExperiment) = experiment(JsonField.of(experiment))
+
+        /**
+         * Sets [Builder.experiment] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.experiment] with a well-typed [JourneyExperiment] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun experiment(experiment: JsonField<JourneyExperiment>) = apply {
+            this.experiment = experiment
+        }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -251,6 +296,7 @@ private constructor(
                 checkRequired("type", type),
                 id,
                 conditions,
+                experiment,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -274,6 +320,7 @@ private constructor(
         type().validate()
         id()
         conditions().ifPresent { it.validate() }
+        experiment().ifPresent { it.validate() }
         validated = true
     }
 
@@ -295,33 +342,28 @@ private constructor(
         (message.asKnown().getOrNull()?.validity() ?: 0) +
             (type.asKnown().getOrNull()?.validity() ?: 0) +
             (if (id.asKnown().isPresent) 1 else 0) +
-            (conditions.asKnown().getOrNull()?.validity() ?: 0)
+            (conditions.asKnown().getOrNull()?.validity() ?: 0) +
+            (experiment.asKnown().getOrNull()?.validity() ?: 0)
 
     class Message
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
-        private val template: JsonField<String>,
         private val data: JsonField<Data>,
         private val delay: JsonField<Delay>,
+        private val template: JsonField<String>,
         private val to: JsonField<To>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
         @JsonCreator
         private constructor(
+            @JsonProperty("data") @ExcludeMissing data: JsonField<Data> = JsonMissing.of(),
+            @JsonProperty("delay") @ExcludeMissing delay: JsonField<Delay> = JsonMissing.of(),
             @JsonProperty("template")
             @ExcludeMissing
             template: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("data") @ExcludeMissing data: JsonField<Data> = JsonMissing.of(),
-            @JsonProperty("delay") @ExcludeMissing delay: JsonField<Delay> = JsonMissing.of(),
             @JsonProperty("to") @ExcludeMissing to: JsonField<To> = JsonMissing.of(),
-        ) : this(template, data, delay, to, mutableMapOf())
-
-        /**
-         * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun template(): String = template.getRequired("template")
+        ) : this(data, delay, template, to, mutableMapOf())
 
         /**
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -339,14 +381,13 @@ private constructor(
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun to(): Optional<To> = to.getOptional("to")
+        fun template(): Optional<String> = template.getOptional("template")
 
         /**
-         * Returns the raw JSON value of [template].
-         *
-         * Unlike [template], this method doesn't throw if the JSON field has an unexpected type.
+         * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
          */
-        @JsonProperty("template") @ExcludeMissing fun _template(): JsonField<String> = template
+        fun to(): Optional<To> = to.getOptional("to")
 
         /**
          * Returns the raw JSON value of [data].
@@ -361,6 +402,13 @@ private constructor(
          * Unlike [delay], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("delay") @ExcludeMissing fun _delay(): JsonField<Delay> = delay
+
+        /**
+         * Returns the raw JSON value of [template].
+         *
+         * Unlike [template], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("template") @ExcludeMissing fun _template(): JsonField<String> = template
 
         /**
          * Returns the raw JSON value of [to].
@@ -383,45 +431,27 @@ private constructor(
 
         companion object {
 
-            /**
-             * Returns a mutable builder for constructing an instance of [Message].
-             *
-             * The following fields are required:
-             * ```java
-             * .template()
-             * ```
-             */
+            /** Returns a mutable builder for constructing an instance of [Message]. */
             @JvmStatic fun builder() = Builder()
         }
 
         /** A builder for [Message]. */
         class Builder internal constructor() {
 
-            private var template: JsonField<String>? = null
             private var data: JsonField<Data> = JsonMissing.of()
             private var delay: JsonField<Delay> = JsonMissing.of()
+            private var template: JsonField<String> = JsonMissing.of()
             private var to: JsonField<To> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(message: Message) = apply {
-                template = message.template
                 data = message.data
                 delay = message.delay
+                template = message.template
                 to = message.to
                 additionalProperties = message.additionalProperties.toMutableMap()
             }
-
-            fun template(template: String) = template(JsonField.of(template))
-
-            /**
-             * Sets [Builder.template] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.template] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun template(template: JsonField<String>) = apply { this.template = template }
 
             fun data(data: Data) = data(JsonField.of(data))
 
@@ -444,6 +474,17 @@ private constructor(
              * value.
              */
             fun delay(delay: JsonField<Delay>) = apply { this.delay = delay }
+
+            fun template(template: String) = template(JsonField.of(template))
+
+            /**
+             * Sets [Builder.template] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.template] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun template(template: JsonField<String>) = apply { this.template = template }
 
             fun to(to: To) = to(JsonField.of(to))
 
@@ -479,22 +520,9 @@ private constructor(
              * Returns an immutable instance of [Message].
              *
              * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```java
-             * .template()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
              */
             fun build(): Message =
-                Message(
-                    checkRequired("template", template),
-                    data,
-                    delay,
-                    to,
-                    additionalProperties.toMutableMap(),
-                )
+                Message(data, delay, template, to, additionalProperties.toMutableMap())
         }
 
         private var validated: Boolean = false
@@ -513,9 +541,9 @@ private constructor(
                 return@apply
             }
 
-            template()
             data().ifPresent { it.validate() }
             delay().ifPresent { it.validate() }
+            template()
             to().ifPresent { it.validate() }
             validated = true
         }
@@ -536,9 +564,9 @@ private constructor(
          */
         @JvmSynthetic
         internal fun validity(): Int =
-            (if (template.asKnown().isPresent) 1 else 0) +
-                (data.asKnown().getOrNull()?.validity() ?: 0) +
+            (data.asKnown().getOrNull()?.validity() ?: 0) +
                 (delay.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (template.asKnown().isPresent) 1 else 0) +
                 (to.asKnown().getOrNull()?.validity() ?: 0)
 
         class Data
@@ -1121,21 +1149,21 @@ private constructor(
             }
 
             return other is Message &&
-                template == other.template &&
                 data == other.data &&
                 delay == other.delay &&
+                template == other.template &&
                 to == other.to &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(template, data, delay, to, additionalProperties)
+            Objects.hash(data, delay, template, to, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Message{template=$template, data=$data, delay=$delay, to=$to, additionalProperties=$additionalProperties}"
+            "Message{data=$data, delay=$delay, template=$template, to=$to, additionalProperties=$additionalProperties}"
     }
 
     class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
@@ -1276,15 +1304,16 @@ private constructor(
             type == other.type &&
             id == other.id &&
             conditions == other.conditions &&
+            experiment == other.experiment &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(message, type, id, conditions, additionalProperties)
+        Objects.hash(message, type, id, conditions, experiment, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "JourneySendNode{message=$message, type=$type, id=$id, conditions=$conditions, additionalProperties=$additionalProperties}"
+        "JourneySendNode{message=$message, type=$type, id=$id, conditions=$conditions, experiment=$experiment, additionalProperties=$additionalProperties}"
 }
