@@ -1,5 +1,20 @@
 # Changelog
 
+## 4.19.0 (2026-07-06)
+
+Full Changelog: [v4.18.2...v4.19.0](https://github.com/trycourier/courier-java/compare/v4.18.2...v4.19.0)
+
+### Features
+
+* **openapi:** Journeys cancel-by-token endpoint + send-node experiments (C-18986) ([41c9837](https://github.com/trycourier/courier-java/commit/41c9837633b219c112b05446107960558415d3d5))
+
+
+### Documentation
+
+* **openapi:** reword Cancel journey runs 400 description (re-trigger deploy) ([1e3a8e7](https://github.com/trycourier/courier-java/commit/1e3a8e71129b8b6ec2fbbbab73229cc750cfc2df))
+* **openapi:** reword Cancel journey runs description (re-trigger deploy) ([ec00755](https://github.com/trycourier/courier-java/commit/ec007551c1fcc9a7674d59307471740025a8aab4))
+* **openapi:** tighten Journeys cancel/experiment copy (C-19177) ([763855d](https://github.com/trycourier/courier-java/commit/763855d7f2ccb596347031f1c23674d98f6ec1f6))
+
 ## 4.18.2 (2026-06-25)
 
 Full Changelog: [v4.18.1...v4.18.2](https://github.com/trycourier/courier-java/compare/v4.18.1...v4.18.2)
