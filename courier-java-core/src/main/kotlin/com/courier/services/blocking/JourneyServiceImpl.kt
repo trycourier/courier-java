@@ -17,7 +17,9 @@ import com.courier.core.http.HttpResponseFor
 import com.courier.core.http.json
 import com.courier.core.http.parseable
 import com.courier.core.prepare
+import com.courier.models.journeys.CancelJourneyResponse
 import com.courier.models.journeys.JourneyArchiveParams
+import com.courier.models.journeys.JourneyCancelParams
 import com.courier.models.journeys.JourneyCreateParams
 import com.courier.models.journeys.JourneyInvokeParams
 import com.courier.models.journeys.JourneyListParams
@@ -75,6 +77,13 @@ class JourneyServiceImpl internal constructor(private val clientOptions: ClientO
         // delete /journeys/{templateId}
         withRawResponse().archive(params, requestOptions)
     }
+
+    override fun cancel(
+        params: JourneyCancelParams,
+        requestOptions: RequestOptions,
+    ): CancelJourneyResponse =
+        // post /journeys/cancel
+        withRawResponse().cancel(params, requestOptions).parse()
 
     override fun invoke(
         params: JourneyInvokeParams,
@@ -229,6 +238,34 @@ class JourneyServiceImpl internal constructor(private val clientOptions: ClientO
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return errorHandler.handle(response).parseable {
                 response.use { archiveHandler.handle(it) }
+            }
+        }
+
+        private val cancelHandler: Handler<CancelJourneyResponse> =
+            jsonHandler<CancelJourneyResponse>(clientOptions.jsonMapper)
+
+        override fun cancel(
+            params: JourneyCancelParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<CancelJourneyResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("journeys", "cancel")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { cancelHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
             }
         }
 

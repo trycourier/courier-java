@@ -16,7 +16,6 @@ internal class JourneySendNodeTest {
             JourneySendNode.builder()
                 .message(
                     JourneySendNode.Message.builder()
-                        .template("x")
                         .data(
                             JourneySendNode.Message.Data.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -25,6 +24,7 @@ internal class JourneySendNodeTest {
                         .delay(
                             JourneySendNode.Message.Delay.builder().until("x").timezone("x").build()
                         )
+                        .template("x")
                         .to(
                             JourneySendNode.Message.To.builder()
                                 .emailOverride("x")
@@ -37,18 +37,41 @@ internal class JourneySendNodeTest {
                 .type(JourneySendNode.Type.SEND)
                 .id("x")
                 .conditionsOfConditionAtom(listOf("string", "string"))
+                .experiment(
+                    JourneyExperiment.builder()
+                        .bucketingKey("x")
+                        .addVariant(
+                            JourneyExperimentVariant.builder()
+                                .id("x")
+                                .templateId("x")
+                                .weight(0.0)
+                                .name("name")
+                                .build()
+                        )
+                        .addVariant(
+                            JourneyExperimentVariant.builder()
+                                .id("x")
+                                .templateId("x")
+                                .weight(0.0)
+                                .name("name")
+                                .build()
+                        )
+                        .id("x")
+                        .name("name")
+                        .build()
+                )
                 .build()
 
         assertThat(journeySendNode.message())
             .isEqualTo(
                 JourneySendNode.Message.builder()
-                    .template("x")
                     .data(
                         JourneySendNode.Message.Data.builder()
                             .putAdditionalProperty("foo", JsonValue.from("bar"))
                             .build()
                     )
                     .delay(JourneySendNode.Message.Delay.builder().until("x").timezone("x").build())
+                    .template("x")
                     .to(
                         JourneySendNode.Message.To.builder()
                             .emailOverride("x")
@@ -62,6 +85,30 @@ internal class JourneySendNodeTest {
         assertThat(journeySendNode.id()).contains("x")
         assertThat(journeySendNode.conditions())
             .contains(JourneyConditionsField.ofConditionAtom(listOf("string", "string")))
+        assertThat(journeySendNode.experiment())
+            .contains(
+                JourneyExperiment.builder()
+                    .bucketingKey("x")
+                    .addVariant(
+                        JourneyExperimentVariant.builder()
+                            .id("x")
+                            .templateId("x")
+                            .weight(0.0)
+                            .name("name")
+                            .build()
+                    )
+                    .addVariant(
+                        JourneyExperimentVariant.builder()
+                            .id("x")
+                            .templateId("x")
+                            .weight(0.0)
+                            .name("name")
+                            .build()
+                    )
+                    .id("x")
+                    .name("name")
+                    .build()
+            )
     }
 
     @Test
@@ -71,7 +118,6 @@ internal class JourneySendNodeTest {
             JourneySendNode.builder()
                 .message(
                     JourneySendNode.Message.builder()
-                        .template("x")
                         .data(
                             JourneySendNode.Message.Data.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -80,6 +126,7 @@ internal class JourneySendNodeTest {
                         .delay(
                             JourneySendNode.Message.Delay.builder().until("x").timezone("x").build()
                         )
+                        .template("x")
                         .to(
                             JourneySendNode.Message.To.builder()
                                 .emailOverride("x")
@@ -92,6 +139,29 @@ internal class JourneySendNodeTest {
                 .type(JourneySendNode.Type.SEND)
                 .id("x")
                 .conditionsOfConditionAtom(listOf("string", "string"))
+                .experiment(
+                    JourneyExperiment.builder()
+                        .bucketingKey("x")
+                        .addVariant(
+                            JourneyExperimentVariant.builder()
+                                .id("x")
+                                .templateId("x")
+                                .weight(0.0)
+                                .name("name")
+                                .build()
+                        )
+                        .addVariant(
+                            JourneyExperimentVariant.builder()
+                                .id("x")
+                                .templateId("x")
+                                .weight(0.0)
+                                .name("name")
+                                .build()
+                        )
+                        .id("x")
+                        .name("name")
+                        .build()
+                )
                 .build()
 
         val roundtrippedJourneySendNode =

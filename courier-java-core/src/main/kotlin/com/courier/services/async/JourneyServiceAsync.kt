@@ -6,8 +6,11 @@ import com.courier.core.ClientOptions
 import com.courier.core.RequestOptions
 import com.courier.core.http.HttpResponse
 import com.courier.core.http.HttpResponseFor
+import com.courier.models.journeys.CancelJourneyRequest
+import com.courier.models.journeys.CancelJourneyResponse
 import com.courier.models.journeys.CreateJourneyRequest
 import com.courier.models.journeys.JourneyArchiveParams
+import com.courier.models.journeys.JourneyCancelParams
 import com.courier.models.journeys.JourneyCreateParams
 import com.courier.models.journeys.JourneyInvokeParams
 import com.courier.models.journeys.JourneyListParams
@@ -159,6 +162,62 @@ interface JourneyServiceAsync {
     /** @see archive */
     fun archive(templateId: String, requestOptions: RequestOptions): CompletableFuture<Void?> =
         archive(templateId, JourneyArchiveParams.none(), requestOptions)
+
+    /**
+     * Cancel journey runs. The request body must include EXACTLY ONE of `cancelation_token`
+     * (cancels every run associated with the token) or `run_id` (cancels a single tenant-scoped
+     * run). Supplying both or neither returns a `400`. A `run_id` that does not match a run for the
+     * tenant returns `404`. Cancelation is idempotent: a run that has already finished
+     * (`PROCESSED`/`ERROR`) or was already `CANCELED` is left unchanged and its current status is
+     * returned.
+     */
+    fun cancel(params: JourneyCancelParams): CompletableFuture<CancelJourneyResponse> =
+        cancel(params, RequestOptions.none())
+
+    /** @see cancel */
+    fun cancel(
+        params: JourneyCancelParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<CancelJourneyResponse>
+
+    /** @see cancel */
+    fun cancel(
+        cancelJourneyRequest: CancelJourneyRequest,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<CancelJourneyResponse> =
+        cancel(
+            JourneyCancelParams.builder().cancelJourneyRequest(cancelJourneyRequest).build(),
+            requestOptions,
+        )
+
+    /** @see cancel */
+    fun cancel(
+        cancelJourneyRequest: CancelJourneyRequest
+    ): CompletableFuture<CancelJourneyResponse> =
+        cancel(cancelJourneyRequest, RequestOptions.none())
+
+    /** @see cancel */
+    fun cancel(
+        byCancelationToken: CancelJourneyRequest.ByCancelationToken,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<CancelJourneyResponse> =
+        cancel(CancelJourneyRequest.ofByCancelationToken(byCancelationToken), requestOptions)
+
+    /** @see cancel */
+    fun cancel(
+        byCancelationToken: CancelJourneyRequest.ByCancelationToken
+    ): CompletableFuture<CancelJourneyResponse> = cancel(byCancelationToken, RequestOptions.none())
+
+    /** @see cancel */
+    fun cancel(
+        byRunId: CancelJourneyRequest.ByRunId,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<CancelJourneyResponse> =
+        cancel(CancelJourneyRequest.ofByRunId(byRunId), requestOptions)
+
+    /** @see cancel */
+    fun cancel(byRunId: CancelJourneyRequest.ByRunId): CompletableFuture<CancelJourneyResponse> =
+        cancel(byRunId, RequestOptions.none())
 
     /**
      * Invoke a journey by id or alias to start a new run. The response includes a `runId`
@@ -441,6 +500,63 @@ interface JourneyServiceAsync {
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponse> =
             archive(templateId, JourneyArchiveParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /journeys/cancel`, but is otherwise the same as
+         * [JourneyServiceAsync.cancel].
+         */
+        fun cancel(
+            params: JourneyCancelParams
+        ): CompletableFuture<HttpResponseFor<CancelJourneyResponse>> =
+            cancel(params, RequestOptions.none())
+
+        /** @see cancel */
+        fun cancel(
+            params: JourneyCancelParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CancelJourneyResponse>>
+
+        /** @see cancel */
+        fun cancel(
+            cancelJourneyRequest: CancelJourneyRequest,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CancelJourneyResponse>> =
+            cancel(
+                JourneyCancelParams.builder().cancelJourneyRequest(cancelJourneyRequest).build(),
+                requestOptions,
+            )
+
+        /** @see cancel */
+        fun cancel(
+            cancelJourneyRequest: CancelJourneyRequest
+        ): CompletableFuture<HttpResponseFor<CancelJourneyResponse>> =
+            cancel(cancelJourneyRequest, RequestOptions.none())
+
+        /** @see cancel */
+        fun cancel(
+            byCancelationToken: CancelJourneyRequest.ByCancelationToken,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CancelJourneyResponse>> =
+            cancel(CancelJourneyRequest.ofByCancelationToken(byCancelationToken), requestOptions)
+
+        /** @see cancel */
+        fun cancel(
+            byCancelationToken: CancelJourneyRequest.ByCancelationToken
+        ): CompletableFuture<HttpResponseFor<CancelJourneyResponse>> =
+            cancel(byCancelationToken, RequestOptions.none())
+
+        /** @see cancel */
+        fun cancel(
+            byRunId: CancelJourneyRequest.ByRunId,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CancelJourneyResponse>> =
+            cancel(CancelJourneyRequest.ofByRunId(byRunId), requestOptions)
+
+        /** @see cancel */
+        fun cancel(
+            byRunId: CancelJourneyRequest.ByRunId
+        ): CompletableFuture<HttpResponseFor<CancelJourneyResponse>> =
+            cancel(byRunId, RequestOptions.none())
 
         /**
          * Returns a raw HTTP response for `post /journeys/{templateId}/invoke`, but is otherwise

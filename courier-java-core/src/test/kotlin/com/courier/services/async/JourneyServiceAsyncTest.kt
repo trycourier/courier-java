@@ -4,6 +4,7 @@ package com.courier.services.async
 
 import com.courier.client.okhttp.CourierOkHttpClientAsync
 import com.courier.core.JsonValue
+import com.courier.models.journeys.CancelJourneyRequest
 import com.courier.models.journeys.CreateJourneyRequest
 import com.courier.models.journeys.JourneyApiInvokeTriggerNode
 import com.courier.models.journeys.JourneyInvokeParams
@@ -106,6 +107,23 @@ internal class JourneyServiceAsyncTest {
         val future = journeyServiceAsync.archive("x")
 
         val response = future.get()
+    }
+
+    @Disabled("Mock server tests are disabled")
+    @Test
+    fun cancel() {
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val journeyServiceAsync = client.journeys()
+
+        val cancelJourneyResponseFuture =
+            journeyServiceAsync.cancel(
+                CancelJourneyRequest.ByCancelationToken.builder()
+                    .cancelationToken("order-1234")
+                    .build()
+            )
+
+        val cancelJourneyResponse = cancelJourneyResponseFuture.get()
+        cancelJourneyResponse.validate()
     }
 
     @Disabled("Mock server tests are disabled")

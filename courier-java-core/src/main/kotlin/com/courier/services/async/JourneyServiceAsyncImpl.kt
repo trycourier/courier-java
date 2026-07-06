@@ -17,7 +17,9 @@ import com.courier.core.http.HttpResponseFor
 import com.courier.core.http.json
 import com.courier.core.http.parseable
 import com.courier.core.prepareAsync
+import com.courier.models.journeys.CancelJourneyResponse
 import com.courier.models.journeys.JourneyArchiveParams
+import com.courier.models.journeys.JourneyCancelParams
 import com.courier.models.journeys.JourneyCreateParams
 import com.courier.models.journeys.JourneyInvokeParams
 import com.courier.models.journeys.JourneyListParams
@@ -78,6 +80,13 @@ class JourneyServiceAsyncImpl internal constructor(private val clientOptions: Cl
     ): CompletableFuture<Void?> =
         // delete /journeys/{templateId}
         withRawResponse().archive(params, requestOptions).thenAccept {}
+
+    override fun cancel(
+        params: JourneyCancelParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<CancelJourneyResponse> =
+        // post /journeys/cancel
+        withRawResponse().cancel(params, requestOptions).thenApply { it.parse() }
 
     override fun invoke(
         params: JourneyInvokeParams,
@@ -243,6 +252,37 @@ class JourneyServiceAsyncImpl internal constructor(private val clientOptions: Cl
                 .thenApply { response ->
                     errorHandler.handle(response).parseable {
                         response.use { archiveHandler.handle(it) }
+                    }
+                }
+        }
+
+        private val cancelHandler: Handler<CancelJourneyResponse> =
+            jsonHandler<CancelJourneyResponse>(clientOptions.jsonMapper)
+
+        override fun cancel(
+            params: JourneyCancelParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<CancelJourneyResponse>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("journeys", "cancel")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { cancelHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
                     }
                 }
         }
