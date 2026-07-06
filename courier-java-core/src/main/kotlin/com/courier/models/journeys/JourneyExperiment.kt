@@ -64,7 +64,7 @@ private constructor(
     fun variants(): List<JourneyExperimentVariant> = variants.getRequired("variants")
 
     /**
-     * Server-authoritative experiment id (prefixed `exp_`). Omit to have the server mint one; when
+     * Unique experiment id (prefixed `exp_`). Omit to have one generated automatically; when
      * supplied it must be a valid `exp_` id.
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -73,7 +73,7 @@ private constructor(
     fun id(): Optional<String> = id.getOptional("id")
 
     /**
-     * Optional, cosmetic display name for the experiment.
+     * Optional display name for the experiment.
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -200,8 +200,8 @@ private constructor(
         }
 
         /**
-         * Server-authoritative experiment id (prefixed `exp_`). Omit to have the server mint one;
-         * when supplied it must be a valid `exp_` id.
+         * Unique experiment id (prefixed `exp_`). Omit to have one generated automatically; when
+         * supplied it must be a valid `exp_` id.
          */
         fun id(id: String) = id(JsonField.of(id))
 
@@ -213,7 +213,7 @@ private constructor(
          */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
-        /** Optional, cosmetic display name for the experiment. */
+        /** Optional display name for the experiment. */
         fun name(name: String) = name(JsonField.of(name))
 
         /**

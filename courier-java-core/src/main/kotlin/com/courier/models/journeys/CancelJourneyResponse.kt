@@ -28,8 +28,9 @@ import java.util.Objects
 import java.util.Optional
 
 /**
- * `202 Accepted` body for `POST /journeys/cancel`, echoing the submitted identifier. The token
- * branch returns `{ cancelation_token }`; the run_id branch returns `{ run_id, status }`.
+ * `202 Accepted` body for `POST /journeys/cancel`, returning the submitted identifier. When called
+ * with `cancelation_token`, returns `{ cancelation_token }`; when called with `run_id`, returns `{
+ * run_id, status }`.
  */
 @JsonDeserialize(using = CancelJourneyResponse.Deserializer::class)
 @JsonSerialize(using = CancelJourneyResponse.Serializer::class)
@@ -442,8 +443,8 @@ private constructor(
         fun runId(): String = runId.getRequired("run_id")
 
         /**
-         * The run's resulting status. `CANCELED` when the run was active and we canceled it;
-         * `PROCESSED` or `ERROR` when the run had already finished and was left untouched;
+         * The run's resulting status. `CANCELED` when the run was active and has been canceled;
+         * `PROCESSED` or `ERROR` when the run had already finished and was left unchanged;
          * `CANCELED` for an already-canceled run.
          *
          * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
@@ -517,8 +518,8 @@ private constructor(
             fun runId(runId: JsonField<String>) = apply { this.runId = runId }
 
             /**
-             * The run's resulting status. `CANCELED` when the run was active and we canceled it;
-             * `PROCESSED` or `ERROR` when the run had already finished and was left untouched;
+             * The run's resulting status. `CANCELED` when the run was active and has been canceled;
+             * `PROCESSED` or `ERROR` when the run had already finished and was left unchanged;
              * `CANCELED` for an already-canceled run.
              */
             fun status(status: String) = status(JsonField.of(status))
