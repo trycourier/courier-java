@@ -17,8 +17,8 @@ import java.util.Objects
 import java.util.Optional
 
 /**
- * A single weighted arm of an experiment. Variant ids must be unique within the experiment and the
- * sum of all variant weights must be greater than 0. Weights are relative (no sum-to-100
+ * A single weighted variant of an experiment. Variant ids must be unique within the experiment and
+ * the sum of all variant weights must be greater than 0. Weights are relative (no sum-to-100
  * requirement) — routing normalizes them proportionally.
  */
 class JourneyExperimentVariant
@@ -64,7 +64,7 @@ private constructor(
     fun weight(): Double = weight.getRequired("weight")
 
     /**
-     * Optional, cosmetic display name for the variant.
+     * Optional display name for the variant.
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -177,7 +177,7 @@ private constructor(
          */
         fun weight(weight: JsonField<Double>) = apply { this.weight = weight }
 
-        /** Optional, cosmetic display name for the variant. */
+        /** Optional display name for the variant. */
         fun name(name: String) = name(JsonField.of(name))
 
         /**
