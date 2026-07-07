@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.19.1 (2026-07-07)
+
+Full Changelog: [v4.19.0...v4.19.1](https://github.com/trycourier/courier-java/compare/v4.19.0...v4.19.1)
+
+### Documentation
+
+* **openapi:** document audiences filter combinator (SUP-686) ([bc3e1d6](https://github.com/trycourier/courier-java/commit/bc3e1d638edb165d64bb4b768f57c229325240e2))
+
 ## 4.19.0 (2026-07-06)
 
 Full Changelog: [v4.18.2...v4.19.0](https://github.com/trycourier/courier-java/compare/v4.18.2...v4.19.0)
