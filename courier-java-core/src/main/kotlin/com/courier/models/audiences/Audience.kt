@@ -92,7 +92,8 @@ private constructor(
     fun filter(): Optional<AudienceFilterConfig> = filter.getOptional("filter")
 
     /**
-     * The logical operator (AND/OR) for the top-level filter
+     * The logical operator (AND/OR) combining the top-level `filter.filters`. Convenience alias for
+     * `filter.operator`.
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -272,7 +273,10 @@ private constructor(
          */
         fun filter(filter: JsonField<AudienceFilterConfig>) = apply { this.filter = filter }
 
-        /** The logical operator (AND/OR) for the top-level filter */
+        /**
+         * The logical operator (AND/OR) combining the top-level `filter.filters`. Convenience alias
+         * for `filter.operator`.
+         */
         fun operator(operator: Operator) = operator(JsonField.of(operator))
 
         /**
@@ -380,7 +384,10 @@ private constructor(
             (filter.asKnown().getOrNull()?.validity() ?: 0) +
             (operator.asKnown().getOrNull()?.validity() ?: 0)
 
-    /** The logical operator (AND/OR) for the top-level filter */
+    /**
+     * The logical operator (AND/OR) combining the top-level `filter.filters`. Convenience alias for
+     * `filter.operator`.
+     */
     class Operator @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**

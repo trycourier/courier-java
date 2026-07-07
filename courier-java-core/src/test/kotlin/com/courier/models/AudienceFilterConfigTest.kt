@@ -21,6 +21,7 @@ internal class AudienceFilterConfigTest {
                         .value("value")
                         .build()
                 )
+                .operator(AudienceFilterConfig.Operator.AND)
                 .build()
 
         assertThat(audienceFilterConfig.filters())
@@ -32,6 +33,7 @@ internal class AudienceFilterConfigTest {
                     .value("value")
                     .build()
             )
+        assertThat(audienceFilterConfig.operator()).contains(AudienceFilterConfig.Operator.AND)
     }
 
     @Test
@@ -47,6 +49,7 @@ internal class AudienceFilterConfigTest {
                         .value("value")
                         .build()
                 )
+                .operator(AudienceFilterConfig.Operator.AND)
                 .build()
 
         val roundtrippedAudienceFilterConfig =

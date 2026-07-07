@@ -57,7 +57,9 @@ private constructor(
     fun name(): Optional<String> = body.name()
 
     /**
-     * The logical operator (AND/OR) for the top-level filter
+     * The logical operator (AND/OR) combining the top-level `filter.filters`. Convenience alias for
+     * `filter.operator`: if set, it is applied to the top-level filter group. Prefer setting
+     * `operator` directly inside `filter`.
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -187,7 +189,11 @@ private constructor(
          */
         fun name(name: JsonField<String>) = apply { body.name(name) }
 
-        /** The logical operator (AND/OR) for the top-level filter */
+        /**
+         * The logical operator (AND/OR) combining the top-level `filter.filters`. Convenience alias
+         * for `filter.operator`: if set, it is applied to the top-level filter group. Prefer
+         * setting `operator` directly inside `filter`.
+         */
         fun operator(operator: Operator?) = apply { body.operator(operator) }
 
         /** Alias for calling [Builder.operator] with `operator.orElse(null)`. */
@@ -394,7 +400,9 @@ private constructor(
         fun name(): Optional<String> = name.getOptional("name")
 
         /**
-         * The logical operator (AND/OR) for the top-level filter
+         * The logical operator (AND/OR) combining the top-level `filter.filters`. Convenience alias
+         * for `filter.operator`: if set, it is applied to the top-level filter group. Prefer
+         * setting `operator` directly inside `filter`.
          *
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -516,7 +524,11 @@ private constructor(
              */
             fun name(name: JsonField<String>) = apply { this.name = name }
 
-            /** The logical operator (AND/OR) for the top-level filter */
+            /**
+             * The logical operator (AND/OR) combining the top-level `filter.filters`. Convenience
+             * alias for `filter.operator`: if set, it is applied to the top-level filter group.
+             * Prefer setting `operator` directly inside `filter`.
+             */
             fun operator(operator: Operator?) = operator(JsonField.ofNullable(operator))
 
             /** Alias for calling [Builder.operator] with `operator.orElse(null)`. */
@@ -626,7 +638,11 @@ private constructor(
             "Body{description=$description, filter=$filter, name=$name, operator=$operator, additionalProperties=$additionalProperties}"
     }
 
-    /** The logical operator (AND/OR) for the top-level filter */
+    /**
+     * The logical operator (AND/OR) combining the top-level `filter.filters`. Convenience alias for
+     * `filter.operator`: if set, it is applied to the top-level filter group. Prefer setting
+     * `operator` directly inside `filter`.
+     */
     class Operator @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
