@@ -45,6 +45,7 @@ internal class AudienceServiceTest {
                                     .value("value")
                                     .build()
                             )
+                            .operator(AudienceFilterConfig.Operator.AND)
                             .build()
                     )
                     .name("name")

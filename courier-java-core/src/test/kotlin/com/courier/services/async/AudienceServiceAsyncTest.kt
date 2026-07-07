@@ -46,6 +46,7 @@ internal class AudienceServiceAsyncTest {
                                     .value("value")
                                     .build()
                             )
+                            .operator(AudienceFilterConfig.Operator.AND)
                             .build()
                     )
                     .name("name")
