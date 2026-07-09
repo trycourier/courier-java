@@ -14,6 +14,7 @@ internal class WorkspacePreferenceCreateParamsTest {
             .workspacePreferenceCreateRequest(
                 WorkspacePreferenceCreateRequest.builder()
                     .name("Account Notifications")
+                    .description("description")
                     .hasCustomRouting(true)
                     .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
                     .build()
@@ -28,6 +29,7 @@ internal class WorkspacePreferenceCreateParamsTest {
                 .workspacePreferenceCreateRequest(
                     WorkspacePreferenceCreateRequest.builder()
                         .name("Account Notifications")
+                        .description("description")
                         .hasCustomRouting(true)
                         .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
                         .build()
@@ -40,6 +42,7 @@ internal class WorkspacePreferenceCreateParamsTest {
             .isEqualTo(
                 WorkspacePreferenceCreateRequest.builder()
                     .name("Account Notifications")
+                    .description("description")
                     .hasCustomRouting(true)
                     .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
                     .build()

@@ -6,6 +6,10 @@ import com.courier.core.ClientOptions
 import com.courier.core.RequestOptions
 import com.courier.core.http.HttpResponse
 import com.courier.core.http.HttpResponseFor
+import com.courier.models.users.preferences.PreferenceBulkReplaceParams
+import com.courier.models.users.preferences.PreferenceBulkReplaceResponse
+import com.courier.models.users.preferences.PreferenceBulkUpdateParams
+import com.courier.models.users.preferences.PreferenceBulkUpdateResponse
 import com.courier.models.users.preferences.PreferenceDeleteTopicParams
 import com.courier.models.users.preferences.PreferenceRetrieveParams
 import com.courier.models.users.preferences.PreferenceRetrieveResponse
@@ -65,6 +69,89 @@ interface PreferenceServiceAsync {
         requestOptions: RequestOptions,
     ): CompletableFuture<PreferenceRetrieveResponse> =
         retrieve(userId, PreferenceRetrieveParams.none(), requestOptions)
+
+    /**
+     * Replace a user's complete set of preference overrides in a single request. The topics in the
+     * request body become the recipient's entire set of overrides: listed topics are created or
+     * updated, and every existing override that is not included in the body is reset to its topic
+     * default. Submitting an empty `topics` array is a valid clear-all that resets every existing
+     * override.
+     *
+     * This operation is validation-atomic (all-or-nothing): structural validation fails fast with a
+     * single `400`, and if any topic is semantically invalid (an unknown topic, a `REQUIRED` topic
+     * that cannot be opted out, or a custom routing request that is not available on the
+     * workspace's plan) the request returns a single `400` aggregating every failure in `errors`
+     * and writes nothing. On success it returns `200` with `items` (the complete resulting override
+     * set) and `deleted` (the ids of the overrides that were reset to default).
+     *
+     * Every `topic_id` in the response — in `items`, `deleted`, and any `errors` — is returned in
+     * Courier's canonical topic id form, regardless of the form supplied in the request.
+     */
+    fun bulkReplace(
+        userId: String,
+        params: PreferenceBulkReplaceParams,
+    ): CompletableFuture<PreferenceBulkReplaceResponse> =
+        bulkReplace(userId, params, RequestOptions.none())
+
+    /** @see bulkReplace */
+    fun bulkReplace(
+        userId: String,
+        params: PreferenceBulkReplaceParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<PreferenceBulkReplaceResponse> =
+        bulkReplace(params.toBuilder().userId(userId).build(), requestOptions)
+
+    /** @see bulkReplace */
+    fun bulkReplace(
+        params: PreferenceBulkReplaceParams
+    ): CompletableFuture<PreferenceBulkReplaceResponse> = bulkReplace(params, RequestOptions.none())
+
+    /** @see bulkReplace */
+    fun bulkReplace(
+        params: PreferenceBulkReplaceParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<PreferenceBulkReplaceResponse>
+
+    /**
+     * Additively create or update a user's preferences for one or more subscription topics in a
+     * single request. Only the topics included in the request body are created or updated; any
+     * existing overrides for topics not listed are left untouched.
+     *
+     * Structural validation of the request body fails fast with a single `400`. Beyond that, each
+     * topic is processed independently (partial-success, not all-or-nothing): valid topics are
+     * written and returned in `items`, while topics that cannot be applied are collected in
+     * `errors` with a per-topic `reason` (for example an unknown topic, a `REQUIRED` topic that
+     * cannot be opted out, a custom routing request that is not available on the workspace's plan,
+     * or a write failure). The request therefore returns `200` with both lists whenever the body is
+     * structurally valid.
+     *
+     * Every `topic_id` in the response — in both `items` and `errors` — is returned in Courier's
+     * canonical topic id form, regardless of the form supplied in the request.
+     */
+    fun bulkUpdate(
+        userId: String,
+        params: PreferenceBulkUpdateParams,
+    ): CompletableFuture<PreferenceBulkUpdateResponse> =
+        bulkUpdate(userId, params, RequestOptions.none())
+
+    /** @see bulkUpdate */
+    fun bulkUpdate(
+        userId: String,
+        params: PreferenceBulkUpdateParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<PreferenceBulkUpdateResponse> =
+        bulkUpdate(params.toBuilder().userId(userId).build(), requestOptions)
+
+    /** @see bulkUpdate */
+    fun bulkUpdate(
+        params: PreferenceBulkUpdateParams
+    ): CompletableFuture<PreferenceBulkUpdateResponse> = bulkUpdate(params, RequestOptions.none())
+
+    /** @see bulkUpdate */
+    fun bulkUpdate(
+        params: PreferenceBulkUpdateParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<PreferenceBulkUpdateResponse>
 
     /**
      * Remove a user's preferences for a specific subscription topic, resetting the topic to its
@@ -205,6 +292,66 @@ interface PreferenceServiceAsync {
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<PreferenceRetrieveResponse>> =
             retrieve(userId, PreferenceRetrieveParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `put /users/{user_id}/preferences`, but is otherwise the
+         * same as [PreferenceServiceAsync.bulkReplace].
+         */
+        fun bulkReplace(
+            userId: String,
+            params: PreferenceBulkReplaceParams,
+        ): CompletableFuture<HttpResponseFor<PreferenceBulkReplaceResponse>> =
+            bulkReplace(userId, params, RequestOptions.none())
+
+        /** @see bulkReplace */
+        fun bulkReplace(
+            userId: String,
+            params: PreferenceBulkReplaceParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<PreferenceBulkReplaceResponse>> =
+            bulkReplace(params.toBuilder().userId(userId).build(), requestOptions)
+
+        /** @see bulkReplace */
+        fun bulkReplace(
+            params: PreferenceBulkReplaceParams
+        ): CompletableFuture<HttpResponseFor<PreferenceBulkReplaceResponse>> =
+            bulkReplace(params, RequestOptions.none())
+
+        /** @see bulkReplace */
+        fun bulkReplace(
+            params: PreferenceBulkReplaceParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<PreferenceBulkReplaceResponse>>
+
+        /**
+         * Returns a raw HTTP response for `post /users/{user_id}/preferences`, but is otherwise the
+         * same as [PreferenceServiceAsync.bulkUpdate].
+         */
+        fun bulkUpdate(
+            userId: String,
+            params: PreferenceBulkUpdateParams,
+        ): CompletableFuture<HttpResponseFor<PreferenceBulkUpdateResponse>> =
+            bulkUpdate(userId, params, RequestOptions.none())
+
+        /** @see bulkUpdate */
+        fun bulkUpdate(
+            userId: String,
+            params: PreferenceBulkUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<PreferenceBulkUpdateResponse>> =
+            bulkUpdate(params.toBuilder().userId(userId).build(), requestOptions)
+
+        /** @see bulkUpdate */
+        fun bulkUpdate(
+            params: PreferenceBulkUpdateParams
+        ): CompletableFuture<HttpResponseFor<PreferenceBulkUpdateResponse>> =
+            bulkUpdate(params, RequestOptions.none())
+
+        /** @see bulkUpdate */
+        fun bulkUpdate(
+            params: PreferenceBulkUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<PreferenceBulkUpdateResponse>>
 
         /**
          * Returns a raw HTTP response for `delete /users/{user_id}/preferences/{topic_id}`, but is

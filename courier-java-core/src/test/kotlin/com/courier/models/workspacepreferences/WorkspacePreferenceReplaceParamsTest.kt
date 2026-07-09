@@ -15,6 +15,7 @@ internal class WorkspacePreferenceReplaceParamsTest {
             .workspacePreferenceReplaceRequest(
                 WorkspacePreferenceReplaceRequest.builder()
                     .name("name")
+                    .description("description")
                     .hasCustomRouting(true)
                     .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
                     .build()
@@ -45,6 +46,7 @@ internal class WorkspacePreferenceReplaceParamsTest {
                 .workspacePreferenceReplaceRequest(
                     WorkspacePreferenceReplaceRequest.builder()
                         .name("name")
+                        .description("description")
                         .hasCustomRouting(true)
                         .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
                         .build()
@@ -57,6 +59,7 @@ internal class WorkspacePreferenceReplaceParamsTest {
             .isEqualTo(
                 WorkspacePreferenceReplaceRequest.builder()
                     .name("name")
+                    .description("description")
                     .hasCustomRouting(true)
                     .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
                     .build()

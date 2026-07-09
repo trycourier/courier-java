@@ -29,6 +29,7 @@ internal class WorkspacePreferenceTopicGetResponseTest {
                 )
                 .updated("updated")
                 .creator("creator")
+                .description("description")
                 .updater("updater")
                 .build()
 
@@ -50,6 +51,7 @@ internal class WorkspacePreferenceTopicGetResponseTest {
             )
         assertThat(workspacePreferenceTopicGetResponse.updated()).isEqualTo("updated")
         assertThat(workspacePreferenceTopicGetResponse.creator()).contains("creator")
+        assertThat(workspacePreferenceTopicGetResponse.description()).contains("description")
         assertThat(workspacePreferenceTopicGetResponse.updater()).contains("updater")
     }
 
@@ -72,6 +74,7 @@ internal class WorkspacePreferenceTopicGetResponseTest {
                 )
                 .updated("updated")
                 .creator("creator")
+                .description("description")
                 .updater("updater")
                 .build()
 

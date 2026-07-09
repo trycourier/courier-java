@@ -4,6 +4,7 @@ package com.courier.services.async
 
 import com.courier.client.okhttp.CourierOkHttpClientAsync
 import com.courier.models.ChannelClassification
+import com.courier.models.workspacepreferences.PublishPreferencesRequest
 import com.courier.models.workspacepreferences.WorkspacePreferenceCreateRequest
 import com.courier.models.workspacepreferences.WorkspacePreferenceReplaceParams
 import com.courier.models.workspacepreferences.WorkspacePreferenceReplaceRequest
@@ -22,6 +23,7 @@ internal class WorkspacePreferenceServiceAsyncTest {
             workspacePreferenceServiceAsync.create(
                 WorkspacePreferenceCreateRequest.builder()
                     .name("Account Notifications")
+                    .description("description")
                     .hasCustomRouting(true)
                     .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
                     .build()
@@ -73,7 +75,14 @@ internal class WorkspacePreferenceServiceAsyncTest {
         val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
         val workspacePreferenceServiceAsync = client.workspacePreferences()
 
-        val publishPreferencesResponseFuture = workspacePreferenceServiceAsync.publish()
+        val publishPreferencesResponseFuture =
+            workspacePreferenceServiceAsync.publish(
+                PublishPreferencesRequest.builder()
+                    .brandId("brand_id")
+                    .description("description")
+                    .heading("heading")
+                    .build()
+            )
 
         val publishPreferencesResponse = publishPreferencesResponseFuture.get()
         publishPreferencesResponse.validate()
@@ -92,6 +101,7 @@ internal class WorkspacePreferenceServiceAsyncTest {
                     .workspacePreferenceReplaceRequest(
                         WorkspacePreferenceReplaceRequest.builder()
                             .name("name")
+                            .description("description")
                             .hasCustomRouting(true)
                             .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
                             .build()

@@ -22,6 +22,7 @@ internal class TopicReplaceParamsTest {
                     .addAllowedPreference(
                         WorkspacePreferenceTopicReplaceRequest.AllowedPreference.SNOOZE
                     )
+                    .description("description")
                     .includeUnsubscribeHeader(true)
                     .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
                     .topicData(
@@ -71,6 +72,7 @@ internal class TopicReplaceParamsTest {
                         .addAllowedPreference(
                             WorkspacePreferenceTopicReplaceRequest.AllowedPreference.SNOOZE
                         )
+                        .description("description")
                         .includeUnsubscribeHeader(true)
                         .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
                         .topicData(
@@ -92,6 +94,7 @@ internal class TopicReplaceParamsTest {
                     .addAllowedPreference(
                         WorkspacePreferenceTopicReplaceRequest.AllowedPreference.SNOOZE
                     )
+                    .description("description")
                     .includeUnsubscribeHeader(true)
                     .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
                     .topicData(

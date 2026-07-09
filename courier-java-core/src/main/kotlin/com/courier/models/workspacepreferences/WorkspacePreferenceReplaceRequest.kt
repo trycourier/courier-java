@@ -28,6 +28,7 @@ class WorkspacePreferenceReplaceRequest
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val name: JsonField<String>,
+    private val description: JsonField<String>,
     private val hasCustomRouting: JsonField<Boolean>,
     private val routingOptions: JsonField<List<ChannelClassification>>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -36,13 +37,16 @@ private constructor(
     @JsonCreator
     private constructor(
         @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("description")
+        @ExcludeMissing
+        description: JsonField<String> = JsonMissing.of(),
         @JsonProperty("has_custom_routing")
         @ExcludeMissing
         hasCustomRouting: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("routing_options")
         @ExcludeMissing
         routingOptions: JsonField<List<ChannelClassification>> = JsonMissing.of(),
-    ) : this(name, hasCustomRouting, routingOptions, mutableMapOf())
+    ) : this(name, description, hasCustomRouting, routingOptions, mutableMapOf())
 
     /**
      * Human-readable name for the workspace preference.
@@ -51,6 +55,14 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun name(): String = name.getRequired("name")
+
+    /**
+     * Optional description shown under the section on the hosted preferences page. Omit to clear.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun description(): Optional<String> = description.getOptional("description")
 
     /**
      * Whether the workspace preference defines custom routing for its topics.
@@ -75,6 +87,13 @@ private constructor(
      * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+    /**
+     * Returns the raw JSON value of [description].
+     *
+     * Unlike [description], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("description") @ExcludeMissing fun _description(): JsonField<String> = description
 
     /**
      * Returns the raw JSON value of [hasCustomRouting].
@@ -125,6 +144,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var name: JsonField<String>? = null
+        private var description: JsonField<String> = JsonMissing.of()
         private var hasCustomRouting: JsonField<Boolean> = JsonMissing.of()
         private var routingOptions: JsonField<MutableList<ChannelClassification>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -133,6 +153,7 @@ private constructor(
         internal fun from(workspacePreferenceReplaceRequest: WorkspacePreferenceReplaceRequest) =
             apply {
                 name = workspacePreferenceReplaceRequest.name
+                description = workspacePreferenceReplaceRequest.description
                 hasCustomRouting = workspacePreferenceReplaceRequest.hasCustomRouting
                 routingOptions =
                     workspacePreferenceReplaceRequest.routingOptions.map { it.toMutableList() }
@@ -150,6 +171,24 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun name(name: JsonField<String>) = apply { this.name = name }
+
+        /**
+         * Optional description shown under the section on the hosted preferences page. Omit to
+         * clear.
+         */
+        fun description(description: String?) = description(JsonField.ofNullable(description))
+
+        /** Alias for calling [Builder.description] with `description.orElse(null)`. */
+        fun description(description: Optional<String>) = description(description.getOrNull())
+
+        /**
+         * Sets [Builder.description] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.description] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun description(description: JsonField<String>) = apply { this.description = description }
 
         /** Whether the workspace preference defines custom routing for its topics. */
         fun hasCustomRouting(hasCustomRouting: Boolean?) =
@@ -243,6 +282,7 @@ private constructor(
         fun build(): WorkspacePreferenceReplaceRequest =
             WorkspacePreferenceReplaceRequest(
                 checkRequired("name", name),
+                description,
                 hasCustomRouting,
                 (routingOptions ?: JsonMissing.of()).map { it.toImmutable() },
                 additionalProperties.toMutableMap(),
@@ -265,6 +305,7 @@ private constructor(
         }
 
         name()
+        description()
         hasCustomRouting()
         routingOptions().ifPresent { it.forEach { it.validate() } }
         validated = true
@@ -286,6 +327,7 @@ private constructor(
     @JvmSynthetic
     internal fun validity(): Int =
         (if (name.asKnown().isPresent) 1 else 0) +
+            (if (description.asKnown().isPresent) 1 else 0) +
             (if (hasCustomRouting.asKnown().isPresent) 1 else 0) +
             (routingOptions.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
 
@@ -296,17 +338,18 @@ private constructor(
 
         return other is WorkspacePreferenceReplaceRequest &&
             name == other.name &&
+            description == other.description &&
             hasCustomRouting == other.hasCustomRouting &&
             routingOptions == other.routingOptions &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(name, hasCustomRouting, routingOptions, additionalProperties)
+        Objects.hash(name, description, hasCustomRouting, routingOptions, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "WorkspacePreferenceReplaceRequest{name=$name, hasCustomRouting=$hasCustomRouting, routingOptions=$routingOptions, additionalProperties=$additionalProperties}"
+        "WorkspacePreferenceReplaceRequest{name=$name, description=$description, hasCustomRouting=$hasCustomRouting, routingOptions=$routingOptions, additionalProperties=$additionalProperties}"
 }

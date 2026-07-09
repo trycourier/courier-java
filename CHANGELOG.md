@@ -1,5 +1,14 @@
 # Changelog
 
+## 4.20.0 (2026-07-09)
+
+Full Changelog: [v4.19.2...v4.20.0](https://github.com/trycourier/courier-java/compare/v4.19.2...v4.20.0)
+
+### Features
+
+* Add bulk user preference upsert and replace endpoints ([e119feb](https://github.com/trycourier/courier-java/commit/e119feb43eceb25d6599d9cb6c9f83178c184e64))
+* Preferences v3 REST fields: section/topic description + publish body ([30e226b](https://github.com/trycourier/courier-java/commit/30e226b6693d399cb83c0e3ffbbe77d2b851339b))
+
 ## 4.19.2 (2026-07-09)
 
 Full Changelog: [v4.19.1...v4.19.2](https://github.com/trycourier/courier-java/compare/v4.19.1...v4.19.2)

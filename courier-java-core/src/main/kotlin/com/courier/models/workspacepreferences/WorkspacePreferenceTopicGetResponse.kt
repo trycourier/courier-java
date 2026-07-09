@@ -35,6 +35,7 @@ private constructor(
     private val topicData: JsonField<TopicData>,
     private val updated: JsonField<String>,
     private val creator: JsonField<String>,
+    private val description: JsonField<String>,
     private val updater: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
@@ -61,6 +62,9 @@ private constructor(
         topicData: JsonField<TopicData> = JsonMissing.of(),
         @JsonProperty("updated") @ExcludeMissing updated: JsonField<String> = JsonMissing.of(),
         @JsonProperty("creator") @ExcludeMissing creator: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("description")
+        @ExcludeMissing
+        description: JsonField<String> = JsonMissing.of(),
         @JsonProperty("updater") @ExcludeMissing updater: JsonField<String> = JsonMissing.of(),
     ) : this(
         id,
@@ -73,6 +77,7 @@ private constructor(
         topicData,
         updated,
         creator,
+        description,
         updater,
         mutableMapOf(),
     )
@@ -159,6 +164,14 @@ private constructor(
      *   server responded with an unexpected value).
      */
     fun creator(): Optional<String> = creator.getOptional("creator")
+
+    /**
+     * Optional description shown under the topic on the hosted preferences page.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun description(): Optional<String> = description.getOptional("description")
 
     /**
      * Id of the last updater.
@@ -249,6 +262,13 @@ private constructor(
     @JsonProperty("creator") @ExcludeMissing fun _creator(): JsonField<String> = creator
 
     /**
+     * Returns the raw JSON value of [description].
+     *
+     * Unlike [description], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("description") @ExcludeMissing fun _description(): JsonField<String> = description
+
+    /**
      * Returns the raw JSON value of [updater].
      *
      * Unlike [updater], this method doesn't throw if the JSON field has an unexpected type.
@@ -302,6 +322,7 @@ private constructor(
         private var topicData: JsonField<TopicData>? = null
         private var updated: JsonField<String>? = null
         private var creator: JsonField<String> = JsonMissing.of()
+        private var description: JsonField<String> = JsonMissing.of()
         private var updater: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -321,6 +342,7 @@ private constructor(
             topicData = workspacePreferenceTopicGetResponse.topicData
             updated = workspacePreferenceTopicGetResponse.updated
             creator = workspacePreferenceTopicGetResponse.creator
+            description = workspacePreferenceTopicGetResponse.description
             updater = workspacePreferenceTopicGetResponse.updater
             additionalProperties =
                 workspacePreferenceTopicGetResponse.additionalProperties.toMutableMap()
@@ -479,6 +501,21 @@ private constructor(
          */
         fun creator(creator: JsonField<String>) = apply { this.creator = creator }
 
+        /** Optional description shown under the topic on the hosted preferences page. */
+        fun description(description: String?) = description(JsonField.ofNullable(description))
+
+        /** Alias for calling [Builder.description] with `description.orElse(null)`. */
+        fun description(description: Optional<String>) = description(description.getOrNull())
+
+        /**
+         * Sets [Builder.description] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.description] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun description(description: JsonField<String>) = apply { this.description = description }
+
         /** Id of the last updater. */
         fun updater(updater: String?) = updater(JsonField.ofNullable(updater))
 
@@ -544,6 +581,7 @@ private constructor(
                 checkRequired("topicData", topicData),
                 checkRequired("updated", updated),
                 creator,
+                description,
                 updater,
                 additionalProperties.toMutableMap(),
             )
@@ -574,6 +612,7 @@ private constructor(
         topicData().validate()
         updated()
         creator()
+        description()
         updater()
         validated = true
     }
@@ -603,6 +642,7 @@ private constructor(
             (topicData.asKnown().getOrNull()?.validity() ?: 0) +
             (if (updated.asKnown().isPresent) 1 else 0) +
             (if (creator.asKnown().isPresent) 1 else 0) +
+            (if (description.asKnown().isPresent) 1 else 0) +
             (if (updater.asKnown().isPresent) 1 else 0)
 
     /** A preference control a recipient may customize for a topic. */
@@ -1014,6 +1054,7 @@ private constructor(
             topicData == other.topicData &&
             updated == other.updated &&
             creator == other.creator &&
+            description == other.description &&
             updater == other.updater &&
             additionalProperties == other.additionalProperties
     }
@@ -1030,6 +1071,7 @@ private constructor(
             topicData,
             updated,
             creator,
+            description,
             updater,
             additionalProperties,
         )
@@ -1038,5 +1080,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "WorkspacePreferenceTopicGetResponse{id=$id, allowedPreferences=$allowedPreferences, created=$created, defaultStatus=$defaultStatus, includeUnsubscribeHeader=$includeUnsubscribeHeader, name=$name, routingOptions=$routingOptions, topicData=$topicData, updated=$updated, creator=$creator, updater=$updater, additionalProperties=$additionalProperties}"
+        "WorkspacePreferenceTopicGetResponse{id=$id, allowedPreferences=$allowedPreferences, created=$created, defaultStatus=$defaultStatus, includeUnsubscribeHeader=$includeUnsubscribeHeader, name=$name, routingOptions=$routingOptions, topicData=$topicData, updated=$updated, creator=$creator, description=$description, updater=$updater, additionalProperties=$additionalProperties}"
 }

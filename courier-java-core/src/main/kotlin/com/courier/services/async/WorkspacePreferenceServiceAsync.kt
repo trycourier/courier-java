@@ -6,6 +6,7 @@ import com.courier.core.ClientOptions
 import com.courier.core.RequestOptions
 import com.courier.core.http.HttpResponse
 import com.courier.core.http.HttpResponseFor
+import com.courier.models.workspacepreferences.PublishPreferencesRequest
 import com.courier.models.workspacepreferences.PublishPreferencesResponse
 import com.courier.models.workspacepreferences.WorkspacePreferenceArchiveParams
 import com.courier.models.workspacepreferences.WorkspacePreferenceCreateParams
@@ -180,6 +181,24 @@ interface WorkspacePreferenceServiceAsync {
     fun publish(
         params: WorkspacePreferencePublishParams = WorkspacePreferencePublishParams.none()
     ): CompletableFuture<PublishPreferencesResponse> = publish(params, RequestOptions.none())
+
+    /** @see publish */
+    fun publish(
+        publishPreferencesRequest: PublishPreferencesRequest,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<PublishPreferencesResponse> =
+        publish(
+            WorkspacePreferencePublishParams.builder()
+                .publishPreferencesRequest(publishPreferencesRequest)
+                .build(),
+            requestOptions,
+        )
+
+    /** @see publish */
+    fun publish(
+        publishPreferencesRequest: PublishPreferencesRequest
+    ): CompletableFuture<PublishPreferencesResponse> =
+        publish(publishPreferencesRequest, RequestOptions.none())
 
     /** @see publish */
     fun publish(requestOptions: RequestOptions): CompletableFuture<PublishPreferencesResponse> =
@@ -388,6 +407,24 @@ interface WorkspacePreferenceServiceAsync {
             params: WorkspacePreferencePublishParams = WorkspacePreferencePublishParams.none()
         ): CompletableFuture<HttpResponseFor<PublishPreferencesResponse>> =
             publish(params, RequestOptions.none())
+
+        /** @see publish */
+        fun publish(
+            publishPreferencesRequest: PublishPreferencesRequest,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<PublishPreferencesResponse>> =
+            publish(
+                WorkspacePreferencePublishParams.builder()
+                    .publishPreferencesRequest(publishPreferencesRequest)
+                    .build(),
+                requestOptions,
+            )
+
+        /** @see publish */
+        fun publish(
+            publishPreferencesRequest: PublishPreferencesRequest
+        ): CompletableFuture<HttpResponseFor<PublishPreferencesResponse>> =
+            publish(publishPreferencesRequest, RequestOptions.none())
 
         /** @see publish */
         fun publish(

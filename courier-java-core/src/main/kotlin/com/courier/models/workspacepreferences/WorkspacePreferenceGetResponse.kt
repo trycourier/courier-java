@@ -31,6 +31,7 @@ private constructor(
     private val routingOptions: JsonField<List<ChannelClassification>>,
     private val topics: JsonField<List<WorkspacePreferenceTopicGetResponse>>,
     private val creator: JsonField<String>,
+    private val description: JsonField<String>,
     private val updated: JsonField<String>,
     private val updater: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -51,6 +52,9 @@ private constructor(
         @ExcludeMissing
         topics: JsonField<List<WorkspacePreferenceTopicGetResponse>> = JsonMissing.of(),
         @JsonProperty("creator") @ExcludeMissing creator: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("description")
+        @ExcludeMissing
+        description: JsonField<String> = JsonMissing.of(),
         @JsonProperty("updated") @ExcludeMissing updated: JsonField<String> = JsonMissing.of(),
         @JsonProperty("updater") @ExcludeMissing updater: JsonField<String> = JsonMissing.of(),
     ) : this(
@@ -61,6 +65,7 @@ private constructor(
         routingOptions,
         topics,
         creator,
+        description,
         updated,
         updater,
         mutableMapOf(),
@@ -122,6 +127,14 @@ private constructor(
      *   server responded with an unexpected value).
      */
     fun creator(): Optional<String> = creator.getOptional("creator")
+
+    /**
+     * Optional description shown under the section on the hosted preferences page.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun description(): Optional<String> = description.getOptional("description")
 
     /**
      * ISO-8601 timestamp of the last update.
@@ -196,6 +209,13 @@ private constructor(
     @JsonProperty("creator") @ExcludeMissing fun _creator(): JsonField<String> = creator
 
     /**
+     * Returns the raw JSON value of [description].
+     *
+     * Unlike [description], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("description") @ExcludeMissing fun _description(): JsonField<String> = description
+
+    /**
      * Returns the raw JSON value of [updated].
      *
      * Unlike [updated], this method doesn't throw if the JSON field has an unexpected type.
@@ -250,6 +270,7 @@ private constructor(
         private var routingOptions: JsonField<MutableList<ChannelClassification>>? = null
         private var topics: JsonField<MutableList<WorkspacePreferenceTopicGetResponse>>? = null
         private var creator: JsonField<String> = JsonMissing.of()
+        private var description: JsonField<String> = JsonMissing.of()
         private var updated: JsonField<String> = JsonMissing.of()
         private var updater: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -264,6 +285,7 @@ private constructor(
                 workspacePreferenceGetResponse.routingOptions.map { it.toMutableList() }
             topics = workspacePreferenceGetResponse.topics.map { it.toMutableList() }
             creator = workspacePreferenceGetResponse.creator
+            description = workspacePreferenceGetResponse.description
             updated = workspacePreferenceGetResponse.updated
             updater = workspacePreferenceGetResponse.updater
             additionalProperties =
@@ -385,6 +407,21 @@ private constructor(
          */
         fun creator(creator: JsonField<String>) = apply { this.creator = creator }
 
+        /** Optional description shown under the section on the hosted preferences page. */
+        fun description(description: String?) = description(JsonField.ofNullable(description))
+
+        /** Alias for calling [Builder.description] with `description.orElse(null)`. */
+        fun description(description: Optional<String>) = description(description.getOrNull())
+
+        /**
+         * Sets [Builder.description] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.description] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun description(description: JsonField<String>) = apply { this.description = description }
+
         /** ISO-8601 timestamp of the last update. */
         fun updated(updated: String?) = updated(JsonField.ofNullable(updated))
 
@@ -458,6 +495,7 @@ private constructor(
                 checkRequired("routingOptions", routingOptions).map { it.toImmutable() },
                 checkRequired("topics", topics).map { it.toImmutable() },
                 creator,
+                description,
                 updated,
                 updater,
                 additionalProperties.toMutableMap(),
@@ -486,6 +524,7 @@ private constructor(
         routingOptions().forEach { it.validate() }
         topics().forEach { it.validate() }
         creator()
+        description()
         updated()
         updater()
         validated = true
@@ -513,6 +552,7 @@ private constructor(
             (routingOptions.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
             (topics.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
             (if (creator.asKnown().isPresent) 1 else 0) +
+            (if (description.asKnown().isPresent) 1 else 0) +
             (if (updated.asKnown().isPresent) 1 else 0) +
             (if (updater.asKnown().isPresent) 1 else 0)
 
@@ -529,6 +569,7 @@ private constructor(
             routingOptions == other.routingOptions &&
             topics == other.topics &&
             creator == other.creator &&
+            description == other.description &&
             updated == other.updated &&
             updater == other.updater &&
             additionalProperties == other.additionalProperties
@@ -543,6 +584,7 @@ private constructor(
             routingOptions,
             topics,
             creator,
+            description,
             updated,
             updater,
             additionalProperties,
@@ -552,5 +594,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "WorkspacePreferenceGetResponse{id=$id, created=$created, hasCustomRouting=$hasCustomRouting, name=$name, routingOptions=$routingOptions, topics=$topics, creator=$creator, updated=$updated, updater=$updater, additionalProperties=$additionalProperties}"
+        "WorkspacePreferenceGetResponse{id=$id, created=$created, hasCustomRouting=$hasCustomRouting, name=$name, routingOptions=$routingOptions, topics=$topics, creator=$creator, description=$description, updated=$updated, updater=$updater, additionalProperties=$additionalProperties}"
 }
