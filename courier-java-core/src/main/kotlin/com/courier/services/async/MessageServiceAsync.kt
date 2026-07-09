@@ -13,6 +13,8 @@ import com.courier.models.messages.MessageHistoryParams
 import com.courier.models.messages.MessageHistoryResponse
 import com.courier.models.messages.MessageListParams
 import com.courier.models.messages.MessageListResponse
+import com.courier.models.messages.MessageResendParams
+import com.courier.models.messages.MessageResendResponse
 import com.courier.models.messages.MessageRetrieveParams
 import com.courier.models.messages.MessageRetrieveResponse
 import java.util.concurrent.CompletableFuture
@@ -195,6 +197,46 @@ interface MessageServiceAsync {
         requestOptions: RequestOptions,
     ): CompletableFuture<MessageHistoryResponse> =
         history(messageId, MessageHistoryParams.none(), requestOptions)
+
+    /**
+     * Resend a previously sent message. The original send request is loaded from storage and a
+     * brand-new send is enqueued for the same recipient and content, producing a **new**
+     * `messageId` — the original message is not modified. Throttled by a per-message rate limit; a
+     * repeat inside the limit window returns `429 Too Many Requests`.
+     */
+    fun resend(messageId: String): CompletableFuture<MessageResendResponse> =
+        resend(messageId, MessageResendParams.none())
+
+    /** @see resend */
+    fun resend(
+        messageId: String,
+        params: MessageResendParams = MessageResendParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<MessageResendResponse> =
+        resend(params.toBuilder().messageId(messageId).build(), requestOptions)
+
+    /** @see resend */
+    fun resend(
+        messageId: String,
+        params: MessageResendParams = MessageResendParams.none(),
+    ): CompletableFuture<MessageResendResponse> = resend(messageId, params, RequestOptions.none())
+
+    /** @see resend */
+    fun resend(
+        params: MessageResendParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<MessageResendResponse>
+
+    /** @see resend */
+    fun resend(params: MessageResendParams): CompletableFuture<MessageResendResponse> =
+        resend(params, RequestOptions.none())
+
+    /** @see resend */
+    fun resend(
+        messageId: String,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<MessageResendResponse> =
+        resend(messageId, MessageResendParams.none(), requestOptions)
 
     /**
      * A view of [MessageServiceAsync] that provides access to raw HTTP responses for each method.
@@ -400,5 +442,46 @@ interface MessageServiceAsync {
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<MessageHistoryResponse>> =
             history(messageId, MessageHistoryParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /messages/{message_id}/resend`, but is otherwise
+         * the same as [MessageServiceAsync.resend].
+         */
+        fun resend(messageId: String): CompletableFuture<HttpResponseFor<MessageResendResponse>> =
+            resend(messageId, MessageResendParams.none())
+
+        /** @see resend */
+        fun resend(
+            messageId: String,
+            params: MessageResendParams = MessageResendParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<MessageResendResponse>> =
+            resend(params.toBuilder().messageId(messageId).build(), requestOptions)
+
+        /** @see resend */
+        fun resend(
+            messageId: String,
+            params: MessageResendParams = MessageResendParams.none(),
+        ): CompletableFuture<HttpResponseFor<MessageResendResponse>> =
+            resend(messageId, params, RequestOptions.none())
+
+        /** @see resend */
+        fun resend(
+            params: MessageResendParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<MessageResendResponse>>
+
+        /** @see resend */
+        fun resend(
+            params: MessageResendParams
+        ): CompletableFuture<HttpResponseFor<MessageResendResponse>> =
+            resend(params, RequestOptions.none())
+
+        /** @see resend */
+        fun resend(
+            messageId: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<MessageResendResponse>> =
+            resend(messageId, MessageResendParams.none(), requestOptions)
     }
 }

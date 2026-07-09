@@ -85,4 +85,15 @@ internal class MessageServiceTest {
 
         response.validate()
     }
+
+    @Disabled("Mock server tests are disabled")
+    @Test
+    fun resend() {
+        val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
+        val messageService = client.messages()
+
+        val response = messageService.resend("message_id")
+
+        response.validate()
+    }
 }

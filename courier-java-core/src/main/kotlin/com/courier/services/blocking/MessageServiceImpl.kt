@@ -24,6 +24,8 @@ import com.courier.models.messages.MessageHistoryParams
 import com.courier.models.messages.MessageHistoryResponse
 import com.courier.models.messages.MessageListParams
 import com.courier.models.messages.MessageListResponse
+import com.courier.models.messages.MessageResendParams
+import com.courier.models.messages.MessageResendResponse
 import com.courier.models.messages.MessageRetrieveParams
 import com.courier.models.messages.MessageRetrieveResponse
 import java.util.function.Consumer
@@ -75,6 +77,13 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
     ): MessageHistoryResponse =
         // get /messages/{message_id}/history
         withRawResponse().history(params, requestOptions).parse()
+
+    override fun resend(
+        params: MessageResendParams,
+        requestOptions: RequestOptions,
+    ): MessageResendResponse =
+        // post /messages/{message_id}/resend
+        withRawResponse().resend(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         MessageService.WithRawResponse {
@@ -229,6 +238,37 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
             return errorHandler.handle(response).parseable {
                 response
                     .use { historyHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val resendHandler: Handler<MessageResendResponse> =
+            jsonHandler<MessageResendResponse>(clientOptions.jsonMapper)
+
+        override fun resend(
+            params: MessageResendParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<MessageResendResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("messageId", params.messageId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("messages", params._pathParam(0), "resend")
+                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { resendHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()
