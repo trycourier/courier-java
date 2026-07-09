@@ -90,4 +90,16 @@ internal class MessageServiceAsyncTest {
         val response = responseFuture.get()
         response.validate()
     }
+
+    @Disabled("Mock server tests are disabled")
+    @Test
+    fun resend() {
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val messageServiceAsync = client.messages()
+
+        val responseFuture = messageServiceAsync.resend("message_id")
+
+        val response = responseFuture.get()
+        response.validate()
+    }
 }
