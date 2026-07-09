@@ -13,6 +13,8 @@ import com.courier.models.messages.MessageHistoryParams
 import com.courier.models.messages.MessageHistoryResponse
 import com.courier.models.messages.MessageListParams
 import com.courier.models.messages.MessageListResponse
+import com.courier.models.messages.MessageResendParams
+import com.courier.models.messages.MessageResendResponse
 import com.courier.models.messages.MessageRetrieveParams
 import com.courier.models.messages.MessageRetrieveResponse
 import com.google.errorprone.annotations.MustBeClosed
@@ -178,6 +180,43 @@ interface MessageService {
     /** @see history */
     fun history(messageId: String, requestOptions: RequestOptions): MessageHistoryResponse =
         history(messageId, MessageHistoryParams.none(), requestOptions)
+
+    /**
+     * Resend a previously sent message. The original send request is loaded from storage and a
+     * brand-new send is enqueued for the same recipient and content, producing a **new**
+     * `messageId` — the original message is not modified. Throttled by a per-message rate limit; a
+     * repeat inside the limit window returns `429 Too Many Requests`.
+     */
+    fun resend(messageId: String): MessageResendResponse =
+        resend(messageId, MessageResendParams.none())
+
+    /** @see resend */
+    fun resend(
+        messageId: String,
+        params: MessageResendParams = MessageResendParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): MessageResendResponse =
+        resend(params.toBuilder().messageId(messageId).build(), requestOptions)
+
+    /** @see resend */
+    fun resend(
+        messageId: String,
+        params: MessageResendParams = MessageResendParams.none(),
+    ): MessageResendResponse = resend(messageId, params, RequestOptions.none())
+
+    /** @see resend */
+    fun resend(
+        params: MessageResendParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): MessageResendResponse
+
+    /** @see resend */
+    fun resend(params: MessageResendParams): MessageResendResponse =
+        resend(params, RequestOptions.none())
+
+    /** @see resend */
+    fun resend(messageId: String, requestOptions: RequestOptions): MessageResendResponse =
+        resend(messageId, MessageResendParams.none(), requestOptions)
 
     /** A view of [MessageService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -392,5 +431,49 @@ interface MessageService {
             requestOptions: RequestOptions,
         ): HttpResponseFor<MessageHistoryResponse> =
             history(messageId, MessageHistoryParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /messages/{message_id}/resend`, but is otherwise
+         * the same as [MessageService.resend].
+         */
+        @MustBeClosed
+        fun resend(messageId: String): HttpResponseFor<MessageResendResponse> =
+            resend(messageId, MessageResendParams.none())
+
+        /** @see resend */
+        @MustBeClosed
+        fun resend(
+            messageId: String,
+            params: MessageResendParams = MessageResendParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<MessageResendResponse> =
+            resend(params.toBuilder().messageId(messageId).build(), requestOptions)
+
+        /** @see resend */
+        @MustBeClosed
+        fun resend(
+            messageId: String,
+            params: MessageResendParams = MessageResendParams.none(),
+        ): HttpResponseFor<MessageResendResponse> = resend(messageId, params, RequestOptions.none())
+
+        /** @see resend */
+        @MustBeClosed
+        fun resend(
+            params: MessageResendParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<MessageResendResponse>
+
+        /** @see resend */
+        @MustBeClosed
+        fun resend(params: MessageResendParams): HttpResponseFor<MessageResendResponse> =
+            resend(params, RequestOptions.none())
+
+        /** @see resend */
+        @MustBeClosed
+        fun resend(
+            messageId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<MessageResendResponse> =
+            resend(messageId, MessageResendParams.none(), requestOptions)
     }
 }

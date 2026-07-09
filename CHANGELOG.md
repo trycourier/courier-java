@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.19.2 (2026-07-09)
+
+Full Changelog: [v4.19.1...v4.19.2](https://github.com/trycourier/courier-java/compare/v4.19.1...v4.19.2)
+
+### Chores
+
+* update api-spec with new message resend endpoint ([815f092](https://github.com/trycourier/courier-java/commit/815f092362606058abe1a6d36842449349f95284))
+
 ## 4.19.1 (2026-07-07)
 
 Full Changelog: [v4.19.0...v4.19.1](https://github.com/trycourier/courier-java/compare/v4.19.0...v4.19.1)
