@@ -44,7 +44,7 @@ internal class PreferenceServiceTest {
                     .addTopic(
                         PreferenceBulkReplaceParams.Topic.builder()
                             .status(PreferenceBulkReplaceParams.Topic.Status.OPTED_IN)
-                            .topicId("74Q4QGFBEX481DP6JRPMV751H4XT")
+                            .topicId("pt_01kx4h2jdafq8bk996nn92357r")
                             .addCustomRouting(ChannelClassification.INBOX)
                             .addCustomRouting(ChannelClassification.EMAIL)
                             .hasCustomRouting(true)
@@ -70,7 +70,7 @@ internal class PreferenceServiceTest {
                     .addTopic(
                         PreferenceBulkUpdateParams.Topic.builder()
                             .status(PreferenceBulkUpdateParams.Topic.Status.OPTED_IN)
-                            .topicId("74Q4QGFBEX481DP6JRPMV751H4XT")
+                            .topicId("pt_01kx4h2jdafq8bk996nn92357r")
                             .addCustomRouting(ChannelClassification.INBOX)
                             .addCustomRouting(ChannelClassification.EMAIL)
                             .hasCustomRouting(true)
@@ -79,7 +79,7 @@ internal class PreferenceServiceTest {
                     .addTopic(
                         PreferenceBulkUpdateParams.Topic.builder()
                             .status(PreferenceBulkUpdateParams.Topic.Status.OPTED_OUT)
-                            .topicId("5Q4QGFBEX481DP6JRPMV751H4YU")
+                            .topicId("pt_01kx4h2jdafq8bk99eyt3dx43x")
                             .addCustomRouting(ChannelClassification.DIRECT_MESSAGE)
                             .hasCustomRouting(true)
                             .build()

@@ -17,7 +17,7 @@ internal class PreferenceBulkReplaceParamsTest {
             .addTopic(
                 PreferenceBulkReplaceParams.Topic.builder()
                     .status(PreferenceBulkReplaceParams.Topic.Status.OPTED_IN)
-                    .topicId("74Q4QGFBEX481DP6JRPMV751H4XT")
+                    .topicId("pt_01kx4h2jdafq8bk996nn92357r")
                     .addCustomRouting(ChannelClassification.INBOX)
                     .addCustomRouting(ChannelClassification.EMAIL)
                     .hasCustomRouting(true)
@@ -34,7 +34,7 @@ internal class PreferenceBulkReplaceParamsTest {
                 .addTopic(
                     PreferenceBulkReplaceParams.Topic.builder()
                         .status(PreferenceBulkReplaceParams.Topic.Status.OPTED_IN)
-                        .topicId("74Q4QGFBEX481DP6JRPMV751H4XT")
+                        .topicId("pt_01kx4h2jdafq8bk996nn92357r")
                         .build()
                 )
                 .build()
@@ -53,7 +53,7 @@ internal class PreferenceBulkReplaceParamsTest {
                 .addTopic(
                     PreferenceBulkReplaceParams.Topic.builder()
                         .status(PreferenceBulkReplaceParams.Topic.Status.OPTED_IN)
-                        .topicId("74Q4QGFBEX481DP6JRPMV751H4XT")
+                        .topicId("pt_01kx4h2jdafq8bk996nn92357r")
                         .addCustomRouting(ChannelClassification.INBOX)
                         .addCustomRouting(ChannelClassification.EMAIL)
                         .hasCustomRouting(true)
@@ -75,7 +75,7 @@ internal class PreferenceBulkReplaceParamsTest {
                 .addTopic(
                     PreferenceBulkReplaceParams.Topic.builder()
                         .status(PreferenceBulkReplaceParams.Topic.Status.OPTED_IN)
-                        .topicId("74Q4QGFBEX481DP6JRPMV751H4XT")
+                        .topicId("pt_01kx4h2jdafq8bk996nn92357r")
                         .build()
                 )
                 .build()
@@ -94,7 +94,7 @@ internal class PreferenceBulkReplaceParamsTest {
                 .addTopic(
                     PreferenceBulkReplaceParams.Topic.builder()
                         .status(PreferenceBulkReplaceParams.Topic.Status.OPTED_IN)
-                        .topicId("74Q4QGFBEX481DP6JRPMV751H4XT")
+                        .topicId("pt_01kx4h2jdafq8bk996nn92357r")
                         .addCustomRouting(ChannelClassification.INBOX)
                         .addCustomRouting(ChannelClassification.EMAIL)
                         .hasCustomRouting(true)
@@ -108,7 +108,7 @@ internal class PreferenceBulkReplaceParamsTest {
             .containsExactly(
                 PreferenceBulkReplaceParams.Topic.builder()
                     .status(PreferenceBulkReplaceParams.Topic.Status.OPTED_IN)
-                    .topicId("74Q4QGFBEX481DP6JRPMV751H4XT")
+                    .topicId("pt_01kx4h2jdafq8bk996nn92357r")
                     .addCustomRouting(ChannelClassification.INBOX)
                     .addCustomRouting(ChannelClassification.EMAIL)
                     .hasCustomRouting(true)
@@ -124,7 +124,7 @@ internal class PreferenceBulkReplaceParamsTest {
                 .addTopic(
                     PreferenceBulkReplaceParams.Topic.builder()
                         .status(PreferenceBulkReplaceParams.Topic.Status.OPTED_IN)
-                        .topicId("74Q4QGFBEX481DP6JRPMV751H4XT")
+                        .topicId("pt_01kx4h2jdafq8bk996nn92357r")
                         .build()
                 )
                 .build()
@@ -135,7 +135,7 @@ internal class PreferenceBulkReplaceParamsTest {
             .containsExactly(
                 PreferenceBulkReplaceParams.Topic.builder()
                     .status(PreferenceBulkReplaceParams.Topic.Status.OPTED_IN)
-                    .topicId("74Q4QGFBEX481DP6JRPMV751H4XT")
+                    .topicId("pt_01kx4h2jdafq8bk996nn92357r")
                     .build()
             )
     }
