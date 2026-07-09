@@ -16,11 +16,13 @@ internal class WorkspacePreferenceReplaceRequestTest {
         val workspacePreferenceReplaceRequest =
             WorkspacePreferenceReplaceRequest.builder()
                 .name("name")
+                .description("description")
                 .hasCustomRouting(true)
                 .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
                 .build()
 
         assertThat(workspacePreferenceReplaceRequest.name()).isEqualTo("name")
+        assertThat(workspacePreferenceReplaceRequest.description()).contains("description")
         assertThat(workspacePreferenceReplaceRequest.hasCustomRouting()).contains(true)
         assertThat(workspacePreferenceReplaceRequest.routingOptions().getOrNull())
             .containsExactly(ChannelClassification.DIRECT_MESSAGE)
@@ -32,6 +34,7 @@ internal class WorkspacePreferenceReplaceRequestTest {
         val workspacePreferenceReplaceRequest =
             WorkspacePreferenceReplaceRequest.builder()
                 .name("name")
+                .description("description")
                 .hasCustomRouting(true)
                 .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
                 .build()

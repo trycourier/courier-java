@@ -21,6 +21,7 @@ internal class WorkspacePreferenceTopicCreateRequestTest {
                 .addAllowedPreference(
                     WorkspacePreferenceTopicCreateRequest.AllowedPreference.SNOOZE
                 )
+                .description("description")
                 .includeUnsubscribeHeader(true)
                 .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
                 .topicData(
@@ -35,6 +36,7 @@ internal class WorkspacePreferenceTopicCreateRequestTest {
         assertThat(workspacePreferenceTopicCreateRequest.name()).isEqualTo("name")
         assertThat(workspacePreferenceTopicCreateRequest.allowedPreferences().getOrNull())
             .containsExactly(WorkspacePreferenceTopicCreateRequest.AllowedPreference.SNOOZE)
+        assertThat(workspacePreferenceTopicCreateRequest.description()).contains("description")
         assertThat(workspacePreferenceTopicCreateRequest.includeUnsubscribeHeader()).contains(true)
         assertThat(workspacePreferenceTopicCreateRequest.routingOptions().getOrNull())
             .containsExactly(ChannelClassification.DIRECT_MESSAGE)
@@ -56,6 +58,7 @@ internal class WorkspacePreferenceTopicCreateRequestTest {
                 .addAllowedPreference(
                     WorkspacePreferenceTopicCreateRequest.AllowedPreference.SNOOZE
                 )
+                .description("description")
                 .includeUnsubscribeHeader(true)
                 .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
                 .topicData(

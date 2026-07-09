@@ -4,6 +4,7 @@ package com.courier.services.blocking
 
 import com.courier.client.okhttp.CourierOkHttpClient
 import com.courier.models.ChannelClassification
+import com.courier.models.workspacepreferences.PublishPreferencesRequest
 import com.courier.models.workspacepreferences.WorkspacePreferenceCreateRequest
 import com.courier.models.workspacepreferences.WorkspacePreferenceReplaceParams
 import com.courier.models.workspacepreferences.WorkspacePreferenceReplaceRequest
@@ -22,6 +23,7 @@ internal class WorkspacePreferenceServiceTest {
             workspacePreferenceService.create(
                 WorkspacePreferenceCreateRequest.builder()
                     .name("Account Notifications")
+                    .description("description")
                     .hasCustomRouting(true)
                     .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
                     .build()
@@ -67,7 +69,14 @@ internal class WorkspacePreferenceServiceTest {
         val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
         val workspacePreferenceService = client.workspacePreferences()
 
-        val publishPreferencesResponse = workspacePreferenceService.publish()
+        val publishPreferencesResponse =
+            workspacePreferenceService.publish(
+                PublishPreferencesRequest.builder()
+                    .brandId("brand_id")
+                    .description("description")
+                    .heading("heading")
+                    .build()
+            )
 
         publishPreferencesResponse.validate()
     }
@@ -85,6 +94,7 @@ internal class WorkspacePreferenceServiceTest {
                     .workspacePreferenceReplaceRequest(
                         WorkspacePreferenceReplaceRequest.builder()
                             .name("name")
+                            .description("description")
                             .hasCustomRouting(true)
                             .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
                             .build()

@@ -28,6 +28,7 @@ private constructor(
     private val defaultStatus: JsonField<DefaultStatus>,
     private val name: JsonField<String>,
     private val allowedPreferences: JsonField<List<AllowedPreference>>,
+    private val description: JsonField<String>,
     private val includeUnsubscribeHeader: JsonField<Boolean>,
     private val routingOptions: JsonField<List<ChannelClassification>>,
     private val topicData: JsonField<TopicData>,
@@ -43,6 +44,9 @@ private constructor(
         @JsonProperty("allowed_preferences")
         @ExcludeMissing
         allowedPreferences: JsonField<List<AllowedPreference>> = JsonMissing.of(),
+        @JsonProperty("description")
+        @ExcludeMissing
+        description: JsonField<String> = JsonMissing.of(),
         @JsonProperty("include_unsubscribe_header")
         @ExcludeMissing
         includeUnsubscribeHeader: JsonField<Boolean> = JsonMissing.of(),
@@ -56,6 +60,7 @@ private constructor(
         defaultStatus,
         name,
         allowedPreferences,
+        description,
         includeUnsubscribeHeader,
         routingOptions,
         topicData,
@@ -86,6 +91,14 @@ private constructor(
      */
     fun allowedPreferences(): Optional<List<AllowedPreference>> =
         allowedPreferences.getOptional("allowed_preferences")
+
+    /**
+     * Optional description shown under the topic on the hosted preferences page.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun description(): Optional<String> = description.getOptional("description")
 
     /**
      * Whether to include a list-unsubscribe header on emails for this topic.
@@ -138,6 +151,13 @@ private constructor(
     @JsonProperty("allowed_preferences")
     @ExcludeMissing
     fun _allowedPreferences(): JsonField<List<AllowedPreference>> = allowedPreferences
+
+    /**
+     * Returns the raw JSON value of [description].
+     *
+     * Unlike [description], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("description") @ExcludeMissing fun _description(): JsonField<String> = description
 
     /**
      * Returns the raw JSON value of [includeUnsubscribeHeader].
@@ -198,6 +218,7 @@ private constructor(
         private var defaultStatus: JsonField<DefaultStatus>? = null
         private var name: JsonField<String>? = null
         private var allowedPreferences: JsonField<MutableList<AllowedPreference>>? = null
+        private var description: JsonField<String> = JsonMissing.of()
         private var includeUnsubscribeHeader: JsonField<Boolean> = JsonMissing.of()
         private var routingOptions: JsonField<MutableList<ChannelClassification>>? = null
         private var topicData: JsonField<TopicData> = JsonMissing.of()
@@ -211,6 +232,7 @@ private constructor(
             name = workspacePreferenceTopicCreateRequest.name
             allowedPreferences =
                 workspacePreferenceTopicCreateRequest.allowedPreferences.map { it.toMutableList() }
+            description = workspacePreferenceTopicCreateRequest.description
             includeUnsubscribeHeader =
                 workspacePreferenceTopicCreateRequest.includeUnsubscribeHeader
             routingOptions =
@@ -280,6 +302,21 @@ private constructor(
                     checkKnown("allowedPreferences", it).add(allowedPreference)
                 }
         }
+
+        /** Optional description shown under the topic on the hosted preferences page. */
+        fun description(description: String?) = description(JsonField.ofNullable(description))
+
+        /** Alias for calling [Builder.description] with `description.orElse(null)`. */
+        fun description(description: Optional<String>) = description(description.getOrNull())
+
+        /**
+         * Sets [Builder.description] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.description] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun description(description: JsonField<String>) = apply { this.description = description }
 
         /** Whether to include a list-unsubscribe header on emails for this topic. */
         fun includeUnsubscribeHeader(includeUnsubscribeHeader: Boolean?) =
@@ -394,6 +431,7 @@ private constructor(
                 checkRequired("defaultStatus", defaultStatus),
                 checkRequired("name", name),
                 (allowedPreferences ?: JsonMissing.of()).map { it.toImmutable() },
+                description,
                 includeUnsubscribeHeader,
                 (routingOptions ?: JsonMissing.of()).map { it.toImmutable() },
                 topicData,
@@ -419,6 +457,7 @@ private constructor(
         defaultStatus().validate()
         name()
         allowedPreferences().ifPresent { it.forEach { it.validate() } }
+        description()
         includeUnsubscribeHeader()
         routingOptions().ifPresent { it.forEach { it.validate() } }
         topicData().ifPresent { it.validate() }
@@ -443,6 +482,7 @@ private constructor(
         (defaultStatus.asKnown().getOrNull()?.validity() ?: 0) +
             (if (name.asKnown().isPresent) 1 else 0) +
             (allowedPreferences.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+            (if (description.asKnown().isPresent) 1 else 0) +
             (if (includeUnsubscribeHeader.asKnown().isPresent) 1 else 0) +
             (routingOptions.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
             (topicData.asKnown().getOrNull()?.validity() ?: 0)
@@ -849,6 +889,7 @@ private constructor(
             defaultStatus == other.defaultStatus &&
             name == other.name &&
             allowedPreferences == other.allowedPreferences &&
+            description == other.description &&
             includeUnsubscribeHeader == other.includeUnsubscribeHeader &&
             routingOptions == other.routingOptions &&
             topicData == other.topicData &&
@@ -860,6 +901,7 @@ private constructor(
             defaultStatus,
             name,
             allowedPreferences,
+            description,
             includeUnsubscribeHeader,
             routingOptions,
             topicData,
@@ -870,5 +912,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "WorkspacePreferenceTopicCreateRequest{defaultStatus=$defaultStatus, name=$name, allowedPreferences=$allowedPreferences, includeUnsubscribeHeader=$includeUnsubscribeHeader, routingOptions=$routingOptions, topicData=$topicData, additionalProperties=$additionalProperties}"
+        "WorkspacePreferenceTopicCreateRequest{defaultStatus=$defaultStatus, name=$name, allowedPreferences=$allowedPreferences, description=$description, includeUnsubscribeHeader=$includeUnsubscribeHeader, routingOptions=$routingOptions, topicData=$topicData, additionalProperties=$additionalProperties}"
 }
