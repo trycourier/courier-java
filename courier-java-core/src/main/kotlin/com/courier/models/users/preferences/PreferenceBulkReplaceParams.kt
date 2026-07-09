@@ -52,7 +52,7 @@ private constructor(
 
     fun userId(): Optional<String> = Optional.ofNullable(userId)
 
-    /** Update the preferences of a user for this specific tenant context. */
+    /** Replace the preferences of a user for this specific tenant context. */
     fun tenantId(): Optional<String> = Optional.ofNullable(tenantId)
 
     /**
@@ -118,7 +118,7 @@ private constructor(
         /** Alias for calling [Builder.userId] with `userId.orElse(null)`. */
         fun userId(userId: Optional<String>) = userId(userId.getOrNull())
 
-        /** Update the preferences of a user for this specific tenant context. */
+        /** Replace the preferences of a user for this specific tenant context. */
         fun tenantId(tenantId: String?) = apply { this.tenantId = tenantId }
 
         /** Alias for calling [Builder.tenantId] with `tenantId.orElse(null)`. */
