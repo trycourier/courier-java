@@ -17,6 +17,10 @@ import com.courier.core.http.HttpResponseFor
 import com.courier.core.http.json
 import com.courier.core.http.parseable
 import com.courier.core.prepareAsync
+import com.courier.models.users.preferences.PreferenceBulkReplaceParams
+import com.courier.models.users.preferences.PreferenceBulkReplaceResponse
+import com.courier.models.users.preferences.PreferenceBulkUpdateParams
+import com.courier.models.users.preferences.PreferenceBulkUpdateResponse
 import com.courier.models.users.preferences.PreferenceDeleteTopicParams
 import com.courier.models.users.preferences.PreferenceRetrieveParams
 import com.courier.models.users.preferences.PreferenceRetrieveResponse
@@ -46,6 +50,20 @@ class PreferenceServiceAsyncImpl internal constructor(private val clientOptions:
     ): CompletableFuture<PreferenceRetrieveResponse> =
         // get /users/{user_id}/preferences
         withRawResponse().retrieve(params, requestOptions).thenApply { it.parse() }
+
+    override fun bulkReplace(
+        params: PreferenceBulkReplaceParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<PreferenceBulkReplaceResponse> =
+        // put /users/{user_id}/preferences
+        withRawResponse().bulkReplace(params, requestOptions).thenApply { it.parse() }
+
+    override fun bulkUpdate(
+        params: PreferenceBulkUpdateParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<PreferenceBulkUpdateResponse> =
+        // post /users/{user_id}/preferences
+        withRawResponse().bulkUpdate(params, requestOptions).thenApply { it.parse() }
 
     override fun deleteTopic(
         params: PreferenceDeleteTopicParams,
@@ -105,6 +123,74 @@ class PreferenceServiceAsyncImpl internal constructor(private val clientOptions:
                     errorHandler.handle(response).parseable {
                         response
                             .use { retrieveHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val bulkReplaceHandler: Handler<PreferenceBulkReplaceResponse> =
+            jsonHandler<PreferenceBulkReplaceResponse>(clientOptions.jsonMapper)
+
+        override fun bulkReplace(
+            params: PreferenceBulkReplaceParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<PreferenceBulkReplaceResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PUT)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("users", params._pathParam(0), "preferences")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { bulkReplaceHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val bulkUpdateHandler: Handler<PreferenceBulkUpdateResponse> =
+            jsonHandler<PreferenceBulkUpdateResponse>(clientOptions.jsonMapper)
+
+        override fun bulkUpdate(
+            params: PreferenceBulkUpdateParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<PreferenceBulkUpdateResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("users", params._pathParam(0), "preferences")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { bulkUpdateHandler.handle(it) }
                             .also {
                                 if (requestOptions.responseValidation!!) {
                                     it.validate()
