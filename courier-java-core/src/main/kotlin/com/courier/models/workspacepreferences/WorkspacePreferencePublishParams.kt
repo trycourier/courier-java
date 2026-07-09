@@ -6,9 +6,10 @@ import com.courier.core.JsonValue
 import com.courier.core.Params
 import com.courier.core.http.Headers
 import com.courier.core.http.QueryParams
-import com.courier.core.toImmutable
+import com.courier.core.immutableEmptyMap
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Publish the workspace's preferences page. Takes a snapshot of every workspace preference with its
@@ -17,13 +18,21 @@ import java.util.Optional
  */
 class WorkspacePreferencePublishParams
 private constructor(
+    private val publishPreferencesRequest: PublishPreferencesRequest?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
-    /** Additional body properties to send with the request. */
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    /**
+     * Optional page metadata to apply when publishing the workspace's preferences page. All fields
+     * are optional; omitted fields fall back to the page defaults (and the workspace default
+     * brand).
+     */
+    fun publishPreferencesRequest(): Optional<PublishPreferencesRequest> =
+        Optional.ofNullable(publishPreferencesRequest)
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> =
+        publishPreferencesRequest?._additionalProperties() ?: immutableEmptyMap()
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -47,19 +56,37 @@ private constructor(
     /** A builder for [WorkspacePreferencePublishParams]. */
     class Builder internal constructor() {
 
+        private var publishPreferencesRequest: PublishPreferencesRequest? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(workspacePreferencePublishParams: WorkspacePreferencePublishParams) =
             apply {
+                publishPreferencesRequest =
+                    workspacePreferencePublishParams.publishPreferencesRequest
                 additionalHeaders = workspacePreferencePublishParams.additionalHeaders.toBuilder()
                 additionalQueryParams =
                     workspacePreferencePublishParams.additionalQueryParams.toBuilder()
-                additionalBodyProperties =
-                    workspacePreferencePublishParams.additionalBodyProperties.toMutableMap()
             }
+
+        /**
+         * Optional page metadata to apply when publishing the workspace's preferences page. All
+         * fields are optional; omitted fields fall back to the page defaults (and the workspace
+         * default brand).
+         */
+        fun publishPreferencesRequest(publishPreferencesRequest: PublishPreferencesRequest?) =
+            apply {
+                this.publishPreferencesRequest = publishPreferencesRequest
+            }
+
+        /**
+         * Alias for calling [Builder.publishPreferencesRequest] with
+         * `publishPreferencesRequest.orElse(null)`.
+         */
+        fun publishPreferencesRequest(
+            publishPreferencesRequest: Optional<PublishPreferencesRequest>
+        ) = publishPreferencesRequest(publishPreferencesRequest.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -159,28 +186,6 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
-        }
-
         /**
          * Returns an immutable instance of [WorkspacePreferencePublishParams].
          *
@@ -188,14 +193,14 @@ private constructor(
          */
         fun build(): WorkspacePreferencePublishParams =
             WorkspacePreferencePublishParams(
+                publishPreferencesRequest,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
-    fun _body(): Optional<Map<String, JsonValue>> =
-        Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
+    fun _body(): Optional<PublishPreferencesRequest> =
+        Optional.ofNullable(publishPreferencesRequest)
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -207,14 +212,14 @@ private constructor(
         }
 
         return other is WorkspacePreferencePublishParams &&
+            publishPreferencesRequest == other.publishPreferencesRequest &&
             additionalHeaders == other.additionalHeaders &&
-            additionalQueryParams == other.additionalQueryParams &&
-            additionalBodyProperties == other.additionalBodyProperties
+            additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(additionalHeaders, additionalQueryParams, additionalBodyProperties)
+        Objects.hash(publishPreferencesRequest, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "WorkspacePreferencePublishParams{additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "WorkspacePreferencePublishParams{publishPreferencesRequest=$publishPreferencesRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

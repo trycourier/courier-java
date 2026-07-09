@@ -6,6 +6,7 @@ import com.courier.core.ClientOptions
 import com.courier.core.RequestOptions
 import com.courier.core.http.HttpResponse
 import com.courier.core.http.HttpResponseFor
+import com.courier.models.workspacepreferences.PublishPreferencesRequest
 import com.courier.models.workspacepreferences.PublishPreferencesResponse
 import com.courier.models.workspacepreferences.WorkspacePreferenceArchiveParams
 import com.courier.models.workspacepreferences.WorkspacePreferenceCreateParams
@@ -172,6 +173,22 @@ interface WorkspacePreferenceService {
     fun publish(
         params: WorkspacePreferencePublishParams = WorkspacePreferencePublishParams.none()
     ): PublishPreferencesResponse = publish(params, RequestOptions.none())
+
+    /** @see publish */
+    fun publish(
+        publishPreferencesRequest: PublishPreferencesRequest,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): PublishPreferencesResponse =
+        publish(
+            WorkspacePreferencePublishParams.builder()
+                .publishPreferencesRequest(publishPreferencesRequest)
+                .build(),
+            requestOptions,
+        )
+
+    /** @see publish */
+    fun publish(publishPreferencesRequest: PublishPreferencesRequest): PublishPreferencesResponse =
+        publish(publishPreferencesRequest, RequestOptions.none())
 
     /** @see publish */
     fun publish(requestOptions: RequestOptions): PublishPreferencesResponse =
@@ -389,6 +406,26 @@ interface WorkspacePreferenceService {
         fun publish(
             params: WorkspacePreferencePublishParams = WorkspacePreferencePublishParams.none()
         ): HttpResponseFor<PublishPreferencesResponse> = publish(params, RequestOptions.none())
+
+        /** @see publish */
+        @MustBeClosed
+        fun publish(
+            publishPreferencesRequest: PublishPreferencesRequest,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<PublishPreferencesResponse> =
+            publish(
+                WorkspacePreferencePublishParams.builder()
+                    .publishPreferencesRequest(publishPreferencesRequest)
+                    .build(),
+                requestOptions,
+            )
+
+        /** @see publish */
+        @MustBeClosed
+        fun publish(
+            publishPreferencesRequest: PublishPreferencesRequest
+        ): HttpResponseFor<PublishPreferencesResponse> =
+            publish(publishPreferencesRequest, RequestOptions.none())
 
         /** @see publish */
         @MustBeClosed

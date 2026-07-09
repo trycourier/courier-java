@@ -21,6 +21,7 @@ internal class TopicCreateParamsTest {
                     .addAllowedPreference(
                         WorkspacePreferenceTopicCreateRequest.AllowedPreference.SNOOZE
                     )
+                    .description("description")
                     .includeUnsubscribeHeader(true)
                     .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
                     .topicData(
@@ -67,6 +68,7 @@ internal class TopicCreateParamsTest {
                         .addAllowedPreference(
                             WorkspacePreferenceTopicCreateRequest.AllowedPreference.SNOOZE
                         )
+                        .description("description")
                         .includeUnsubscribeHeader(true)
                         .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
                         .topicData(
@@ -88,6 +90,7 @@ internal class TopicCreateParamsTest {
                     .addAllowedPreference(
                         WorkspacePreferenceTopicCreateRequest.AllowedPreference.SNOOZE
                     )
+                    .description("description")
                     .includeUnsubscribeHeader(true)
                     .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
                     .topicData(

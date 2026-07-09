@@ -35,6 +35,7 @@ internal class TopicServiceAsyncTest {
                             .addAllowedPreference(
                                 WorkspacePreferenceTopicCreateRequest.AllowedPreference.SNOOZE
                             )
+                            .description("description")
                             .includeUnsubscribeHeader(true)
                             .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
                             .topicData(
@@ -112,6 +113,7 @@ internal class TopicServiceAsyncTest {
                             .addAllowedPreference(
                                 WorkspacePreferenceTopicReplaceRequest.AllowedPreference.SNOOZE
                             )
+                            .description("description")
                             .includeUnsubscribeHeader(true)
                             .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
                             .topicData(
