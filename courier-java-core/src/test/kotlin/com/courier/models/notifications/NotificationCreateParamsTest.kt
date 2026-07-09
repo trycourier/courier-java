@@ -38,7 +38,7 @@ internal class NotificationCreateParamsTest {
                             )
                             .subscription(
                                 NotificationTemplatePayload.Subscription.builder()
-                                    .topicId("marketing")
+                                    .topicId("pt_01kx4h2jdafq8bk9a26x0kvd1t")
                                     .build()
                             )
                             .addTag("onboarding")
@@ -82,7 +82,7 @@ internal class NotificationCreateParamsTest {
                                 )
                                 .subscription(
                                     NotificationTemplatePayload.Subscription.builder()
-                                        .topicId("marketing")
+                                        .topicId("pt_01kx4h2jdafq8bk9a26x0kvd1t")
                                         .build()
                                 )
                                 .addTag("onboarding")
@@ -122,7 +122,7 @@ internal class NotificationCreateParamsTest {
                             )
                             .subscription(
                                 NotificationTemplatePayload.Subscription.builder()
-                                    .topicId("marketing")
+                                    .topicId("pt_01kx4h2jdafq8bk9a26x0kvd1t")
                                     .build()
                             )
                             .addTag("onboarding")
@@ -161,7 +161,7 @@ internal class NotificationCreateParamsTest {
                                 )
                                 .subscription(
                                     NotificationTemplatePayload.Subscription.builder()
-                                        .topicId("marketing")
+                                        .topicId("pt_01kx4h2jdafq8bk9a26x0kvd1t")
                                         .build()
                                 )
                                 .addTag("onboarding")
@@ -196,7 +196,7 @@ internal class NotificationCreateParamsTest {
                             )
                             .subscription(
                                 NotificationTemplatePayload.Subscription.builder()
-                                    .topicId("marketing")
+                                    .topicId("pt_01kx4h2jdafq8bk9a26x0kvd1t")
                                     .build()
                             )
                             .addTag("onboarding")
