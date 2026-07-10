@@ -18,7 +18,9 @@ internal class NotificationCreateParamsTest {
                     .notification(
                         NotificationTemplatePayload.builder()
                             .brand(
-                                NotificationTemplatePayload.Brand.builder().id("brand_abc").build()
+                                NotificationTemplatePayload.Brand.builder()
+                                    .id("bnd_01kx4mrd0pfzw8wt7pn7p2fzag")
+                                    .build()
                             )
                             .content(
                                 ElementalContent.builder()
@@ -33,7 +35,7 @@ internal class NotificationCreateParamsTest {
                             .name("Welcome Email")
                             .routing(
                                 NotificationTemplatePayload.Routing.builder()
-                                    .strategyId("rs_123")
+                                    .strategyId("rs_01kx4h2jdafq8bk9amzvy6hbv0")
                                     .build()
                             )
                             .subscription(
@@ -61,7 +63,7 @@ internal class NotificationCreateParamsTest {
                             NotificationTemplatePayload.builder()
                                 .brand(
                                     NotificationTemplatePayload.Brand.builder()
-                                        .id("brand_abc")
+                                        .id("bnd_01kx4mrd0pfzw8wt7pn7p2fzag")
                                         .build()
                                 )
                                 .content(
@@ -77,7 +79,7 @@ internal class NotificationCreateParamsTest {
                                 .name("Welcome Email")
                                 .routing(
                                     NotificationTemplatePayload.Routing.builder()
-                                        .strategyId("rs_123")
+                                        .strategyId("rs_01kx4h2jdafq8bk9amzvy6hbv0")
                                         .build()
                                 )
                                 .subscription(
@@ -102,7 +104,9 @@ internal class NotificationCreateParamsTest {
                     .notification(
                         NotificationTemplatePayload.builder()
                             .brand(
-                                NotificationTemplatePayload.Brand.builder().id("brand_abc").build()
+                                NotificationTemplatePayload.Brand.builder()
+                                    .id("bnd_01kx4mrd0pfzw8wt7pn7p2fzag")
+                                    .build()
                             )
                             .content(
                                 ElementalContent.builder()
@@ -117,7 +121,7 @@ internal class NotificationCreateParamsTest {
                             .name("Welcome Email")
                             .routing(
                                 NotificationTemplatePayload.Routing.builder()
-                                    .strategyId("rs_123")
+                                    .strategyId("rs_01kx4h2jdafq8bk9amzvy6hbv0")
                                     .build()
                             )
                             .subscription(
@@ -144,7 +148,7 @@ internal class NotificationCreateParamsTest {
                             NotificationTemplatePayload.builder()
                                 .brand(
                                     NotificationTemplatePayload.Brand.builder()
-                                        .id("brand_abc")
+                                        .id("bnd_01kx4mrd0pfzw8wt7pn7p2fzag")
                                         .build()
                                 )
                                 .content(
@@ -156,7 +160,7 @@ internal class NotificationCreateParamsTest {
                                 .name("Welcome Email")
                                 .routing(
                                     NotificationTemplatePayload.Routing.builder()
-                                        .strategyId("rs_123")
+                                        .strategyId("rs_01kx4h2jdafq8bk9amzvy6hbv0")
                                         .build()
                                 )
                                 .subscription(
@@ -180,7 +184,9 @@ internal class NotificationCreateParamsTest {
                     .notification(
                         NotificationTemplatePayload.builder()
                             .brand(
-                                NotificationTemplatePayload.Brand.builder().id("brand_abc").build()
+                                NotificationTemplatePayload.Brand.builder()
+                                    .id("bnd_01kx4mrd0pfzw8wt7pn7p2fzag")
+                                    .build()
                             )
                             .content(
                                 ElementalContent.builder()
@@ -191,7 +197,7 @@ internal class NotificationCreateParamsTest {
                             .name("Welcome Email")
                             .routing(
                                 NotificationTemplatePayload.Routing.builder()
-                                    .strategyId("rs_123")
+                                    .strategyId("rs_01kx4h2jdafq8bk9amzvy6hbv0")
                                     .build()
                             )
                             .subscription(
