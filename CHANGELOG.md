@@ -1,5 +1,14 @@
 # Changelog
 
+## 4.20.2 (2026-07-10)
+
+Full Changelog: [v4.20.1...v4.20.2](https://github.com/trycourier/courier-java/compare/v4.20.1...v4.20.2)
+
+### Documentation
+
+* **openapi:** canonical type-id prefixes across all examples ([#162](https://github.com/trycourier/courier-java/issues/162)) ([b1dacb2](https://github.com/trycourier/courier-java/commit/b1dacb2964d6575f6b8749f2ede2cc24a1626743))
+* **openapi:** use canonical type-id prefixes in id examples ([#160](https://github.com/trycourier/courier-java/issues/160)) ([94930d2](https://github.com/trycourier/courier-java/commit/94930d2713a1fe2dadaa64409b469ba3fac29f2f))
+
 ## 4.20.1 (2026-07-09)
 
 Full Changelog: [v4.20.0...v4.20.1](https://github.com/trycourier/courier-java/compare/v4.20.0...v4.20.1)
