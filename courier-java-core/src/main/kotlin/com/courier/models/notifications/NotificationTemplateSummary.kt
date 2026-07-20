@@ -31,6 +31,7 @@ private constructor(
     private val state: JsonField<State>,
     private val tags: JsonField<List<String>>,
     private val subscriptionTopicId: JsonField<String>,
+    private val topicId: JsonField<String>,
     private val updated: JsonField<Long>,
     private val updater: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -47,6 +48,7 @@ private constructor(
         @JsonProperty("subscription_topic_id")
         @ExcludeMissing
         subscriptionTopicId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("topic_id") @ExcludeMissing topicId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("updated") @ExcludeMissing updated: JsonField<Long> = JsonMissing.of(),
         @JsonProperty("updater") @ExcludeMissing updater: JsonField<String> = JsonMissing.of(),
     ) : this(
@@ -57,6 +59,7 @@ private constructor(
         state,
         tags,
         subscriptionTopicId,
+        topicId,
         updated,
         updater,
         mutableMapOf(),
@@ -111,6 +114,15 @@ private constructor(
      */
     fun subscriptionTopicId(): Optional<String> =
         subscriptionTopicId.getOptional("subscription_topic_id")
+
+    /**
+     * Alias of subscription_topic_id, provided under the same name V1 list items use for the linked
+     * topic. Always carries the same value as subscription_topic_id.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun topicId(): Optional<String> = topicId.getOptional("topic_id")
 
     /**
      * Epoch milliseconds of last update.
@@ -181,6 +193,13 @@ private constructor(
     fun _subscriptionTopicId(): JsonField<String> = subscriptionTopicId
 
     /**
+     * Returns the raw JSON value of [topicId].
+     *
+     * Unlike [topicId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("topic_id") @ExcludeMissing fun _topicId(): JsonField<String> = topicId
+
+    /**
      * Returns the raw JSON value of [updated].
      *
      * Unlike [updated], this method doesn't throw if the JSON field has an unexpected type.
@@ -234,6 +253,7 @@ private constructor(
         private var state: JsonField<State>? = null
         private var tags: JsonField<MutableList<String>>? = null
         private var subscriptionTopicId: JsonField<String> = JsonMissing.of()
+        private var topicId: JsonField<String> = JsonMissing.of()
         private var updated: JsonField<Long> = JsonMissing.of()
         private var updater: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -247,6 +267,7 @@ private constructor(
             state = notificationTemplateSummary.state
             tags = notificationTemplateSummary.tags.map { it.toMutableList() }
             subscriptionTopicId = notificationTemplateSummary.subscriptionTopicId
+            topicId = notificationTemplateSummary.topicId
             updated = notificationTemplateSummary.updated
             updater = notificationTemplateSummary.updater
             additionalProperties = notificationTemplateSummary.additionalProperties.toMutableMap()
@@ -344,6 +365,20 @@ private constructor(
             this.subscriptionTopicId = subscriptionTopicId
         }
 
+        /**
+         * Alias of subscription_topic_id, provided under the same name V1 list items use for the
+         * linked topic. Always carries the same value as subscription_topic_id.
+         */
+        fun topicId(topicId: String) = topicId(JsonField.of(topicId))
+
+        /**
+         * Sets [Builder.topicId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.topicId] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun topicId(topicId: JsonField<String>) = apply { this.topicId = topicId }
+
         /** Epoch milliseconds of last update. */
         fun updated(updated: Long) = updated(JsonField.of(updated))
 
@@ -411,6 +446,7 @@ private constructor(
                 checkRequired("state", state),
                 checkRequired("tags", tags).map { it.toImmutable() },
                 subscriptionTopicId,
+                topicId,
                 updated,
                 updater,
                 additionalProperties.toMutableMap(),
@@ -439,6 +475,7 @@ private constructor(
         state().validate()
         tags()
         subscriptionTopicId()
+        topicId()
         updated()
         updater()
         validated = true
@@ -466,6 +503,7 @@ private constructor(
             (state.asKnown().getOrNull()?.validity() ?: 0) +
             (tags.asKnown().getOrNull()?.size ?: 0) +
             (if (subscriptionTopicId.asKnown().isPresent) 1 else 0) +
+            (if (topicId.asKnown().isPresent) 1 else 0) +
             (if (updated.asKnown().isPresent) 1 else 0) +
             (if (updater.asKnown().isPresent) 1 else 0)
 
@@ -616,6 +654,7 @@ private constructor(
             state == other.state &&
             tags == other.tags &&
             subscriptionTopicId == other.subscriptionTopicId &&
+            topicId == other.topicId &&
             updated == other.updated &&
             updater == other.updater &&
             additionalProperties == other.additionalProperties
@@ -630,6 +669,7 @@ private constructor(
             state,
             tags,
             subscriptionTopicId,
+            topicId,
             updated,
             updater,
             additionalProperties,
@@ -639,5 +679,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "NotificationTemplateSummary{id=$id, created=$created, creator=$creator, name=$name, state=$state, tags=$tags, subscriptionTopicId=$subscriptionTopicId, updated=$updated, updater=$updater, additionalProperties=$additionalProperties}"
+        "NotificationTemplateSummary{id=$id, created=$created, creator=$creator, name=$name, state=$state, tags=$tags, subscriptionTopicId=$subscriptionTopicId, topicId=$topicId, updated=$updated, updater=$updater, additionalProperties=$additionalProperties}"
 }
