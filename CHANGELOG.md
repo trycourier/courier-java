@@ -1,5 +1,16 @@
 # Changelog
 
+## 4.21.0 (2026-07-20)
+
+Full Changelog: [v4.20.2...v4.21.0](https://github.com/trycourier/courier-java/compare/v4.20.2...v4.21.0)
+
+### Features
+
+* Document POST /notifications/{id}/duplicate [C-18607] ([#165](https://github.com/trycourier/courier-java/issues/165)) ([2d6de78](https://github.com/trycourier/courier-java/commit/2d6de78b8dca5f167d42c3e2d136998278ddc80d))
+* Merge pull request [#149](https://github.com/trycourier/courier-java/issues/149) from trycourier/geraldosilva/c-19201-notification-template-subscription-topic-id ([74a301f](https://github.com/trycourier/courier-java/commit/74a301ff09a28e668a231af1ba87417bd637b8dd))
+* Merge pull request [#168](https://github.com/trycourier/courier-java/issues/168) from trycourier/geraldosilva/c-19419-topic-id-notification-template-summary ([4046832](https://github.com/trycourier/courier-java/commit/4046832157d0dcb58cfb2c1c8b96d6ea0b8976f3))
+* **stlc:** configurable CI runner and private-production-repo support in workflow templates ([f8ddf0c](https://github.com/trycourier/courier-java/commit/f8ddf0c1489ae8df71966dc9020008d09c8eb305))
+
 ## 4.20.2 (2026-07-10)
 
 Full Changelog: [v4.20.1...v4.20.2](https://github.com/trycourier/courier-java/compare/v4.20.1...v4.20.2)
