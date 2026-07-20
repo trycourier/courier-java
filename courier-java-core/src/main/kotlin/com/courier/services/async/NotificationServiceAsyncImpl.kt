@@ -20,6 +20,7 @@ import com.courier.core.prepareAsync
 import com.courier.models.notifications.NotificationArchiveParams
 import com.courier.models.notifications.NotificationContentMutationResponse
 import com.courier.models.notifications.NotificationCreateParams
+import com.courier.models.notifications.NotificationDuplicateParams
 import com.courier.models.notifications.NotificationListParams
 import com.courier.models.notifications.NotificationListResponse
 import com.courier.models.notifications.NotificationListVersionsParams
@@ -82,6 +83,13 @@ class NotificationServiceAsyncImpl internal constructor(private val clientOption
     ): CompletableFuture<Void?> =
         // delete /notifications/{id}
         withRawResponse().archive(params, requestOptions).thenAccept {}
+
+    override fun duplicate(
+        params: NotificationDuplicateParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<NotificationTemplateResponse> =
+        // post /notifications/{id}/duplicate
+        withRawResponse().duplicate(params, requestOptions).thenApply { it.parse() }
 
     override fun listVersions(
         params: NotificationListVersionsParams,
@@ -268,6 +276,40 @@ class NotificationServiceAsyncImpl internal constructor(private val clientOption
                 .thenApply { response ->
                     errorHandler.handle(response).parseable {
                         response.use { archiveHandler.handle(it) }
+                    }
+                }
+        }
+
+        private val duplicateHandler: Handler<NotificationTemplateResponse> =
+            jsonHandler<NotificationTemplateResponse>(clientOptions.jsonMapper)
+
+        override fun duplicate(
+            params: NotificationDuplicateParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<NotificationTemplateResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("notifications", params._pathParam(0), "duplicate")
+                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { duplicateHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
                     }
                 }
         }

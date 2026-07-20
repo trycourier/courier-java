@@ -30,6 +30,8 @@ private constructor(
     private val name: JsonField<String>,
     private val state: JsonField<State>,
     private val tags: JsonField<List<String>>,
+    private val subscriptionTopicId: JsonField<String>,
+    private val topicId: JsonField<String>,
     private val updated: JsonField<Long>,
     private val updater: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -43,9 +45,25 @@ private constructor(
         @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
         @JsonProperty("state") @ExcludeMissing state: JsonField<State> = JsonMissing.of(),
         @JsonProperty("tags") @ExcludeMissing tags: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("subscription_topic_id")
+        @ExcludeMissing
+        subscriptionTopicId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("topic_id") @ExcludeMissing topicId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("updated") @ExcludeMissing updated: JsonField<Long> = JsonMissing.of(),
         @JsonProperty("updater") @ExcludeMissing updater: JsonField<String> = JsonMissing.of(),
-    ) : this(id, created, creator, name, state, tags, updated, updater, mutableMapOf())
+    ) : this(
+        id,
+        created,
+        creator,
+        name,
+        state,
+        tags,
+        subscriptionTopicId,
+        topicId,
+        updated,
+        updater,
+        mutableMapOf(),
+    )
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
@@ -86,6 +104,25 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun tags(): List<String> = tags.getRequired("tags")
+
+    /**
+     * The linked subscription (preference) topic of the published version. Omitted when no topic is
+     * linked or the template has never been published.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun subscriptionTopicId(): Optional<String> =
+        subscriptionTopicId.getOptional("subscription_topic_id")
+
+    /**
+     * Alias of subscription_topic_id, provided under the same name V1 list items use for the linked
+     * topic. Always carries the same value as subscription_topic_id.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun topicId(): Optional<String> = topicId.getOptional("topic_id")
 
     /**
      * Epoch milliseconds of last update.
@@ -146,6 +183,23 @@ private constructor(
     @JsonProperty("tags") @ExcludeMissing fun _tags(): JsonField<List<String>> = tags
 
     /**
+     * Returns the raw JSON value of [subscriptionTopicId].
+     *
+     * Unlike [subscriptionTopicId], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("subscription_topic_id")
+    @ExcludeMissing
+    fun _subscriptionTopicId(): JsonField<String> = subscriptionTopicId
+
+    /**
+     * Returns the raw JSON value of [topicId].
+     *
+     * Unlike [topicId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("topic_id") @ExcludeMissing fun _topicId(): JsonField<String> = topicId
+
+    /**
      * Returns the raw JSON value of [updated].
      *
      * Unlike [updated], this method doesn't throw if the JSON field has an unexpected type.
@@ -198,6 +252,8 @@ private constructor(
         private var name: JsonField<String>? = null
         private var state: JsonField<State>? = null
         private var tags: JsonField<MutableList<String>>? = null
+        private var subscriptionTopicId: JsonField<String> = JsonMissing.of()
+        private var topicId: JsonField<String> = JsonMissing.of()
         private var updated: JsonField<Long> = JsonMissing.of()
         private var updater: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -210,6 +266,8 @@ private constructor(
             name = notificationTemplateSummary.name
             state = notificationTemplateSummary.state
             tags = notificationTemplateSummary.tags.map { it.toMutableList() }
+            subscriptionTopicId = notificationTemplateSummary.subscriptionTopicId
+            topicId = notificationTemplateSummary.topicId
             updated = notificationTemplateSummary.updated
             updater = notificationTemplateSummary.updater
             additionalProperties = notificationTemplateSummary.additionalProperties.toMutableMap()
@@ -289,6 +347,38 @@ private constructor(
             tags = (tags ?: JsonField.of(mutableListOf())).also { checkKnown("tags", it).add(tag) }
         }
 
+        /**
+         * The linked subscription (preference) topic of the published version. Omitted when no
+         * topic is linked or the template has never been published.
+         */
+        fun subscriptionTopicId(subscriptionTopicId: String) =
+            subscriptionTopicId(JsonField.of(subscriptionTopicId))
+
+        /**
+         * Sets [Builder.subscriptionTopicId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.subscriptionTopicId] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun subscriptionTopicId(subscriptionTopicId: JsonField<String>) = apply {
+            this.subscriptionTopicId = subscriptionTopicId
+        }
+
+        /**
+         * Alias of subscription_topic_id, provided under the same name V1 list items use for the
+         * linked topic. Always carries the same value as subscription_topic_id.
+         */
+        fun topicId(topicId: String) = topicId(JsonField.of(topicId))
+
+        /**
+         * Sets [Builder.topicId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.topicId] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun topicId(topicId: JsonField<String>) = apply { this.topicId = topicId }
+
         /** Epoch milliseconds of last update. */
         fun updated(updated: Long) = updated(JsonField.of(updated))
 
@@ -355,6 +445,8 @@ private constructor(
                 checkRequired("name", name),
                 checkRequired("state", state),
                 checkRequired("tags", tags).map { it.toImmutable() },
+                subscriptionTopicId,
+                topicId,
                 updated,
                 updater,
                 additionalProperties.toMutableMap(),
@@ -382,6 +474,8 @@ private constructor(
         name()
         state().validate()
         tags()
+        subscriptionTopicId()
+        topicId()
         updated()
         updater()
         validated = true
@@ -408,6 +502,8 @@ private constructor(
             (if (name.asKnown().isPresent) 1 else 0) +
             (state.asKnown().getOrNull()?.validity() ?: 0) +
             (tags.asKnown().getOrNull()?.size ?: 0) +
+            (if (subscriptionTopicId.asKnown().isPresent) 1 else 0) +
+            (if (topicId.asKnown().isPresent) 1 else 0) +
             (if (updated.asKnown().isPresent) 1 else 0) +
             (if (updater.asKnown().isPresent) 1 else 0)
 
@@ -557,6 +653,8 @@ private constructor(
             name == other.name &&
             state == other.state &&
             tags == other.tags &&
+            subscriptionTopicId == other.subscriptionTopicId &&
+            topicId == other.topicId &&
             updated == other.updated &&
             updater == other.updater &&
             additionalProperties == other.additionalProperties
@@ -570,6 +668,8 @@ private constructor(
             name,
             state,
             tags,
+            subscriptionTopicId,
+            topicId,
             updated,
             updater,
             additionalProperties,
@@ -579,5 +679,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "NotificationTemplateSummary{id=$id, created=$created, creator=$creator, name=$name, state=$state, tags=$tags, updated=$updated, updater=$updater, additionalProperties=$additionalProperties}"
+        "NotificationTemplateSummary{id=$id, created=$created, creator=$creator, name=$name, state=$state, tags=$tags, subscriptionTopicId=$subscriptionTopicId, topicId=$topicId, updated=$updated, updater=$updater, additionalProperties=$additionalProperties}"
 }

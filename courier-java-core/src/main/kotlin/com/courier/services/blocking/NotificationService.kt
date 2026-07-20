@@ -9,6 +9,7 @@ import com.courier.core.http.HttpResponseFor
 import com.courier.models.notifications.NotificationArchiveParams
 import com.courier.models.notifications.NotificationContentMutationResponse
 import com.courier.models.notifications.NotificationCreateParams
+import com.courier.models.notifications.NotificationDuplicateParams
 import com.courier.models.notifications.NotificationListParams
 import com.courier.models.notifications.NotificationListResponse
 import com.courier.models.notifications.NotificationListVersionsParams
@@ -152,6 +153,44 @@ interface NotificationService {
     /** @see archive */
     fun archive(id: String, requestOptions: RequestOptions) =
         archive(id, NotificationArchiveParams.none(), requestOptions)
+
+    /**
+     * Duplicate a notification template. Creates a standalone copy within the same workspace and
+     * environment, with " COPY" appended to the title. The copy clones the source draft's tags,
+     * brand, subscription topic, routing strategy, channels, and content, and is always created as
+     * a standalone template (it is not linked to any journey or broadcast, even if the source was).
+     * Templates that are scoped to a journey or a broadcast cannot be duplicated through this
+     * endpoint.
+     */
+    fun duplicate(id: String): NotificationTemplateResponse =
+        duplicate(id, NotificationDuplicateParams.none())
+
+    /** @see duplicate */
+    fun duplicate(
+        id: String,
+        params: NotificationDuplicateParams = NotificationDuplicateParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): NotificationTemplateResponse = duplicate(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see duplicate */
+    fun duplicate(
+        id: String,
+        params: NotificationDuplicateParams = NotificationDuplicateParams.none(),
+    ): NotificationTemplateResponse = duplicate(id, params, RequestOptions.none())
+
+    /** @see duplicate */
+    fun duplicate(
+        params: NotificationDuplicateParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): NotificationTemplateResponse
+
+    /** @see duplicate */
+    fun duplicate(params: NotificationDuplicateParams): NotificationTemplateResponse =
+        duplicate(params, RequestOptions.none())
+
+    /** @see duplicate */
+    fun duplicate(id: String, requestOptions: RequestOptions): NotificationTemplateResponse =
+        duplicate(id, NotificationDuplicateParams.none(), requestOptions)
 
     /** List versions of a notification template. */
     fun listVersions(id: String): NotificationTemplateVersionListResponse =
@@ -522,6 +561,52 @@ interface NotificationService {
         @MustBeClosed
         fun archive(id: String, requestOptions: RequestOptions): HttpResponse =
             archive(id, NotificationArchiveParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /notifications/{id}/duplicate`, but is otherwise
+         * the same as [NotificationService.duplicate].
+         */
+        @MustBeClosed
+        fun duplicate(id: String): HttpResponseFor<NotificationTemplateResponse> =
+            duplicate(id, NotificationDuplicateParams.none())
+
+        /** @see duplicate */
+        @MustBeClosed
+        fun duplicate(
+            id: String,
+            params: NotificationDuplicateParams = NotificationDuplicateParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<NotificationTemplateResponse> =
+            duplicate(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see duplicate */
+        @MustBeClosed
+        fun duplicate(
+            id: String,
+            params: NotificationDuplicateParams = NotificationDuplicateParams.none(),
+        ): HttpResponseFor<NotificationTemplateResponse> =
+            duplicate(id, params, RequestOptions.none())
+
+        /** @see duplicate */
+        @MustBeClosed
+        fun duplicate(
+            params: NotificationDuplicateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<NotificationTemplateResponse>
+
+        /** @see duplicate */
+        @MustBeClosed
+        fun duplicate(
+            params: NotificationDuplicateParams
+        ): HttpResponseFor<NotificationTemplateResponse> = duplicate(params, RequestOptions.none())
+
+        /** @see duplicate */
+        @MustBeClosed
+        fun duplicate(
+            id: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<NotificationTemplateResponse> =
+            duplicate(id, NotificationDuplicateParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /notifications/{id}/versions`, but is otherwise the
