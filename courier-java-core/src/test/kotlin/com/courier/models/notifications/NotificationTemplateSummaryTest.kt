@@ -20,6 +20,7 @@ internal class NotificationTemplateSummaryTest {
                 .state(NotificationTemplateSummary.State.DRAFT)
                 .addTag("string")
                 .subscriptionTopicId("subscription_topic_id")
+                .topicId("topic_id")
                 .updated(0L)
                 .updater("updater")
                 .build()
@@ -33,6 +34,7 @@ internal class NotificationTemplateSummaryTest {
         assertThat(notificationTemplateSummary.tags()).containsExactly("string")
         assertThat(notificationTemplateSummary.subscriptionTopicId())
             .contains("subscription_topic_id")
+        assertThat(notificationTemplateSummary.topicId()).contains("topic_id")
         assertThat(notificationTemplateSummary.updated()).contains(0L)
         assertThat(notificationTemplateSummary.updater()).contains("updater")
     }
@@ -49,6 +51,7 @@ internal class NotificationTemplateSummaryTest {
                 .state(NotificationTemplateSummary.State.DRAFT)
                 .addTag("string")
                 .subscriptionTopicId("subscription_topic_id")
+                .topicId("topic_id")
                 .updated(0L)
                 .updater("updater")
                 .build()
