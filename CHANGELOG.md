@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.22.1 (2026-07-23)
+
+Full Changelog: [v4.22.0...v4.22.1](https://github.com/trycourier/courier-java/compare/v4.22.0...v4.22.1)
+
+### Documentation
+
+* **openapi:** describe user topic-preference fields explicitly ([#172](https://github.com/trycourier/courier-java/issues/172)) ([1d09244](https://github.com/trycourier/courier-java/commit/1d09244b56cb1ed9c98e28365d7509cd9dbe0018))
+
 ## 4.22.0 (2026-07-23)
 
 Full Changelog: [v4.21.0...v4.22.0](https://github.com/trycourier/courier-java/compare/v4.21.0...v4.22.0)
