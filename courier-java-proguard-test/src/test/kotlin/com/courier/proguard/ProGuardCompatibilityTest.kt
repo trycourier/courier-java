@@ -58,7 +58,6 @@ internal class ProGuardCompatibilityTest {
         assertThat(client.automations()).isNotNull()
         assertThat(client.journeys()).isNotNull()
         assertThat(client.brands()).isNotNull()
-        assertThat(client.bulk()).isNotNull()
         assertThat(client.digests()).isNotNull()
         assertThat(client.inbound()).isNotNull()
         assertThat(client.lists()).isNotNull()

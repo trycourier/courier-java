@@ -8,7 +8,6 @@ import com.courier.services.async.AuditEventServiceAsync
 import com.courier.services.async.AuthServiceAsync
 import com.courier.services.async.AutomationServiceAsync
 import com.courier.services.async.BrandServiceAsync
-import com.courier.services.async.BulkServiceAsync
 import com.courier.services.async.DigestServiceAsync
 import com.courier.services.async.InboundServiceAsync
 import com.courier.services.async.JourneyServiceAsync
@@ -78,8 +77,6 @@ interface CourierClientAsync {
 
     fun brands(): BrandServiceAsync
 
-    fun bulk(): BulkServiceAsync
-
     fun digests(): DigestServiceAsync
 
     fun inbound(): InboundServiceAsync
@@ -146,8 +143,6 @@ interface CourierClientAsync {
         fun journeys(): JourneyServiceAsync.WithRawResponse
 
         fun brands(): BrandServiceAsync.WithRawResponse
-
-        fun bulk(): BulkServiceAsync.WithRawResponse
 
         fun digests(): DigestServiceAsync.WithRawResponse
 
