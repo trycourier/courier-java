@@ -14,8 +14,6 @@ import com.courier.services.async.AutomationServiceAsync
 import com.courier.services.async.AutomationServiceAsyncImpl
 import com.courier.services.async.BrandServiceAsync
 import com.courier.services.async.BrandServiceAsyncImpl
-import com.courier.services.async.BulkServiceAsync
-import com.courier.services.async.BulkServiceAsyncImpl
 import com.courier.services.async.DigestServiceAsync
 import com.courier.services.async.DigestServiceAsyncImpl
 import com.courier.services.async.InboundServiceAsync
@@ -93,8 +91,6 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
         BrandServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
-    private val bulk: BulkServiceAsync by lazy { BulkServiceAsyncImpl(clientOptionsWithUserAgent) }
-
     private val digests: DigestServiceAsync by lazy {
         DigestServiceAsyncImpl(clientOptionsWithUserAgent)
     }
@@ -162,8 +158,6 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
 
     override fun brands(): BrandServiceAsync = brands
 
-    override fun bulk(): BulkServiceAsync = bulk
-
     override fun digests(): DigestServiceAsync = digests
 
     override fun inbound(): InboundServiceAsync = inbound
@@ -223,10 +217,6 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
 
         private val brands: BrandServiceAsync.WithRawResponse by lazy {
             BrandServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
-
-        private val bulk: BulkServiceAsync.WithRawResponse by lazy {
-            BulkServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
         private val digests: DigestServiceAsync.WithRawResponse by lazy {
@@ -299,8 +289,6 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
         override fun journeys(): JourneyServiceAsync.WithRawResponse = journeys
 
         override fun brands(): BrandServiceAsync.WithRawResponse = brands
-
-        override fun bulk(): BulkServiceAsync.WithRawResponse = bulk
 
         override fun digests(): DigestServiceAsync.WithRawResponse = digests
 

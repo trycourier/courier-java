@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.22.0 (2026-07-23)
+
+Full Changelog: [v4.21.0...v4.22.0](https://github.com/trycourier/courier-java/compare/v4.21.0...v4.22.0)
+
+### Features
+
+* Remove /bulk endpoints from api-spec (C-19507) ([#171](https://github.com/trycourier/courier-java/issues/171)) ([2a450f6](https://github.com/trycourier/courier-java/commit/2a450f65f702ff5a8899326c40575facbb7690b2))
+
 ## 4.21.0 (2026-07-20)
 
 Full Changelog: [v4.20.2...v4.21.0](https://github.com/trycourier/courier-java/compare/v4.20.2...v4.21.0)
