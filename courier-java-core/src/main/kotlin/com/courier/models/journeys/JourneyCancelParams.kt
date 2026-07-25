@@ -9,11 +9,8 @@ import com.courier.core.http.QueryParams
 import java.util.Objects
 
 /**
- * Cancel journey runs. The request body must include EXACTLY ONE of `cancelation_token` (cancels
- * every run associated with the token) or `run_id` (cancels a single tenant-scoped run). Supplying
- * both or neither returns a `400`. A `run_id` that does not match a run for the tenant returns
- * `404`. Cancelation is idempotent: a run that has already finished (`PROCESSED`/`ERROR`) or was
- * already `CANCELED` is left unchanged and its current status is returned.
+ * Cancels in-flight journey runs, either every run sharing a cancelation token or one run by id.
+ * Use it to stop a sequence when the event resolves.
  */
 class JourneyCancelParams
 private constructor(

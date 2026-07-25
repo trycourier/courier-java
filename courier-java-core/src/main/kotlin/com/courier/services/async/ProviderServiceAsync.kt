@@ -34,8 +34,8 @@ interface ProviderServiceAsync {
     fun catalog(): CatalogServiceAsync
 
     /**
-     * Create a new provider configuration. The `provider` field must be a known Courier provider
-     * key (see catalog).
+     * Configures a provider integration from a Courier provider key and its settings. Check the
+     * catalog endpoint for the schema each provider expects.
      */
     fun create(params: ProviderCreateParams): CompletableFuture<Provider> =
         create(params, RequestOptions.none())
@@ -46,7 +46,10 @@ interface ProviderServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Provider>
 
-    /** Fetch a single provider configuration by ID. */
+    /**
+     * Returns one configured provider by id, including its channel, provider key, alias, title, and
+     * current settings.
+     */
     fun retrieve(id: String): CompletableFuture<Provider> =
         retrieve(id, ProviderRetrieveParams.none())
 
@@ -78,10 +81,8 @@ interface ProviderServiceAsync {
         retrieve(id, ProviderRetrieveParams.none(), requestOptions)
 
     /**
-     * Replace an existing provider configuration. The `provider` key is required and determines
-     * which provider-specific settings schema is applied. All other fields are optional — omitted
-     * fields are cleared from the stored configuration (this is a full replacement, not a partial
-     * merge). Changing the provider type for an existing configuration is not supported.
+     * Replaces a provider's configuration in full, clearing any field you omit rather than merging
+     * it. Send the complete settings object.
      */
     fun update(id: String, params: ProviderUpdateParams): CompletableFuture<Provider> =
         update(id, params, RequestOptions.none())
@@ -104,8 +105,8 @@ interface ProviderServiceAsync {
     ): CompletableFuture<Provider>
 
     /**
-     * List configured provider integrations for the current workspace. Supports cursor-based
-     * pagination.
+     * Lists the provider integrations configured in the workspace, one entry per channel and
+     * provider key with its alias and settings.
      */
     fun list(): CompletableFuture<ProviderListResponse> = list(ProviderListParams.none())
 
@@ -125,8 +126,8 @@ interface ProviderServiceAsync {
         list(ProviderListParams.none(), requestOptions)
 
     /**
-     * Delete a provider configuration. Returns 409 if the provider is still referenced by routing
-     * or notifications.
+     * Deletes a provider configuration, which fails while routing strategies or templates still
+     * reference it. Update those references first.
      */
     fun delete(id: String): CompletableFuture<Void?> = delete(id, ProviderDeleteParams.none())
 

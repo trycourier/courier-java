@@ -24,7 +24,10 @@ interface AuthService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): AuthService
 
-    /** Returns a new access token. */
+    /**
+     * Returns a JWT for authenticating client-side SDKs such as the Inbox. You supply the scope and
+     * an expires_in duration, both required.
+     */
     fun issueToken(params: AuthIssueTokenParams): AuthIssueTokenResponse =
         issueToken(params, RequestOptions.none())
 

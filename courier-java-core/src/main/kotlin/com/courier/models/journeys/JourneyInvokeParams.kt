@@ -12,8 +12,8 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Invoke a journey by id or alias to start a new run. The response includes a `runId` identifying
- * the run.
+ * Starts a journey run for one user and returns a runId. Runs execute asynchronously, so the
+ * response arrives before any message is sent.
  */
 class JourneyInvokeParams
 private constructor(

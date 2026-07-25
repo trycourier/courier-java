@@ -20,7 +20,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Replace an existing brand with the supplied values. */
+/**
+ * Replaces a brand with the values you supply, so send the complete settings and snippets rather
+ * than only the fields you want changed.
+ */
 class BrandUpdateParams
 private constructor(
     private val brandId: String?,

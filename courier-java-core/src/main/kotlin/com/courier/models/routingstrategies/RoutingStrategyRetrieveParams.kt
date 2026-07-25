@@ -10,8 +10,8 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Retrieve a routing strategy by ID. Returns the full entity including routing content and
- * metadata.
+ * Returns one routing strategy by id with its name, tags, channels, and the routing rules that
+ * decide provider order and fallback.
  */
 class RoutingStrategyRetrieveParams
 private constructor(

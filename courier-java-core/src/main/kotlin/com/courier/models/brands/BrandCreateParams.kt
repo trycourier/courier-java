@@ -21,8 +21,8 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Create a new brand. Requires `name` and `settings` (with at least `colors.primary` and
- * `colors.secondary`).
+ * Creates a brand from a name and settings, including primary and secondary colors. Brands supply
+ * the logo, colors, and styling that templates render with.
  */
 class BrandCreateParams
 private constructor(

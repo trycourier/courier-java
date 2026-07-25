@@ -11,7 +11,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Removes all list subscriptions for given user. */
+/**
+ * Removes every list subscription for a user at once. Their profile and preferences are untouched,
+ * so this only affects list-targeted sends.
+ */
 class ListDeleteParams
 private constructor(
     private val userId: String?,

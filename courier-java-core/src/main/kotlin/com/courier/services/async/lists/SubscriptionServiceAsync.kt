@@ -29,7 +29,10 @@ interface SubscriptionServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): SubscriptionServiceAsync
 
-    /** Get the list's subscriptions. */
+    /**
+     * Returns the users subscribed to a list with paging, each with the preferences recorded for
+     * that subscription.
+     */
     fun list(listId: String): CompletableFuture<SubscriptionListResponse> =
         list(listId, SubscriptionListParams.none())
 
@@ -114,8 +117,8 @@ interface SubscriptionServiceAsync {
     ): CompletableFuture<Void?>
 
     /**
-     * Subscribe a user to an existing list (note: if the List does not exist, it will be
-     * automatically created).
+     * Subscribes one user to a list, creating the list if it does not yet exist. Optional
+     * preferences apply to this subscription only.
      */
     fun subscribeUser(
         userId: String,
@@ -140,7 +143,10 @@ interface SubscriptionServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Void?>
 
-    /** Delete a subscription to a list by list ID and user ID. */
+    /**
+     * Removes one user's subscription to a list, addressed by list id and user id. The user's
+     * profile and other subscriptions are separate resources.
+     */
     fun unsubscribeUser(
         userId: String,
         params: SubscriptionUnsubscribeUserParams,

@@ -9,7 +9,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Fetch a specific audit event by ID. */
+/**
+ * Returns one audit event by id, including the actor who performed it, the target they changed, the
+ * source, the event type, and a timestamp.
+ */
 class AuditEventRetrieveParams
 private constructor(
     private val auditEventId: String?,

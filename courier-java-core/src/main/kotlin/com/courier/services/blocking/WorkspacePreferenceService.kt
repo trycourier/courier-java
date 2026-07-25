@@ -38,8 +38,8 @@ interface WorkspacePreferenceService {
     fun topics(): TopicService
 
     /**
-     * Create a workspace preference. The workspace preference id is generated and returned. Topics
-     * are created inside a workspace preference via POST /preferences/sections/{section_id}/topics.
+     * Creates a workspace preference and returns its generated id. Add subscription topics to it
+     * afterwards with the topics endpoint.
      */
     fun create(params: WorkspacePreferenceCreateParams): WorkspacePreferenceGetResponse =
         create(params, RequestOptions.none())
@@ -68,7 +68,10 @@ interface WorkspacePreferenceService {
     ): WorkspacePreferenceGetResponse =
         create(workspacePreferenceCreateRequest, RequestOptions.none())
 
-    /** Retrieve a workspace preference by id, including its topics. */
+    /**
+     * Returns one workspace preference by id, including its subscription topics, routing options,
+     * and custom routing flag.
+     */
     fun retrieve(sectionId: String): WorkspacePreferenceGetResponse =
         retrieve(sectionId, WorkspacePreferenceRetrieveParams.none())
 
@@ -104,8 +107,8 @@ interface WorkspacePreferenceService {
         retrieve(sectionId, WorkspacePreferenceRetrieveParams.none(), requestOptions)
 
     /**
-     * List the workspace's preferences. Each workspace preference embeds its topics. Scoped to the
-     * workspace of the API key.
+     * Returns the workspace's preferences, each embedding its subscription topics, routing options,
+     * and whether custom routing is allowed.
      */
     fun list(): WorkspacePreferenceListResponse = list(WorkspacePreferenceListParams.none())
 
@@ -157,9 +160,8 @@ interface WorkspacePreferenceService {
         archive(sectionId, WorkspacePreferenceArchiveParams.none(), requestOptions)
 
     /**
-     * Publish the workspace's preferences page. Takes a snapshot of every workspace preference with
-     * its topics under a new published version, making the current state visible on the hosted
-     * preferences page (non-draft).
+     * Publishes the workspace preference page, snapshotting every preference and topic, and returns
+     * the page id and a preview URL.
      */
     fun publish(): PublishPreferencesResponse = publish(WorkspacePreferencePublishParams.none())
 

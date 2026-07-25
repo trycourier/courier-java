@@ -9,7 +9,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Get the audiences associated with the authorization token. */
+/**
+ * Returns the audiences in the workspace with paging. Audiences are filter-based groups that
+ * recalculate as user profiles change.
+ */
 class AudienceListParams
 private constructor(
     private val cursor: String?,

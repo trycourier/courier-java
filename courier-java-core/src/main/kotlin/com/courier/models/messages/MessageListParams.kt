@@ -10,7 +10,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Fetch the statuses of messages you've previously sent. */
+/**
+ * Returns previously sent messages, most recent first, each carrying its status, recipient,
+ * channel, and provider. Paged by cursor.
+ */
 class MessageListParams
 private constructor(
     private val archived: Boolean?,

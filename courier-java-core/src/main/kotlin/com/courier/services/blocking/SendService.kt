@@ -24,7 +24,10 @@ interface SendService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): SendService
 
-    /** Send a message to one or more recipients. */
+    /**
+     * Sends a message to one or more recipients and returns a requestId. Courier routes it to
+     * email, SMS, push, chat, or in-app based on your rules.
+     */
     fun message(params: SendMessageParams): SendMessageResponse =
         message(params, RequestOptions.none())
 

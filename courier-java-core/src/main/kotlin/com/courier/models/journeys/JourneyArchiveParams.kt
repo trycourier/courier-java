@@ -12,8 +12,8 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Archive a journey. Archived journeys cannot be invoked. Existing journey runs continue to
- * completion.
+ * Archives a journey so it can no longer be invoked. Runs already in flight continue to completion,
+ * so archiving never strands a user mid-sequence.
  */
 class JourneyArchiveParams
 private constructor(

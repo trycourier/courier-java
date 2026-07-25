@@ -31,8 +31,8 @@ interface TopicService {
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): TopicService
 
     /**
-     * Create a subscription preference topic inside a workspace preference. Fails with 404 if the
-     * workspace preference does not exist. The topic id is generated and returned.
+     * Creates a subscription topic inside a workspace preference. The default status sets whether
+     * users start opted in, opted out, or required.
      */
     fun create(sectionId: String, params: TopicCreateParams): WorkspacePreferenceTopicGetResponse =
         create(sectionId, params, RequestOptions.none())
@@ -56,9 +56,8 @@ interface TopicService {
     ): WorkspacePreferenceTopicGetResponse
 
     /**
-     * Retrieve a topic within a workspace preference. Returns 404 if the workspace preference does
-     * not exist, the topic does not exist, or the topic belongs to a different workspace
-     * preference.
+     * Returns one subscription topic with its default status, routing options, allowed preferences,
+     * and unsubscribe header setting.
      */
     fun retrieve(
         topicId: String,
@@ -83,7 +82,10 @@ interface TopicService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): WorkspacePreferenceTopicGetResponse
 
-    /** List the topics in a workspace preference. */
+    /**
+     * Returns the subscription topics inside a workspace preference, each with its default status
+     * and routing options.
+     */
     fun list(sectionId: String): WorkspacePreferenceTopicListResponse =
         list(sectionId, TopicListParams.none())
 
@@ -118,7 +120,10 @@ interface TopicService {
     ): WorkspacePreferenceTopicListResponse =
         list(sectionId, TopicListParams.none(), requestOptions)
 
-    /** Archive a topic and remove it from its workspace preference. Same 404 rules as GET. */
+    /**
+     * Archives a subscription topic and removes it from its workspace preference, addressed by
+     * section id and topic id.
+     */
     fun archive(topicId: String, params: TopicArchiveParams) =
         archive(topicId, params, RequestOptions.none())
 

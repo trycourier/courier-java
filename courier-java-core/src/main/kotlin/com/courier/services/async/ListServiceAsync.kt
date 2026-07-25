@@ -33,7 +33,10 @@ interface ListServiceAsync {
 
     fun subscriptions(): SubscriptionServiceAsync
 
-    /** Returns a list based on the list ID provided. */
+    /**
+     * Returns one list by id with its name and created and updated timestamps. Fetch its
+     * subscribers separately with the subscriptions endpoint.
+     */
     fun retrieve(listId: String): CompletableFuture<SubscriptionList> =
         retrieve(listId, ListRetrieveParams.none())
 
@@ -68,7 +71,10 @@ interface ListServiceAsync {
     ): CompletableFuture<SubscriptionList> =
         retrieve(listId, ListRetrieveParams.none(), requestOptions)
 
-    /** Create or replace an existing list with the supplied values. */
+    /**
+     * Creates or replaces a list from a name and preferences. Subscribers are managed through the
+     * separate subscriptions endpoints.
+     */
     fun update(listId: String, params: ListUpdateParams): CompletableFuture<Void?> =
         update(listId, params, RequestOptions.none())
 
@@ -89,7 +95,10 @@ interface ListServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Void?>
 
-    /** Returns all of the lists, with the ability to filter based on a pattern. */
+    /**
+     * Returns the workspace's lists, filterable by a pattern to fetch a subset such as every
+     * regional list. Paged by cursor.
+     */
     fun list(): CompletableFuture<ListListResponse> = list(ListListParams.none())
 
     /** @see list */
@@ -106,7 +115,10 @@ interface ListServiceAsync {
     fun list(requestOptions: RequestOptions): CompletableFuture<ListListResponse> =
         list(ListListParams.none(), requestOptions)
 
-    /** Delete a list by list ID. */
+    /**
+     * Deletes a list, halting sends that target it. A previously deleted list can be brought back
+     * with the companion restore endpoint.
+     */
     fun delete(listId: String): CompletableFuture<Void?> = delete(listId, ListDeleteParams.none())
 
     /** @see delete */
@@ -136,7 +148,10 @@ interface ListServiceAsync {
     fun delete(listId: String, requestOptions: RequestOptions): CompletableFuture<Void?> =
         delete(listId, ListDeleteParams.none(), requestOptions)
 
-    /** Restore a previously deleted list. */
+    /**
+     * Restores a previously deleted list along with its subscribers, so a list removed by mistake
+     * can be brought back rather than rebuilt.
+     */
     fun restore(listId: String, params: ListRestoreParams): CompletableFuture<Void?> =
         restore(listId, params, RequestOptions.none())
 

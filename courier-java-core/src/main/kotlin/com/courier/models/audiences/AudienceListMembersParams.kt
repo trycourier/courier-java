@@ -9,7 +9,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Get list of members of an audience. */
+/**
+ * Returns the users currently matching an audience filter, with paging. Membership is recalculated,
+ * so results shift as profiles change.
+ */
 class AudienceListMembersParams
 private constructor(
     private val audienceId: String?,

@@ -12,7 +12,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Remove Default Preferences For Topic */
+/**
+ * Removes a tenant's default preference for one subscription topic, addressed by tenant id and
+ * topic id.
+ */
 class ItemDeleteParams
 private constructor(
     private val tenantId: String,

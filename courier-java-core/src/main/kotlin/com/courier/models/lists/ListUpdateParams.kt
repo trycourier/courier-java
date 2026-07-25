@@ -21,7 +21,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Create or replace an existing list with the supplied values. */
+/**
+ * Creates or replaces a list from a name and preferences. Subscribers are managed through the
+ * separate subscriptions endpoints.
+ */
 class ListUpdateParams
 private constructor(
     private val listId: String?,

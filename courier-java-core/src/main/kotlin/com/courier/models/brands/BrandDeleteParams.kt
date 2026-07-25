@@ -11,7 +11,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Delete a brand by brand ID. */
+/**
+ * Deletes a brand by id. Reassign any template or tenant that references it before deleting to keep
+ * their styling intact.
+ */
 class BrandDeleteParams
 private constructor(
     private val brandId: String?,

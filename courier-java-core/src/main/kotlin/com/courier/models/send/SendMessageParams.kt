@@ -50,7 +50,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Send a message to one or more recipients. */
+/**
+ * Sends a message to one or more recipients and returns a requestId. Courier routes it to email,
+ * SMS, push, chat, or in-app based on your rules.
+ */
 class SendMessageParams
 private constructor(
     private val body: Body,

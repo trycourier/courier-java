@@ -26,7 +26,10 @@ interface AuditEventService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): AuditEventService
 
-    /** Fetch a specific audit event by ID. */
+    /**
+     * Returns one audit event by id, including the actor who performed it, the target they changed,
+     * the source, the event type, and a timestamp.
+     */
     fun retrieve(auditEventId: String): AuditEvent =
         retrieve(auditEventId, AuditEventRetrieveParams.none())
 
@@ -57,7 +60,10 @@ interface AuditEventService {
     fun retrieve(auditEventId: String, requestOptions: RequestOptions): AuditEvent =
         retrieve(auditEventId, AuditEventRetrieveParams.none(), requestOptions)
 
-    /** Fetch the list of audit events */
+    /**
+     * Returns the workspace's audit event log with cursor paging. Each event records the actor,
+     * target, source, type, and timestamp of a change.
+     */
     fun list(): AuditEventListResponse = list(AuditEventListParams.none())
 
     /** @see list */

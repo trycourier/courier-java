@@ -9,7 +9,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Gets all tokens available for a :user_id */
+/**
+ * Returns every device token registered for a user, each with its provider key, status, and expiry
+ * date.
+ */
 class TokenListParams
 private constructor(
     private val userId: String?,

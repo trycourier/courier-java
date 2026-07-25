@@ -10,7 +10,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Get translations by locale */
+/**
+ * Returns the translation strings stored for one domain and locale, for use in localized
+ * notification content.
+ */
 class TranslationRetrieveParams
 private constructor(
     private val domain: String,

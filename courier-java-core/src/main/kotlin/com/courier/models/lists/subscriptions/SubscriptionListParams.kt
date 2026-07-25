@@ -9,7 +9,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Get the list's subscriptions. */
+/**
+ * Returns the users subscribed to a list with paging, each with the preferences recorded for that
+ * subscription.
+ */
 class SubscriptionListParams
 private constructor(
     private val listId: String?,

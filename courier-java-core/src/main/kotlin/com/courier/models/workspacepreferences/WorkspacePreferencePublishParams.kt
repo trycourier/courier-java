@@ -12,9 +12,8 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Publish the workspace's preferences page. Takes a snapshot of every workspace preference with its
- * topics under a new published version, making the current state visible on the hosted preferences
- * page (non-draft).
+ * Publishes the workspace preference page, snapshotting every preference and topic, and returns the
+ * page id and a preview URL.
  */
 class WorkspacePreferencePublishParams
 private constructor(

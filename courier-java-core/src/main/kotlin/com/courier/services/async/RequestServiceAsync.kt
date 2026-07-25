@@ -23,7 +23,10 @@ interface RequestServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): RequestServiceAsync
 
-    /** Archive message */
+    /**
+     * Archives a send request by its request id. Use it to remove test sends or superseded requests
+     * from the message list without deleting them.
+     */
     fun archive(requestId: String): CompletableFuture<Void?> =
         archive(requestId, RequestArchiveParams.none())
 

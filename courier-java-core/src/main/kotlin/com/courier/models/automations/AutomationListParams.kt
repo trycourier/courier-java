@@ -13,7 +13,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Get the list of automations. */
+/**
+ * Lists the workspace's saved automation templates, each with its id and a cursor for paging to the
+ * next page of results.
+ */
 class AutomationListParams
 private constructor(
     private val cursor: String?,

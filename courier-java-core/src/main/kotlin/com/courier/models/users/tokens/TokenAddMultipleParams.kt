@@ -11,7 +11,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Adds multiple tokens to a user and overwrites matching existing tokens. */
+/**
+ * Registers several device tokens for a user in one call, overwriting any stored token with a
+ * matching value.
+ */
 class TokenAddMultipleParams
 private constructor(
     private val userId: String?,

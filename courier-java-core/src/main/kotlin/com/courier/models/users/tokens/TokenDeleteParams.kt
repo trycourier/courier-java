@@ -12,7 +12,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Delete User Token */
+/**
+ * Deletes one device token for a user, addressed by the token value, so push sends no longer target
+ * that device.
+ */
 class TokenDeleteParams
 private constructor(
     private val userId: String,

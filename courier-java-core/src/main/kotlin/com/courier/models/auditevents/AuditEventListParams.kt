@@ -9,7 +9,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Fetch the list of audit events */
+/**
+ * Returns the workspace's audit event log with cursor paging. Each event records the actor, target,
+ * source, type, and timestamp of a change.
+ */
 class AuditEventListParams
 private constructor(
     private val cursor: String?,

@@ -11,7 +11,8 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * List published versions of the journey-scoped notification template, ordered most recent first.
+ * Lists the published versions of a template that belongs to a journey, most recent first. Paged by
+ * cursor.
  */
 class TemplateListVersionsParams
 private constructor(

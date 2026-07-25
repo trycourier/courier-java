@@ -37,7 +37,10 @@ interface TenantServiceAsync {
 
     fun templates(): TemplateServiceAsync
 
-    /** Get a Tenant */
+    /**
+     * Returns one tenant with its name, parent tenant id, default preferences, properties, and the
+     * user profile applied to its members.
+     */
     fun retrieve(tenantId: String): CompletableFuture<Tenant> =
         retrieve(tenantId, TenantRetrieveParams.none())
 
@@ -69,7 +72,10 @@ interface TenantServiceAsync {
     fun retrieve(tenantId: String, requestOptions: RequestOptions): CompletableFuture<Tenant> =
         retrieve(tenantId, TenantRetrieveParams.none(), requestOptions)
 
-    /** Create or Replace a Tenant */
+    /**
+     * Creates or replaces a tenant from a name, parent, brand, properties, and default preferences
+     * supplied in the request body.
+     */
     fun update(tenantId: String, params: TenantUpdateParams): CompletableFuture<Tenant> =
         update(tenantId, params, RequestOptions.none())
 
@@ -91,7 +97,10 @@ interface TenantServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Tenant>
 
-    /** Get a List of Tenants */
+    /**
+     * Lists the workspace's tenants, each carrying a name, parent tenant, properties, and default
+     * preferences. Paged.
+     */
     fun list(): CompletableFuture<TenantListResponse> = list(TenantListParams.none())
 
     /** @see list */
@@ -109,7 +118,10 @@ interface TenantServiceAsync {
     fun list(requestOptions: RequestOptions): CompletableFuture<TenantListResponse> =
         list(TenantListParams.none(), requestOptions)
 
-    /** Delete a Tenant */
+    /**
+     * Deletes a tenant. Its members' workspace-level profiles and preferences live outside the
+     * tenant and are managed separately.
+     */
     fun delete(tenantId: String): CompletableFuture<Void?> =
         delete(tenantId, TenantDeleteParams.none())
 
@@ -141,7 +153,10 @@ interface TenantServiceAsync {
     fun delete(tenantId: String, requestOptions: RequestOptions): CompletableFuture<Void?> =
         delete(tenantId, TenantDeleteParams.none(), requestOptions)
 
-    /** Get Users in Tenant */
+    /**
+     * Returns the users belonging to a tenant with cursor paging. Use it to see who a tenant-scoped
+     * send will reach.
+     */
     fun listUsers(tenantId: String): CompletableFuture<TenantListUsersResponse> =
         listUsers(tenantId, TenantListUsersParams.none())
 

@@ -11,7 +11,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Delete a Tenant */
+/**
+ * Deletes a tenant. Its members' workspace-level profiles and preferences live outside the tenant
+ * and are managed separately.
+ */
 class TenantDeleteParams
 private constructor(
     private val tenantId: String?,

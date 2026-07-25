@@ -32,7 +32,10 @@ interface AudienceServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): AudienceServiceAsync
 
-    /** Returns the specified audience by id. */
+    /**
+     * Returns one audience with its name, description, and the filter and AND or OR operator that
+     * decide which users belong to it.
+     */
     fun retrieve(audienceId: String): CompletableFuture<Audience> =
         retrieve(audienceId, AudienceRetrieveParams.none())
 
@@ -64,7 +67,10 @@ interface AudienceServiceAsync {
     fun retrieve(audienceId: String, requestOptions: RequestOptions): CompletableFuture<Audience> =
         retrieve(audienceId, AudienceRetrieveParams.none(), requestOptions)
 
-    /** Creates or updates audience. */
+    /**
+     * Creates or replaces an audience from a filter and an AND or OR operator. Membership
+     * recalculates automatically as profiles change.
+     */
     fun update(audienceId: String): CompletableFuture<AudienceUpdateResponse> =
         update(audienceId, AudienceUpdateParams.none())
 
@@ -99,7 +105,10 @@ interface AudienceServiceAsync {
     ): CompletableFuture<AudienceUpdateResponse> =
         update(audienceId, AudienceUpdateParams.none(), requestOptions)
 
-    /** Get the audiences associated with the authorization token. */
+    /**
+     * Returns the audiences in the workspace with paging. Audiences are filter-based groups that
+     * recalculate as user profiles change.
+     */
     fun list(): CompletableFuture<AudienceListResponse> = list(AudienceListParams.none())
 
     /** @see list */
@@ -117,7 +126,10 @@ interface AudienceServiceAsync {
     fun list(requestOptions: RequestOptions): CompletableFuture<AudienceListResponse> =
         list(AudienceListParams.none(), requestOptions)
 
-    /** Deletes the specified audience. */
+    /**
+     * Deletes an audience permanently, so update any caller sending to it by audience id first.
+     * Those sends fail once the audience is gone.
+     */
     fun delete(audienceId: String): CompletableFuture<Void?> =
         delete(audienceId, AudienceDeleteParams.none())
 
@@ -149,7 +161,10 @@ interface AudienceServiceAsync {
     fun delete(audienceId: String, requestOptions: RequestOptions): CompletableFuture<Void?> =
         delete(audienceId, AudienceDeleteParams.none(), requestOptions)
 
-    /** Get list of members of an audience. */
+    /**
+     * Returns the users currently matching an audience filter, with paging. Membership is
+     * recalculated, so results shift as profiles change.
+     */
     fun listMembers(audienceId: String): CompletableFuture<AudienceListMembersResponse> =
         listMembers(audienceId, AudienceListMembersParams.none())
 

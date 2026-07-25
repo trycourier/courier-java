@@ -9,7 +9,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Fetch all user preferences. */
+/**
+ * Returns a user's preference overrides with paging, one entry per subscription topic they have set
+ * a choice for.
+ */
 class PreferenceRetrieveParams
 private constructor(
     private val userId: String?,

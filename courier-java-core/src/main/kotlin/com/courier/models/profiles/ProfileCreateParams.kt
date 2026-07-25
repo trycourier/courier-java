@@ -22,8 +22,8 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Merge the supplied values with an existing profile or create a new profile if one doesn't already
- * exist.
+ * Merges the supplied values into a user's profile, creating it if absent and leaving any key you
+ * omit untouched. Prefer this for everyday writes.
  */
 class ProfileCreateParams
 private constructor(

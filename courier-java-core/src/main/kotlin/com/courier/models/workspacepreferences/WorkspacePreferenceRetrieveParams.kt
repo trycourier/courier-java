@@ -9,7 +9,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Retrieve a workspace preference by id, including its topics. */
+/**
+ * Returns one workspace preference by id, including its subscription topics, routing options, and
+ * custom routing flag.
+ */
 class WorkspacePreferenceRetrieveParams
 private constructor(
     private val sectionId: String?,

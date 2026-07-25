@@ -22,10 +22,8 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * This endpoint is used to add a single tenant.
- *
- * A custom profile can also be supplied with the tenant. This profile will be merged with the
- * user's main profile when sending to the user with that tenant.
+ * Adds a user to one tenant, optionally with a tenant-specific profile that overrides their
+ * workspace profile for sends in that tenant.
  */
 class TenantAddSingleParams
 private constructor(

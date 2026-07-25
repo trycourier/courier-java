@@ -23,7 +23,10 @@ interface RequestService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): RequestService
 
-    /** Archive message */
+    /**
+     * Archives a send request by its request id. Use it to remove test sends or superseded requests
+     * from the message list without deleting them.
+     */
     fun archive(requestId: String) = archive(requestId, RequestArchiveParams.none())
 
     /** @see archive */

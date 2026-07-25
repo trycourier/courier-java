@@ -12,7 +12,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Replace the journey-scoped notification template draft. */
+/**
+ * Replaces the draft content of one journey's notification template. Publish it before send nodes
+ * referencing it render the change.
+ */
 class TemplateReplaceParams
 private constructor(
     private val templateId: String,
