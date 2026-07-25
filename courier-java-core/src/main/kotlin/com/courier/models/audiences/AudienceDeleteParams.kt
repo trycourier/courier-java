@@ -11,7 +11,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Deletes the specified audience. */
+/**
+ * Deletes an audience permanently, so update any caller sending to it by audience id first. Those
+ * sends fail once the audience is gone.
+ */
 class AudienceDeleteParams
 private constructor(
     private val audienceId: String?,

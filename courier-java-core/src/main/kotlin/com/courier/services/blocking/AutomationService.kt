@@ -27,7 +27,10 @@ interface AutomationService {
 
     fun invoke(): InvokeService
 
-    /** Get the list of automations. */
+    /**
+     * Lists the workspace's saved automation templates, each with its id and a cursor for paging to
+     * the next page of results.
+     */
     fun list(): AutomationTemplateListResponse = list(AutomationListParams.none())
 
     /** @see list */

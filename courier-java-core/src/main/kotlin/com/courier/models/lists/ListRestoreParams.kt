@@ -11,7 +11,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Restore a previously deleted list. */
+/**
+ * Restores a previously deleted list along with its subscribers, so a list removed by mistake can
+ * be brought back rather than rebuilt.
+ */
 class ListRestoreParams
 private constructor(
     private val listId: String?,

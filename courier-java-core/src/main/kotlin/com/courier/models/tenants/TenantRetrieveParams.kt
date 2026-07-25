@@ -9,7 +9,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Get a Tenant */
+/**
+ * Returns one tenant with its name, parent tenant id, default preferences, properties, and the user
+ * profile applied to its members.
+ */
 class TenantRetrieveParams
 private constructor(
     private val tenantId: String?,

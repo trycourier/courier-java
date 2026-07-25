@@ -9,7 +9,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** List notification templates in your workspace. */
+/**
+ * Lists the workspace's notification templates. Each carries a name, tags, brand, routing, and its
+ * draft or published state.
+ */
 class NotificationListParams
 private constructor(
     private val cursor: String?,

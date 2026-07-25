@@ -9,7 +9,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Fetch the array of events of a message you've previously sent. */
+/**
+ * Returns the ordered event history for a sent message, one entry per status transition with its
+ * timestamp.
+ */
 class MessageHistoryParams
 private constructor(
     private val messageId: String?,

@@ -24,7 +24,10 @@ interface InboundServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): InboundServiceAsync
 
-    /** Courier Track Event */
+    /**
+     * Records an inbound event that can trigger a journey. Requires an event name, a messageId you
+     * generate, a type, and a properties object.
+     */
     fun trackEvent(params: InboundTrackEventParams): CompletableFuture<InboundTrackEventResponse> =
         trackEvent(params, RequestOptions.none())
 

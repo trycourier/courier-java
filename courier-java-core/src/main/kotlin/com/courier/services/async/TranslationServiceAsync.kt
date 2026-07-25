@@ -25,7 +25,10 @@ interface TranslationServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): TranslationServiceAsync
 
-    /** Get translations by locale */
+    /**
+     * Returns the translation strings stored for one domain and locale, for use in localized
+     * notification content.
+     */
     fun retrieve(locale: String, params: TranslationRetrieveParams): CompletableFuture<String> =
         retrieve(locale, params, RequestOptions.none())
 
@@ -47,7 +50,10 @@ interface TranslationServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<String>
 
-    /** Update a translation */
+    /**
+     * Uploads the translation strings for one domain and locale. Courier uses them to render
+     * localized content for recipients in that locale.
+     */
     fun update(locale: String, params: TranslationUpdateParams): CompletableFuture<Void?> =
         update(locale, params, RequestOptions.none())
 

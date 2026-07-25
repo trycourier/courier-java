@@ -25,9 +25,8 @@ interface CatalogService {
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): CatalogService
 
     /**
-     * Returns the catalog of available provider types with their display names, descriptions, and
-     * configuration schema fields (snake_case, with `type` and `required`). Providers with no
-     * configurable schema return only `provider`, `name`, and `description`.
+     * Returns the provider types Courier supports, each with a display name, description, and the
+     * configuration fields it requires.
      */
     fun list(): CatalogListResponse = list(CatalogListParams.none())
 

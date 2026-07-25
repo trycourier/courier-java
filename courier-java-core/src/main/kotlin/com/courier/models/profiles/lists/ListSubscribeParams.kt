@@ -24,7 +24,8 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Subscribes the given user to one or more lists. If the list does not exist, it will be created.
+ * Subscribes a user to one or more lists, creating any list that does not yet exist. Optional
+ * preferences apply to each subscription.
  */
 class ListSubscribeParams
 private constructor(

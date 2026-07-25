@@ -9,7 +9,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Fetch a single provider configuration by ID. */
+/**
+ * Returns one configured provider by id, including its channel, provider key, alias, title, and
+ * current settings.
+ */
 class ProviderRetrieveParams
 private constructor(
     private val id: String?,

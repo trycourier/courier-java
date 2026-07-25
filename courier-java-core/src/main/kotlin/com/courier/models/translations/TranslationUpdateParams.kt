@@ -10,7 +10,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Update a translation */
+/**
+ * Uploads the translation strings for one domain and locale. Courier uses them to render localized
+ * content for recipients in that locale.
+ */
 class TranslationUpdateParams
 private constructor(
     private val domain: String,

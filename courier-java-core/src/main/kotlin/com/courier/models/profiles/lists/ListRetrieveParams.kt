@@ -9,7 +9,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Returns the subscribed lists for a specified user. */
+/**
+ * Returns the lists a user is subscribed to, with paging. Use it to check what a recipient will
+ * receive before sending to a list.
+ */
 class ListRetrieveParams
 private constructor(
     private val userId: String?,

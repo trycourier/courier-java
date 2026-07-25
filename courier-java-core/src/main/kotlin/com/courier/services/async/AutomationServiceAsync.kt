@@ -27,7 +27,10 @@ interface AutomationServiceAsync {
 
     fun invoke(): InvokeServiceAsync
 
-    /** Get the list of automations. */
+    /**
+     * Lists the workspace's saved automation templates, each with its id and a cursor for paging to
+     * the next page of results.
+     */
     fun list(): CompletableFuture<AutomationTemplateListResponse> =
         list(AutomationListParams.none())
 

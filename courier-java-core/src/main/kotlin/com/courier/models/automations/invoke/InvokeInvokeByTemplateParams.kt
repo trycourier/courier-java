@@ -21,7 +21,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Invoke an automation run from an automation template. */
+/**
+ * Starts an automation run from a saved template for one recipient, with optional data and profile,
+ * and returns a runId.
+ */
 class InvokeInvokeByTemplateParams
 private constructor(
     private val templateId: String?,

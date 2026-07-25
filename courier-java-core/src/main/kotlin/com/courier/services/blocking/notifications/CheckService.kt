@@ -28,7 +28,10 @@ interface CheckService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): CheckService
 
-    /** Replace the submission checks for a notification template. */
+    /**
+     * Replaces the approval checks on a template submission with the complete set supplied in the
+     * request body.
+     */
     fun update(submissionId: String, params: CheckUpdateParams): CheckUpdateResponse =
         update(submissionId, params, RequestOptions.none())
 
@@ -50,7 +53,10 @@ interface CheckService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CheckUpdateResponse
 
-    /** Retrieve the submission checks for a notification template. */
+    /**
+     * Returns the approval checks recorded for a template submission, each with its pass or fail
+     * result.
+     */
     fun list(submissionId: String, params: CheckListParams): CheckListResponse =
         list(submissionId, params, RequestOptions.none())
 
@@ -71,7 +77,10 @@ interface CheckService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CheckListResponse
 
-    /** Cancel a submission for a notification template. */
+    /**
+     * Cancels a pending template submission, withdrawing it from the approval workflow. The
+     * template stays in draft and can be resubmitted later.
+     */
     fun delete(submissionId: String, params: CheckDeleteParams) =
         delete(submissionId, params, RequestOptions.none())
 

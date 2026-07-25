@@ -12,7 +12,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Archive a topic and remove it from its workspace preference. Same 404 rules as GET. */
+/**
+ * Archives a subscription topic and removes it from its workspace preference, addressed by section
+ * id and topic id.
+ */
 class TopicArchiveParams
 private constructor(
     private val sectionId: String,

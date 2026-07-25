@@ -13,9 +13,8 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Remove a user's preferences for a specific subscription topic, resetting the topic to its
- * effective default. This operation is idempotent: deleting a preference that does not exist
- * succeeds with no error.
+ * Removes a user's override for one subscription topic, resetting it to the effective default from
+ * the tenant or workspace.
  */
 class PreferenceDeleteTopicParams
 private constructor(

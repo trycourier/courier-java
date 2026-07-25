@@ -14,8 +14,8 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Publish the current draft of the journey-scoped notification template as a new version.
- * Optionally roll back to a prior version by passing `{ "version": "vN" }`.
+ * Publishes a journey-scoped template's draft as a new version. Pass a version instead to roll back
+ * the template to an earlier publish.
  */
 class TemplatePublishParams
 private constructor(

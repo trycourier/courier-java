@@ -35,7 +35,10 @@ interface TemplateService {
 
     fun versions(): VersionService
 
-    /** Get a Template in Tenant */
+    /**
+     * Returns a tenant's notification template with its content, version, and created, updated, and
+     * published timestamps.
+     */
     fun retrieve(
         templateId: String,
         params: TemplateRetrieveParams,
@@ -59,7 +62,10 @@ interface TemplateService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BaseTemplateTenantAssociation
 
-    /** List Templates in Tenant */
+    /**
+     * Lists a tenant's notification templates, each carrying its version and published timestamp.
+     * Paged.
+     */
     fun list(tenantId: String): TemplateListResponse = list(tenantId, TemplateListParams.none())
 
     /** @see list */
@@ -89,12 +95,8 @@ interface TemplateService {
         list(tenantId, TemplateListParams.none(), requestOptions)
 
     /**
-     * Deletes the tenant's notification template with the given `template_id`.
-     *
-     * Returns **204 No Content** with an empty body on success.
-     *
-     * Returns **404** if there is no template with this ID for the tenant, including a second
-     * `DELETE` after a successful removal.
+     * Deletes a tenant's notification template by id. Sends for that tenant then use the workspace
+     * template registered under the same id.
      */
     fun delete(templateId: String, params: TemplateDeleteParams) =
         delete(templateId, params, RequestOptions.none())
@@ -113,10 +115,8 @@ interface TemplateService {
     fun delete(params: TemplateDeleteParams, requestOptions: RequestOptions = RequestOptions.none())
 
     /**
-     * Publishes a specific version of a notification template for a tenant.
-     *
-     * The template must already exist in the tenant's notification map. If no version is specified,
-     * defaults to publishing the "latest" version.
+     * Publishes a version of a tenant's notification template, making it the content that tenant's
+     * sends render from until you publish another.
      */
     fun publish(
         templateId: String,
@@ -142,12 +142,8 @@ interface TemplateService {
     ): PostTenantTemplatePublishResponse
 
     /**
-     * Creates or updates a notification template for a tenant.
-     *
-     * If the template already exists for the tenant, it will be updated (200). Otherwise, a new
-     * template is created (201).
-     *
-     * Optionally publishes the template immediately if the `published` flag is set to true.
+     * Creates or updates a notification template scoped to one tenant, letting a tenant override
+     * the content the workspace template would send.
      */
     fun replace(templateId: String, params: TemplateReplaceParams): PutTenantTemplateResponse =
         replace(templateId, params, RequestOptions.none())

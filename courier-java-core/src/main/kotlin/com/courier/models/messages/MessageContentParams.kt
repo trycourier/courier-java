@@ -9,7 +9,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Get message content */
+/**
+ * Returns the rendered content Courier delivered for a message, broken out per channel, to confirm
+ * what the recipient received.
+ */
 class MessageContentParams
 private constructor(
     private val messageId: String?,

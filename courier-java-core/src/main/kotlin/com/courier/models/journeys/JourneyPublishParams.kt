@@ -12,8 +12,8 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Publish the current draft as a new version. Body is optional; pass `{ "version": "vN" }` to roll
- * back to a prior version instead. Returns 404 if the journey has no draft to publish.
+ * Publishes a journey's current draft as a new version, making it live for new runs. Pass a version
+ * instead to roll back to an earlier one.
  */
 class JourneyPublishParams
 private constructor(

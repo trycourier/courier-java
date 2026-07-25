@@ -12,10 +12,8 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Replace the journey draft. Updates the working draft only; call `POST
- * /journeys/{templateId}/publish` to make it live, or pass `state: "PUBLISHED"` in this request to
- * publish immediately. Send-node `template` ids must already exist and be scoped to this journey,
- * and node ids must not be claimed by another journey.
+ * Replaces a journey's working draft, leaving the published version live until you publish. Reach
+ * for this when editing a journey already running.
  */
 class JourneyReplaceParams
 private constructor(

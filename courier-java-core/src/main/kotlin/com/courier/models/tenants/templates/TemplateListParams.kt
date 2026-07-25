@@ -9,7 +9,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** List Templates in Tenant */
+/**
+ * Lists a tenant's notification templates, each carrying its version and published timestamp.
+ * Paged.
+ */
 class TemplateListParams
 private constructor(
     private val tenantId: String?,

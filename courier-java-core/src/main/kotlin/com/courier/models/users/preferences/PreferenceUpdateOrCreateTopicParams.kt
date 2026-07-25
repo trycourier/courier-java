@@ -24,7 +24,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Update or Create user preferences for a specific subscription topic. */
+/**
+ * Sets a user's opt-in status and channel choices for one subscription topic, overriding the tenant
+ * default for that topic only.
+ */
 class PreferenceUpdateOrCreateTopicParams
 private constructor(
     private val userId: String,

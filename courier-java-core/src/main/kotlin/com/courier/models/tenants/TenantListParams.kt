@@ -9,7 +9,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Get a List of Tenants */
+/**
+ * Lists the workspace's tenants, each carrying a name, parent tenant, properties, and default
+ * preferences. Paged.
+ */
 class TenantListParams
 private constructor(
     private val cursor: String?,

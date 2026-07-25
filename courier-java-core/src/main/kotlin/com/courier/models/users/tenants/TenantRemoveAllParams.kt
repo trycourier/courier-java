@@ -11,7 +11,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Removes a user from any tenants they may have been associated with. */
+/**
+ * Removes a user from every tenant they belong to in one call. Their workspace-level profile is a
+ * separate resource.
+ */
 class TenantRemoveAllParams
 private constructor(
     private val userId: String?,

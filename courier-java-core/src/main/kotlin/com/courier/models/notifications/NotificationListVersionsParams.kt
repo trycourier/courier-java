@@ -9,7 +9,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** List versions of a notification template. */
+/**
+ * Returns a notification template's published versions, most recent first, for comparison or
+ * rollback. Paged.
+ */
 class NotificationListVersionsParams
 private constructor(
     private val id: String?,

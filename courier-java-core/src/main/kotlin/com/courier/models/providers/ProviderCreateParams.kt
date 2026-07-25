@@ -22,8 +22,8 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Create a new provider configuration. The `provider` field must be a known Courier provider key
- * (see catalog).
+ * Configures a provider integration from a Courier provider key and its settings. Check the catalog
+ * endpoint for the schema each provider expects.
  */
 class ProviderCreateParams
 private constructor(

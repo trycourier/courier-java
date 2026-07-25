@@ -37,7 +37,10 @@ interface TenantService {
 
     fun templates(): TemplateService
 
-    /** Get a Tenant */
+    /**
+     * Returns one tenant with its name, parent tenant id, default preferences, properties, and the
+     * user profile applied to its members.
+     */
     fun retrieve(tenantId: String): Tenant = retrieve(tenantId, TenantRetrieveParams.none())
 
     /** @see retrieve */
@@ -66,7 +69,10 @@ interface TenantService {
     fun retrieve(tenantId: String, requestOptions: RequestOptions): Tenant =
         retrieve(tenantId, TenantRetrieveParams.none(), requestOptions)
 
-    /** Create or Replace a Tenant */
+    /**
+     * Creates or replaces a tenant from a name, parent, brand, properties, and default preferences
+     * supplied in the request body.
+     */
     fun update(tenantId: String, params: TenantUpdateParams): Tenant =
         update(tenantId, params, RequestOptions.none())
 
@@ -86,7 +92,10 @@ interface TenantService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Tenant
 
-    /** Get a List of Tenants */
+    /**
+     * Lists the workspace's tenants, each carrying a name, parent tenant, properties, and default
+     * preferences. Paged.
+     */
     fun list(): TenantListResponse = list(TenantListParams.none())
 
     /** @see list */
@@ -103,7 +112,10 @@ interface TenantService {
     fun list(requestOptions: RequestOptions): TenantListResponse =
         list(TenantListParams.none(), requestOptions)
 
-    /** Delete a Tenant */
+    /**
+     * Deletes a tenant. Its members' workspace-level profiles and preferences live outside the
+     * tenant and are managed separately.
+     */
     fun delete(tenantId: String) = delete(tenantId, TenantDeleteParams.none())
 
     /** @see delete */
@@ -127,7 +139,10 @@ interface TenantService {
     fun delete(tenantId: String, requestOptions: RequestOptions) =
         delete(tenantId, TenantDeleteParams.none(), requestOptions)
 
-    /** Get Users in Tenant */
+    /**
+     * Returns the users belonging to a tenant with cursor paging. Use it to see who a tenant-scoped
+     * send will reach.
+     */
     fun listUsers(tenantId: String): TenantListUsersResponse =
         listUsers(tenantId, TenantListUsersParams.none())
 

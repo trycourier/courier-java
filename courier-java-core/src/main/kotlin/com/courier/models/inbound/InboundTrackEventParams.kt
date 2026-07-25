@@ -22,7 +22,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Courier Track Event */
+/**
+ * Records an inbound event that can trigger a journey. Requires an event name, a messageId you
+ * generate, a type, and a properties object.
+ */
 class InboundTrackEventParams
 private constructor(
     private val body: Body,

@@ -9,7 +9,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Get the list of brands. */
+/**
+ * Lists the workspace's brands. Every entry carries its name, styling settings, snippets, and
+ * published version.
+ */
 class BrandListParams
 private constructor(
     private val cursor: String?,

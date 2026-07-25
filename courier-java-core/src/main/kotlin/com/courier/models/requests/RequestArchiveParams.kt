@@ -11,7 +11,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Archive message */
+/**
+ * Archives a send request by its request id. Use it to remove test sends or superseded requests
+ * from the message list without deleting them.
+ */
 class RequestArchiveParams
 private constructor(
     private val requestId: String?,

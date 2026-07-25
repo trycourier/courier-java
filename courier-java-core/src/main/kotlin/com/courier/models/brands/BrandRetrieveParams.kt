@@ -9,7 +9,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Fetch a specific brand by brand ID. */
+/**
+ * Returns one brand by id, including its colors, logo and styling settings, Handlebars snippets,
+ * and published version.
+ */
 class BrandRetrieveParams
 private constructor(
     private val brandId: String?,

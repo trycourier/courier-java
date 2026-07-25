@@ -35,8 +35,8 @@ interface ProfileServiceAsync {
     fun lists(): ListServiceAsync
 
     /**
-     * Merge the supplied values with an existing profile or create a new profile if one doesn't
-     * already exist.
+     * Merges the supplied values into a user's profile, creating it if absent and leaving any key
+     * you omit untouched. Prefer this for everyday writes.
      */
     fun create(
         userId: String,
@@ -61,7 +61,10 @@ interface ProfileServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<ProfileCreateResponse>
 
-    /** Returns the specified user profile. */
+    /**
+     * Returns a user's stored profile and preferences, including the email address, phone number,
+     * and push tokens Courier can reach them on.
+     */
     fun retrieve(userId: String): CompletableFuture<ProfileRetrieveResponse> =
         retrieve(userId, ProfileRetrieveParams.none())
 
@@ -96,7 +99,10 @@ interface ProfileServiceAsync {
     ): CompletableFuture<ProfileRetrieveResponse> =
         retrieve(userId, ProfileRetrieveParams.none(), requestOptions)
 
-    /** Update a profile */
+    /**
+     * Applies a JSON Patch to a user profile, adding, removing, or replacing individual fields
+     * without sending the whole object.
+     */
     fun update(userId: String, params: ProfileUpdateParams): CompletableFuture<Void?> =
         update(userId, params, RequestOptions.none())
 
@@ -117,7 +123,10 @@ interface ProfileServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Void?>
 
-    /** Deletes the specified user profile. */
+    /**
+     * Deletes a user's profile and stored contact details. List subscriptions and preferences are
+     * separate resources, so remove those too if required.
+     */
     fun delete(userId: String): CompletableFuture<Void?> =
         delete(userId, ProfileDeleteParams.none())
 
@@ -149,11 +158,8 @@ interface ProfileServiceAsync {
         delete(userId, ProfileDeleteParams.none(), requestOptions)
 
     /**
-     * When using `PUT`, be sure to include all the key-value pairs required by the recipient's
-     * profile. Any key-value pairs that exist in the profile but fail to be included in the `PUT`
-     * request will be removed from the profile. Remember, a `PUT` update is a full replacement of
-     * the data. For partial updates, use the
-     * [Patch](https://www.courier.com/docs/reference/profiles/patch/) request.
+     * Overwrites a user profile in full, removing any key absent from the request body. Use the
+     * patch endpoint when changing a single field.
      */
     fun replace(
         userId: String,
