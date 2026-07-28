@@ -18,6 +18,8 @@ import com.courier.services.blocking.DigestService
 import com.courier.services.blocking.DigestServiceImpl
 import com.courier.services.blocking.InboundService
 import com.courier.services.blocking.InboundServiceImpl
+import com.courier.services.blocking.InboxService
+import com.courier.services.blocking.InboxServiceImpl
 import com.courier.services.blocking.JourneyService
 import com.courier.services.blocking.JourneyServiceImpl
 import com.courier.services.blocking.ListService
@@ -93,6 +95,8 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
 
     private val lists: ListService by lazy { ListServiceImpl(clientOptionsWithUserAgent) }
 
+    private val inbox: InboxService by lazy { InboxServiceImpl(clientOptionsWithUserAgent) }
+
     private val messages: MessageService by lazy { MessageServiceImpl(clientOptionsWithUserAgent) }
 
     private val requests: RequestService by lazy { RequestServiceImpl(clientOptionsWithUserAgent) }
@@ -147,6 +151,8 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
     override fun inbound(): InboundService = inbound
 
     override fun lists(): ListService = lists
+
+    override fun inbox(): InboxService = inbox
 
     override fun messages(): MessageService = messages
 
@@ -215,6 +221,10 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
             ListServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val inbox: InboxService.WithRawResponse by lazy {
+            InboxServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
         private val messages: MessageService.WithRawResponse by lazy {
             MessageServiceImpl.WithRawResponseImpl(clientOptions)
         }
@@ -279,6 +289,8 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
         override fun inbound(): InboundService.WithRawResponse = inbound
 
         override fun lists(): ListService.WithRawResponse = lists
+
+        override fun inbox(): InboxService.WithRawResponse = inbox
 
         override fun messages(): MessageService.WithRawResponse = messages
 
