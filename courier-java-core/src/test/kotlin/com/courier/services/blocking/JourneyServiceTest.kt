@@ -7,6 +7,8 @@ import com.courier.core.JsonValue
 import com.courier.models.journeys.CancelJourneyRequest
 import com.courier.models.journeys.CreateJourneyRequest
 import com.courier.models.journeys.JourneyApiInvokeTriggerNode
+import com.courier.models.journeys.JourneyCancelParams
+import com.courier.models.journeys.JourneyCreateParams
 import com.courier.models.journeys.JourneyInvokeParams
 import com.courier.models.journeys.JourneyListParams
 import com.courier.models.journeys.JourneyPublishParams
@@ -28,36 +30,42 @@ internal class JourneyServiceTest {
 
         val journeyResponse =
             journeyService.create(
-                CreateJourneyRequest.builder()
-                    .name("Welcome Journey")
-                    .addNode(
-                        JourneyApiInvokeTriggerNode.builder()
-                            .triggerType(JourneyApiInvokeTriggerNode.TriggerType.API_INVOKE)
-                            .type(JourneyApiInvokeTriggerNode.Type.TRIGGER)
-                            .id("trigger-1")
-                            .conditionsOfConditionAtom(listOf("string", "string"))
-                            .schema(
-                                JourneyApiInvokeTriggerNode.Schema.builder()
-                                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                JourneyCreateParams.builder()
+                    .idempotencyKey("order-ORD-456-user-123")
+                    .xIdempotencyExpiration("1785312000")
+                    .createJourneyRequest(
+                        CreateJourneyRequest.builder()
+                            .name("Welcome Journey")
+                            .addNode(
+                                JourneyApiInvokeTriggerNode.builder()
+                                    .triggerType(JourneyApiInvokeTriggerNode.TriggerType.API_INVOKE)
+                                    .type(JourneyApiInvokeTriggerNode.Type.TRIGGER)
+                                    .id("trigger-1")
+                                    .conditionsOfConditionAtom(listOf("string", "string"))
+                                    .schema(
+                                        JourneyApiInvokeTriggerNode.Schema.builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                            .build()
+                                    )
                                     .build()
                             )
-                            .build()
-                    )
-                    .addNode(
-                        JourneyApiInvokeTriggerNode.builder()
-                            .triggerType(JourneyApiInvokeTriggerNode.TriggerType.API_INVOKE)
-                            .type(JourneyApiInvokeTriggerNode.Type.TRIGGER)
-                            .id("send-1")
-                            .conditionsOfConditionAtom(listOf("string", "string"))
-                            .schema(
-                                JourneyApiInvokeTriggerNode.Schema.builder()
-                                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .addNode(
+                                JourneyApiInvokeTriggerNode.builder()
+                                    .triggerType(JourneyApiInvokeTriggerNode.TriggerType.API_INVOKE)
+                                    .type(JourneyApiInvokeTriggerNode.Type.TRIGGER)
+                                    .id("send-1")
+                                    .conditionsOfConditionAtom(listOf("string", "string"))
+                                    .schema(
+                                        JourneyApiInvokeTriggerNode.Schema.builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                            .build()
+                                    )
                                     .build()
                             )
+                            .enabled(true)
+                            .state(JourneyState.DRAFT)
                             .build()
                     )
-                    .enabled(true)
-                    .state(JourneyState.DRAFT)
                     .build()
             )
 
@@ -112,8 +120,14 @@ internal class JourneyServiceTest {
 
         val cancelJourneyResponse =
             journeyService.cancel(
-                CancelJourneyRequest.ByCancelationToken.builder()
-                    .cancelationToken("order-1234")
+                JourneyCancelParams.builder()
+                    .idempotencyKey("order-ORD-456-user-123")
+                    .xIdempotencyExpiration("1785312000")
+                    .cancelJourneyRequest(
+                        CancelJourneyRequest.ByCancelationToken.builder()
+                            .cancelationToken("order-1234")
+                            .build()
+                    )
                     .build()
             )
 
@@ -130,6 +144,8 @@ internal class JourneyServiceTest {
             journeyService.invoke(
                 JourneyInvokeParams.builder()
                     .templateId("templateId")
+                    .idempotencyKey("order-ORD-456-user-123")
+                    .xIdempotencyExpiration("1785312000")
                     .journeysInvokeRequest(
                         JourneysInvokeRequest.builder()
                             .data(
@@ -173,6 +189,8 @@ internal class JourneyServiceTest {
             journeyService.publish(
                 JourneyPublishParams.builder()
                     .templateId("x")
+                    .idempotencyKey("order-ORD-456-user-123")
+                    .xIdempotencyExpiration("1785312000")
                     .journeyPublishRequest(
                         JourneyPublishRequest.builder().version("v321669910225").build()
                     )

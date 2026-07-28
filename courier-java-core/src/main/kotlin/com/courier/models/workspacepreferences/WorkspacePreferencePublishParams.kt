@@ -17,10 +17,16 @@ import kotlin.jvm.optionals.getOrNull
  */
 class WorkspacePreferencePublishParams
 private constructor(
+    private val idempotencyKey: String?,
+    private val xIdempotencyExpiration: String?,
     private val publishPreferencesRequest: PublishPreferencesRequest?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
+
+    fun idempotencyKey(): Optional<String> = Optional.ofNullable(idempotencyKey)
+
+    fun xIdempotencyExpiration(): Optional<String> = Optional.ofNullable(xIdempotencyExpiration)
 
     /**
      * Optional page metadata to apply when publishing the workspace's preferences page. All fields
@@ -55,6 +61,8 @@ private constructor(
     /** A builder for [WorkspacePreferencePublishParams]. */
     class Builder internal constructor() {
 
+        private var idempotencyKey: String? = null
+        private var xIdempotencyExpiration: String? = null
         private var publishPreferencesRequest: PublishPreferencesRequest? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
@@ -62,12 +70,31 @@ private constructor(
         @JvmSynthetic
         internal fun from(workspacePreferencePublishParams: WorkspacePreferencePublishParams) =
             apply {
+                idempotencyKey = workspacePreferencePublishParams.idempotencyKey
+                xIdempotencyExpiration = workspacePreferencePublishParams.xIdempotencyExpiration
                 publishPreferencesRequest =
                     workspacePreferencePublishParams.publishPreferencesRequest
                 additionalHeaders = workspacePreferencePublishParams.additionalHeaders.toBuilder()
                 additionalQueryParams =
                     workspacePreferencePublishParams.additionalQueryParams.toBuilder()
             }
+
+        fun idempotencyKey(idempotencyKey: String?) = apply { this.idempotencyKey = idempotencyKey }
+
+        /** Alias for calling [Builder.idempotencyKey] with `idempotencyKey.orElse(null)`. */
+        fun idempotencyKey(idempotencyKey: Optional<String>) =
+            idempotencyKey(idempotencyKey.getOrNull())
+
+        fun xIdempotencyExpiration(xIdempotencyExpiration: String?) = apply {
+            this.xIdempotencyExpiration = xIdempotencyExpiration
+        }
+
+        /**
+         * Alias for calling [Builder.xIdempotencyExpiration] with
+         * `xIdempotencyExpiration.orElse(null)`.
+         */
+        fun xIdempotencyExpiration(xIdempotencyExpiration: Optional<String>) =
+            xIdempotencyExpiration(xIdempotencyExpiration.getOrNull())
 
         /**
          * Optional page metadata to apply when publishing the workspace's preferences page. All
@@ -192,6 +219,8 @@ private constructor(
          */
         fun build(): WorkspacePreferencePublishParams =
             WorkspacePreferencePublishParams(
+                idempotencyKey,
+                xIdempotencyExpiration,
                 publishPreferencesRequest,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -201,7 +230,14 @@ private constructor(
     fun _body(): Optional<PublishPreferencesRequest> =
         Optional.ofNullable(publishPreferencesRequest)
 
-    override fun _headers(): Headers = additionalHeaders
+    override fun _headers(): Headers =
+        Headers.builder()
+            .apply {
+                idempotencyKey?.let { put("Idempotency-Key", it) }
+                xIdempotencyExpiration?.let { put("x-idempotency-expiration", it) }
+                putAll(additionalHeaders)
+            }
+            .build()
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
@@ -211,14 +247,22 @@ private constructor(
         }
 
         return other is WorkspacePreferencePublishParams &&
+            idempotencyKey == other.idempotencyKey &&
+            xIdempotencyExpiration == other.xIdempotencyExpiration &&
             publishPreferencesRequest == other.publishPreferencesRequest &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(publishPreferencesRequest, additionalHeaders, additionalQueryParams)
+        Objects.hash(
+            idempotencyKey,
+            xIdempotencyExpiration,
+            publishPreferencesRequest,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
     override fun toString() =
-        "WorkspacePreferencePublishParams{publishPreferencesRequest=$publishPreferencesRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "WorkspacePreferencePublishParams{idempotencyKey=$idempotencyKey, xIdempotencyExpiration=$xIdempotencyExpiration, publishPreferencesRequest=$publishPreferencesRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

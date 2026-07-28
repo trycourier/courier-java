@@ -8,6 +8,8 @@ import com.courier.core.checkRequired
 import com.courier.core.http.Headers
 import com.courier.core.http.QueryParams
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Creates a workspace preference and returns its generated id. Add subscription topics to it
@@ -15,10 +17,16 @@ import java.util.Objects
  */
 class WorkspacePreferenceCreateParams
 private constructor(
+    private val idempotencyKey: String?,
+    private val xIdempotencyExpiration: String?,
     private val workspacePreferenceCreateRequest: WorkspacePreferenceCreateRequest,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
+
+    fun idempotencyKey(): Optional<String> = Optional.ofNullable(idempotencyKey)
+
+    fun xIdempotencyExpiration(): Optional<String> = Optional.ofNullable(xIdempotencyExpiration)
 
     /** Request body for creating a workspace preference. */
     fun workspacePreferenceCreateRequest(): WorkspacePreferenceCreateRequest =
@@ -52,6 +60,8 @@ private constructor(
     /** A builder for [WorkspacePreferenceCreateParams]. */
     class Builder internal constructor() {
 
+        private var idempotencyKey: String? = null
+        private var xIdempotencyExpiration: String? = null
         private var workspacePreferenceCreateRequest: WorkspacePreferenceCreateRequest? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
@@ -59,12 +69,31 @@ private constructor(
         @JvmSynthetic
         internal fun from(workspacePreferenceCreateParams: WorkspacePreferenceCreateParams) =
             apply {
+                idempotencyKey = workspacePreferenceCreateParams.idempotencyKey
+                xIdempotencyExpiration = workspacePreferenceCreateParams.xIdempotencyExpiration
                 workspacePreferenceCreateRequest =
                     workspacePreferenceCreateParams.workspacePreferenceCreateRequest
                 additionalHeaders = workspacePreferenceCreateParams.additionalHeaders.toBuilder()
                 additionalQueryParams =
                     workspacePreferenceCreateParams.additionalQueryParams.toBuilder()
             }
+
+        fun idempotencyKey(idempotencyKey: String?) = apply { this.idempotencyKey = idempotencyKey }
+
+        /** Alias for calling [Builder.idempotencyKey] with `idempotencyKey.orElse(null)`. */
+        fun idempotencyKey(idempotencyKey: Optional<String>) =
+            idempotencyKey(idempotencyKey.getOrNull())
+
+        fun xIdempotencyExpiration(xIdempotencyExpiration: String?) = apply {
+            this.xIdempotencyExpiration = xIdempotencyExpiration
+        }
+
+        /**
+         * Alias for calling [Builder.xIdempotencyExpiration] with
+         * `xIdempotencyExpiration.orElse(null)`.
+         */
+        fun xIdempotencyExpiration(xIdempotencyExpiration: Optional<String>) =
+            xIdempotencyExpiration(xIdempotencyExpiration.getOrNull())
 
         /** Request body for creating a workspace preference. */
         fun workspacePreferenceCreateRequest(
@@ -183,6 +212,8 @@ private constructor(
          */
         fun build(): WorkspacePreferenceCreateParams =
             WorkspacePreferenceCreateParams(
+                idempotencyKey,
+                xIdempotencyExpiration,
                 checkRequired("workspacePreferenceCreateRequest", workspacePreferenceCreateRequest),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -191,7 +222,14 @@ private constructor(
 
     fun _body(): WorkspacePreferenceCreateRequest = workspacePreferenceCreateRequest
 
-    override fun _headers(): Headers = additionalHeaders
+    override fun _headers(): Headers =
+        Headers.builder()
+            .apply {
+                idempotencyKey?.let { put("Idempotency-Key", it) }
+                xIdempotencyExpiration?.let { put("x-idempotency-expiration", it) }
+                putAll(additionalHeaders)
+            }
+            .build()
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
@@ -201,14 +239,22 @@ private constructor(
         }
 
         return other is WorkspacePreferenceCreateParams &&
+            idempotencyKey == other.idempotencyKey &&
+            xIdempotencyExpiration == other.xIdempotencyExpiration &&
             workspacePreferenceCreateRequest == other.workspacePreferenceCreateRequest &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(workspacePreferenceCreateRequest, additionalHeaders, additionalQueryParams)
+        Objects.hash(
+            idempotencyKey,
+            xIdempotencyExpiration,
+            workspacePreferenceCreateRequest,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
     override fun toString() =
-        "WorkspacePreferenceCreateParams{workspacePreferenceCreateRequest=$workspacePreferenceCreateRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "WorkspacePreferenceCreateParams{idempotencyKey=$idempotencyKey, xIdempotencyExpiration=$xIdempotencyExpiration, workspacePreferenceCreateRequest=$workspacePreferenceCreateRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

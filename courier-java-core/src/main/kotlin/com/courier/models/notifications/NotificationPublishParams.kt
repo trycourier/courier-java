@@ -18,12 +18,18 @@ import kotlin.jvm.optionals.getOrNull
 class NotificationPublishParams
 private constructor(
     private val id: String?,
+    private val idempotencyKey: String?,
+    private val xIdempotencyExpiration: String?,
     private val notificationTemplatePublishRequest: NotificationTemplatePublishRequest?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     fun id(): Optional<String> = Optional.ofNullable(id)
+
+    fun idempotencyKey(): Optional<String> = Optional.ofNullable(idempotencyKey)
+
+    fun xIdempotencyExpiration(): Optional<String> = Optional.ofNullable(xIdempotencyExpiration)
 
     /**
      * Optional request body for publishing a notification template. Omit or send an empty object to
@@ -57,6 +63,8 @@ private constructor(
     class Builder internal constructor() {
 
         private var id: String? = null
+        private var idempotencyKey: String? = null
+        private var xIdempotencyExpiration: String? = null
         private var notificationTemplatePublishRequest: NotificationTemplatePublishRequest? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
@@ -64,6 +72,8 @@ private constructor(
         @JvmSynthetic
         internal fun from(notificationPublishParams: NotificationPublishParams) = apply {
             id = notificationPublishParams.id
+            idempotencyKey = notificationPublishParams.idempotencyKey
+            xIdempotencyExpiration = notificationPublishParams.xIdempotencyExpiration
             notificationTemplatePublishRequest =
                 notificationPublishParams.notificationTemplatePublishRequest
             additionalHeaders = notificationPublishParams.additionalHeaders.toBuilder()
@@ -74,6 +84,23 @@ private constructor(
 
         /** Alias for calling [Builder.id] with `id.orElse(null)`. */
         fun id(id: Optional<String>) = id(id.getOrNull())
+
+        fun idempotencyKey(idempotencyKey: String?) = apply { this.idempotencyKey = idempotencyKey }
+
+        /** Alias for calling [Builder.idempotencyKey] with `idempotencyKey.orElse(null)`. */
+        fun idempotencyKey(idempotencyKey: Optional<String>) =
+            idempotencyKey(idempotencyKey.getOrNull())
+
+        fun xIdempotencyExpiration(xIdempotencyExpiration: String?) = apply {
+            this.xIdempotencyExpiration = xIdempotencyExpiration
+        }
+
+        /**
+         * Alias for calling [Builder.xIdempotencyExpiration] with
+         * `xIdempotencyExpiration.orElse(null)`.
+         */
+        fun xIdempotencyExpiration(xIdempotencyExpiration: Optional<String>) =
+            xIdempotencyExpiration(xIdempotencyExpiration.getOrNull())
 
         /**
          * Optional request body for publishing a notification template. Omit or send an empty
@@ -197,6 +224,8 @@ private constructor(
         fun build(): NotificationPublishParams =
             NotificationPublishParams(
                 id,
+                idempotencyKey,
+                xIdempotencyExpiration,
                 notificationTemplatePublishRequest,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -212,7 +241,14 @@ private constructor(
             else -> ""
         }
 
-    override fun _headers(): Headers = additionalHeaders
+    override fun _headers(): Headers =
+        Headers.builder()
+            .apply {
+                idempotencyKey?.let { put("Idempotency-Key", it) }
+                xIdempotencyExpiration?.let { put("x-idempotency-expiration", it) }
+                putAll(additionalHeaders)
+            }
+            .build()
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
@@ -223,6 +259,8 @@ private constructor(
 
         return other is NotificationPublishParams &&
             id == other.id &&
+            idempotencyKey == other.idempotencyKey &&
+            xIdempotencyExpiration == other.xIdempotencyExpiration &&
             notificationTemplatePublishRequest == other.notificationTemplatePublishRequest &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
@@ -231,11 +269,13 @@ private constructor(
     override fun hashCode(): Int =
         Objects.hash(
             id,
+            idempotencyKey,
+            xIdempotencyExpiration,
             notificationTemplatePublishRequest,
             additionalHeaders,
             additionalQueryParams,
         )
 
     override fun toString() =
-        "NotificationPublishParams{id=$id, notificationTemplatePublishRequest=$notificationTemplatePublishRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "NotificationPublishParams{id=$id, idempotencyKey=$idempotencyKey, xIdempotencyExpiration=$xIdempotencyExpiration, notificationTemplatePublishRequest=$notificationTemplatePublishRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

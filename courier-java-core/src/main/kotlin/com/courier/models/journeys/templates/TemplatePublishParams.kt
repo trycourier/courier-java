@@ -21,6 +21,8 @@ class TemplatePublishParams
 private constructor(
     private val templateId: String,
     private val notificationId: String?,
+    private val idempotencyKey: String?,
+    private val xIdempotencyExpiration: String?,
     private val journeyTemplatePublishRequest: JourneyTemplatePublishRequest?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -29,6 +31,10 @@ private constructor(
     fun templateId(): String = templateId
 
     fun notificationId(): Optional<String> = Optional.ofNullable(notificationId)
+
+    fun idempotencyKey(): Optional<String> = Optional.ofNullable(idempotencyKey)
+
+    fun xIdempotencyExpiration(): Optional<String> = Optional.ofNullable(xIdempotencyExpiration)
 
     /**
      * Request body for publishing a journey-scoped notification template. Pass `version` to roll
@@ -66,6 +72,8 @@ private constructor(
 
         private var templateId: String? = null
         private var notificationId: String? = null
+        private var idempotencyKey: String? = null
+        private var xIdempotencyExpiration: String? = null
         private var journeyTemplatePublishRequest: JourneyTemplatePublishRequest? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
@@ -74,6 +82,8 @@ private constructor(
         internal fun from(templatePublishParams: TemplatePublishParams) = apply {
             templateId = templatePublishParams.templateId
             notificationId = templatePublishParams.notificationId
+            idempotencyKey = templatePublishParams.idempotencyKey
+            xIdempotencyExpiration = templatePublishParams.xIdempotencyExpiration
             journeyTemplatePublishRequest = templatePublishParams.journeyTemplatePublishRequest
             additionalHeaders = templatePublishParams.additionalHeaders.toBuilder()
             additionalQueryParams = templatePublishParams.additionalQueryParams.toBuilder()
@@ -86,6 +96,23 @@ private constructor(
         /** Alias for calling [Builder.notificationId] with `notificationId.orElse(null)`. */
         fun notificationId(notificationId: Optional<String>) =
             notificationId(notificationId.getOrNull())
+
+        fun idempotencyKey(idempotencyKey: String?) = apply { this.idempotencyKey = idempotencyKey }
+
+        /** Alias for calling [Builder.idempotencyKey] with `idempotencyKey.orElse(null)`. */
+        fun idempotencyKey(idempotencyKey: Optional<String>) =
+            idempotencyKey(idempotencyKey.getOrNull())
+
+        fun xIdempotencyExpiration(xIdempotencyExpiration: String?) = apply {
+            this.xIdempotencyExpiration = xIdempotencyExpiration
+        }
+
+        /**
+         * Alias for calling [Builder.xIdempotencyExpiration] with
+         * `xIdempotencyExpiration.orElse(null)`.
+         */
+        fun xIdempotencyExpiration(xIdempotencyExpiration: Optional<String>) =
+            xIdempotencyExpiration(xIdempotencyExpiration.getOrNull())
 
         /**
          * Request body for publishing a journey-scoped notification template. Pass `version` to
@@ -217,6 +244,8 @@ private constructor(
             TemplatePublishParams(
                 checkRequired("templateId", templateId),
                 notificationId,
+                idempotencyKey,
+                xIdempotencyExpiration,
                 journeyTemplatePublishRequest,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -233,7 +262,14 @@ private constructor(
             else -> ""
         }
 
-    override fun _headers(): Headers = additionalHeaders
+    override fun _headers(): Headers =
+        Headers.builder()
+            .apply {
+                idempotencyKey?.let { put("Idempotency-Key", it) }
+                xIdempotencyExpiration?.let { put("x-idempotency-expiration", it) }
+                putAll(additionalHeaders)
+            }
+            .build()
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
@@ -245,6 +281,8 @@ private constructor(
         return other is TemplatePublishParams &&
             templateId == other.templateId &&
             notificationId == other.notificationId &&
+            idempotencyKey == other.idempotencyKey &&
+            xIdempotencyExpiration == other.xIdempotencyExpiration &&
             journeyTemplatePublishRequest == other.journeyTemplatePublishRequest &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
@@ -254,11 +292,13 @@ private constructor(
         Objects.hash(
             templateId,
             notificationId,
+            idempotencyKey,
+            xIdempotencyExpiration,
             journeyTemplatePublishRequest,
             additionalHeaders,
             additionalQueryParams,
         )
 
     override fun toString() =
-        "TemplatePublishParams{templateId=$templateId, notificationId=$notificationId, journeyTemplatePublishRequest=$journeyTemplatePublishRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "TemplatePublishParams{templateId=$templateId, notificationId=$notificationId, idempotencyKey=$idempotencyKey, xIdempotencyExpiration=$xIdempotencyExpiration, journeyTemplatePublishRequest=$journeyTemplatePublishRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

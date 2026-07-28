@@ -30,12 +30,18 @@ import kotlin.jvm.optionals.getOrNull
 class SubscriptionAddParams
 private constructor(
     private val listId: String?,
+    private val idempotencyKey: String?,
+    private val xIdempotencyExpiration: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     fun listId(): Optional<String> = Optional.ofNullable(listId)
+
+    fun idempotencyKey(): Optional<String> = Optional.ofNullable(idempotencyKey)
+
+    fun xIdempotencyExpiration(): Optional<String> = Optional.ofNullable(xIdempotencyExpiration)
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
@@ -77,6 +83,8 @@ private constructor(
     class Builder internal constructor() {
 
         private var listId: String? = null
+        private var idempotencyKey: String? = null
+        private var xIdempotencyExpiration: String? = null
         private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
@@ -84,6 +92,8 @@ private constructor(
         @JvmSynthetic
         internal fun from(subscriptionAddParams: SubscriptionAddParams) = apply {
             listId = subscriptionAddParams.listId
+            idempotencyKey = subscriptionAddParams.idempotencyKey
+            xIdempotencyExpiration = subscriptionAddParams.xIdempotencyExpiration
             body = subscriptionAddParams.body.toBuilder()
             additionalHeaders = subscriptionAddParams.additionalHeaders.toBuilder()
             additionalQueryParams = subscriptionAddParams.additionalQueryParams.toBuilder()
@@ -93,6 +103,23 @@ private constructor(
 
         /** Alias for calling [Builder.listId] with `listId.orElse(null)`. */
         fun listId(listId: Optional<String>) = listId(listId.getOrNull())
+
+        fun idempotencyKey(idempotencyKey: String?) = apply { this.idempotencyKey = idempotencyKey }
+
+        /** Alias for calling [Builder.idempotencyKey] with `idempotencyKey.orElse(null)`. */
+        fun idempotencyKey(idempotencyKey: Optional<String>) =
+            idempotencyKey(idempotencyKey.getOrNull())
+
+        fun xIdempotencyExpiration(xIdempotencyExpiration: String?) = apply {
+            this.xIdempotencyExpiration = xIdempotencyExpiration
+        }
+
+        /**
+         * Alias for calling [Builder.xIdempotencyExpiration] with
+         * `xIdempotencyExpiration.orElse(null)`.
+         */
+        fun xIdempotencyExpiration(xIdempotencyExpiration: Optional<String>) =
+            xIdempotencyExpiration(xIdempotencyExpiration.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -259,6 +286,8 @@ private constructor(
         fun build(): SubscriptionAddParams =
             SubscriptionAddParams(
                 listId,
+                idempotencyKey,
+                xIdempotencyExpiration,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -273,7 +302,14 @@ private constructor(
             else -> ""
         }
 
-    override fun _headers(): Headers = additionalHeaders
+    override fun _headers(): Headers =
+        Headers.builder()
+            .apply {
+                idempotencyKey?.let { put("Idempotency-Key", it) }
+                xIdempotencyExpiration?.let { put("x-idempotency-expiration", it) }
+                putAll(additionalHeaders)
+            }
+            .build()
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
@@ -470,14 +506,23 @@ private constructor(
 
         return other is SubscriptionAddParams &&
             listId == other.listId &&
+            idempotencyKey == other.idempotencyKey &&
+            xIdempotencyExpiration == other.xIdempotencyExpiration &&
             body == other.body &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(listId, body, additionalHeaders, additionalQueryParams)
+        Objects.hash(
+            listId,
+            idempotencyKey,
+            xIdempotencyExpiration,
+            body,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
     override fun toString() =
-        "SubscriptionAddParams{listId=$listId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "SubscriptionAddParams{listId=$listId, idempotencyKey=$idempotencyKey, xIdempotencyExpiration=$xIdempotencyExpiration, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

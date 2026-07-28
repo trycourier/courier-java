@@ -28,12 +28,18 @@ import kotlin.jvm.optionals.getOrNull
 class InvokeInvokeByTemplateParams
 private constructor(
     private val templateId: String?,
+    private val idempotencyKey: String?,
+    private val xIdempotencyExpiration: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     fun templateId(): Optional<String> = Optional.ofNullable(templateId)
+
+    fun idempotencyKey(): Optional<String> = Optional.ofNullable(idempotencyKey)
+
+    fun xIdempotencyExpiration(): Optional<String> = Optional.ofNullable(xIdempotencyExpiration)
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -127,6 +133,8 @@ private constructor(
     class Builder internal constructor() {
 
         private var templateId: String? = null
+        private var idempotencyKey: String? = null
+        private var xIdempotencyExpiration: String? = null
         private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
@@ -134,6 +142,8 @@ private constructor(
         @JvmSynthetic
         internal fun from(invokeInvokeByTemplateParams: InvokeInvokeByTemplateParams) = apply {
             templateId = invokeInvokeByTemplateParams.templateId
+            idempotencyKey = invokeInvokeByTemplateParams.idempotencyKey
+            xIdempotencyExpiration = invokeInvokeByTemplateParams.xIdempotencyExpiration
             body = invokeInvokeByTemplateParams.body.toBuilder()
             additionalHeaders = invokeInvokeByTemplateParams.additionalHeaders.toBuilder()
             additionalQueryParams = invokeInvokeByTemplateParams.additionalQueryParams.toBuilder()
@@ -143,6 +153,23 @@ private constructor(
 
         /** Alias for calling [Builder.templateId] with `templateId.orElse(null)`. */
         fun templateId(templateId: Optional<String>) = templateId(templateId.getOrNull())
+
+        fun idempotencyKey(idempotencyKey: String?) = apply { this.idempotencyKey = idempotencyKey }
+
+        /** Alias for calling [Builder.idempotencyKey] with `idempotencyKey.orElse(null)`. */
+        fun idempotencyKey(idempotencyKey: Optional<String>) =
+            idempotencyKey(idempotencyKey.getOrNull())
+
+        fun xIdempotencyExpiration(xIdempotencyExpiration: String?) = apply {
+            this.xIdempotencyExpiration = xIdempotencyExpiration
+        }
+
+        /**
+         * Alias for calling [Builder.xIdempotencyExpiration] with
+         * `xIdempotencyExpiration.orElse(null)`.
+         */
+        fun xIdempotencyExpiration(xIdempotencyExpiration: Optional<String>) =
+            xIdempotencyExpiration(xIdempotencyExpiration.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -356,6 +383,8 @@ private constructor(
         fun build(): InvokeInvokeByTemplateParams =
             InvokeInvokeByTemplateParams(
                 templateId,
+                idempotencyKey,
+                xIdempotencyExpiration,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -370,7 +399,14 @@ private constructor(
             else -> ""
         }
 
-    override fun _headers(): Headers = additionalHeaders
+    override fun _headers(): Headers =
+        Headers.builder()
+            .apply {
+                idempotencyKey?.let { put("Idempotency-Key", it) }
+                xIdempotencyExpiration?.let { put("x-idempotency-expiration", it) }
+                putAll(additionalHeaders)
+            }
+            .build()
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
@@ -911,14 +947,23 @@ private constructor(
 
         return other is InvokeInvokeByTemplateParams &&
             templateId == other.templateId &&
+            idempotencyKey == other.idempotencyKey &&
+            xIdempotencyExpiration == other.xIdempotencyExpiration &&
             body == other.body &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(templateId, body, additionalHeaders, additionalQueryParams)
+        Objects.hash(
+            templateId,
+            idempotencyKey,
+            xIdempotencyExpiration,
+            body,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
     override fun toString() =
-        "InvokeInvokeByTemplateParams{templateId=$templateId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "InvokeInvokeByTemplateParams{templateId=$templateId, idempotencyKey=$idempotencyKey, xIdempotencyExpiration=$xIdempotencyExpiration, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

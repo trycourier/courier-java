@@ -26,6 +26,8 @@ internal class TopicServiceTest {
             topicService.create(
                 TopicCreateParams.builder()
                     .sectionId("section_id")
+                    .idempotencyKey("order-ORD-456-user-123")
+                    .xIdempotencyExpiration("1785312000")
                     .workspacePreferenceTopicCreateRequest(
                         WorkspacePreferenceTopicCreateRequest.builder()
                             .defaultStatus(

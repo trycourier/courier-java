@@ -3,6 +3,7 @@
 package com.courier.models.automations.invoke
 
 import com.courier.core.JsonValue
+import com.courier.core.http.Headers
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -12,6 +13,8 @@ internal class InvokeInvokeByTemplateParamsTest {
     fun create() {
         InvokeInvokeByTemplateParams.builder()
             .templateId("templateId")
+            .idempotencyKey("order-ORD-456-user-123")
+            .xIdempotencyExpiration("1785312000")
             .recipient("recipient")
             .brand("brand")
             .data(
@@ -42,10 +45,58 @@ internal class InvokeInvokeByTemplateParamsTest {
     }
 
     @Test
+    fun headers() {
+        val params =
+            InvokeInvokeByTemplateParams.builder()
+                .templateId("templateId")
+                .idempotencyKey("order-ORD-456-user-123")
+                .xIdempotencyExpiration("1785312000")
+                .recipient("recipient")
+                .brand("brand")
+                .data(
+                    InvokeInvokeByTemplateParams.Data.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .build()
+                )
+                .profile(
+                    InvokeInvokeByTemplateParams.Profile.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .build()
+                )
+                .template("template")
+                .build()
+
+        val headers = params._headers()
+
+        assertThat(headers)
+            .isEqualTo(
+                Headers.builder()
+                    .put("Idempotency-Key", "order-ORD-456-user-123")
+                    .put("x-idempotency-expiration", "1785312000")
+                    .build()
+            )
+    }
+
+    @Test
+    fun headersWithoutOptionalFields() {
+        val params =
+            InvokeInvokeByTemplateParams.builder()
+                .templateId("templateId")
+                .recipient("recipient")
+                .build()
+
+        val headers = params._headers()
+
+        assertThat(headers).isEqualTo(Headers.builder().build())
+    }
+
+    @Test
     fun body() {
         val params =
             InvokeInvokeByTemplateParams.builder()
                 .templateId("templateId")
+                .idempotencyKey("order-ORD-456-user-123")
+                .xIdempotencyExpiration("1785312000")
                 .recipient("recipient")
                 .brand("brand")
                 .data(

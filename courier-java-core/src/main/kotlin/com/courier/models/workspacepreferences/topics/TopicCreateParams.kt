@@ -19,12 +19,18 @@ import kotlin.jvm.optionals.getOrNull
 class TopicCreateParams
 private constructor(
     private val sectionId: String?,
+    private val idempotencyKey: String?,
+    private val xIdempotencyExpiration: String?,
     private val workspacePreferenceTopicCreateRequest: WorkspacePreferenceTopicCreateRequest,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     fun sectionId(): Optional<String> = Optional.ofNullable(sectionId)
+
+    fun idempotencyKey(): Optional<String> = Optional.ofNullable(idempotencyKey)
+
+    fun xIdempotencyExpiration(): Optional<String> = Optional.ofNullable(xIdempotencyExpiration)
 
     /** Request body for creating a preference topic. */
     fun workspacePreferenceTopicCreateRequest(): WorkspacePreferenceTopicCreateRequest =
@@ -58,6 +64,8 @@ private constructor(
     class Builder internal constructor() {
 
         private var sectionId: String? = null
+        private var idempotencyKey: String? = null
+        private var xIdempotencyExpiration: String? = null
         private var workspacePreferenceTopicCreateRequest: WorkspacePreferenceTopicCreateRequest? =
             null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -66,6 +74,8 @@ private constructor(
         @JvmSynthetic
         internal fun from(topicCreateParams: TopicCreateParams) = apply {
             sectionId = topicCreateParams.sectionId
+            idempotencyKey = topicCreateParams.idempotencyKey
+            xIdempotencyExpiration = topicCreateParams.xIdempotencyExpiration
             workspacePreferenceTopicCreateRequest =
                 topicCreateParams.workspacePreferenceTopicCreateRequest
             additionalHeaders = topicCreateParams.additionalHeaders.toBuilder()
@@ -76,6 +86,23 @@ private constructor(
 
         /** Alias for calling [Builder.sectionId] with `sectionId.orElse(null)`. */
         fun sectionId(sectionId: Optional<String>) = sectionId(sectionId.getOrNull())
+
+        fun idempotencyKey(idempotencyKey: String?) = apply { this.idempotencyKey = idempotencyKey }
+
+        /** Alias for calling [Builder.idempotencyKey] with `idempotencyKey.orElse(null)`. */
+        fun idempotencyKey(idempotencyKey: Optional<String>) =
+            idempotencyKey(idempotencyKey.getOrNull())
+
+        fun xIdempotencyExpiration(xIdempotencyExpiration: String?) = apply {
+            this.xIdempotencyExpiration = xIdempotencyExpiration
+        }
+
+        /**
+         * Alias for calling [Builder.xIdempotencyExpiration] with
+         * `xIdempotencyExpiration.orElse(null)`.
+         */
+        fun xIdempotencyExpiration(xIdempotencyExpiration: Optional<String>) =
+            xIdempotencyExpiration(xIdempotencyExpiration.getOrNull())
 
         /** Request body for creating a preference topic. */
         fun workspacePreferenceTopicCreateRequest(
@@ -197,6 +224,8 @@ private constructor(
         fun build(): TopicCreateParams =
             TopicCreateParams(
                 sectionId,
+                idempotencyKey,
+                xIdempotencyExpiration,
                 checkRequired(
                     "workspacePreferenceTopicCreateRequest",
                     workspacePreferenceTopicCreateRequest,
@@ -214,7 +243,14 @@ private constructor(
             else -> ""
         }
 
-    override fun _headers(): Headers = additionalHeaders
+    override fun _headers(): Headers =
+        Headers.builder()
+            .apply {
+                idempotencyKey?.let { put("Idempotency-Key", it) }
+                xIdempotencyExpiration?.let { put("x-idempotency-expiration", it) }
+                putAll(additionalHeaders)
+            }
+            .build()
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
@@ -225,6 +261,8 @@ private constructor(
 
         return other is TopicCreateParams &&
             sectionId == other.sectionId &&
+            idempotencyKey == other.idempotencyKey &&
+            xIdempotencyExpiration == other.xIdempotencyExpiration &&
             workspacePreferenceTopicCreateRequest == other.workspacePreferenceTopicCreateRequest &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
@@ -233,11 +271,13 @@ private constructor(
     override fun hashCode(): Int =
         Objects.hash(
             sectionId,
+            idempotencyKey,
+            xIdempotencyExpiration,
             workspacePreferenceTopicCreateRequest,
             additionalHeaders,
             additionalQueryParams,
         )
 
     override fun toString() =
-        "TopicCreateParams{sectionId=$sectionId, workspacePreferenceTopicCreateRequest=$workspacePreferenceTopicCreateRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "TopicCreateParams{sectionId=$sectionId, idempotencyKey=$idempotencyKey, xIdempotencyExpiration=$xIdempotencyExpiration, workspacePreferenceTopicCreateRequest=$workspacePreferenceTopicCreateRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

@@ -3,6 +3,7 @@
 package com.courier.models.workspacepreferences.topics
 
 import com.courier.core.JsonValue
+import com.courier.core.http.Headers
 import com.courier.models.ChannelClassification
 import com.courier.models.workspacepreferences.WorkspacePreferenceTopicCreateRequest
 import org.assertj.core.api.Assertions.assertThat
@@ -14,6 +15,8 @@ internal class TopicCreateParamsTest {
     fun create() {
         TopicCreateParams.builder()
             .sectionId("section_id")
+            .idempotencyKey("order-ORD-456-user-123")
+            .xIdempotencyExpiration("1785312000")
             .workspacePreferenceTopicCreateRequest(
                 WorkspacePreferenceTopicCreateRequest.builder()
                     .defaultStatus(WorkspacePreferenceTopicCreateRequest.DefaultStatus.OPTED_OUT)
@@ -55,10 +58,71 @@ internal class TopicCreateParamsTest {
     }
 
     @Test
+    fun headers() {
+        val params =
+            TopicCreateParams.builder()
+                .sectionId("section_id")
+                .idempotencyKey("order-ORD-456-user-123")
+                .xIdempotencyExpiration("1785312000")
+                .workspacePreferenceTopicCreateRequest(
+                    WorkspacePreferenceTopicCreateRequest.builder()
+                        .defaultStatus(
+                            WorkspacePreferenceTopicCreateRequest.DefaultStatus.OPTED_OUT
+                        )
+                        .name("Marketing")
+                        .addAllowedPreference(
+                            WorkspacePreferenceTopicCreateRequest.AllowedPreference.SNOOZE
+                        )
+                        .description("description")
+                        .includeUnsubscribeHeader(true)
+                        .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
+                        .topicData(
+                            WorkspacePreferenceTopicCreateRequest.TopicData.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
+                        )
+                        .build()
+                )
+                .build()
+
+        val headers = params._headers()
+
+        assertThat(headers)
+            .isEqualTo(
+                Headers.builder()
+                    .put("Idempotency-Key", "order-ORD-456-user-123")
+                    .put("x-idempotency-expiration", "1785312000")
+                    .build()
+            )
+    }
+
+    @Test
+    fun headersWithoutOptionalFields() {
+        val params =
+            TopicCreateParams.builder()
+                .sectionId("section_id")
+                .workspacePreferenceTopicCreateRequest(
+                    WorkspacePreferenceTopicCreateRequest.builder()
+                        .defaultStatus(
+                            WorkspacePreferenceTopicCreateRequest.DefaultStatus.OPTED_OUT
+                        )
+                        .name("Marketing")
+                        .build()
+                )
+                .build()
+
+        val headers = params._headers()
+
+        assertThat(headers).isEqualTo(Headers.builder().build())
+    }
+
+    @Test
     fun body() {
         val params =
             TopicCreateParams.builder()
                 .sectionId("section_id")
+                .idempotencyKey("order-ORD-456-user-123")
+                .xIdempotencyExpiration("1785312000")
                 .workspacePreferenceTopicCreateRequest(
                     WorkspacePreferenceTopicCreateRequest.builder()
                         .defaultStatus(

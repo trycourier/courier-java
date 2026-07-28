@@ -3,6 +3,7 @@
 package com.courier.models.automations.invoke
 
 import com.courier.core.JsonValue
+import com.courier.core.http.Headers
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -11,6 +12,8 @@ internal class InvokeInvokeAdHocParamsTest {
     @Test
     fun create() {
         InvokeInvokeAdHocParams.builder()
+            .idempotencyKey("order-ORD-456-user-123")
+            .xIdempotencyExpiration("1785312000")
             .automation(
                 InvokeInvokeAdHocParams.Automation.builder()
                     .addStep(
@@ -66,9 +69,117 @@ internal class InvokeInvokeAdHocParamsTest {
     }
 
     @Test
+    fun headers() {
+        val params =
+            InvokeInvokeAdHocParams.builder()
+                .idempotencyKey("order-ORD-456-user-123")
+                .xIdempotencyExpiration("1785312000")
+                .automation(
+                    InvokeInvokeAdHocParams.Automation.builder()
+                        .addStep(
+                            InvokeInvokeAdHocParams.Automation.Step.AutomationDelayStep.builder()
+                                .action(
+                                    InvokeInvokeAdHocParams.Automation.Step.AutomationDelayStep
+                                        .Action
+                                        .DELAY
+                                )
+                                .duration("duration")
+                                .until("20240408T080910.123")
+                                .build()
+                        )
+                        .addStep(
+                            InvokeInvokeAdHocParams.Automation.Step.AutomationSendStep.builder()
+                                .action(
+                                    InvokeInvokeAdHocParams.Automation.Step.AutomationSendStep
+                                        .Action
+                                        .SEND
+                                )
+                                .brand("brand")
+                                .data(
+                                    InvokeInvokeAdHocParams.Automation.Step.AutomationSendStep.Data
+                                        .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .build()
+                                )
+                                .profile(
+                                    InvokeInvokeAdHocParams.Automation.Step.AutomationSendStep
+                                        .Profile
+                                        .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .build()
+                                )
+                                .recipient("recipient")
+                                .template("64TP5HKPFTM8VTK1Y75SJDQX9JK0")
+                                .build()
+                        )
+                        .cancelationToken("delay-send--user-yes--abc-123")
+                        .build()
+                )
+                .brand("brand")
+                .data(
+                    InvokeInvokeAdHocParams.Data.builder()
+                        .putAdditionalProperty("name", JsonValue.from("bar"))
+                        .build()
+                )
+                .profile(
+                    InvokeInvokeAdHocParams.Profile.builder()
+                        .putAdditionalProperty("tenant_id", JsonValue.from("bar"))
+                        .build()
+                )
+                .recipient("user-yes")
+                .template("template")
+                .build()
+
+        val headers = params._headers()
+
+        assertThat(headers)
+            .isEqualTo(
+                Headers.builder()
+                    .put("Idempotency-Key", "order-ORD-456-user-123")
+                    .put("x-idempotency-expiration", "1785312000")
+                    .build()
+            )
+    }
+
+    @Test
+    fun headersWithoutOptionalFields() {
+        val params =
+            InvokeInvokeAdHocParams.builder()
+                .automation(
+                    InvokeInvokeAdHocParams.Automation.builder()
+                        .addStep(
+                            InvokeInvokeAdHocParams.Automation.Step.AutomationDelayStep.builder()
+                                .action(
+                                    InvokeInvokeAdHocParams.Automation.Step.AutomationDelayStep
+                                        .Action
+                                        .DELAY
+                                )
+                                .build()
+                        )
+                        .addStep(
+                            InvokeInvokeAdHocParams.Automation.Step.AutomationSendStep.builder()
+                                .action(
+                                    InvokeInvokeAdHocParams.Automation.Step.AutomationSendStep
+                                        .Action
+                                        .SEND
+                                )
+                                .build()
+                        )
+                        .build()
+                )
+                .build()
+
+        val headers = params._headers()
+
+        assertThat(headers).isEqualTo(Headers.builder().build())
+    }
+
+    @Test
     fun body() {
         val params =
             InvokeInvokeAdHocParams.builder()
+                .idempotencyKey("order-ORD-456-user-123")
+                .xIdempotencyExpiration("1785312000")
                 .automation(
                     InvokeInvokeAdHocParams.Automation.builder()
                         .addStep(

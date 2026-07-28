@@ -18,12 +18,18 @@ import kotlin.jvm.optionals.getOrNull
 class JourneyInvokeParams
 private constructor(
     private val templateId: String?,
+    private val idempotencyKey: String?,
+    private val xIdempotencyExpiration: String?,
     private val journeysInvokeRequest: JourneysInvokeRequest,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     fun templateId(): Optional<String> = Optional.ofNullable(templateId)
+
+    fun idempotencyKey(): Optional<String> = Optional.ofNullable(idempotencyKey)
+
+    fun xIdempotencyExpiration(): Optional<String> = Optional.ofNullable(xIdempotencyExpiration)
 
     /**
      * Request body for invoking a journey. Requires either a user identifier or a profile with
@@ -60,6 +66,8 @@ private constructor(
     class Builder internal constructor() {
 
         private var templateId: String? = null
+        private var idempotencyKey: String? = null
+        private var xIdempotencyExpiration: String? = null
         private var journeysInvokeRequest: JourneysInvokeRequest? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
@@ -67,6 +75,8 @@ private constructor(
         @JvmSynthetic
         internal fun from(journeyInvokeParams: JourneyInvokeParams) = apply {
             templateId = journeyInvokeParams.templateId
+            idempotencyKey = journeyInvokeParams.idempotencyKey
+            xIdempotencyExpiration = journeyInvokeParams.xIdempotencyExpiration
             journeysInvokeRequest = journeyInvokeParams.journeysInvokeRequest
             additionalHeaders = journeyInvokeParams.additionalHeaders.toBuilder()
             additionalQueryParams = journeyInvokeParams.additionalQueryParams.toBuilder()
@@ -76,6 +86,23 @@ private constructor(
 
         /** Alias for calling [Builder.templateId] with `templateId.orElse(null)`. */
         fun templateId(templateId: Optional<String>) = templateId(templateId.getOrNull())
+
+        fun idempotencyKey(idempotencyKey: String?) = apply { this.idempotencyKey = idempotencyKey }
+
+        /** Alias for calling [Builder.idempotencyKey] with `idempotencyKey.orElse(null)`. */
+        fun idempotencyKey(idempotencyKey: Optional<String>) =
+            idempotencyKey(idempotencyKey.getOrNull())
+
+        fun xIdempotencyExpiration(xIdempotencyExpiration: String?) = apply {
+            this.xIdempotencyExpiration = xIdempotencyExpiration
+        }
+
+        /**
+         * Alias for calling [Builder.xIdempotencyExpiration] with
+         * `xIdempotencyExpiration.orElse(null)`.
+         */
+        fun xIdempotencyExpiration(xIdempotencyExpiration: Optional<String>) =
+            xIdempotencyExpiration(xIdempotencyExpiration.getOrNull())
 
         /**
          * Request body for invoking a journey. Requires either a user identifier or a profile with
@@ -199,6 +226,8 @@ private constructor(
         fun build(): JourneyInvokeParams =
             JourneyInvokeParams(
                 templateId,
+                idempotencyKey,
+                xIdempotencyExpiration,
                 checkRequired("journeysInvokeRequest", journeysInvokeRequest),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -213,7 +242,14 @@ private constructor(
             else -> ""
         }
 
-    override fun _headers(): Headers = additionalHeaders
+    override fun _headers(): Headers =
+        Headers.builder()
+            .apply {
+                idempotencyKey?.let { put("Idempotency-Key", it) }
+                xIdempotencyExpiration?.let { put("x-idempotency-expiration", it) }
+                putAll(additionalHeaders)
+            }
+            .build()
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
@@ -224,14 +260,23 @@ private constructor(
 
         return other is JourneyInvokeParams &&
             templateId == other.templateId &&
+            idempotencyKey == other.idempotencyKey &&
+            xIdempotencyExpiration == other.xIdempotencyExpiration &&
             journeysInvokeRequest == other.journeysInvokeRequest &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(templateId, journeysInvokeRequest, additionalHeaders, additionalQueryParams)
+        Objects.hash(
+            templateId,
+            idempotencyKey,
+            xIdempotencyExpiration,
+            journeysInvokeRequest,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
     override fun toString() =
-        "JourneyInvokeParams{templateId=$templateId, journeysInvokeRequest=$journeysInvokeRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "JourneyInvokeParams{templateId=$templateId, idempotencyKey=$idempotencyKey, xIdempotencyExpiration=$xIdempotencyExpiration, journeysInvokeRequest=$journeysInvokeRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

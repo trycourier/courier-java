@@ -8,6 +8,8 @@ import com.courier.core.checkRequired
 import com.courier.core.http.Headers
 import com.courier.core.http.QueryParams
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Create a notification template. Requires all fields in the notification object. Templates are
@@ -15,10 +17,16 @@ import java.util.Objects
  */
 class NotificationCreateParams
 private constructor(
+    private val idempotencyKey: String?,
+    private val xIdempotencyExpiration: String?,
     private val notificationTemplateCreateRequest: NotificationTemplateCreateRequest,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
+
+    fun idempotencyKey(): Optional<String> = Optional.ofNullable(idempotencyKey)
+
+    fun xIdempotencyExpiration(): Optional<String> = Optional.ofNullable(xIdempotencyExpiration)
 
     /** Request body for creating a notification template. */
     fun notificationTemplateCreateRequest(): NotificationTemplateCreateRequest =
@@ -51,17 +59,38 @@ private constructor(
     /** A builder for [NotificationCreateParams]. */
     class Builder internal constructor() {
 
+        private var idempotencyKey: String? = null
+        private var xIdempotencyExpiration: String? = null
         private var notificationTemplateCreateRequest: NotificationTemplateCreateRequest? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
         internal fun from(notificationCreateParams: NotificationCreateParams) = apply {
+            idempotencyKey = notificationCreateParams.idempotencyKey
+            xIdempotencyExpiration = notificationCreateParams.xIdempotencyExpiration
             notificationTemplateCreateRequest =
                 notificationCreateParams.notificationTemplateCreateRequest
             additionalHeaders = notificationCreateParams.additionalHeaders.toBuilder()
             additionalQueryParams = notificationCreateParams.additionalQueryParams.toBuilder()
         }
+
+        fun idempotencyKey(idempotencyKey: String?) = apply { this.idempotencyKey = idempotencyKey }
+
+        /** Alias for calling [Builder.idempotencyKey] with `idempotencyKey.orElse(null)`. */
+        fun idempotencyKey(idempotencyKey: Optional<String>) =
+            idempotencyKey(idempotencyKey.getOrNull())
+
+        fun xIdempotencyExpiration(xIdempotencyExpiration: String?) = apply {
+            this.xIdempotencyExpiration = xIdempotencyExpiration
+        }
+
+        /**
+         * Alias for calling [Builder.xIdempotencyExpiration] with
+         * `xIdempotencyExpiration.orElse(null)`.
+         */
+        fun xIdempotencyExpiration(xIdempotencyExpiration: Optional<String>) =
+            xIdempotencyExpiration(xIdempotencyExpiration.getOrNull())
 
         /** Request body for creating a notification template. */
         fun notificationTemplateCreateRequest(
@@ -180,6 +209,8 @@ private constructor(
          */
         fun build(): NotificationCreateParams =
             NotificationCreateParams(
+                idempotencyKey,
+                xIdempotencyExpiration,
                 checkRequired(
                     "notificationTemplateCreateRequest",
                     notificationTemplateCreateRequest,
@@ -191,7 +222,14 @@ private constructor(
 
     fun _body(): NotificationTemplateCreateRequest = notificationTemplateCreateRequest
 
-    override fun _headers(): Headers = additionalHeaders
+    override fun _headers(): Headers =
+        Headers.builder()
+            .apply {
+                idempotencyKey?.let { put("Idempotency-Key", it) }
+                xIdempotencyExpiration?.let { put("x-idempotency-expiration", it) }
+                putAll(additionalHeaders)
+            }
+            .build()
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
@@ -201,14 +239,22 @@ private constructor(
         }
 
         return other is NotificationCreateParams &&
+            idempotencyKey == other.idempotencyKey &&
+            xIdempotencyExpiration == other.xIdempotencyExpiration &&
             notificationTemplateCreateRequest == other.notificationTemplateCreateRequest &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(notificationTemplateCreateRequest, additionalHeaders, additionalQueryParams)
+        Objects.hash(
+            idempotencyKey,
+            xIdempotencyExpiration,
+            notificationTemplateCreateRequest,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
     override fun toString() =
-        "NotificationCreateParams{notificationTemplateCreateRequest=$notificationTemplateCreateRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "NotificationCreateParams{idempotencyKey=$idempotencyKey, xIdempotencyExpiration=$xIdempotencyExpiration, notificationTemplateCreateRequest=$notificationTemplateCreateRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

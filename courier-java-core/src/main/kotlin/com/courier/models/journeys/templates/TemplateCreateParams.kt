@@ -19,12 +19,18 @@ import kotlin.jvm.optionals.getOrNull
 class TemplateCreateParams
 private constructor(
     private val templateId: String?,
+    private val idempotencyKey: String?,
+    private val xIdempotencyExpiration: String?,
     private val journeyTemplateCreateRequest: JourneyTemplateCreateRequest,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     fun templateId(): Optional<String> = Optional.ofNullable(templateId)
+
+    fun idempotencyKey(): Optional<String> = Optional.ofNullable(idempotencyKey)
+
+    fun xIdempotencyExpiration(): Optional<String> = Optional.ofNullable(xIdempotencyExpiration)
 
     /** Request body for creating a notification template scoped to a journey. */
     fun journeyTemplateCreateRequest(): JourneyTemplateCreateRequest = journeyTemplateCreateRequest
@@ -57,6 +63,8 @@ private constructor(
     class Builder internal constructor() {
 
         private var templateId: String? = null
+        private var idempotencyKey: String? = null
+        private var xIdempotencyExpiration: String? = null
         private var journeyTemplateCreateRequest: JourneyTemplateCreateRequest? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
@@ -64,6 +72,8 @@ private constructor(
         @JvmSynthetic
         internal fun from(templateCreateParams: TemplateCreateParams) = apply {
             templateId = templateCreateParams.templateId
+            idempotencyKey = templateCreateParams.idempotencyKey
+            xIdempotencyExpiration = templateCreateParams.xIdempotencyExpiration
             journeyTemplateCreateRequest = templateCreateParams.journeyTemplateCreateRequest
             additionalHeaders = templateCreateParams.additionalHeaders.toBuilder()
             additionalQueryParams = templateCreateParams.additionalQueryParams.toBuilder()
@@ -73,6 +83,23 @@ private constructor(
 
         /** Alias for calling [Builder.templateId] with `templateId.orElse(null)`. */
         fun templateId(templateId: Optional<String>) = templateId(templateId.getOrNull())
+
+        fun idempotencyKey(idempotencyKey: String?) = apply { this.idempotencyKey = idempotencyKey }
+
+        /** Alias for calling [Builder.idempotencyKey] with `idempotencyKey.orElse(null)`. */
+        fun idempotencyKey(idempotencyKey: Optional<String>) =
+            idempotencyKey(idempotencyKey.getOrNull())
+
+        fun xIdempotencyExpiration(xIdempotencyExpiration: String?) = apply {
+            this.xIdempotencyExpiration = xIdempotencyExpiration
+        }
+
+        /**
+         * Alias for calling [Builder.xIdempotencyExpiration] with
+         * `xIdempotencyExpiration.orElse(null)`.
+         */
+        fun xIdempotencyExpiration(xIdempotencyExpiration: Optional<String>) =
+            xIdempotencyExpiration(xIdempotencyExpiration.getOrNull())
 
         /** Request body for creating a notification template scoped to a journey. */
         fun journeyTemplateCreateRequest(
@@ -192,6 +219,8 @@ private constructor(
         fun build(): TemplateCreateParams =
             TemplateCreateParams(
                 templateId,
+                idempotencyKey,
+                xIdempotencyExpiration,
                 checkRequired("journeyTemplateCreateRequest", journeyTemplateCreateRequest),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -206,7 +235,14 @@ private constructor(
             else -> ""
         }
 
-    override fun _headers(): Headers = additionalHeaders
+    override fun _headers(): Headers =
+        Headers.builder()
+            .apply {
+                idempotencyKey?.let { put("Idempotency-Key", it) }
+                xIdempotencyExpiration?.let { put("x-idempotency-expiration", it) }
+                putAll(additionalHeaders)
+            }
+            .build()
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
@@ -217,6 +253,8 @@ private constructor(
 
         return other is TemplateCreateParams &&
             templateId == other.templateId &&
+            idempotencyKey == other.idempotencyKey &&
+            xIdempotencyExpiration == other.xIdempotencyExpiration &&
             journeyTemplateCreateRequest == other.journeyTemplateCreateRequest &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
@@ -225,11 +263,13 @@ private constructor(
     override fun hashCode(): Int =
         Objects.hash(
             templateId,
+            idempotencyKey,
+            xIdempotencyExpiration,
             journeyTemplateCreateRequest,
             additionalHeaders,
             additionalQueryParams,
         )
 
     override fun toString() =
-        "TemplateCreateParams{templateId=$templateId, journeyTemplateCreateRequest=$journeyTemplateCreateRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "TemplateCreateParams{templateId=$templateId, idempotencyKey=$idempotencyKey, xIdempotencyExpiration=$xIdempotencyExpiration, journeyTemplateCreateRequest=$journeyTemplateCreateRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
