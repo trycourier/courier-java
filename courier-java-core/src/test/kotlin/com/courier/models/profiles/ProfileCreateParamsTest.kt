@@ -3,6 +3,7 @@
 package com.courier.models.profiles
 
 import com.courier.core.JsonValue
+import com.courier.core.http.Headers
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -12,6 +13,8 @@ internal class ProfileCreateParamsTest {
     fun create() {
         ProfileCreateParams.builder()
             .userId("user_id")
+            .idempotencyKey("order-ORD-456-user-123")
+            .xIdempotencyExpiration("1785312000")
             .profile(
                 ProfileCreateParams.Profile.builder()
                     .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -38,7 +41,73 @@ internal class ProfileCreateParamsTest {
     }
 
     @Test
+    fun headers() {
+        val params =
+            ProfileCreateParams.builder()
+                .userId("user_id")
+                .idempotencyKey("order-ORD-456-user-123")
+                .xIdempotencyExpiration("1785312000")
+                .profile(
+                    ProfileCreateParams.Profile.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .build()
+                )
+                .build()
+
+        val headers = params._headers()
+
+        assertThat(headers)
+            .isEqualTo(
+                Headers.builder()
+                    .put("Idempotency-Key", "order-ORD-456-user-123")
+                    .put("x-idempotency-expiration", "1785312000")
+                    .build()
+            )
+    }
+
+    @Test
+    fun headersWithoutOptionalFields() {
+        val params =
+            ProfileCreateParams.builder()
+                .userId("user_id")
+                .profile(
+                    ProfileCreateParams.Profile.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .build()
+                )
+                .build()
+
+        val headers = params._headers()
+
+        assertThat(headers).isEqualTo(Headers.builder().build())
+    }
+
+    @Test
     fun body() {
+        val params =
+            ProfileCreateParams.builder()
+                .userId("user_id")
+                .idempotencyKey("order-ORD-456-user-123")
+                .xIdempotencyExpiration("1785312000")
+                .profile(
+                    ProfileCreateParams.Profile.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .build()
+                )
+                .build()
+
+        val body = params._body()
+
+        assertThat(body.profile())
+            .isEqualTo(
+                ProfileCreateParams.Profile.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                    .build()
+            )
+    }
+
+    @Test
+    fun bodyWithoutOptionalFields() {
         val params =
             ProfileCreateParams.builder()
                 .userId("user_id")

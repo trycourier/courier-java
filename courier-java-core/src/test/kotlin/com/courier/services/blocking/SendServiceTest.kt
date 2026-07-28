@@ -25,6 +25,8 @@ internal class SendServiceTest {
         val response =
             sendService.message(
                 SendMessageParams.builder()
+                    .idempotencyKey("order-ORD-456-user-123")
+                    .xIdempotencyExpiration("1785312000")
                     .message(
                         SendMessageParams.Message.builder()
                             .brandId("brand_id")

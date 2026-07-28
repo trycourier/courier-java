@@ -20,6 +20,8 @@ internal class InvokeServiceTest {
         val automationInvokeResponse =
             invokeService.invokeAdHoc(
                 InvokeInvokeAdHocParams.builder()
+                    .idempotencyKey("order-ORD-456-user-123")
+                    .xIdempotencyExpiration("1785312000")
                     .automation(
                         InvokeInvokeAdHocParams.Automation.builder()
                             .addStep(
@@ -92,6 +94,8 @@ internal class InvokeServiceTest {
             invokeService.invokeByTemplate(
                 InvokeInvokeByTemplateParams.builder()
                     .templateId("templateId")
+                    .idempotencyKey("order-ORD-456-user-123")
+                    .xIdempotencyExpiration("1785312000")
                     .recipient("recipient")
                     .brand("brand")
                     .data(

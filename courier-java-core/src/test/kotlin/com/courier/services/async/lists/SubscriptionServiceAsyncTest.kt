@@ -41,6 +41,8 @@ internal class SubscriptionServiceAsyncTest {
             subscriptionServiceAsync.add(
                 SubscriptionAddParams.builder()
                     .listId("list_id")
+                    .idempotencyKey("order-ORD-456-user-123")
+                    .xIdempotencyExpiration("1785312000")
                     .addRecipient(
                         PutSubscriptionsRecipient.builder()
                             .recipientId("recipientId")

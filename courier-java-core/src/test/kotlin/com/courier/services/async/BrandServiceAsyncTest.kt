@@ -33,6 +33,8 @@ internal class BrandServiceAsyncTest {
         val brandFuture =
             brandServiceAsync.create(
                 BrandCreateParams.builder()
+                    .idempotencyKey("order-ORD-456-user-123")
+                    .xIdempotencyExpiration("1785312000")
                     .name("My Brand")
                     .settings(
                         BrandSettings.builder()

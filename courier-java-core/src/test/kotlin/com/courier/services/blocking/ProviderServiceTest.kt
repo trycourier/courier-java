@@ -21,6 +21,8 @@ internal class ProviderServiceTest {
         val provider =
             providerService.create(
                 ProviderCreateParams.builder()
+                    .idempotencyKey("order-ORD-456-user-123")
+                    .xIdempotencyExpiration("1785312000")
                     .provider("provider")
                     .alias("alias")
                     .settings(

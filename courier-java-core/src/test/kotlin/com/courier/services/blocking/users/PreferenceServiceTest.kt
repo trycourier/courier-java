@@ -67,6 +67,8 @@ internal class PreferenceServiceTest {
                 PreferenceBulkUpdateParams.builder()
                     .userId("user_id")
                     .tenantId("tenant_id")
+                    .idempotencyKey("order-ORD-456-user-123")
+                    .xIdempotencyExpiration("1785312000")
                     .addTopic(
                         PreferenceBulkUpdateParams.Topic.builder()
                             .status(PreferenceBulkUpdateParams.Topic.Status.OPTED_IN)

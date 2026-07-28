@@ -7,6 +7,8 @@ import com.courier.core.checkRequired
 import com.courier.core.http.Headers
 import com.courier.core.http.QueryParams
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Cancels in-flight journey runs, either every run sharing a cancelation token or one run by id.
@@ -14,10 +16,16 @@ import java.util.Objects
  */
 class JourneyCancelParams
 private constructor(
+    private val idempotencyKey: String?,
+    private val xIdempotencyExpiration: String?,
     private val cancelJourneyRequest: CancelJourneyRequest,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
+
+    fun idempotencyKey(): Optional<String> = Optional.ofNullable(idempotencyKey)
+
+    fun xIdempotencyExpiration(): Optional<String> = Optional.ofNullable(xIdempotencyExpiration)
 
     /**
      * Request body for `POST /journeys/cancel`. Provide EXACTLY ONE of `cancelation_token` (cancels
@@ -49,16 +57,37 @@ private constructor(
     /** A builder for [JourneyCancelParams]. */
     class Builder internal constructor() {
 
+        private var idempotencyKey: String? = null
+        private var xIdempotencyExpiration: String? = null
         private var cancelJourneyRequest: CancelJourneyRequest? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
         internal fun from(journeyCancelParams: JourneyCancelParams) = apply {
+            idempotencyKey = journeyCancelParams.idempotencyKey
+            xIdempotencyExpiration = journeyCancelParams.xIdempotencyExpiration
             cancelJourneyRequest = journeyCancelParams.cancelJourneyRequest
             additionalHeaders = journeyCancelParams.additionalHeaders.toBuilder()
             additionalQueryParams = journeyCancelParams.additionalQueryParams.toBuilder()
         }
+
+        fun idempotencyKey(idempotencyKey: String?) = apply { this.idempotencyKey = idempotencyKey }
+
+        /** Alias for calling [Builder.idempotencyKey] with `idempotencyKey.orElse(null)`. */
+        fun idempotencyKey(idempotencyKey: Optional<String>) =
+            idempotencyKey(idempotencyKey.getOrNull())
+
+        fun xIdempotencyExpiration(xIdempotencyExpiration: String?) = apply {
+            this.xIdempotencyExpiration = xIdempotencyExpiration
+        }
+
+        /**
+         * Alias for calling [Builder.xIdempotencyExpiration] with
+         * `xIdempotencyExpiration.orElse(null)`.
+         */
+        fun xIdempotencyExpiration(xIdempotencyExpiration: Optional<String>) =
+            xIdempotencyExpiration(xIdempotencyExpiration.getOrNull())
 
         /**
          * Request body for `POST /journeys/cancel`. Provide EXACTLY ONE of `cancelation_token`
@@ -194,6 +223,8 @@ private constructor(
          */
         fun build(): JourneyCancelParams =
             JourneyCancelParams(
+                idempotencyKey,
+                xIdempotencyExpiration,
                 checkRequired("cancelJourneyRequest", cancelJourneyRequest),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -202,7 +233,14 @@ private constructor(
 
     fun _body(): CancelJourneyRequest = cancelJourneyRequest
 
-    override fun _headers(): Headers = additionalHeaders
+    override fun _headers(): Headers =
+        Headers.builder()
+            .apply {
+                idempotencyKey?.let { put("Idempotency-Key", it) }
+                xIdempotencyExpiration?.let { put("x-idempotency-expiration", it) }
+                putAll(additionalHeaders)
+            }
+            .build()
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
@@ -212,14 +250,22 @@ private constructor(
         }
 
         return other is JourneyCancelParams &&
+            idempotencyKey == other.idempotencyKey &&
+            xIdempotencyExpiration == other.xIdempotencyExpiration &&
             cancelJourneyRequest == other.cancelJourneyRequest &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(cancelJourneyRequest, additionalHeaders, additionalQueryParams)
+        Objects.hash(
+            idempotencyKey,
+            xIdempotencyExpiration,
+            cancelJourneyRequest,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
     override fun toString() =
-        "JourneyCancelParams{cancelJourneyRequest=$cancelJourneyRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "JourneyCancelParams{idempotencyKey=$idempotencyKey, xIdempotencyExpiration=$xIdempotencyExpiration, cancelJourneyRequest=$cancelJourneyRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
