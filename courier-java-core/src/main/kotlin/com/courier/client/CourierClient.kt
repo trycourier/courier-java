@@ -10,6 +10,7 @@ import com.courier.services.blocking.AutomationService
 import com.courier.services.blocking.BrandService
 import com.courier.services.blocking.DigestService
 import com.courier.services.blocking.InboundService
+import com.courier.services.blocking.InboxService
 import com.courier.services.blocking.JourneyService
 import com.courier.services.blocking.ListService
 import com.courier.services.blocking.MessageService
@@ -83,6 +84,8 @@ interface CourierClient {
 
     fun lists(): ListService
 
+    fun inbox(): InboxService
+
     fun messages(): MessageService
 
     fun requests(): RequestService
@@ -145,6 +148,8 @@ interface CourierClient {
         fun inbound(): InboundService.WithRawResponse
 
         fun lists(): ListService.WithRawResponse
+
+        fun inbox(): InboxService.WithRawResponse
 
         fun messages(): MessageService.WithRawResponse
 
