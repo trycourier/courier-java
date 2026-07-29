@@ -26,6 +26,10 @@ import com.courier.services.blocking.journeys.TemplateService
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
+/**
+ * Build, version, publish, invoke, and cancel multi-step notification workflows, along with the
+ * templates scoped to them.
+ */
 interface JourneyService {
 
     /**
@@ -40,6 +44,10 @@ interface JourneyService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): JourneyService
 
+    /**
+     * Build, version, publish, invoke, and cancel multi-step notification workflows, along with the
+     * templates scoped to them.
+     */
     fun templates(): TemplateService
 
     /**
@@ -331,6 +339,10 @@ interface JourneyService {
          */
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): JourneyService.WithRawResponse
 
+        /**
+         * Build, version, publish, invoke, and cancel multi-step notification workflows, along with
+         * the templates scoped to them.
+         */
         fun templates(): TemplateService.WithRawResponse
 
         /**

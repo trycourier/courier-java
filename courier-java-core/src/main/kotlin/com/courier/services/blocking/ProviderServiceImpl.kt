@@ -29,6 +29,10 @@ import com.courier.services.blocking.providers.CatalogServiceImpl
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * Configure the channel providers Courier delivers through, and browse the provider types it
+ * supports.
+ */
 class ProviderServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     ProviderService {
 
@@ -43,6 +47,10 @@ class ProviderServiceImpl internal constructor(private val clientOptions: Client
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): ProviderService =
         ProviderServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /**
+     * Configure the channel providers Courier delivers through, and browse the provider types it
+     * supports.
+     */
     override fun catalog(): CatalogService = catalog
 
     override fun create(params: ProviderCreateParams, requestOptions: RequestOptions): Provider =
@@ -89,6 +97,10 @@ class ProviderServiceImpl internal constructor(private val clientOptions: Client
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /**
+         * Configure the channel providers Courier delivers through, and browse the provider types
+         * it supports.
+         */
         override fun catalog(): CatalogService.WithRawResponse = catalog
 
         private val createHandler: Handler<Provider> =

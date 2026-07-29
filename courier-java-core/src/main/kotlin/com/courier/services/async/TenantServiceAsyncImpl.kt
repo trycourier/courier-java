@@ -33,6 +33,10 @@ import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * Manage tenants — the organizations, teams, or accounts your users belong to — along with their
+ * users and default preferences.
+ */
 class TenantServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     TenantServiceAsync {
 
@@ -53,6 +57,10 @@ class TenantServiceAsyncImpl internal constructor(private val clientOptions: Cli
 
     override fun preferences(): PreferenceServiceAsync = preferences
 
+    /**
+     * Manage the templates and template versions scoped to a single tenant, including the ones
+     * authored in the embedded designer.
+     */
     override fun templates(): TemplateServiceAsync = templates
 
     override fun retrieve(
@@ -113,6 +121,10 @@ class TenantServiceAsyncImpl internal constructor(private val clientOptions: Cli
 
         override fun preferences(): PreferenceServiceAsync.WithRawResponse = preferences
 
+        /**
+         * Manage the templates and template versions scoped to a single tenant, including the ones
+         * authored in the embedded designer.
+         */
         override fun templates(): TemplateServiceAsync.WithRawResponse = templates
 
         private val retrieveHandler: Handler<Tenant> = jsonHandler<Tenant>(clientOptions.jsonMapper)

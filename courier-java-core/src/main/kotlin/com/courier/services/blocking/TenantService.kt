@@ -19,6 +19,10 @@ import com.courier.services.blocking.tenants.TemplateService
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
+/**
+ * Manage tenants — the organizations, teams, or accounts your users belong to — along with their
+ * users and default preferences.
+ */
 interface TenantService {
 
     /**
@@ -35,6 +39,10 @@ interface TenantService {
 
     fun preferences(): PreferenceService
 
+    /**
+     * Manage the templates and template versions scoped to a single tenant, including the ones
+     * authored in the embedded designer.
+     */
     fun templates(): TemplateService
 
     /**
@@ -186,6 +194,10 @@ interface TenantService {
 
         fun preferences(): PreferenceService.WithRawResponse
 
+        /**
+         * Manage the templates and template versions scoped to a single tenant, including the ones
+         * authored in the embedded designer.
+         */
         fun templates(): TemplateService.WithRawResponse
 
         /**

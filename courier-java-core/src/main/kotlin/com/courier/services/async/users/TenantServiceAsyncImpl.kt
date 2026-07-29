@@ -27,6 +27,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/** Associate a user with one or more tenants, and read or remove those associations. */
 class TenantServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     TenantServiceAsync {
 

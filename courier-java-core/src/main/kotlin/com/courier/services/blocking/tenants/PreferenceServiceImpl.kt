@@ -21,6 +21,10 @@ class PreferenceServiceImpl internal constructor(private val clientOptions: Clie
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): PreferenceService =
         PreferenceServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /**
+     * Manage tenants — the organizations, teams, or accounts your users belong to — along with
+     * their users and default preferences.
+     */
     override fun items(): ItemService = items
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -37,6 +41,10 @@ class PreferenceServiceImpl internal constructor(private val clientOptions: Clie
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /**
+         * Manage tenants — the organizations, teams, or accounts your users belong to — along with
+         * their users and default preferences.
+         */
         override fun items(): ItemService.WithRawResponse = items
     }
 }

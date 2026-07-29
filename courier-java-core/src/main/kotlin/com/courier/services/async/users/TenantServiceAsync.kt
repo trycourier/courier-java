@@ -15,6 +15,7 @@ import com.courier.models.users.tenants.TenantRemoveSingleParams
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/** Associate a user with one or more tenants, and read or remove those associations. */
 interface TenantServiceAsync {
 
     /**

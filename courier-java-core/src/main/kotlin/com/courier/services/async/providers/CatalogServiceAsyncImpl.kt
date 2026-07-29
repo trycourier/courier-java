@@ -19,6 +19,10 @@ import com.courier.models.providers.catalog.CatalogListResponse
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * Configure the channel providers Courier delivers through, and browse the provider types it
+ * supports.
+ */
 class CatalogServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     CatalogServiceAsync {
 

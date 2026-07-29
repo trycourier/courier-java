@@ -30,6 +30,10 @@ import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * Configure the channel providers Courier delivers through, and browse the provider types it
+ * supports.
+ */
 class ProviderServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     ProviderServiceAsync {
 
@@ -44,6 +48,10 @@ class ProviderServiceAsyncImpl internal constructor(private val clientOptions: C
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): ProviderServiceAsync =
         ProviderServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /**
+     * Configure the channel providers Courier delivers through, and browse the provider types it
+     * supports.
+     */
     override fun catalog(): CatalogServiceAsync = catalog
 
     override fun create(
@@ -98,6 +106,10 @@ class ProviderServiceAsyncImpl internal constructor(private val clientOptions: C
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /**
+         * Configure the channel providers Courier delivers through, and browse the provider types
+         * it supports.
+         */
         override fun catalog(): CatalogServiceAsync.WithRawResponse = catalog
 
         private val createHandler: Handler<Provider> =

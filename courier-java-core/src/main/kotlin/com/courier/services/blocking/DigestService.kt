@@ -20,6 +20,10 @@ interface DigestService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): DigestService
 
+    /**
+     * Inspect what has accumulated in a digest schedule and release a digest ahead of its next
+     * scheduled delivery.
+     */
     fun schedules(): ScheduleService
 
     /** A view of [DigestService] that provides access to raw HTTP responses for each method. */
@@ -32,6 +36,10 @@ interface DigestService {
          */
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): DigestService.WithRawResponse
 
+        /**
+         * Inspect what has accumulated in a digest schedule and release a digest ahead of its next
+         * scheduled delivery.
+         */
         fun schedules(): ScheduleService.WithRawResponse
     }
 }

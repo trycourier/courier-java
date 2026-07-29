@@ -27,6 +27,7 @@ import com.courier.models.brands.BrandUpdateParams
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/** Manage the logos, colors, and layout that give the templates you send a consistent look. */
 class BrandServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     BrandService {
 

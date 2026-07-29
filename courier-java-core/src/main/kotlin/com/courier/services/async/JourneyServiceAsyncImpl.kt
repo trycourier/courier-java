@@ -37,6 +37,10 @@ import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * Build, version, publish, invoke, and cancel multi-step notification workflows, along with the
+ * templates scoped to them.
+ */
 class JourneyServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     JourneyServiceAsync {
 
@@ -51,6 +55,10 @@ class JourneyServiceAsyncImpl internal constructor(private val clientOptions: Cl
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): JourneyServiceAsync =
         JourneyServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /**
+     * Build, version, publish, invoke, and cancel multi-step notification workflows, along with the
+     * templates scoped to them.
+     */
     override fun templates(): TemplateServiceAsync = templates
 
     override fun create(
@@ -133,6 +141,10 @@ class JourneyServiceAsyncImpl internal constructor(private val clientOptions: Cl
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /**
+         * Build, version, publish, invoke, and cancel multi-step notification workflows, along with
+         * the templates scoped to them.
+         */
         override fun templates(): TemplateServiceAsync.WithRawResponse = templates
 
         private val createHandler: Handler<JourneyResponse> =

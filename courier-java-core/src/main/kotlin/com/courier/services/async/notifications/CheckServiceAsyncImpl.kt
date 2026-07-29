@@ -26,6 +26,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/** Create, update, version, publish, and localize notification templates and their content. */
 class CheckServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     CheckServiceAsync {
 

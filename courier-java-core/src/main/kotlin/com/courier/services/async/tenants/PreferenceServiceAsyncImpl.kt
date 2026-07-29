@@ -21,6 +21,10 @@ class PreferenceServiceAsyncImpl internal constructor(private val clientOptions:
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): PreferenceServiceAsync =
         PreferenceServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /**
+     * Manage tenants — the organizations, teams, or accounts your users belong to — along with
+     * their users and default preferences.
+     */
     override fun items(): ItemServiceAsync = items
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -37,6 +41,10 @@ class PreferenceServiceAsyncImpl internal constructor(private val clientOptions:
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /**
+         * Manage tenants — the organizations, teams, or accounts your users belong to — along with
+         * their users and default preferences.
+         */
         override fun items(): ItemServiceAsync.WithRawResponse = items
     }
 }

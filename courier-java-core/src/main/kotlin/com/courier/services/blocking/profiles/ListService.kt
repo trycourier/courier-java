@@ -14,6 +14,10 @@ import com.courier.models.profiles.lists.ListSubscribeResponse
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
+/**
+ * Store the contact information Courier delivers to for each user — email, phone number, push
+ * tokens, and any custom data you send to.
+ */
 interface ListService {
 
     /**

@@ -19,6 +19,7 @@ import com.courier.models.routingstrategies.RoutingStrategyRetrieveParams
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/** Define reusable channel routing and failover strategies, and see which templates use them. */
 interface RoutingStrategyServiceAsync {
 
     /**

@@ -24,6 +24,10 @@ import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * Inspect what has accumulated in a digest schedule and release a digest ahead of its next
+ * scheduled delivery.
+ */
 class ScheduleServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     ScheduleServiceAsync {
 

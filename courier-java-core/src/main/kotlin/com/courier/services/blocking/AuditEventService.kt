@@ -12,6 +12,7 @@ import com.courier.models.auditevents.AuditEventRetrieveParams
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
+/** Read the audit trail of configuration and access changes in your workspace. */
 interface AuditEventService {
 
     /**

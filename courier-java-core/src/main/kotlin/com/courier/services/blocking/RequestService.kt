@@ -9,6 +9,10 @@ import com.courier.models.requests.RequestArchiveParams
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
+/**
+ * Look up the messages Courier has accepted, inspect their delivery history and rendered output,
+ * and cancel, resend, or archive them.
+ */
 interface RequestService {
 
     /**

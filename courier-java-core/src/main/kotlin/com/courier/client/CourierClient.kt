@@ -62,44 +62,97 @@ interface CourierClient {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): CourierClient
 
+    /**
+     * Send a message to one or more recipients — users, lists, audiences, or tenants — across every
+     * channel you have configured.
+     */
     fun send(): SendService
 
+    /** Define filter-based groups whose membership Courier recalculates as user profiles change. */
     fun audiences(): AudienceService
 
+    /**
+     * Configure the channel providers Courier delivers through, and browse the provider types it
+     * supports.
+     */
     fun providers(): ProviderService
 
+    /** Read the audit trail of configuration and access changes in your workspace. */
     fun auditEvents(): AuditEventService
 
+    /**
+     * Issue scoped, short-lived JWTs so client-side SDKs — Inbox, Preferences, and the embedded
+     * designer — can call Courier as a single user. Server-side requests authenticate with your
+     * workspace API key instead.
+     */
     fun auth(): AuthService
 
+    /** Invoke a stored automation template or an ad hoc automation defined in the request. */
     fun automations(): AutomationService
 
+    /**
+     * Build, version, publish, invoke, and cancel multi-step notification workflows, along with the
+     * templates scoped to them.
+     */
     fun journeys(): JourneyService
 
+    /** Manage the logos, colors, and layout that give the templates you send a consistent look. */
     fun brands(): BrandService
 
     fun digests(): DigestService
 
+    /** Record an inbound event that triggers the journeys and automations mapped to it. */
     fun inbound(): InboundService
 
+    /**
+     * Manage static groups of users that you subscribe explicitly, and send to them by list id or
+     * list pattern.
+     */
     fun lists(): ListService
 
     fun inbox(): InboxService
 
+    /**
+     * Look up the messages Courier has accepted, inspect their delivery history and rendered
+     * output, and cancel, resend, or archive them.
+     */
     fun messages(): MessageService
 
+    /**
+     * Look up the messages Courier has accepted, inspect their delivery history and rendered
+     * output, and cancel, resend, or archive them.
+     */
     fun requests(): RequestService
 
+    /** Create, update, version, publish, and localize notification templates and their content. */
     fun notifications(): NotificationService
 
+    /**
+     * Define reusable channel routing and failover strategies, and see which templates use them.
+     */
     fun routingStrategies(): RoutingStrategyService
 
+    /**
+     * Manage the workspace catalog of subscription topics, the sections that group them, and
+     * publishing the preference page.
+     */
     fun workspacePreferences(): WorkspacePreferenceService
 
+    /**
+     * Store the contact information Courier delivers to for each user — email, phone number, push
+     * tokens, and any custom data you send to.
+     */
     fun profiles(): ProfileService
 
+    /**
+     * Manage tenants — the organizations, teams, or accounts your users belong to — along with
+     * their users and default preferences.
+     */
     fun tenants(): TenantService
 
+    /**
+     * Store and retrieve the translation strings Courier uses to render localized template content.
+     */
     fun translations(): TranslationService
 
     fun users(): UserService
@@ -127,44 +180,105 @@ interface CourierClient {
          */
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): CourierClient.WithRawResponse
 
+        /**
+         * Send a message to one or more recipients — users, lists, audiences, or tenants — across
+         * every channel you have configured.
+         */
         fun send(): SendService.WithRawResponse
 
+        /**
+         * Define filter-based groups whose membership Courier recalculates as user profiles change.
+         */
         fun audiences(): AudienceService.WithRawResponse
 
+        /**
+         * Configure the channel providers Courier delivers through, and browse the provider types
+         * it supports.
+         */
         fun providers(): ProviderService.WithRawResponse
 
+        /** Read the audit trail of configuration and access changes in your workspace. */
         fun auditEvents(): AuditEventService.WithRawResponse
 
+        /**
+         * Issue scoped, short-lived JWTs so client-side SDKs — Inbox, Preferences, and the embedded
+         * designer — can call Courier as a single user. Server-side requests authenticate with your
+         * workspace API key instead.
+         */
         fun auth(): AuthService.WithRawResponse
 
+        /** Invoke a stored automation template or an ad hoc automation defined in the request. */
         fun automations(): AutomationService.WithRawResponse
 
+        /**
+         * Build, version, publish, invoke, and cancel multi-step notification workflows, along with
+         * the templates scoped to them.
+         */
         fun journeys(): JourneyService.WithRawResponse
 
+        /**
+         * Manage the logos, colors, and layout that give the templates you send a consistent look.
+         */
         fun brands(): BrandService.WithRawResponse
 
         fun digests(): DigestService.WithRawResponse
 
+        /** Record an inbound event that triggers the journeys and automations mapped to it. */
         fun inbound(): InboundService.WithRawResponse
 
+        /**
+         * Manage static groups of users that you subscribe explicitly, and send to them by list id
+         * or list pattern.
+         */
         fun lists(): ListService.WithRawResponse
 
         fun inbox(): InboxService.WithRawResponse
 
+        /**
+         * Look up the messages Courier has accepted, inspect their delivery history and rendered
+         * output, and cancel, resend, or archive them.
+         */
         fun messages(): MessageService.WithRawResponse
 
+        /**
+         * Look up the messages Courier has accepted, inspect their delivery history and rendered
+         * output, and cancel, resend, or archive them.
+         */
         fun requests(): RequestService.WithRawResponse
 
+        /**
+         * Create, update, version, publish, and localize notification templates and their content.
+         */
         fun notifications(): NotificationService.WithRawResponse
 
+        /**
+         * Define reusable channel routing and failover strategies, and see which templates use
+         * them.
+         */
         fun routingStrategies(): RoutingStrategyService.WithRawResponse
 
+        /**
+         * Manage the workspace catalog of subscription topics, the sections that group them, and
+         * publishing the preference page.
+         */
         fun workspacePreferences(): WorkspacePreferenceService.WithRawResponse
 
+        /**
+         * Store the contact information Courier delivers to for each user — email, phone number,
+         * push tokens, and any custom data you send to.
+         */
         fun profiles(): ProfileService.WithRawResponse
 
+        /**
+         * Manage tenants — the organizations, teams, or accounts your users belong to — along with
+         * their users and default preferences.
+         */
         fun tenants(): TenantService.WithRawResponse
 
+        /**
+         * Store and retrieve the translation strings Courier uses to render localized template
+         * content.
+         */
         fun translations(): TranslationService.WithRawResponse
 
         fun users(): UserService.WithRawResponse

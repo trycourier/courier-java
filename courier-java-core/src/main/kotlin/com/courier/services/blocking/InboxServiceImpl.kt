@@ -21,6 +21,7 @@ class InboxServiceImpl internal constructor(private val clientOptions: ClientOpt
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): InboxService =
         InboxServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /** Manage the messages in a user's in-app inbox. */
     override fun messages(): MessageService = messages
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -37,6 +38,7 @@ class InboxServiceImpl internal constructor(private val clientOptions: ClientOpt
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /** Manage the messages in a user's in-app inbox. */
         override fun messages(): MessageService.WithRawResponse = messages
     }
 }

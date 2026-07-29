@@ -17,6 +17,10 @@ import com.courier.services.async.lists.SubscriptionServiceAsync
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * Manage static groups of users that you subscribe explicitly, and send to them by list id or list
+ * pattern.
+ */
 interface ListServiceAsync {
 
     /**
@@ -31,6 +35,10 @@ interface ListServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): ListServiceAsync
 
+    /**
+     * Manage static groups of users that you subscribe explicitly, and send to them by list id or
+     * list pattern.
+     */
     fun subscriptions(): SubscriptionServiceAsync
 
     /**
@@ -182,6 +190,10 @@ interface ListServiceAsync {
          */
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): ListServiceAsync.WithRawResponse
 
+        /**
+         * Manage static groups of users that you subscribe explicitly, and send to them by list id
+         * or list pattern.
+         */
         fun subscriptions(): SubscriptionServiceAsync.WithRawResponse
 
         /**

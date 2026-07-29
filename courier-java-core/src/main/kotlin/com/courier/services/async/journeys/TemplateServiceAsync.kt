@@ -24,6 +24,10 @@ import com.courier.models.notifications.NotificationTemplateVersionListResponse
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * Build, version, publish, invoke, and cancel multi-step notification workflows, along with the
+ * templates scoped to them.
+ */
 interface TemplateServiceAsync {
 
     /**

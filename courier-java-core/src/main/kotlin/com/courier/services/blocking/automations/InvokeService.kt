@@ -11,6 +11,7 @@ import com.courier.models.automations.invoke.InvokeInvokeByTemplateParams
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
+/** Invoke a stored automation template or an ad hoc automation defined in the request. */
 interface InvokeService {
 
     /**

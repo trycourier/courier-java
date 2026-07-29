@@ -28,6 +28,7 @@ import com.courier.services.blocking.notifications.CheckService
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
+/** Create, update, version, publish, and localize notification templates and their content. */
 interface NotificationService {
 
     /**
@@ -42,6 +43,7 @@ interface NotificationService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): NotificationService
 
+    /** Create, update, version, publish, and localize notification templates and their content. */
     fun checks(): CheckService
 
     /**
@@ -421,6 +423,9 @@ interface NotificationService {
             modifier: Consumer<ClientOptions.Builder>
         ): NotificationService.WithRawResponse
 
+        /**
+         * Create, update, version, publish, and localize notification templates and their content.
+         */
         fun checks(): CheckService.WithRawResponse
 
         /**

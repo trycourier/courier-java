@@ -20,6 +20,10 @@ import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * Look up the messages Courier has accepted, inspect their delivery history and rendered output,
+ * and cancel, resend, or archive them.
+ */
 class RequestServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     RequestServiceAsync {
 

@@ -11,6 +11,7 @@ import com.courier.models.translations.TranslationUpdateParams
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/** Store and retrieve the translation strings Courier uses to render localized template content. */
 interface TranslationServiceAsync {
 
     /**

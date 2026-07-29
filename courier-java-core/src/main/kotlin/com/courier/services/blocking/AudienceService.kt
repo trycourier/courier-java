@@ -18,6 +18,7 @@ import com.courier.models.audiences.AudienceUpdateResponse
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
+/** Define filter-based groups whose membership Courier recalculates as user profiles change. */
 interface AudienceService {
 
     /**

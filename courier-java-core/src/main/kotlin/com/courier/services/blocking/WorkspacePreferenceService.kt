@@ -21,6 +21,10 @@ import com.courier.services.blocking.workspacepreferences.TopicService
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
+/**
+ * Manage the workspace catalog of subscription topics, the sections that group them, and publishing
+ * the preference page.
+ */
 interface WorkspacePreferenceService {
 
     /**
@@ -35,6 +39,10 @@ interface WorkspacePreferenceService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): WorkspacePreferenceService
 
+    /**
+     * Manage the workspace catalog of subscription topics, the sections that group them, and
+     * publishing the preference page.
+     */
     fun topics(): TopicService
 
     /**
@@ -238,6 +246,10 @@ interface WorkspacePreferenceService {
             modifier: Consumer<ClientOptions.Builder>
         ): WorkspacePreferenceService.WithRawResponse
 
+        /**
+         * Manage the workspace catalog of subscription topics, the sections that group them, and
+         * publishing the preference page.
+         */
         fun topics(): TopicService.WithRawResponse
 
         /**

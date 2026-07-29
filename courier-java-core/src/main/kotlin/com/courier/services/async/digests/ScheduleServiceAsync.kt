@@ -12,6 +12,10 @@ import com.courier.models.digests.schedules.ScheduleReleaseParams
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * Inspect what has accumulated in a digest schedule and release a digest ahead of its next
+ * scheduled delivery.
+ */
 interface ScheduleServiceAsync {
 
     /**

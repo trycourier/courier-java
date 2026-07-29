@@ -31,10 +31,15 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): UserServiceAsync =
         UserServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /** Read and write a single user's notification preferences, per topic and per channel. */
     override fun preferences(): PreferenceServiceAsync = preferences
 
+    /** Associate a user with one or more tenants, and read or remove those associations. */
     override fun tenants(): TenantServiceAsync = tenants
 
+    /**
+     * Register and manage the APNS and FCM device tokens Courier delivers push notifications to.
+     */
     override fun tokens(): TokenServiceAsync = tokens
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -59,10 +64,16 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /** Read and write a single user's notification preferences, per topic and per channel. */
         override fun preferences(): PreferenceServiceAsync.WithRawResponse = preferences
 
+        /** Associate a user with one or more tenants, and read or remove those associations. */
         override fun tenants(): TenantServiceAsync.WithRawResponse = tenants
 
+        /**
+         * Register and manage the APNS and FCM device tokens Courier delivers push notifications
+         * to.
+         */
         override fun tokens(): TokenServiceAsync.WithRawResponse = tokens
     }
 }

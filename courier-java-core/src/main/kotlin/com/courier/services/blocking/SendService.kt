@@ -10,6 +10,10 @@ import com.courier.models.send.SendMessageResponse
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
+/**
+ * Send a message to one or more recipients — users, lists, audiences, or tenants — across every
+ * channel you have configured.
+ */
 interface SendService {
 
     /**

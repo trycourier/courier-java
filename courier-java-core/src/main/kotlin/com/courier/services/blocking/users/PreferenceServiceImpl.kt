@@ -31,6 +31,7 @@ import com.courier.models.users.preferences.PreferenceUpdateOrCreateTopicRespons
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/** Read and write a single user's notification preferences, per topic and per channel. */
 class PreferenceServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     PreferenceService {
 

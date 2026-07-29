@@ -16,6 +16,7 @@ import com.courier.models.brands.BrandUpdateParams
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
+/** Manage the logos, colors, and layout that give the templates you send a consistent look. */
 interface BrandService {
 
     /**

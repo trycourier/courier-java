@@ -18,6 +18,7 @@ import com.courier.models.audiences.AudienceUpdateResponse
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/** Define filter-based groups whose membership Courier recalculates as user profiles change. */
 interface AudienceServiceAsync {
 
     /**

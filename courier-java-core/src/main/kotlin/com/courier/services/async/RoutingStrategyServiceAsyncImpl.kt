@@ -30,6 +30,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/** Define reusable channel routing and failover strategies, and see which templates use them. */
 class RoutingStrategyServiceAsyncImpl
 internal constructor(private val clientOptions: ClientOptions) : RoutingStrategyServiceAsync {
 
