@@ -97,6 +97,10 @@ interface CourierClient {
      */
     fun journeys(): JourneyService
 
+    /**
+     * Create a one-off send to a list or audience, author its content, then send it immediately or
+     * schedule it for later.
+     */
     fun broadcasts(): BroadcastService
 
     /** Manage the logos, colors, and layout that give the templates you send a consistent look. */
@@ -219,6 +223,10 @@ interface CourierClient {
          */
         fun journeys(): JourneyService.WithRawResponse
 
+        /**
+         * Create a one-off send to a list or audience, author its content, then send it immediately
+         * or schedule it for later.
+         */
         fun broadcasts(): BroadcastService.WithRawResponse
 
         /**
