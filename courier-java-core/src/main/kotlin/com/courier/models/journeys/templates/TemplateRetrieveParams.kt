@@ -11,8 +11,8 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Fetch a journey-scoped notification template by id. Pass `?version=draft` (default `published`)
- * to retrieve the working draft, or `?version=vN` for a historical version.
+ * Returns a journey's own notification template with its name, brand, subscription topic, and
+ * content. Defaults to the published version.
  */
 class TemplateRetrieveParams
 private constructor(

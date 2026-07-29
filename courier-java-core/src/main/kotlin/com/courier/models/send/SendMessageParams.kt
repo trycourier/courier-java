@@ -50,13 +50,22 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Send a message to one or more recipients. */
+/**
+ * Sends a message to one or more recipients and returns a requestId. Courier routes it to email,
+ * SMS, push, chat, or in-app based on your rules.
+ */
 class SendMessageParams
 private constructor(
+    private val idempotencyKey: String?,
+    private val xIdempotencyExpiration: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
+
+    fun idempotencyKey(): Optional<String> = Optional.ofNullable(idempotencyKey)
+
+    fun xIdempotencyExpiration(): Optional<String> = Optional.ofNullable(xIdempotencyExpiration)
 
     /**
      * The message property has the following primary top-level properties. They define the
@@ -100,16 +109,37 @@ private constructor(
     /** A builder for [SendMessageParams]. */
     class Builder internal constructor() {
 
+        private var idempotencyKey: String? = null
+        private var xIdempotencyExpiration: String? = null
         private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
         internal fun from(sendMessageParams: SendMessageParams) = apply {
+            idempotencyKey = sendMessageParams.idempotencyKey
+            xIdempotencyExpiration = sendMessageParams.xIdempotencyExpiration
             body = sendMessageParams.body.toBuilder()
             additionalHeaders = sendMessageParams.additionalHeaders.toBuilder()
             additionalQueryParams = sendMessageParams.additionalQueryParams.toBuilder()
         }
+
+        fun idempotencyKey(idempotencyKey: String?) = apply { this.idempotencyKey = idempotencyKey }
+
+        /** Alias for calling [Builder.idempotencyKey] with `idempotencyKey.orElse(null)`. */
+        fun idempotencyKey(idempotencyKey: Optional<String>) =
+            idempotencyKey(idempotencyKey.getOrNull())
+
+        fun xIdempotencyExpiration(xIdempotencyExpiration: String?) = apply {
+            this.xIdempotencyExpiration = xIdempotencyExpiration
+        }
+
+        /**
+         * Alias for calling [Builder.xIdempotencyExpiration] with
+         * `xIdempotencyExpiration.orElse(null)`.
+         */
+        fun xIdempotencyExpiration(xIdempotencyExpiration: Optional<String>) =
+            xIdempotencyExpiration(xIdempotencyExpiration.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -265,6 +295,8 @@ private constructor(
          */
         fun build(): SendMessageParams =
             SendMessageParams(
+                idempotencyKey,
+                xIdempotencyExpiration,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -273,7 +305,14 @@ private constructor(
 
     fun _body(): Body = body
 
-    override fun _headers(): Headers = additionalHeaders
+    override fun _headers(): Headers =
+        Headers.builder()
+            .apply {
+                idempotencyKey?.let { put("Idempotency-Key", it) }
+                xIdempotencyExpiration?.let { put("x-idempotency-expiration", it) }
+                putAll(additionalHeaders)
+            }
+            .build()
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
@@ -4691,13 +4730,22 @@ private constructor(
         }
 
         return other is SendMessageParams &&
+            idempotencyKey == other.idempotencyKey &&
+            xIdempotencyExpiration == other.xIdempotencyExpiration &&
             body == other.body &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = Objects.hash(body, additionalHeaders, additionalQueryParams)
+    override fun hashCode(): Int =
+        Objects.hash(
+            idempotencyKey,
+            xIdempotencyExpiration,
+            body,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
     override fun toString() =
-        "SendMessageParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "SendMessageParams{idempotencyKey=$idempotencyKey, xIdempotencyExpiration=$xIdempotencyExpiration, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

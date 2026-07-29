@@ -36,6 +36,8 @@ internal class TemplateServiceTest {
             templateService.create(
                 TemplateCreateParams.builder()
                     .templateId("x")
+                    .idempotencyKey("order-ORD-456-user-123")
+                    .xIdempotencyExpiration("1785312000")
                     .journeyTemplateCreateRequest(
                         JourneyTemplateCreateRequest.builder()
                             .channel("email")
@@ -152,6 +154,8 @@ internal class TemplateServiceTest {
             TemplatePublishParams.builder()
                 .templateId("x")
                 .notificationId("x")
+                .idempotencyKey("order-ORD-456-user-123")
+                .xIdempotencyExpiration("1785312000")
                 .journeyTemplatePublishRequest(
                     JourneyTemplatePublishRequest.builder().version("v321669910225").build()
                 )

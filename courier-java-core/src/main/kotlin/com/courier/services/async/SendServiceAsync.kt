@@ -10,6 +10,10 @@ import com.courier.models.send.SendMessageResponse
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * Send a message to one or more recipients — users, lists, audiences, or tenants — across every
+ * channel you have configured.
+ */
 interface SendServiceAsync {
 
     /**
@@ -24,7 +28,10 @@ interface SendServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): SendServiceAsync
 
-    /** Send a message to one or more recipients. */
+    /**
+     * Sends a message to one or more recipients and returns a requestId. Courier routes it to
+     * email, SMS, push, chat, or in-app based on your rules.
+     */
     fun message(params: SendMessageParams): CompletableFuture<SendMessageResponse> =
         message(params, RequestOptions.none())
 

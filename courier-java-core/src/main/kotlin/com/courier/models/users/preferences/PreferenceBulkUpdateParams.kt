@@ -25,24 +25,15 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Additively create or update a user's preferences for one or more subscription topics in a single
- * request. Only the topics included in the request body are created or updated; any existing
- * overrides for topics not listed are left untouched.
- *
- * Structural validation of the request body fails fast with a single `400`. Beyond that, each topic
- * is processed independently (partial-success, not all-or-nothing): valid topics are written and
- * returned in `items`, while topics that cannot be applied are collected in `errors` with a
- * per-topic `reason` (for example an unknown topic, a `REQUIRED` topic that cannot be opted out, a
- * custom routing request that is not available on the workspace's plan, or a write failure). The
- * request therefore returns `200` with both lists whenever the body is structurally valid.
- *
- * Every `topic_id` in the response — in both `items` and `errors` — is returned in Courier's
- * canonical topic id form, regardless of the form supplied in the request.
+ * Adds or updates a user's preferences for several subscription topics at once. Topics you leave
+ * out keep whatever they were set to before.
  */
 class PreferenceBulkUpdateParams
 private constructor(
     private val userId: String?,
     private val tenantId: String?,
+    private val idempotencyKey: String?,
+    private val xIdempotencyExpiration: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -52,6 +43,10 @@ private constructor(
 
     /** Update the preferences of a user for this specific tenant context. */
     fun tenantId(): Optional<String> = Optional.ofNullable(tenantId)
+
+    fun idempotencyKey(): Optional<String> = Optional.ofNullable(idempotencyKey)
+
+    fun xIdempotencyExpiration(): Optional<String> = Optional.ofNullable(xIdempotencyExpiration)
 
     /**
      * The topics to create or update. Between 1 and 50 topics may be provided in a single request.
@@ -96,6 +91,8 @@ private constructor(
 
         private var userId: String? = null
         private var tenantId: String? = null
+        private var idempotencyKey: String? = null
+        private var xIdempotencyExpiration: String? = null
         private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
@@ -104,6 +101,8 @@ private constructor(
         internal fun from(preferenceBulkUpdateParams: PreferenceBulkUpdateParams) = apply {
             userId = preferenceBulkUpdateParams.userId
             tenantId = preferenceBulkUpdateParams.tenantId
+            idempotencyKey = preferenceBulkUpdateParams.idempotencyKey
+            xIdempotencyExpiration = preferenceBulkUpdateParams.xIdempotencyExpiration
             body = preferenceBulkUpdateParams.body.toBuilder()
             additionalHeaders = preferenceBulkUpdateParams.additionalHeaders.toBuilder()
             additionalQueryParams = preferenceBulkUpdateParams.additionalQueryParams.toBuilder()
@@ -119,6 +118,23 @@ private constructor(
 
         /** Alias for calling [Builder.tenantId] with `tenantId.orElse(null)`. */
         fun tenantId(tenantId: Optional<String>) = tenantId(tenantId.getOrNull())
+
+        fun idempotencyKey(idempotencyKey: String?) = apply { this.idempotencyKey = idempotencyKey }
+
+        /** Alias for calling [Builder.idempotencyKey] with `idempotencyKey.orElse(null)`. */
+        fun idempotencyKey(idempotencyKey: Optional<String>) =
+            idempotencyKey(idempotencyKey.getOrNull())
+
+        fun xIdempotencyExpiration(xIdempotencyExpiration: String?) = apply {
+            this.xIdempotencyExpiration = xIdempotencyExpiration
+        }
+
+        /**
+         * Alias for calling [Builder.xIdempotencyExpiration] with
+         * `xIdempotencyExpiration.orElse(null)`.
+         */
+        fun xIdempotencyExpiration(xIdempotencyExpiration: Optional<String>) =
+            xIdempotencyExpiration(xIdempotencyExpiration.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -284,6 +300,8 @@ private constructor(
             PreferenceBulkUpdateParams(
                 userId,
                 tenantId,
+                idempotencyKey,
+                xIdempotencyExpiration,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -298,7 +316,14 @@ private constructor(
             else -> ""
         }
 
-    override fun _headers(): Headers = additionalHeaders
+    override fun _headers(): Headers =
+        Headers.builder()
+            .apply {
+                idempotencyKey?.let { put("Idempotency-Key", it) }
+                xIdempotencyExpiration?.let { put("x-idempotency-expiration", it) }
+                putAll(additionalHeaders)
+            }
+            .build()
 
     override fun _queryParams(): QueryParams =
         QueryParams.builder()
@@ -954,14 +979,24 @@ private constructor(
         return other is PreferenceBulkUpdateParams &&
             userId == other.userId &&
             tenantId == other.tenantId &&
+            idempotencyKey == other.idempotencyKey &&
+            xIdempotencyExpiration == other.xIdempotencyExpiration &&
             body == other.body &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(userId, tenantId, body, additionalHeaders, additionalQueryParams)
+        Objects.hash(
+            userId,
+            tenantId,
+            idempotencyKey,
+            xIdempotencyExpiration,
+            body,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
     override fun toString() =
-        "PreferenceBulkUpdateParams{userId=$userId, tenantId=$tenantId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "PreferenceBulkUpdateParams{userId=$userId, tenantId=$tenantId, idempotencyKey=$idempotencyKey, xIdempotencyExpiration=$xIdempotencyExpiration, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

@@ -24,7 +24,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Update or Create user preferences for a specific subscription topic. */
+/**
+ * Sets a user's opt-in status and channel choices for one subscription topic, overriding the tenant
+ * default for that topic only.
+ */
 class PreferenceUpdateOrCreateTopicParams
 private constructor(
     private val userId: String,
@@ -479,13 +482,17 @@ private constructor(
         ) : this(status, customRouting, hasCustomRouting, mutableMapOf())
 
         /**
+         * The subscription status to set: OPTED_IN or OPTED_OUT. REQUIRED is a topic-level default,
+         * not a user choice; the API rejects opting a user out of a REQUIRED topic.
+         *
          * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun status(): PreferenceStatus = status.getRequired("status")
 
         /**
-         * The Channels a user has chosen to receive notifications through for this topic
+         * The channels to deliver this topic on when has_custom_routing is true. One or more of:
+         * direct_message, email, push, sms, webhook, inbox.
          *
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -494,6 +501,9 @@ private constructor(
             customRouting.getOptional("custom_routing")
 
         /**
+         * Set to true to route this topic to the channels in custom_routing instead of the topic's
+         * default routing.
+         *
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
@@ -568,6 +578,10 @@ private constructor(
                 additionalProperties = topic.additionalProperties.toMutableMap()
             }
 
+            /**
+             * The subscription status to set: OPTED_IN or OPTED_OUT. REQUIRED is a topic-level
+             * default, not a user choice; the API rejects opting a user out of a REQUIRED topic.
+             */
             fun status(status: PreferenceStatus) = status(JsonField.of(status))
 
             /**
@@ -579,7 +593,10 @@ private constructor(
              */
             fun status(status: JsonField<PreferenceStatus>) = apply { this.status = status }
 
-            /** The Channels a user has chosen to receive notifications through for this topic */
+            /**
+             * The channels to deliver this topic on when has_custom_routing is true. One or more
+             * of: direct_message, email, push, sms, webhook, inbox.
+             */
             fun customRouting(customRouting: List<ChannelClassification>?) =
                 customRouting(JsonField.ofNullable(customRouting))
 
@@ -610,6 +627,10 @@ private constructor(
                     }
             }
 
+            /**
+             * Set to true to route this topic to the channels in custom_routing instead of the
+             * topic's default routing.
+             */
             fun hasCustomRouting(hasCustomRouting: Boolean?) =
                 hasCustomRouting(JsonField.ofNullable(hasCustomRouting))
 

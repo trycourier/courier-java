@@ -12,18 +12,24 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Publish the current draft as a new version. Body is optional; pass `{ "version": "vN" }` to roll
- * back to a prior version instead. Returns 404 if the journey has no draft to publish.
+ * Publishes a journey's current draft as a new version, making it live for new runs. Pass a version
+ * instead to roll back to an earlier one.
  */
 class JourneyPublishParams
 private constructor(
     private val templateId: String?,
+    private val idempotencyKey: String?,
+    private val xIdempotencyExpiration: String?,
     private val journeyPublishRequest: JourneyPublishRequest?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     fun templateId(): Optional<String> = Optional.ofNullable(templateId)
+
+    fun idempotencyKey(): Optional<String> = Optional.ofNullable(idempotencyKey)
+
+    fun xIdempotencyExpiration(): Optional<String> = Optional.ofNullable(xIdempotencyExpiration)
 
     /**
      * Request body for publishing a journey. Pass `version` to roll back to a prior version; omit
@@ -55,6 +61,8 @@ private constructor(
     class Builder internal constructor() {
 
         private var templateId: String? = null
+        private var idempotencyKey: String? = null
+        private var xIdempotencyExpiration: String? = null
         private var journeyPublishRequest: JourneyPublishRequest? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
@@ -62,6 +70,8 @@ private constructor(
         @JvmSynthetic
         internal fun from(journeyPublishParams: JourneyPublishParams) = apply {
             templateId = journeyPublishParams.templateId
+            idempotencyKey = journeyPublishParams.idempotencyKey
+            xIdempotencyExpiration = journeyPublishParams.xIdempotencyExpiration
             journeyPublishRequest = journeyPublishParams.journeyPublishRequest
             additionalHeaders = journeyPublishParams.additionalHeaders.toBuilder()
             additionalQueryParams = journeyPublishParams.additionalQueryParams.toBuilder()
@@ -71,6 +81,23 @@ private constructor(
 
         /** Alias for calling [Builder.templateId] with `templateId.orElse(null)`. */
         fun templateId(templateId: Optional<String>) = templateId(templateId.getOrNull())
+
+        fun idempotencyKey(idempotencyKey: String?) = apply { this.idempotencyKey = idempotencyKey }
+
+        /** Alias for calling [Builder.idempotencyKey] with `idempotencyKey.orElse(null)`. */
+        fun idempotencyKey(idempotencyKey: Optional<String>) =
+            idempotencyKey(idempotencyKey.getOrNull())
+
+        fun xIdempotencyExpiration(xIdempotencyExpiration: String?) = apply {
+            this.xIdempotencyExpiration = xIdempotencyExpiration
+        }
+
+        /**
+         * Alias for calling [Builder.xIdempotencyExpiration] with
+         * `xIdempotencyExpiration.orElse(null)`.
+         */
+        fun xIdempotencyExpiration(xIdempotencyExpiration: Optional<String>) =
+            xIdempotencyExpiration(xIdempotencyExpiration.getOrNull())
 
         /**
          * Request body for publishing a journey. Pass `version` to roll back to a prior version;
@@ -193,6 +220,8 @@ private constructor(
         fun build(): JourneyPublishParams =
             JourneyPublishParams(
                 templateId,
+                idempotencyKey,
+                xIdempotencyExpiration,
                 journeyPublishRequest,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -207,7 +236,14 @@ private constructor(
             else -> ""
         }
 
-    override fun _headers(): Headers = additionalHeaders
+    override fun _headers(): Headers =
+        Headers.builder()
+            .apply {
+                idempotencyKey?.let { put("Idempotency-Key", it) }
+                xIdempotencyExpiration?.let { put("x-idempotency-expiration", it) }
+                putAll(additionalHeaders)
+            }
+            .build()
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
@@ -218,14 +254,23 @@ private constructor(
 
         return other is JourneyPublishParams &&
             templateId == other.templateId &&
+            idempotencyKey == other.idempotencyKey &&
+            xIdempotencyExpiration == other.xIdempotencyExpiration &&
             journeyPublishRequest == other.journeyPublishRequest &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(templateId, journeyPublishRequest, additionalHeaders, additionalQueryParams)
+        Objects.hash(
+            templateId,
+            idempotencyKey,
+            xIdempotencyExpiration,
+            journeyPublishRequest,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
     override fun toString() =
-        "JourneyPublishParams{templateId=$templateId, journeyPublishRequest=$journeyPublishRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "JourneyPublishParams{templateId=$templateId, idempotencyKey=$idempotencyKey, xIdempotencyExpiration=$xIdempotencyExpiration, journeyPublishRequest=$journeyPublishRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

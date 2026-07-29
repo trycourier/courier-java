@@ -9,7 +9,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Fetch the status of a message you've previously sent. */
+/**
+ * Returns a sent message's status, recipient, event, and per-provider delivery detail, with
+ * timestamps for enqueued, sent, delivered, opened, and clicked.
+ */
 class MessageRetrieveParams
 private constructor(
     private val messageId: String?,

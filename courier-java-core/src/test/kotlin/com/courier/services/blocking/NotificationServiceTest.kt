@@ -7,6 +7,7 @@ import com.courier.core.JsonValue
 import com.courier.models.ElementalChannelNodeWithType
 import com.courier.models.ElementalContent
 import com.courier.models.notifications.NotificationContentPutRequest
+import com.courier.models.notifications.NotificationCreateParams
 import com.courier.models.notifications.NotificationElementPutRequest
 import com.courier.models.notifications.NotificationListParams
 import com.courier.models.notifications.NotificationListVersionsParams
@@ -36,40 +37,46 @@ internal class NotificationServiceTest {
 
         val notificationTemplateResponse =
             notificationService.create(
-                NotificationTemplateCreateRequest.builder()
-                    .notification(
-                        NotificationTemplatePayload.builder()
-                            .brand(
-                                NotificationTemplatePayload.Brand.builder()
-                                    .id("bnd_01kx4mrd0pfzw8wt7pn7p2fzag")
-                                    .build()
-                            )
-                            .content(
-                                ElementalContent.builder()
-                                    .addElement(
-                                        ElementalChannelNodeWithType.builder()
-                                            .type(ElementalChannelNodeWithType.Type.CHANNEL)
+                NotificationCreateParams.builder()
+                    .idempotencyKey("order-ORD-456-user-123")
+                    .xIdempotencyExpiration("1785312000")
+                    .notificationTemplateCreateRequest(
+                        NotificationTemplateCreateRequest.builder()
+                            .notification(
+                                NotificationTemplatePayload.builder()
+                                    .brand(
+                                        NotificationTemplatePayload.Brand.builder()
+                                            .id("bnd_01kx4mrd0pfzw8wt7pn7p2fzag")
                                             .build()
                                     )
-                                    .version("2022-01-01")
+                                    .content(
+                                        ElementalContent.builder()
+                                            .addElement(
+                                                ElementalChannelNodeWithType.builder()
+                                                    .type(ElementalChannelNodeWithType.Type.CHANNEL)
+                                                    .build()
+                                            )
+                                            .version("2022-01-01")
+                                            .build()
+                                    )
+                                    .name("Welcome Email")
+                                    .routing(
+                                        NotificationTemplatePayload.Routing.builder()
+                                            .strategyId("rs_01kx4h2jdafq8bk9amzvy6hbv0")
+                                            .build()
+                                    )
+                                    .subscription(
+                                        NotificationTemplatePayload.Subscription.builder()
+                                            .topicId("pt_01kx4h2jdafq8bk9a26x0kvd1t")
+                                            .build()
+                                    )
+                                    .addTag("onboarding")
+                                    .addTag("welcome")
                                     .build()
                             )
-                            .name("Welcome Email")
-                            .routing(
-                                NotificationTemplatePayload.Routing.builder()
-                                    .strategyId("rs_01kx4h2jdafq8bk9amzvy6hbv0")
-                                    .build()
-                            )
-                            .subscription(
-                                NotificationTemplatePayload.Subscription.builder()
-                                    .topicId("pt_01kx4h2jdafq8bk9a26x0kvd1t")
-                                    .build()
-                            )
-                            .addTag("onboarding")
-                            .addTag("welcome")
+                            .state(NotificationTemplateCreateRequest.State.DRAFT)
                             .build()
                     )
-                    .state(NotificationTemplateCreateRequest.State.DRAFT)
                     .build()
             )
 
@@ -155,6 +162,8 @@ internal class NotificationServiceTest {
         notificationService.publish(
             NotificationPublishParams.builder()
                 .id("id")
+                .idempotencyKey("order-ORD-456-user-123")
+                .xIdempotencyExpiration("1785312000")
                 .notificationTemplatePublishRequest(
                     NotificationTemplatePublishRequest.builder().version("v321669910225").build()
                 )

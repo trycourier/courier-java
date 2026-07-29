@@ -16,6 +16,7 @@ import com.courier.models.brands.BrandUpdateParams
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
+/** Manage the logos, colors, and layout that give the templates you send a consistent look. */
 interface BrandService {
 
     /**
@@ -31,8 +32,8 @@ interface BrandService {
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): BrandService
 
     /**
-     * Create a new brand. Requires `name` and `settings` (with at least `colors.primary` and
-     * `colors.secondary`).
+     * Creates a brand from a name and settings, including primary and secondary colors. Brands
+     * supply the logo, colors, and styling that templates render with.
      */
     fun create(params: BrandCreateParams): Brand = create(params, RequestOptions.none())
 
@@ -42,7 +43,10 @@ interface BrandService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Brand
 
-    /** Fetch a specific brand by brand ID. */
+    /**
+     * Returns one brand by id, including its colors, logo and styling settings, Handlebars
+     * snippets, and published version.
+     */
     fun retrieve(brandId: String): Brand = retrieve(brandId, BrandRetrieveParams.none())
 
     /** @see retrieve */
@@ -69,7 +73,10 @@ interface BrandService {
     fun retrieve(brandId: String, requestOptions: RequestOptions): Brand =
         retrieve(brandId, BrandRetrieveParams.none(), requestOptions)
 
-    /** Replace an existing brand with the supplied values. */
+    /**
+     * Replaces a brand with the values you supply, so send the complete settings and snippets
+     * rather than only the fields you want changed.
+     */
     fun update(brandId: String, params: BrandUpdateParams): Brand =
         update(brandId, params, RequestOptions.none())
 
@@ -89,7 +96,10 @@ interface BrandService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Brand
 
-    /** Get the list of brands. */
+    /**
+     * Lists the workspace's brands. Every entry carries its name, styling settings, snippets, and
+     * published version.
+     */
     fun list(): BrandListResponse = list(BrandListParams.none())
 
     /** @see list */
@@ -106,7 +116,10 @@ interface BrandService {
     fun list(requestOptions: RequestOptions): BrandListResponse =
         list(BrandListParams.none(), requestOptions)
 
-    /** Delete a brand by brand ID. */
+    /**
+     * Deletes a brand by id. Reassign any template or tenant that references it before deleting to
+     * keep their styling intact.
+     */
     fun delete(brandId: String) = delete(brandId, BrandDeleteParams.none())
 
     /** @see delete */

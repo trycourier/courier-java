@@ -1,5 +1,21 @@
 # Changelog
 
+## 4.23.0 (2026-07-29)
+
+Full Changelog: [v4.22.0...v4.23.0](https://github.com/trycourier/courier-java/compare/v4.22.0...v4.23.0)
+
+### Features
+
+* Document DELETE/PUT restore for inbox messages (C-19268) ([#175](https://github.com/trycourier/courier-java/issues/175)) ([6a1a54a](https://github.com/trycourier/courier-java/commit/6a1a54a0d6ad45e41c9c99c18e01c315fcae5b58))
+* spec: rename and reorder the API reference sections ([#179](https://github.com/trycourier/courier-java/issues/179)) ([2ce28ee](https://github.com/trycourier/courier-java/commit/2ce28eee967b036c5b725a1146cb8cc2a1a84f02))
+
+
+### Documentation
+
+* **openapi:** describe user topic-preference fields explicitly ([#172](https://github.com/trycourier/courier-java/issues/172)) ([1d09244](https://github.com/trycourier/courier-java/commit/1d09244b56cb1ed9c98e28365d7509cd9dbe0018))
+* **openapi:** document Idempotency-Key header on idempotent POST endpoints ([#176](https://github.com/trycourier/courier-java/issues/176)) ([8d254c6](https://github.com/trycourier/courier-java/commit/8d254c610de6563741992db211375fc40d4f33ef))
+* **openapi:** rewrite operation descriptions for agents and SEO ([#174](https://github.com/trycourier/courier-java/issues/174)) ([3453be3](https://github.com/trycourier/courier-java/commit/3453be34b9c9713b88aa72e64c6fdfa3251a2fae))
+
 ## 4.22.0 (2026-07-23)
 
 Full Changelog: [v4.21.0...v4.22.0](https://github.com/trycourier/courier-java/compare/v4.21.0...v4.22.0)

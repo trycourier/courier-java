@@ -32,7 +32,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Adds a single token to a user and overwrites a matching existing token. */
+/**
+ * Registers one device token for a user against a provider key, overwriting the token if it already
+ * exists. Push sends resolve tokens per user.
+ */
 class TokenAddSingleParams
 private constructor(
     private val userId: String,

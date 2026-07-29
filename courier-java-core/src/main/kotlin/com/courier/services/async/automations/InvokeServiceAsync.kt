@@ -11,6 +11,7 @@ import com.courier.models.automations.invoke.InvokeInvokeByTemplateParams
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/** Invoke a stored automation template or an ad hoc automation defined in the request. */
 interface InvokeServiceAsync {
 
     /**
@@ -26,9 +27,8 @@ interface InvokeServiceAsync {
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): InvokeServiceAsync
 
     /**
-     * Invoke an ad hoc automation run. This endpoint accepts a JSON payload with a series of
-     * automation steps. For information about what steps are available, checkout the ad hoc
-     * automation guide [here](https://www.courier.com/docs/automations/steps/).
+     * Runs a series of automation steps supplied inline, without a saved template, and returns a
+     * runId.
      */
     fun invokeAdHoc(params: InvokeInvokeAdHocParams): CompletableFuture<AutomationInvokeResponse> =
         invokeAdHoc(params, RequestOptions.none())
@@ -39,7 +39,10 @@ interface InvokeServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<AutomationInvokeResponse>
 
-    /** Invoke an automation run from an automation template. */
+    /**
+     * Starts an automation run from a saved template for one recipient, with optional data and
+     * profile, and returns a runId.
+     */
     fun invokeByTemplate(
         templateId: String,
         params: InvokeInvokeByTemplateParams,

@@ -9,6 +9,10 @@ import com.courier.models.requests.RequestArchiveParams
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * Look up the messages Courier has accepted, inspect their delivery history and rendered output,
+ * and cancel, resend, or archive them.
+ */
 interface RequestServiceAsync {
 
     /**
@@ -23,7 +27,10 @@ interface RequestServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): RequestServiceAsync
 
-    /** Archive message */
+    /**
+     * Archives a send request by its request id. Use it to remove test sends or superseded requests
+     * from the message list without deleting them.
+     */
     fun archive(requestId: String): CompletableFuture<Void?> =
         archive(requestId, RequestArchiveParams.none())
 

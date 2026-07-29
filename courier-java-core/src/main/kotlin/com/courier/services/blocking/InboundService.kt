@@ -10,6 +10,7 @@ import com.courier.models.inbound.InboundTrackEventResponse
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
+/** Record an inbound event that triggers the journeys and automations mapped to it. */
 interface InboundService {
 
     /**
@@ -24,7 +25,10 @@ interface InboundService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): InboundService
 
-    /** Courier Track Event */
+    /**
+     * Records an inbound event that can trigger a journey. Requires an event name, a messageId you
+     * generate, a type, and a properties object.
+     */
     fun trackEvent(params: InboundTrackEventParams): InboundTrackEventResponse =
         trackEvent(params, RequestOptions.none())
 

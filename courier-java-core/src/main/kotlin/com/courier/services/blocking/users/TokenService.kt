@@ -17,6 +17,7 @@ import com.courier.models.users.tokens.TokenUpdateParams
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
+/** Register and manage the APNS and FCM device tokens Courier delivers push notifications to. */
 interface TokenService {
 
     /**
@@ -31,7 +32,10 @@ interface TokenService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): TokenService
 
-    /** Get single token available for a `:token` */
+    /**
+     * Returns one device token with its provider key, status and status reason, expiry date, and
+     * any properties stored alongside it.
+     */
     fun retrieve(token: String, params: TokenRetrieveParams): TokenRetrieveResponse =
         retrieve(token, params, RequestOptions.none())
 
@@ -52,7 +56,10 @@ interface TokenService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): TokenRetrieveResponse
 
-    /** Apply a JSON Patch (RFC 6902) to the specified token. */
+    /**
+     * Applies a JSON Patch to a device token, changing its status, expiry, or properties without
+     * re-registering it.
+     */
     fun update(token: String, params: TokenUpdateParams) =
         update(token, params, RequestOptions.none())
 
@@ -69,7 +76,10 @@ interface TokenService {
     /** @see update */
     fun update(params: TokenUpdateParams, requestOptions: RequestOptions = RequestOptions.none())
 
-    /** Gets all tokens available for a :user_id */
+    /**
+     * Returns every device token registered for a user, each with its provider key, status, and
+     * expiry date.
+     */
     fun list(userId: String): TokenListResponse = list(userId, TokenListParams.none())
 
     /** @see list */
@@ -96,7 +106,10 @@ interface TokenService {
     fun list(userId: String, requestOptions: RequestOptions): TokenListResponse =
         list(userId, TokenListParams.none(), requestOptions)
 
-    /** Delete User Token */
+    /**
+     * Deletes one device token for a user, addressed by the token value, so push sends no longer
+     * target that device.
+     */
     fun delete(token: String, params: TokenDeleteParams) =
         delete(token, params, RequestOptions.none())
 
@@ -113,7 +126,10 @@ interface TokenService {
     /** @see delete */
     fun delete(params: TokenDeleteParams, requestOptions: RequestOptions = RequestOptions.none())
 
-    /** Adds multiple tokens to a user and overwrites matching existing tokens. */
+    /**
+     * Registers several device tokens for a user in one call, overwriting any stored token with a
+     * matching value.
+     */
     fun addMultiple(userId: String) = addMultiple(userId, TokenAddMultipleParams.none())
 
     /** @see addMultiple */
@@ -142,7 +158,10 @@ interface TokenService {
     fun addMultiple(userId: String, requestOptions: RequestOptions) =
         addMultiple(userId, TokenAddMultipleParams.none(), requestOptions)
 
-    /** Adds a single token to a user and overwrites a matching existing token. */
+    /**
+     * Registers one device token for a user against a provider key, overwriting the token if it
+     * already exists. Push sends resolve tokens per user.
+     */
     fun addSingle(token: String, params: TokenAddSingleParams) =
         addSingle(token, params, RequestOptions.none())
 

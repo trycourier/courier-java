@@ -10,7 +10,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Fetch user preferences for a specific subscription topic. */
+/**
+ * Returns a user's opt-in status and channel choices for one subscription topic, or the effective
+ * default if they have set no override.
+ */
 class PreferenceRetrieveTopicParams
 private constructor(
     private val userId: String,

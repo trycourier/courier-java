@@ -30,6 +30,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/** Define filter-based groups whose membership Courier recalculates as user profiles change. */
 class AudienceServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     AudienceServiceAsync {
 

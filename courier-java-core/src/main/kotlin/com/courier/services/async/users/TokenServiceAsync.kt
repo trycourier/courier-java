@@ -17,6 +17,7 @@ import com.courier.models.users.tokens.TokenUpdateParams
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/** Register and manage the APNS and FCM device tokens Courier delivers push notifications to. */
 interface TokenServiceAsync {
 
     /**
@@ -31,7 +32,10 @@ interface TokenServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): TokenServiceAsync
 
-    /** Get single token available for a `:token` */
+    /**
+     * Returns one device token with its provider key, status and status reason, expiry date, and
+     * any properties stored alongside it.
+     */
     fun retrieve(
         token: String,
         params: TokenRetrieveParams,
@@ -55,7 +59,10 @@ interface TokenServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<TokenRetrieveResponse>
 
-    /** Apply a JSON Patch (RFC 6902) to the specified token. */
+    /**
+     * Applies a JSON Patch to a device token, changing its status, expiry, or properties without
+     * re-registering it.
+     */
     fun update(token: String, params: TokenUpdateParams): CompletableFuture<Void?> =
         update(token, params, RequestOptions.none())
 
@@ -76,7 +83,10 @@ interface TokenServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Void?>
 
-    /** Gets all tokens available for a :user_id */
+    /**
+     * Returns every device token registered for a user, each with its provider key, status, and
+     * expiry date.
+     */
     fun list(userId: String): CompletableFuture<TokenListResponse> =
         list(userId, TokenListParams.none())
 
@@ -108,7 +118,10 @@ interface TokenServiceAsync {
     fun list(userId: String, requestOptions: RequestOptions): CompletableFuture<TokenListResponse> =
         list(userId, TokenListParams.none(), requestOptions)
 
-    /** Delete User Token */
+    /**
+     * Deletes one device token for a user, addressed by the token value, so push sends no longer
+     * target that device.
+     */
     fun delete(token: String, params: TokenDeleteParams): CompletableFuture<Void?> =
         delete(token, params, RequestOptions.none())
 
@@ -129,7 +142,10 @@ interface TokenServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Void?>
 
-    /** Adds multiple tokens to a user and overwrites matching existing tokens. */
+    /**
+     * Registers several device tokens for a user in one call, overwriting any stored token with a
+     * matching value.
+     */
     fun addMultiple(userId: String): CompletableFuture<Void?> =
         addMultiple(userId, TokenAddMultipleParams.none())
 
@@ -161,7 +177,10 @@ interface TokenServiceAsync {
     fun addMultiple(userId: String, requestOptions: RequestOptions): CompletableFuture<Void?> =
         addMultiple(userId, TokenAddMultipleParams.none(), requestOptions)
 
-    /** Adds a single token to a user and overwrites a matching existing token. */
+    /**
+     * Registers one device token for a user against a provider key, overwriting the token if it
+     * already exists. Push sends resolve tokens per user.
+     */
     fun addSingle(token: String, params: TokenAddSingleParams): CompletableFuture<Void?> =
         addSingle(token, params, RequestOptions.none())
 

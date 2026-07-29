@@ -12,8 +12,8 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Delete a provider configuration. Returns 409 if the provider is still referenced by routing or
- * notifications.
+ * Deletes a provider configuration, which fails while routing strategies or templates still
+ * reference it. Update those references first.
  */
 class ProviderDeleteParams
 private constructor(

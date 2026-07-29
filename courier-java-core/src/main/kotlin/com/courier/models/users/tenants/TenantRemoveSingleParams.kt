@@ -12,7 +12,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Removes a user from the supplied tenant. */
+/**
+ * Removes a user from one tenant. Their other tenant memberships and workspace profile are managed
+ * through separate endpoints.
+ */
 class TenantRemoveSingleParams
 private constructor(
     private val userId: String,

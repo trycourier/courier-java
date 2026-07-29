@@ -35,6 +35,10 @@ import com.courier.models.notifications.NotificationTemplateVersionListResponse
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * Build, version, publish, invoke, and cancel multi-step notification workflows, along with the
+ * templates scoped to them.
+ */
 class TemplateServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     TemplateService {
 

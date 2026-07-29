@@ -8,20 +8,25 @@ import com.courier.core.checkRequired
 import com.courier.core.http.Headers
 import com.courier.core.http.QueryParams
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
- * Create a journey. Defaults to `DRAFT` state; pass `state: "PUBLISHED"` to publish on create. Send
- * nodes are not allowed on `POST`. The standard flow is: create the journey shell here, add
- * notification templates with `POST /journeys/{templateId}/templates`, then wire them into the
- * journey with `PUT /journeys/{templateId}`. Call `POST /journeys/{templateId}/publish` to publish
- * a draft after the fact.
+ * Creates a journey from a set of nodes, in draft state unless you pass a published state. Send
+ * nodes cannot be included until their templates exist.
  */
 class JourneyCreateParams
 private constructor(
+    private val idempotencyKey: String?,
+    private val xIdempotencyExpiration: String?,
     private val createJourneyRequest: CreateJourneyRequest,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
+
+    fun idempotencyKey(): Optional<String> = Optional.ofNullable(idempotencyKey)
+
+    fun xIdempotencyExpiration(): Optional<String> = Optional.ofNullable(xIdempotencyExpiration)
 
     /** Request body for creating a journey. */
     fun createJourneyRequest(): CreateJourneyRequest = createJourneyRequest
@@ -53,16 +58,37 @@ private constructor(
     /** A builder for [JourneyCreateParams]. */
     class Builder internal constructor() {
 
+        private var idempotencyKey: String? = null
+        private var xIdempotencyExpiration: String? = null
         private var createJourneyRequest: CreateJourneyRequest? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
         internal fun from(journeyCreateParams: JourneyCreateParams) = apply {
+            idempotencyKey = journeyCreateParams.idempotencyKey
+            xIdempotencyExpiration = journeyCreateParams.xIdempotencyExpiration
             createJourneyRequest = journeyCreateParams.createJourneyRequest
             additionalHeaders = journeyCreateParams.additionalHeaders.toBuilder()
             additionalQueryParams = journeyCreateParams.additionalQueryParams.toBuilder()
         }
+
+        fun idempotencyKey(idempotencyKey: String?) = apply { this.idempotencyKey = idempotencyKey }
+
+        /** Alias for calling [Builder.idempotencyKey] with `idempotencyKey.orElse(null)`. */
+        fun idempotencyKey(idempotencyKey: Optional<String>) =
+            idempotencyKey(idempotencyKey.getOrNull())
+
+        fun xIdempotencyExpiration(xIdempotencyExpiration: String?) = apply {
+            this.xIdempotencyExpiration = xIdempotencyExpiration
+        }
+
+        /**
+         * Alias for calling [Builder.xIdempotencyExpiration] with
+         * `xIdempotencyExpiration.orElse(null)`.
+         */
+        fun xIdempotencyExpiration(xIdempotencyExpiration: Optional<String>) =
+            xIdempotencyExpiration(xIdempotencyExpiration.getOrNull())
 
         /** Request body for creating a journey. */
         fun createJourneyRequest(createJourneyRequest: CreateJourneyRequest) = apply {
@@ -181,6 +207,8 @@ private constructor(
          */
         fun build(): JourneyCreateParams =
             JourneyCreateParams(
+                idempotencyKey,
+                xIdempotencyExpiration,
                 checkRequired("createJourneyRequest", createJourneyRequest),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -189,7 +217,14 @@ private constructor(
 
     fun _body(): CreateJourneyRequest = createJourneyRequest
 
-    override fun _headers(): Headers = additionalHeaders
+    override fun _headers(): Headers =
+        Headers.builder()
+            .apply {
+                idempotencyKey?.let { put("Idempotency-Key", it) }
+                xIdempotencyExpiration?.let { put("x-idempotency-expiration", it) }
+                putAll(additionalHeaders)
+            }
+            .build()
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
@@ -199,14 +234,22 @@ private constructor(
         }
 
         return other is JourneyCreateParams &&
+            idempotencyKey == other.idempotencyKey &&
+            xIdempotencyExpiration == other.xIdempotencyExpiration &&
             createJourneyRequest == other.createJourneyRequest &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(createJourneyRequest, additionalHeaders, additionalQueryParams)
+        Objects.hash(
+            idempotencyKey,
+            xIdempotencyExpiration,
+            createJourneyRequest,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
     override fun toString() =
-        "JourneyCreateParams{createJourneyRequest=$createJourneyRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "JourneyCreateParams{idempotencyKey=$idempotencyKey, xIdempotencyExpiration=$xIdempotencyExpiration, createJourneyRequest=$createJourneyRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

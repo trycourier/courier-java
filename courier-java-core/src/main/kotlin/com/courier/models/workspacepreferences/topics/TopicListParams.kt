@@ -9,7 +9,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** List the topics in a workspace preference. */
+/**
+ * Returns the subscription topics inside a workspace preference, each with its default status and
+ * routing options.
+ */
 class TopicListParams
 private constructor(
     private val sectionId: String?,

@@ -48,6 +48,8 @@ internal class ListServiceTest {
             listService.subscribe(
                 ListSubscribeParams.builder()
                     .userId("user_id")
+                    .idempotencyKey("order-ORD-456-user-123")
+                    .xIdempotencyExpiration("1785312000")
                     .addList(
                         SubscribeToListsRequestItem.builder()
                             .listId("listId")

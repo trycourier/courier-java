@@ -9,7 +9,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Returns a paginated list of user tenant associations. */
+/**
+ * Returns the tenants a user belongs to, with cursor paging. A user can belong to many tenants,
+ * each with its own profile and preferences.
+ */
 class TenantListParams
 private constructor(
     private val userId: String?,

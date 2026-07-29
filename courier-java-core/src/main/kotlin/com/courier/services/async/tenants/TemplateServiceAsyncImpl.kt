@@ -32,6 +32,10 @@ import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * Manage the templates and template versions scoped to a single tenant, including the ones authored
+ * in the embedded designer.
+ */
 class TemplateServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     TemplateServiceAsync {
 
@@ -46,6 +50,10 @@ class TemplateServiceAsyncImpl internal constructor(private val clientOptions: C
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): TemplateServiceAsync =
         TemplateServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /**
+     * Manage the templates and template versions scoped to a single tenant, including the ones
+     * authored in the embedded designer.
+     */
     override fun versions(): VersionServiceAsync = versions
 
     override fun retrieve(
@@ -100,6 +108,10 @@ class TemplateServiceAsyncImpl internal constructor(private val clientOptions: C
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /**
+         * Manage the templates and template versions scoped to a single tenant, including the ones
+         * authored in the embedded designer.
+         */
         override fun versions(): VersionServiceAsync.WithRawResponse = versions
 
         private val retrieveHandler: Handler<BaseTemplateTenantAssociation> =

@@ -12,7 +12,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Create or Replace Default Preferences For Topic */
+/**
+ * Sets a tenant's default opt-in status for one subscription topic, which applies to every member
+ * unless a user sets their own override.
+ */
 class ItemUpdateParams
 private constructor(
     private val tenantId: String,

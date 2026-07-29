@@ -60,31 +60,42 @@ private constructor(
     )
 
     /**
+     * The topic's default status, returned on reads. It applies whenever the user has no override
+     * of their own (status equals this value).
+     *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun defaultStatus(): PreferenceStatus = defaultStatus.getRequired("default_status")
 
     /**
+     * The user's subscription status for this topic. OPTED_IN or OPTED_OUT reflect the user's own
+     * choice; REQUIRED is a topic-level default set in the preferences editor, not a user choice.
+     *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun status(): PreferenceStatus = status.getRequired("status")
 
     /**
+     * The unique identifier of the subscription topic this preference applies to.
+     *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun topicId(): String = topicId.getRequired("topic_id")
 
     /**
+     * The display name of the subscription topic, returned on reads.
+     *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun topicName(): String = topicName.getRequired("topic_name")
 
     /**
-     * The Channels a user has chosen to receive notifications through for this topic
+     * The channels the user has chosen to receive this topic on, present only when
+     * has_custom_routing is true. One or more of: direct_message, email, push, sms, webhook, inbox.
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -93,6 +104,9 @@ private constructor(
         customRouting.getOptional("custom_routing")
 
     /**
+     * Whether the user has chosen specific delivery channels for this topic (listed in
+     * custom_routing) rather than the topic's default routing.
+     *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -197,6 +211,10 @@ private constructor(
             additionalProperties = topicPreference.additionalProperties.toMutableMap()
         }
 
+        /**
+         * The topic's default status, returned on reads. It applies whenever the user has no
+         * override of their own (status equals this value).
+         */
         fun defaultStatus(defaultStatus: PreferenceStatus) =
             defaultStatus(JsonField.of(defaultStatus))
 
@@ -211,6 +229,11 @@ private constructor(
             this.defaultStatus = defaultStatus
         }
 
+        /**
+         * The user's subscription status for this topic. OPTED_IN or OPTED_OUT reflect the user's
+         * own choice; REQUIRED is a topic-level default set in the preferences editor, not a user
+         * choice.
+         */
         fun status(status: PreferenceStatus) = status(JsonField.of(status))
 
         /**
@@ -222,6 +245,7 @@ private constructor(
          */
         fun status(status: JsonField<PreferenceStatus>) = apply { this.status = status }
 
+        /** The unique identifier of the subscription topic this preference applies to. */
         fun topicId(topicId: String) = topicId(JsonField.of(topicId))
 
         /**
@@ -232,6 +256,7 @@ private constructor(
          */
         fun topicId(topicId: JsonField<String>) = apply { this.topicId = topicId }
 
+        /** The display name of the subscription topic, returned on reads. */
         fun topicName(topicName: String) = topicName(JsonField.of(topicName))
 
         /**
@@ -243,7 +268,11 @@ private constructor(
          */
         fun topicName(topicName: JsonField<String>) = apply { this.topicName = topicName }
 
-        /** The Channels a user has chosen to receive notifications through for this topic */
+        /**
+         * The channels the user has chosen to receive this topic on, present only when
+         * has_custom_routing is true. One or more of: direct_message, email, push, sms, webhook,
+         * inbox.
+         */
         fun customRouting(customRouting: List<ChannelClassification>?) =
             customRouting(JsonField.ofNullable(customRouting))
 
@@ -274,6 +303,10 @@ private constructor(
                 }
         }
 
+        /**
+         * Whether the user has chosen specific delivery channels for this topic (listed in
+         * custom_routing) rather than the topic's default routing.
+         */
         fun hasCustomRouting(hasCustomRouting: Boolean?) =
             hasCustomRouting(JsonField.ofNullable(hasCustomRouting))
 

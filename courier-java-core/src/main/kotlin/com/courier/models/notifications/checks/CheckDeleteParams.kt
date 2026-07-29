@@ -12,7 +12,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Cancel a submission for a notification template. */
+/**
+ * Cancels a pending template submission, withdrawing it from the approval workflow. The template
+ * stays in draft and can be resubmitted later.
+ */
 class CheckDeleteParams
 private constructor(
     private val id: String,

@@ -19,6 +19,7 @@ import com.courier.models.routingstrategies.RoutingStrategyRetrieveParams
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
+/** Define reusable channel routing and failover strategies, and see which templates use them. */
 interface RoutingStrategyService {
 
     /**
@@ -64,8 +65,8 @@ interface RoutingStrategyService {
     ): RoutingStrategyGetResponse = create(routingStrategyCreateRequest, RequestOptions.none())
 
     /**
-     * Retrieve a routing strategy by ID. Returns the full entity including routing content and
-     * metadata.
+     * Returns one routing strategy by id with its name, tags, channels, and the routing rules that
+     * decide provider order and fallback.
      */
     fun retrieve(id: String): RoutingStrategyGetResponse =
         retrieve(id, RoutingStrategyRetrieveParams.none())
@@ -151,8 +152,8 @@ interface RoutingStrategyService {
         archive(id, RoutingStrategyArchiveParams.none(), requestOptions)
 
     /**
-     * List notification templates associated with a routing strategy. Includes template metadata
-     * only, not full content.
+     * Returns the notification templates using a routing strategy, with paging. Check this before
+     * changing a strategy that templates depend on.
      */
     fun listNotifications(id: String): AssociatedNotificationListResponse =
         listNotifications(id, RoutingStrategyListNotificationsParams.none())

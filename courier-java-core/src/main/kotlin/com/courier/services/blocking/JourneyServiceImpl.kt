@@ -36,6 +36,10 @@ import com.courier.services.blocking.journeys.TemplateServiceImpl
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * Build, version, publish, invoke, and cancel multi-step notification workflows, along with the
+ * templates scoped to them.
+ */
 class JourneyServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     JourneyService {
 
@@ -50,6 +54,10 @@ class JourneyServiceImpl internal constructor(private val clientOptions: ClientO
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): JourneyService =
         JourneyServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /**
+     * Build, version, publish, invoke, and cancel multi-step notification workflows, along with the
+     * templates scoped to them.
+     */
     override fun templates(): TemplateService = templates
 
     override fun create(
@@ -130,6 +138,10 @@ class JourneyServiceImpl internal constructor(private val clientOptions: ClientO
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /**
+         * Build, version, publish, invoke, and cancel multi-step notification workflows, along with
+         * the templates scoped to them.
+         */
         override fun templates(): TemplateService.WithRawResponse = templates
 
         private val createHandler: Handler<JourneyResponse> =

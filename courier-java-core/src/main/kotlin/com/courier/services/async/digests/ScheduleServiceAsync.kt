@@ -12,6 +12,10 @@ import com.courier.models.digests.schedules.ScheduleReleaseParams
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * Inspect what has accumulated in a digest schedule and release a digest ahead of its next
+ * scheduled delivery.
+ */
 interface ScheduleServiceAsync {
 
     /**
@@ -27,9 +31,8 @@ interface ScheduleServiceAsync {
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): ScheduleServiceAsync
 
     /**
-     * List the digest instances for a schedule. Each instance represents the events accumulated for
-     * a single user against the schedule, and can be used to monitor digest accumulation before the
-     * digest is released.
+     * Returns the digest instances for a schedule, one per user, with cursor paging. Use it to see
+     * what has accumulated before a digest releases.
      */
     fun listInstances(scheduleId: String): CompletableFuture<DigestInstanceListResponse> =
         listInstances(scheduleId, ScheduleListInstancesParams.none())

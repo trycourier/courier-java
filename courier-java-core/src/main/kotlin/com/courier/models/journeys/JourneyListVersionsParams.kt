@@ -9,7 +9,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** List published versions of a journey, ordered most recent first. */
+/**
+ * Lists a journey's published versions, most recent first, so you have a version id to roll back
+ * to. Paged by cursor.
+ */
 class JourneyListVersionsParams
 private constructor(
     private val templateId: String?,

@@ -9,7 +9,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Get Users in Tenant */
+/**
+ * Returns the users belonging to a tenant with cursor paging. Use it to see who a tenant-scoped
+ * send will reach.
+ */
 class TenantListUsersParams
 private constructor(
     private val tenantId: String?,

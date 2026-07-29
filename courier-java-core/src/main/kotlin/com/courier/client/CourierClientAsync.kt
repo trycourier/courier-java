@@ -10,6 +10,7 @@ import com.courier.services.async.AutomationServiceAsync
 import com.courier.services.async.BrandServiceAsync
 import com.courier.services.async.DigestServiceAsync
 import com.courier.services.async.InboundServiceAsync
+import com.courier.services.async.InboxServiceAsync
 import com.courier.services.async.JourneyServiceAsync
 import com.courier.services.async.ListServiceAsync
 import com.courier.services.async.MessageServiceAsync
@@ -61,42 +62,97 @@ interface CourierClientAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): CourierClientAsync
 
+    /**
+     * Send a message to one or more recipients — users, lists, audiences, or tenants — across every
+     * channel you have configured.
+     */
     fun send(): SendServiceAsync
 
+    /** Define filter-based groups whose membership Courier recalculates as user profiles change. */
     fun audiences(): AudienceServiceAsync
 
+    /**
+     * Configure the channel providers Courier delivers through, and browse the provider types it
+     * supports.
+     */
     fun providers(): ProviderServiceAsync
 
+    /** Read the audit trail of configuration and access changes in your workspace. */
     fun auditEvents(): AuditEventServiceAsync
 
+    /**
+     * Issue scoped, short-lived JWTs so client-side SDKs — Inbox, Preferences, and the embedded
+     * designer — can call Courier as a single user. Server-side requests authenticate with your
+     * workspace API key instead.
+     */
     fun auth(): AuthServiceAsync
 
+    /** Invoke a stored automation template or an ad hoc automation defined in the request. */
     fun automations(): AutomationServiceAsync
 
+    /**
+     * Build, version, publish, invoke, and cancel multi-step notification workflows, along with the
+     * templates scoped to them.
+     */
     fun journeys(): JourneyServiceAsync
 
+    /** Manage the logos, colors, and layout that give the templates you send a consistent look. */
     fun brands(): BrandServiceAsync
 
     fun digests(): DigestServiceAsync
 
+    /** Record an inbound event that triggers the journeys and automations mapped to it. */
     fun inbound(): InboundServiceAsync
 
+    /**
+     * Manage static groups of users that you subscribe explicitly, and send to them by list id or
+     * list pattern.
+     */
     fun lists(): ListServiceAsync
 
+    fun inbox(): InboxServiceAsync
+
+    /**
+     * Look up the messages Courier has accepted, inspect their delivery history and rendered
+     * output, and cancel, resend, or archive them.
+     */
     fun messages(): MessageServiceAsync
 
+    /**
+     * Look up the messages Courier has accepted, inspect their delivery history and rendered
+     * output, and cancel, resend, or archive them.
+     */
     fun requests(): RequestServiceAsync
 
+    /** Create, update, version, publish, and localize notification templates and their content. */
     fun notifications(): NotificationServiceAsync
 
+    /**
+     * Define reusable channel routing and failover strategies, and see which templates use them.
+     */
     fun routingStrategies(): RoutingStrategyServiceAsync
 
+    /**
+     * Manage the workspace catalog of subscription topics, the sections that group them, and
+     * publishing the preference page.
+     */
     fun workspacePreferences(): WorkspacePreferenceServiceAsync
 
+    /**
+     * Store the contact information Courier delivers to for each user — email, phone number, push
+     * tokens, and any custom data you send to.
+     */
     fun profiles(): ProfileServiceAsync
 
+    /**
+     * Manage tenants — the organizations, teams, or accounts your users belong to — along with
+     * their users and default preferences.
+     */
     fun tenants(): TenantServiceAsync
 
+    /**
+     * Store and retrieve the translation strings Courier uses to render localized template content.
+     */
     fun translations(): TranslationServiceAsync
 
     fun users(): UserServiceAsync
@@ -128,42 +184,105 @@ interface CourierClientAsync {
             modifier: Consumer<ClientOptions.Builder>
         ): CourierClientAsync.WithRawResponse
 
+        /**
+         * Send a message to one or more recipients — users, lists, audiences, or tenants — across
+         * every channel you have configured.
+         */
         fun send(): SendServiceAsync.WithRawResponse
 
+        /**
+         * Define filter-based groups whose membership Courier recalculates as user profiles change.
+         */
         fun audiences(): AudienceServiceAsync.WithRawResponse
 
+        /**
+         * Configure the channel providers Courier delivers through, and browse the provider types
+         * it supports.
+         */
         fun providers(): ProviderServiceAsync.WithRawResponse
 
+        /** Read the audit trail of configuration and access changes in your workspace. */
         fun auditEvents(): AuditEventServiceAsync.WithRawResponse
 
+        /**
+         * Issue scoped, short-lived JWTs so client-side SDKs — Inbox, Preferences, and the embedded
+         * designer — can call Courier as a single user. Server-side requests authenticate with your
+         * workspace API key instead.
+         */
         fun auth(): AuthServiceAsync.WithRawResponse
 
+        /** Invoke a stored automation template or an ad hoc automation defined in the request. */
         fun automations(): AutomationServiceAsync.WithRawResponse
 
+        /**
+         * Build, version, publish, invoke, and cancel multi-step notification workflows, along with
+         * the templates scoped to them.
+         */
         fun journeys(): JourneyServiceAsync.WithRawResponse
 
+        /**
+         * Manage the logos, colors, and layout that give the templates you send a consistent look.
+         */
         fun brands(): BrandServiceAsync.WithRawResponse
 
         fun digests(): DigestServiceAsync.WithRawResponse
 
+        /** Record an inbound event that triggers the journeys and automations mapped to it. */
         fun inbound(): InboundServiceAsync.WithRawResponse
 
+        /**
+         * Manage static groups of users that you subscribe explicitly, and send to them by list id
+         * or list pattern.
+         */
         fun lists(): ListServiceAsync.WithRawResponse
 
+        fun inbox(): InboxServiceAsync.WithRawResponse
+
+        /**
+         * Look up the messages Courier has accepted, inspect their delivery history and rendered
+         * output, and cancel, resend, or archive them.
+         */
         fun messages(): MessageServiceAsync.WithRawResponse
 
+        /**
+         * Look up the messages Courier has accepted, inspect their delivery history and rendered
+         * output, and cancel, resend, or archive them.
+         */
         fun requests(): RequestServiceAsync.WithRawResponse
 
+        /**
+         * Create, update, version, publish, and localize notification templates and their content.
+         */
         fun notifications(): NotificationServiceAsync.WithRawResponse
 
+        /**
+         * Define reusable channel routing and failover strategies, and see which templates use
+         * them.
+         */
         fun routingStrategies(): RoutingStrategyServiceAsync.WithRawResponse
 
+        /**
+         * Manage the workspace catalog of subscription topics, the sections that group them, and
+         * publishing the preference page.
+         */
         fun workspacePreferences(): WorkspacePreferenceServiceAsync.WithRawResponse
 
+        /**
+         * Store the contact information Courier delivers to for each user — email, phone number,
+         * push tokens, and any custom data you send to.
+         */
         fun profiles(): ProfileServiceAsync.WithRawResponse
 
+        /**
+         * Manage tenants — the organizations, teams, or accounts your users belong to — along with
+         * their users and default preferences.
+         */
         fun tenants(): TenantServiceAsync.WithRawResponse
 
+        /**
+         * Store and retrieve the translation strings Courier uses to render localized template
+         * content.
+         */
         fun translations(): TranslationServiceAsync.WithRawResponse
 
         fun users(): UserServiceAsync.WithRawResponse

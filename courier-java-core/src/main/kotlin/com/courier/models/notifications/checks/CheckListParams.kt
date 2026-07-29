@@ -10,7 +10,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Retrieve the submission checks for a notification template. */
+/**
+ * Returns the approval checks recorded for a template submission, each with its pass or fail
+ * result.
+ */
 class CheckListParams
 private constructor(
     private val id: String,

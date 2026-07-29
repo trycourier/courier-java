@@ -9,7 +9,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Returns the specified audience by id. */
+/**
+ * Returns one audience with its name, description, and the filter and AND or OR operator that
+ * decide which users belong to it.
+ */
 class AudienceRetrieveParams
 private constructor(
     private val audienceId: String?,

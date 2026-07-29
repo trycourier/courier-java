@@ -15,6 +15,7 @@ import com.courier.models.users.tenants.TenantRemoveSingleParams
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
+/** Associate a user with one or more tenants, and read or remove those associations. */
 interface TenantService {
 
     /**
@@ -29,7 +30,10 @@ interface TenantService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): TenantService
 
-    /** Returns a paginated list of user tenant associations. */
+    /**
+     * Returns the tenants a user belongs to, with cursor paging. A user can belong to many tenants,
+     * each with its own profile and preferences.
+     */
     fun list(userId: String): TenantListResponse = list(userId, TenantListParams.none())
 
     /** @see list */
@@ -59,9 +63,8 @@ interface TenantService {
         list(userId, TenantListParams.none(), requestOptions)
 
     /**
-     * This endpoint is used to add a user to multiple tenants in one call. A custom profile can
-     * also be supplied for each tenant. This profile will be merged with the user's main profile
-     * when sending to the user with that tenant.
+     * Adds a user to several tenants in one call, each optionally with a per-tenant profile that
+     * overrides their workspace profile.
      */
     fun addMultiple(userId: String, params: TenantAddMultipleParams) =
         addMultiple(userId, params, RequestOptions.none())
@@ -83,10 +86,8 @@ interface TenantService {
     )
 
     /**
-     * This endpoint is used to add a single tenant.
-     *
-     * A custom profile can also be supplied with the tenant. This profile will be merged with the
-     * user's main profile when sending to the user with that tenant.
+     * Adds a user to one tenant, optionally with a tenant-specific profile that overrides their
+     * workspace profile for sends in that tenant.
      */
     fun addSingle(tenantId: String, params: TenantAddSingleParams) =
         addSingle(tenantId, params, RequestOptions.none())
@@ -107,7 +108,10 @@ interface TenantService {
         requestOptions: RequestOptions = RequestOptions.none(),
     )
 
-    /** Removes a user from any tenants they may have been associated with. */
+    /**
+     * Removes a user from every tenant they belong to in one call. Their workspace-level profile is
+     * a separate resource.
+     */
     fun removeAll(userId: String) = removeAll(userId, TenantRemoveAllParams.none())
 
     /** @see removeAll */
@@ -134,7 +138,10 @@ interface TenantService {
     fun removeAll(userId: String, requestOptions: RequestOptions) =
         removeAll(userId, TenantRemoveAllParams.none(), requestOptions)
 
-    /** Removes a user from the supplied tenant. */
+    /**
+     * Removes a user from one tenant. Their other tenant memberships and workspace profile are
+     * managed through separate endpoints.
+     */
     fun removeSingle(tenantId: String, params: TenantRemoveSingleParams) =
         removeSingle(tenantId, params, RequestOptions.none())
 

@@ -20,6 +20,7 @@ import com.courier.models.users.preferences.PreferenceUpdateOrCreateTopicRespons
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/** Read and write a single user's notification preferences, per topic and per channel. */
 interface PreferenceServiceAsync {
 
     /**
@@ -34,7 +35,10 @@ interface PreferenceServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): PreferenceServiceAsync
 
-    /** Fetch all user preferences. */
+    /**
+     * Returns a user's preference overrides with paging, one entry per subscription topic they have
+     * set a choice for.
+     */
     fun retrieve(userId: String): CompletableFuture<PreferenceRetrieveResponse> =
         retrieve(userId, PreferenceRetrieveParams.none())
 
@@ -71,21 +75,8 @@ interface PreferenceServiceAsync {
         retrieve(userId, PreferenceRetrieveParams.none(), requestOptions)
 
     /**
-     * Replace a user's complete set of preference overrides in a single request. The topics in the
-     * request body become the recipient's entire set of overrides: listed topics are created or
-     * updated, and every existing override that is not included in the body is reset to its topic
-     * default. Submitting an empty `topics` array is a valid clear-all that resets every existing
-     * override.
-     *
-     * This operation is validation-atomic (all-or-nothing): structural validation fails fast with a
-     * single `400`, and if any topic is semantically invalid (an unknown topic, a `REQUIRED` topic
-     * that cannot be opted out, or a custom routing request that is not available on the
-     * workspace's plan) the request returns a single `400` aggregating every failure in `errors`
-     * and writes nothing. On success it returns `200` with `items` (the complete resulting override
-     * set) and `deleted` (the ids of the overrides that were reset to default).
-     *
-     * Every `topic_id` in the response — in `items`, `deleted`, and any `errors` — is returned in
-     * Courier's canonical topic id form, regardless of the form supplied in the request.
+     * Replaces a user's entire set of preference overrides. Any topic you leave out is reset to its
+     * default, so send the full set rather than a subset.
      */
     fun bulkReplace(
         userId: String,
@@ -113,20 +104,8 @@ interface PreferenceServiceAsync {
     ): CompletableFuture<PreferenceBulkReplaceResponse>
 
     /**
-     * Additively create or update a user's preferences for one or more subscription topics in a
-     * single request. Only the topics included in the request body are created or updated; any
-     * existing overrides for topics not listed are left untouched.
-     *
-     * Structural validation of the request body fails fast with a single `400`. Beyond that, each
-     * topic is processed independently (partial-success, not all-or-nothing): valid topics are
-     * written and returned in `items`, while topics that cannot be applied are collected in
-     * `errors` with a per-topic `reason` (for example an unknown topic, a `REQUIRED` topic that
-     * cannot be opted out, a custom routing request that is not available on the workspace's plan,
-     * or a write failure). The request therefore returns `200` with both lists whenever the body is
-     * structurally valid.
-     *
-     * Every `topic_id` in the response — in both `items` and `errors` — is returned in Courier's
-     * canonical topic id form, regardless of the form supplied in the request.
+     * Adds or updates a user's preferences for several subscription topics at once. Topics you
+     * leave out keep whatever they were set to before.
      */
     fun bulkUpdate(
         userId: String,
@@ -154,9 +133,8 @@ interface PreferenceServiceAsync {
     ): CompletableFuture<PreferenceBulkUpdateResponse>
 
     /**
-     * Remove a user's preferences for a specific subscription topic, resetting the topic to its
-     * effective default. This operation is idempotent: deleting a preference that does not exist
-     * succeeds with no error.
+     * Removes a user's override for one subscription topic, resetting it to the effective default
+     * from the tenant or workspace.
      */
     fun deleteTopic(
         topicId: String,
@@ -181,7 +159,10 @@ interface PreferenceServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Void?>
 
-    /** Fetch user preferences for a specific subscription topic. */
+    /**
+     * Returns a user's opt-in status and channel choices for one subscription topic, or the
+     * effective default if they have set no override.
+     */
     fun retrieveTopic(
         topicId: String,
         params: PreferenceRetrieveTopicParams,
@@ -208,7 +189,10 @@ interface PreferenceServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<PreferenceRetrieveTopicResponse>
 
-    /** Update or Create user preferences for a specific subscription topic. */
+    /**
+     * Sets a user's opt-in status and channel choices for one subscription topic, overriding the
+     * tenant default for that topic only.
+     */
     fun updateOrCreateTopic(
         topicId: String,
         params: PreferenceUpdateOrCreateTopicParams,

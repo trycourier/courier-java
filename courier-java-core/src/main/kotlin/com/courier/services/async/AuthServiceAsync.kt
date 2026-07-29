@@ -10,6 +10,11 @@ import com.courier.models.auth.AuthIssueTokenResponse
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * Issue scoped, short-lived JWTs so client-side SDKs — Inbox, Preferences, and the embedded
+ * designer — can call Courier as a single user. Server-side requests authenticate with your
+ * workspace API key instead.
+ */
 interface AuthServiceAsync {
 
     /**
@@ -24,7 +29,10 @@ interface AuthServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): AuthServiceAsync
 
-    /** Returns a new access token. */
+    /**
+     * Returns a JWT for authenticating client-side SDKs such as the Inbox. You supply the scope and
+     * an expires_in duration, both required.
+     */
     fun issueToken(params: AuthIssueTokenParams): CompletableFuture<AuthIssueTokenResponse> =
         issueToken(params, RequestOptions.none())
 

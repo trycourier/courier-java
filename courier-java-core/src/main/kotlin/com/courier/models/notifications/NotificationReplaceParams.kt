@@ -11,7 +11,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Replace a notification template. All fields are required. */
+/**
+ * Replaces a notification template in full, so send every field rather than only the ones you want
+ * changed. Publish separately to make it live.
+ */
 class NotificationReplaceParams
 private constructor(
     private val id: String?,

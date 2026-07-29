@@ -10,8 +10,8 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * List notification templates associated with a routing strategy. Includes template metadata only,
- * not full content.
+ * Returns the notification templates using a routing strategy, with paging. Check this before
+ * changing a strategy that templates depend on.
  */
 class RoutingStrategyListNotificationsParams
 private constructor(

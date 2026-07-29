@@ -25,6 +25,7 @@ import com.courier.models.notifications.checks.CheckUpdateResponse
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/** Create, update, version, publish, and localize notification templates and their content. */
 class CheckServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     CheckService {
 

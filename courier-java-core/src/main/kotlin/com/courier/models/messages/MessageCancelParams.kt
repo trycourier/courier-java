@@ -12,10 +12,8 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Cancel a message that is currently in the process of being delivered. A well-formatted API call
- * to the cancel message API will return either `200` status code for a successful cancellation or
- * `409` status code for an unsuccessful cancellation. Both cases will include the actual message
- * record in the response body (see details below).
+ * Cancels a message that is still in the delivery pipeline and returns the message record with its
+ * resulting canceled or failed status.
  */
 class MessageCancelParams
 private constructor(

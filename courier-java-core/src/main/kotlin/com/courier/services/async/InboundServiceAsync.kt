@@ -10,6 +10,7 @@ import com.courier.models.inbound.InboundTrackEventResponse
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/** Record an inbound event that triggers the journeys and automations mapped to it. */
 interface InboundServiceAsync {
 
     /**
@@ -24,7 +25,10 @@ interface InboundServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): InboundServiceAsync
 
-    /** Courier Track Event */
+    /**
+     * Records an inbound event that can trigger a journey. Requires an event name, a messageId you
+     * generate, a type, and a properties object.
+     */
     fun trackEvent(params: InboundTrackEventParams): CompletableFuture<InboundTrackEventResponse> =
         trackEvent(params, RequestOptions.none())
 

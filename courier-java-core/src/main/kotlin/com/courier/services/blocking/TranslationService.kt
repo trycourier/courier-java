@@ -11,6 +11,7 @@ import com.courier.models.translations.TranslationUpdateParams
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
+/** Store and retrieve the translation strings Courier uses to render localized template content. */
 interface TranslationService {
 
     /**
@@ -25,7 +26,10 @@ interface TranslationService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): TranslationService
 
-    /** Get translations by locale */
+    /**
+     * Returns the translation strings stored for one domain and locale, for use in localized
+     * notification content.
+     */
     fun retrieve(locale: String, params: TranslationRetrieveParams): String =
         retrieve(locale, params, RequestOptions.none())
 
@@ -46,7 +50,10 @@ interface TranslationService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): String
 
-    /** Update a translation */
+    /**
+     * Uploads the translation strings for one domain and locale. Courier uses them to render
+     * localized content for recipients in that locale.
+     */
     fun update(locale: String, params: TranslationUpdateParams) =
         update(locale, params, RequestOptions.none())
 

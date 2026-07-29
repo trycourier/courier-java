@@ -13,7 +13,9 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Get the list of journeys. */
+/**
+ * Lists the workspace's journeys, each carrying a name, state, and enabled flag. Paged by cursor.
+ */
 class JourneyListParams
 private constructor(
     private val cursor: String?,

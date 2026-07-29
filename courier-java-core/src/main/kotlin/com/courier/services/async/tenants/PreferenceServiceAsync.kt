@@ -20,6 +20,10 @@ interface PreferenceServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): PreferenceServiceAsync
 
+    /**
+     * Manage tenants — the organizations, teams, or accounts your users belong to — along with
+     * their users and default preferences.
+     */
     fun items(): ItemServiceAsync
 
     /**
@@ -37,6 +41,10 @@ interface PreferenceServiceAsync {
             modifier: Consumer<ClientOptions.Builder>
         ): PreferenceServiceAsync.WithRawResponse
 
+        /**
+         * Manage tenants — the organizations, teams, or accounts your users belong to — along with
+         * their users and default preferences.
+         */
         fun items(): ItemServiceAsync.WithRawResponse
     }
 }

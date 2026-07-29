@@ -40,6 +40,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/** Create, update, version, publish, and localize notification templates and their content. */
 class NotificationServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     NotificationServiceAsync {
 
@@ -54,6 +55,7 @@ class NotificationServiceAsyncImpl internal constructor(private val clientOption
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): NotificationServiceAsync =
         NotificationServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /** Create, update, version, publish, and localize notification templates and their content. */
     override fun checks(): CheckServiceAsync = checks
 
     override fun create(
@@ -157,6 +159,9 @@ class NotificationServiceAsyncImpl internal constructor(private val clientOption
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /**
+         * Create, update, version, publish, and localize notification templates and their content.
+         */
         override fun checks(): CheckServiceAsync.WithRawResponse = checks
 
         private val createHandler: Handler<NotificationTemplateResponse> =

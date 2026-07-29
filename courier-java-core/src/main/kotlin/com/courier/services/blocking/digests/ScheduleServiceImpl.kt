@@ -23,6 +23,10 @@ import com.courier.models.digests.schedules.ScheduleReleaseParams
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * Inspect what has accumulated in a digest schedule and release a digest ahead of its next
+ * scheduled delivery.
+ */
 class ScheduleServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     ScheduleService {
 

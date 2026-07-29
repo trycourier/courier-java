@@ -21,6 +21,8 @@ internal class ProviderServiceAsyncTest {
         val providerFuture =
             providerServiceAsync.create(
                 ProviderCreateParams.builder()
+                    .idempotencyKey("order-ORD-456-user-123")
+                    .xIdempotencyExpiration("1785312000")
                     .provider("provider")
                     .alias("alias")
                     .settings(

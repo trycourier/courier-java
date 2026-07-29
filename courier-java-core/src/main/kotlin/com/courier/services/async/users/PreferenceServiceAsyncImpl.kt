@@ -32,6 +32,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/** Read and write a single user's notification preferences, per topic and per channel. */
 class PreferenceServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     PreferenceServiceAsync {
 

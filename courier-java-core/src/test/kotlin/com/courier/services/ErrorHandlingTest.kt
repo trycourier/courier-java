@@ -78,6 +78,8 @@ internal class ErrorHandlingTest {
             assertThrows<BadRequestException> {
                 sendService.message(
                     SendMessageParams.builder()
+                        .idempotencyKey("order-ORD-456-user-123")
+                        .xIdempotencyExpiration("1785312000")
                         .message(
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
@@ -311,6 +313,8 @@ internal class ErrorHandlingTest {
             assertThrows<BadRequestException> {
                 sendService.message(
                     SendMessageParams.builder()
+                        .idempotencyKey("order-ORD-456-user-123")
+                        .xIdempotencyExpiration("1785312000")
                         .message(
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
@@ -544,6 +548,8 @@ internal class ErrorHandlingTest {
             assertThrows<UnauthorizedException> {
                 sendService.message(
                     SendMessageParams.builder()
+                        .idempotencyKey("order-ORD-456-user-123")
+                        .xIdempotencyExpiration("1785312000")
                         .message(
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
@@ -777,6 +783,8 @@ internal class ErrorHandlingTest {
             assertThrows<UnauthorizedException> {
                 sendService.message(
                     SendMessageParams.builder()
+                        .idempotencyKey("order-ORD-456-user-123")
+                        .xIdempotencyExpiration("1785312000")
                         .message(
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
@@ -1010,6 +1018,8 @@ internal class ErrorHandlingTest {
             assertThrows<PermissionDeniedException> {
                 sendService.message(
                     SendMessageParams.builder()
+                        .idempotencyKey("order-ORD-456-user-123")
+                        .xIdempotencyExpiration("1785312000")
                         .message(
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
@@ -1243,6 +1253,8 @@ internal class ErrorHandlingTest {
             assertThrows<PermissionDeniedException> {
                 sendService.message(
                     SendMessageParams.builder()
+                        .idempotencyKey("order-ORD-456-user-123")
+                        .xIdempotencyExpiration("1785312000")
                         .message(
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
@@ -1476,6 +1488,8 @@ internal class ErrorHandlingTest {
             assertThrows<NotFoundException> {
                 sendService.message(
                     SendMessageParams.builder()
+                        .idempotencyKey("order-ORD-456-user-123")
+                        .xIdempotencyExpiration("1785312000")
                         .message(
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
@@ -1709,6 +1723,8 @@ internal class ErrorHandlingTest {
             assertThrows<NotFoundException> {
                 sendService.message(
                     SendMessageParams.builder()
+                        .idempotencyKey("order-ORD-456-user-123")
+                        .xIdempotencyExpiration("1785312000")
                         .message(
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
@@ -1942,6 +1958,8 @@ internal class ErrorHandlingTest {
             assertThrows<UnprocessableEntityException> {
                 sendService.message(
                     SendMessageParams.builder()
+                        .idempotencyKey("order-ORD-456-user-123")
+                        .xIdempotencyExpiration("1785312000")
                         .message(
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
@@ -2175,6 +2193,8 @@ internal class ErrorHandlingTest {
             assertThrows<UnprocessableEntityException> {
                 sendService.message(
                     SendMessageParams.builder()
+                        .idempotencyKey("order-ORD-456-user-123")
+                        .xIdempotencyExpiration("1785312000")
                         .message(
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
@@ -2408,6 +2428,8 @@ internal class ErrorHandlingTest {
             assertThrows<RateLimitException> {
                 sendService.message(
                     SendMessageParams.builder()
+                        .idempotencyKey("order-ORD-456-user-123")
+                        .xIdempotencyExpiration("1785312000")
                         .message(
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
@@ -2641,6 +2663,8 @@ internal class ErrorHandlingTest {
             assertThrows<RateLimitException> {
                 sendService.message(
                     SendMessageParams.builder()
+                        .idempotencyKey("order-ORD-456-user-123")
+                        .xIdempotencyExpiration("1785312000")
                         .message(
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
@@ -2874,6 +2898,8 @@ internal class ErrorHandlingTest {
             assertThrows<InternalServerException> {
                 sendService.message(
                     SendMessageParams.builder()
+                        .idempotencyKey("order-ORD-456-user-123")
+                        .xIdempotencyExpiration("1785312000")
                         .message(
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
@@ -3107,6 +3133,8 @@ internal class ErrorHandlingTest {
             assertThrows<InternalServerException> {
                 sendService.message(
                     SendMessageParams.builder()
+                        .idempotencyKey("order-ORD-456-user-123")
+                        .xIdempotencyExpiration("1785312000")
                         .message(
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
@@ -3340,6 +3368,8 @@ internal class ErrorHandlingTest {
             assertThrows<UnexpectedStatusCodeException> {
                 sendService.message(
                     SendMessageParams.builder()
+                        .idempotencyKey("order-ORD-456-user-123")
+                        .xIdempotencyExpiration("1785312000")
                         .message(
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
@@ -3573,6 +3603,8 @@ internal class ErrorHandlingTest {
             assertThrows<UnexpectedStatusCodeException> {
                 sendService.message(
                     SendMessageParams.builder()
+                        .idempotencyKey("order-ORD-456-user-123")
+                        .xIdempotencyExpiration("1785312000")
                         .message(
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")
@@ -3804,6 +3836,8 @@ internal class ErrorHandlingTest {
             assertThrows<CourierException> {
                 sendService.message(
                     SendMessageParams.builder()
+                        .idempotencyKey("order-ORD-456-user-123")
+                        .xIdempotencyExpiration("1785312000")
                         .message(
                             SendMessageParams.Message.builder()
                                 .brandId("brand_id")

@@ -10,7 +10,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Get a Template in Tenant */
+/**
+ * Returns a tenant's notification template with its content, version, and created, updated, and
+ * published timestamps.
+ */
 class TemplateRetrieveParams
 private constructor(
     private val tenantId: String,

@@ -9,7 +9,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Returns all of the lists, with the ability to filter based on a pattern. */
+/**
+ * Returns the workspace's lists, filterable by a pattern to fetch a subset such as every regional
+ * list. Paged by cursor.
+ */
 class ListListParams
 private constructor(
     private val cursor: String?,

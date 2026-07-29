@@ -15,6 +15,7 @@ import com.courier.models.users.tenants.TenantRemoveSingleParams
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/** Associate a user with one or more tenants, and read or remove those associations. */
 interface TenantServiceAsync {
 
     /**
@@ -29,7 +30,10 @@ interface TenantServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): TenantServiceAsync
 
-    /** Returns a paginated list of user tenant associations. */
+    /**
+     * Returns the tenants a user belongs to, with cursor paging. A user can belong to many tenants,
+     * each with its own profile and preferences.
+     */
     fun list(userId: String): CompletableFuture<TenantListResponse> =
         list(userId, TenantListParams.none())
 
@@ -64,9 +68,8 @@ interface TenantServiceAsync {
     ): CompletableFuture<TenantListResponse> = list(userId, TenantListParams.none(), requestOptions)
 
     /**
-     * This endpoint is used to add a user to multiple tenants in one call. A custom profile can
-     * also be supplied for each tenant. This profile will be merged with the user's main profile
-     * when sending to the user with that tenant.
+     * Adds a user to several tenants in one call, each optionally with a per-tenant profile that
+     * overrides their workspace profile.
      */
     fun addMultiple(userId: String, params: TenantAddMultipleParams): CompletableFuture<Void?> =
         addMultiple(userId, params, RequestOptions.none())
@@ -90,10 +93,8 @@ interface TenantServiceAsync {
     ): CompletableFuture<Void?>
 
     /**
-     * This endpoint is used to add a single tenant.
-     *
-     * A custom profile can also be supplied with the tenant. This profile will be merged with the
-     * user's main profile when sending to the user with that tenant.
+     * Adds a user to one tenant, optionally with a tenant-specific profile that overrides their
+     * workspace profile for sends in that tenant.
      */
     fun addSingle(tenantId: String, params: TenantAddSingleParams): CompletableFuture<Void?> =
         addSingle(tenantId, params, RequestOptions.none())
@@ -116,7 +117,10 @@ interface TenantServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Void?>
 
-    /** Removes a user from any tenants they may have been associated with. */
+    /**
+     * Removes a user from every tenant they belong to in one call. Their workspace-level profile is
+     * a separate resource.
+     */
     fun removeAll(userId: String): CompletableFuture<Void?> =
         removeAll(userId, TenantRemoveAllParams.none())
 
@@ -148,7 +152,10 @@ interface TenantServiceAsync {
     fun removeAll(userId: String, requestOptions: RequestOptions): CompletableFuture<Void?> =
         removeAll(userId, TenantRemoveAllParams.none(), requestOptions)
 
-    /** Removes a user from the supplied tenant. */
+    /**
+     * Removes a user from one tenant. Their other tenant memberships and workspace profile are
+     * managed through separate endpoints.
+     */
     fun removeSingle(tenantId: String, params: TenantRemoveSingleParams): CompletableFuture<Void?> =
         removeSingle(tenantId, params, RequestOptions.none())
 

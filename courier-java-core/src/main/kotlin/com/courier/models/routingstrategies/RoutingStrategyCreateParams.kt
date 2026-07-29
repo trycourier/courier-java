@@ -8,6 +8,8 @@ import com.courier.core.checkRequired
 import com.courier.core.http.Headers
 import com.courier.core.http.QueryParams
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Create a routing strategy. Requires a name and routing configuration at minimum. Channels and
@@ -15,10 +17,16 @@ import java.util.Objects
  */
 class RoutingStrategyCreateParams
 private constructor(
+    private val idempotencyKey: String?,
+    private val xIdempotencyExpiration: String?,
     private val routingStrategyCreateRequest: RoutingStrategyCreateRequest,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
+
+    fun idempotencyKey(): Optional<String> = Optional.ofNullable(idempotencyKey)
+
+    fun xIdempotencyExpiration(): Optional<String> = Optional.ofNullable(xIdempotencyExpiration)
 
     /** Request body for creating a routing strategy. */
     fun routingStrategyCreateRequest(): RoutingStrategyCreateRequest = routingStrategyCreateRequest
@@ -50,16 +58,37 @@ private constructor(
     /** A builder for [RoutingStrategyCreateParams]. */
     class Builder internal constructor() {
 
+        private var idempotencyKey: String? = null
+        private var xIdempotencyExpiration: String? = null
         private var routingStrategyCreateRequest: RoutingStrategyCreateRequest? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
         internal fun from(routingStrategyCreateParams: RoutingStrategyCreateParams) = apply {
+            idempotencyKey = routingStrategyCreateParams.idempotencyKey
+            xIdempotencyExpiration = routingStrategyCreateParams.xIdempotencyExpiration
             routingStrategyCreateRequest = routingStrategyCreateParams.routingStrategyCreateRequest
             additionalHeaders = routingStrategyCreateParams.additionalHeaders.toBuilder()
             additionalQueryParams = routingStrategyCreateParams.additionalQueryParams.toBuilder()
         }
+
+        fun idempotencyKey(idempotencyKey: String?) = apply { this.idempotencyKey = idempotencyKey }
+
+        /** Alias for calling [Builder.idempotencyKey] with `idempotencyKey.orElse(null)`. */
+        fun idempotencyKey(idempotencyKey: Optional<String>) =
+            idempotencyKey(idempotencyKey.getOrNull())
+
+        fun xIdempotencyExpiration(xIdempotencyExpiration: String?) = apply {
+            this.xIdempotencyExpiration = xIdempotencyExpiration
+        }
+
+        /**
+         * Alias for calling [Builder.xIdempotencyExpiration] with
+         * `xIdempotencyExpiration.orElse(null)`.
+         */
+        fun xIdempotencyExpiration(xIdempotencyExpiration: Optional<String>) =
+            xIdempotencyExpiration(xIdempotencyExpiration.getOrNull())
 
         /** Request body for creating a routing strategy. */
         fun routingStrategyCreateRequest(
@@ -178,6 +207,8 @@ private constructor(
          */
         fun build(): RoutingStrategyCreateParams =
             RoutingStrategyCreateParams(
+                idempotencyKey,
+                xIdempotencyExpiration,
                 checkRequired("routingStrategyCreateRequest", routingStrategyCreateRequest),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -186,7 +217,14 @@ private constructor(
 
     fun _body(): RoutingStrategyCreateRequest = routingStrategyCreateRequest
 
-    override fun _headers(): Headers = additionalHeaders
+    override fun _headers(): Headers =
+        Headers.builder()
+            .apply {
+                idempotencyKey?.let { put("Idempotency-Key", it) }
+                xIdempotencyExpiration?.let { put("x-idempotency-expiration", it) }
+                putAll(additionalHeaders)
+            }
+            .build()
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
@@ -196,14 +234,22 @@ private constructor(
         }
 
         return other is RoutingStrategyCreateParams &&
+            idempotencyKey == other.idempotencyKey &&
+            xIdempotencyExpiration == other.xIdempotencyExpiration &&
             routingStrategyCreateRequest == other.routingStrategyCreateRequest &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(routingStrategyCreateRequest, additionalHeaders, additionalQueryParams)
+        Objects.hash(
+            idempotencyKey,
+            xIdempotencyExpiration,
+            routingStrategyCreateRequest,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
     override fun toString() =
-        "RoutingStrategyCreateParams{routingStrategyCreateRequest=$routingStrategyCreateRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "RoutingStrategyCreateParams{idempotencyKey=$idempotencyKey, xIdempotencyExpiration=$xIdempotencyExpiration, routingStrategyCreateRequest=$routingStrategyCreateRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

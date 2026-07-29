@@ -8,8 +8,8 @@ import com.courier.core.http.QueryParams
 import java.util.Objects
 
 /**
- * List the workspace's preferences. Each workspace preference embeds its topics. Scoped to the
- * workspace of the API key.
+ * Returns the workspace's preferences, each embedding its subscription topics, routing options, and
+ * whether custom routing is allowed.
  */
 class WorkspacePreferenceListParams
 private constructor(

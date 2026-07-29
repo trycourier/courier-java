@@ -21,7 +21,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Create or Replace a Tenant */
+/**
+ * Creates or replaces a tenant from a name, parent, brand, properties, and default preferences
+ * supplied in the request body.
+ */
 class TenantUpdateParams
 private constructor(
     private val tenantId: String?,

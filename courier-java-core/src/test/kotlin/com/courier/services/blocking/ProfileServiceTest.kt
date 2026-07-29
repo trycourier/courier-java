@@ -22,6 +22,8 @@ internal class ProfileServiceTest {
             profileService.create(
                 ProfileCreateParams.builder()
                     .userId("user_id")
+                    .idempotencyKey("order-ORD-456-user-123")
+                    .xIdempotencyExpiration("1785312000")
                     .profile(
                         ProfileCreateParams.Profile.builder()
                             .putAdditionalProperty("foo", JsonValue.from("bar"))

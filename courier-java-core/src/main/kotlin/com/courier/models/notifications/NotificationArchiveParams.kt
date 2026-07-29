@@ -11,7 +11,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Archive a notification template. */
+/**
+ * Archives a notification template, preventing new sends from referencing it. The template stays
+ * retrievable for its version history.
+ */
 class NotificationArchiveParams
 private constructor(
     private val id: String?,

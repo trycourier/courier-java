@@ -20,6 +20,10 @@ import com.courier.models.tenants.preferences.items.ItemUpdateParams
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * Manage tenants — the organizations, teams, or accounts your users belong to — along with their
+ * users and default preferences.
+ */
 class ItemServiceImpl internal constructor(private val clientOptions: ClientOptions) : ItemService {
 
     private val withRawResponse: ItemService.WithRawResponse by lazy {

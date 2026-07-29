@@ -9,7 +9,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Returns a list based on the list ID provided. */
+/**
+ * Returns one list by id with its name and created and updated timestamps. Fetch its subscribers
+ * separately with the subscriptions endpoint.
+ */
 class ListRetrieveParams
 private constructor(
     private val listId: String?,

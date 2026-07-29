@@ -10,8 +10,8 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * List configured provider integrations for the current workspace. Supports cursor-based
- * pagination.
+ * Lists the provider integrations configured in the workspace, one entry per channel and provider
+ * key with its alias and settings.
  */
 class ProviderListParams
 private constructor(

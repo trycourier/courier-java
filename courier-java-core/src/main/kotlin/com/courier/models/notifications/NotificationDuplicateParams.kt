@@ -12,11 +12,8 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Duplicate a notification template. Creates a standalone copy within the same workspace and
- * environment, with " COPY" appended to the title. The copy clones the source draft's tags, brand,
- * subscription topic, routing strategy, channels, and content, and is always created as a
- * standalone template (it is not linked to any journey or broadcast, even if the source was).
- * Templates that are scoped to a journey or a broadcast cannot be duplicated through this endpoint.
+ * Copies a notification template within the same workspace and environment, appending " COPY" to
+ * the title. The copy is standalone and independently editable.
  */
 class NotificationDuplicateParams
 private constructor(

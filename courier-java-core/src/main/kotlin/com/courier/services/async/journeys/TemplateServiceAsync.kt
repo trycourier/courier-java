@@ -24,6 +24,10 @@ import com.courier.models.notifications.NotificationTemplateVersionListResponse
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * Build, version, publish, invoke, and cancel multi-step notification workflows, along with the
+ * templates scoped to them.
+ */
 interface TemplateServiceAsync {
 
     /**
@@ -67,8 +71,8 @@ interface TemplateServiceAsync {
     ): CompletableFuture<JourneyTemplateGetResponse>
 
     /**
-     * Fetch a journey-scoped notification template by id. Pass `?version=draft` (default
-     * `published`) to retrieve the working draft, or `?version=vN` for a historical version.
+     * Returns a journey's own notification template with its name, brand, subscription topic, and
+     * content. Defaults to the published version.
      */
     fun retrieve(
         notificationId: String,
@@ -133,7 +137,10 @@ interface TemplateServiceAsync {
     ): CompletableFuture<JourneyTemplateListResponse> =
         list(templateId, TemplateListParams.none(), requestOptions)
 
-    /** Archive the journey-scoped notification template. Archived templates cannot be sent. */
+    /**
+     * Archives one journey's notification template, preventing further sends. Detach any send node
+     * referencing it beforehand.
+     */
     fun archive(notificationId: String, params: TemplateArchiveParams): CompletableFuture<Void?> =
         archive(notificationId, params, RequestOptions.none())
 
@@ -156,8 +163,8 @@ interface TemplateServiceAsync {
     ): CompletableFuture<Void?>
 
     /**
-     * List published versions of the journey-scoped notification template, ordered most recent
-     * first.
+     * Lists the published versions of a template that belongs to a journey, most recent first.
+     * Paged by cursor.
      */
     fun listVersions(
         notificationId: String,
@@ -186,8 +193,8 @@ interface TemplateServiceAsync {
     ): CompletableFuture<NotificationTemplateVersionListResponse>
 
     /**
-     * Publish the current draft of the journey-scoped notification template as a new version.
-     * Optionally roll back to a prior version by passing `{ "version": "vN" }`.
+     * Publishes a journey-scoped template's draft as a new version. Pass a version instead to roll
+     * back the template to an earlier publish.
      */
     fun publish(notificationId: String, params: TemplatePublishParams): CompletableFuture<Void?> =
         publish(notificationId, params, RequestOptions.none())
@@ -270,7 +277,10 @@ interface TemplateServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<NotificationContentMutationResponse>
 
-    /** Replace the journey-scoped notification template draft. */
+    /**
+     * Replaces the draft content of one journey's notification template. Publish it before send
+     * nodes referencing it render the change.
+     */
     fun replace(
         notificationId: String,
         params: TemplateReplaceParams,
@@ -296,10 +306,8 @@ interface TemplateServiceAsync {
     ): CompletableFuture<JourneyTemplateGetResponse>
 
     /**
-     * Retrieve the elemental content of a journey-scoped notification template. The response
-     * contains the versioned elements along with their content checksums, which can be used to
-     * detect changes between versions. Pass `?version=draft` (default `published`) to retrieve the
-     * working draft, or `?version=vN` for a historical version.
+     * Returns the Elemental elements and version of a journey-scoped template's content. Compare
+     * versions to see what changed between publishes.
      */
     fun retrieveContent(
         notificationId: String,

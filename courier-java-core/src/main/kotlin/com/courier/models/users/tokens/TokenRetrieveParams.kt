@@ -10,7 +10,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Get single token available for a `:token` */
+/**
+ * Returns one device token with its provider key, status and status reason, expiry date, and any
+ * properties stored alongside it.
+ */
 class TokenRetrieveParams
 private constructor(
     private val userId: String,

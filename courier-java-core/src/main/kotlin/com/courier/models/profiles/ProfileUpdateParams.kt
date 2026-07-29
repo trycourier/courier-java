@@ -22,7 +22,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Update a profile */
+/**
+ * Applies a JSON Patch to a user profile, adding, removing, or replacing individual fields without
+ * sending the whole object.
+ */
 class ProfileUpdateParams
 private constructor(
     private val userId: String?,

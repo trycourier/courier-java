@@ -9,7 +9,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Returns the specified user profile. */
+/**
+ * Returns a user's stored profile and preferences, including the email address, phone number, and
+ * push tokens Courier can reach them on.
+ */
 class ProfileRetrieveParams
 private constructor(
     private val userId: String?,

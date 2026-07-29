@@ -9,6 +9,10 @@ import com.courier.models.requests.RequestArchiveParams
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
+/**
+ * Look up the messages Courier has accepted, inspect their delivery history and rendered output,
+ * and cancel, resend, or archive them.
+ */
 interface RequestService {
 
     /**
@@ -23,7 +27,10 @@ interface RequestService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): RequestService
 
-    /** Archive message */
+    /**
+     * Archives a send request by its request id. Use it to remove test sends or superseded requests
+     * from the message list without deleting them.
+     */
     fun archive(requestId: String) = archive(requestId, RequestArchiveParams.none())
 
     /** @see archive */

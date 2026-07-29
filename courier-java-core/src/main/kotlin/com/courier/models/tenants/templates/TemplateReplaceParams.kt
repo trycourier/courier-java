@@ -13,12 +13,8 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Creates or updates a notification template for a tenant.
- *
- * If the template already exists for the tenant, it will be updated (200). Otherwise, a new
- * template is created (201).
- *
- * Optionally publishes the template immediately if the `published` flag is set to true.
+ * Creates or updates a notification template scoped to one tenant, letting a tenant override the
+ * content the workspace template would send.
  */
 class TemplateReplaceParams
 private constructor(

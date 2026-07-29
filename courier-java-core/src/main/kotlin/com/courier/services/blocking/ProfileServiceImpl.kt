@@ -30,6 +30,10 @@ import com.courier.services.blocking.profiles.ListServiceImpl
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * Store the contact information Courier delivers to for each user — email, phone number, push
+ * tokens, and any custom data you send to.
+ */
 class ProfileServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     ProfileService {
 
@@ -44,6 +48,10 @@ class ProfileServiceImpl internal constructor(private val clientOptions: ClientO
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): ProfileService =
         ProfileServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /**
+     * Store the contact information Courier delivers to for each user — email, phone number, push
+     * tokens, and any custom data you send to.
+     */
     override fun lists(): ListService = lists
 
     override fun create(
@@ -94,6 +102,10 @@ class ProfileServiceImpl internal constructor(private val clientOptions: ClientO
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /**
+         * Store the contact information Courier delivers to for each user — email, phone number,
+         * push tokens, and any custom data you send to.
+         */
         override fun lists(): ListService.WithRawResponse = lists
 
         private val createHandler: Handler<ProfileCreateResponse> =

@@ -5,7 +5,9 @@ package com.courier.services.async
 import com.courier.client.okhttp.CourierOkHttpClientAsync
 import com.courier.models.ChannelClassification
 import com.courier.models.workspacepreferences.PublishPreferencesRequest
+import com.courier.models.workspacepreferences.WorkspacePreferenceCreateParams
 import com.courier.models.workspacepreferences.WorkspacePreferenceCreateRequest
+import com.courier.models.workspacepreferences.WorkspacePreferencePublishParams
 import com.courier.models.workspacepreferences.WorkspacePreferenceReplaceParams
 import com.courier.models.workspacepreferences.WorkspacePreferenceReplaceRequest
 import org.junit.jupiter.api.Disabled
@@ -21,11 +23,17 @@ internal class WorkspacePreferenceServiceAsyncTest {
 
         val workspacePreferenceGetResponseFuture =
             workspacePreferenceServiceAsync.create(
-                WorkspacePreferenceCreateRequest.builder()
-                    .name("Account Notifications")
-                    .description("description")
-                    .hasCustomRouting(true)
-                    .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
+                WorkspacePreferenceCreateParams.builder()
+                    .idempotencyKey("order-ORD-456-user-123")
+                    .xIdempotencyExpiration("1785312000")
+                    .workspacePreferenceCreateRequest(
+                        WorkspacePreferenceCreateRequest.builder()
+                            .name("Account Notifications")
+                            .description("description")
+                            .hasCustomRouting(true)
+                            .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
+                            .build()
+                    )
                     .build()
             )
 
@@ -77,10 +85,16 @@ internal class WorkspacePreferenceServiceAsyncTest {
 
         val publishPreferencesResponseFuture =
             workspacePreferenceServiceAsync.publish(
-                PublishPreferencesRequest.builder()
-                    .brandId("brand_id")
-                    .description("description")
-                    .heading("heading")
+                WorkspacePreferencePublishParams.builder()
+                    .idempotencyKey("order-ORD-456-user-123")
+                    .xIdempotencyExpiration("1785312000")
+                    .publishPreferencesRequest(
+                        PublishPreferencesRequest.builder()
+                            .brandId("brand_id")
+                            .description("description")
+                            .heading("heading")
+                            .build()
+                    )
                     .build()
             )
 

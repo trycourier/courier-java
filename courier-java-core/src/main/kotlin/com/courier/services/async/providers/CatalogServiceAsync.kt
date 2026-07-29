@@ -10,6 +10,10 @@ import com.courier.models.providers.catalog.CatalogListResponse
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * Configure the channel providers Courier delivers through, and browse the provider types it
+ * supports.
+ */
 interface CatalogServiceAsync {
 
     /**
@@ -25,9 +29,8 @@ interface CatalogServiceAsync {
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): CatalogServiceAsync
 
     /**
-     * Returns the catalog of available provider types with their display names, descriptions, and
-     * configuration schema fields (snake_case, with `type` and `required`). Providers with no
-     * configurable schema return only `provider`, `name`, and `description`.
+     * Returns the provider types Courier supports, each with a display name, description, and the
+     * configuration fields it requires.
      */
     fun list(): CompletableFuture<CatalogListResponse> = list(CatalogListParams.none())
 

@@ -10,6 +10,10 @@ import com.courier.models.tenants.preferences.items.ItemUpdateParams
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * Manage tenants — the organizations, teams, or accounts your users belong to — along with their
+ * users and default preferences.
+ */
 interface ItemServiceAsync {
 
     /**
@@ -24,7 +28,10 @@ interface ItemServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): ItemServiceAsync
 
-    /** Create or Replace Default Preferences For Topic */
+    /**
+     * Sets a tenant's default opt-in status for one subscription topic, which applies to every
+     * member unless a user sets their own override.
+     */
     fun update(topicId: String, params: ItemUpdateParams): CompletableFuture<Void?> =
         update(topicId, params, RequestOptions.none())
 
@@ -46,7 +53,10 @@ interface ItemServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Void?>
 
-    /** Remove Default Preferences For Topic */
+    /**
+     * Removes a tenant's default preference for one subscription topic, addressed by tenant id and
+     * topic id.
+     */
     fun delete(topicId: String, params: ItemDeleteParams): CompletableFuture<Void?> =
         delete(topicId, params, RequestOptions.none())
 

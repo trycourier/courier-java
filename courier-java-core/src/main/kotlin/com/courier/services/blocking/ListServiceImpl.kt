@@ -29,6 +29,10 @@ import com.courier.services.blocking.lists.SubscriptionServiceImpl
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * Manage static groups of users that you subscribe explicitly, and send to them by list id or list
+ * pattern.
+ */
 class ListServiceImpl internal constructor(private val clientOptions: ClientOptions) : ListService {
 
     private val withRawResponse: ListService.WithRawResponse by lazy {
@@ -44,6 +48,10 @@ class ListServiceImpl internal constructor(private val clientOptions: ClientOpti
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): ListService =
         ListServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /**
+     * Manage static groups of users that you subscribe explicitly, and send to them by list id or
+     * list pattern.
+     */
     override fun subscriptions(): SubscriptionService = subscriptions
 
     override fun retrieve(
@@ -89,6 +97,10 @@ class ListServiceImpl internal constructor(private val clientOptions: ClientOpti
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /**
+         * Manage static groups of users that you subscribe explicitly, and send to them by list id
+         * or list pattern.
+         */
         override fun subscriptions(): SubscriptionService.WithRawResponse = subscriptions
 
         private val retrieveHandler: Handler<SubscriptionList> =

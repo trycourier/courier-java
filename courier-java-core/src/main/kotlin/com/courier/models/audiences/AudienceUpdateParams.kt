@@ -21,7 +21,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Creates or updates audience. */
+/**
+ * Creates or replaces an audience from a filter and an AND or OR operator. Membership recalculates
+ * automatically as profiles change.
+ */
 class AudienceUpdateParams
 private constructor(
     private val audienceId: String?,

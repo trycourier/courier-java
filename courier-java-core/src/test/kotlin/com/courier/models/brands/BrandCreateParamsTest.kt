@@ -2,6 +2,7 @@
 
 package com.courier.models.brands
 
+import com.courier.core.http.Headers
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -10,6 +11,8 @@ internal class BrandCreateParamsTest {
     @Test
     fun create() {
         BrandCreateParams.builder()
+            .idempotencyKey("order-ORD-456-user-123")
+            .xIdempotencyExpiration("1785312000")
             .name("My Brand")
             .settings(
                 BrandSettings.builder()
@@ -91,9 +94,125 @@ internal class BrandCreateParamsTest {
     }
 
     @Test
+    fun headers() {
+        val params =
+            BrandCreateParams.builder()
+                .idempotencyKey("order-ORD-456-user-123")
+                .xIdempotencyExpiration("1785312000")
+                .name("My Brand")
+                .settings(
+                    BrandSettings.builder()
+                        .colors(
+                            BrandColors.builder().primary("#9D3789").secondary("#FFFFFF").build()
+                        )
+                        .email(
+                            BrandSettingsEmail.builder()
+                                .footer(
+                                    EmailFooter.builder()
+                                        .content("content")
+                                        .inheritDefault(true)
+                                        .build()
+                                )
+                                .head(
+                                    EmailHead.builder()
+                                        .inheritDefault(true)
+                                        .content("content")
+                                        .build()
+                                )
+                                .header(
+                                    EmailHeader.builder()
+                                        .logo(Logo.builder().href("href").image("image").build())
+                                        .barColor("barColor")
+                                        .inheritDefault(true)
+                                        .build()
+                                )
+                                .templateOverride(
+                                    BrandSettingsEmail.TemplateOverride.builder()
+                                        .enabled(true)
+                                        .backgroundColor("backgroundColor")
+                                        .blocksBackgroundColor("blocksBackgroundColor")
+                                        .footer("footer")
+                                        .head("head")
+                                        .header("header")
+                                        .width("width")
+                                        .mjml(
+                                            BrandTemplate.builder()
+                                                .enabled(true)
+                                                .backgroundColor("backgroundColor")
+                                                .blocksBackgroundColor("blocksBackgroundColor")
+                                                .footer("footer")
+                                                .head("head")
+                                                .header("header")
+                                                .width("width")
+                                                .build()
+                                        )
+                                        .footerBackgroundColor("footerBackgroundColor")
+                                        .footerFullWidth(true)
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .inapp(
+                            BrandSettingsInApp.builder()
+                                .colors(
+                                    BrandColors.builder()
+                                        .primary("primary")
+                                        .secondary("secondary")
+                                        .build()
+                                )
+                                .icons(Icons.builder().bell("bell").message("message").build())
+                                .widgetBackground(
+                                    WidgetBackground.builder()
+                                        .bottomColor("bottomColor")
+                                        .topColor("topColor")
+                                        .build()
+                                )
+                                .borderRadius("borderRadius")
+                                .disableMessageIcon(true)
+                                .fontFamily("fontFamily")
+                                .placement(BrandSettingsInApp.Placement.TOP)
+                                .build()
+                        )
+                        .build()
+                )
+                .id("id")
+                .snippets(
+                    BrandSnippets.builder()
+                        .addItem(BrandSnippet.builder().name("name").value("value").build())
+                        .build()
+                )
+                .build()
+
+        val headers = params._headers()
+
+        assertThat(headers)
+            .isEqualTo(
+                Headers.builder()
+                    .put("Idempotency-Key", "order-ORD-456-user-123")
+                    .put("x-idempotency-expiration", "1785312000")
+                    .build()
+            )
+    }
+
+    @Test
+    fun headersWithoutOptionalFields() {
+        val params =
+            BrandCreateParams.builder()
+                .name("My Brand")
+                .settings(BrandSettings.builder().build())
+                .build()
+
+        val headers = params._headers()
+
+        assertThat(headers).isEqualTo(Headers.builder().build())
+    }
+
+    @Test
     fun body() {
         val params =
             BrandCreateParams.builder()
+                .idempotencyKey("order-ORD-456-user-123")
+                .xIdempotencyExpiration("1785312000")
                 .name("My Brand")
                 .settings(
                     BrandSettings.builder()

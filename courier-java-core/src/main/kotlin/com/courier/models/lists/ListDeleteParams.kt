@@ -11,7 +11,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Delete a list by list ID. */
+/**
+ * Deletes a list, halting sends that target it. A previously deleted list can be brought back with
+ * the companion restore endpoint.
+ */
 class ListDeleteParams
 private constructor(
     private val listId: String?,

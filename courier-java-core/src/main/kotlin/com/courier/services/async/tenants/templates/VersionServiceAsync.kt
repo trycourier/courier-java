@@ -10,6 +10,10 @@ import com.courier.models.tenants.templates.versions.VersionRetrieveParams
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * Manage the templates and template versions scoped to a single tenant, including the ones authored
+ * in the embedded designer.
+ */
 interface VersionServiceAsync {
 
     /**
@@ -25,12 +29,8 @@ interface VersionServiceAsync {
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): VersionServiceAsync
 
     /**
-     * Fetches a specific version of a tenant template.
-     *
-     * Supports the following version formats:
-     * - `latest` - The most recent version of the template
-     * - `published` - The currently published version
-     * - `v{version}` - A specific version (e.g., "v1", "v2", "v1.0.0")
+     * Returns one version of a tenant template, addressed by version number or by latest, with its
+     * content and publish timestamp.
      */
     fun retrieve(
         version: String,

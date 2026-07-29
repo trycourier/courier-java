@@ -22,7 +22,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Apply a JSON Patch (RFC 6902) to the specified token. */
+/**
+ * Applies a JSON Patch to a device token, changing its status, expiry, or properties without
+ * re-registering it.
+ */
 class TokenUpdateParams
 private constructor(
     private val userId: String,

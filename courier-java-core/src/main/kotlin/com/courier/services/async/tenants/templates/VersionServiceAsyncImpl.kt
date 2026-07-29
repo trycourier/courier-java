@@ -21,6 +21,10 @@ import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * Manage the templates and template versions scoped to a single tenant, including the ones authored
+ * in the embedded designer.
+ */
 class VersionServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     VersionServiceAsync {
 

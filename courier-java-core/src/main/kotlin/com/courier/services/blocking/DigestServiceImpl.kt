@@ -21,6 +21,10 @@ class DigestServiceImpl internal constructor(private val clientOptions: ClientOp
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): DigestService =
         DigestServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /**
+     * Inspect what has accumulated in a digest schedule and release a digest ahead of its next
+     * scheduled delivery.
+     */
     override fun schedules(): ScheduleService = schedules
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -37,6 +41,10 @@ class DigestServiceImpl internal constructor(private val clientOptions: ClientOp
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /**
+         * Inspect what has accumulated in a digest schedule and release a digest ahead of its next
+         * scheduled delivery.
+         */
         override fun schedules(): ScheduleService.WithRawResponse = schedules
     }
 }

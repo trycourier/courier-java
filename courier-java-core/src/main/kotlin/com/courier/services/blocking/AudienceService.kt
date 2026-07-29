@@ -18,6 +18,7 @@ import com.courier.models.audiences.AudienceUpdateResponse
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
+/** Define filter-based groups whose membership Courier recalculates as user profiles change. */
 interface AudienceService {
 
     /**
@@ -32,7 +33,10 @@ interface AudienceService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): AudienceService
 
-    /** Returns the specified audience by id. */
+    /**
+     * Returns one audience with its name, description, and the filter and AND or OR operator that
+     * decide which users belong to it.
+     */
     fun retrieve(audienceId: String): Audience = retrieve(audienceId, AudienceRetrieveParams.none())
 
     /** @see retrieve */
@@ -61,7 +65,10 @@ interface AudienceService {
     fun retrieve(audienceId: String, requestOptions: RequestOptions): Audience =
         retrieve(audienceId, AudienceRetrieveParams.none(), requestOptions)
 
-    /** Creates or updates audience. */
+    /**
+     * Creates or replaces an audience from a filter and an AND or OR operator. Membership
+     * recalculates automatically as profiles change.
+     */
     fun update(audienceId: String): AudienceUpdateResponse =
         update(audienceId, AudienceUpdateParams.none())
 
@@ -93,7 +100,10 @@ interface AudienceService {
     fun update(audienceId: String, requestOptions: RequestOptions): AudienceUpdateResponse =
         update(audienceId, AudienceUpdateParams.none(), requestOptions)
 
-    /** Get the audiences associated with the authorization token. */
+    /**
+     * Returns the audiences in the workspace with paging. Audiences are filter-based groups that
+     * recalculate as user profiles change.
+     */
     fun list(): AudienceListResponse = list(AudienceListParams.none())
 
     /** @see list */
@@ -110,7 +120,10 @@ interface AudienceService {
     fun list(requestOptions: RequestOptions): AudienceListResponse =
         list(AudienceListParams.none(), requestOptions)
 
-    /** Deletes the specified audience. */
+    /**
+     * Deletes an audience permanently, so update any caller sending to it by audience id first.
+     * Those sends fail once the audience is gone.
+     */
     fun delete(audienceId: String) = delete(audienceId, AudienceDeleteParams.none())
 
     /** @see delete */
@@ -134,7 +147,10 @@ interface AudienceService {
     fun delete(audienceId: String, requestOptions: RequestOptions) =
         delete(audienceId, AudienceDeleteParams.none(), requestOptions)
 
-    /** Get list of members of an audience. */
+    /**
+     * Returns the users currently matching an audience filter, with paging. Membership is
+     * recalculated, so results shift as profiles change.
+     */
     fun listMembers(audienceId: String): AudienceListMembersResponse =
         listMembers(audienceId, AudienceListMembersParams.none())
 

@@ -19,6 +19,11 @@ import com.courier.models.auth.AuthIssueTokenParams
 import com.courier.models.auth.AuthIssueTokenResponse
 import java.util.function.Consumer
 
+/**
+ * Issue scoped, short-lived JWTs so client-side SDKs — Inbox, Preferences, and the embedded
+ * designer — can call Courier as a single user. Server-side requests authenticate with your
+ * workspace API key instead.
+ */
 class AuthServiceImpl internal constructor(private val clientOptions: ClientOptions) : AuthService {
 
     private val withRawResponse: AuthService.WithRawResponse by lazy {

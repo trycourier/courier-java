@@ -11,7 +11,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Deletes the specified user profile. */
+/**
+ * Deletes a user's profile and stored contact details. List subscriptions and preferences are
+ * separate resources, so remove those too if required.
+ */
 class ProfileDeleteParams
 private constructor(
     private val userId: String?,
