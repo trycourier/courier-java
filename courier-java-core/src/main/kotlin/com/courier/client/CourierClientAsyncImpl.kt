@@ -14,6 +14,8 @@ import com.courier.services.async.AutomationServiceAsync
 import com.courier.services.async.AutomationServiceAsyncImpl
 import com.courier.services.async.BrandServiceAsync
 import com.courier.services.async.BrandServiceAsyncImpl
+import com.courier.services.async.BroadcastServiceAsync
+import com.courier.services.async.BroadcastServiceAsyncImpl
 import com.courier.services.async.DigestServiceAsync
 import com.courier.services.async.DigestServiceAsyncImpl
 import com.courier.services.async.InboundServiceAsync
@@ -87,6 +89,10 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
 
     private val journeys: JourneyServiceAsync by lazy {
         JourneyServiceAsyncImpl(clientOptionsWithUserAgent)
+    }
+
+    private val broadcasts: BroadcastServiceAsync by lazy {
+        BroadcastServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
     private val brands: BrandServiceAsync by lazy {
@@ -182,6 +188,8 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
      */
     override fun journeys(): JourneyServiceAsync = journeys
 
+    override fun broadcasts(): BroadcastServiceAsync = broadcasts
+
     /** Manage the logos, colors, and layout that give the templates you send a consistent look. */
     override fun brands(): BrandServiceAsync = brands
 
@@ -274,6 +282,10 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
 
         private val journeys: JourneyServiceAsync.WithRawResponse by lazy {
             JourneyServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val broadcasts: BroadcastServiceAsync.WithRawResponse by lazy {
+            BroadcastServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
         private val brands: BrandServiceAsync.WithRawResponse by lazy {
@@ -374,6 +386,8 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
          * the templates scoped to them.
          */
         override fun journeys(): JourneyServiceAsync.WithRawResponse = journeys
+
+        override fun broadcasts(): BroadcastServiceAsync.WithRawResponse = broadcasts
 
         /**
          * Manage the logos, colors, and layout that give the templates you send a consistent look.
