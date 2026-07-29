@@ -170,6 +170,10 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
      */
     override fun journeys(): JourneyService = journeys
 
+    /**
+     * Create a one-off send to a list or audience, author its content, then send it immediately or
+     * schedule it for later.
+     */
     override fun broadcasts(): BroadcastService = broadcasts
 
     /** Manage the logos, colors, and layout that give the templates you send a consistent look. */
@@ -369,6 +373,10 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
          */
         override fun journeys(): JourneyService.WithRawResponse = journeys
 
+        /**
+         * Create a one-off send to a list or audience, author its content, then send it immediately
+         * or schedule it for later.
+         */
         override fun broadcasts(): BroadcastService.WithRawResponse = broadcasts
 
         /**
