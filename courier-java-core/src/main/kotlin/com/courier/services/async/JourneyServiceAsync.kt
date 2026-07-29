@@ -26,6 +26,10 @@ import com.courier.services.async.journeys.TemplateServiceAsync
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * Build, version, publish, invoke, and cancel multi-step notification workflows, along with the
+ * templates scoped to them.
+ */
 interface JourneyServiceAsync {
 
     /**
@@ -40,6 +44,10 @@ interface JourneyServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): JourneyServiceAsync
 
+    /**
+     * Build, version, publish, invoke, and cancel multi-step notification workflows, along with the
+     * templates scoped to them.
+     */
     fun templates(): TemplateServiceAsync
 
     /**
@@ -361,6 +369,10 @@ interface JourneyServiceAsync {
             modifier: Consumer<ClientOptions.Builder>
         ): JourneyServiceAsync.WithRawResponse
 
+        /**
+         * Build, version, publish, invoke, and cancel multi-step notification workflows, along with
+         * the templates scoped to them.
+         */
         fun templates(): TemplateServiceAsync.WithRawResponse
 
         /**

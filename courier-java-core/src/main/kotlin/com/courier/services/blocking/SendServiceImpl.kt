@@ -19,6 +19,10 @@ import com.courier.models.send.SendMessageParams
 import com.courier.models.send.SendMessageResponse
 import java.util.function.Consumer
 
+/**
+ * Send a message to one or more recipients — users, lists, audiences, or tenants — across every
+ * channel you have configured.
+ */
 class SendServiceImpl internal constructor(private val clientOptions: ClientOptions) : SendService {
 
     private val withRawResponse: SendService.WithRawResponse by lazy {

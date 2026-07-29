@@ -18,6 +18,10 @@ import com.courier.services.async.profiles.ListServiceAsync
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * Store the contact information Courier delivers to for each user — email, phone number, push
+ * tokens, and any custom data you send to.
+ */
 interface ProfileServiceAsync {
 
     /**
@@ -32,6 +36,10 @@ interface ProfileServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): ProfileServiceAsync
 
+    /**
+     * Store the contact information Courier delivers to for each user — email, phone number, push
+     * tokens, and any custom data you send to.
+     */
     fun lists(): ListServiceAsync
 
     /**
@@ -198,6 +206,10 @@ interface ProfileServiceAsync {
             modifier: Consumer<ClientOptions.Builder>
         ): ProfileServiceAsync.WithRawResponse
 
+        /**
+         * Store the contact information Courier delivers to for each user — email, phone number,
+         * push tokens, and any custom data you send to.
+         */
         fun lists(): ListServiceAsync.WithRawResponse
 
         /**

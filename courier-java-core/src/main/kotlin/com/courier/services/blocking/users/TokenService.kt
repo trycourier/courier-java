@@ -17,6 +17,7 @@ import com.courier.models.users.tokens.TokenUpdateParams
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
+/** Register and manage the APNS and FCM device tokens Courier delivers push notifications to. */
 interface TokenService {
 
     /**

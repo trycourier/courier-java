@@ -20,6 +20,10 @@ interface PreferenceService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): PreferenceService
 
+    /**
+     * Manage tenants — the organizations, teams, or accounts your users belong to — along with
+     * their users and default preferences.
+     */
     fun items(): ItemService
 
     /** A view of [PreferenceService] that provides access to raw HTTP responses for each method. */
@@ -34,6 +38,10 @@ interface PreferenceService {
             modifier: Consumer<ClientOptions.Builder>
         ): PreferenceService.WithRawResponse
 
+        /**
+         * Manage tenants — the organizations, teams, or accounts your users belong to — along with
+         * their users and default preferences.
+         */
         fun items(): ItemService.WithRawResponse
     }
 }

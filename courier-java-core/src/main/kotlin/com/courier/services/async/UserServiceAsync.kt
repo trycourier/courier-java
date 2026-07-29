@@ -22,10 +22,15 @@ interface UserServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): UserServiceAsync
 
+    /** Read and write a single user's notification preferences, per topic and per channel. */
     fun preferences(): PreferenceServiceAsync
 
+    /** Associate a user with one or more tenants, and read or remove those associations. */
     fun tenants(): TenantServiceAsync
 
+    /**
+     * Register and manage the APNS and FCM device tokens Courier delivers push notifications to.
+     */
     fun tokens(): TokenServiceAsync
 
     /** A view of [UserServiceAsync] that provides access to raw HTTP responses for each method. */
@@ -38,10 +43,16 @@ interface UserServiceAsync {
          */
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): UserServiceAsync.WithRawResponse
 
+        /** Read and write a single user's notification preferences, per topic and per channel. */
         fun preferences(): PreferenceServiceAsync.WithRawResponse
 
+        /** Associate a user with one or more tenants, and read or remove those associations. */
         fun tenants(): TenantServiceAsync.WithRawResponse
 
+        /**
+         * Register and manage the APNS and FCM device tokens Courier delivers push notifications
+         * to.
+         */
         fun tokens(): TokenServiceAsync.WithRawResponse
     }
 }

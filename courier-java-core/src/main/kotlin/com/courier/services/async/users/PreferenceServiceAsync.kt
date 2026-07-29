@@ -20,6 +20,7 @@ import com.courier.models.users.preferences.PreferenceUpdateOrCreateTopicRespons
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/** Read and write a single user's notification preferences, per topic and per channel. */
 interface PreferenceServiceAsync {
 
     /**

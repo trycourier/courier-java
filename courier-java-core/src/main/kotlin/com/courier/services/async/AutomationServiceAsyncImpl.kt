@@ -21,6 +21,7 @@ import com.courier.services.async.automations.InvokeServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/** Invoke a stored automation template or an ad hoc automation defined in the request. */
 class AutomationServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     AutomationServiceAsync {
 
@@ -35,6 +36,7 @@ class AutomationServiceAsyncImpl internal constructor(private val clientOptions:
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): AutomationServiceAsync =
         AutomationServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /** Invoke a stored automation template or an ad hoc automation defined in the request. */
     override fun invoke(): InvokeServiceAsync = invoke
 
     override fun list(
@@ -61,6 +63,7 @@ class AutomationServiceAsyncImpl internal constructor(private val clientOptions:
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /** Invoke a stored automation template or an ad hoc automation defined in the request. */
         override fun invoke(): InvokeServiceAsync.WithRawResponse = invoke
 
         private val listHandler: Handler<AutomationTemplateListResponse> =

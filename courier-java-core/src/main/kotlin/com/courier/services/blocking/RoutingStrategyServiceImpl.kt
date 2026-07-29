@@ -29,6 +29,7 @@ import com.courier.models.routingstrategies.RoutingStrategyRetrieveParams
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/** Define reusable channel routing and failover strategies, and see which templates use them. */
 class RoutingStrategyServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     RoutingStrategyService {
 

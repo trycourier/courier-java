@@ -30,6 +30,10 @@ import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * Manage static groups of users that you subscribe explicitly, and send to them by list id or list
+ * pattern.
+ */
 class ListServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     ListServiceAsync {
 
@@ -46,6 +50,10 @@ class ListServiceAsyncImpl internal constructor(private val clientOptions: Clien
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): ListServiceAsync =
         ListServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /**
+     * Manage static groups of users that you subscribe explicitly, and send to them by list id or
+     * list pattern.
+     */
     override fun subscriptions(): SubscriptionServiceAsync = subscriptions
 
     override fun retrieve(
@@ -100,6 +108,10 @@ class ListServiceAsyncImpl internal constructor(private val clientOptions: Clien
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /**
+         * Manage static groups of users that you subscribe explicitly, and send to them by list id
+         * or list pattern.
+         */
         override fun subscriptions(): SubscriptionServiceAsync.WithRawResponse = subscriptions
 
         private val retrieveHandler: Handler<SubscriptionList> =

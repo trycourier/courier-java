@@ -10,6 +10,7 @@ import com.courier.models.inbox.messages.MessageRestoreParams
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
+/** Manage the messages in a user's in-app inbox. */
 interface MessageService {
 
     /**

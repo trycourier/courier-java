@@ -20,6 +20,10 @@ interface DigestServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): DigestServiceAsync
 
+    /**
+     * Inspect what has accumulated in a digest schedule and release a digest ahead of its next
+     * scheduled delivery.
+     */
     fun schedules(): ScheduleServiceAsync
 
     /**
@@ -36,6 +40,10 @@ interface DigestServiceAsync {
             modifier: Consumer<ClientOptions.Builder>
         ): DigestServiceAsync.WithRawResponse
 
+        /**
+         * Inspect what has accumulated in a digest schedule and release a digest ahead of its next
+         * scheduled delivery.
+         */
         fun schedules(): ScheduleServiceAsync.WithRawResponse
     }
 }

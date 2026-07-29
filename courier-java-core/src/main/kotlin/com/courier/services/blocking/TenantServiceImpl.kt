@@ -32,6 +32,10 @@ import com.courier.services.blocking.tenants.TemplateServiceImpl
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * Manage tenants — the organizations, teams, or accounts your users belong to — along with their
+ * users and default preferences.
+ */
 class TenantServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     TenantService {
 
@@ -50,6 +54,10 @@ class TenantServiceImpl internal constructor(private val clientOptions: ClientOp
 
     override fun preferences(): PreferenceService = preferences
 
+    /**
+     * Manage the templates and template versions scoped to a single tenant, including the ones
+     * authored in the embedded designer.
+     */
     override fun templates(): TemplateService = templates
 
     override fun retrieve(params: TenantRetrieveParams, requestOptions: RequestOptions): Tenant =
@@ -102,6 +110,10 @@ class TenantServiceImpl internal constructor(private val clientOptions: ClientOp
 
         override fun preferences(): PreferenceService.WithRawResponse = preferences
 
+        /**
+         * Manage the templates and template versions scoped to a single tenant, including the ones
+         * authored in the embedded designer.
+         */
         override fun templates(): TemplateService.WithRawResponse = templates
 
         private val retrieveHandler: Handler<Tenant> = jsonHandler<Tenant>(clientOptions.jsonMapper)

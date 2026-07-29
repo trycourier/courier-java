@@ -20,6 +20,7 @@ interface InboxService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): InboxService
 
+    /** Manage the messages in a user's in-app inbox. */
     fun messages(): MessageService
 
     /** A view of [InboxService] that provides access to raw HTTP responses for each method. */
@@ -32,6 +33,7 @@ interface InboxService {
          */
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): InboxService.WithRawResponse
 
+        /** Manage the messages in a user's in-app inbox. */
         fun messages(): MessageService.WithRawResponse
     }
 }

@@ -20,6 +20,7 @@ import com.courier.services.blocking.automations.InvokeService
 import com.courier.services.blocking.automations.InvokeServiceImpl
 import java.util.function.Consumer
 
+/** Invoke a stored automation template or an ad hoc automation defined in the request. */
 class AutomationServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     AutomationService {
 
@@ -34,6 +35,7 @@ class AutomationServiceImpl internal constructor(private val clientOptions: Clie
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): AutomationService =
         AutomationServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /** Invoke a stored automation template or an ad hoc automation defined in the request. */
     override fun invoke(): InvokeService = invoke
 
     override fun list(
@@ -60,6 +62,7 @@ class AutomationServiceImpl internal constructor(private val clientOptions: Clie
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /** Invoke a stored automation template or an ad hoc automation defined in the request. */
         override fun invoke(): InvokeService.WithRawResponse = invoke
 
         private val listHandler: Handler<AutomationTemplateListResponse> =

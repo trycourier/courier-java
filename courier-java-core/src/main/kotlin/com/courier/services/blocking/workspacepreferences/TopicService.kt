@@ -16,6 +16,10 @@ import com.courier.models.workspacepreferences.topics.TopicRetrieveParams
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
+/**
+ * Manage the workspace catalog of subscription topics, the sections that group them, and publishing
+ * the preference page.
+ */
 interface TopicService {
 
     /**

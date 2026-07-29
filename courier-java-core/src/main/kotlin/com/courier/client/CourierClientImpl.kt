@@ -130,44 +130,97 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): CourierClient =
         CourierClientImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /**
+     * Send a message to one or more recipients — users, lists, audiences, or tenants — across every
+     * channel you have configured.
+     */
     override fun send(): SendService = send
 
+    /** Define filter-based groups whose membership Courier recalculates as user profiles change. */
     override fun audiences(): AudienceService = audiences
 
+    /**
+     * Configure the channel providers Courier delivers through, and browse the provider types it
+     * supports.
+     */
     override fun providers(): ProviderService = providers
 
+    /** Read the audit trail of configuration and access changes in your workspace. */
     override fun auditEvents(): AuditEventService = auditEvents
 
+    /**
+     * Issue scoped, short-lived JWTs so client-side SDKs — Inbox, Preferences, and the embedded
+     * designer — can call Courier as a single user. Server-side requests authenticate with your
+     * workspace API key instead.
+     */
     override fun auth(): AuthService = auth
 
+    /** Invoke a stored automation template or an ad hoc automation defined in the request. */
     override fun automations(): AutomationService = automations
 
+    /**
+     * Build, version, publish, invoke, and cancel multi-step notification workflows, along with the
+     * templates scoped to them.
+     */
     override fun journeys(): JourneyService = journeys
 
+    /** Manage the logos, colors, and layout that give the templates you send a consistent look. */
     override fun brands(): BrandService = brands
 
     override fun digests(): DigestService = digests
 
+    /** Record an inbound event that triggers the journeys and automations mapped to it. */
     override fun inbound(): InboundService = inbound
 
+    /**
+     * Manage static groups of users that you subscribe explicitly, and send to them by list id or
+     * list pattern.
+     */
     override fun lists(): ListService = lists
 
     override fun inbox(): InboxService = inbox
 
+    /**
+     * Look up the messages Courier has accepted, inspect their delivery history and rendered
+     * output, and cancel, resend, or archive them.
+     */
     override fun messages(): MessageService = messages
 
+    /**
+     * Look up the messages Courier has accepted, inspect their delivery history and rendered
+     * output, and cancel, resend, or archive them.
+     */
     override fun requests(): RequestService = requests
 
+    /** Create, update, version, publish, and localize notification templates and their content. */
     override fun notifications(): NotificationService = notifications
 
+    /**
+     * Define reusable channel routing and failover strategies, and see which templates use them.
+     */
     override fun routingStrategies(): RoutingStrategyService = routingStrategies
 
+    /**
+     * Manage the workspace catalog of subscription topics, the sections that group them, and
+     * publishing the preference page.
+     */
     override fun workspacePreferences(): WorkspacePreferenceService = workspacePreferences
 
+    /**
+     * Store the contact information Courier delivers to for each user — email, phone number, push
+     * tokens, and any custom data you send to.
+     */
     override fun profiles(): ProfileService = profiles
 
+    /**
+     * Manage tenants — the organizations, teams, or accounts your users belong to — along with
+     * their users and default preferences.
+     */
     override fun tenants(): TenantService = tenants
 
+    /**
+     * Store and retrieve the translation strings Courier uses to render localized template content.
+     */
     override fun translations(): TranslationService = translations
 
     override fun users(): UserService = users
@@ -268,45 +321,106 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /**
+         * Send a message to one or more recipients — users, lists, audiences, or tenants — across
+         * every channel you have configured.
+         */
         override fun send(): SendService.WithRawResponse = send
 
+        /**
+         * Define filter-based groups whose membership Courier recalculates as user profiles change.
+         */
         override fun audiences(): AudienceService.WithRawResponse = audiences
 
+        /**
+         * Configure the channel providers Courier delivers through, and browse the provider types
+         * it supports.
+         */
         override fun providers(): ProviderService.WithRawResponse = providers
 
+        /** Read the audit trail of configuration and access changes in your workspace. */
         override fun auditEvents(): AuditEventService.WithRawResponse = auditEvents
 
+        /**
+         * Issue scoped, short-lived JWTs so client-side SDKs — Inbox, Preferences, and the embedded
+         * designer — can call Courier as a single user. Server-side requests authenticate with your
+         * workspace API key instead.
+         */
         override fun auth(): AuthService.WithRawResponse = auth
 
+        /** Invoke a stored automation template or an ad hoc automation defined in the request. */
         override fun automations(): AutomationService.WithRawResponse = automations
 
+        /**
+         * Build, version, publish, invoke, and cancel multi-step notification workflows, along with
+         * the templates scoped to them.
+         */
         override fun journeys(): JourneyService.WithRawResponse = journeys
 
+        /**
+         * Manage the logos, colors, and layout that give the templates you send a consistent look.
+         */
         override fun brands(): BrandService.WithRawResponse = brands
 
         override fun digests(): DigestService.WithRawResponse = digests
 
+        /** Record an inbound event that triggers the journeys and automations mapped to it. */
         override fun inbound(): InboundService.WithRawResponse = inbound
 
+        /**
+         * Manage static groups of users that you subscribe explicitly, and send to them by list id
+         * or list pattern.
+         */
         override fun lists(): ListService.WithRawResponse = lists
 
         override fun inbox(): InboxService.WithRawResponse = inbox
 
+        /**
+         * Look up the messages Courier has accepted, inspect their delivery history and rendered
+         * output, and cancel, resend, or archive them.
+         */
         override fun messages(): MessageService.WithRawResponse = messages
 
+        /**
+         * Look up the messages Courier has accepted, inspect their delivery history and rendered
+         * output, and cancel, resend, or archive them.
+         */
         override fun requests(): RequestService.WithRawResponse = requests
 
+        /**
+         * Create, update, version, publish, and localize notification templates and their content.
+         */
         override fun notifications(): NotificationService.WithRawResponse = notifications
 
+        /**
+         * Define reusable channel routing and failover strategies, and see which templates use
+         * them.
+         */
         override fun routingStrategies(): RoutingStrategyService.WithRawResponse = routingStrategies
 
+        /**
+         * Manage the workspace catalog of subscription topics, the sections that group them, and
+         * publishing the preference page.
+         */
         override fun workspacePreferences(): WorkspacePreferenceService.WithRawResponse =
             workspacePreferences
 
+        /**
+         * Store the contact information Courier delivers to for each user — email, phone number,
+         * push tokens, and any custom data you send to.
+         */
         override fun profiles(): ProfileService.WithRawResponse = profiles
 
+        /**
+         * Manage tenants — the organizations, teams, or accounts your users belong to — along with
+         * their users and default preferences.
+         */
         override fun tenants(): TenantService.WithRawResponse = tenants
 
+        /**
+         * Store and retrieve the translation strings Courier uses to render localized template
+         * content.
+         */
         override fun translations(): TranslationService.WithRawResponse = translations
 
         override fun users(): UserService.WithRawResponse = users

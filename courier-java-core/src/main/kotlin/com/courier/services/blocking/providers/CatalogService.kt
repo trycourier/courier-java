@@ -10,6 +10,10 @@ import com.courier.models.providers.catalog.CatalogListResponse
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
+/**
+ * Configure the channel providers Courier delivers through, and browse the provider types it
+ * supports.
+ */
 interface CatalogService {
 
     /**

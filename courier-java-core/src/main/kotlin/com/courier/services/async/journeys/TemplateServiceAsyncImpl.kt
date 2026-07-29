@@ -36,6 +36,10 @@ import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * Build, version, publish, invoke, and cancel multi-step notification workflows, along with the
+ * templates scoped to them.
+ */
 class TemplateServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     TemplateServiceAsync {
 

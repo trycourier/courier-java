@@ -25,6 +25,10 @@ import com.courier.models.profiles.lists.ListSubscribeResponse
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * Store the contact information Courier delivers to for each user — email, phone number, push
+ * tokens, and any custom data you send to.
+ */
 class ListServiceImpl internal constructor(private val clientOptions: ClientOptions) : ListService {
 
     private val withRawResponse: ListService.WithRawResponse by lazy {

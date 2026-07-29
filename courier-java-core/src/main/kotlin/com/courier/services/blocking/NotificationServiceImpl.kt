@@ -39,6 +39,7 @@ import com.courier.services.blocking.notifications.CheckServiceImpl
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/** Create, update, version, publish, and localize notification templates and their content. */
 class NotificationServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     NotificationService {
 
@@ -53,6 +54,7 @@ class NotificationServiceImpl internal constructor(private val clientOptions: Cl
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): NotificationService =
         NotificationServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /** Create, update, version, publish, and localize notification templates and their content. */
     override fun checks(): CheckService = checks
 
     override fun create(
@@ -152,6 +154,9 @@ class NotificationServiceImpl internal constructor(private val clientOptions: Cl
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /**
+         * Create, update, version, publish, and localize notification templates and their content.
+         */
         override fun checks(): CheckService.WithRawResponse = checks
 
         private val createHandler: Handler<NotificationTemplateResponse> =

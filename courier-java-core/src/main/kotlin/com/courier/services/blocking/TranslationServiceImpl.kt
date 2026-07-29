@@ -22,6 +22,7 @@ import com.courier.models.translations.TranslationUpdateParams
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/** Store and retrieve the translation strings Courier uses to render localized template content. */
 class TranslationServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     TranslationService {
 

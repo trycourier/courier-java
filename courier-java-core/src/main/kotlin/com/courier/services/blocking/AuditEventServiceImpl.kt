@@ -22,6 +22,7 @@ import com.courier.models.auditevents.AuditEventRetrieveParams
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/** Read the audit trail of configuration and access changes in your workspace. */
 class AuditEventServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     AuditEventService {
 

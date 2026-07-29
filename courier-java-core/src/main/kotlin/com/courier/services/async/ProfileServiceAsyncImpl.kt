@@ -31,6 +31,10 @@ import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * Store the contact information Courier delivers to for each user — email, phone number, push
+ * tokens, and any custom data you send to.
+ */
 class ProfileServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     ProfileServiceAsync {
 
@@ -45,6 +49,10 @@ class ProfileServiceAsyncImpl internal constructor(private val clientOptions: Cl
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): ProfileServiceAsync =
         ProfileServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /**
+     * Store the contact information Courier delivers to for each user — email, phone number, push
+     * tokens, and any custom data you send to.
+     */
     override fun lists(): ListServiceAsync = lists
 
     override fun create(
@@ -99,6 +107,10 @@ class ProfileServiceAsyncImpl internal constructor(private val clientOptions: Cl
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /**
+         * Store the contact information Courier delivers to for each user — email, phone number,
+         * push tokens, and any custom data you send to.
+         */
         override fun lists(): ListServiceAsync.WithRawResponse = lists
 
         private val createHandler: Handler<ProfileCreateResponse> =

@@ -20,6 +20,7 @@ import com.courier.models.inbox.messages.MessageRestoreParams
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/** Manage the messages in a user's in-app inbox. */
 class MessageServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     MessageService {
 

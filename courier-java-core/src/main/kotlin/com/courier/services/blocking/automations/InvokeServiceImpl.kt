@@ -22,6 +22,7 @@ import com.courier.models.automations.invoke.InvokeInvokeByTemplateParams
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/** Invoke a stored automation template or an ad hoc automation defined in the request. */
 class InvokeServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     InvokeService {
 

@@ -20,6 +20,10 @@ import com.courier.models.tenants.templates.versions.VersionRetrieveParams
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * Manage the templates and template versions scoped to a single tenant, including the ones authored
+ * in the embedded designer.
+ */
 class VersionServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     VersionService {
 

@@ -21,6 +21,10 @@ import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * Manage tenants — the organizations, teams, or accounts your users belong to — along with their
+ * users and default preferences.
+ */
 class ItemServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     ItemServiceAsync {
 

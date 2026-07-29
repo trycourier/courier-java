@@ -17,6 +17,10 @@ import com.courier.services.blocking.providers.CatalogService
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
+/**
+ * Configure the channel providers Courier delivers through, and browse the provider types it
+ * supports.
+ */
 interface ProviderService {
 
     /**
@@ -31,6 +35,10 @@ interface ProviderService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): ProviderService
 
+    /**
+     * Configure the channel providers Courier delivers through, and browse the provider types it
+     * supports.
+     */
     fun catalog(): CatalogService
 
     /**
@@ -157,6 +165,10 @@ interface ProviderService {
          */
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): ProviderService.WithRawResponse
 
+        /**
+         * Configure the channel providers Courier delivers through, and browse the provider types
+         * it supports.
+         */
         fun catalog(): CatalogService.WithRawResponse
 
         /**

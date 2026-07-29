@@ -28,6 +28,7 @@ import com.courier.services.async.notifications.CheckServiceAsync
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/** Create, update, version, publish, and localize notification templates and their content. */
 interface NotificationServiceAsync {
 
     /**
@@ -42,6 +43,7 @@ interface NotificationServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): NotificationServiceAsync
 
+    /** Create, update, version, publish, and localize notification templates and their content. */
     fun checks(): CheckServiceAsync
 
     /**
@@ -458,6 +460,9 @@ interface NotificationServiceAsync {
             modifier: Consumer<ClientOptions.Builder>
         ): NotificationServiceAsync.WithRawResponse
 
+        /**
+         * Create, update, version, publish, and localize notification templates and their content.
+         */
         fun checks(): CheckServiceAsync.WithRawResponse
 
         /**

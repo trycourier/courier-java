@@ -31,6 +31,10 @@ import com.courier.services.blocking.tenants.templates.VersionServiceImpl
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * Manage the templates and template versions scoped to a single tenant, including the ones authored
+ * in the embedded designer.
+ */
 class TemplateServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     TemplateService {
 
@@ -45,6 +49,10 @@ class TemplateServiceImpl internal constructor(private val clientOptions: Client
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): TemplateService =
         TemplateServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /**
+     * Manage the templates and template versions scoped to a single tenant, including the ones
+     * authored in the embedded designer.
+     */
     override fun versions(): VersionService = versions
 
     override fun retrieve(
@@ -97,6 +105,10 @@ class TemplateServiceImpl internal constructor(private val clientOptions: Client
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /**
+         * Manage the templates and template versions scoped to a single tenant, including the ones
+         * authored in the embedded designer.
+         */
         override fun versions(): VersionService.WithRawResponse = versions
 
         private val retrieveHandler: Handler<BaseTemplateTenantAssociation> =

@@ -21,6 +21,7 @@ class InboxServiceAsyncImpl internal constructor(private val clientOptions: Clie
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): InboxServiceAsync =
         InboxServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /** Manage the messages in a user's in-app inbox. */
     override fun messages(): MessageServiceAsync = messages
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -37,6 +38,7 @@ class InboxServiceAsyncImpl internal constructor(private val clientOptions: Clie
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /** Manage the messages in a user's in-app inbox. */
         override fun messages(): MessageServiceAsync.WithRawResponse = messages
     }
 }

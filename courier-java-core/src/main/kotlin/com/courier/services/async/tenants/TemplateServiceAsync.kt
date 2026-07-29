@@ -19,6 +19,10 @@ import com.courier.services.async.tenants.templates.VersionServiceAsync
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * Manage the templates and template versions scoped to a single tenant, including the ones authored
+ * in the embedded designer.
+ */
 interface TemplateServiceAsync {
 
     /**
@@ -33,6 +37,10 @@ interface TemplateServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): TemplateServiceAsync
 
+    /**
+     * Manage the templates and template versions scoped to a single tenant, including the ones
+     * authored in the embedded designer.
+     */
     fun versions(): VersionServiceAsync
 
     /**
@@ -197,6 +205,10 @@ interface TemplateServiceAsync {
             modifier: Consumer<ClientOptions.Builder>
         ): TemplateServiceAsync.WithRawResponse
 
+        /**
+         * Manage the templates and template versions scoped to a single tenant, including the ones
+         * authored in the embedded designer.
+         */
         fun versions(): VersionServiceAsync.WithRawResponse
 
         /**

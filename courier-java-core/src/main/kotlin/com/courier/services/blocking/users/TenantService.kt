@@ -15,6 +15,7 @@ import com.courier.models.users.tenants.TenantRemoveSingleParams
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
+/** Associate a user with one or more tenants, and read or remove those associations. */
 interface TenantService {
 
     /**

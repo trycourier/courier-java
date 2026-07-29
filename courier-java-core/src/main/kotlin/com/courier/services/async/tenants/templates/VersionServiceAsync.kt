@@ -10,6 +10,10 @@ import com.courier.models.tenants.templates.versions.VersionRetrieveParams
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * Manage the templates and template versions scoped to a single tenant, including the ones authored
+ * in the embedded designer.
+ */
 interface VersionServiceAsync {
 
     /**

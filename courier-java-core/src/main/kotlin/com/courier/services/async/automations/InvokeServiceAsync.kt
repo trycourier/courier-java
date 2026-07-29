@@ -11,6 +11,7 @@ import com.courier.models.automations.invoke.InvokeInvokeByTemplateParams
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/** Invoke a stored automation template or an ad hoc automation defined in the request. */
 interface InvokeServiceAsync {
 
     /**

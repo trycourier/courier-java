@@ -29,6 +29,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/** Register and manage the APNS and FCM device tokens Courier delivers push notifications to. */
 class TokenServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     TokenServiceAsync {
 

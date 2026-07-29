@@ -21,6 +21,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/** Manage the messages in a user's in-app inbox. */
 class MessageServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     MessageServiceAsync {
 

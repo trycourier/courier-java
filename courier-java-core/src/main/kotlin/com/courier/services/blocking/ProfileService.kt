@@ -18,6 +18,10 @@ import com.courier.services.blocking.profiles.ListService
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
+/**
+ * Store the contact information Courier delivers to for each user — email, phone number, push
+ * tokens, and any custom data you send to.
+ */
 interface ProfileService {
 
     /**
@@ -32,6 +36,10 @@ interface ProfileService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): ProfileService
 
+    /**
+     * Store the contact information Courier delivers to for each user — email, phone number, push
+     * tokens, and any custom data you send to.
+     */
     fun lists(): ListService
 
     /**
@@ -173,6 +181,10 @@ interface ProfileService {
          */
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): ProfileService.WithRawResponse
 
+        /**
+         * Store the contact information Courier delivers to for each user — email, phone number,
+         * push tokens, and any custom data you send to.
+         */
         fun lists(): ListService.WithRawResponse
 
         /**

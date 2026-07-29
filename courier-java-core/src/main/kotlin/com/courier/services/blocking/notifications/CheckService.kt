@@ -14,6 +14,7 @@ import com.courier.models.notifications.checks.CheckUpdateResponse
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
+/** Create, update, version, publish, and localize notification templates and their content. */
 interface CheckService {
 
     /**

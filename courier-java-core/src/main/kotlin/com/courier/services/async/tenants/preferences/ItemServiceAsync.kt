@@ -10,6 +10,10 @@ import com.courier.models.tenants.preferences.items.ItemUpdateParams
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * Manage tenants — the organizations, teams, or accounts your users belong to — along with their
+ * users and default preferences.
+ */
 interface ItemServiceAsync {
 
     /**

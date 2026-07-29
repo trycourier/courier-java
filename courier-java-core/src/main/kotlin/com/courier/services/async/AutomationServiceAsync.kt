@@ -11,6 +11,7 @@ import com.courier.services.async.automations.InvokeServiceAsync
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/** Invoke a stored automation template or an ad hoc automation defined in the request. */
 interface AutomationServiceAsync {
 
     /**
@@ -25,6 +26,7 @@ interface AutomationServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): AutomationServiceAsync
 
+    /** Invoke a stored automation template or an ad hoc automation defined in the request. */
     fun invoke(): InvokeServiceAsync
 
     /**
@@ -64,6 +66,7 @@ interface AutomationServiceAsync {
             modifier: Consumer<ClientOptions.Builder>
         ): AutomationServiceAsync.WithRawResponse
 
+        /** Invoke a stored automation template or an ad hoc automation defined in the request. */
         fun invoke(): InvokeServiceAsync.WithRawResponse
 
         /**

@@ -26,6 +26,7 @@ import com.courier.models.users.tenants.TenantRemoveSingleParams
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/** Associate a user with one or more tenants, and read or remove those associations. */
 class TenantServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     TenantService {
 

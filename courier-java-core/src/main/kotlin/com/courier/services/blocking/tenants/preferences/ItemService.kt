@@ -10,6 +10,10 @@ import com.courier.models.tenants.preferences.items.ItemUpdateParams
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
+/**
+ * Manage tenants — the organizations, teams, or accounts your users belong to — along with their
+ * users and default preferences.
+ */
 interface ItemService {
 
     /**

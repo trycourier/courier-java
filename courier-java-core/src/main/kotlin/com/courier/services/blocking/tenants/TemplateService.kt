@@ -19,6 +19,10 @@ import com.courier.services.blocking.tenants.templates.VersionService
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
+/**
+ * Manage the templates and template versions scoped to a single tenant, including the ones authored
+ * in the embedded designer.
+ */
 interface TemplateService {
 
     /**
@@ -33,6 +37,10 @@ interface TemplateService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): TemplateService
 
+    /**
+     * Manage the templates and template versions scoped to a single tenant, including the ones
+     * authored in the embedded designer.
+     */
     fun versions(): VersionService
 
     /**
@@ -176,6 +184,10 @@ interface TemplateService {
          */
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): TemplateService.WithRawResponse
 
+        /**
+         * Manage the templates and template versions scoped to a single tenant, including the ones
+         * authored in the embedded designer.
+         */
         fun versions(): VersionService.WithRawResponse
 
         /**

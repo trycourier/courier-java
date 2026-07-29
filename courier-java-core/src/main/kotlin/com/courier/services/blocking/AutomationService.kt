@@ -11,6 +11,7 @@ import com.courier.services.blocking.automations.InvokeService
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
+/** Invoke a stored automation template or an ad hoc automation defined in the request. */
 interface AutomationService {
 
     /**
@@ -25,6 +26,7 @@ interface AutomationService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): AutomationService
 
+    /** Invoke a stored automation template or an ad hoc automation defined in the request. */
     fun invoke(): InvokeService
 
     /**
@@ -60,6 +62,7 @@ interface AutomationService {
             modifier: Consumer<ClientOptions.Builder>
         ): AutomationService.WithRawResponse
 
+        /** Invoke a stored automation template or an ad hoc automation defined in the request. */
         fun invoke(): InvokeService.WithRawResponse
 
         /**

@@ -19,6 +19,10 @@ import com.courier.services.async.tenants.TemplateServiceAsync
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * Manage tenants — the organizations, teams, or accounts your users belong to — along with their
+ * users and default preferences.
+ */
 interface TenantServiceAsync {
 
     /**
@@ -35,6 +39,10 @@ interface TenantServiceAsync {
 
     fun preferences(): PreferenceServiceAsync
 
+    /**
+     * Manage the templates and template versions scoped to a single tenant, including the ones
+     * authored in the embedded designer.
+     */
     fun templates(): TemplateServiceAsync
 
     /**
@@ -208,6 +216,10 @@ interface TenantServiceAsync {
 
         fun preferences(): PreferenceServiceAsync.WithRawResponse
 
+        /**
+         * Manage the templates and template versions scoped to a single tenant, including the ones
+         * authored in the embedded designer.
+         */
         fun templates(): TemplateServiceAsync.WithRawResponse
 
         /**

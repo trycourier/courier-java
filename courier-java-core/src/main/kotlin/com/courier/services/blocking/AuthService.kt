@@ -10,6 +10,11 @@ import com.courier.models.auth.AuthIssueTokenResponse
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
+/**
+ * Issue scoped, short-lived JWTs so client-side SDKs — Inbox, Preferences, and the embedded
+ * designer — can call Courier as a single user. Server-side requests authenticate with your
+ * workspace API key instead.
+ */
 interface AuthService {
 
     /**
