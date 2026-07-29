@@ -8,6 +8,7 @@ import com.courier.services.blocking.AuditEventService
 import com.courier.services.blocking.AuthService
 import com.courier.services.blocking.AutomationService
 import com.courier.services.blocking.BrandService
+import com.courier.services.blocking.BroadcastService
 import com.courier.services.blocking.DigestService
 import com.courier.services.blocking.InboundService
 import com.courier.services.blocking.InboxService
@@ -95,6 +96,8 @@ interface CourierClient {
      * templates scoped to them.
      */
     fun journeys(): JourneyService
+
+    fun broadcasts(): BroadcastService
 
     /** Manage the logos, colors, and layout that give the templates you send a consistent look. */
     fun brands(): BrandService
@@ -215,6 +218,8 @@ interface CourierClient {
          * the templates scoped to them.
          */
         fun journeys(): JourneyService.WithRawResponse
+
+        fun broadcasts(): BroadcastService.WithRawResponse
 
         /**
          * Manage the logos, colors, and layout that give the templates you send a consistent look.

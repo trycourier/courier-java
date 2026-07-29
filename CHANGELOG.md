@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.24.0 (2026-07-29)
+
+Full Changelog: [v4.23.0...v4.24.0](https://github.com/trycourier/courier-java/compare/v4.23.0...v4.24.0)
+
+### Features
+
+* **broadcasts:** document Broadcasts CRUD REST API ([#170](https://github.com/trycourier/courier-java/issues/170)) ([a0c4ddc](https://github.com/trycourier/courier-java/commit/a0c4ddc2dd43551db2684ed6ed82f8dc4a682005))
+
 ## 4.23.0 (2026-07-29)
 
 Full Changelog: [v4.22.0...v4.23.0](https://github.com/trycourier/courier-java/compare/v4.22.0...v4.23.0)

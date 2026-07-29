@@ -14,6 +14,8 @@ import com.courier.services.blocking.AutomationService
 import com.courier.services.blocking.AutomationServiceImpl
 import com.courier.services.blocking.BrandService
 import com.courier.services.blocking.BrandServiceImpl
+import com.courier.services.blocking.BroadcastService
+import com.courier.services.blocking.BroadcastServiceImpl
 import com.courier.services.blocking.DigestService
 import com.courier.services.blocking.DigestServiceImpl
 import com.courier.services.blocking.InboundService
@@ -86,6 +88,10 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
     }
 
     private val journeys: JourneyService by lazy { JourneyServiceImpl(clientOptionsWithUserAgent) }
+
+    private val broadcasts: BroadcastService by lazy {
+        BroadcastServiceImpl(clientOptionsWithUserAgent)
+    }
 
     private val brands: BrandService by lazy { BrandServiceImpl(clientOptionsWithUserAgent) }
 
@@ -163,6 +169,8 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
      * templates scoped to them.
      */
     override fun journeys(): JourneyService = journeys
+
+    override fun broadcasts(): BroadcastService = broadcasts
 
     /** Manage the logos, colors, and layout that give the templates you send a consistent look. */
     override fun brands(): BrandService = brands
@@ -256,6 +264,10 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
 
         private val journeys: JourneyService.WithRawResponse by lazy {
             JourneyServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val broadcasts: BroadcastService.WithRawResponse by lazy {
+            BroadcastServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
         private val brands: BrandService.WithRawResponse by lazy {
@@ -356,6 +368,8 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
          * the templates scoped to them.
          */
         override fun journeys(): JourneyService.WithRawResponse = journeys
+
+        override fun broadcasts(): BroadcastService.WithRawResponse = broadcasts
 
         /**
          * Manage the logos, colors, and layout that give the templates you send a consistent look.

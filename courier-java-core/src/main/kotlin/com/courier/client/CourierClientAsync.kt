@@ -8,6 +8,7 @@ import com.courier.services.async.AuditEventServiceAsync
 import com.courier.services.async.AuthServiceAsync
 import com.courier.services.async.AutomationServiceAsync
 import com.courier.services.async.BrandServiceAsync
+import com.courier.services.async.BroadcastServiceAsync
 import com.courier.services.async.DigestServiceAsync
 import com.courier.services.async.InboundServiceAsync
 import com.courier.services.async.InboxServiceAsync
@@ -95,6 +96,8 @@ interface CourierClientAsync {
      * templates scoped to them.
      */
     fun journeys(): JourneyServiceAsync
+
+    fun broadcasts(): BroadcastServiceAsync
 
     /** Manage the logos, colors, and layout that give the templates you send a consistent look. */
     fun brands(): BrandServiceAsync
@@ -219,6 +222,8 @@ interface CourierClientAsync {
          * the templates scoped to them.
          */
         fun journeys(): JourneyServiceAsync.WithRawResponse
+
+        fun broadcasts(): BroadcastServiceAsync.WithRawResponse
 
         /**
          * Manage the logos, colors, and layout that give the templates you send a consistent look.
