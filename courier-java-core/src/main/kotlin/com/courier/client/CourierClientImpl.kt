@@ -20,8 +20,6 @@ import com.courier.services.blocking.DigestService
 import com.courier.services.blocking.DigestServiceImpl
 import com.courier.services.blocking.InboundService
 import com.courier.services.blocking.InboundServiceImpl
-import com.courier.services.blocking.InboxService
-import com.courier.services.blocking.InboxServiceImpl
 import com.courier.services.blocking.JourneyService
 import com.courier.services.blocking.JourneyServiceImpl
 import com.courier.services.blocking.ListService
@@ -100,8 +98,6 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
     private val inbound: InboundService by lazy { InboundServiceImpl(clientOptionsWithUserAgent) }
 
     private val lists: ListService by lazy { ListServiceImpl(clientOptionsWithUserAgent) }
-
-    private val inbox: InboxService by lazy { InboxServiceImpl(clientOptionsWithUserAgent) }
 
     private val messages: MessageService by lazy { MessageServiceImpl(clientOptionsWithUserAgent) }
 
@@ -189,8 +185,6 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
      * list pattern.
      */
     override fun lists(): ListService = lists
-
-    override fun inbox(): InboxService = inbox
 
     /**
      * Look up the messages Courier has accepted, inspect their delivery history and rendered
@@ -288,10 +282,6 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
 
         private val lists: ListService.WithRawResponse by lazy {
             ListServiceImpl.WithRawResponseImpl(clientOptions)
-        }
-
-        private val inbox: InboxService.WithRawResponse by lazy {
-            InboxServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
         private val messages: MessageService.WithRawResponse by lazy {
@@ -394,8 +384,6 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
          * or list pattern.
          */
         override fun lists(): ListService.WithRawResponse = lists
-
-        override fun inbox(): InboxService.WithRawResponse = inbox
 
         /**
          * Look up the messages Courier has accepted, inspect their delivery history and rendered
