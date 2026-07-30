@@ -11,7 +11,6 @@ import com.courier.services.blocking.BrandService
 import com.courier.services.blocking.BroadcastService
 import com.courier.services.blocking.DigestService
 import com.courier.services.blocking.InboundService
-import com.courier.services.blocking.InboxService
 import com.courier.services.blocking.JourneyService
 import com.courier.services.blocking.ListService
 import com.courier.services.blocking.MessageService
@@ -116,8 +115,6 @@ interface CourierClient {
      * list pattern.
      */
     fun lists(): ListService
-
-    fun inbox(): InboxService
 
     /**
      * Look up the messages Courier has accepted, inspect their delivery history and rendered
@@ -244,8 +241,6 @@ interface CourierClient {
          * or list pattern.
          */
         fun lists(): ListService.WithRawResponse
-
-        fun inbox(): InboxService.WithRawResponse
 
         /**
          * Look up the messages Courier has accepted, inspect their delivery history and rendered
