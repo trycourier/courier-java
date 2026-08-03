@@ -20,8 +20,6 @@ import com.courier.services.blocking.DigestService
 import com.courier.services.blocking.DigestServiceImpl
 import com.courier.services.blocking.InboundService
 import com.courier.services.blocking.InboundServiceImpl
-import com.courier.services.blocking.InboxService
-import com.courier.services.blocking.InboxServiceImpl
 import com.courier.services.blocking.JourneyService
 import com.courier.services.blocking.JourneyServiceImpl
 import com.courier.services.blocking.ListService
@@ -101,8 +99,6 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
 
     private val lists: ListService by lazy { ListServiceImpl(clientOptionsWithUserAgent) }
 
-    private val inbox: InboxService by lazy { InboxServiceImpl(clientOptionsWithUserAgent) }
-
     private val messages: MessageService by lazy { MessageServiceImpl(clientOptionsWithUserAgent) }
 
     private val requests: RequestService by lazy { RequestServiceImpl(clientOptionsWithUserAgent) }
@@ -170,6 +166,10 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
      */
     override fun journeys(): JourneyService = journeys
 
+    /**
+     * Create a one-off send to a list or audience, author its content, then send it immediately or
+     * schedule it for later.
+     */
     override fun broadcasts(): BroadcastService = broadcasts
 
     /** Manage the logos, colors, and layout that give the templates you send a consistent look. */
@@ -185,8 +185,6 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
      * list pattern.
      */
     override fun lists(): ListService = lists
-
-    override fun inbox(): InboxService = inbox
 
     /**
      * Look up the messages Courier has accepted, inspect their delivery history and rendered
@@ -286,10 +284,6 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
             ListServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
-        private val inbox: InboxService.WithRawResponse by lazy {
-            InboxServiceImpl.WithRawResponseImpl(clientOptions)
-        }
-
         private val messages: MessageService.WithRawResponse by lazy {
             MessageServiceImpl.WithRawResponseImpl(clientOptions)
         }
@@ -369,6 +363,10 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
          */
         override fun journeys(): JourneyService.WithRawResponse = journeys
 
+        /**
+         * Create a one-off send to a list or audience, author its content, then send it immediately
+         * or schedule it for later.
+         */
         override fun broadcasts(): BroadcastService.WithRawResponse = broadcasts
 
         /**
@@ -386,8 +384,6 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
          * or list pattern.
          */
         override fun lists(): ListService.WithRawResponse = lists
-
-        override fun inbox(): InboxService.WithRawResponse = inbox
 
         /**
          * Look up the messages Courier has accepted, inspect their delivery history and rendered

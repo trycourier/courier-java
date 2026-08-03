@@ -71,7 +71,7 @@ private constructor(
      * Send to the recipient. A send node sources its content from EXACTLY ONE of `message.template`
      * (a single notification template) or `experiment` (an A/B split across weighted template
      * variants) — supplying both, or neither, is rejected. Optionally override the recipient
-     * address, delay the send, or attach `data`.
+     * address, send as a tenant, delay the send, or attach `data`.
      */
     fun send(): Optional<JourneySendNode> = Optional.ofNullable(send)
 
@@ -177,7 +177,7 @@ private constructor(
      * Send to the recipient. A send node sources its content from EXACTLY ONE of `message.template`
      * (a single notification template) or `experiment` (an A/B split across weighted template
      * variants) — supplying both, or neither, is rejected. Optionally override the recipient
-     * address, delay the send, or attach `data`.
+     * address, send as a tenant, delay the send, or attach `data`.
      */
     fun asSend(): JourneySendNode = send.getOrThrow("send")
 
@@ -505,7 +505,7 @@ private constructor(
          * Send to the recipient. A send node sources its content from EXACTLY ONE of
          * `message.template` (a single notification template) or `experiment` (an A/B split across
          * weighted template variants) — supplying both, or neither, is rejected. Optionally
-         * override the recipient address, delay the send, or attach `data`.
+         * override the recipient address, send as a tenant, delay the send, or attach `data`.
          */
         @JvmStatic fun ofSend(send: JourneySendNode) = JourneyNode(send = send)
 
@@ -600,7 +600,7 @@ private constructor(
          * Send to the recipient. A send node sources its content from EXACTLY ONE of
          * `message.template` (a single notification template) or `experiment` (an A/B split across
          * weighted template variants) — supplying both, or neither, is rejected. Optionally
-         * override the recipient address, delay the send, or attach `data`.
+         * override the recipient address, send as a tenant, delay the send, or attach `data`.
          */
         fun visitSend(send: JourneySendNode): T
 

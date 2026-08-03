@@ -20,8 +20,6 @@ import com.courier.services.async.DigestServiceAsync
 import com.courier.services.async.DigestServiceAsyncImpl
 import com.courier.services.async.InboundServiceAsync
 import com.courier.services.async.InboundServiceAsyncImpl
-import com.courier.services.async.InboxServiceAsync
-import com.courier.services.async.InboxServiceAsyncImpl
 import com.courier.services.async.JourneyServiceAsync
 import com.courier.services.async.JourneyServiceAsyncImpl
 import com.courier.services.async.ListServiceAsync
@@ -109,10 +107,6 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
 
     private val lists: ListServiceAsync by lazy { ListServiceAsyncImpl(clientOptionsWithUserAgent) }
 
-    private val inbox: InboxServiceAsync by lazy {
-        InboxServiceAsyncImpl(clientOptionsWithUserAgent)
-    }
-
     private val messages: MessageServiceAsync by lazy {
         MessageServiceAsyncImpl(clientOptionsWithUserAgent)
     }
@@ -188,6 +182,10 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
      */
     override fun journeys(): JourneyServiceAsync = journeys
 
+    /**
+     * Create a one-off send to a list or audience, author its content, then send it immediately or
+     * schedule it for later.
+     */
     override fun broadcasts(): BroadcastServiceAsync = broadcasts
 
     /** Manage the logos, colors, and layout that give the templates you send a consistent look. */
@@ -203,8 +201,6 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
      * list pattern.
      */
     override fun lists(): ListServiceAsync = lists
-
-    override fun inbox(): InboxServiceAsync = inbox
 
     /**
      * Look up the messages Courier has accepted, inspect their delivery history and rendered
@@ -304,10 +300,6 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
             ListServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
-        private val inbox: InboxServiceAsync.WithRawResponse by lazy {
-            InboxServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
-
         private val messages: MessageServiceAsync.WithRawResponse by lazy {
             MessageServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
@@ -387,6 +379,10 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
          */
         override fun journeys(): JourneyServiceAsync.WithRawResponse = journeys
 
+        /**
+         * Create a one-off send to a list or audience, author its content, then send it immediately
+         * or schedule it for later.
+         */
         override fun broadcasts(): BroadcastServiceAsync.WithRawResponse = broadcasts
 
         /**
@@ -404,8 +400,6 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
          * or list pattern.
          */
         override fun lists(): ListServiceAsync.WithRawResponse = lists
-
-        override fun inbox(): InboxServiceAsync.WithRawResponse = inbox
 
         /**
          * Look up the messages Courier has accepted, inspect their delivery history and rendered

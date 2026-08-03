@@ -24,6 +24,10 @@ import com.courier.models.notifications.NotificationContentMutationResponse
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * Create a one-off send to a list or audience, author its content, then send it immediately or
+ * schedule it for later.
+ */
 interface BroadcastServiceAsync {
 
     /**

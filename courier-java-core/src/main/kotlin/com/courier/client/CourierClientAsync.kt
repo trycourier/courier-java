@@ -11,7 +11,6 @@ import com.courier.services.async.BrandServiceAsync
 import com.courier.services.async.BroadcastServiceAsync
 import com.courier.services.async.DigestServiceAsync
 import com.courier.services.async.InboundServiceAsync
-import com.courier.services.async.InboxServiceAsync
 import com.courier.services.async.JourneyServiceAsync
 import com.courier.services.async.ListServiceAsync
 import com.courier.services.async.MessageServiceAsync
@@ -97,6 +96,10 @@ interface CourierClientAsync {
      */
     fun journeys(): JourneyServiceAsync
 
+    /**
+     * Create a one-off send to a list or audience, author its content, then send it immediately or
+     * schedule it for later.
+     */
     fun broadcasts(): BroadcastServiceAsync
 
     /** Manage the logos, colors, and layout that give the templates you send a consistent look. */
@@ -112,8 +115,6 @@ interface CourierClientAsync {
      * list pattern.
      */
     fun lists(): ListServiceAsync
-
-    fun inbox(): InboxServiceAsync
 
     /**
      * Look up the messages Courier has accepted, inspect their delivery history and rendered
@@ -223,6 +224,10 @@ interface CourierClientAsync {
          */
         fun journeys(): JourneyServiceAsync.WithRawResponse
 
+        /**
+         * Create a one-off send to a list or audience, author its content, then send it immediately
+         * or schedule it for later.
+         */
         fun broadcasts(): BroadcastServiceAsync.WithRawResponse
 
         /**
@@ -240,8 +245,6 @@ interface CourierClientAsync {
          * or list pattern.
          */
         fun lists(): ListServiceAsync.WithRawResponse
-
-        fun inbox(): InboxServiceAsync.WithRawResponse
 
         /**
          * Look up the messages Courier has accepted, inspect their delivery history and rendered

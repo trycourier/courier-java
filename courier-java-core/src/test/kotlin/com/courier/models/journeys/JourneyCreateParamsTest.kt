@@ -17,31 +17,89 @@ internal class JourneyCreateParamsTest {
             .createJourneyRequest(
                 CreateJourneyRequest.builder()
                     .name("Welcome Journey")
-                    .addNode(
-                        JourneyApiInvokeTriggerNode.builder()
-                            .triggerType(JourneyApiInvokeTriggerNode.TriggerType.API_INVOKE)
-                            .type(JourneyApiInvokeTriggerNode.Type.TRIGGER)
-                            .id("trigger-1")
-                            .conditionsOfConditionAtom(listOf("string", "string"))
-                            .schema(
-                                JourneyApiInvokeTriggerNode.Schema.builder()
-                                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                    .nodes(
+                        listOf(
+                            JourneyNode.ofApiInvokeTrigger(
+                                JourneyApiInvokeTriggerNode.builder()
+                                    .triggerType(JourneyApiInvokeTriggerNode.TriggerType.API_INVOKE)
+                                    .type(JourneyApiInvokeTriggerNode.Type.TRIGGER)
+                                    .id("trigger-1")
+                                    .conditionsOfConditionAtom(listOf("string", "string"))
+                                    .schema(
+                                        JourneyApiInvokeTriggerNode.Schema.builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                            .build()
+                                    )
                                     .build()
-                            )
-                            .build()
-                    )
-                    .addNode(
-                        JourneyApiInvokeTriggerNode.builder()
-                            .triggerType(JourneyApiInvokeTriggerNode.TriggerType.API_INVOKE)
-                            .type(JourneyApiInvokeTriggerNode.Type.TRIGGER)
-                            .id("send-1")
-                            .conditionsOfConditionAtom(listOf("string", "string"))
-                            .schema(
-                                JourneyApiInvokeTriggerNode.Schema.builder()
-                                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            ),
+                            JourneyNode.ofSend(
+                                JourneySendNode.builder()
+                                    .message(
+                                        JourneySendNode.Message.builder()
+                                            .context(
+                                                JourneySendNode.Message.Context.builder()
+                                                    .tenantId("x")
+                                                    .build()
+                                            )
+                                            .data(
+                                                JourneySendNode.Message.Data.builder()
+                                                    .putAdditionalProperty(
+                                                        "foo",
+                                                        JsonValue.from("bar"),
+                                                    )
+                                                    .build()
+                                            )
+                                            .delay(
+                                                JourneySendNode.Message.Delay.builder()
+                                                    .until("x")
+                                                    .timezone("x")
+                                                    .build()
+                                            )
+                                            .template("nt_01kx4h2jdafq8bk9aftxak4b40")
+                                            .to(
+                                                JourneySendNode.Message.To.builder()
+                                                    .emailOverride("x")
+                                                    .phoneNumberOverride("x")
+                                                    .userIdOverride("x")
+                                                    .build()
+                                            )
+                                            .build()
+                                    )
+                                    .type(JourneySendNode.Type.SEND)
+                                    .id("send-1")
+                                    .conditionsOfConditionAtom(listOf("string", "string"))
+                                    .experiment(
+                                        JourneyExperiment.builder()
+                                            .bucketingKey("x")
+                                            .addVariant(
+                                                JourneyExperimentVariant.builder()
+                                                    .id("x")
+                                                    .templateId("x")
+                                                    .weight(0.0)
+                                                    .name("name")
+                                                    .build()
+                                            )
+                                            .addVariant(
+                                                JourneyExperimentVariant.builder()
+                                                    .id("x")
+                                                    .templateId("x")
+                                                    .weight(0.0)
+                                                    .name("name")
+                                                    .build()
+                                            )
+                                            .id("x")
+                                            .name("name")
+                                            .build()
+                                    )
                                     .build()
-                            )
-                            .build()
+                            ),
+                            JourneyNode.ofExit(
+                                JourneyExitNode.builder()
+                                    .type(JourneyExitNode.Type.EXIT)
+                                    .id("exit-1")
+                                    .build()
+                            ),
+                        )
                     )
                     .enabled(true)
                     .state(JourneyState.DRAFT)
@@ -59,31 +117,91 @@ internal class JourneyCreateParamsTest {
                 .createJourneyRequest(
                     CreateJourneyRequest.builder()
                         .name("Welcome Journey")
-                        .addNode(
-                            JourneyApiInvokeTriggerNode.builder()
-                                .triggerType(JourneyApiInvokeTriggerNode.TriggerType.API_INVOKE)
-                                .type(JourneyApiInvokeTriggerNode.Type.TRIGGER)
-                                .id("trigger-1")
-                                .conditionsOfConditionAtom(listOf("string", "string"))
-                                .schema(
-                                    JourneyApiInvokeTriggerNode.Schema.builder()
-                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .nodes(
+                            listOf(
+                                JourneyNode.ofApiInvokeTrigger(
+                                    JourneyApiInvokeTriggerNode.builder()
+                                        .triggerType(
+                                            JourneyApiInvokeTriggerNode.TriggerType.API_INVOKE
+                                        )
+                                        .type(JourneyApiInvokeTriggerNode.Type.TRIGGER)
+                                        .id("trigger-1")
+                                        .conditionsOfConditionAtom(listOf("string", "string"))
+                                        .schema(
+                                            JourneyApiInvokeTriggerNode.Schema.builder()
+                                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                                .build()
+                                        )
                                         .build()
-                                )
-                                .build()
-                        )
-                        .addNode(
-                            JourneyApiInvokeTriggerNode.builder()
-                                .triggerType(JourneyApiInvokeTriggerNode.TriggerType.API_INVOKE)
-                                .type(JourneyApiInvokeTriggerNode.Type.TRIGGER)
-                                .id("send-1")
-                                .conditionsOfConditionAtom(listOf("string", "string"))
-                                .schema(
-                                    JourneyApiInvokeTriggerNode.Schema.builder()
-                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                ),
+                                JourneyNode.ofSend(
+                                    JourneySendNode.builder()
+                                        .message(
+                                            JourneySendNode.Message.builder()
+                                                .context(
+                                                    JourneySendNode.Message.Context.builder()
+                                                        .tenantId("x")
+                                                        .build()
+                                                )
+                                                .data(
+                                                    JourneySendNode.Message.Data.builder()
+                                                        .putAdditionalProperty(
+                                                            "foo",
+                                                            JsonValue.from("bar"),
+                                                        )
+                                                        .build()
+                                                )
+                                                .delay(
+                                                    JourneySendNode.Message.Delay.builder()
+                                                        .until("x")
+                                                        .timezone("x")
+                                                        .build()
+                                                )
+                                                .template("nt_01kx4h2jdafq8bk9aftxak4b40")
+                                                .to(
+                                                    JourneySendNode.Message.To.builder()
+                                                        .emailOverride("x")
+                                                        .phoneNumberOverride("x")
+                                                        .userIdOverride("x")
+                                                        .build()
+                                                )
+                                                .build()
+                                        )
+                                        .type(JourneySendNode.Type.SEND)
+                                        .id("send-1")
+                                        .conditionsOfConditionAtom(listOf("string", "string"))
+                                        .experiment(
+                                            JourneyExperiment.builder()
+                                                .bucketingKey("x")
+                                                .addVariant(
+                                                    JourneyExperimentVariant.builder()
+                                                        .id("x")
+                                                        .templateId("x")
+                                                        .weight(0.0)
+                                                        .name("name")
+                                                        .build()
+                                                )
+                                                .addVariant(
+                                                    JourneyExperimentVariant.builder()
+                                                        .id("x")
+                                                        .templateId("x")
+                                                        .weight(0.0)
+                                                        .name("name")
+                                                        .build()
+                                                )
+                                                .id("x")
+                                                .name("name")
+                                                .build()
+                                        )
                                         .build()
-                                )
-                                .build()
+                                ),
+                                JourneyNode.ofExit(
+                                    JourneyExitNode.builder()
+                                        .type(JourneyExitNode.Type.EXIT)
+                                        .id("exit-1")
+                                        .build()
+                                ),
+                            )
                         )
                         .enabled(true)
                         .state(JourneyState.DRAFT)
@@ -109,17 +227,28 @@ internal class JourneyCreateParamsTest {
                 .createJourneyRequest(
                     CreateJourneyRequest.builder()
                         .name("Welcome Journey")
-                        .addNode(
-                            JourneyApiInvokeTriggerNode.builder()
-                                .triggerType(JourneyApiInvokeTriggerNode.TriggerType.API_INVOKE)
-                                .type(JourneyApiInvokeTriggerNode.Type.TRIGGER)
-                                .build()
-                        )
-                        .addNode(
-                            JourneyApiInvokeTriggerNode.builder()
-                                .triggerType(JourneyApiInvokeTriggerNode.TriggerType.API_INVOKE)
-                                .type(JourneyApiInvokeTriggerNode.Type.TRIGGER)
-                                .build()
+                        .nodes(
+                            listOf(
+                                JourneyNode.ofApiInvokeTrigger(
+                                    JourneyApiInvokeTriggerNode.builder()
+                                        .triggerType(
+                                            JourneyApiInvokeTriggerNode.TriggerType.API_INVOKE
+                                        )
+                                        .type(JourneyApiInvokeTriggerNode.Type.TRIGGER)
+                                        .build()
+                                ),
+                                JourneyNode.ofSend(
+                                    JourneySendNode.builder()
+                                        .message(JourneySendNode.Message.builder().build())
+                                        .type(JourneySendNode.Type.SEND)
+                                        .build()
+                                ),
+                                JourneyNode.ofExit(
+                                    JourneyExitNode.builder()
+                                        .type(JourneyExitNode.Type.EXIT)
+                                        .build()
+                                ),
+                            )
                         )
                         .build()
                 )
@@ -139,31 +268,91 @@ internal class JourneyCreateParamsTest {
                 .createJourneyRequest(
                     CreateJourneyRequest.builder()
                         .name("Welcome Journey")
-                        .addNode(
-                            JourneyApiInvokeTriggerNode.builder()
-                                .triggerType(JourneyApiInvokeTriggerNode.TriggerType.API_INVOKE)
-                                .type(JourneyApiInvokeTriggerNode.Type.TRIGGER)
-                                .id("trigger-1")
-                                .conditionsOfConditionAtom(listOf("string", "string"))
-                                .schema(
-                                    JourneyApiInvokeTriggerNode.Schema.builder()
-                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .nodes(
+                            listOf(
+                                JourneyNode.ofApiInvokeTrigger(
+                                    JourneyApiInvokeTriggerNode.builder()
+                                        .triggerType(
+                                            JourneyApiInvokeTriggerNode.TriggerType.API_INVOKE
+                                        )
+                                        .type(JourneyApiInvokeTriggerNode.Type.TRIGGER)
+                                        .id("trigger-1")
+                                        .conditionsOfConditionAtom(listOf("string", "string"))
+                                        .schema(
+                                            JourneyApiInvokeTriggerNode.Schema.builder()
+                                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                                .build()
+                                        )
                                         .build()
-                                )
-                                .build()
-                        )
-                        .addNode(
-                            JourneyApiInvokeTriggerNode.builder()
-                                .triggerType(JourneyApiInvokeTriggerNode.TriggerType.API_INVOKE)
-                                .type(JourneyApiInvokeTriggerNode.Type.TRIGGER)
-                                .id("send-1")
-                                .conditionsOfConditionAtom(listOf("string", "string"))
-                                .schema(
-                                    JourneyApiInvokeTriggerNode.Schema.builder()
-                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                ),
+                                JourneyNode.ofSend(
+                                    JourneySendNode.builder()
+                                        .message(
+                                            JourneySendNode.Message.builder()
+                                                .context(
+                                                    JourneySendNode.Message.Context.builder()
+                                                        .tenantId("x")
+                                                        .build()
+                                                )
+                                                .data(
+                                                    JourneySendNode.Message.Data.builder()
+                                                        .putAdditionalProperty(
+                                                            "foo",
+                                                            JsonValue.from("bar"),
+                                                        )
+                                                        .build()
+                                                )
+                                                .delay(
+                                                    JourneySendNode.Message.Delay.builder()
+                                                        .until("x")
+                                                        .timezone("x")
+                                                        .build()
+                                                )
+                                                .template("nt_01kx4h2jdafq8bk9aftxak4b40")
+                                                .to(
+                                                    JourneySendNode.Message.To.builder()
+                                                        .emailOverride("x")
+                                                        .phoneNumberOverride("x")
+                                                        .userIdOverride("x")
+                                                        .build()
+                                                )
+                                                .build()
+                                        )
+                                        .type(JourneySendNode.Type.SEND)
+                                        .id("send-1")
+                                        .conditionsOfConditionAtom(listOf("string", "string"))
+                                        .experiment(
+                                            JourneyExperiment.builder()
+                                                .bucketingKey("x")
+                                                .addVariant(
+                                                    JourneyExperimentVariant.builder()
+                                                        .id("x")
+                                                        .templateId("x")
+                                                        .weight(0.0)
+                                                        .name("name")
+                                                        .build()
+                                                )
+                                                .addVariant(
+                                                    JourneyExperimentVariant.builder()
+                                                        .id("x")
+                                                        .templateId("x")
+                                                        .weight(0.0)
+                                                        .name("name")
+                                                        .build()
+                                                )
+                                                .id("x")
+                                                .name("name")
+                                                .build()
+                                        )
                                         .build()
-                                )
-                                .build()
+                                ),
+                                JourneyNode.ofExit(
+                                    JourneyExitNode.builder()
+                                        .type(JourneyExitNode.Type.EXIT)
+                                        .id("exit-1")
+                                        .build()
+                                ),
+                            )
                         )
                         .enabled(true)
                         .state(JourneyState.DRAFT)
@@ -177,31 +366,89 @@ internal class JourneyCreateParamsTest {
             .isEqualTo(
                 CreateJourneyRequest.builder()
                     .name("Welcome Journey")
-                    .addNode(
-                        JourneyApiInvokeTriggerNode.builder()
-                            .triggerType(JourneyApiInvokeTriggerNode.TriggerType.API_INVOKE)
-                            .type(JourneyApiInvokeTriggerNode.Type.TRIGGER)
-                            .id("trigger-1")
-                            .conditionsOfConditionAtom(listOf("string", "string"))
-                            .schema(
-                                JourneyApiInvokeTriggerNode.Schema.builder()
-                                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                    .nodes(
+                        listOf(
+                            JourneyNode.ofApiInvokeTrigger(
+                                JourneyApiInvokeTriggerNode.builder()
+                                    .triggerType(JourneyApiInvokeTriggerNode.TriggerType.API_INVOKE)
+                                    .type(JourneyApiInvokeTriggerNode.Type.TRIGGER)
+                                    .id("trigger-1")
+                                    .conditionsOfConditionAtom(listOf("string", "string"))
+                                    .schema(
+                                        JourneyApiInvokeTriggerNode.Schema.builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                            .build()
+                                    )
                                     .build()
-                            )
-                            .build()
-                    )
-                    .addNode(
-                        JourneyApiInvokeTriggerNode.builder()
-                            .triggerType(JourneyApiInvokeTriggerNode.TriggerType.API_INVOKE)
-                            .type(JourneyApiInvokeTriggerNode.Type.TRIGGER)
-                            .id("send-1")
-                            .conditionsOfConditionAtom(listOf("string", "string"))
-                            .schema(
-                                JourneyApiInvokeTriggerNode.Schema.builder()
-                                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            ),
+                            JourneyNode.ofSend(
+                                JourneySendNode.builder()
+                                    .message(
+                                        JourneySendNode.Message.builder()
+                                            .context(
+                                                JourneySendNode.Message.Context.builder()
+                                                    .tenantId("x")
+                                                    .build()
+                                            )
+                                            .data(
+                                                JourneySendNode.Message.Data.builder()
+                                                    .putAdditionalProperty(
+                                                        "foo",
+                                                        JsonValue.from("bar"),
+                                                    )
+                                                    .build()
+                                            )
+                                            .delay(
+                                                JourneySendNode.Message.Delay.builder()
+                                                    .until("x")
+                                                    .timezone("x")
+                                                    .build()
+                                            )
+                                            .template("nt_01kx4h2jdafq8bk9aftxak4b40")
+                                            .to(
+                                                JourneySendNode.Message.To.builder()
+                                                    .emailOverride("x")
+                                                    .phoneNumberOverride("x")
+                                                    .userIdOverride("x")
+                                                    .build()
+                                            )
+                                            .build()
+                                    )
+                                    .type(JourneySendNode.Type.SEND)
+                                    .id("send-1")
+                                    .conditionsOfConditionAtom(listOf("string", "string"))
+                                    .experiment(
+                                        JourneyExperiment.builder()
+                                            .bucketingKey("x")
+                                            .addVariant(
+                                                JourneyExperimentVariant.builder()
+                                                    .id("x")
+                                                    .templateId("x")
+                                                    .weight(0.0)
+                                                    .name("name")
+                                                    .build()
+                                            )
+                                            .addVariant(
+                                                JourneyExperimentVariant.builder()
+                                                    .id("x")
+                                                    .templateId("x")
+                                                    .weight(0.0)
+                                                    .name("name")
+                                                    .build()
+                                            )
+                                            .id("x")
+                                            .name("name")
+                                            .build()
+                                    )
                                     .build()
-                            )
-                            .build()
+                            ),
+                            JourneyNode.ofExit(
+                                JourneyExitNode.builder()
+                                    .type(JourneyExitNode.Type.EXIT)
+                                    .id("exit-1")
+                                    .build()
+                            ),
+                        )
                     )
                     .enabled(true)
                     .state(JourneyState.DRAFT)
@@ -216,17 +463,28 @@ internal class JourneyCreateParamsTest {
                 .createJourneyRequest(
                     CreateJourneyRequest.builder()
                         .name("Welcome Journey")
-                        .addNode(
-                            JourneyApiInvokeTriggerNode.builder()
-                                .triggerType(JourneyApiInvokeTriggerNode.TriggerType.API_INVOKE)
-                                .type(JourneyApiInvokeTriggerNode.Type.TRIGGER)
-                                .build()
-                        )
-                        .addNode(
-                            JourneyApiInvokeTriggerNode.builder()
-                                .triggerType(JourneyApiInvokeTriggerNode.TriggerType.API_INVOKE)
-                                .type(JourneyApiInvokeTriggerNode.Type.TRIGGER)
-                                .build()
+                        .nodes(
+                            listOf(
+                                JourneyNode.ofApiInvokeTrigger(
+                                    JourneyApiInvokeTriggerNode.builder()
+                                        .triggerType(
+                                            JourneyApiInvokeTriggerNode.TriggerType.API_INVOKE
+                                        )
+                                        .type(JourneyApiInvokeTriggerNode.Type.TRIGGER)
+                                        .build()
+                                ),
+                                JourneyNode.ofSend(
+                                    JourneySendNode.builder()
+                                        .message(JourneySendNode.Message.builder().build())
+                                        .type(JourneySendNode.Type.SEND)
+                                        .build()
+                                ),
+                                JourneyNode.ofExit(
+                                    JourneyExitNode.builder()
+                                        .type(JourneyExitNode.Type.EXIT)
+                                        .build()
+                                ),
+                            )
                         )
                         .build()
                 )
@@ -238,17 +496,24 @@ internal class JourneyCreateParamsTest {
             .isEqualTo(
                 CreateJourneyRequest.builder()
                     .name("Welcome Journey")
-                    .addNode(
-                        JourneyApiInvokeTriggerNode.builder()
-                            .triggerType(JourneyApiInvokeTriggerNode.TriggerType.API_INVOKE)
-                            .type(JourneyApiInvokeTriggerNode.Type.TRIGGER)
-                            .build()
-                    )
-                    .addNode(
-                        JourneyApiInvokeTriggerNode.builder()
-                            .triggerType(JourneyApiInvokeTriggerNode.TriggerType.API_INVOKE)
-                            .type(JourneyApiInvokeTriggerNode.Type.TRIGGER)
-                            .build()
+                    .nodes(
+                        listOf(
+                            JourneyNode.ofApiInvokeTrigger(
+                                JourneyApiInvokeTriggerNode.builder()
+                                    .triggerType(JourneyApiInvokeTriggerNode.TriggerType.API_INVOKE)
+                                    .type(JourneyApiInvokeTriggerNode.Type.TRIGGER)
+                                    .build()
+                            ),
+                            JourneyNode.ofSend(
+                                JourneySendNode.builder()
+                                    .message(JourneySendNode.Message.builder().build())
+                                    .type(JourneySendNode.Type.SEND)
+                                    .build()
+                            ),
+                            JourneyNode.ofExit(
+                                JourneyExitNode.builder().type(JourneyExitNode.Type.EXIT).build()
+                            ),
+                        )
                     )
                     .build()
             )
