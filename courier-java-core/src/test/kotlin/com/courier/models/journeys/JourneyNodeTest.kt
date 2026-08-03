@@ -134,6 +134,7 @@ internal class JourneyNodeTest {
             JourneySendNode.builder()
                 .message(
                     JourneySendNode.Message.builder()
+                        .context(JourneySendNode.Message.Context.builder().tenantId("x").build())
                         .data(
                             JourneySendNode.Message.Data.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -206,6 +207,9 @@ internal class JourneyNodeTest {
                 JourneySendNode.builder()
                     .message(
                         JourneySendNode.Message.builder()
+                            .context(
+                                JourneySendNode.Message.Context.builder().tenantId("x").build()
+                            )
                             .data(
                                 JourneySendNode.Message.Data.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("bar"))
