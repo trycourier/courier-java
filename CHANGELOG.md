@@ -1,5 +1,15 @@
 # Changelog
 
+## 4.25.0 (2026-08-03)
+
+Full Changelog: [v4.24.0...v4.25.0](https://github.com/trycourier/courier-java/compare/v4.24.0...v4.25.0)
+
+### Features
+
+* Merge pull request [#183](https://github.com/trycourier/courier-java/issues/183) from trycourier/dantran/c-19684-api-spec-document-messagecontexttenant_id-on-journey-send ([375b0f1](https://github.com/trycourier/courier-java/commit/375b0f16dfd7e9817a0fc0fb51aa05899eaa6ae7))
+* spec: remove inbox message delete/restore endpoints for now (C-19268) ([#182](https://github.com/trycourier/courier-java/issues/182)) ([07e30e0](https://github.com/trycourier/courier-java/commit/07e30e0228b6de99301269f039ebba887c5dff47))
+* spec: reorder API reference sections to match the Studio nav ([#180](https://github.com/trycourier/courier-java/issues/180)) ([3fe56cc](https://github.com/trycourier/courier-java/commit/3fe56ccad1fcdce5235c1ef4e3c2613879384d59))
+
 ## 4.24.0 (2026-07-29)
 
 Full Changelog: [v4.23.0...v4.24.0](https://github.com/trycourier/courier-java/compare/v4.23.0...v4.24.0)
