@@ -22,8 +22,8 @@ import kotlin.jvm.optionals.getOrNull
 /**
  * Send to the recipient. A send node sources its content from EXACTLY ONE of `message.template` (a
  * single notification template) or `experiment` (an A/B split across weighted template variants) —
- * supplying both, or neither, is rejected. Optionally override the recipient address, delay the
- * send, or attach `data`.
+ * supplying both, or neither, is rejected. Optionally override the recipient address, send as a
+ * tenant, delay the send, or attach `data`.
  */
 class JourneySendNode
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
@@ -348,6 +348,7 @@ private constructor(
     class Message
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
+        private val context: JsonField<Context>,
         private val data: JsonField<Data>,
         private val delay: JsonField<Delay>,
         private val template: JsonField<String>,
@@ -357,13 +358,23 @@ private constructor(
 
         @JsonCreator
         private constructor(
+            @JsonProperty("context") @ExcludeMissing context: JsonField<Context> = JsonMissing.of(),
             @JsonProperty("data") @ExcludeMissing data: JsonField<Data> = JsonMissing.of(),
             @JsonProperty("delay") @ExcludeMissing delay: JsonField<Delay> = JsonMissing.of(),
             @JsonProperty("template")
             @ExcludeMissing
             template: JsonField<String> = JsonMissing.of(),
             @JsonProperty("to") @ExcludeMissing to: JsonField<To> = JsonMissing.of(),
-        ) : this(data, delay, template, to, mutableMapOf())
+        ) : this(context, data, delay, template, to, mutableMapOf())
+
+        /**
+         * Tenant context for this send. Set it to deliver on behalf of one of your customers, so
+         * the message uses that tenant's brand and settings.
+         *
+         * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun context(): Optional<Context> = context.getOptional("context")
 
         /**
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -388,6 +399,13 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun to(): Optional<To> = to.getOptional("to")
+
+        /**
+         * Returns the raw JSON value of [context].
+         *
+         * Unlike [context], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("context") @ExcludeMissing fun _context(): JsonField<Context> = context
 
         /**
          * Returns the raw JSON value of [data].
@@ -438,6 +456,7 @@ private constructor(
         /** A builder for [Message]. */
         class Builder internal constructor() {
 
+            private var context: JsonField<Context> = JsonMissing.of()
             private var data: JsonField<Data> = JsonMissing.of()
             private var delay: JsonField<Delay> = JsonMissing.of()
             private var template: JsonField<String> = JsonMissing.of()
@@ -446,12 +465,28 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(message: Message) = apply {
+                context = message.context
                 data = message.data
                 delay = message.delay
                 template = message.template
                 to = message.to
                 additionalProperties = message.additionalProperties.toMutableMap()
             }
+
+            /**
+             * Tenant context for this send. Set it to deliver on behalf of one of your customers,
+             * so the message uses that tenant's brand and settings.
+             */
+            fun context(context: Context) = context(JsonField.of(context))
+
+            /**
+             * Sets [Builder.context] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.context] with a well-typed [Context] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun context(context: JsonField<Context>) = apply { this.context = context }
 
             fun data(data: Data) = data(JsonField.of(data))
 
@@ -522,7 +557,7 @@ private constructor(
              * Further updates to this [Builder] will not mutate the returned instance.
              */
             fun build(): Message =
-                Message(data, delay, template, to, additionalProperties.toMutableMap())
+                Message(context, data, delay, template, to, additionalProperties.toMutableMap())
         }
 
         private var validated: Boolean = false
@@ -541,6 +576,7 @@ private constructor(
                 return@apply
             }
 
+            context().ifPresent { it.validate() }
             data().ifPresent { it.validate() }
             delay().ifPresent { it.validate() }
             template()
@@ -564,10 +600,213 @@ private constructor(
          */
         @JvmSynthetic
         internal fun validity(): Int =
-            (data.asKnown().getOrNull()?.validity() ?: 0) +
+            (context.asKnown().getOrNull()?.validity() ?: 0) +
+                (data.asKnown().getOrNull()?.validity() ?: 0) +
                 (delay.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (template.asKnown().isPresent) 1 else 0) +
                 (to.asKnown().getOrNull()?.validity() ?: 0)
+
+        /**
+         * Tenant context for this send. Set it to deliver on behalf of one of your customers, so
+         * the message uses that tenant's brand and settings.
+         */
+        class Context
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
+            private val tenantId: JsonField<String>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("tenant_id")
+                @ExcludeMissing
+                tenantId: JsonField<String> = JsonMissing.of()
+            ) : this(tenantId, mutableMapOf())
+
+            /**
+             * The tenant to send as. Accepts either a literal tenant id (`acme-tenant`) or a
+             * whole-string mustache reference to a value the run already holds —
+             * `{{data.tenant_id}}` from the invocation payload, or `{{f1.body.tenant_id}}` from the
+             * response of an earlier fetch node with id `f1`. A reference is resolved separately on
+             * every run, so a single journey can deliver as many tenants. Two forms are rejected
+             * with `400`: mid-string interpolation such as `tenant-{{data.region}}`, and any value
+             * beginning with `refs.`, which is reserved for internal use. A reference that resolves
+             * to nothing at run time does not stop the run — the message is still sent, with no
+             * tenant context — so make sure the referenced value is always present. `GET` returns
+             * the value in the same form it was supplied.
+             *
+             * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun tenantId(): String = tenantId.getRequired("tenant_id")
+
+            /**
+             * Returns the raw JSON value of [tenantId].
+             *
+             * Unlike [tenantId], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("tenant_id") @ExcludeMissing fun _tenantId(): JsonField<String> = tenantId
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /**
+                 * Returns a mutable builder for constructing an instance of [Context].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .tenantId()
+                 * ```
+                 */
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [Context]. */
+            class Builder internal constructor() {
+
+                private var tenantId: JsonField<String>? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(context: Context) = apply {
+                    tenantId = context.tenantId
+                    additionalProperties = context.additionalProperties.toMutableMap()
+                }
+
+                /**
+                 * The tenant to send as. Accepts either a literal tenant id (`acme-tenant`) or a
+                 * whole-string mustache reference to a value the run already holds —
+                 * `{{data.tenant_id}}` from the invocation payload, or `{{f1.body.tenant_id}}` from
+                 * the response of an earlier fetch node with id `f1`. A reference is resolved
+                 * separately on every run, so a single journey can deliver as many tenants. Two
+                 * forms are rejected with `400`: mid-string interpolation such as
+                 * `tenant-{{data.region}}`, and any value beginning with `refs.`, which is reserved
+                 * for internal use. A reference that resolves to nothing at run time does not stop
+                 * the run — the message is still sent, with no tenant context — so make sure the
+                 * referenced value is always present. `GET` returns the value in the same form it
+                 * was supplied.
+                 */
+                fun tenantId(tenantId: String) = tenantId(JsonField.of(tenantId))
+
+                /**
+                 * Sets [Builder.tenantId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.tenantId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun tenantId(tenantId: JsonField<String>) = apply { this.tenantId = tenantId }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Context].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .tenantId()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
+                fun build(): Context =
+                    Context(
+                        checkRequired("tenantId", tenantId),
+                        additionalProperties.toMutableMap(),
+                    )
+            }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws CourierInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
+            fun validate(): Context = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                tenantId()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: CourierInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int = (if (tenantId.asKnown().isPresent) 1 else 0)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Context &&
+                    tenantId == other.tenantId &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy { Objects.hash(tenantId, additionalProperties) }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "Context{tenantId=$tenantId, additionalProperties=$additionalProperties}"
+        }
 
         class Data
         @JsonCreator
@@ -1149,6 +1388,7 @@ private constructor(
             }
 
             return other is Message &&
+                context == other.context &&
                 data == other.data &&
                 delay == other.delay &&
                 template == other.template &&
@@ -1157,13 +1397,13 @@ private constructor(
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(data, delay, template, to, additionalProperties)
+            Objects.hash(context, data, delay, template, to, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Message{data=$data, delay=$delay, template=$template, to=$to, additionalProperties=$additionalProperties}"
+            "Message{context=$context, data=$data, delay=$delay, template=$template, to=$to, additionalProperties=$additionalProperties}"
     }
 
     class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {

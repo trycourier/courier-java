@@ -16,6 +16,7 @@ internal class JourneySendNodeTest {
             JourneySendNode.builder()
                 .message(
                     JourneySendNode.Message.builder()
+                        .context(JourneySendNode.Message.Context.builder().tenantId("x").build())
                         .data(
                             JourneySendNode.Message.Data.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -65,6 +66,7 @@ internal class JourneySendNodeTest {
         assertThat(journeySendNode.message())
             .isEqualTo(
                 JourneySendNode.Message.builder()
+                    .context(JourneySendNode.Message.Context.builder().tenantId("x").build())
                     .data(
                         JourneySendNode.Message.Data.builder()
                             .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -118,6 +120,7 @@ internal class JourneySendNodeTest {
             JourneySendNode.builder()
                 .message(
                     JourneySendNode.Message.builder()
+                        .context(JourneySendNode.Message.Context.builder().tenantId("x").build())
                         .data(
                             JourneySendNode.Message.Data.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
