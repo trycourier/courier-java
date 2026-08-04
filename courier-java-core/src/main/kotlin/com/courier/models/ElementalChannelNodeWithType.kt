@@ -38,6 +38,9 @@ private constructor(
     private val loop: JsonField<String>,
     private val ref: JsonField<String>,
     private val channel: JsonField<String>,
+    private val fontSize: JsonField<String>,
+    private val lineHeight: JsonField<String>,
+    private val padding: JsonField<String>,
     private val raw: JsonField<ElementalChannelNode.Raw>,
     private val type: JsonField<Type>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -52,11 +55,28 @@ private constructor(
         @JsonProperty("loop") @ExcludeMissing loop: JsonField<String> = JsonMissing.of(),
         @JsonProperty("ref") @ExcludeMissing ref: JsonField<String> = JsonMissing.of(),
         @JsonProperty("channel") @ExcludeMissing channel: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("font_size") @ExcludeMissing fontSize: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("line_height")
+        @ExcludeMissing
+        lineHeight: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("padding") @ExcludeMissing padding: JsonField<String> = JsonMissing.of(),
         @JsonProperty("raw")
         @ExcludeMissing
         raw: JsonField<ElementalChannelNode.Raw> = JsonMissing.of(),
         @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
-    ) : this(channels, if_, loop, ref, channel, raw, type, mutableMapOf())
+    ) : this(
+        channels,
+        if_,
+        loop,
+        ref,
+        channel,
+        fontSize,
+        lineHeight,
+        padding,
+        raw,
+        type,
+        mutableMapOf(),
+    )
 
     fun toElementalChannelNode(): ElementalChannelNode =
         ElementalChannelNode.builder()
@@ -65,6 +85,9 @@ private constructor(
             .loop(loop)
             .ref(ref)
             .channel(channel)
+            .fontSize(fontSize)
+            .lineHeight(lineHeight)
+            .padding(padding)
             .raw(raw)
             .build()
 
@@ -100,6 +123,34 @@ private constructor(
      *   server responded with an unexpected value).
      */
     fun channel(): Optional<String> = channel.getOptional("channel")
+
+    /**
+     * Email only. Document-level base font size (CSS px, e.g. `16px`) for body content — text,
+     * quote, list and action button labels. Heading styles (`h1`/`h2`/`h3`) and `subtext` keep
+     * their preset sizes.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun fontSize(): Optional<String> = fontSize.getOptional("font_size")
+
+    /**
+     * Email only. Document-level line height (CSS px or unitless multiplier, e.g. `24px` or `1.5`)
+     * applied to all body content unless overridden per block.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun lineHeight(): Optional<String> = lineHeight.getOptional("line_height")
+
+    /**
+     * Email only. Document-level body padding applied once around the email body, as a CSS px
+     * shorthand (1–4 values), e.g. `48px 64px`.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun padding(): Optional<String> = padding.getOptional("padding")
 
     /**
      * Raw data to apply to the channel. If `elements` has not been specified, `raw` is required.
@@ -151,6 +202,27 @@ private constructor(
     @JsonProperty("channel") @ExcludeMissing fun _channel(): JsonField<String> = channel
 
     /**
+     * Returns the raw JSON value of [fontSize].
+     *
+     * Unlike [fontSize], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("font_size") @ExcludeMissing fun _fontSize(): JsonField<String> = fontSize
+
+    /**
+     * Returns the raw JSON value of [lineHeight].
+     *
+     * Unlike [lineHeight], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("line_height") @ExcludeMissing fun _lineHeight(): JsonField<String> = lineHeight
+
+    /**
+     * Returns the raw JSON value of [padding].
+     *
+     * Unlike [padding], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("padding") @ExcludeMissing fun _padding(): JsonField<String> = padding
+
+    /**
      * Returns the raw JSON value of [raw].
      *
      * Unlike [raw], this method doesn't throw if the JSON field has an unexpected type.
@@ -192,6 +264,9 @@ private constructor(
         private var loop: JsonField<String> = JsonMissing.of()
         private var ref: JsonField<String> = JsonMissing.of()
         private var channel: JsonField<String> = JsonMissing.of()
+        private var fontSize: JsonField<String> = JsonMissing.of()
+        private var lineHeight: JsonField<String> = JsonMissing.of()
+        private var padding: JsonField<String> = JsonMissing.of()
         private var raw: JsonField<ElementalChannelNode.Raw> = JsonMissing.of()
         private var type: JsonField<Type> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -203,6 +278,9 @@ private constructor(
             loop = elementalChannelNodeWithType.loop
             ref = elementalChannelNodeWithType.ref
             channel = elementalChannelNodeWithType.channel
+            fontSize = elementalChannelNodeWithType.fontSize
+            lineHeight = elementalChannelNodeWithType.lineHeight
+            padding = elementalChannelNodeWithType.padding
             raw = elementalChannelNodeWithType.raw
             type = elementalChannelNodeWithType.type
             additionalProperties = elementalChannelNodeWithType.additionalProperties.toMutableMap()
@@ -290,6 +368,59 @@ private constructor(
         fun channel(channel: JsonField<String>) = apply { this.channel = channel }
 
         /**
+         * Email only. Document-level base font size (CSS px, e.g. `16px`) for body content — text,
+         * quote, list and action button labels. Heading styles (`h1`/`h2`/`h3`) and `subtext` keep
+         * their preset sizes.
+         */
+        fun fontSize(fontSize: String?) = fontSize(JsonField.ofNullable(fontSize))
+
+        /** Alias for calling [Builder.fontSize] with `fontSize.orElse(null)`. */
+        fun fontSize(fontSize: Optional<String>) = fontSize(fontSize.getOrNull())
+
+        /**
+         * Sets [Builder.fontSize] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.fontSize] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun fontSize(fontSize: JsonField<String>) = apply { this.fontSize = fontSize }
+
+        /**
+         * Email only. Document-level line height (CSS px or unitless multiplier, e.g. `24px` or
+         * `1.5`) applied to all body content unless overridden per block.
+         */
+        fun lineHeight(lineHeight: String?) = lineHeight(JsonField.ofNullable(lineHeight))
+
+        /** Alias for calling [Builder.lineHeight] with `lineHeight.orElse(null)`. */
+        fun lineHeight(lineHeight: Optional<String>) = lineHeight(lineHeight.getOrNull())
+
+        /**
+         * Sets [Builder.lineHeight] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.lineHeight] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun lineHeight(lineHeight: JsonField<String>) = apply { this.lineHeight = lineHeight }
+
+        /**
+         * Email only. Document-level body padding applied once around the email body, as a CSS px
+         * shorthand (1–4 values), e.g. `48px 64px`.
+         */
+        fun padding(padding: String?) = padding(JsonField.ofNullable(padding))
+
+        /** Alias for calling [Builder.padding] with `padding.orElse(null)`. */
+        fun padding(padding: Optional<String>) = padding(padding.getOrNull())
+
+        /**
+         * Sets [Builder.padding] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.padding] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun padding(padding: JsonField<String>) = apply { this.padding = padding }
+
+        /**
          * Raw data to apply to the channel. If `elements` has not been specified, `raw` is
          * required.
          */
@@ -348,6 +479,9 @@ private constructor(
                 loop,
                 ref,
                 channel,
+                fontSize,
+                lineHeight,
+                padding,
                 raw,
                 type,
                 additionalProperties.toMutableMap(),
@@ -374,6 +508,9 @@ private constructor(
         loop()
         ref()
         channel()
+        fontSize()
+        lineHeight()
+        padding()
         raw().ifPresent { it.validate() }
         type().ifPresent { it.validate() }
         validated = true
@@ -399,6 +536,9 @@ private constructor(
             (if (loop.asKnown().isPresent) 1 else 0) +
             (if (ref.asKnown().isPresent) 1 else 0) +
             (if (channel.asKnown().isPresent) 1 else 0) +
+            (if (fontSize.asKnown().isPresent) 1 else 0) +
+            (if (lineHeight.asKnown().isPresent) 1 else 0) +
+            (if (padding.asKnown().isPresent) 1 else 0) +
             (raw.asKnown().getOrNull()?.validity() ?: 0) +
             (type.asKnown().getOrNull()?.validity() ?: 0)
 
@@ -541,17 +681,32 @@ private constructor(
             loop == other.loop &&
             ref == other.ref &&
             channel == other.channel &&
+            fontSize == other.fontSize &&
+            lineHeight == other.lineHeight &&
+            padding == other.padding &&
             raw == other.raw &&
             type == other.type &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(channels, if_, loop, ref, channel, raw, type, additionalProperties)
+        Objects.hash(
+            channels,
+            if_,
+            loop,
+            ref,
+            channel,
+            fontSize,
+            lineHeight,
+            padding,
+            raw,
+            type,
+            additionalProperties,
+        )
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ElementalChannelNodeWithType{channels=$channels, if_=$if_, loop=$loop, ref=$ref, channel=$channel, raw=$raw, type=$type, additionalProperties=$additionalProperties}"
+        "ElementalChannelNodeWithType{channels=$channels, if_=$if_, loop=$loop, ref=$ref, channel=$channel, fontSize=$fontSize, lineHeight=$lineHeight, padding=$padding, raw=$raw, type=$type, additionalProperties=$additionalProperties}"
 }
