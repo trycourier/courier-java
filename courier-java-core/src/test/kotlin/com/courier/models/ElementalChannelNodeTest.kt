@@ -20,6 +20,9 @@ internal class ElementalChannelNodeTest {
                 .loop("loop")
                 .ref("ref")
                 .channel("email")
+                .fontSize("font_size")
+                .lineHeight("line_height")
+                .padding("padding")
                 .raw(
                     ElementalChannelNode.Raw.builder()
                         .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -32,6 +35,9 @@ internal class ElementalChannelNodeTest {
         assertThat(elementalChannelNode.loop()).contains("loop")
         assertThat(elementalChannelNode.ref()).contains("ref")
         assertThat(elementalChannelNode.channel()).contains("email")
+        assertThat(elementalChannelNode.fontSize()).contains("font_size")
+        assertThat(elementalChannelNode.lineHeight()).contains("line_height")
+        assertThat(elementalChannelNode.padding()).contains("padding")
         assertThat(elementalChannelNode.raw())
             .contains(
                 ElementalChannelNode.Raw.builder()
@@ -50,6 +56,9 @@ internal class ElementalChannelNodeTest {
                 .loop("loop")
                 .ref("ref")
                 .channel("email")
+                .fontSize("font_size")
+                .lineHeight("line_height")
+                .padding("padding")
                 .raw(
                     ElementalChannelNode.Raw.builder()
                         .putAdditionalProperty("foo", JsonValue.from("bar"))
