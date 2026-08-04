@@ -1,5 +1,18 @@
 # Changelog
 
+## 4.26.0 (2026-08-04)
+
+Full Changelog: [v4.25.0...v4.26.0](https://github.com/trycourier/courier-java/compare/v4.25.0...v4.26.0)
+
+### Features
+
+* Merge pull request [#178](https://github.com/trycourier/courier-java/issues/178) from trycourier/geraldosilva/c-19484-elemental-formatting-controls ([b101502](https://github.com/trycourier/courier-java/commit/b101502c679ded2342612293da4c8fec8574e1c2))
+
+
+### Chores
+
+* **internal:** codegen related update ([703b085](https://github.com/trycourier/courier-java/commit/703b085eb7aeb0ba0948849bb023a8fe7b9622da))
+
 ## 4.25.0 (2026-08-03)
 
 Full Changelog: [v4.24.0...v4.25.0](https://github.com/trycourier/courier-java/compare/v4.24.0...v4.25.0)
