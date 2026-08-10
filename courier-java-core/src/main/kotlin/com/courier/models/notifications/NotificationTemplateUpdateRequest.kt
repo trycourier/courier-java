@@ -20,12 +20,13 @@ import kotlin.jvm.optionals.getOrNull
 
 /**
  * Request body for replacing a notification template. Same shape as create. All fields required
- * (PUT = full replacement).
+ * (PUT = full replacement), except `alias`, whose omission means "leave the existing aliases
+ * alone".
  */
 class NotificationTemplateUpdateRequest
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    private val notification: JsonField<NotificationTemplatePayload>,
+    private val notification: JsonField<NotificationTemplateWritePayload>,
     private val state: JsonField<State>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
@@ -34,18 +35,17 @@ private constructor(
     private constructor(
         @JsonProperty("notification")
         @ExcludeMissing
-        notification: JsonField<NotificationTemplatePayload> = JsonMissing.of(),
+        notification: JsonField<NotificationTemplateWritePayload> = JsonMissing.of(),
         @JsonProperty("state") @ExcludeMissing state: JsonField<State> = JsonMissing.of(),
     ) : this(notification, state, mutableMapOf())
 
     /**
-     * Core template fields used in POST and PUT request bodies (nested under a `notification` key)
-     * and returned at the top level in responses.
+     * Template fields accepted in POST and PUT request bodies, nested under a `notification` key.
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun notification(): NotificationTemplatePayload = notification.getRequired("notification")
+    fun notification(): NotificationTemplateWritePayload = notification.getRequired("notification")
 
     /**
      * Template state after update. Case-insensitive input, normalized to uppercase in the response.
@@ -63,7 +63,7 @@ private constructor(
      */
     @JsonProperty("notification")
     @ExcludeMissing
-    fun _notification(): JsonField<NotificationTemplatePayload> = notification
+    fun _notification(): JsonField<NotificationTemplateWritePayload> = notification
 
     /**
      * Returns the raw JSON value of [state].
@@ -101,7 +101,7 @@ private constructor(
     /** A builder for [NotificationTemplateUpdateRequest]. */
     class Builder internal constructor() {
 
-        private var notification: JsonField<NotificationTemplatePayload>? = null
+        private var notification: JsonField<NotificationTemplateWritePayload>? = null
         private var state: JsonField<State> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -115,20 +115,20 @@ private constructor(
             }
 
         /**
-         * Core template fields used in POST and PUT request bodies (nested under a `notification`
-         * key) and returned at the top level in responses.
+         * Template fields accepted in POST and PUT request bodies, nested under a `notification`
+         * key.
          */
-        fun notification(notification: NotificationTemplatePayload) =
+        fun notification(notification: NotificationTemplateWritePayload) =
             notification(JsonField.of(notification))
 
         /**
          * Sets [Builder.notification] to an arbitrary JSON value.
          *
          * You should usually call [Builder.notification] with a well-typed
-         * [NotificationTemplatePayload] value instead. This method is primarily for setting the
-         * field to an undocumented or not yet supported value.
+         * [NotificationTemplateWritePayload] value instead. This method is primarily for setting
+         * the field to an undocumented or not yet supported value.
          */
-        fun notification(notification: JsonField<NotificationTemplatePayload>) = apply {
+        fun notification(notification: JsonField<NotificationTemplateWritePayload>) = apply {
             this.notification = notification
         }
 

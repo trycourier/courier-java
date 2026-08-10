@@ -16,7 +16,7 @@ internal class NotificationTemplateCreateRequestTest {
         val notificationTemplateCreateRequest =
             NotificationTemplateCreateRequest.builder()
                 .notification(
-                    NotificationTemplatePayload.builder()
+                    NotificationTemplateWritePayload.builder()
                         .brand(NotificationTemplatePayload.Brand.builder().id("id").build())
                         .content(
                             ElementalContent.builder()
@@ -44,6 +44,7 @@ internal class NotificationTemplateCreateRequestTest {
                                 .build()
                         )
                         .addTag("string")
+                        .alias("alias")
                         .build()
                 )
                 .state(NotificationTemplateCreateRequest.State.DRAFT)
@@ -51,7 +52,7 @@ internal class NotificationTemplateCreateRequestTest {
 
         assertThat(notificationTemplateCreateRequest.notification())
             .isEqualTo(
-                NotificationTemplatePayload.builder()
+                NotificationTemplateWritePayload.builder()
                     .brand(NotificationTemplatePayload.Brand.builder().id("id").build())
                     .content(
                         ElementalContent.builder()
@@ -79,6 +80,7 @@ internal class NotificationTemplateCreateRequestTest {
                             .build()
                     )
                     .addTag("string")
+                    .alias("alias")
                     .build()
             )
         assertThat(notificationTemplateCreateRequest.state())
@@ -91,7 +93,7 @@ internal class NotificationTemplateCreateRequestTest {
         val notificationTemplateCreateRequest =
             NotificationTemplateCreateRequest.builder()
                 .notification(
-                    NotificationTemplatePayload.builder()
+                    NotificationTemplateWritePayload.builder()
                         .brand(NotificationTemplatePayload.Brand.builder().id("id").build())
                         .content(
                             ElementalContent.builder()
@@ -119,6 +121,7 @@ internal class NotificationTemplateCreateRequestTest {
                                 .build()
                         )
                         .addTag("string")
+                        .alias("alias")
                         .build()
                 )
                 .state(NotificationTemplateCreateRequest.State.DRAFT)

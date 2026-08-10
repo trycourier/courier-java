@@ -9,12 +9,12 @@ import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-internal class NotificationTemplateResponseTest {
+internal class NotificationTemplateWritePayloadTest {
 
     @Test
     fun create() {
-        val notificationTemplateResponse =
-            NotificationTemplateResponse.builder()
+        val notificationTemplateWritePayload =
+            NotificationTemplateWritePayload.builder()
                 .brand(NotificationTemplatePayload.Brand.builder().id("id").build())
                 .content(
                     ElementalContent.builder()
@@ -38,18 +38,12 @@ internal class NotificationTemplateResponseTest {
                     NotificationTemplatePayload.Subscription.builder().topicId("topic_id").build()
                 )
                 .addTag("string")
-                .id("id")
-                .created(0L)
-                .creator("creator")
-                .state(NotificationTemplateResponse.State.DRAFT)
-                .alias("string")
-                .updated(0L)
-                .updater("updater")
+                .alias("alias")
                 .build()
 
-        assertThat(notificationTemplateResponse.brand())
+        assertThat(notificationTemplateWritePayload.brand())
             .contains(NotificationTemplatePayload.Brand.builder().id("id").build())
-        assertThat(notificationTemplateResponse.content())
+        assertThat(notificationTemplateWritePayload.content())
             .isEqualTo(
                 ElementalContent.builder()
                     .addElement(
@@ -64,32 +58,24 @@ internal class NotificationTemplateResponseTest {
                     .version("version")
                     .build()
             )
-        assertThat(notificationTemplateResponse.name()).isEqualTo("name")
-        assertThat(notificationTemplateResponse.routing())
+        assertThat(notificationTemplateWritePayload.name()).isEqualTo("name")
+        assertThat(notificationTemplateWritePayload.routing())
             .contains(
                 NotificationTemplatePayload.Routing.builder().strategyId("strategy_id").build()
             )
-        assertThat(notificationTemplateResponse.subscription())
+        assertThat(notificationTemplateWritePayload.subscription())
             .contains(
                 NotificationTemplatePayload.Subscription.builder().topicId("topic_id").build()
             )
-        assertThat(notificationTemplateResponse.tags()).containsExactly("string")
-        assertThat(notificationTemplateResponse.id()).isEqualTo("id")
-        assertThat(notificationTemplateResponse.created()).isEqualTo(0L)
-        assertThat(notificationTemplateResponse.creator()).isEqualTo("creator")
-        assertThat(notificationTemplateResponse.state())
-            .isEqualTo(NotificationTemplateResponse.State.DRAFT)
-        assertThat(notificationTemplateResponse.alias())
-            .contains(NotificationTemplateAlias.ofString("string"))
-        assertThat(notificationTemplateResponse.updated()).contains(0L)
-        assertThat(notificationTemplateResponse.updater()).contains("updater")
+        assertThat(notificationTemplateWritePayload.tags()).containsExactly("string")
+        assertThat(notificationTemplateWritePayload.alias()).contains("alias")
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val notificationTemplateResponse =
-            NotificationTemplateResponse.builder()
+        val notificationTemplateWritePayload =
+            NotificationTemplateWritePayload.builder()
                 .brand(NotificationTemplatePayload.Brand.builder().id("id").build())
                 .content(
                     ElementalContent.builder()
@@ -113,21 +99,16 @@ internal class NotificationTemplateResponseTest {
                     NotificationTemplatePayload.Subscription.builder().topicId("topic_id").build()
                 )
                 .addTag("string")
-                .id("id")
-                .created(0L)
-                .creator("creator")
-                .state(NotificationTemplateResponse.State.DRAFT)
-                .alias("string")
-                .updated(0L)
-                .updater("updater")
+                .alias("alias")
                 .build()
 
-        val roundtrippedNotificationTemplateResponse =
+        val roundtrippedNotificationTemplateWritePayload =
             jsonMapper.readValue(
-                jsonMapper.writeValueAsString(notificationTemplateResponse),
-                jacksonTypeRef<NotificationTemplateResponse>(),
+                jsonMapper.writeValueAsString(notificationTemplateWritePayload),
+                jacksonTypeRef<NotificationTemplateWritePayload>(),
             )
 
-        assertThat(roundtrippedNotificationTemplateResponse).isEqualTo(notificationTemplateResponse)
+        assertThat(roundtrippedNotificationTemplateWritePayload)
+            .isEqualTo(notificationTemplateWritePayload)
     }
 }
