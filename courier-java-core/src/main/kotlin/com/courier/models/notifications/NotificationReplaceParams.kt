@@ -27,7 +27,8 @@ private constructor(
 
     /**
      * Request body for replacing a notification template. Same shape as create. All fields required
-     * (PUT = full replacement).
+     * (PUT = full replacement), except `alias`, whose omission means "leave the existing aliases
+     * alone".
      */
     fun notificationTemplateUpdateRequest(): NotificationTemplateUpdateRequest =
         notificationTemplateUpdateRequest
@@ -80,7 +81,8 @@ private constructor(
 
         /**
          * Request body for replacing a notification template. Same shape as create. All fields
-         * required (PUT = full replacement).
+         * required (PUT = full replacement), except `alias`, whose omission means "leave the
+         * existing aliases alone".
          */
         fun notificationTemplateUpdateRequest(
             notificationTemplateUpdateRequest: NotificationTemplateUpdateRequest

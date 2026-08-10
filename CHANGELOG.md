@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.27.0 (2026-08-10)
+
+Full Changelog: [v4.26.0...v4.27.0](https://github.com/trycourier/courier-java/compare/v4.26.0...v4.27.0)
+
+### Features
+
+* Merge pull request [#185](https://github.com/trycourier/courier-java/issues/185) from trycourier/geraldosilva/c-19821-notifications-alias-v2 ([cd5d43a](https://github.com/trycourier/courier-java/commit/cd5d43ae82d645c083527d1a81de4a513c446e8e))
+
 ## 4.26.0 (2026-08-04)
 
 Full Changelog: [v4.25.0...v4.26.0](https://github.com/trycourier/courier-java/compare/v4.25.0...v4.26.0)
