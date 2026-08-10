@@ -17,7 +17,7 @@ internal class NotificationReplaceParamsTest {
             .notificationTemplateUpdateRequest(
                 NotificationTemplateUpdateRequest.builder()
                     .notification(
-                        NotificationTemplatePayload.builder()
+                        NotificationTemplateWritePayload.builder()
                             .brand(NotificationTemplatePayload.Brand.builder().id("id").build())
                             .content(
                                 ElementalContent.builder()
@@ -41,6 +41,7 @@ internal class NotificationReplaceParamsTest {
                                     .build()
                             )
                             .addTag("updated")
+                            .alias("alias")
                             .build()
                     )
                     .state(NotificationTemplateUpdateRequest.State.PUBLISHED)
@@ -57,7 +58,7 @@ internal class NotificationReplaceParamsTest {
                 .notificationTemplateUpdateRequest(
                     NotificationTemplateUpdateRequest.builder()
                         .notification(
-                            NotificationTemplatePayload.builder()
+                            NotificationTemplateWritePayload.builder()
                                 .brand(NotificationTemplatePayload.Brand.builder().id("id").build())
                                 .content(
                                     ElementalContent.builder()
@@ -96,7 +97,7 @@ internal class NotificationReplaceParamsTest {
                 .notificationTemplateUpdateRequest(
                     NotificationTemplateUpdateRequest.builder()
                         .notification(
-                            NotificationTemplatePayload.builder()
+                            NotificationTemplateWritePayload.builder()
                                 .brand(NotificationTemplatePayload.Brand.builder().id("id").build())
                                 .content(
                                     ElementalContent.builder()
@@ -120,6 +121,7 @@ internal class NotificationReplaceParamsTest {
                                         .build()
                                 )
                                 .addTag("updated")
+                                .alias("alias")
                                 .build()
                         )
                         .state(NotificationTemplateUpdateRequest.State.PUBLISHED)
@@ -133,7 +135,7 @@ internal class NotificationReplaceParamsTest {
             .isEqualTo(
                 NotificationTemplateUpdateRequest.builder()
                     .notification(
-                        NotificationTemplatePayload.builder()
+                        NotificationTemplateWritePayload.builder()
                             .brand(NotificationTemplatePayload.Brand.builder().id("id").build())
                             .content(
                                 ElementalContent.builder()
@@ -157,6 +159,7 @@ internal class NotificationReplaceParamsTest {
                                     .build()
                             )
                             .addTag("updated")
+                            .alias("alias")
                             .build()
                     )
                     .state(NotificationTemplateUpdateRequest.State.PUBLISHED)
@@ -172,7 +175,7 @@ internal class NotificationReplaceParamsTest {
                 .notificationTemplateUpdateRequest(
                     NotificationTemplateUpdateRequest.builder()
                         .notification(
-                            NotificationTemplatePayload.builder()
+                            NotificationTemplateWritePayload.builder()
                                 .brand(NotificationTemplatePayload.Brand.builder().id("id").build())
                                 .content(
                                     ElementalContent.builder()
@@ -204,7 +207,7 @@ internal class NotificationReplaceParamsTest {
             .isEqualTo(
                 NotificationTemplateUpdateRequest.builder()
                     .notification(
-                        NotificationTemplatePayload.builder()
+                        NotificationTemplateWritePayload.builder()
                             .brand(NotificationTemplatePayload.Brand.builder().id("id").build())
                             .content(
                                 ElementalContent.builder()

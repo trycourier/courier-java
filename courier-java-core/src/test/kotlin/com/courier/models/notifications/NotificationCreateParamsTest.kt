@@ -19,7 +19,7 @@ internal class NotificationCreateParamsTest {
             .notificationTemplateCreateRequest(
                 NotificationTemplateCreateRequest.builder()
                     .notification(
-                        NotificationTemplatePayload.builder()
+                        NotificationTemplateWritePayload.builder()
                             .brand(
                                 NotificationTemplatePayload.Brand.builder()
                                     .id("bnd_01kx4mrd0pfzw8wt7pn7p2fzag")
@@ -48,6 +48,7 @@ internal class NotificationCreateParamsTest {
                             )
                             .addTag("onboarding")
                             .addTag("welcome")
+                            .alias("welcome")
                             .build()
                     )
                     .state(NotificationTemplateCreateRequest.State.DRAFT)
@@ -65,7 +66,7 @@ internal class NotificationCreateParamsTest {
                 .notificationTemplateCreateRequest(
                     NotificationTemplateCreateRequest.builder()
                         .notification(
-                            NotificationTemplatePayload.builder()
+                            NotificationTemplateWritePayload.builder()
                                 .brand(
                                     NotificationTemplatePayload.Brand.builder()
                                         .id("bnd_01kx4mrd0pfzw8wt7pn7p2fzag")
@@ -94,6 +95,7 @@ internal class NotificationCreateParamsTest {
                                 )
                                 .addTag("onboarding")
                                 .addTag("welcome")
+                                .alias("welcome")
                                 .build()
                         )
                         .state(NotificationTemplateCreateRequest.State.DRAFT)
@@ -119,7 +121,7 @@ internal class NotificationCreateParamsTest {
                 .notificationTemplateCreateRequest(
                     NotificationTemplateCreateRequest.builder()
                         .notification(
-                            NotificationTemplatePayload.builder()
+                            NotificationTemplateWritePayload.builder()
                                 .brand(
                                     NotificationTemplatePayload.Brand.builder()
                                         .id("bnd_01kx4mrd0pfzw8wt7pn7p2fzag")
@@ -164,7 +166,7 @@ internal class NotificationCreateParamsTest {
                 .notificationTemplateCreateRequest(
                     NotificationTemplateCreateRequest.builder()
                         .notification(
-                            NotificationTemplatePayload.builder()
+                            NotificationTemplateWritePayload.builder()
                                 .brand(
                                     NotificationTemplatePayload.Brand.builder()
                                         .id("bnd_01kx4mrd0pfzw8wt7pn7p2fzag")
@@ -193,6 +195,7 @@ internal class NotificationCreateParamsTest {
                                 )
                                 .addTag("onboarding")
                                 .addTag("welcome")
+                                .alias("welcome")
                                 .build()
                         )
                         .state(NotificationTemplateCreateRequest.State.DRAFT)
@@ -206,7 +209,7 @@ internal class NotificationCreateParamsTest {
             .isEqualTo(
                 NotificationTemplateCreateRequest.builder()
                     .notification(
-                        NotificationTemplatePayload.builder()
+                        NotificationTemplateWritePayload.builder()
                             .brand(
                                 NotificationTemplatePayload.Brand.builder()
                                     .id("bnd_01kx4mrd0pfzw8wt7pn7p2fzag")
@@ -235,6 +238,7 @@ internal class NotificationCreateParamsTest {
                             )
                             .addTag("onboarding")
                             .addTag("welcome")
+                            .alias("welcome")
                             .build()
                     )
                     .state(NotificationTemplateCreateRequest.State.DRAFT)
@@ -249,7 +253,7 @@ internal class NotificationCreateParamsTest {
                 .notificationTemplateCreateRequest(
                     NotificationTemplateCreateRequest.builder()
                         .notification(
-                            NotificationTemplatePayload.builder()
+                            NotificationTemplateWritePayload.builder()
                                 .brand(
                                     NotificationTemplatePayload.Brand.builder()
                                         .id("bnd_01kx4mrd0pfzw8wt7pn7p2fzag")
@@ -286,7 +290,7 @@ internal class NotificationCreateParamsTest {
             .isEqualTo(
                 NotificationTemplateCreateRequest.builder()
                     .notification(
-                        NotificationTemplatePayload.builder()
+                        NotificationTemplateWritePayload.builder()
                             .brand(
                                 NotificationTemplatePayload.Brand.builder()
                                     .id("bnd_01kx4mrd0pfzw8wt7pn7p2fzag")

@@ -24,6 +24,7 @@ import com.courier.models.notifications.NotificationTemplatePayload
 import com.courier.models.notifications.NotificationTemplatePublishRequest
 import com.courier.models.notifications.NotificationTemplateState
 import com.courier.models.notifications.NotificationTemplateUpdateRequest
+import com.courier.models.notifications.NotificationTemplateWritePayload
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
@@ -43,7 +44,7 @@ internal class NotificationServiceAsyncTest {
                     .notificationTemplateCreateRequest(
                         NotificationTemplateCreateRequest.builder()
                             .notification(
-                                NotificationTemplatePayload.builder()
+                                NotificationTemplateWritePayload.builder()
                                     .brand(
                                         NotificationTemplatePayload.Brand.builder()
                                             .id("bnd_01kx4mrd0pfzw8wt7pn7p2fzag")
@@ -72,6 +73,7 @@ internal class NotificationServiceAsyncTest {
                                     )
                                     .addTag("onboarding")
                                     .addTag("welcome")
+                                    .alias("welcome")
                                     .build()
                             )
                             .state(NotificationTemplateCreateRequest.State.DRAFT)
@@ -291,7 +293,7 @@ internal class NotificationServiceAsyncTest {
                     .notificationTemplateUpdateRequest(
                         NotificationTemplateUpdateRequest.builder()
                             .notification(
-                                NotificationTemplatePayload.builder()
+                                NotificationTemplateWritePayload.builder()
                                     .brand(
                                         NotificationTemplatePayload.Brand.builder().id("id").build()
                                     )
@@ -317,6 +319,7 @@ internal class NotificationServiceAsyncTest {
                                             .build()
                                     )
                                     .addTag("updated")
+                                    .alias("alias")
                                     .build()
                             )
                             .state(NotificationTemplateUpdateRequest.State.PUBLISHED)

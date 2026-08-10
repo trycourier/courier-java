@@ -38,6 +38,7 @@ private constructor(
     private val created: JsonField<Long>,
     private val creator: JsonField<String>,
     private val state: JsonField<State>,
+    private val alias: JsonField<NotificationTemplateAlias>,
     private val updated: JsonField<Long>,
     private val updater: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -63,6 +64,9 @@ private constructor(
         @JsonProperty("created") @ExcludeMissing created: JsonField<Long> = JsonMissing.of(),
         @JsonProperty("creator") @ExcludeMissing creator: JsonField<String> = JsonMissing.of(),
         @JsonProperty("state") @ExcludeMissing state: JsonField<State> = JsonMissing.of(),
+        @JsonProperty("alias")
+        @ExcludeMissing
+        alias: JsonField<NotificationTemplateAlias> = JsonMissing.of(),
         @JsonProperty("updated") @ExcludeMissing updated: JsonField<Long> = JsonMissing.of(),
         @JsonProperty("updater") @ExcludeMissing updater: JsonField<String> = JsonMissing.of(),
     ) : this(
@@ -76,6 +80,7 @@ private constructor(
         created,
         creator,
         state,
+        alias,
         updated,
         updater,
         mutableMapOf(),
@@ -173,6 +178,17 @@ private constructor(
     fun state(): State = state.getRequired("state")
 
     /**
+     * A template's send-time alias as returned by a read, omitted entirely when it has none.
+     * Usually a single string; an array for a template that resolves from several aliases, which
+     * writes through this API can no longer produce — only templates predating that restriction, or
+     * aliases attached outside this API, hold more than one.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun alias(): Optional<NotificationTemplateAlias> = alias.getOptional("alias")
+
+    /**
      * Epoch milliseconds of last update.
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -265,6 +281,15 @@ private constructor(
     @JsonProperty("state") @ExcludeMissing fun _state(): JsonField<State> = state
 
     /**
+     * Returns the raw JSON value of [alias].
+     *
+     * Unlike [alias], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("alias")
+    @ExcludeMissing
+    fun _alias(): JsonField<NotificationTemplateAlias> = alias
+
+    /**
      * Returns the raw JSON value of [updated].
      *
      * Unlike [updated], this method doesn't throw if the JSON field has an unexpected type.
@@ -325,6 +350,7 @@ private constructor(
         private var created: JsonField<Long>? = null
         private var creator: JsonField<String>? = null
         private var state: JsonField<State>? = null
+        private var alias: JsonField<NotificationTemplateAlias> = JsonMissing.of()
         private var updated: JsonField<Long> = JsonMissing.of()
         private var updater: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -341,6 +367,7 @@ private constructor(
             created = notificationTemplateResponse.created
             creator = notificationTemplateResponse.creator
             state = notificationTemplateResponse.state
+            alias = notificationTemplateResponse.alias
             updated = notificationTemplateResponse.updated
             updater = notificationTemplateResponse.updater
             additionalProperties = notificationTemplateResponse.additionalProperties.toMutableMap()
@@ -492,6 +519,30 @@ private constructor(
          */
         fun state(state: JsonField<State>) = apply { this.state = state }
 
+        /**
+         * A template's send-time alias as returned by a read, omitted entirely when it has none.
+         * Usually a single string; an array for a template that resolves from several aliases,
+         * which writes through this API can no longer produce — only templates predating that
+         * restriction, or aliases attached outside this API, hold more than one.
+         */
+        fun alias(alias: NotificationTemplateAlias) = alias(JsonField.of(alias))
+
+        /**
+         * Sets [Builder.alias] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.alias] with a well-typed [NotificationTemplateAlias]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
+        fun alias(alias: JsonField<NotificationTemplateAlias>) = apply { this.alias = alias }
+
+        /** Alias for calling [alias] with `NotificationTemplateAlias.ofString(string)`. */
+        fun alias(string: String) = alias(NotificationTemplateAlias.ofString(string))
+
+        /** Alias for calling [alias] with `NotificationTemplateAlias.ofStrings(strings)`. */
+        fun aliasOfStrings(strings: List<String>) =
+            alias(NotificationTemplateAlias.ofStrings(strings))
+
         /** Epoch milliseconds of last update. */
         fun updated(updated: Long) = updated(JsonField.of(updated))
 
@@ -566,6 +617,7 @@ private constructor(
                 checkRequired("created", created),
                 checkRequired("creator", creator),
                 checkRequired("state", state),
+                alias,
                 updated,
                 updater,
                 additionalProperties.toMutableMap(),
@@ -597,6 +649,7 @@ private constructor(
         created()
         creator()
         state().validate()
+        alias().ifPresent { it.validate() }
         updated()
         updater()
         validated = true
@@ -627,6 +680,7 @@ private constructor(
             (if (created.asKnown().isPresent) 1 else 0) +
             (if (creator.asKnown().isPresent) 1 else 0) +
             (state.asKnown().getOrNull()?.validity() ?: 0) +
+            (alias.asKnown().getOrNull()?.validity() ?: 0) +
             (if (updated.asKnown().isPresent) 1 else 0) +
             (if (updater.asKnown().isPresent) 1 else 0)
 
@@ -781,6 +835,7 @@ private constructor(
             created == other.created &&
             creator == other.creator &&
             state == other.state &&
+            alias == other.alias &&
             updated == other.updated &&
             updater == other.updater &&
             additionalProperties == other.additionalProperties
@@ -798,6 +853,7 @@ private constructor(
             created,
             creator,
             state,
+            alias,
             updated,
             updater,
             additionalProperties,
@@ -807,5 +863,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "NotificationTemplateResponse{brand=$brand, content=$content, name=$name, routing=$routing, subscription=$subscription, tags=$tags, id=$id, created=$created, creator=$creator, state=$state, updated=$updated, updater=$updater, additionalProperties=$additionalProperties}"
+        "NotificationTemplateResponse{brand=$brand, content=$content, name=$name, routing=$routing, subscription=$subscription, tags=$tags, id=$id, created=$created, creator=$creator, state=$state, alias=$alias, updated=$updated, updater=$updater, additionalProperties=$additionalProperties}"
 }
