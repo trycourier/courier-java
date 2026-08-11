@@ -1,0 +1,660 @@
+# Changelog
+
+## 4.27.0 (2026-08-10)
+
+Full Changelog: [v4.26.0...v4.27.0](https://github.com/trycourier/courier-java/compare/v4.26.0...v4.27.0)
+
+### Features
+
+* Merge pull request [#185](https://github.com/trycourier/courier-java/issues/185) from trycourier/geraldosilva/c-19821-notifications-alias-v2 ([cd5d43a](https://github.com/trycourier/courier-java/commit/cd5d43ae82d645c083527d1a81de4a513c446e8e))
+
+## 4.26.0 (2026-08-04)
+
+Full Changelog: [v4.25.0...v4.26.0](https://github.com/trycourier/courier-java/compare/v4.25.0...v4.26.0)
+
+### Features
+
+* Merge pull request [#178](https://github.com/trycourier/courier-java/issues/178) from trycourier/geraldosilva/c-19484-elemental-formatting-controls ([b101502](https://github.com/trycourier/courier-java/commit/b101502c679ded2342612293da4c8fec8574e1c2))
+
+
+### Chores
+
+* **internal:** codegen related update ([703b085](https://github.com/trycourier/courier-java/commit/703b085eb7aeb0ba0948849bb023a8fe7b9622da))
+
+## 4.25.0 (2026-08-03)
+
+Full Changelog: [v4.24.0...v4.25.0](https://github.com/trycourier/courier-java/compare/v4.24.0...v4.25.0)
+
+### Features
+
+* Merge pull request [#183](https://github.com/trycourier/courier-java/issues/183) from trycourier/dantran/c-19684-api-spec-document-messagecontexttenant_id-on-journey-send ([375b0f1](https://github.com/trycourier/courier-java/commit/375b0f16dfd7e9817a0fc0fb51aa05899eaa6ae7))
+* spec: remove inbox message delete/restore endpoints for now (C-19268) ([#182](https://github.com/trycourier/courier-java/issues/182)) ([07e30e0](https://github.com/trycourier/courier-java/commit/07e30e0228b6de99301269f039ebba887c5dff47))
+* spec: reorder API reference sections to match the Studio nav ([#180](https://github.com/trycourier/courier-java/issues/180)) ([3fe56cc](https://github.com/trycourier/courier-java/commit/3fe56ccad1fcdce5235c1ef4e3c2613879384d59))
+
+## 4.24.0 (2026-07-29)
+
+Full Changelog: [v4.23.0...v4.24.0](https://github.com/trycourier/courier-java/compare/v4.23.0...v4.24.0)
+
+### Features
+
+* **broadcasts:** document Broadcasts CRUD REST API ([#170](https://github.com/trycourier/courier-java/issues/170)) ([a0c4ddc](https://github.com/trycourier/courier-java/commit/a0c4ddc2dd43551db2684ed6ed82f8dc4a682005))
+
+## 4.23.0 (2026-07-29)
+
+Full Changelog: [v4.22.0...v4.23.0](https://github.com/trycourier/courier-java/compare/v4.22.0...v4.23.0)
+
+### Features
+
+* Document DELETE/PUT restore for inbox messages (C-19268) ([#175](https://github.com/trycourier/courier-java/issues/175)) ([6a1a54a](https://github.com/trycourier/courier-java/commit/6a1a54a0d6ad45e41c9c99c18e01c315fcae5b58))
+* spec: rename and reorder the API reference sections ([#179](https://github.com/trycourier/courier-java/issues/179)) ([2ce28ee](https://github.com/trycourier/courier-java/commit/2ce28eee967b036c5b725a1146cb8cc2a1a84f02))
+
+
+### Documentation
+
+* **openapi:** describe user topic-preference fields explicitly ([#172](https://github.com/trycourier/courier-java/issues/172)) ([1d09244](https://github.com/trycourier/courier-java/commit/1d09244b56cb1ed9c98e28365d7509cd9dbe0018))
+* **openapi:** document Idempotency-Key header on idempotent POST endpoints ([#176](https://github.com/trycourier/courier-java/issues/176)) ([8d254c6](https://github.com/trycourier/courier-java/commit/8d254c610de6563741992db211375fc40d4f33ef))
+* **openapi:** rewrite operation descriptions for agents and SEO ([#174](https://github.com/trycourier/courier-java/issues/174)) ([3453be3](https://github.com/trycourier/courier-java/commit/3453be34b9c9713b88aa72e64c6fdfa3251a2fae))
+
+## 4.22.0 (2026-07-23)
+
+Full Changelog: [v4.21.0...v4.22.0](https://github.com/trycourier/courier-java/compare/v4.21.0...v4.22.0)
+
+### Features
+
+* Remove /bulk endpoints from api-spec (C-19507) ([#171](https://github.com/trycourier/courier-java/issues/171)) ([2a450f6](https://github.com/trycourier/courier-java/commit/2a450f65f702ff5a8899326c40575facbb7690b2))
+
+## 4.21.0 (2026-07-20)
+
+Full Changelog: [v4.20.2...v4.21.0](https://github.com/trycourier/courier-java/compare/v4.20.2...v4.21.0)
+
+### Features
+
+* Document POST /notifications/{id}/duplicate [C-18607] ([#165](https://github.com/trycourier/courier-java/issues/165)) ([2d6de78](https://github.com/trycourier/courier-java/commit/2d6de78b8dca5f167d42c3e2d136998278ddc80d))
+* Merge pull request [#149](https://github.com/trycourier/courier-java/issues/149) from trycourier/geraldosilva/c-19201-notification-template-subscription-topic-id ([74a301f](https://github.com/trycourier/courier-java/commit/74a301ff09a28e668a231af1ba87417bd637b8dd))
+* Merge pull request [#168](https://github.com/trycourier/courier-java/issues/168) from trycourier/geraldosilva/c-19419-topic-id-notification-template-summary ([4046832](https://github.com/trycourier/courier-java/commit/4046832157d0dcb58cfb2c1c8b96d6ea0b8976f3))
+* **stlc:** configurable CI runner and private-production-repo support in workflow templates ([f8ddf0c](https://github.com/trycourier/courier-java/commit/f8ddf0c1489ae8df71966dc9020008d09c8eb305))
+
+## 4.20.2 (2026-07-10)
+
+Full Changelog: [v4.20.1...v4.20.2](https://github.com/trycourier/courier-java/compare/v4.20.1...v4.20.2)
+
+### Documentation
+
+* **openapi:** canonical type-id prefixes across all examples ([#162](https://github.com/trycourier/courier-java/issues/162)) ([b1dacb2](https://github.com/trycourier/courier-java/commit/b1dacb2964d6575f6b8749f2ede2cc24a1626743))
+* **openapi:** use canonical type-id prefixes in id examples ([#160](https://github.com/trycourier/courier-java/issues/160)) ([94930d2](https://github.com/trycourier/courier-java/commit/94930d2713a1fe2dadaa64409b469ba3fac29f2f))
+
+## 4.20.1 (2026-07-09)
+
+Full Changelog: [v4.20.0...v4.20.1](https://github.com/trycourier/courier-java/compare/v4.20.0...v4.20.1)
+
+## 4.20.0 (2026-07-09)
+
+Full Changelog: [v4.19.2...v4.20.0](https://github.com/trycourier/courier-java/compare/v4.19.2...v4.20.0)
+
+### Features
+
+* Add bulk user preference upsert and replace endpoints ([e119feb](https://github.com/trycourier/courier-java/commit/e119feb43eceb25d6599d9cb6c9f83178c184e64))
+* Preferences v3 REST fields: section/topic description + publish body ([30e226b](https://github.com/trycourier/courier-java/commit/30e226b6693d399cb83c0e3ffbbe77d2b851339b))
+
+## 4.19.2 (2026-07-09)
+
+Full Changelog: [v4.19.1...v4.19.2](https://github.com/trycourier/courier-java/compare/v4.19.1...v4.19.2)
+
+### Chores
+
+* update api-spec with new message resend endpoint ([815f092](https://github.com/trycourier/courier-java/commit/815f092362606058abe1a6d36842449349f95284))
+
+## 4.19.1 (2026-07-07)
+
+Full Changelog: [v4.19.0...v4.19.1](https://github.com/trycourier/courier-java/compare/v4.19.0...v4.19.1)
+
+### Documentation
+
+* **openapi:** document audiences filter combinator (SUP-686) ([bc3e1d6](https://github.com/trycourier/courier-java/commit/bc3e1d638edb165d64bb4b768f57c229325240e2))
+
+## 4.19.0 (2026-07-06)
+
+Full Changelog: [v4.18.2...v4.19.0](https://github.com/trycourier/courier-java/compare/v4.18.2...v4.19.0)
+
+### Features
+
+* **openapi:** Journeys cancel-by-token endpoint + send-node experiments (C-18986) ([41c9837](https://github.com/trycourier/courier-java/commit/41c9837633b219c112b05446107960558415d3d5))
+
+
+### Documentation
+
+* **openapi:** reword Cancel journey runs 400 description (re-trigger deploy) ([1e3a8e7](https://github.com/trycourier/courier-java/commit/1e3a8e71129b8b6ec2fbbbab73229cc750cfc2df))
+* **openapi:** reword Cancel journey runs description (re-trigger deploy) ([ec00755](https://github.com/trycourier/courier-java/commit/ec007551c1fcc9a7674d59307471740025a8aab4))
+* **openapi:** tighten Journeys cancel/experiment copy (C-19177) ([763855d](https://github.com/trycourier/courier-java/commit/763855d7f2ccb596347031f1c23674d98f6ec1f6))
+
+## 4.18.2 (2026-06-25)
+
+Full Changelog: [v4.18.1...v4.18.2](https://github.com/trycourier/courier-java/compare/v4.18.1...v4.18.2)
+
+### Documentation
+
+* **openapi:** add full response examples to every endpoint ([210ab8c](https://github.com/trycourier/courier-java/commit/210ab8c3f739ba985d644c099a910d491c4302f9))
+* **openapi:** reword Cancel Submission description ([8be16f8](https://github.com/trycourier/courier-java/commit/8be16f8740cc317d81f7a5ca3b3debaf746b073e))
+* **openapi:** reword Get Submission Checks description ([95daf0b](https://github.com/trycourier/courier-java/commit/95daf0b3f98a989a1c2c7cfc3b88c994936decb8))
+* **openapi:** reword Replace Submission Checks description ([878a8a7](https://github.com/trycourier/courier-java/commit/878a8a7cb71be98ed4490cfad61d4e611467dbfb))
+
+## 4.18.1 (2026-06-24)
+
+Full Changelog: [v4.18.0...v4.18.1](https://github.com/trycourier/courier-java/compare/v4.18.0...v4.18.1)
+
+## 4.18.0 (2026-06-24)
+
+Full Changelog: [v4.17.0...v4.18.0](https://github.com/trycourier/courier-java/compare/v4.17.0...v4.18.0)
+
+### Features
+
+* **preferences:** workspace preference sections & nested topics endpoints ([a2e9d20](https://github.com/trycourier/courier-java/commit/a2e9d20128590a3a1487ef3ac17a53c647d9ea14))
+
+## 4.17.0 (2026-06-23)
+
+Full Changelog: [v4.16.0...v4.17.0](https://github.com/trycourier/courier-java/compare/v4.16.0...v4.17.0)
+
+### Features
+
+* **journeys:** add content + locale endpoints to journey-scoped templates ([b454906](https://github.com/trycourier/courier-java/commit/b4549063b75fc2a81428388b88e3060313560a4d))
+
+
+### Documentation
+
+* **journeys:** clarify checksum usage + re-trigger docs sync for journey content endpoints ([3d0e613](https://github.com/trycourier/courier-java/commit/3d0e613cf81f619a84517be7365c263b079b53d1))
+
+## 4.16.0 (2026-06-17)
+
+Full Changelog: [v4.15.0...v4.16.0](https://github.com/trycourier/courier-java/compare/v4.15.0...v4.16.0)
+
+### Features
+
+* **openapi:** add add-to-digest JourneyNode variant ([01ef61c](https://github.com/trycourier/courier-java/commit/01ef61c19aef27fb6df26735cf5e1d9ee94cc6b6))
+* **openapi:** add DELETE /users/{id}/preferences/{topicId} ([34315dd](https://github.com/trycourier/courier-java/commit/34315ddb9b1b1663efbaf95d9ac9b594039dcd60))
+
+## 4.15.0 (2026-06-12)
+
+Full Changelog: [v4.14.0...v4.15.0](https://github.com/trycourier/courier-java/compare/v4.14.0...v4.15.0)
+
+### Features
+
+* **digests:** document digest REST endpoints in OpenAPI spec ([e145081](https://github.com/trycourier/courier-java/commit/e145081e4ae5b862290944d7fb5b0c125522b0c0))
+
+## 4.14.0 (2026-05-28)
+
+Full Changelog: [v4.13.1...v4.14.0](https://github.com/trycourier/courier-java/compare/v4.13.1...v4.14.0)
+
+### Features
+
+* [C-18276] Publish Journeys endpoints + types in openapi.yml ([5525cbd](https://github.com/trycourier/courier-java/commit/5525cbd0de6234ad4e5585a2255380d9f6e34b01))
+* [C-18380] Journeys API reference: copy + naming cleanup ([b0d0a7c](https://github.com/trycourier/courier-java/commit/b0d0a7c3260aa6afe98ae6430ef8485450faa401))
+* C-18612 Add Journeys `batch` node variant to OpenAPI spec ([4524f05](https://github.com/trycourier/courier-java/commit/4524f059908fc674228af2999b56bf3607b301e8))
+* **client:** improve logging ([0ec8146](https://github.com/trycourier/courier-java/commit/0ec8146c41091a5e8a733dcd55796bcfb1e42a2d))
+* **client:** more robust error parsing ([dfddadd](https://github.com/trycourier/courier-java/commit/dfddadd8ab69cc9c7ec54c5a77ab749e6b9ef326))
+* **client:** support proxy authentication ([1970659](https://github.com/trycourier/courier-java/commit/1970659bdff9093f19ba2a0e9fd29e289d097503))
+* Mark `settings` as required on POST /brands ([cc89a65](https://github.com/trycourier/courier-java/commit/cc89a6532cc152eba360002b8e1f83300c393ef7))
+* support setting headers via env ([0daaeb0](https://github.com/trycourier/courier-java/commit/0daaeb00073c63b431948f08180a83ba8103e74a))
+* Update requestId description and example in SendMessageResponse ([544f31a](https://github.com/trycourier/courier-java/commit/544f31a5494056540bd5cabe80d37810438ff580))
+
+
+### Performance Improvements
+
+* **client:** create one json mapper ([a32e5f0](https://github.com/trycourier/courier-java/commit/a32e5f01ad406002ddac7b6948d41ae08be49579))
+
+
+### Chores
+
+* **internal:** regenerate SDK with no functional changes ([ee2263b](https://github.com/trycourier/courier-java/commit/ee2263bb79e91190ef50f87e5fce97abe6600a4e))
+* **openapi:** bump requestId example to re-trigger docs sync ([61f5bd5](https://github.com/trycourier/courier-java/commit/61f5bd517e04455a1f26cbdcb2cc6cae5cfe6a85))
+* **openapi:** bump requestId example to re-trigger docs sync ([d8a85c7](https://github.com/trycourier/courier-java/commit/d8a85c7e81de7bd2b7390984eb421ff061b81b17))
+* redact api-key headers in debug logs ([abe8fea](https://github.com/trycourier/courier-java/commit/abe8feaef46775e0102015b1d34a772d90224f2f))
+* remove duplicated dokka setup ([124dc6d](https://github.com/trycourier/courier-java/commit/124dc6d37161a4cffd310a4ba87588422ee26681))
+
+
+### Documentation
+
+* clarify forwards compat behavior ([b830924](https://github.com/trycourier/courier-java/commit/b830924d986652432d1f063c110e55f32c601bcb))
+
+## 4.13.1 (2026-04-14)
+
+Full Changelog: [v4.13.0...v4.13.1](https://github.com/trycourier/courier-java/compare/v4.13.0...v4.13.1)
+
+### Bug Fixes
+
+* **types:** flatten response structure in NotificationTemplateResponse ([38b5307](https://github.com/trycourier/courier-java/commit/38b53079bd65f9813756e45cfbe7f8d4d5b27c99))
+* **types:** make note optional in notifications, flatten template response ([ba686ac](https://github.com/trycourier/courier-java/commit/ba686ac91e66e3f6979623246a9f9b01607839aa))
+
+## 4.13.0 (2026-04-13)
+
+Full Changelog: [v4.12.0...v4.13.0](https://github.com/trycourier/courier-java/compare/v4.12.0...v4.13.0)
+
+### Features
+
+* **api:** update notifications/routing_strategies return types, change providers update to PUT ([a83b773](https://github.com/trycourier/courier-java/commit/a83b7735114f5eb5fee33770b70d561f64ec1c64))
+
+
+### Chores
+
+* **internal:** regenerate SDK with no functional changes ([42f49e4](https://github.com/trycourier/courier-java/commit/42f49e4f9dba28b99404bfa2e00baf83d6cc2ce9))
+
+## 4.12.0 (2026-04-08)
+
+Full Changelog: [v4.11.0...v4.12.0](https://github.com/trycourier/courier-java/compare/v4.11.0...v4.12.0)
+
+### Features
+
+* **api:** add content/element/locale put methods, remove draft service, update types ([5a00765](https://github.com/trycourier/courier-java/commit/5a007658c70362a4a5fee9a26720fa6620a8f56e))
+* **api:** add listNotifications method to routing_strategies ([8d98990](https://github.com/trycourier/courier-java/commit/8d98990e8fa4307a4a3037d57460f0770da649e4))
+
+## 4.11.0 (2026-04-01)
+
+Full Changelog: [v4.10.0...v4.11.0](https://github.com/trycourier/courier-java/compare/v4.10.0...v4.11.0)
+
+### Features
+
+* **api:** add create/retrieve/archive/publish/replace methods, event_id param to notifications ([358631e](https://github.com/trycourier/courier-java/commit/358631e09af79a2e56e5b4288876e4e0e2607400))
+* **api:** add ElementalHtmlNodeWithType model, rename unionMember7 to htmlNodeWithType ([0dc22ef](https://github.com/trycourier/courier-java/commit/0dc22efec476f5683a8e228fcdf22bfe3965c2b3))
+* **api:** add providers CRUD endpoints and catalog ([419447b](https://github.com/trycourier/courier-java/commit/419447b8cc5ca1ea3087316f3a1efdd12520221e))
+* **api:** add routing strategies resource ([9f329c9](https://github.com/trycourier/courier-java/commit/9f329c99cfe8439e7bec445491e8899e6dff18e2))
+* **api:** add UnionMember7 variant to ElementalNode ([6746b6c](https://github.com/trycourier/courier-java/commit/6746b6c0e0d54c6f7c5329957a7ebdb81dd14915))
+
+
+### Bug Fixes
+
+* **client:** allow updating header/query affecting fields in `toBuilder()` ([70b3261](https://github.com/trycourier/courier-java/commit/70b3261bbfad022f214911ebc59e9bd0fd012f19))
+
+
+### Chores
+
+* **ci:** skip lint on metadata-only changes ([a55e12c](https://github.com/trycourier/courier-java/commit/a55e12c7b01fd705297d77e31917f420d1b63239))
+* **internal:** bump ktfmt ([fabae89](https://github.com/trycourier/courier-java/commit/fabae89dc835ea37f424d9b7c1abbd29b96f41e2))
+* **internal:** tweak CI branches ([9103b5e](https://github.com/trycourier/courier-java/commit/9103b5e9e1ac35ba2864920f1c445018a4ecc738))
+* **internal:** update gitignore ([0c97939](https://github.com/trycourier/courier-java/commit/0c9793956c168087be4ab867d9e3a563666fccde))
+* **internal:** update retry delay tests ([41453e1](https://github.com/trycourier/courier-java/commit/41453e1486ea0a27a268ffdc6f1220ceab69db8d))
+
+
+### Documentation
+
+* add AGENTS.md for AI coding assistants ([#96](https://github.com/trycourier/courier-java/issues/96)) ([873304d](https://github.com/trycourier/courier-java/commit/873304dfb2534679904292a2ad49dadc46234050))
+* sync README from mintlify-docs (2026-03-23 19:31 UTC) ([#95](https://github.com/trycourier/courier-java/issues/95)) ([8efc854](https://github.com/trycourier/courier-java/commit/8efc8542cbe37b8ba7673d53a37995625e574785))
+
+## 4.10.0 (2026-03-12)
+
+Full Changelog: [v4.9.1...v4.10.0](https://github.com/trycourier/courier-java/compare/v4.9.1...v4.10.0)
+
+### Features
+
+* **api:** add journeys resource with list/invoke methods ([2c7587e](https://github.com/trycourier/courier-java/commit/2c7587e7b3eb0ae29e77b5bbe26f96d19aed5076))
+* **client:** add connection pooling option ([b2e1bcb](https://github.com/trycourier/courier-java/commit/b2e1bcbd856bbe7d247497b2296dd8f368fdc6da))
+
+
+### Bug Fixes
+
+* **api:** restructure token add single request body, rename pathToken to token ([9577dec](https://github.com/trycourier/courier-java/commit/9577decaf5da849b9c35d2c7a6302ef2b105193e))
+* **client:** incorrect `Retry-After` parsing ([4719954](https://github.com/trycourier/courier-java/commit/471995496d38e95ca4f0b832064ae529fc02dabf))
+* mark MessageDetails timestamp fields as optional ([e948f83](https://github.com/trycourier/courier-java/commit/e948f832f3ac9e5b71b24a3f02387e88ffb6be12))
+* **types:** remove brand field from ElementalContent model ([cb336a3](https://github.com/trycourier/courier-java/commit/cb336a3bb81b5e2bd25483be06c45bdfd518fe2b))
+
+
+### Chores
+
+* **ci:** skip uploading artifacts on stainless-internal branches ([330979b](https://github.com/trycourier/courier-java/commit/330979bc70a21d68fa33ca16f949bc378aa818c9))
+* drop apache dependency ([90094b9](https://github.com/trycourier/courier-java/commit/90094b91bb84ab5f9b01d351031431990495e2fa))
+* **internal:** bump palantir-java-format ([0057417](https://github.com/trycourier/courier-java/commit/0057417ffd2fcb14a33a42ebb8d81bce4232197a))
+* **internal:** codegen related update ([6a1cfae](https://github.com/trycourier/courier-java/commit/6a1cfaeee2212a162513951b903778d4a35e48b3))
+* **internal:** expand imports ([b1b8ef3](https://github.com/trycourier/courier-java/commit/b1b8ef384a3acddc0ce6cd79cfca840e6da4c748))
+* **internal:** make `OkHttp` constructor internal ([4e39320](https://github.com/trycourier/courier-java/commit/4e393200781dd186e45a32ff8d18be7083e83b31))
+* **internal:** remove mock server code ([b63945e](https://github.com/trycourier/courier-java/commit/b63945ee56673ba3e736de9d2170b0a27e7dcd82))
+* **internal:** update `TestServerExtension` comment ([26b5aed](https://github.com/trycourier/courier-java/commit/26b5aede00f47e7a0bae77e058e36a00361060b0))
+* make `Properties` more resilient to `null` ([401bc43](https://github.com/trycourier/courier-java/commit/401bc435edc5a6798afb1c1619a0de37cdb7a9fe))
+* update mock server docs ([ff62ef0](https://github.com/trycourier/courier-java/commit/ff62ef0c2c8c232f96a3b3e5ade9c6ac22a1b248))
+
+
+### Documentation
+
+* add AUTO-GENERATED-OVERVIEW markers for README sync ([#92](https://github.com/trycourier/courier-java/issues/92)) ([4bc2f46](https://github.com/trycourier/courier-java/commit/4bc2f4661c8c7d35d72234c1f5520eec71a39bcc))
+
+## 4.9.1 (2026-02-07)
+
+Full Changelog: [v4.9.0...v4.9.1](https://github.com/trycourier/courier-java/compare/v4.9.0...v4.9.1)
+
+### Chores
+
+* **internal:** upgrade AssertJ ([afe545e](https://github.com/trycourier/courier-java/commit/afe545eaebadf882a5bea38b08d2a31fc8c8289b))
+
+## 4.9.0 (2026-02-06)
+
+Full Changelog: [v4.8.0...v4.9.0](https://github.com/trycourier/courier-java/compare/v4.8.0...v4.9.0)
+
+### Features
+
+* **api:** add publish/replace methods, versions resource to tenant templates ([41fbfe5](https://github.com/trycourier/courier-java/commit/41fbfe5dd327a8a142da5ac65ba72f777f9794a9))
+* **api:** add toOfRecipients method to send message ([35df215](https://github.com/trycourier/courier-java/commit/35df2154e48a5e158285cda871f506202d9199c6))
+
+
+### Chores
+
+* **internal:** allow passing args to `./scripts/test` ([a809582](https://github.com/trycourier/courier-java/commit/a8095821586036d00c3543929e6eef860fabdd3a))
+
+## 4.8.0 (2026-01-27)
+
+Full Changelog: [v4.7.1...v4.8.0](https://github.com/trycourier/courier-java/compare/v4.7.1...v4.8.0)
+
+### Features
+
+* **client:** send `X-Stainless-Kotlin-Version` header ([11e5765](https://github.com/trycourier/courier-java/commit/11e5765a138fa78d8aaf0abc3df4dffd1493d3b4))
+
+
+### Bug Fixes
+
+* **client:** disallow coercion from float to int ([5263a13](https://github.com/trycourier/courier-java/commit/5263a1385622f70224b69681b7f75661d89107ef))
+* **client:** fully respect max retries ([33cdc16](https://github.com/trycourier/courier-java/commit/33cdc16ed453f885b62c996480751a45035e0afd))
+* **client:** preserve time zone in lenient date-time parsing ([07887c9](https://github.com/trycourier/courier-java/commit/07887c919084244ae3805068e13aa7c7a6604aec))
+* **client:** send retry count header for max retries 0 ([33cdc16](https://github.com/trycourier/courier-java/commit/33cdc16ed453f885b62c996480751a45035e0afd))
+* date time deserialization leniency ([fa50329](https://github.com/trycourier/courier-java/commit/fa50329d5f5e1cd2c555d5deb71b4dd4d8a57c4a))
+
+
+### Chores
+
+* **ci:** upgrade `actions/github-script` ([b428743](https://github.com/trycourier/courier-java/commit/b428743ceed1201f44ca1ae23ddae0c10a323a86))
+* **ci:** upgrade `actions/setup-java` ([01049af](https://github.com/trycourier/courier-java/commit/01049af97f49ca7d1ad74d09017838263e24735f))
+* **internal:** clean up maven repo artifact script and add html documentation to repo root ([e1937ab](https://github.com/trycourier/courier-java/commit/e1937aba76551a3e486cb8961c3f1e0981d9a57f))
+* **internal:** correct cache invalidation for `SKIP_MOCK_TESTS` ([3bc2faa](https://github.com/trycourier/courier-java/commit/3bc2faa7b3d346e8c4466a58039947f2cebe04ca))
+* **internal:** depend on packages directly in example ([33cdc16](https://github.com/trycourier/courier-java/commit/33cdc16ed453f885b62c996480751a45035e0afd))
+* **internal:** improve maven repo docs ([af0c83b](https://github.com/trycourier/courier-java/commit/af0c83b582d3d26589a0f1176405a365df1e26b5))
+* **internal:** update `actions/checkout` version ([337fcd7](https://github.com/trycourier/courier-java/commit/337fcd7a6f5f7d5747ab6f48e74287e58d18eca0))
+* **internal:** update maven repo doc to include authentication ([dbf1829](https://github.com/trycourier/courier-java/commit/dbf182983acea01de5784fe9df85f1d43482de5a))
+* test on Jackson 2.14.0 to avoid encountering FasterXML/jackson-databind[#3240](https://github.com/trycourier/courier-java/issues/3240) in tests ([fa50329](https://github.com/trycourier/courier-java/commit/fa50329d5f5e1cd2c555d5deb71b4dd4d8a57c4a))
+
+
+### Documentation
+
+* add comment for arbitrary value fields ([20bc1ec](https://github.com/trycourier/courier-java/commit/20bc1ecfa8818a7f6eb6669352d74306b308cf21))
+* clarify version field description in AutomationTemplate ([d853521](https://github.com/trycourier/courier-java/commit/d8535218c37e9315c2bbe6b5161caaa2d66fb603))
+
+## 4.7.1 (2026-01-14)
+
+Full Changelog: [v4.7.0...v4.7.1](https://github.com/trycourier/courier-java/compare/v4.7.0...v4.7.1)
+
+### Chores
+
+* **internal:** regenerate SDK with no functional changes ([227578d](https://github.com/trycourier/courier-java/commit/227578dc96d7114cd01e4cac20567f46008364ec))
+* **internal:** regenerate SDK with no functional changes ([49599e7](https://github.com/trycourier/courier-java/commit/49599e729b1ed313141734486e484ca4b88cd8d9))
+* **internal:** support uploading Maven repo artifacts to stainless package server ([4a21584](https://github.com/trycourier/courier-java/commit/4a21584ee2daff5c18cf9ca259cce3a9920005ba))
+
+## 4.7.0 (2026-01-12)
+
+Full Changelog: [v4.6.0...v4.7.0](https://github.com/trycourier/courier-java/compare/v4.6.0...v4.7.0)
+
+### Features
+
+* **client:** allow configuring dispatcher executor service ([86008d9](https://github.com/trycourier/courier-java/commit/86008d9281207c5dff33942f841fcf57fe9ac543))
+
+
+### Bug Fixes
+
+* **types:** change rules type from FilterConfig to Filter in NestedFilterConfig ([49ad2a8](https://github.com/trycourier/courier-java/commit/49ad2a877f281961289abaa1a00e38e52921a825))
+
+
+### Chores
+
+* **internal:** regenerate SDK with no functional changes ([1267b56](https://github.com/trycourier/courier-java/commit/1267b5646869806f1df16eb24b19ad1c988a0be6))
+
+## 4.6.0 (2026-01-08)
+
+Full Changelog: [v4.5.0...v4.6.0](https://github.com/trycourier/courier-java/compare/v4.5.0...v4.6.0)
+
+### Features
+
+* Add automation list endpoint to API spec ([d325774](https://github.com/trycourier/courier-java/commit/d32577416aac404f5252240814411027720f9b7e))
+* **client:** add `HttpRequest#url()` method ([68fea18](https://github.com/trycourier/courier-java/commit/68fea18aaff857c538d86a74f17c3655a7815817))
+
+## 4.5.0 (2025-12-29)
+
+Full Changelog: [v4.4.0...v4.5.0](https://github.com/trycourier/courier-java/compare/v4.4.0...v4.5.0)
+
+### Features
+
+* **api:** add audience/list/slack/msTeams/pagerduty/webhook recipients, restructure to union ([46de0d2](https://github.com/trycourier/courier-java/commit/46de0d2d85f59c4d1d220dc3e3028c7e6760c769))
+
+## 4.4.0 (2025-12-16)
+
+Full Changelog: [v4.3.0...v4.4.0](https://github.com/trycourier/courier-java/compare/v4.3.0...v4.4.0)
+
+### Features
+
+* Add timezone field to Delay schema ([46d1671](https://github.com/trycourier/courier-java/commit/46d16713aeb86a15fe73de9c9e2aea168872a7c0))
+* Update bulk API spec: make event required, document profile.email req… ([e436dcd](https://github.com/trycourier/courier-java/commit/e436dcd0a916911f366d3016333b8a6a2cdc947d))
+
+## 4.3.0 (2025-12-08)
+
+Full Changelog: [v4.2.0...v4.3.0](https://github.com/trycourier/courier-java/compare/v4.2.0...v4.3.0)
+
+### Features
+
+* Fix UsersGetAllTokensResponse to return object with tokens property i… ([d714e73](https://github.com/trycourier/courier-java/commit/d714e730131147eeed7f17a7b7732021bfe6b2c2))
+
+## 4.2.0 (2025-12-08)
+
+Full Changelog: [v4.1.1...v4.2.0](https://github.com/trycourier/courier-java/compare/v4.1.1...v4.2.0)
+
+### Features
+
+* Add event_ids field to Notification schema ([7c1f965](https://github.com/trycourier/courier-java/commit/7c1f9658796281d891f340cbe0773a01ea0883d9))
+
+
+### Bug Fixes
+
+* **client:** fix duplicate Go struct resulting from name derivations schema ([6af2591](https://github.com/trycourier/courier-java/commit/6af25911aa81ad591d3b2a34e77045394abfbf21))
+
+
+### Documentation
+
+* remove `$` for better copy-pasteabality ([ed4b896](https://github.com/trycourier/courier-java/commit/ed4b8969289ea8559fa436a706b6d5c177e925f5))
+
+## 4.1.1 (2025-12-02)
+
+Full Changelog: [v4.1.0...v4.1.1](https://github.com/trycourier/courier-java/compare/v4.1.0...v4.1.1)
+
+### Bug Fixes
+
+* **client:** cancel okhttp call when future cancelled ([a9dd41b](https://github.com/trycourier/courier-java/commit/a9dd41bced8c09a8c786a53ef000a5eb3d806116))
+
+## 4.1.0 (2025-11-18)
+
+Full Changelog: [v4.0.1...v4.1.0](https://github.com/trycourier/courier-java/compare/v4.0.1...v4.1.0)
+
+### Features
+
+* JWT scope updates ([6b86ae2](https://github.com/trycourier/courier-java/commit/6b86ae2db80aedb1e2659c79d1182f250de5e0ac))
+* NPM enabled ([8e4f4d9](https://github.com/trycourier/courier-java/commit/8e4f4d9d89652f1c41867eae9b0048c8ce5c0ad6))
+* Test ([849aabb](https://github.com/trycourier/courier-java/commit/849aabb30345aa0f2ee9efcb11242992743934bb))
+
+
+### Bug Fixes
+
+* **client:** multi-value header serialization ([82763dd](https://github.com/trycourier/courier-java/commit/82763ddd160ebb38c45bf9cdc09fb7b596b77c2e))
+
+## 4.0.1 (2025-11-12)
+
+Full Changelog: [v4.0.0...v4.0.1](https://github.com/trycourier/courier-java/compare/v4.0.0...v4.0.1)
+
+### Chores
+
+* update SDK settings ([b7ac3e7](https://github.com/trycourier/courier-java/commit/b7ac3e7b7af7c54afc7071395db34293cdc356db))
+
+## 4.0.0 (2025-11-08)
+
+Full Changelog: [v3.8.0...v4.0.0](https://github.com/trycourier/courier-java/compare/v3.8.0...v4.0.0)
+
+### Features
+
+* Token Prop Description Change ([7087c01](https://github.com/trycourier/courier-java/commit/7087c010d372844abfab7310aa52e6fa9729ae39))
+
+## 3.8.0 (2025-11-07)
+
+Full Changelog: [v3.7.2...v3.8.0](https://github.com/trycourier/courier-java/compare/v3.7.2...v3.8.0)
+
+### Features
+
+* Spec Comment Change ([4a95534](https://github.com/trycourier/courier-java/commit/4a955346ee45fa23a2db253c750916c879d130c3))
+
+## 3.7.2 (2025-11-07)
+
+Full Changelog: [v3.7.1...v3.7.2](https://github.com/trycourier/courier-java/compare/v3.7.1...v3.7.2)
+
+### Bug Fixes
+
+* Better Python Samples + Updates to naming ([bcfaab7](https://github.com/trycourier/courier-java/commit/bcfaab71bfebcd63089bdc85916d4f493f30479f))
+
+## 3.7.1 (2025-11-04)
+
+Full Changelog: [v3.7.0...v3.7.1](https://github.com/trycourier/courier-java/compare/v3.7.0...v3.7.1)
+
+### Features
+
+* Attempt kick off again ([fadbcb6](https://github.com/trycourier/courier-java/commit/fadbcb687966348aafeafd7d2dec123ecde91260))
+
+## 3.7.0 (2025-11-03)
+
+Full Changelog: [v3.7.0-alpha7...v3.7.0](https://github.com/trycourier/courier-java/compare/v3.7.0-alpha7...v3.7.0)
+
+### Features
+
+* Organization update ([6eb3c51](https://github.com/trycourier/courier-java/commit/6eb3c519ff7c2f7c08fe55a01c57bdf753eb811a))
+
+## 3.7.0-alpha7 (2025-10-31)
+
+Full Changelog: [v3.7.0-alpha6...v3.7.0-alpha7](https://github.com/trycourier/courier-java/compare/v3.7.0-alpha6...v3.7.0-alpha7)
+
+### Bug Fixes
+
+* Courier Reverse Domain for Java ([29df93f](https://github.com/trycourier/courier-java/commit/29df93f9ee88817e62d724d5b5e4755895bb0e29))
+
+## 3.7.0-alpha6 (2025-10-31)
+
+Full Changelog: [v3.7.0-alpha5...v3.7.0-alpha6](https://github.com/trycourier/courier-java/compare/v3.7.0-alpha5...v3.7.0-alpha6)
+
+### Features
+
+* Comment adjustment to kick of build ([fdfd8d5](https://github.com/trycourier/courier-java/commit/fdfd8d5df14451f7abcf5044a2dab0864685c65f))
+
+
+### Bug Fixes
+
+* Comment to kick off build ([d940d0c](https://github.com/trycourier/courier-java/commit/d940d0cac457f30c85b202eb641d03443e1d5ceb))
+
+## 3.7.0-alpha5 (2025-10-17)
+
+Full Changelog: [v3.7.0-alpha4...v3.7.0-alpha5](https://github.com/trycourier/courier-java/compare/v3.7.0-alpha4...v3.7.0-alpha5)
+
+### Bug Fixes
+
+* Dep Warning ([9f7c1b2](https://github.com/trycourier/courier-java/commit/9f7c1b278685a941c2a37edfc5928610d18c42a3))
+
+## 3.7.0-alpha4 (2025-10-17)
+
+Full Changelog: [v3.7.0-alpha3...v3.7.0-alpha4](https://github.com/trycourier/courier-java/compare/v3.7.0-alpha3...v3.7.0-alpha4)
+
+### Bug Fixes
+
+* Updated paths for each model and go example updates ([175539f](https://github.com/trycourier/courier-java/commit/175539f9d0376f5bd6539c44650ece4c899d84c2))
+
+## 3.7.0-alpha3 (2025-10-17)
+
+Full Changelog: [v3.7.0-alpha2...v3.7.0-alpha3](https://github.com/trycourier/courier-java/compare/v3.7.0-alpha2...v3.7.0-alpha3)
+
+### Features
+
+* More PHP and attempted node automerge ([a034224](https://github.com/trycourier/courier-java/commit/a034224e176fd5cfd303732bf202d19f9c269584))
+
+
+### Bug Fixes
+
+* **test:** set required field channel ([93525f3](https://github.com/trycourier/courier-java/commit/93525f374fe22c412e473afd0b4f22f649dada8f))
+
+## 3.7.0-alpha2 (2025-10-14)
+
+Full Changelog: [v3.7.0-alpha1...v3.7.0-alpha2](https://github.com/trycourier/courier-java/compare/v3.7.0-alpha1...v3.7.0-alpha2)
+
+### Features
+
+* Feature/java 2 ([699fc18](https://github.com/trycourier/courier-java/commit/699fc187551f2caab3a133bfd247cada53c54526))
+
+## 3.7.0-alpha1 (2025-10-14)
+
+Full Changelog: [v3.7.0-alpha0...v3.7.0-alpha1](https://github.com/trycourier/courier-java/compare/v3.7.0-alpha0...v3.7.0-alpha1)
+
+### Features
+
+* Changes to spec, examples and scripts ([e38bbae](https://github.com/trycourier/courier-java/commit/e38bbaef5f16357b583f56cbc20a4e767be28703))
+
+## 3.7.0-alpha0 (2025-10-14)
+
+Full Changelog: [v0.2.0...v3.7.0-alpha0](https://github.com/trycourier/courier-java/compare/v0.2.0...v3.7.0-alpha0)
+
+### Features
+
+* Kick of merge attempt ([db5f91b](https://github.com/trycourier/courier-java/commit/db5f91ba4ca352805f4367ea8a02cbd636224b7d))
+* Model sync ([0e586b9](https://github.com/trycourier/courier-java/commit/0e586b9a81627a68afa4c760a2453e8cc166c667))
+* Polish and Kick of Java Kit Gen ([7650a29](https://github.com/trycourier/courier-java/commit/7650a294024eed0a1d074be64ca67d679491ca10))
+* Template Id ([150a51a](https://github.com/trycourier/courier-java/commit/150a51add95002f29d1893beec7c4db6890b9aeb))
+* Test Github Action ([333fa1a](https://github.com/trycourier/courier-java/commit/333fa1a7398dd84cb98f21af74f305dc6574417a))
+
+
+### Chores
+
+* **client:** custom java naming to fix List overlap ([c95e9d1](https://github.com/trycourier/courier-java/commit/c95e9d1776c66978bfc891c6fabb8a82b9a09123))
+
+## 0.2.0 (2025-10-08)
+
+Full Changelog: [v0.1.0...v0.2.0](https://github.com/trycourier/courier-java/compare/v0.1.0...v0.2.0)
+
+### Features
+
+* **api:** manual updates ([bea49ba](https://github.com/trycourier/courier-java/commit/bea49ba0584c19e5d94584fa318328f7613b6524))
+
+## 0.1.0 (2025-10-08)
+
+Full Changelog: [v0.0.1...v0.1.0](https://github.com/trycourier/courier-java/compare/v0.0.1...v0.1.0)
+
+### Features
+
+* **api:** manual updates ([9e03ceb](https://github.com/trycourier/courier-java/commit/9e03ceb1c3b1608e25723ba7aff14c35fc0a116a))
+* **api:** manual updates ([3e3e01a](https://github.com/trycourier/courier-java/commit/3e3e01adad08e941231a6fcada1ad9460ad2237c))
+* **api:** manual updates ([e8d7297](https://github.com/trycourier/courier-java/commit/e8d729759fbbf511e93ab2b0559d718a48cc1ecb))
+* **api:** manual updates ([0dfa4cf](https://github.com/trycourier/courier-java/commit/0dfa4cf4dce0a35be9ef30442b70eab98a1fb64d))
+* **api:** manual updates ([7f3f0ba](https://github.com/trycourier/courier-java/commit/7f3f0ba34e06bea6f5d847486acdfd0d037da9f2))
+* **api:** manual updates ([1e9572f](https://github.com/trycourier/courier-java/commit/1e9572f91eeefbe7536ffb2f0663f9b951d442ff))
+* **api:** manual updates ([d18518a](https://github.com/trycourier/courier-java/commit/d18518a50f4f868cdfd3ca90a113d8160aaefa85))
+* **api:** manual updates ([2e42d44](https://github.com/trycourier/courier-java/commit/2e42d443e1c5aa64c05fea6dc2c19b173aa223e4))
+* **api:** manual updates ([4bedb44](https://github.com/trycourier/courier-java/commit/4bedb44312e4618b9cb16245f032978490a9fa1e))
+* **api:** manual updates ([51e1a35](https://github.com/trycourier/courier-java/commit/51e1a35ffcee9de2e8f8eb6b6e5ee443ba3cc1e3))
+* **api:** manual updates ([25ea9c2](https://github.com/trycourier/courier-java/commit/25ea9c20e06aaf842128758a136bcf961dcdc707))
+* **api:** manual updates ([61a87f9](https://github.com/trycourier/courier-java/commit/61a87f9d18bb355e008a69ab86c578d2763fddcc))
+* **api:** manual updates ([822e2a4](https://github.com/trycourier/courier-java/commit/822e2a4a7d93bdc32bfc2c92bd0cc1ac4b3ff359))
+* **api:** manual updates ([6bb1fba](https://github.com/trycourier/courier-java/commit/6bb1fbabc235d3cc1eb7489919bbb71b42bc22e9))
+* **api:** manual updates ([ead7d7c](https://github.com/trycourier/courier-java/commit/ead7d7cbf54c37a6aed22496051334693aa647ea))
+* **api:** manual updates ([e5bfbdb](https://github.com/trycourier/courier-java/commit/e5bfbdb1174fafbc1852694c138e364a98010ef3))
+* **api:** manual updates ([0435076](https://github.com/trycourier/courier-java/commit/043507613239e61b8173032071dd91f3b378c514))
+* **api:** manual updates ([e6ed828](https://github.com/trycourier/courier-java/commit/e6ed82846b54dea4c15295f1df79439dca3c4875))
+* **api:** manual updates ([0ec4d93](https://github.com/trycourier/courier-java/commit/0ec4d9354b7a702a83e9d305ea8a493eda3af820))
+* **api:** manual updates ([70aa287](https://github.com/trycourier/courier-java/commit/70aa2874518fd8f48e5cc8927b7abcea60787b7c))
+* **api:** manual updates ([998a0c1](https://github.com/trycourier/courier-java/commit/998a0c13140b88e4fba9fbd2374e07b3ec6a4849))
+* **api:** manual updates ([1d5dae3](https://github.com/trycourier/courier-java/commit/1d5dae306c780129e17111dae95b55bc600ad6e9))
+* **api:** manual updates ([26e335a](https://github.com/trycourier/courier-java/commit/26e335a72dc4aebf9c3b71f440f317ce4409371c))
+* **api:** manual updates ([6b9f529](https://github.com/trycourier/courier-java/commit/6b9f5296179dccc64931dd2afe8802cf06b69873))
+* **api:** manual updates ([2f68cbe](https://github.com/trycourier/courier-java/commit/2f68cbe54d8ed9f6ae5dc5c060e3067131acf3fb))
+* **api:** manual updates ([33a23f3](https://github.com/trycourier/courier-java/commit/33a23f3e6c64100af51e328215bc7d2a93fef331))
+* **api:** manual updates ([5c5e618](https://github.com/trycourier/courier-java/commit/5c5e61819a03f950fc01468e21f1aa58b3f9a49a))
+* **api:** manual updates ([1a3eab1](https://github.com/trycourier/courier-java/commit/1a3eab10a8b1eba2ed8bbdd82dffb81efae0155f))
+* **api:** manual updates ([e4986bc](https://github.com/trycourier/courier-java/commit/e4986bcd194638319398f2375e0a5304cbda49dd))
+* **api:** manual updates ([ab3ef5d](https://github.com/trycourier/courier-java/commit/ab3ef5d4292e846a80b39ae7c608305830637f64))
+* Examples and ref polish ([da2b50d](https://github.com/trycourier/courier-java/commit/da2b50dcc25a818bb2a02c3d6976083c8522a89c))
+
+
+### Chores
+
+* sync repo ([166f09d](https://github.com/trycourier/courier-java/commit/166f09d23f53cda5b63b60a9a785bc9e2e430fb7))
+* update SDK settings ([a6b8878](https://github.com/trycourier/courier-java/commit/a6b88785330883c72efcef1a178d952f31de4420))
+* update SDK settings ([d4cde45](https://github.com/trycourier/courier-java/commit/d4cde450dc82626223aee050c5c848f70fe79382))
