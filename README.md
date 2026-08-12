@@ -1,14 +1,30 @@
-<!-- AUTO-GENERATED-OVERVIEW:START — Do not edit this section. It is synced from mintlify-docs. -->
-# Courier Java SDK
+# Courier Java API Library
 
-The Courier Java SDK provides typed access to the Courier REST API from applications written in Java 8+. It uses builder-pattern request construction, OkHttp for transport, and returns strongly typed response objects.
+<!-- x-release-please-start-version -->
+
+[![Maven Central](https://img.shields.io/maven-central/v/com.courier/courier-java)](https://central.sonatype.com/artifact/com.courier/courier-java/4.27.0)
+[![javadoc](https://javadoc.io/badge2/com.courier/courier-java/4.27.0/javadoc.svg)](https://javadoc.io/doc/com.courier/courier-java/4.27.0)
+
+<!-- x-release-please-end -->
+
+The Courier Java SDK provides convenient access to the [Courier REST API](https://www.courier.com/docs) from applications written in Java.
+
+It is generated with [Stainless](https://www.stainless.com/).
+
+<!-- x-release-please-start-version -->
+
+The REST API documentation can be found on [www.courier.com](https://www.courier.com/docs). Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.courier/courier-java/4.27.0).
+
+<!-- x-release-please-end -->
 
 ## Installation
+
+<!-- x-release-please-start-version -->
 
 ### Gradle
 
 ```kotlin
-implementation("com.courier:courier-java:LATEST_VERSION")
+implementation("com.courier:courier-java:4.27.0")
 ```
 
 ### Maven
@@ -17,13 +33,17 @@ implementation("com.courier:courier-java:LATEST_VERSION")
 <dependency>
   <groupId>com.courier</groupId>
   <artifactId>courier-java</artifactId>
-  <version>LATEST_VERSION</version>
+  <version>4.27.0</version>
 </dependency>
 ```
 
-Find the latest version on [Maven Central](https://central.sonatype.com/artifact/com.courier/courier-java).
+<!-- x-release-please-end -->
 
-## Quick Start
+## Requirements
+
+This library requires Java 8 or later.
+
+## Usage
 
 ```java
 import com.courier.client.CourierClient;
@@ -31,21 +51,205 @@ import com.courier.client.okhttp.CourierOkHttpClient;
 import com.courier.core.JsonValue;
 import com.courier.models.UserRecipient;
 import com.courier.models.send.SendMessageParams;
+import com.courier.models.send.SendMessageResponse;
 
+// Configures using the `courier.apiKey` and `courier.baseUrl` system properties
+// Or configures using the `COURIER_API_KEY` and `COURIER_BASE_URL` environment variables
 CourierClient client = CourierOkHttpClient.fromEnv();
 
 SendMessageParams params = SendMessageParams.builder()
     .message(SendMessageParams.Message.builder()
-        .to(UserRecipient.builder().userId("your_user_id").build())
+        .to(UserRecipient.builder()
+            .userId("your_user_id")
+            .build())
         .template("your_template_id")
         .data(SendMessageParams.Message.Data.builder()
             .putAdditionalProperty("foo", JsonValue.from("bar"))
             .build())
         .build())
     .build();
+SendMessageResponse response = client.send().message(params);
+```
 
-var response = client.send().message(params);
-System.out.println(response.requestId());
+## Client configuration
+
+Configure the client using system properties or environment variables:
+
+```java
+import com.courier.client.CourierClient;
+import com.courier.client.okhttp.CourierOkHttpClient;
+
+// Configures using the `courier.apiKey` and `courier.baseUrl` system properties
+// Or configures using the `COURIER_API_KEY` and `COURIER_BASE_URL` environment variables
+CourierClient client = CourierOkHttpClient.fromEnv();
+```
+
+Or manually:
+
+```java
+import com.courier.client.CourierClient;
+import com.courier.client.okhttp.CourierOkHttpClient;
+
+CourierClient client = CourierOkHttpClient.builder()
+    .apiKey("My API Key")
+    .build();
+```
+
+Or using a combination of the two approaches:
+
+```java
+import com.courier.client.CourierClient;
+import com.courier.client.okhttp.CourierOkHttpClient;
+
+CourierClient client = CourierOkHttpClient.builder()
+    // Configures using the `courier.apiKey` and `courier.baseUrl` system properties
+    // Or configures using the `COURIER_API_KEY` and `COURIER_BASE_URL` environment variables
+    .fromEnv()
+    .apiKey("My API Key")
+    .build();
+```
+
+See this table for the available options:
+
+| Setter    | System property   | Environment variable | Required | Default value               |
+| --------- | ----------------- | -------------------- | -------- | --------------------------- |
+| `apiKey`  | `courier.apiKey`  | `COURIER_API_KEY`    | true     | -                           |
+| `baseUrl` | `courier.baseUrl` | `COURIER_BASE_URL`   | true     | `"https://api.courier.com"` |
+
+System properties take precedence over environment variables.
+
+> [!TIP]
+> Don't create more than one client in the same application. Each client has a connection pool and
+> thread pools, which are more efficient to share between requests.
+
+### Modifying configuration
+
+To temporarily use a modified client configuration, while reusing the same connection and thread pools, call `withOptions()` on any client or service:
+
+```java
+import com.courier.client.CourierClient;
+
+CourierClient clientWithOptions = client.withOptions(optionsBuilder -> {
+    optionsBuilder.baseUrl("https://example.com");
+    optionsBuilder.maxRetries(42);
+});
+```
+
+The `withOptions()` method does not affect the original client or service.
+
+## Requests and responses
+
+To send a request to the Courier API, build an instance of some `Params` class and pass it to the corresponding client method. When the response is received, it will be deserialized into an instance of a Java class.
+
+For example, `client.send().message(...)` should be called with an instance of `SendMessageParams`, and it will return an instance of `SendMessageResponse`.
+
+## Immutability
+
+Each class in the SDK has an associated [builder](https://blogs.oracle.com/javamagazine/post/exploring-joshua-blochs-builder-design-pattern-in-java) or factory method for constructing it.
+
+Each class is [immutable](https://docs.oracle.com/javase/tutorial/essential/concurrency/immutable.html) once constructed. If the class has an associated builder, then it has a `toBuilder()` method, which can be used to convert it back to a builder for making a modified copy.
+
+Because each class is immutable, builder modification will _never_ affect already built class instances.
+
+## Asynchronous execution
+
+The default client is synchronous. To switch to asynchronous execution, call the `async()` method:
+
+```java
+import com.courier.client.CourierClient;
+import com.courier.client.okhttp.CourierOkHttpClient;
+import com.courier.core.JsonValue;
+import com.courier.models.UserRecipient;
+import com.courier.models.send.SendMessageParams;
+import com.courier.models.send.SendMessageResponse;
+import java.util.concurrent.CompletableFuture;
+
+// Configures using the `courier.apiKey` and `courier.baseUrl` system properties
+// Or configures using the `COURIER_API_KEY` and `COURIER_BASE_URL` environment variables
+CourierClient client = CourierOkHttpClient.fromEnv();
+
+SendMessageParams params = SendMessageParams.builder()
+    .message(SendMessageParams.Message.builder()
+        .to(UserRecipient.builder()
+            .userId("your_user_id")
+            .build())
+        .template("your_template_id")
+        .data(SendMessageParams.Message.Data.builder()
+            .putAdditionalProperty("foo", JsonValue.from("bar"))
+            .build())
+        .build())
+    .build();
+CompletableFuture<SendMessageResponse> response = client.async().send().message(params);
+```
+
+Or create an asynchronous client from the beginning:
+
+```java
+import com.courier.client.CourierClientAsync;
+import com.courier.client.okhttp.CourierOkHttpClientAsync;
+import com.courier.core.JsonValue;
+import com.courier.models.UserRecipient;
+import com.courier.models.send.SendMessageParams;
+import com.courier.models.send.SendMessageResponse;
+import java.util.concurrent.CompletableFuture;
+
+// Configures using the `courier.apiKey` and `courier.baseUrl` system properties
+// Or configures using the `COURIER_API_KEY` and `COURIER_BASE_URL` environment variables
+CourierClientAsync client = CourierOkHttpClientAsync.fromEnv();
+
+SendMessageParams params = SendMessageParams.builder()
+    .message(SendMessageParams.Message.builder()
+        .to(UserRecipient.builder()
+            .userId("your_user_id")
+            .build())
+        .template("your_template_id")
+        .data(SendMessageParams.Message.Data.builder()
+            .putAdditionalProperty("foo", JsonValue.from("bar"))
+            .build())
+        .build())
+    .build();
+CompletableFuture<SendMessageResponse> response = client.send().message(params);
+```
+
+The asynchronous client supports the same options as the synchronous one, except most methods return `CompletableFuture`s.
+
+## Raw responses
+
+The SDK defines methods that deserialize responses into instances of Java classes. However, these methods don't provide access to the response headers, status code, or the raw response body.
+
+To access this data, prefix any HTTP method call on a client or service with `withRawResponse()`:
+
+```java
+import com.courier.core.JsonValue;
+import com.courier.core.http.Headers;
+import com.courier.core.http.HttpResponseFor;
+import com.courier.models.UserRecipient;
+import com.courier.models.send.SendMessageParams;
+import com.courier.models.send.SendMessageResponse;
+
+SendMessageParams params = SendMessageParams.builder()
+    .message(SendMessageParams.Message.builder()
+        .to(UserRecipient.builder()
+            .userId("your_user_id")
+            .build())
+        .template("your_template_id")
+        .data(SendMessageParams.Message.Data.builder()
+            .putAdditionalProperty("foo", JsonValue.from("bar"))
+            .build())
+        .build())
+    .build();
+HttpResponseFor<SendMessageResponse> response = client.send().withRawResponse().message(params);
+
+int statusCode = response.statusCode();
+Headers headers = response.headers();
+```
+
+You can still deserialize the response into an instance of a Java class if needed:
+
+```java
+import com.courier.models.send.SendMessageResponse;
+
+SendMessageResponse parsedResponse = response.parse();
 ```
 
 ## Error handling
@@ -509,14 +713,10 @@ Checked exceptions:
 ## Semantic versioning
 
 This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:
-The client reads `COURIER_API_KEY` from your environment (or `courier.apiKey` system property) automatically.
 
-## Documentation
+1. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_
+2. Changes that we do not expect to impact the vast majority of users in practice.
 
-Full documentation: **[courier.com/docs/sdk-libraries/java](https://www.courier.com/docs/sdk-libraries/java/)**
+We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-- [Quickstart](https://www.courier.com/docs/getting-started/quickstart/)
-- [Send API](https://www.courier.com/docs/platform/sending/send-message/)
-- [API Reference](https://www.courier.com/docs/reference/get-started/)
-- [Javadocs](https://javadoc.io/doc/com.courier/courier-java/)
-<!-- AUTO-GENERATED-OVERVIEW:END -->
+We are keen for your feedback; please open an [issue](https://www.github.com/trycourier/courier-java/issues) with questions, bugs, or suggestions.
