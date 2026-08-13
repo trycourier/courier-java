@@ -1,5 +1,17 @@
 # Changelog
 
+## [4.27.1](https://github.com/trycourier/courier-java/compare/v4.27.0...v4.27.1) (2026-08-13)
+
+
+### Chores
+
+* **api:** regenerate SDK ([#129](https://github.com/trycourier/courier-java/issues/129)) ([9885f36](https://github.com/trycourier/courier-java/commit/9885f36f1f12f03b9b62b6a3ac22014821d49a00))
+
+
+### Documentation
+
+* sync README from api-spec ([#125](https://github.com/trycourier/courier-java/issues/125)) ([5abe31b](https://github.com/trycourier/courier-java/commit/5abe31b71482ac09ae3cbc2c32dce5eb4cff43da))
+
 ## 4.27.0 (2026-08-10)
 
 Full Changelog: [v4.26.0...v4.27.0](https://github.com/trycourier/courier-java/compare/v4.26.0...v4.27.0)
