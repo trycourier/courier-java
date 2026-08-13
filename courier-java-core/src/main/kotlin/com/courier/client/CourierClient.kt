@@ -9,6 +9,7 @@ import com.courier.services.blocking.AuthService
 import com.courier.services.blocking.AutomationService
 import com.courier.services.blocking.BrandService
 import com.courier.services.blocking.BroadcastService
+import com.courier.services.blocking.BulkService
 import com.courier.services.blocking.DigestService
 import com.courier.services.blocking.InboundService
 import com.courier.services.blocking.JourneyService
@@ -101,6 +102,8 @@ interface CourierClient {
      * schedule it for later.
      */
     fun broadcasts(): BroadcastService
+
+    fun bulk(): BulkService
 
     /** Manage the logos, colors, and layout that give the templates you send a consistent look. */
     fun brands(): BrandService
@@ -225,6 +228,8 @@ interface CourierClient {
          * or schedule it for later.
          */
         fun broadcasts(): BroadcastService.WithRawResponse
+
+        fun bulk(): BulkService.WithRawResponse
 
         /**
          * Manage the logos, colors, and layout that give the templates you send a consistent look.
