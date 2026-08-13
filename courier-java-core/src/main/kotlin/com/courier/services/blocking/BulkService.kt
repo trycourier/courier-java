@@ -70,7 +70,10 @@ interface BulkService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BulkCreateJobResponse
 
-    /** Get Bulk Job Users */
+    /**
+     * Returns the users ingested into a bulk job with paging, each carrying the status Courier
+     * recorded for it and the id of the message it produced.
+     */
     fun listUsers(jobId: String): BulkListUsersResponse =
         listUsers(jobId, BulkListUsersParams.none())
 
@@ -101,7 +104,11 @@ interface BulkService {
     fun listUsers(jobId: String, requestOptions: RequestOptions): BulkListUsersResponse =
         listUsers(jobId, BulkListUsersParams.none(), requestOptions)
 
-    /** Get a bulk job */
+    /**
+     * Returns a bulk job's message definition, its status — CREATED, PROCESSING, COMPLETED, or
+     * ERROR — and running counts of users received, messages enqueued, and failures. Poll it to
+     * follow a job through to completion.
+     */
     fun retrieveJob(jobId: String): BulkRetrieveJobResponse =
         retrieveJob(jobId, BulkRetrieveJobParams.none())
 
@@ -133,7 +140,10 @@ interface BulkService {
     fun retrieveJob(jobId: String, requestOptions: RequestOptions): BulkRetrieveJobResponse =
         retrieveJob(jobId, BulkRetrieveJobParams.none(), requestOptions)
 
-    /** Run a bulk job */
+    /**
+     * Starts processing a bulk job, sending to every user ingested into it. Returns 204
+     * immediately; the job runs asynchronously, so poll the job to watch its status and counts.
+     */
     fun runJob(jobId: String) = runJob(jobId, BulkRunJobParams.none())
 
     /** @see runJob */

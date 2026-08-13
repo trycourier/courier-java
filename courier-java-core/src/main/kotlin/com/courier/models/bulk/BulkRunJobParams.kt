@@ -11,7 +11,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Run a bulk job */
+/**
+ * Starts processing a bulk job, sending to every user ingested into it. Returns 204 immediately;
+ * the job runs asynchronously, so poll the job to watch its status and counts.
+ */
 class BulkRunJobParams
 private constructor(
     private val jobId: String?,
