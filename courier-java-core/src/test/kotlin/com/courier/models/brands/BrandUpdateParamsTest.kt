@@ -11,10 +11,10 @@ internal class BrandUpdateParamsTest {
     fun create() {
         BrandUpdateParams.builder()
             .brandId("brand_id")
-            .name("name")
+            .name("My Brand")
             .settings(
                 BrandSettings.builder()
-                    .colors(BrandColors.builder().primary("primary").secondary("secondary").build())
+                    .colors(BrandColors.builder().primary("#9D3789").secondary("#FFFFFF").build())
                     .email(
                         BrandSettingsEmail.builder()
                             .footer(
@@ -92,7 +92,7 @@ internal class BrandUpdateParamsTest {
 
     @Test
     fun pathParams() {
-        val params = BrandUpdateParams.builder().brandId("brand_id").name("name").build()
+        val params = BrandUpdateParams.builder().brandId("brand_id").name("My Brand").build()
 
         assertThat(params._pathParam(0)).isEqualTo("brand_id")
         // out-of-bound path param
@@ -104,11 +104,11 @@ internal class BrandUpdateParamsTest {
         val params =
             BrandUpdateParams.builder()
                 .brandId("brand_id")
-                .name("name")
+                .name("My Brand")
                 .settings(
                     BrandSettings.builder()
                         .colors(
-                            BrandColors.builder().primary("primary").secondary("secondary").build()
+                            BrandColors.builder().primary("#9D3789").secondary("#FFFFFF").build()
                         )
                         .email(
                             BrandSettingsEmail.builder()
@@ -189,11 +189,11 @@ internal class BrandUpdateParamsTest {
 
         val body = params._body()
 
-        assertThat(body.name()).isEqualTo("name")
+        assertThat(body.name()).isEqualTo("My Brand")
         assertThat(body.settings())
             .contains(
                 BrandSettings.builder()
-                    .colors(BrandColors.builder().primary("primary").secondary("secondary").build())
+                    .colors(BrandColors.builder().primary("#9D3789").secondary("#FFFFFF").build())
                     .email(
                         BrandSettingsEmail.builder()
                             .footer(
@@ -271,10 +271,10 @@ internal class BrandUpdateParamsTest {
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = BrandUpdateParams.builder().brandId("brand_id").name("name").build()
+        val params = BrandUpdateParams.builder().brandId("brand_id").name("My Brand").build()
 
         val body = params._body()
 
-        assertThat(body.name()).isEqualTo("name")
+        assertThat(body.name()).isEqualTo("My Brand")
     }
 }

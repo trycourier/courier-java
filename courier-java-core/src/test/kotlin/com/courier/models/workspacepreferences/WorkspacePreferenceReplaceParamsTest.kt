@@ -14,10 +14,11 @@ internal class WorkspacePreferenceReplaceParamsTest {
             .sectionId("section_id")
             .workspacePreferenceReplaceRequest(
                 WorkspacePreferenceReplaceRequest.builder()
-                    .name("name")
+                    .name("Account Notifications")
                     .description("description")
                     .hasCustomRouting(true)
-                    .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
+                    .addRoutingOption(ChannelClassification.EMAIL)
+                    .addRoutingOption(ChannelClassification.PUSH)
                     .build()
             )
             .build()
@@ -29,7 +30,9 @@ internal class WorkspacePreferenceReplaceParamsTest {
             WorkspacePreferenceReplaceParams.builder()
                 .sectionId("section_id")
                 .workspacePreferenceReplaceRequest(
-                    WorkspacePreferenceReplaceRequest.builder().name("name").build()
+                    WorkspacePreferenceReplaceRequest.builder()
+                        .name("Account Notifications")
+                        .build()
                 )
                 .build()
 
@@ -45,10 +48,11 @@ internal class WorkspacePreferenceReplaceParamsTest {
                 .sectionId("section_id")
                 .workspacePreferenceReplaceRequest(
                     WorkspacePreferenceReplaceRequest.builder()
-                        .name("name")
+                        .name("Account Notifications")
                         .description("description")
                         .hasCustomRouting(true)
-                        .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
+                        .addRoutingOption(ChannelClassification.EMAIL)
+                        .addRoutingOption(ChannelClassification.PUSH)
                         .build()
                 )
                 .build()
@@ -58,10 +62,11 @@ internal class WorkspacePreferenceReplaceParamsTest {
         assertThat(body)
             .isEqualTo(
                 WorkspacePreferenceReplaceRequest.builder()
-                    .name("name")
+                    .name("Account Notifications")
                     .description("description")
                     .hasCustomRouting(true)
-                    .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
+                    .addRoutingOption(ChannelClassification.EMAIL)
+                    .addRoutingOption(ChannelClassification.PUSH)
                     .build()
             )
     }
@@ -72,12 +77,17 @@ internal class WorkspacePreferenceReplaceParamsTest {
             WorkspacePreferenceReplaceParams.builder()
                 .sectionId("section_id")
                 .workspacePreferenceReplaceRequest(
-                    WorkspacePreferenceReplaceRequest.builder().name("name").build()
+                    WorkspacePreferenceReplaceRequest.builder()
+                        .name("Account Notifications")
+                        .build()
                 )
                 .build()
 
         val body = params._body()
 
-        assertThat(body).isEqualTo(WorkspacePreferenceReplaceRequest.builder().name("name").build())
+        assertThat(body)
+            .isEqualTo(
+                WorkspacePreferenceReplaceRequest.builder().name("Account Notifications").build()
+            )
     }
 }

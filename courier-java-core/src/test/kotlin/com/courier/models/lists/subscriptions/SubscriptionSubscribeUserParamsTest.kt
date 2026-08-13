@@ -35,7 +35,7 @@ internal class SubscriptionSubscribeUserParamsTest {
                     .notifications(
                         RecipientPreferences.Notifications.builder()
                             .putAdditionalProperty(
-                                "foo",
+                                "nt_01kx4h2jdafq8bk9aftxak4b40",
                                 JsonValue.from(
                                     mapOf(
                                         "status" to "OPTED_IN",
@@ -93,7 +93,7 @@ internal class SubscriptionSubscribeUserParamsTest {
                         .notifications(
                             RecipientPreferences.Notifications.builder()
                                 .putAdditionalProperty(
-                                    "foo",
+                                    "nt_01kx4h2jdafq8bk9aftxak4b40",
                                     JsonValue.from(
                                         mapOf(
                                             "status" to "OPTED_IN",
@@ -136,7 +136,7 @@ internal class SubscriptionSubscribeUserParamsTest {
                     .notifications(
                         RecipientPreferences.Notifications.builder()
                             .putAdditionalProperty(
-                                "foo",
+                                "nt_01kx4h2jdafq8bk9aftxak4b40",
                                 JsonValue.from(
                                     mapOf(
                                         "status" to "OPTED_IN",

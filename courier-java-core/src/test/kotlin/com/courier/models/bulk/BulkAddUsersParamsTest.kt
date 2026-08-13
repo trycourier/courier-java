@@ -17,7 +17,7 @@ internal class BulkAddUsersParamsTest {
             .jobId("job_id")
             .addUser(
                 InboundBulkMessageUser.builder()
-                    .data(JsonValue.from(mapOf<String, Any>()))
+                    .data(JsonValue.from(mapOf("name" to "Jane")))
                     .preferences(
                         RecipientPreferences.builder()
                             .categories(
@@ -66,10 +66,10 @@ internal class BulkAddUsersParamsTest {
                     )
                     .profile(
                         InboundBulkMessageUser.Profile.builder()
-                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .putAdditionalProperty("email", JsonValue.from("bar"))
                             .build()
                     )
-                    .recipient("recipient")
+                    .recipient("user_abc")
                     .to(
                         UserRecipient.builder()
                             .accountId("account_id")
@@ -165,7 +165,7 @@ internal class BulkAddUsersParamsTest {
                 .jobId("job_id")
                 .addUser(
                     InboundBulkMessageUser.builder()
-                        .data(JsonValue.from(mapOf<String, Any>()))
+                        .data(JsonValue.from(mapOf("name" to "Jane")))
                         .preferences(
                             RecipientPreferences.builder()
                                 .categories(
@@ -218,10 +218,10 @@ internal class BulkAddUsersParamsTest {
                         )
                         .profile(
                             InboundBulkMessageUser.Profile.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .putAdditionalProperty("email", JsonValue.from("bar"))
                                 .build()
                         )
-                        .recipient("recipient")
+                        .recipient("user_abc")
                         .to(
                             UserRecipient.builder()
                                 .accountId("account_id")
@@ -307,7 +307,7 @@ internal class BulkAddUsersParamsTest {
         assertThat(body.users())
             .containsExactly(
                 InboundBulkMessageUser.builder()
-                    .data(JsonValue.from(mapOf<String, Any>()))
+                    .data(JsonValue.from(mapOf("name" to "Jane")))
                     .preferences(
                         RecipientPreferences.builder()
                             .categories(
@@ -356,10 +356,10 @@ internal class BulkAddUsersParamsTest {
                     )
                     .profile(
                         InboundBulkMessageUser.Profile.builder()
-                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .putAdditionalProperty("email", JsonValue.from("bar"))
                             .build()
                     )
-                    .recipient("recipient")
+                    .recipient("user_abc")
                     .to(
                         UserRecipient.builder()
                             .accountId("account_id")

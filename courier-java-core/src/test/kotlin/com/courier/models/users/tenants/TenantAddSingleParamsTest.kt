@@ -15,7 +15,7 @@ internal class TenantAddSingleParamsTest {
             .tenantId("tenant_id")
             .profile(
                 TenantAddSingleParams.Profile.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                    .putAdditionalProperty("role", JsonValue.from("bar"))
                     .build()
             )
             .build()
@@ -39,7 +39,7 @@ internal class TenantAddSingleParamsTest {
                 .tenantId("tenant_id")
                 .profile(
                     TenantAddSingleParams.Profile.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .putAdditionalProperty("role", JsonValue.from("bar"))
                         .build()
                 )
                 .build()
@@ -49,7 +49,7 @@ internal class TenantAddSingleParamsTest {
         assertThat(body.profile())
             .contains(
                 TenantAddSingleParams.Profile.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                    .putAdditionalProperty("role", JsonValue.from("bar"))
                     .build()
             )
     }

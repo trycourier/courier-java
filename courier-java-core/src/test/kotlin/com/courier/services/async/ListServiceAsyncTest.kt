@@ -35,7 +35,7 @@ internal class ListServiceAsyncTest {
             listServiceAsync.update(
                 ListUpdateParams.builder()
                     .listId("list_id")
-                    .name("name")
+                    .name("Product Updates")
                     .preferences(
                         RecipientPreferences.builder()
                             .categories(

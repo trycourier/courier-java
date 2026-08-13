@@ -41,7 +41,19 @@ internal class TenantServiceAsyncTest {
                     .userId("user_id")
                     .addTenant(
                         TenantAssociation.builder()
-                            .tenantId("tenant_id")
+                            .tenantId("tenant_abc")
+                            .profile(
+                                TenantAssociation.Profile.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                    .build()
+                            )
+                            .type(TenantAssociation.Type.USER)
+                            .userId("user_id")
+                            .build()
+                    )
+                    .addTenant(
+                        TenantAssociation.builder()
+                            .tenantId("tenant_def")
                             .profile(
                                 TenantAssociation.Profile.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -70,7 +82,7 @@ internal class TenantServiceAsyncTest {
                     .tenantId("tenant_id")
                     .profile(
                         TenantAddSingleParams.Profile.builder()
-                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .putAdditionalProperty("role", JsonValue.from("bar"))
                             .build()
                     )
                     .build()

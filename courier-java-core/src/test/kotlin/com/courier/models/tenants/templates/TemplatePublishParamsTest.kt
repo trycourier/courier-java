@@ -15,7 +15,7 @@ internal class TemplatePublishParamsTest {
             .tenantId("tenant_id")
             .templateId("template_id")
             .postTenantTemplatePublishRequest(
-                PostTenantTemplatePublishRequest.builder().version("version").build()
+                PostTenantTemplatePublishRequest.builder().version("latest").build()
             )
             .build()
     }
@@ -38,14 +38,14 @@ internal class TemplatePublishParamsTest {
                 .tenantId("tenant_id")
                 .templateId("template_id")
                 .postTenantTemplatePublishRequest(
-                    PostTenantTemplatePublishRequest.builder().version("version").build()
+                    PostTenantTemplatePublishRequest.builder().version("latest").build()
                 )
                 .build()
 
         val body = params._body().getOrNull()
 
         assertThat(body)
-            .isEqualTo(PostTenantTemplatePublishRequest.builder().version("version").build())
+            .isEqualTo(PostTenantTemplatePublishRequest.builder().version("latest").build())
     }
 
     @Test

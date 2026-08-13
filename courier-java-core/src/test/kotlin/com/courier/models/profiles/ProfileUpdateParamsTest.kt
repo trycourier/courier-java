@@ -12,7 +12,11 @@ internal class ProfileUpdateParamsTest {
         ProfileUpdateParams.builder()
             .userId("user_id")
             .addPatch(
-                ProfileUpdateParams.Patch.builder().op("op").path("path").value("value").build()
+                ProfileUpdateParams.Patch.builder()
+                    .op("replace")
+                    .path("/email")
+                    .value("jdoe@example.com")
+                    .build()
             )
             .build()
     }
@@ -23,7 +27,11 @@ internal class ProfileUpdateParamsTest {
             ProfileUpdateParams.builder()
                 .userId("user_id")
                 .addPatch(
-                    ProfileUpdateParams.Patch.builder().op("op").path("path").value("value").build()
+                    ProfileUpdateParams.Patch.builder()
+                        .op("replace")
+                        .path("/email")
+                        .value("jdoe@example.com")
+                        .build()
                 )
                 .build()
 
@@ -38,7 +46,11 @@ internal class ProfileUpdateParamsTest {
             ProfileUpdateParams.builder()
                 .userId("user_id")
                 .addPatch(
-                    ProfileUpdateParams.Patch.builder().op("op").path("path").value("value").build()
+                    ProfileUpdateParams.Patch.builder()
+                        .op("replace")
+                        .path("/email")
+                        .value("jdoe@example.com")
+                        .build()
                 )
                 .build()
 
@@ -46,7 +58,11 @@ internal class ProfileUpdateParamsTest {
 
         assertThat(body.patch())
             .containsExactly(
-                ProfileUpdateParams.Patch.builder().op("op").path("path").value("value").build()
+                ProfileUpdateParams.Patch.builder()
+                    .op("replace")
+                    .path("/email")
+                    .value("jdoe@example.com")
+                    .build()
             )
     }
 }

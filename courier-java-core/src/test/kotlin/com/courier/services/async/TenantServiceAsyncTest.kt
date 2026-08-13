@@ -37,8 +37,8 @@ internal class TenantServiceAsyncTest {
             tenantServiceAsync.update(
                 TenantUpdateParams.builder()
                     .tenantId("tenant_id")
-                    .name("name")
-                    .brandId("brand_id")
+                    .name("Acme Corp")
+                    .brandId("bnd_01kx4mrd0pfzw8wt7pn7p2fzag")
                     .defaultPreferences(
                         DefaultPreferences.builder()
                             .addItem(
@@ -54,7 +54,7 @@ internal class TenantServiceAsyncTest {
                     .parentTenantId("parent_tenant_id")
                     .properties(
                         TenantUpdateParams.Properties.builder()
-                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .putAdditionalProperty("plan", JsonValue.from("bar"))
                             .build()
                     )
                     .userProfile(

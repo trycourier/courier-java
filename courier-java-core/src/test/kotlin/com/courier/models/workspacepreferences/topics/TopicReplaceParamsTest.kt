@@ -17,14 +17,15 @@ internal class TopicReplaceParamsTest {
             .topicId("topic_id")
             .workspacePreferenceTopicReplaceRequest(
                 WorkspacePreferenceTopicReplaceRequest.builder()
-                    .defaultStatus(WorkspacePreferenceTopicReplaceRequest.DefaultStatus.OPTED_OUT)
-                    .name("name")
+                    .defaultStatus(WorkspacePreferenceTopicReplaceRequest.DefaultStatus.OPTED_IN)
+                    .name("Product Updates")
                     .addAllowedPreference(
-                        WorkspacePreferenceTopicReplaceRequest.AllowedPreference.SNOOZE
+                        WorkspacePreferenceTopicReplaceRequest.AllowedPreference.CHANNEL_PREFERENCES
                     )
                     .description("description")
                     .includeUnsubscribeHeader(true)
-                    .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
+                    .addRoutingOption(ChannelClassification.EMAIL)
+                    .addRoutingOption(ChannelClassification.INBOX)
                     .topicData(
                         WorkspacePreferenceTopicReplaceRequest.TopicData.builder()
                             .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -44,9 +45,9 @@ internal class TopicReplaceParamsTest {
                 .workspacePreferenceTopicReplaceRequest(
                     WorkspacePreferenceTopicReplaceRequest.builder()
                         .defaultStatus(
-                            WorkspacePreferenceTopicReplaceRequest.DefaultStatus.OPTED_OUT
+                            WorkspacePreferenceTopicReplaceRequest.DefaultStatus.OPTED_IN
                         )
-                        .name("name")
+                        .name("Product Updates")
                         .build()
                 )
                 .build()
@@ -66,15 +67,17 @@ internal class TopicReplaceParamsTest {
                 .workspacePreferenceTopicReplaceRequest(
                     WorkspacePreferenceTopicReplaceRequest.builder()
                         .defaultStatus(
-                            WorkspacePreferenceTopicReplaceRequest.DefaultStatus.OPTED_OUT
+                            WorkspacePreferenceTopicReplaceRequest.DefaultStatus.OPTED_IN
                         )
-                        .name("name")
+                        .name("Product Updates")
                         .addAllowedPreference(
-                            WorkspacePreferenceTopicReplaceRequest.AllowedPreference.SNOOZE
+                            WorkspacePreferenceTopicReplaceRequest.AllowedPreference
+                                .CHANNEL_PREFERENCES
                         )
                         .description("description")
                         .includeUnsubscribeHeader(true)
-                        .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
+                        .addRoutingOption(ChannelClassification.EMAIL)
+                        .addRoutingOption(ChannelClassification.INBOX)
                         .topicData(
                             WorkspacePreferenceTopicReplaceRequest.TopicData.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -89,14 +92,15 @@ internal class TopicReplaceParamsTest {
         assertThat(body)
             .isEqualTo(
                 WorkspacePreferenceTopicReplaceRequest.builder()
-                    .defaultStatus(WorkspacePreferenceTopicReplaceRequest.DefaultStatus.OPTED_OUT)
-                    .name("name")
+                    .defaultStatus(WorkspacePreferenceTopicReplaceRequest.DefaultStatus.OPTED_IN)
+                    .name("Product Updates")
                     .addAllowedPreference(
-                        WorkspacePreferenceTopicReplaceRequest.AllowedPreference.SNOOZE
+                        WorkspacePreferenceTopicReplaceRequest.AllowedPreference.CHANNEL_PREFERENCES
                     )
                     .description("description")
                     .includeUnsubscribeHeader(true)
-                    .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
+                    .addRoutingOption(ChannelClassification.EMAIL)
+                    .addRoutingOption(ChannelClassification.INBOX)
                     .topicData(
                         WorkspacePreferenceTopicReplaceRequest.TopicData.builder()
                             .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -115,9 +119,9 @@ internal class TopicReplaceParamsTest {
                 .workspacePreferenceTopicReplaceRequest(
                     WorkspacePreferenceTopicReplaceRequest.builder()
                         .defaultStatus(
-                            WorkspacePreferenceTopicReplaceRequest.DefaultStatus.OPTED_OUT
+                            WorkspacePreferenceTopicReplaceRequest.DefaultStatus.OPTED_IN
                         )
-                        .name("name")
+                        .name("Product Updates")
                         .build()
                 )
                 .build()
@@ -127,8 +131,8 @@ internal class TopicReplaceParamsTest {
         assertThat(body)
             .isEqualTo(
                 WorkspacePreferenceTopicReplaceRequest.builder()
-                    .defaultStatus(WorkspacePreferenceTopicReplaceRequest.DefaultStatus.OPTED_OUT)
-                    .name("name")
+                    .defaultStatus(WorkspacePreferenceTopicReplaceRequest.DefaultStatus.OPTED_IN)
+                    .name("Product Updates")
                     .build()
             )
     }

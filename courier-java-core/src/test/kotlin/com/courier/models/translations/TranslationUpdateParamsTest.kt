@@ -9,13 +9,21 @@ internal class TranslationUpdateParamsTest {
 
     @Test
     fun create() {
-        TranslationUpdateParams.builder().domain("domain").locale("locale").body("body").build()
+        TranslationUpdateParams.builder()
+            .domain("domain")
+            .locale("locale")
+            .body("msgid \"Hello\"\nmsgstr \"Hola\"")
+            .build()
     }
 
     @Test
     fun pathParams() {
         val params =
-            TranslationUpdateParams.builder().domain("domain").locale("locale").body("body").build()
+            TranslationUpdateParams.builder()
+                .domain("domain")
+                .locale("locale")
+                .body("msgid \"Hello\"\nmsgstr \"Hola\"")
+                .build()
 
         assertThat(params._pathParam(0)).isEqualTo("domain")
         assertThat(params._pathParam(1)).isEqualTo("locale")
@@ -26,10 +34,14 @@ internal class TranslationUpdateParamsTest {
     @Test
     fun body() {
         val params =
-            TranslationUpdateParams.builder().domain("domain").locale("locale").body("body").build()
+            TranslationUpdateParams.builder()
+                .domain("domain")
+                .locale("locale")
+                .body("msgid \"Hello\"\nmsgstr \"Hola\"")
+                .build()
 
         val body = params._body()
 
-        assertThat(body).isEqualTo("body")
+        assertThat(body).isEqualTo("msgid \"Hello\"\nmsgstr \"Hola\"")
     }
 }

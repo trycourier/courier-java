@@ -17,7 +17,7 @@ internal class TokenAddSingleParamsTest {
             .device(
                 TokenAddSingleParams.Device.builder()
                     .adId("ad_id")
-                    .appId("app_id")
+                    .appId("com.example.app")
                     .deviceId("device_id")
                     .manufacturer("manufacturer")
                     .model("model")
@@ -62,7 +62,7 @@ internal class TokenAddSingleParamsTest {
                 .device(
                     TokenAddSingleParams.Device.builder()
                         .adId("ad_id")
-                        .appId("app_id")
+                        .appId("com.example.app")
                         .deviceId("device_id")
                         .manufacturer("manufacturer")
                         .model("model")
@@ -88,7 +88,7 @@ internal class TokenAddSingleParamsTest {
             .contains(
                 TokenAddSingleParams.Device.builder()
                     .adId("ad_id")
-                    .appId("app_id")
+                    .appId("com.example.app")
                     .deviceId("device_id")
                     .manufacturer("manufacturer")
                     .model("model")

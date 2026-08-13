@@ -13,7 +13,11 @@ internal class TokenUpdateParamsTest {
             .userId("user_id")
             .token("token")
             .addPatch(
-                TokenUpdateParams.Patch.builder().op("op").path("path").value("value").build()
+                TokenUpdateParams.Patch.builder()
+                    .op("replace")
+                    .path("/expiry_date")
+                    .value("2024-12-31T00:00:00.000Z")
+                    .build()
             )
             .build()
     }
@@ -24,7 +28,9 @@ internal class TokenUpdateParamsTest {
             TokenUpdateParams.builder()
                 .userId("user_id")
                 .token("token")
-                .addPatch(TokenUpdateParams.Patch.builder().op("op").path("path").build())
+                .addPatch(
+                    TokenUpdateParams.Patch.builder().op("replace").path("/expiry_date").build()
+                )
                 .build()
 
         assertThat(params._pathParam(0)).isEqualTo("user_id")
@@ -40,7 +46,11 @@ internal class TokenUpdateParamsTest {
                 .userId("user_id")
                 .token("token")
                 .addPatch(
-                    TokenUpdateParams.Patch.builder().op("op").path("path").value("value").build()
+                    TokenUpdateParams.Patch.builder()
+                        .op("replace")
+                        .path("/expiry_date")
+                        .value("2024-12-31T00:00:00.000Z")
+                        .build()
                 )
                 .build()
 
@@ -48,7 +58,11 @@ internal class TokenUpdateParamsTest {
 
         assertThat(body.patch())
             .containsExactly(
-                TokenUpdateParams.Patch.builder().op("op").path("path").value("value").build()
+                TokenUpdateParams.Patch.builder()
+                    .op("replace")
+                    .path("/expiry_date")
+                    .value("2024-12-31T00:00:00.000Z")
+                    .build()
             )
     }
 
@@ -58,12 +72,16 @@ internal class TokenUpdateParamsTest {
             TokenUpdateParams.builder()
                 .userId("user_id")
                 .token("token")
-                .addPatch(TokenUpdateParams.Patch.builder().op("op").path("path").build())
+                .addPatch(
+                    TokenUpdateParams.Patch.builder().op("replace").path("/expiry_date").build()
+                )
                 .build()
 
         val body = params._body()
 
         assertThat(body.patch())
-            .containsExactly(TokenUpdateParams.Patch.builder().op("op").path("path").build())
+            .containsExactly(
+                TokenUpdateParams.Patch.builder().op("replace").path("/expiry_date").build()
+            )
     }
 }

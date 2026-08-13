@@ -35,7 +35,7 @@ internal class TranslationServiceAsyncTest {
                 TranslationUpdateParams.builder()
                     .domain("domain")
                     .locale("locale")
-                    .body("body")
+                    .body("msgid \"Hello\"\nmsgstr \"Hola\"")
                     .build()
             )
 

@@ -35,7 +35,7 @@ internal class TemplateReplaceParamsTest {
                                             .type(ElementalTextNodeWithType.Type.TEXT)
                                             .build()
                                     )
-                                    .version("version")
+                                    .version("2022-01-01")
                                     .build()
                             )
                             .channels(
@@ -93,8 +93,8 @@ internal class TemplateReplaceParamsTest {
                             )
                             .routing(
                                 MessageRouting.builder()
-                                    .addChannel("string")
-                                    .method(MessageRouting.Method.ALL)
+                                    .addChannel("email")
+                                    .method(MessageRouting.Method.SINGLE)
                                     .build()
                             )
                             .build()
@@ -118,7 +118,7 @@ internal class TemplateReplaceParamsTest {
                                 .content(
                                     ElementalContent.builder()
                                         .addElement(ElementalTextNodeWithType.builder().build())
-                                        .version("version")
+                                        .version("2022-01-01")
                                         .build()
                                 )
                                 .build()
@@ -154,7 +154,7 @@ internal class TemplateReplaceParamsTest {
                                                 .type(ElementalTextNodeWithType.Type.TEXT)
                                                 .build()
                                         )
-                                        .version("version")
+                                        .version("2022-01-01")
                                         .build()
                                 )
                                 .channels(
@@ -213,8 +213,8 @@ internal class TemplateReplaceParamsTest {
                                 )
                                 .routing(
                                     MessageRouting.builder()
-                                        .addChannel("string")
-                                        .method(MessageRouting.Method.ALL)
+                                        .addChannel("email")
+                                        .method(MessageRouting.Method.SINGLE)
                                         .build()
                                 )
                                 .build()
@@ -242,7 +242,7 @@ internal class TemplateReplaceParamsTest {
                                             .type(ElementalTextNodeWithType.Type.TEXT)
                                             .build()
                                     )
-                                    .version("version")
+                                    .version("2022-01-01")
                                     .build()
                             )
                             .channels(
@@ -300,8 +300,8 @@ internal class TemplateReplaceParamsTest {
                             )
                             .routing(
                                 MessageRouting.builder()
-                                    .addChannel("string")
-                                    .method(MessageRouting.Method.ALL)
+                                    .addChannel("email")
+                                    .method(MessageRouting.Method.SINGLE)
                                     .build()
                             )
                             .build()
@@ -324,7 +324,7 @@ internal class TemplateReplaceParamsTest {
                                 .content(
                                     ElementalContent.builder()
                                         .addElement(ElementalTextNodeWithType.builder().build())
-                                        .version("version")
+                                        .version("2022-01-01")
                                         .build()
                                 )
                                 .build()
@@ -343,7 +343,7 @@ internal class TemplateReplaceParamsTest {
                             .content(
                                 ElementalContent.builder()
                                     .addElement(ElementalTextNodeWithType.builder().build())
-                                    .version("version")
+                                    .version("2022-01-01")
                                     .build()
                             )
                             .build()

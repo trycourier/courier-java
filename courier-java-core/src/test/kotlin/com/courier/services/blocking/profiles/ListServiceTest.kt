@@ -52,7 +52,7 @@ internal class ListServiceTest {
                     .xIdempotencyExpiration("1785312000")
                     .addList(
                         SubscribeToListsRequestItem.builder()
-                            .listId("listId")
+                            .listId("example.list.id")
                             .preferences(
                                 RecipientPreferences.builder()
                                     .categories(

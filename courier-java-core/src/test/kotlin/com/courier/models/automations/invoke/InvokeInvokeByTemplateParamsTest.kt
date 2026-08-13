@@ -15,16 +15,16 @@ internal class InvokeInvokeByTemplateParamsTest {
             .templateId("templateId")
             .idempotencyKey("order-ORD-456-user-123")
             .xIdempotencyExpiration("1785312000")
-            .recipient("recipient")
+            .recipient("user_abc")
             .brand("brand")
             .data(
                 InvokeInvokeByTemplateParams.Data.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                    .putAdditionalProperty("orderId", JsonValue.from("bar"))
                     .build()
             )
             .profile(
                 InvokeInvokeByTemplateParams.Profile.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                    .putAdditionalProperty("email", JsonValue.from("bar"))
                     .build()
             )
             .template("template")
@@ -36,7 +36,7 @@ internal class InvokeInvokeByTemplateParamsTest {
         val params =
             InvokeInvokeByTemplateParams.builder()
                 .templateId("templateId")
-                .recipient("recipient")
+                .recipient("user_abc")
                 .build()
 
         assertThat(params._pathParam(0)).isEqualTo("templateId")
@@ -51,16 +51,16 @@ internal class InvokeInvokeByTemplateParamsTest {
                 .templateId("templateId")
                 .idempotencyKey("order-ORD-456-user-123")
                 .xIdempotencyExpiration("1785312000")
-                .recipient("recipient")
+                .recipient("user_abc")
                 .brand("brand")
                 .data(
                     InvokeInvokeByTemplateParams.Data.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .putAdditionalProperty("orderId", JsonValue.from("bar"))
                         .build()
                 )
                 .profile(
                     InvokeInvokeByTemplateParams.Profile.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .putAdditionalProperty("email", JsonValue.from("bar"))
                         .build()
                 )
                 .template("template")
@@ -82,7 +82,7 @@ internal class InvokeInvokeByTemplateParamsTest {
         val params =
             InvokeInvokeByTemplateParams.builder()
                 .templateId("templateId")
-                .recipient("recipient")
+                .recipient("user_abc")
                 .build()
 
         val headers = params._headers()
@@ -97,16 +97,16 @@ internal class InvokeInvokeByTemplateParamsTest {
                 .templateId("templateId")
                 .idempotencyKey("order-ORD-456-user-123")
                 .xIdempotencyExpiration("1785312000")
-                .recipient("recipient")
+                .recipient("user_abc")
                 .brand("brand")
                 .data(
                     InvokeInvokeByTemplateParams.Data.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .putAdditionalProperty("orderId", JsonValue.from("bar"))
                         .build()
                 )
                 .profile(
                     InvokeInvokeByTemplateParams.Profile.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .putAdditionalProperty("email", JsonValue.from("bar"))
                         .build()
                 )
                 .template("template")
@@ -114,18 +114,18 @@ internal class InvokeInvokeByTemplateParamsTest {
 
         val body = params._body()
 
-        assertThat(body.recipient()).contains("recipient")
+        assertThat(body.recipient()).contains("user_abc")
         assertThat(body.brand()).contains("brand")
         assertThat(body.data())
             .contains(
                 InvokeInvokeByTemplateParams.Data.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                    .putAdditionalProperty("orderId", JsonValue.from("bar"))
                     .build()
             )
         assertThat(body.profile())
             .contains(
                 InvokeInvokeByTemplateParams.Profile.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                    .putAdditionalProperty("email", JsonValue.from("bar"))
                     .build()
             )
         assertThat(body.template()).contains("template")
@@ -136,11 +136,11 @@ internal class InvokeInvokeByTemplateParamsTest {
         val params =
             InvokeInvokeByTemplateParams.builder()
                 .templateId("templateId")
-                .recipient("recipient")
+                .recipient("user_abc")
                 .build()
 
         val body = params._body()
 
-        assertThat(body.recipient()).contains("recipient")
+        assertThat(body.recipient()).contains("user_abc")
     }
 }

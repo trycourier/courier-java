@@ -13,7 +13,7 @@ internal class ListUpdateParamsTest {
     fun create() {
         ListUpdateParams.builder()
             .listId("list_id")
-            .name("name")
+            .name("Product Updates")
             .preferences(
                 RecipientPreferences.builder()
                     .categories(
@@ -55,7 +55,7 @@ internal class ListUpdateParamsTest {
 
     @Test
     fun pathParams() {
-        val params = ListUpdateParams.builder().listId("list_id").name("name").build()
+        val params = ListUpdateParams.builder().listId("list_id").name("Product Updates").build()
 
         assertThat(params._pathParam(0)).isEqualTo("list_id")
         // out-of-bound path param
@@ -67,7 +67,7 @@ internal class ListUpdateParamsTest {
         val params =
             ListUpdateParams.builder()
                 .listId("list_id")
-                .name("name")
+                .name("Product Updates")
                 .preferences(
                     RecipientPreferences.builder()
                         .categories(
@@ -112,7 +112,7 @@ internal class ListUpdateParamsTest {
 
         val body = params._body()
 
-        assertThat(body.name()).isEqualTo("name")
+        assertThat(body.name()).isEqualTo("Product Updates")
         assertThat(body.preferences())
             .contains(
                 RecipientPreferences.builder()
@@ -154,10 +154,10 @@ internal class ListUpdateParamsTest {
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = ListUpdateParams.builder().listId("list_id").name("name").build()
+        val params = ListUpdateParams.builder().listId("list_id").name("Product Updates").build()
 
         val body = params._body()
 
-        assertThat(body.name()).isEqualTo("name")
+        assertThat(body.name()).isEqualTo("Product Updates")
     }
 }
