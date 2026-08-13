@@ -9,7 +9,11 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Get a bulk job */
+/**
+ * Returns a bulk job's message definition, its status — CREATED, PROCESSING, COMPLETED, or ERROR —
+ * and running counts of users received, messages enqueued, and failures. Poll it to follow a job
+ * through to completion.
+ */
 class BulkRetrieveJobParams
 private constructor(
     private val jobId: String?,
