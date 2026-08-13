@@ -8,7 +8,8 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":courier-java"))
+    implementation(project(":courier-java-core"))
+    implementation(project(":courier-java-client-okhttp"))
 }
 
 tasks.withType<JavaCompile>().configureEach {
@@ -19,7 +20,7 @@ tasks.withType<JavaCompile>().configureEach {
 application {
     // Use `./gradlew :courier-java-example:run` to run `Main`
     // Use `./gradlew :courier-java-example:run -Pexample=Something` to run `SomethingExample`
-    mainClass = "com.courier.api.example.${
+    mainClass = "com.courier.example.${
         if (project.hasProperty("example"))
             "${project.property("example")}Example"
         else
