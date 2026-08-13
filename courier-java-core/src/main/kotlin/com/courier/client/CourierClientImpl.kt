@@ -16,6 +16,8 @@ import com.courier.services.blocking.BrandService
 import com.courier.services.blocking.BrandServiceImpl
 import com.courier.services.blocking.BroadcastService
 import com.courier.services.blocking.BroadcastServiceImpl
+import com.courier.services.blocking.BulkService
+import com.courier.services.blocking.BulkServiceImpl
 import com.courier.services.blocking.DigestService
 import com.courier.services.blocking.DigestServiceImpl
 import com.courier.services.blocking.InboundService
@@ -90,6 +92,8 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
     private val broadcasts: BroadcastService by lazy {
         BroadcastServiceImpl(clientOptionsWithUserAgent)
     }
+
+    private val bulk: BulkService by lazy { BulkServiceImpl(clientOptionsWithUserAgent) }
 
     private val brands: BrandService by lazy { BrandServiceImpl(clientOptionsWithUserAgent) }
 
@@ -171,6 +175,8 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
      * schedule it for later.
      */
     override fun broadcasts(): BroadcastService = broadcasts
+
+    override fun bulk(): BulkService = bulk
 
     /** Manage the logos, colors, and layout that give the templates you send a consistent look. */
     override fun brands(): BrandService = brands
@@ -266,6 +272,10 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
 
         private val broadcasts: BroadcastService.WithRawResponse by lazy {
             BroadcastServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val bulk: BulkService.WithRawResponse by lazy {
+            BulkServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
         private val brands: BrandService.WithRawResponse by lazy {
@@ -368,6 +378,8 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
          * or schedule it for later.
          */
         override fun broadcasts(): BroadcastService.WithRawResponse = broadcasts
+
+        override fun bulk(): BulkService.WithRawResponse = bulk
 
         /**
          * Manage the logos, colors, and layout that give the templates you send a consistent look.

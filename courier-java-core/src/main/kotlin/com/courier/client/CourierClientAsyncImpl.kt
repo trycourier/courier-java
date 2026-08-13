@@ -16,6 +16,8 @@ import com.courier.services.async.BrandServiceAsync
 import com.courier.services.async.BrandServiceAsyncImpl
 import com.courier.services.async.BroadcastServiceAsync
 import com.courier.services.async.BroadcastServiceAsyncImpl
+import com.courier.services.async.BulkServiceAsync
+import com.courier.services.async.BulkServiceAsyncImpl
 import com.courier.services.async.DigestServiceAsync
 import com.courier.services.async.DigestServiceAsyncImpl
 import com.courier.services.async.InboundServiceAsync
@@ -92,6 +94,8 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
     private val broadcasts: BroadcastServiceAsync by lazy {
         BroadcastServiceAsyncImpl(clientOptionsWithUserAgent)
     }
+
+    private val bulk: BulkServiceAsync by lazy { BulkServiceAsyncImpl(clientOptionsWithUserAgent) }
 
     private val brands: BrandServiceAsync by lazy {
         BrandServiceAsyncImpl(clientOptionsWithUserAgent)
@@ -188,6 +192,8 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
      */
     override fun broadcasts(): BroadcastServiceAsync = broadcasts
 
+    override fun bulk(): BulkServiceAsync = bulk
+
     /** Manage the logos, colors, and layout that give the templates you send a consistent look. */
     override fun brands(): BrandServiceAsync = brands
 
@@ -282,6 +288,10 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
 
         private val broadcasts: BroadcastServiceAsync.WithRawResponse by lazy {
             BroadcastServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val bulk: BulkServiceAsync.WithRawResponse by lazy {
+            BulkServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
         private val brands: BrandServiceAsync.WithRawResponse by lazy {
@@ -384,6 +394,8 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
          * or schedule it for later.
          */
         override fun broadcasts(): BroadcastServiceAsync.WithRawResponse = broadcasts
+
+        override fun bulk(): BulkServiceAsync.WithRawResponse = bulk
 
         /**
          * Manage the logos, colors, and layout that give the templates you send a consistent look.

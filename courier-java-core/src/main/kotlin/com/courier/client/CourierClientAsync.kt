@@ -9,6 +9,7 @@ import com.courier.services.async.AuthServiceAsync
 import com.courier.services.async.AutomationServiceAsync
 import com.courier.services.async.BrandServiceAsync
 import com.courier.services.async.BroadcastServiceAsync
+import com.courier.services.async.BulkServiceAsync
 import com.courier.services.async.DigestServiceAsync
 import com.courier.services.async.InboundServiceAsync
 import com.courier.services.async.JourneyServiceAsync
@@ -101,6 +102,8 @@ interface CourierClientAsync {
      * schedule it for later.
      */
     fun broadcasts(): BroadcastServiceAsync
+
+    fun bulk(): BulkServiceAsync
 
     /** Manage the logos, colors, and layout that give the templates you send a consistent look. */
     fun brands(): BrandServiceAsync
@@ -229,6 +232,8 @@ interface CourierClientAsync {
          * or schedule it for later.
          */
         fun broadcasts(): BroadcastServiceAsync.WithRawResponse
+
+        fun bulk(): BulkServiceAsync.WithRawResponse
 
         /**
          * Manage the logos, colors, and layout that give the templates you send a consistent look.
