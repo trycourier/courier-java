@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.27.1](https://github.com/trycourier/courier-java/compare/v4.27.0...v4.27.1) (2026-08-13)
+
+
+### Documentation
+
+* sync README from api-spec ([#125](https://github.com/trycourier/courier-java/issues/125)) ([5abe31b](https://github.com/trycourier/courier-java/commit/5abe31b71482ac09ae3cbc2c32dce5eb4cff43da))
+
 ## 4.27.0 (2026-08-10)
 
 Full Changelog: [v4.26.0...v4.27.0](https://github.com/trycourier/courier-java/compare/v4.26.0...v4.27.0)
