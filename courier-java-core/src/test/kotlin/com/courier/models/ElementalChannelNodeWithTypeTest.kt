@@ -14,7 +14,6 @@ internal class ElementalChannelNodeWithTypeTest {
         val elementalChannelNodeWithType =
             ElementalChannelNodeWithType.builder()
                 .type(ElementalChannelNodeWithType.Type.CHANNEL)
-                .channel("slack")
                 .build()
 
         assertThat(elementalChannelNodeWithType.type())
@@ -27,7 +26,6 @@ internal class ElementalChannelNodeWithTypeTest {
         val elementalChannelNodeWithType =
             ElementalChannelNodeWithType.builder()
                 .type(ElementalChannelNodeWithType.Type.CHANNEL)
-                .channel("slack")
                 .build()
 
         val roundtrippedElementalChannelNodeWithType =
