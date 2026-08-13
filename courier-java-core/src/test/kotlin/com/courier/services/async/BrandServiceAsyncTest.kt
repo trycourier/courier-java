@@ -151,13 +151,13 @@ internal class BrandServiceAsyncTest {
             brandServiceAsync.update(
                 BrandUpdateParams.builder()
                     .brandId("brand_id")
-                    .name("name")
+                    .name("My Brand")
                     .settings(
                         BrandSettings.builder()
                             .colors(
                                 BrandColors.builder()
-                                    .primary("primary")
-                                    .secondary("secondary")
+                                    .primary("#9D3789")
+                                    .secondary("#FFFFFF")
                                     .build()
                             )
                             .email(

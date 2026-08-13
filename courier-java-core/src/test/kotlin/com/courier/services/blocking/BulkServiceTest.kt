@@ -29,7 +29,7 @@ internal class BulkServiceTest {
                 .jobId("job_id")
                 .addUser(
                     InboundBulkMessageUser.builder()
-                        .data(JsonValue.from(mapOf<String, Any>()))
+                        .data(JsonValue.from(mapOf("name" to "Jane")))
                         .preferences(
                             RecipientPreferences.builder()
                                 .categories(
@@ -82,10 +82,10 @@ internal class BulkServiceTest {
                         )
                         .profile(
                             InboundBulkMessageUser.Profile.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .putAdditionalProperty("email", JsonValue.from("bar"))
                                 .build()
                         )
-                        .recipient("recipient")
+                        .recipient("user_abc")
                         .to(
                             UserRecipient.builder()
                                 .accountId("account_id")
@@ -179,14 +179,14 @@ internal class BulkServiceTest {
                 BulkCreateJobParams.builder()
                     .message(
                         InboundBulkMessage.builder()
-                            .event("event")
-                            .brand("brand")
+                            .event("welcome-series")
+                            .brand("bnd_01kx4mrd0pfzw8wt7pn7p2fzag")
                             .content(
                                 ElementalContentSugar.builder().body("body").title("title").build()
                             )
                             .data(
                                 InboundBulkMessage.Data.builder()
-                                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                    .putAdditionalProperty("campaign", JsonValue.from("bar"))
                                     .build()
                             )
                             .locale(

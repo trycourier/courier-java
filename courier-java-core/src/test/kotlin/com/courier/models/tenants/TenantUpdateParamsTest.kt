@@ -13,8 +13,8 @@ internal class TenantUpdateParamsTest {
     fun create() {
         TenantUpdateParams.builder()
             .tenantId("tenant_id")
-            .name("name")
-            .brandId("brand_id")
+            .name("Acme Corp")
+            .brandId("bnd_01kx4mrd0pfzw8wt7pn7p2fzag")
             .defaultPreferences(
                 DefaultPreferences.builder()
                     .addItem(
@@ -30,7 +30,7 @@ internal class TenantUpdateParamsTest {
             .parentTenantId("parent_tenant_id")
             .properties(
                 TenantUpdateParams.Properties.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                    .putAdditionalProperty("plan", JsonValue.from("bar"))
                     .build()
             )
             .userProfile(
@@ -43,7 +43,7 @@ internal class TenantUpdateParamsTest {
 
     @Test
     fun pathParams() {
-        val params = TenantUpdateParams.builder().tenantId("tenant_id").name("name").build()
+        val params = TenantUpdateParams.builder().tenantId("tenant_id").name("Acme Corp").build()
 
         assertThat(params._pathParam(0)).isEqualTo("tenant_id")
         // out-of-bound path param
@@ -55,8 +55,8 @@ internal class TenantUpdateParamsTest {
         val params =
             TenantUpdateParams.builder()
                 .tenantId("tenant_id")
-                .name("name")
-                .brandId("brand_id")
+                .name("Acme Corp")
+                .brandId("bnd_01kx4mrd0pfzw8wt7pn7p2fzag")
                 .defaultPreferences(
                     DefaultPreferences.builder()
                         .addItem(
@@ -72,7 +72,7 @@ internal class TenantUpdateParamsTest {
                 .parentTenantId("parent_tenant_id")
                 .properties(
                     TenantUpdateParams.Properties.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .putAdditionalProperty("plan", JsonValue.from("bar"))
                         .build()
                 )
                 .userProfile(
@@ -84,8 +84,8 @@ internal class TenantUpdateParamsTest {
 
         val body = params._body()
 
-        assertThat(body.name()).isEqualTo("name")
-        assertThat(body.brandId()).contains("brand_id")
+        assertThat(body.name()).isEqualTo("Acme Corp")
+        assertThat(body.brandId()).contains("bnd_01kx4mrd0pfzw8wt7pn7p2fzag")
         assertThat(body.defaultPreferences())
             .contains(
                 DefaultPreferences.builder()
@@ -103,7 +103,7 @@ internal class TenantUpdateParamsTest {
         assertThat(body.properties())
             .contains(
                 TenantUpdateParams.Properties.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                    .putAdditionalProperty("plan", JsonValue.from("bar"))
                     .build()
             )
         assertThat(body.userProfile())
@@ -116,10 +116,10 @@ internal class TenantUpdateParamsTest {
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = TenantUpdateParams.builder().tenantId("tenant_id").name("name").build()
+        val params = TenantUpdateParams.builder().tenantId("tenant_id").name("Acme Corp").build()
 
         val body = params._body()
 
-        assertThat(body.name()).isEqualTo("name")
+        assertThat(body.name()).isEqualTo("Acme Corp")
     }
 }

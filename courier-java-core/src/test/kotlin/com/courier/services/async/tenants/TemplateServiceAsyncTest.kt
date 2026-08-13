@@ -88,7 +88,7 @@ internal class TemplateServiceAsyncTest {
                     .tenantId("tenant_id")
                     .templateId("template_id")
                     .postTenantTemplatePublishRequest(
-                        PostTenantTemplatePublishRequest.builder().version("version").build()
+                        PostTenantTemplatePublishRequest.builder().version("latest").build()
                     )
                     .build()
             )
@@ -123,7 +123,7 @@ internal class TemplateServiceAsyncTest {
                                                     .type(ElementalTextNodeWithType.Type.TEXT)
                                                     .build()
                                             )
-                                            .version("version")
+                                            .version("2022-01-01")
                                             .build()
                                     )
                                     .channels(
@@ -182,8 +182,8 @@ internal class TemplateServiceAsyncTest {
                                     )
                                     .routing(
                                         MessageRouting.builder()
-                                            .addChannel("string")
-                                            .method(MessageRouting.Method.ALL)
+                                            .addChannel("email")
+                                            .method(MessageRouting.Method.SINGLE)
                                             .build()
                                     )
                                     .build()

@@ -17,7 +17,8 @@ internal class ProfileCreateParamsTest {
             .xIdempotencyExpiration("1785312000")
             .profile(
                 ProfileCreateParams.Profile.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                    .putAdditionalProperty("email", JsonValue.from("bar"))
+                    .putAdditionalProperty("phone_number", JsonValue.from("bar"))
                     .build()
             )
             .build()
@@ -30,7 +31,8 @@ internal class ProfileCreateParamsTest {
                 .userId("user_id")
                 .profile(
                     ProfileCreateParams.Profile.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .putAdditionalProperty("email", JsonValue.from("bar"))
+                        .putAdditionalProperty("phone_number", JsonValue.from("bar"))
                         .build()
                 )
                 .build()
@@ -49,7 +51,8 @@ internal class ProfileCreateParamsTest {
                 .xIdempotencyExpiration("1785312000")
                 .profile(
                     ProfileCreateParams.Profile.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .putAdditionalProperty("email", JsonValue.from("bar"))
+                        .putAdditionalProperty("phone_number", JsonValue.from("bar"))
                         .build()
                 )
                 .build()
@@ -72,7 +75,8 @@ internal class ProfileCreateParamsTest {
                 .userId("user_id")
                 .profile(
                     ProfileCreateParams.Profile.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .putAdditionalProperty("email", JsonValue.from("bar"))
+                        .putAdditionalProperty("phone_number", JsonValue.from("bar"))
                         .build()
                 )
                 .build()
@@ -91,7 +95,8 @@ internal class ProfileCreateParamsTest {
                 .xIdempotencyExpiration("1785312000")
                 .profile(
                     ProfileCreateParams.Profile.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .putAdditionalProperty("email", JsonValue.from("bar"))
+                        .putAdditionalProperty("phone_number", JsonValue.from("bar"))
                         .build()
                 )
                 .build()
@@ -101,7 +106,8 @@ internal class ProfileCreateParamsTest {
         assertThat(body.profile())
             .isEqualTo(
                 ProfileCreateParams.Profile.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                    .putAdditionalProperty("email", JsonValue.from("bar"))
+                    .putAdditionalProperty("phone_number", JsonValue.from("bar"))
                     .build()
             )
     }
@@ -113,7 +119,8 @@ internal class ProfileCreateParamsTest {
                 .userId("user_id")
                 .profile(
                     ProfileCreateParams.Profile.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .putAdditionalProperty("email", JsonValue.from("bar"))
+                        .putAdditionalProperty("phone_number", JsonValue.from("bar"))
                         .build()
                 )
                 .build()
@@ -123,7 +130,8 @@ internal class ProfileCreateParamsTest {
         assertThat(body.profile())
             .isEqualTo(
                 ProfileCreateParams.Profile.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                    .putAdditionalProperty("email", JsonValue.from("bar"))
+                    .putAdditionalProperty("phone_number", JsonValue.from("bar"))
                     .build()
             )
     }

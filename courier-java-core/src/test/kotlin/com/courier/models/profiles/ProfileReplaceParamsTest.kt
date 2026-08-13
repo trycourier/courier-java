@@ -14,7 +14,9 @@ internal class ProfileReplaceParamsTest {
             .userId("user_id")
             .profile(
                 ProfileReplaceParams.Profile.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                    .putAdditionalProperty("email", JsonValue.from("bar"))
+                    .putAdditionalProperty("phone_number", JsonValue.from("bar"))
+                    .putAdditionalProperty("locale", JsonValue.from("bar"))
                     .build()
             )
             .build()
@@ -27,7 +29,9 @@ internal class ProfileReplaceParamsTest {
                 .userId("user_id")
                 .profile(
                     ProfileReplaceParams.Profile.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .putAdditionalProperty("email", JsonValue.from("bar"))
+                        .putAdditionalProperty("phone_number", JsonValue.from("bar"))
+                        .putAdditionalProperty("locale", JsonValue.from("bar"))
                         .build()
                 )
                 .build()
@@ -44,7 +48,9 @@ internal class ProfileReplaceParamsTest {
                 .userId("user_id")
                 .profile(
                     ProfileReplaceParams.Profile.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .putAdditionalProperty("email", JsonValue.from("bar"))
+                        .putAdditionalProperty("phone_number", JsonValue.from("bar"))
+                        .putAdditionalProperty("locale", JsonValue.from("bar"))
                         .build()
                 )
                 .build()
@@ -54,7 +60,9 @@ internal class ProfileReplaceParamsTest {
         assertThat(body.profile())
             .isEqualTo(
                 ProfileReplaceParams.Profile.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                    .putAdditionalProperty("email", JsonValue.from("bar"))
+                    .putAdditionalProperty("phone_number", JsonValue.from("bar"))
+                    .putAdditionalProperty("locale", JsonValue.from("bar"))
                     .build()
             )
     }

@@ -28,7 +28,11 @@ internal class TranslationServiceTest {
         val translationService = client.translations()
 
         translationService.update(
-            TranslationUpdateParams.builder().domain("domain").locale("locale").body("body").build()
+            TranslationUpdateParams.builder()
+                .domain("domain")
+                .locale("locale")
+                .body("msgid \"Hello\"\nmsgstr \"Hola\"")
+                .build()
         )
     }
 }

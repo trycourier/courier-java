@@ -25,7 +25,7 @@ internal class CheckServiceTest {
                     .submissionId("submissionId")
                     .addCheck(
                         BaseCheck.builder()
-                            .id("id")
+                            .id("abc-123")
                             .status(BaseCheck.Status.RESOLVED)
                             .type(BaseCheck.Type.CUSTOM)
                             .build()

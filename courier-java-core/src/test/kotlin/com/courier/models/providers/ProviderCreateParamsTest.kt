@@ -14,14 +14,14 @@ internal class ProviderCreateParamsTest {
         ProviderCreateParams.builder()
             .idempotencyKey("order-ORD-456-user-123")
             .xIdempotencyExpiration("1785312000")
-            .provider("provider")
+            .provider("sendgrid")
             .alias("alias")
             .settings(
                 ProviderCreateParams.Settings.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                    .putAdditionalProperty("api_key", JsonValue.from("bar"))
                     .build()
             )
-            .title("title")
+            .title("Production SendGrid")
             .build()
     }
 
@@ -31,14 +31,14 @@ internal class ProviderCreateParamsTest {
             ProviderCreateParams.builder()
                 .idempotencyKey("order-ORD-456-user-123")
                 .xIdempotencyExpiration("1785312000")
-                .provider("provider")
+                .provider("sendgrid")
                 .alias("alias")
                 .settings(
                     ProviderCreateParams.Settings.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .putAdditionalProperty("api_key", JsonValue.from("bar"))
                         .build()
                 )
-                .title("title")
+                .title("Production SendGrid")
                 .build()
 
         val headers = params._headers()
@@ -54,7 +54,7 @@ internal class ProviderCreateParamsTest {
 
     @Test
     fun headersWithoutOptionalFields() {
-        val params = ProviderCreateParams.builder().provider("provider").build()
+        val params = ProviderCreateParams.builder().provider("sendgrid").build()
 
         val headers = params._headers()
 
@@ -67,35 +67,35 @@ internal class ProviderCreateParamsTest {
             ProviderCreateParams.builder()
                 .idempotencyKey("order-ORD-456-user-123")
                 .xIdempotencyExpiration("1785312000")
-                .provider("provider")
+                .provider("sendgrid")
                 .alias("alias")
                 .settings(
                     ProviderCreateParams.Settings.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .putAdditionalProperty("api_key", JsonValue.from("bar"))
                         .build()
                 )
-                .title("title")
+                .title("Production SendGrid")
                 .build()
 
         val body = params._body()
 
-        assertThat(body.provider()).isEqualTo("provider")
+        assertThat(body.provider()).isEqualTo("sendgrid")
         assertThat(body.alias()).contains("alias")
         assertThat(body.settings())
             .contains(
                 ProviderCreateParams.Settings.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                    .putAdditionalProperty("api_key", JsonValue.from("bar"))
                     .build()
             )
-        assertThat(body.title()).contains("title")
+        assertThat(body.title()).contains("Production SendGrid")
     }
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = ProviderCreateParams.builder().provider("provider").build()
+        val params = ProviderCreateParams.builder().provider("sendgrid").build()
 
         val body = params._body()
 
-        assertThat(body.provider()).isEqualTo("provider")
+        assertThat(body.provider()).isEqualTo("sendgrid")
     }
 }

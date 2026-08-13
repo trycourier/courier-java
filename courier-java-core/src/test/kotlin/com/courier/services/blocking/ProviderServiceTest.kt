@@ -23,14 +23,14 @@ internal class ProviderServiceTest {
                 ProviderCreateParams.builder()
                     .idempotencyKey("order-ORD-456-user-123")
                     .xIdempotencyExpiration("1785312000")
-                    .provider("provider")
+                    .provider("sendgrid")
                     .alias("alias")
                     .settings(
                         ProviderCreateParams.Settings.builder()
-                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .putAdditionalProperty("api_key", JsonValue.from("bar"))
                             .build()
                     )
-                    .title("title")
+                    .title("Production SendGrid")
                     .build()
             )
 
@@ -58,14 +58,14 @@ internal class ProviderServiceTest {
             providerService.update(
                 ProviderUpdateParams.builder()
                     .id("id")
-                    .provider("provider")
+                    .provider("sendgrid")
                     .alias("alias")
                     .settings(
                         ProviderUpdateParams.Settings.builder()
-                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .putAdditionalProperty("api_key", JsonValue.from("bar"))
                             .build()
                     )
-                    .title("title")
+                    .title("Production SendGrid")
                     .build()
             )
 

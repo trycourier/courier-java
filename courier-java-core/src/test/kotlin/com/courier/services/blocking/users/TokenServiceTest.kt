@@ -38,7 +38,11 @@ internal class TokenServiceTest {
                 .userId("user_id")
                 .token("token")
                 .addPatch(
-                    TokenUpdateParams.Patch.builder().op("op").path("path").value("value").build()
+                    TokenUpdateParams.Patch.builder()
+                        .op("replace")
+                        .path("/expiry_date")
+                        .value("2024-12-31T00:00:00.000Z")
+                        .build()
                 )
                 .build()
         )
@@ -87,7 +91,7 @@ internal class TokenServiceTest {
                 .device(
                     TokenAddSingleParams.Device.builder()
                         .adId("ad_id")
-                        .appId("app_id")
+                        .appId("com.example.app")
                         .deviceId("device_id")
                         .manufacturer("manufacturer")
                         .model("model")

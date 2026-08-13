@@ -26,7 +26,8 @@ internal class ProfileServiceAsyncTest {
                     .xIdempotencyExpiration("1785312000")
                     .profile(
                         ProfileCreateParams.Profile.builder()
-                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .putAdditionalProperty("email", JsonValue.from("bar"))
+                            .putAdditionalProperty("phone_number", JsonValue.from("bar"))
                             .build()
                     )
                     .build()
@@ -60,9 +61,9 @@ internal class ProfileServiceAsyncTest {
                     .userId("user_id")
                     .addPatch(
                         ProfileUpdateParams.Patch.builder()
-                            .op("op")
-                            .path("path")
-                            .value("value")
+                            .op("replace")
+                            .path("/email")
+                            .value("jdoe@example.com")
                             .build()
                     )
                     .build()
@@ -94,7 +95,9 @@ internal class ProfileServiceAsyncTest {
                     .userId("user_id")
                     .profile(
                         ProfileReplaceParams.Profile.builder()
-                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .putAdditionalProperty("email", JsonValue.from("bar"))
+                            .putAdditionalProperty("phone_number", JsonValue.from("bar"))
+                            .putAdditionalProperty("locale", JsonValue.from("bar"))
                             .build()
                     )
                     .build()

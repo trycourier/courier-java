@@ -15,7 +15,19 @@ internal class TenantAddMultipleParamsTest {
             .userId("user_id")
             .addTenant(
                 TenantAssociation.builder()
-                    .tenantId("tenant_id")
+                    .tenantId("tenant_abc")
+                    .profile(
+                        TenantAssociation.Profile.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
+                    .type(TenantAssociation.Type.USER)
+                    .userId("user_id")
+                    .build()
+            )
+            .addTenant(
+                TenantAssociation.builder()
+                    .tenantId("tenant_def")
                     .profile(
                         TenantAssociation.Profile.builder()
                             .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -33,7 +45,8 @@ internal class TenantAddMultipleParamsTest {
         val params =
             TenantAddMultipleParams.builder()
                 .userId("user_id")
-                .addTenant(TenantAssociation.builder().tenantId("tenant_id").build())
+                .addTenant(TenantAssociation.builder().tenantId("tenant_abc").build())
+                .addTenant(TenantAssociation.builder().tenantId("tenant_def").build())
                 .build()
 
         assertThat(params._pathParam(0)).isEqualTo("user_id")
@@ -48,7 +61,19 @@ internal class TenantAddMultipleParamsTest {
                 .userId("user_id")
                 .addTenant(
                     TenantAssociation.builder()
-                        .tenantId("tenant_id")
+                        .tenantId("tenant_abc")
+                        .profile(
+                            TenantAssociation.Profile.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
+                        )
+                        .type(TenantAssociation.Type.USER)
+                        .userId("user_id")
+                        .build()
+                )
+                .addTenant(
+                    TenantAssociation.builder()
+                        .tenantId("tenant_def")
                         .profile(
                             TenantAssociation.Profile.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -65,7 +90,7 @@ internal class TenantAddMultipleParamsTest {
         assertThat(body.tenants())
             .containsExactly(
                 TenantAssociation.builder()
-                    .tenantId("tenant_id")
+                    .tenantId("tenant_abc")
                     .profile(
                         TenantAssociation.Profile.builder()
                             .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -73,7 +98,17 @@ internal class TenantAddMultipleParamsTest {
                     )
                     .type(TenantAssociation.Type.USER)
                     .userId("user_id")
-                    .build()
+                    .build(),
+                TenantAssociation.builder()
+                    .tenantId("tenant_def")
+                    .profile(
+                        TenantAssociation.Profile.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
+                    .type(TenantAssociation.Type.USER)
+                    .userId("user_id")
+                    .build(),
             )
     }
 
@@ -82,12 +117,16 @@ internal class TenantAddMultipleParamsTest {
         val params =
             TenantAddMultipleParams.builder()
                 .userId("user_id")
-                .addTenant(TenantAssociation.builder().tenantId("tenant_id").build())
+                .addTenant(TenantAssociation.builder().tenantId("tenant_abc").build())
+                .addTenant(TenantAssociation.builder().tenantId("tenant_def").build())
                 .build()
 
         val body = params._body()
 
         assertThat(body.tenants())
-            .containsExactly(TenantAssociation.builder().tenantId("tenant_id").build())
+            .containsExactly(
+                TenantAssociation.builder().tenantId("tenant_abc").build(),
+                TenantAssociation.builder().tenantId("tenant_def").build(),
+            )
     }
 }

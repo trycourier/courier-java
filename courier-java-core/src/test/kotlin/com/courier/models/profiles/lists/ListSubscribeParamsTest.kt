@@ -19,7 +19,7 @@ internal class ListSubscribeParamsTest {
             .xIdempotencyExpiration("1785312000")
             .addList(
                 SubscribeToListsRequestItem.builder()
-                    .listId("listId")
+                    .listId("example.list.id")
                     .preferences(
                         RecipientPreferences.builder()
                             .categories(
@@ -76,7 +76,7 @@ internal class ListSubscribeParamsTest {
         val params =
             ListSubscribeParams.builder()
                 .userId("user_id")
-                .addList(SubscribeToListsRequestItem.builder().listId("listId").build())
+                .addList(SubscribeToListsRequestItem.builder().listId("example.list.id").build())
                 .build()
 
         assertThat(params._pathParam(0)).isEqualTo("user_id")
@@ -93,7 +93,7 @@ internal class ListSubscribeParamsTest {
                 .xIdempotencyExpiration("1785312000")
                 .addList(
                     SubscribeToListsRequestItem.builder()
-                        .listId("listId")
+                        .listId("example.list.id")
                         .preferences(
                             RecipientPreferences.builder()
                                 .categories(
@@ -164,7 +164,7 @@ internal class ListSubscribeParamsTest {
         val params =
             ListSubscribeParams.builder()
                 .userId("user_id")
-                .addList(SubscribeToListsRequestItem.builder().listId("listId").build())
+                .addList(SubscribeToListsRequestItem.builder().listId("example.list.id").build())
                 .build()
 
         val headers = params._headers()
@@ -181,7 +181,7 @@ internal class ListSubscribeParamsTest {
                 .xIdempotencyExpiration("1785312000")
                 .addList(
                     SubscribeToListsRequestItem.builder()
-                        .listId("listId")
+                        .listId("example.list.id")
                         .preferences(
                             RecipientPreferences.builder()
                                 .categories(
@@ -241,7 +241,7 @@ internal class ListSubscribeParamsTest {
         assertThat(body.lists())
             .containsExactly(
                 SubscribeToListsRequestItem.builder()
-                    .listId("listId")
+                    .listId("example.list.id")
                     .preferences(
                         RecipientPreferences.builder()
                             .categories(
@@ -297,12 +297,14 @@ internal class ListSubscribeParamsTest {
         val params =
             ListSubscribeParams.builder()
                 .userId("user_id")
-                .addList(SubscribeToListsRequestItem.builder().listId("listId").build())
+                .addList(SubscribeToListsRequestItem.builder().listId("example.list.id").build())
                 .build()
 
         val body = params._body()
 
         assertThat(body.lists())
-            .containsExactly(SubscribeToListsRequestItem.builder().listId("listId").build())
+            .containsExactly(
+                SubscribeToListsRequestItem.builder().listId("example.list.id").build()
+            )
     }
 }

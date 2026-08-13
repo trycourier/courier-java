@@ -14,12 +14,12 @@ internal class BulkCreateJobParamsTest {
         BulkCreateJobParams.builder()
             .message(
                 InboundBulkMessage.builder()
-                    .event("event")
-                    .brand("brand")
+                    .event("welcome-series")
+                    .brand("bnd_01kx4mrd0pfzw8wt7pn7p2fzag")
                     .content(ElementalContentSugar.builder().body("body").title("title").build())
                     .data(
                         InboundBulkMessage.Data.builder()
-                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .putAdditionalProperty("campaign", JsonValue.from("bar"))
                             .build()
                     )
                     .locale(
@@ -44,14 +44,14 @@ internal class BulkCreateJobParamsTest {
             BulkCreateJobParams.builder()
                 .message(
                     InboundBulkMessage.builder()
-                        .event("event")
-                        .brand("brand")
+                        .event("welcome-series")
+                        .brand("bnd_01kx4mrd0pfzw8wt7pn7p2fzag")
                         .content(
                             ElementalContentSugar.builder().body("body").title("title").build()
                         )
                         .data(
                             InboundBulkMessage.Data.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .putAdditionalProperty("campaign", JsonValue.from("bar"))
                                 .build()
                         )
                         .locale(
@@ -74,12 +74,12 @@ internal class BulkCreateJobParamsTest {
         assertThat(body.message())
             .isEqualTo(
                 InboundBulkMessage.builder()
-                    .event("event")
-                    .brand("brand")
+                    .event("welcome-series")
+                    .brand("bnd_01kx4mrd0pfzw8wt7pn7p2fzag")
                     .content(ElementalContentSugar.builder().body("body").title("title").build())
                     .data(
                         InboundBulkMessage.Data.builder()
-                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .putAdditionalProperty("campaign", JsonValue.from("bar"))
                             .build()
                     )
                     .locale(
@@ -101,11 +101,12 @@ internal class BulkCreateJobParamsTest {
     fun bodyWithoutOptionalFields() {
         val params =
             BulkCreateJobParams.builder()
-                .message(InboundBulkMessage.builder().event("event").build())
+                .message(InboundBulkMessage.builder().event("welcome-series").build())
                 .build()
 
         val body = params._body()
 
-        assertThat(body.message()).isEqualTo(InboundBulkMessage.builder().event("event").build())
+        assertThat(body.message())
+            .isEqualTo(InboundBulkMessage.builder().event("welcome-series").build())
     }
 }

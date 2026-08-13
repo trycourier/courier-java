@@ -16,7 +16,58 @@ internal class SubscriptionSubscribeParamsTest {
             .listId("list_id")
             .addRecipient(
                 PutSubscriptionsRecipient.builder()
-                    .recipientId("recipientId")
+                    .recipientId("user_abc")
+                    .preferences(
+                        RecipientPreferences.builder()
+                            .categories(
+                                RecipientPreferences.Categories.builder()
+                                    .putAdditionalProperty(
+                                        "foo",
+                                        JsonValue.from(
+                                            mapOf(
+                                                "status" to "OPTED_IN",
+                                                "channel_preferences" to
+                                                    listOf(mapOf("channel" to "direct_message")),
+                                                "rules" to
+                                                    listOf(
+                                                        mapOf(
+                                                            "until" to "until",
+                                                            "start" to "start",
+                                                        )
+                                                    ),
+                                            )
+                                        ),
+                                    )
+                                    .build()
+                            )
+                            .notifications(
+                                RecipientPreferences.Notifications.builder()
+                                    .putAdditionalProperty(
+                                        "foo",
+                                        JsonValue.from(
+                                            mapOf(
+                                                "status" to "OPTED_IN",
+                                                "channel_preferences" to
+                                                    listOf(mapOf("channel" to "direct_message")),
+                                                "rules" to
+                                                    listOf(
+                                                        mapOf(
+                                                            "until" to "until",
+                                                            "start" to "start",
+                                                        )
+                                                    ),
+                                            )
+                                        ),
+                                    )
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .build()
+            )
+            .addRecipient(
+                PutSubscriptionsRecipient.builder()
+                    .recipientId("user_def")
                     .preferences(
                         RecipientPreferences.builder()
                             .categories(
@@ -73,9 +124,8 @@ internal class SubscriptionSubscribeParamsTest {
         val params =
             SubscriptionSubscribeParams.builder()
                 .listId("list_id")
-                .addRecipient(
-                    PutSubscriptionsRecipient.builder().recipientId("recipientId").build()
-                )
+                .addRecipient(PutSubscriptionsRecipient.builder().recipientId("user_abc").build())
+                .addRecipient(PutSubscriptionsRecipient.builder().recipientId("user_def").build())
                 .build()
 
         assertThat(params._pathParam(0)).isEqualTo("list_id")
@@ -90,7 +140,62 @@ internal class SubscriptionSubscribeParamsTest {
                 .listId("list_id")
                 .addRecipient(
                     PutSubscriptionsRecipient.builder()
-                        .recipientId("recipientId")
+                        .recipientId("user_abc")
+                        .preferences(
+                            RecipientPreferences.builder()
+                                .categories(
+                                    RecipientPreferences.Categories.builder()
+                                        .putAdditionalProperty(
+                                            "foo",
+                                            JsonValue.from(
+                                                mapOf(
+                                                    "status" to "OPTED_IN",
+                                                    "channel_preferences" to
+                                                        listOf(
+                                                            mapOf("channel" to "direct_message")
+                                                        ),
+                                                    "rules" to
+                                                        listOf(
+                                                            mapOf(
+                                                                "until" to "until",
+                                                                "start" to "start",
+                                                            )
+                                                        ),
+                                                )
+                                            ),
+                                        )
+                                        .build()
+                                )
+                                .notifications(
+                                    RecipientPreferences.Notifications.builder()
+                                        .putAdditionalProperty(
+                                            "foo",
+                                            JsonValue.from(
+                                                mapOf(
+                                                    "status" to "OPTED_IN",
+                                                    "channel_preferences" to
+                                                        listOf(
+                                                            mapOf("channel" to "direct_message")
+                                                        ),
+                                                    "rules" to
+                                                        listOf(
+                                                            mapOf(
+                                                                "until" to "until",
+                                                                "start" to "start",
+                                                            )
+                                                        ),
+                                                )
+                                            ),
+                                        )
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .build()
+                )
+                .addRecipient(
+                    PutSubscriptionsRecipient.builder()
+                        .recipientId("user_def")
                         .preferences(
                             RecipientPreferences.builder()
                                 .categories(
@@ -150,7 +255,7 @@ internal class SubscriptionSubscribeParamsTest {
         assertThat(body.recipients())
             .containsExactly(
                 PutSubscriptionsRecipient.builder()
-                    .recipientId("recipientId")
+                    .recipientId("user_abc")
                     .preferences(
                         RecipientPreferences.builder()
                             .categories(
@@ -197,7 +302,56 @@ internal class SubscriptionSubscribeParamsTest {
                             )
                             .build()
                     )
-                    .build()
+                    .build(),
+                PutSubscriptionsRecipient.builder()
+                    .recipientId("user_def")
+                    .preferences(
+                        RecipientPreferences.builder()
+                            .categories(
+                                RecipientPreferences.Categories.builder()
+                                    .putAdditionalProperty(
+                                        "foo",
+                                        JsonValue.from(
+                                            mapOf(
+                                                "status" to "OPTED_IN",
+                                                "channel_preferences" to
+                                                    listOf(mapOf("channel" to "direct_message")),
+                                                "rules" to
+                                                    listOf(
+                                                        mapOf(
+                                                            "until" to "until",
+                                                            "start" to "start",
+                                                        )
+                                                    ),
+                                            )
+                                        ),
+                                    )
+                                    .build()
+                            )
+                            .notifications(
+                                RecipientPreferences.Notifications.builder()
+                                    .putAdditionalProperty(
+                                        "foo",
+                                        JsonValue.from(
+                                            mapOf(
+                                                "status" to "OPTED_IN",
+                                                "channel_preferences" to
+                                                    listOf(mapOf("channel" to "direct_message")),
+                                                "rules" to
+                                                    listOf(
+                                                        mapOf(
+                                                            "until" to "until",
+                                                            "start" to "start",
+                                                        )
+                                                    ),
+                                            )
+                                        ),
+                                    )
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .build(),
             )
     }
 
@@ -206,14 +360,16 @@ internal class SubscriptionSubscribeParamsTest {
         val params =
             SubscriptionSubscribeParams.builder()
                 .listId("list_id")
-                .addRecipient(
-                    PutSubscriptionsRecipient.builder().recipientId("recipientId").build()
-                )
+                .addRecipient(PutSubscriptionsRecipient.builder().recipientId("user_abc").build())
+                .addRecipient(PutSubscriptionsRecipient.builder().recipientId("user_def").build())
                 .build()
 
         val body = params._body()
 
         assertThat(body.recipients())
-            .containsExactly(PutSubscriptionsRecipient.builder().recipientId("recipientId").build())
+            .containsExactly(
+                PutSubscriptionsRecipient.builder().recipientId("user_abc").build(),
+                PutSubscriptionsRecipient.builder().recipientId("user_def").build(),
+            )
     }
 }

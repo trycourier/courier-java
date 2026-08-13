@@ -12,20 +12,20 @@ internal class ProviderUpdateParamsTest {
     fun create() {
         ProviderUpdateParams.builder()
             .id("id")
-            .provider("provider")
+            .provider("sendgrid")
             .alias("alias")
             .settings(
                 ProviderUpdateParams.Settings.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                    .putAdditionalProperty("api_key", JsonValue.from("bar"))
                     .build()
             )
-            .title("title")
+            .title("Production SendGrid")
             .build()
     }
 
     @Test
     fun pathParams() {
-        val params = ProviderUpdateParams.builder().id("id").provider("provider").build()
+        val params = ProviderUpdateParams.builder().id("id").provider("sendgrid").build()
 
         assertThat(params._pathParam(0)).isEqualTo("id")
         // out-of-bound path param
@@ -37,35 +37,35 @@ internal class ProviderUpdateParamsTest {
         val params =
             ProviderUpdateParams.builder()
                 .id("id")
-                .provider("provider")
+                .provider("sendgrid")
                 .alias("alias")
                 .settings(
                     ProviderUpdateParams.Settings.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .putAdditionalProperty("api_key", JsonValue.from("bar"))
                         .build()
                 )
-                .title("title")
+                .title("Production SendGrid")
                 .build()
 
         val body = params._body()
 
-        assertThat(body.provider()).isEqualTo("provider")
+        assertThat(body.provider()).isEqualTo("sendgrid")
         assertThat(body.alias()).contains("alias")
         assertThat(body.settings())
             .contains(
                 ProviderUpdateParams.Settings.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                    .putAdditionalProperty("api_key", JsonValue.from("bar"))
                     .build()
             )
-        assertThat(body.title()).contains("title")
+        assertThat(body.title()).contains("Production SendGrid")
     }
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = ProviderUpdateParams.builder().id("id").provider("provider").build()
+        val params = ProviderUpdateParams.builder().id("id").provider("sendgrid").build()
 
         val body = params._body()
 
-        assertThat(body.provider()).isEqualTo("provider")
+        assertThat(body.provider()).isEqualTo("sendgrid")
     }
 }
