@@ -9,7 +9,7 @@ The Courier Java SDK provides typed access to the Courier REST API from Java and
 ### Gradle
 
 ```kotlin
-implementation("com.courier:courier-java:4.27.1")
+implementation("com.courier:courier-java:4.27.2")
 ```
 
 ### Maven
@@ -18,7 +18,7 @@ implementation("com.courier:courier-java:4.27.1")
 <dependency>
   <groupId>com.courier</groupId>
   <artifactId>courier-java</artifactId>
-  <version>4.27.1</version>
+  <version>4.27.2</version>
 </dependency>
 ```
 
