@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.27.2](https://github.com/trycourier/courier-java/compare/v4.27.1...v4.27.2) (2026-08-14)
+
+
+### Documentation
+
+* **api:** say what the bulk job endpoints return ([#134](https://github.com/trycourier/courier-java/issues/134)) ([d346e77](https://github.com/trycourier/courier-java/commit/d346e776fd0a283b84336fb3774db721eec9ac0e))
+
 ## [4.27.1](https://github.com/trycourier/courier-java/compare/v4.27.0...v4.27.1) (2026-08-13)
 
 
