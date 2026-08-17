@@ -11,17 +11,15 @@ internal class MultipleTokensTest {
 
     @Test
     fun create() {
-        val multipleTokens =
-            MultipleTokens.builder().addToken(Token.builder().token("token").build()).build()
+        val multipleTokens = MultipleTokens.builder().tokens("string").build()
 
-        assertThat(multipleTokens.tokens()).containsExactly(Token.builder().token("token").build())
+        assertThat(multipleTokens.tokens()).isEqualTo(MultipleTokens.Tokens.ofString("string"))
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val multipleTokens =
-            MultipleTokens.builder().addToken(Token.builder().token("token").build()).build()
+        val multipleTokens = MultipleTokens.builder().tokens("string").build()
 
         val roundtrippedMultipleTokens =
             jsonMapper.readValue(

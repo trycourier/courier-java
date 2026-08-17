@@ -9,7 +9,6 @@ import com.courier.core.http.HttpResponseFor
 import com.courier.models.notifications.NotificationArchiveParams
 import com.courier.models.notifications.NotificationContentMutationResponse
 import com.courier.models.notifications.NotificationCreateParams
-import com.courier.models.notifications.NotificationDuplicateParams
 import com.courier.models.notifications.NotificationListParams
 import com.courier.models.notifications.NotificationListResponse
 import com.courier.models.notifications.NotificationListVersionsParams
@@ -170,46 +169,6 @@ interface NotificationServiceAsync {
     /** @see archive */
     fun archive(id: String, requestOptions: RequestOptions): CompletableFuture<Void?> =
         archive(id, NotificationArchiveParams.none(), requestOptions)
-
-    /**
-     * Copies a notification template within the same workspace and environment, appending " COPY"
-     * to the title. The copy is standalone and independently editable.
-     */
-    fun duplicate(id: String): CompletableFuture<NotificationTemplateResponse> =
-        duplicate(id, NotificationDuplicateParams.none())
-
-    /** @see duplicate */
-    fun duplicate(
-        id: String,
-        params: NotificationDuplicateParams = NotificationDuplicateParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<NotificationTemplateResponse> =
-        duplicate(params.toBuilder().id(id).build(), requestOptions)
-
-    /** @see duplicate */
-    fun duplicate(
-        id: String,
-        params: NotificationDuplicateParams = NotificationDuplicateParams.none(),
-    ): CompletableFuture<NotificationTemplateResponse> =
-        duplicate(id, params, RequestOptions.none())
-
-    /** @see duplicate */
-    fun duplicate(
-        params: NotificationDuplicateParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<NotificationTemplateResponse>
-
-    /** @see duplicate */
-    fun duplicate(
-        params: NotificationDuplicateParams
-    ): CompletableFuture<NotificationTemplateResponse> = duplicate(params, RequestOptions.none())
-
-    /** @see duplicate */
-    fun duplicate(
-        id: String,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<NotificationTemplateResponse> =
-        duplicate(id, NotificationDuplicateParams.none(), requestOptions)
 
     /**
      * Returns a notification template's published versions, most recent first, for comparison or
@@ -598,49 +557,6 @@ interface NotificationServiceAsync {
         /** @see archive */
         fun archive(id: String, requestOptions: RequestOptions): CompletableFuture<HttpResponse> =
             archive(id, NotificationArchiveParams.none(), requestOptions)
-
-        /**
-         * Returns a raw HTTP response for `post /notifications/{id}/duplicate`, but is otherwise
-         * the same as [NotificationServiceAsync.duplicate].
-         */
-        fun duplicate(
-            id: String
-        ): CompletableFuture<HttpResponseFor<NotificationTemplateResponse>> =
-            duplicate(id, NotificationDuplicateParams.none())
-
-        /** @see duplicate */
-        fun duplicate(
-            id: String,
-            params: NotificationDuplicateParams = NotificationDuplicateParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<NotificationTemplateResponse>> =
-            duplicate(params.toBuilder().id(id).build(), requestOptions)
-
-        /** @see duplicate */
-        fun duplicate(
-            id: String,
-            params: NotificationDuplicateParams = NotificationDuplicateParams.none(),
-        ): CompletableFuture<HttpResponseFor<NotificationTemplateResponse>> =
-            duplicate(id, params, RequestOptions.none())
-
-        /** @see duplicate */
-        fun duplicate(
-            params: NotificationDuplicateParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<NotificationTemplateResponse>>
-
-        /** @see duplicate */
-        fun duplicate(
-            params: NotificationDuplicateParams
-        ): CompletableFuture<HttpResponseFor<NotificationTemplateResponse>> =
-            duplicate(params, RequestOptions.none())
-
-        /** @see duplicate */
-        fun duplicate(
-            id: String,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<NotificationTemplateResponse>> =
-            duplicate(id, NotificationDuplicateParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /notifications/{id}/versions`, but is otherwise the

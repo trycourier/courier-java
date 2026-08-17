@@ -128,17 +128,6 @@ internal class NotificationServiceTest {
 
     @Disabled("Mock server tests are disabled")
     @Test
-    fun duplicate() {
-        val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
-        val notificationService = client.notifications()
-
-        val notificationTemplateResponse = notificationService.duplicate("id")
-
-        notificationTemplateResponse.validate()
-    }
-
-    @Disabled("Mock server tests are disabled")
-    @Test
     fun listVersions() {
         val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
         val notificationService = client.notifications()

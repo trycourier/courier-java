@@ -5,8 +5,8 @@ package com.courier.proguard
 import com.courier.client.okhttp.CourierOkHttpClient
 import com.courier.core.jsonMapper
 import com.courier.models.Alignment
-import com.courier.models.Discord
-import com.courier.models.SendToChannel
+import com.courier.models.Apn
+import com.courier.models.Token
 import com.courier.models.send.SendMessageResponse
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import kotlin.reflect.full.memberFunctions
@@ -90,15 +90,14 @@ internal class ProGuardCompatibilityTest {
     }
 
     @Test
-    fun discordRoundtrip() {
+    fun apnRoundtrip() {
         val jsonMapper = jsonMapper()
-        val discord =
-            Discord.ofSendToChannel(SendToChannel.builder().channelId("channel_id").build())
+        val apn = Apn.ofToken(Token.builder().token("token").build())
 
-        val roundtrippedDiscord =
-            jsonMapper.readValue(jsonMapper.writeValueAsString(discord), jacksonTypeRef<Discord>())
+        val roundtrippedApn =
+            jsonMapper.readValue(jsonMapper.writeValueAsString(apn), jacksonTypeRef<Apn>())
 
-        assertThat(roundtrippedDiscord).isEqualTo(discord)
+        assertThat(roundtrippedApn).isEqualTo(apn)
     }
 
     @Test
