@@ -31,6 +31,7 @@ internal class UserProfileTest {
                         .build()
                 )
                 .apn("apn")
+                .awsSns(AwsSns.builder().targetArn("target_arn").build())
                 .birthdate("birthdate")
                 .custom(
                     UserProfile.Custom.builder()
@@ -75,7 +76,6 @@ internal class UserProfileTest {
                         .build()
                 )
                 .sub("sub")
-                .targetArn("target_arn")
                 .updatedAt("updated_at")
                 .website("website")
                 .zoneinfo("zoneinfo")
@@ -100,6 +100,7 @@ internal class UserProfileTest {
                     .build()
             )
         assertThat(userProfile.apn()).contains("apn")
+        assertThat(userProfile.awsSns()).contains(AwsSns.builder().targetArn("target_arn").build())
         assertThat(userProfile.birthdate()).contains("birthdate")
         assertThat(userProfile.custom())
             .contains(
@@ -157,7 +158,6 @@ internal class UserProfileTest {
                 )
             )
         assertThat(userProfile.sub()).contains("sub")
-        assertThat(userProfile.targetArn()).contains("target_arn")
         assertThat(userProfile.updatedAt()).contains("updated_at")
         assertThat(userProfile.website()).contains("website")
         assertThat(userProfile.zoneinfo()).contains("zoneinfo")
@@ -185,6 +185,7 @@ internal class UserProfileTest {
                         .build()
                 )
                 .apn("apn")
+                .awsSns(AwsSns.builder().targetArn("target_arn").build())
                 .birthdate("birthdate")
                 .custom(
                     UserProfile.Custom.builder()
@@ -229,7 +230,6 @@ internal class UserProfileTest {
                         .build()
                 )
                 .sub("sub")
-                .targetArn("target_arn")
                 .updatedAt("updated_at")
                 .website("website")
                 .zoneinfo("zoneinfo")
