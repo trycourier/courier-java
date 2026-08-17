@@ -24,6 +24,7 @@ private constructor(
     private val address: JsonField<Address>,
     private val airship: JsonField<AirshipProfile>,
     private val apn: JsonField<String>,
+    private val awsSns: JsonField<AwsSns>,
     private val birthdate: JsonField<String>,
     private val custom: JsonField<Custom>,
     private val discord: JsonField<Discord>,
@@ -48,7 +49,6 @@ private constructor(
     private val profile: JsonField<String>,
     private val slack: JsonField<Slack>,
     private val sub: JsonField<String>,
-    private val targetArn: JsonField<String>,
     private val updatedAt: JsonField<String>,
     private val website: JsonField<String>,
     private val zoneinfo: JsonField<String>,
@@ -62,6 +62,7 @@ private constructor(
         @ExcludeMissing
         airship: JsonField<AirshipProfile> = JsonMissing.of(),
         @JsonProperty("apn") @ExcludeMissing apn: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("aws_sns") @ExcludeMissing awsSns: JsonField<AwsSns> = JsonMissing.of(),
         @JsonProperty("birthdate") @ExcludeMissing birthdate: JsonField<String> = JsonMissing.of(),
         @JsonProperty("custom") @ExcludeMissing custom: JsonField<Custom> = JsonMissing.of(),
         @JsonProperty("discord") @ExcludeMissing discord: JsonField<Discord> = JsonMissing.of(),
@@ -102,7 +103,6 @@ private constructor(
         @JsonProperty("profile") @ExcludeMissing profile: JsonField<String> = JsonMissing.of(),
         @JsonProperty("slack") @ExcludeMissing slack: JsonField<Slack> = JsonMissing.of(),
         @JsonProperty("sub") @ExcludeMissing sub: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("target_arn") @ExcludeMissing targetArn: JsonField<String> = JsonMissing.of(),
         @JsonProperty("updated_at") @ExcludeMissing updatedAt: JsonField<String> = JsonMissing.of(),
         @JsonProperty("website") @ExcludeMissing website: JsonField<String> = JsonMissing.of(),
         @JsonProperty("zoneinfo") @ExcludeMissing zoneinfo: JsonField<String> = JsonMissing.of(),
@@ -110,6 +110,7 @@ private constructor(
         address,
         airship,
         apn,
+        awsSns,
         birthdate,
         custom,
         discord,
@@ -134,7 +135,6 @@ private constructor(
         profile,
         slack,
         sub,
-        targetArn,
         updatedAt,
         website,
         zoneinfo,
@@ -158,6 +158,15 @@ private constructor(
      *   server responded with an unexpected value).
      */
     fun apn(): Optional<String> = apn.getOptional("apn")
+
+    /**
+     * Routes a push notification through the AWS SNS provider. The target ARN must be nested under
+     * `aws_sns` — a top-level `target_arn` on the profile is ignored by the provider.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun awsSns(): Optional<AwsSns> = awsSns.getOptional("aws_sns")
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -312,12 +321,6 @@ private constructor(
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun targetArn(): Optional<String> = targetArn.getOptional("target_arn")
-
-    /**
-     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
     fun updatedAt(): Optional<String> = updatedAt.getOptional("updated_at")
 
     /**
@@ -352,6 +355,13 @@ private constructor(
      * Unlike [apn], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("apn") @ExcludeMissing fun _apn(): JsonField<String> = apn
+
+    /**
+     * Returns the raw JSON value of [awsSns].
+     *
+     * Unlike [awsSns], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("aws_sns") @ExcludeMissing fun _awsSns(): JsonField<AwsSns> = awsSns
 
     /**
      * Returns the raw JSON value of [birthdate].
@@ -535,13 +545,6 @@ private constructor(
     @JsonProperty("sub") @ExcludeMissing fun _sub(): JsonField<String> = sub
 
     /**
-     * Returns the raw JSON value of [targetArn].
-     *
-     * Unlike [targetArn], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("target_arn") @ExcludeMissing fun _targetArn(): JsonField<String> = targetArn
-
-    /**
      * Returns the raw JSON value of [updatedAt].
      *
      * Unlike [updatedAt], this method doesn't throw if the JSON field has an unexpected type.
@@ -586,6 +589,7 @@ private constructor(
         private var address: JsonField<Address> = JsonMissing.of()
         private var airship: JsonField<AirshipProfile> = JsonMissing.of()
         private var apn: JsonField<String> = JsonMissing.of()
+        private var awsSns: JsonField<AwsSns> = JsonMissing.of()
         private var birthdate: JsonField<String> = JsonMissing.of()
         private var custom: JsonField<Custom> = JsonMissing.of()
         private var discord: JsonField<Discord> = JsonMissing.of()
@@ -610,7 +614,6 @@ private constructor(
         private var profile: JsonField<String> = JsonMissing.of()
         private var slack: JsonField<Slack> = JsonMissing.of()
         private var sub: JsonField<String> = JsonMissing.of()
-        private var targetArn: JsonField<String> = JsonMissing.of()
         private var updatedAt: JsonField<String> = JsonMissing.of()
         private var website: JsonField<String> = JsonMissing.of()
         private var zoneinfo: JsonField<String> = JsonMissing.of()
@@ -621,6 +624,7 @@ private constructor(
             address = userProfile.address
             airship = userProfile.airship
             apn = userProfile.apn
+            awsSns = userProfile.awsSns
             birthdate = userProfile.birthdate
             custom = userProfile.custom
             discord = userProfile.discord
@@ -645,7 +649,6 @@ private constructor(
             profile = userProfile.profile
             slack = userProfile.slack
             sub = userProfile.sub
-            targetArn = userProfile.targetArn
             updatedAt = userProfile.updatedAt
             website = userProfile.website
             zoneinfo = userProfile.zoneinfo
@@ -691,6 +694,23 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun apn(apn: JsonField<String>) = apply { this.apn = apn }
+
+        /**
+         * Routes a push notification through the AWS SNS provider. The target ARN must be nested
+         * under `aws_sns` — a top-level `target_arn` on the profile is ignored by the provider.
+         */
+        fun awsSns(awsSns: AwsSns?) = awsSns(JsonField.ofNullable(awsSns))
+
+        /** Alias for calling [Builder.awsSns] with `awsSns.orElse(null)`. */
+        fun awsSns(awsSns: Optional<AwsSns>) = awsSns(awsSns.getOrNull())
+
+        /**
+         * Sets [Builder.awsSns] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.awsSns] with a well-typed [AwsSns] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun awsSns(awsSns: JsonField<AwsSns>) = apply { this.awsSns = awsSns }
 
         fun birthdate(birthdate: String?) = birthdate(JsonField.ofNullable(birthdate))
 
@@ -1117,20 +1137,6 @@ private constructor(
          */
         fun sub(sub: JsonField<String>) = apply { this.sub = sub }
 
-        fun targetArn(targetArn: String?) = targetArn(JsonField.ofNullable(targetArn))
-
-        /** Alias for calling [Builder.targetArn] with `targetArn.orElse(null)`. */
-        fun targetArn(targetArn: Optional<String>) = targetArn(targetArn.getOrNull())
-
-        /**
-         * Sets [Builder.targetArn] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.targetArn] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun targetArn(targetArn: JsonField<String>) = apply { this.targetArn = targetArn }
-
         fun updatedAt(updatedAt: String?) = updatedAt(JsonField.ofNullable(updatedAt))
 
         /** Alias for calling [Builder.updatedAt] with `updatedAt.orElse(null)`. */
@@ -1200,6 +1206,7 @@ private constructor(
                 address,
                 airship,
                 apn,
+                awsSns,
                 birthdate,
                 custom,
                 discord,
@@ -1224,7 +1231,6 @@ private constructor(
                 profile,
                 slack,
                 sub,
-                targetArn,
                 updatedAt,
                 website,
                 zoneinfo,
@@ -1250,6 +1256,7 @@ private constructor(
         address().ifPresent { it.validate() }
         airship().ifPresent { it.validate() }
         apn()
+        awsSns().ifPresent { it.validate() }
         birthdate()
         custom().ifPresent { it.validate() }
         discord().ifPresent { it.validate() }
@@ -1274,7 +1281,6 @@ private constructor(
         profile()
         slack().ifPresent { it.validate() }
         sub()
-        targetArn()
         updatedAt()
         website()
         zoneinfo()
@@ -1299,6 +1305,7 @@ private constructor(
         (address.asKnown().getOrNull()?.validity() ?: 0) +
             (airship.asKnown().getOrNull()?.validity() ?: 0) +
             (if (apn.asKnown().isPresent) 1 else 0) +
+            (awsSns.asKnown().getOrNull()?.validity() ?: 0) +
             (if (birthdate.asKnown().isPresent) 1 else 0) +
             (custom.asKnown().getOrNull()?.validity() ?: 0) +
             (discord.asKnown().getOrNull()?.validity() ?: 0) +
@@ -1323,7 +1330,6 @@ private constructor(
             (if (profile.asKnown().isPresent) 1 else 0) +
             (slack.asKnown().getOrNull()?.validity() ?: 0) +
             (if (sub.asKnown().isPresent) 1 else 0) +
-            (if (targetArn.asKnown().isPresent) 1 else 0) +
             (if (updatedAt.asKnown().isPresent) 1 else 0) +
             (if (website.asKnown().isPresent) 1 else 0) +
             (if (zoneinfo.asKnown().isPresent) 1 else 0)
@@ -1811,6 +1817,7 @@ private constructor(
             address == other.address &&
             airship == other.airship &&
             apn == other.apn &&
+            awsSns == other.awsSns &&
             birthdate == other.birthdate &&
             custom == other.custom &&
             discord == other.discord &&
@@ -1835,7 +1842,6 @@ private constructor(
             profile == other.profile &&
             slack == other.slack &&
             sub == other.sub &&
-            targetArn == other.targetArn &&
             updatedAt == other.updatedAt &&
             website == other.website &&
             zoneinfo == other.zoneinfo &&
@@ -1847,6 +1853,7 @@ private constructor(
             address,
             airship,
             apn,
+            awsSns,
             birthdate,
             custom,
             discord,
@@ -1871,7 +1878,6 @@ private constructor(
             profile,
             slack,
             sub,
-            targetArn,
             updatedAt,
             website,
             zoneinfo,
@@ -1882,5 +1888,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "UserProfile{address=$address, airship=$airship, apn=$apn, birthdate=$birthdate, custom=$custom, discord=$discord, email=$email, emailVerified=$emailVerified, expo=$expo, facebookPsid=$facebookPsid, familyName=$familyName, firebaseToken=$firebaseToken, gender=$gender, givenName=$givenName, intercom=$intercom, locale=$locale, middleName=$middleName, msTeams=$msTeams, name=$name, nickname=$nickname, phoneNumber=$phoneNumber, phoneNumberVerified=$phoneNumberVerified, picture=$picture, preferredName=$preferredName, profile=$profile, slack=$slack, sub=$sub, targetArn=$targetArn, updatedAt=$updatedAt, website=$website, zoneinfo=$zoneinfo, additionalProperties=$additionalProperties}"
+        "UserProfile{address=$address, airship=$airship, apn=$apn, awsSns=$awsSns, birthdate=$birthdate, custom=$custom, discord=$discord, email=$email, emailVerified=$emailVerified, expo=$expo, facebookPsid=$facebookPsid, familyName=$familyName, firebaseToken=$firebaseToken, gender=$gender, givenName=$givenName, intercom=$intercom, locale=$locale, middleName=$middleName, msTeams=$msTeams, name=$name, nickname=$nickname, phoneNumber=$phoneNumber, phoneNumberVerified=$phoneNumberVerified, picture=$picture, preferredName=$preferredName, profile=$profile, slack=$slack, sub=$sub, updatedAt=$updatedAt, website=$website, zoneinfo=$zoneinfo, additionalProperties=$additionalProperties}"
 }
