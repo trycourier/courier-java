@@ -1,5 +1,16 @@
 # Changelog
 
+## [5.0.0](https://github.com/trycourier/courier-java/compare/v4.27.2...v5.0.0) (2026-08-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* **api:** nest the AWS SNS target_arn under aws_sns on the user profile ([#136](https://github.com/trycourier/courier-java/issues/136))
+
+### Features
+
+* **api:** nest the AWS SNS target_arn under aws_sns on the user profile ([#136](https://github.com/trycourier/courier-java/issues/136)) ([8387568](https://github.com/trycourier/courier-java/commit/8387568f4d5db9c7df2b4835ffd10bfe56e7f7c5))
+
 ## [4.27.2](https://github.com/trycourier/courier-java/compare/v4.27.1...v4.27.2) (2026-08-14)
 
 
