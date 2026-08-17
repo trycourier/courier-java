@@ -23,7 +23,7 @@ class UserProfile
 private constructor(
     private val address: JsonField<Address>,
     private val airship: JsonField<AirshipProfile>,
-    private val apn: JsonField<String>,
+    private val apn: JsonField<Apn>,
     private val awsSns: JsonField<AwsSns>,
     private val birthdate: JsonField<String>,
     private val custom: JsonField<Custom>,
@@ -61,7 +61,7 @@ private constructor(
         @JsonProperty("airship")
         @ExcludeMissing
         airship: JsonField<AirshipProfile> = JsonMissing.of(),
-        @JsonProperty("apn") @ExcludeMissing apn: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("apn") @ExcludeMissing apn: JsonField<Apn> = JsonMissing.of(),
         @JsonProperty("aws_sns") @ExcludeMissing awsSns: JsonField<AwsSns> = JsonMissing.of(),
         @JsonProperty("birthdate") @ExcludeMissing birthdate: JsonField<String> = JsonMissing.of(),
         @JsonProperty("custom") @ExcludeMissing custom: JsonField<Custom> = JsonMissing.of(),
@@ -154,10 +154,13 @@ private constructor(
     fun airship(): Optional<AirshipProfile> = airship.getOptional("airship")
 
     /**
+     * Apple Push Notification device tokens. Supply either a single `token` or a `tokens` value. A
+     * bare string is rejected by the provider — the token must be wrapped in this object.
+     *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun apn(): Optional<String> = apn.getOptional("apn")
+    fun apn(): Optional<Apn> = apn.getOptional("apn")
 
     /**
      * Routes a push notification through the AWS SNS provider. The target ARN must be nested under
@@ -202,6 +205,8 @@ private constructor(
     fun emailVerified(): Optional<Boolean> = emailVerified.getOptional("email_verified")
 
     /**
+     * Expo push tokens. Supply either a single `token` or a `tokens` value.
+     *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -354,7 +359,7 @@ private constructor(
      *
      * Unlike [apn], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("apn") @ExcludeMissing fun _apn(): JsonField<String> = apn
+    @JsonProperty("apn") @ExcludeMissing fun _apn(): JsonField<Apn> = apn
 
     /**
      * Returns the raw JSON value of [awsSns].
@@ -588,7 +593,7 @@ private constructor(
 
         private var address: JsonField<Address> = JsonMissing.of()
         private var airship: JsonField<AirshipProfile> = JsonMissing.of()
-        private var apn: JsonField<String> = JsonMissing.of()
+        private var apn: JsonField<Apn> = JsonMissing.of()
         private var awsSns: JsonField<AwsSns> = JsonMissing.of()
         private var birthdate: JsonField<String> = JsonMissing.of()
         private var custom: JsonField<Custom> = JsonMissing.of()
@@ -682,18 +687,29 @@ private constructor(
          */
         fun airship(airship: JsonField<AirshipProfile>) = apply { this.airship = airship }
 
-        fun apn(apn: String?) = apn(JsonField.ofNullable(apn))
+        /**
+         * Apple Push Notification device tokens. Supply either a single `token` or a `tokens`
+         * value. A bare string is rejected by the provider — the token must be wrapped in this
+         * object.
+         */
+        fun apn(apn: Apn?) = apn(JsonField.ofNullable(apn))
 
         /** Alias for calling [Builder.apn] with `apn.orElse(null)`. */
-        fun apn(apn: Optional<String>) = apn(apn.getOrNull())
+        fun apn(apn: Optional<Apn>) = apn(apn.getOrNull())
 
         /**
          * Sets [Builder.apn] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.apn] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
+         * You should usually call [Builder.apn] with a well-typed [Apn] value instead. This method
+         * is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun apn(apn: JsonField<String>) = apply { this.apn = apn }
+        fun apn(apn: JsonField<Apn>) = apply { this.apn = apn }
+
+        /** Alias for calling [apn] with `Apn.ofToken(token)`. */
+        fun apn(token: Token) = apn(Apn.ofToken(token))
+
+        /** Alias for calling [apn] with `Apn.ofMultipleTokens(multipleTokens)`. */
+        fun apn(multipleTokens: MultipleTokens) = apn(Apn.ofMultipleTokens(multipleTokens))
 
         /**
          * Routes a push notification through the AWS SNS provider. The target ARN must be nested
@@ -801,6 +817,7 @@ private constructor(
             this.emailVerified = emailVerified
         }
 
+        /** Expo push tokens. Supply either a single `token` or a `tokens` value. */
         fun expo(expo: Expo?) = expo(JsonField.ofNullable(expo))
 
         /** Alias for calling [Builder.expo] with `expo.orElse(null)`. */
@@ -1255,7 +1272,7 @@ private constructor(
 
         address().ifPresent { it.validate() }
         airship().ifPresent { it.validate() }
-        apn()
+        apn().ifPresent { it.validate() }
         awsSns().ifPresent { it.validate() }
         birthdate()
         custom().ifPresent { it.validate() }
@@ -1304,7 +1321,7 @@ private constructor(
     internal fun validity(): Int =
         (address.asKnown().getOrNull()?.validity() ?: 0) +
             (airship.asKnown().getOrNull()?.validity() ?: 0) +
-            (if (apn.asKnown().isPresent) 1 else 0) +
+            (apn.asKnown().getOrNull()?.validity() ?: 0) +
             (awsSns.asKnown().getOrNull()?.validity() ?: 0) +
             (if (birthdate.asKnown().isPresent) 1 else 0) +
             (custom.asKnown().getOrNull()?.validity() ?: 0) +

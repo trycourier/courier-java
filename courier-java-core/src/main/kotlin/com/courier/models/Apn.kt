@@ -18,10 +18,13 @@ import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.util.Objects
 import java.util.Optional
 
-/** Expo push tokens. Supply either a single `token` or a `tokens` value. */
-@JsonDeserialize(using = Expo.Deserializer::class)
-@JsonSerialize(using = Expo.Serializer::class)
-class Expo
+/**
+ * Apple Push Notification device tokens. Supply either a single `token` or a `tokens` value. A bare
+ * string is rejected by the provider — the token must be wrapped in this object.
+ */
+@JsonDeserialize(using = Apn.Deserializer::class)
+@JsonSerialize(using = Apn.Serializer::class)
+class Apn
 private constructor(
     private val token: Token? = null,
     private val multipleTokens: MultipleTokens? = null,
@@ -52,7 +55,7 @@ private constructor(
      * import com.courier.core.JsonValue;
      * import java.util.Optional;
      *
-     * Optional<String> result = expo.accept(new Expo.Visitor<Optional<String>>() {
+     * Optional<String> result = apn.accept(new Apn.Visitor<Optional<String>>() {
      *     @Override
      *     public Optional<String> visitToken(Token token) {
      *         return Optional.of(token.toString());
@@ -88,7 +91,7 @@ private constructor(
      * @throws CourierInvalidDataException if any value type in this object doesn't match its
      *   expected type.
      */
-    fun validate(): Expo = apply {
+    fun validate(): Apn = apply {
         if (validated) {
             return@apply
         }
@@ -138,28 +141,28 @@ private constructor(
             return true
         }
 
-        return other is Expo && token == other.token && multipleTokens == other.multipleTokens
+        return other is Apn && token == other.token && multipleTokens == other.multipleTokens
     }
 
     override fun hashCode(): Int = Objects.hash(token, multipleTokens)
 
     override fun toString(): String =
         when {
-            token != null -> "Expo{token=$token}"
-            multipleTokens != null -> "Expo{multipleTokens=$multipleTokens}"
-            _json != null -> "Expo{_unknown=$_json}"
-            else -> throw IllegalStateException("Invalid Expo")
+            token != null -> "Apn{token=$token}"
+            multipleTokens != null -> "Apn{multipleTokens=$multipleTokens}"
+            _json != null -> "Apn{_unknown=$_json}"
+            else -> throw IllegalStateException("Invalid Apn")
         }
 
     companion object {
 
-        @JvmStatic fun ofToken(token: Token) = Expo(token = token)
+        @JvmStatic fun ofToken(token: Token) = Apn(token = token)
 
         @JvmStatic
-        fun ofMultipleTokens(multipleTokens: MultipleTokens) = Expo(multipleTokens = multipleTokens)
+        fun ofMultipleTokens(multipleTokens: MultipleTokens) = Apn(multipleTokens = multipleTokens)
     }
 
-    /** An interface that defines how to map each variant of [Expo] to a value of type [T]. */
+    /** An interface that defines how to map each variant of [Apn] to a value of type [T]. */
     interface Visitor<out T> {
 
         fun visitToken(token: Token): T
@@ -167,31 +170,31 @@ private constructor(
         fun visitMultipleTokens(multipleTokens: MultipleTokens): T
 
         /**
-         * Maps an unknown variant of [Expo] to a value of type [T].
+         * Maps an unknown variant of [Apn] to a value of type [T].
          *
-         * An instance of [Expo] can contain an unknown variant if it was deserialized from data
-         * that doesn't match any known variant. For example, if the SDK is on an older version than
-         * the API, then the API may respond with new variants that the SDK is unaware of.
+         * An instance of [Apn] can contain an unknown variant if it was deserialized from data that
+         * doesn't match any known variant. For example, if the SDK is on an older version than the
+         * API, then the API may respond with new variants that the SDK is unaware of.
          *
          * @throws CourierInvalidDataException in the default implementation.
          */
         fun unknown(json: JsonValue?): T {
-            throw CourierInvalidDataException("Unknown Expo: $json")
+            throw CourierInvalidDataException("Unknown Apn: $json")
         }
     }
 
-    internal class Deserializer : BaseDeserializer<Expo>(Expo::class) {
+    internal class Deserializer : BaseDeserializer<Apn>(Apn::class) {
 
-        override fun ObjectCodec.deserialize(node: JsonNode): Expo {
+        override fun ObjectCodec.deserialize(node: JsonNode): Apn {
             val json = JsonValue.fromJsonNode(node)
 
             val bestMatches =
                 sequenceOf(
                         tryDeserialize(node, jacksonTypeRef<Token>())?.let {
-                            Expo(token = it, _json = json)
+                            Apn(token = it, _json = json)
                         },
                         tryDeserialize(node, jacksonTypeRef<MultipleTokens>())?.let {
-                            Expo(multipleTokens = it, _json = json)
+                            Apn(multipleTokens = it, _json = json)
                         },
                     )
                     .filterNotNull()
@@ -200,7 +203,7 @@ private constructor(
             return when (bestMatches.size) {
                 // This can happen if what we're deserializing is completely incompatible with all
                 // the possible variants (e.g. deserializing from boolean).
-                0 -> Expo(_json = json)
+                0 -> Apn(_json = json)
                 1 -> bestMatches.single()
                 // If there's more than one match with the highest validity, then use the first
                 // completely valid match, or simply the first match if none are completely valid.
@@ -209,18 +212,14 @@ private constructor(
         }
     }
 
-    internal class Serializer : BaseSerializer<Expo>(Expo::class) {
+    internal class Serializer : BaseSerializer<Apn>(Apn::class) {
 
-        override fun serialize(
-            value: Expo,
-            generator: JsonGenerator,
-            provider: SerializerProvider,
-        ) {
+        override fun serialize(value: Apn, generator: JsonGenerator, provider: SerializerProvider) {
             when {
                 value.token != null -> generator.writeObject(value.token)
                 value.multipleTokens != null -> generator.writeObject(value.multipleTokens)
                 value._json != null -> generator.writeObject(value._json)
-                else -> throw IllegalStateException("Invalid Expo")
+                else -> throw IllegalStateException("Invalid Apn")
             }
         }
     }

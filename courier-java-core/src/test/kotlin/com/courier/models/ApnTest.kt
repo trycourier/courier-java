@@ -12,48 +12,48 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 
-internal class ExpoTest {
+internal class ApnTest {
 
     @Test
     fun ofToken() {
         val token = Token.builder().token("token").build()
 
-        val expo = Expo.ofToken(token)
+        val apn = Apn.ofToken(token)
 
-        assertThat(expo.token()).contains(token)
-        assertThat(expo.multipleTokens()).isEmpty
+        assertThat(apn.token()).contains(token)
+        assertThat(apn.multipleTokens()).isEmpty
     }
 
     @Test
     fun ofTokenRoundtrip() {
         val jsonMapper = jsonMapper()
-        val expo = Expo.ofToken(Token.builder().token("token").build())
+        val apn = Apn.ofToken(Token.builder().token("token").build())
 
-        val roundtrippedExpo =
-            jsonMapper.readValue(jsonMapper.writeValueAsString(expo), jacksonTypeRef<Expo>())
+        val roundtrippedApn =
+            jsonMapper.readValue(jsonMapper.writeValueAsString(apn), jacksonTypeRef<Apn>())
 
-        assertThat(roundtrippedExpo).isEqualTo(expo)
+        assertThat(roundtrippedApn).isEqualTo(apn)
     }
 
     @Test
     fun ofMultipleTokens() {
         val multipleTokens = MultipleTokens.builder().tokens("string").build()
 
-        val expo = Expo.ofMultipleTokens(multipleTokens)
+        val apn = Apn.ofMultipleTokens(multipleTokens)
 
-        assertThat(expo.token()).isEmpty
-        assertThat(expo.multipleTokens()).contains(multipleTokens)
+        assertThat(apn.token()).isEmpty
+        assertThat(apn.multipleTokens()).contains(multipleTokens)
     }
 
     @Test
     fun ofMultipleTokensRoundtrip() {
         val jsonMapper = jsonMapper()
-        val expo = Expo.ofMultipleTokens(MultipleTokens.builder().tokens("string").build())
+        val apn = Apn.ofMultipleTokens(MultipleTokens.builder().tokens("string").build())
 
-        val roundtrippedExpo =
-            jsonMapper.readValue(jsonMapper.writeValueAsString(expo), jacksonTypeRef<Expo>())
+        val roundtrippedApn =
+            jsonMapper.readValue(jsonMapper.writeValueAsString(apn), jacksonTypeRef<Apn>())
 
-        assertThat(roundtrippedExpo).isEqualTo(expo)
+        assertThat(roundtrippedApn).isEqualTo(apn)
     }
 
     enum class IncompatibleJsonShapeTestCase(val value: JsonValue) {
@@ -67,9 +67,9 @@ internal class ExpoTest {
     @ParameterizedTest
     @EnumSource
     fun incompatibleJsonShapeDeserializesToUnknown(testCase: IncompatibleJsonShapeTestCase) {
-        val expo = jsonMapper().convertValue(testCase.value, jacksonTypeRef<Expo>())
+        val apn = jsonMapper().convertValue(testCase.value, jacksonTypeRef<Apn>())
 
-        val e = assertThrows<CourierInvalidDataException> { expo.validate() }
+        val e = assertThrows<CourierInvalidDataException> { apn.validate() }
         assertThat(e).hasMessageStartingWith("Unknown ")
     }
 }

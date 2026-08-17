@@ -30,7 +30,7 @@ internal class UserProfileTest {
                         .addDeviceType("string")
                         .build()
                 )
-                .apn("apn")
+                .apn(Token.builder().token("token").build())
                 .awsSns(AwsSns.builder().targetArn("target_arn").build())
                 .birthdate("birthdate")
                 .custom(
@@ -99,7 +99,7 @@ internal class UserProfileTest {
                     .addDeviceType("string")
                     .build()
             )
-        assertThat(userProfile.apn()).contains("apn")
+        assertThat(userProfile.apn()).contains(Apn.ofToken(Token.builder().token("token").build()))
         assertThat(userProfile.awsSns()).contains(AwsSns.builder().targetArn("target_arn").build())
         assertThat(userProfile.birthdate()).contains("birthdate")
         assertThat(userProfile.custom())
@@ -184,7 +184,7 @@ internal class UserProfileTest {
                         .addDeviceType("string")
                         .build()
                 )
-                .apn("apn")
+                .apn(Token.builder().token("token").build())
                 .awsSns(AwsSns.builder().targetArn("target_arn").build())
                 .birthdate("birthdate")
                 .custom(
