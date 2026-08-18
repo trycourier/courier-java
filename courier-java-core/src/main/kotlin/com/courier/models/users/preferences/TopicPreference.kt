@@ -30,6 +30,8 @@ private constructor(
     private val topicName: JsonField<String>,
     private val customRouting: JsonField<List<ChannelClassification>>,
     private val hasCustomRouting: JsonField<Boolean>,
+    private val sectionId: JsonField<String>,
+    private val sectionName: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -49,6 +51,10 @@ private constructor(
         @JsonProperty("has_custom_routing")
         @ExcludeMissing
         hasCustomRouting: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("section_id") @ExcludeMissing sectionId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("section_name")
+        @ExcludeMissing
+        sectionName: JsonField<String> = JsonMissing.of(),
     ) : this(
         defaultStatus,
         status,
@@ -56,6 +62,8 @@ private constructor(
         topicName,
         customRouting,
         hasCustomRouting,
+        sectionId,
+        sectionName,
         mutableMapOf(),
     )
 
@@ -113,6 +121,25 @@ private constructor(
     fun hasCustomRouting(): Optional<Boolean> = hasCustomRouting.getOptional("has_custom_routing")
 
     /**
+     * The unique identifier of the section this topic belongs to. Always present when listing a
+     * user's preferences; omitted by the single-topic read when the topic has no resolvable
+     * section.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun sectionId(): Optional<String> = sectionId.getOptional("section_id")
+
+    /**
+     * The display name of the section this topic belongs to. Always present when listing a user's
+     * preferences; omitted by the single-topic read when the topic has no resolvable section.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun sectionName(): Optional<String> = sectionName.getOptional("section_name")
+
+    /**
      * Returns the raw JSON value of [defaultStatus].
      *
      * Unlike [defaultStatus], this method doesn't throw if the JSON field has an unexpected type.
@@ -161,6 +188,22 @@ private constructor(
     @ExcludeMissing
     fun _hasCustomRouting(): JsonField<Boolean> = hasCustomRouting
 
+    /**
+     * Returns the raw JSON value of [sectionId].
+     *
+     * Unlike [sectionId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("section_id") @ExcludeMissing fun _sectionId(): JsonField<String> = sectionId
+
+    /**
+     * Returns the raw JSON value of [sectionName].
+     *
+     * Unlike [sectionName], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("section_name")
+    @ExcludeMissing
+    fun _sectionName(): JsonField<String> = sectionName
+
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
@@ -198,6 +241,8 @@ private constructor(
         private var topicName: JsonField<String>? = null
         private var customRouting: JsonField<MutableList<ChannelClassification>>? = null
         private var hasCustomRouting: JsonField<Boolean> = JsonMissing.of()
+        private var sectionId: JsonField<String> = JsonMissing.of()
+        private var sectionName: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -208,6 +253,8 @@ private constructor(
             topicName = topicPreference.topicName
             customRouting = topicPreference.customRouting.map { it.toMutableList() }
             hasCustomRouting = topicPreference.hasCustomRouting
+            sectionId = topicPreference.sectionId
+            sectionName = topicPreference.sectionName
             additionalProperties = topicPreference.additionalProperties.toMutableMap()
         }
 
@@ -333,6 +380,38 @@ private constructor(
             this.hasCustomRouting = hasCustomRouting
         }
 
+        /**
+         * The unique identifier of the section this topic belongs to. Always present when listing a
+         * user's preferences; omitted by the single-topic read when the topic has no resolvable
+         * section.
+         */
+        fun sectionId(sectionId: String) = sectionId(JsonField.of(sectionId))
+
+        /**
+         * Sets [Builder.sectionId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.sectionId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun sectionId(sectionId: JsonField<String>) = apply { this.sectionId = sectionId }
+
+        /**
+         * The display name of the section this topic belongs to. Always present when listing a
+         * user's preferences; omitted by the single-topic read when the topic has no resolvable
+         * section.
+         */
+        fun sectionName(sectionName: String) = sectionName(JsonField.of(sectionName))
+
+        /**
+         * Sets [Builder.sectionName] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.sectionName] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun sectionName(sectionName: JsonField<String>) = apply { this.sectionName = sectionName }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -375,6 +454,8 @@ private constructor(
                 checkRequired("topicName", topicName),
                 (customRouting ?: JsonMissing.of()).map { it.toImmutable() },
                 hasCustomRouting,
+                sectionId,
+                sectionName,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -400,6 +481,8 @@ private constructor(
         topicName()
         customRouting().ifPresent { it.forEach { it.validate() } }
         hasCustomRouting()
+        sectionId()
+        sectionName()
         validated = true
     }
 
@@ -423,7 +506,9 @@ private constructor(
             (if (topicId.asKnown().isPresent) 1 else 0) +
             (if (topicName.asKnown().isPresent) 1 else 0) +
             (customRouting.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
-            (if (hasCustomRouting.asKnown().isPresent) 1 else 0)
+            (if (hasCustomRouting.asKnown().isPresent) 1 else 0) +
+            (if (sectionId.asKnown().isPresent) 1 else 0) +
+            (if (sectionName.asKnown().isPresent) 1 else 0)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -437,6 +522,8 @@ private constructor(
             topicName == other.topicName &&
             customRouting == other.customRouting &&
             hasCustomRouting == other.hasCustomRouting &&
+            sectionId == other.sectionId &&
+            sectionName == other.sectionName &&
             additionalProperties == other.additionalProperties
     }
 
@@ -448,6 +535,8 @@ private constructor(
             topicName,
             customRouting,
             hasCustomRouting,
+            sectionId,
+            sectionName,
             additionalProperties,
         )
     }
@@ -455,5 +544,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "TopicPreference{defaultStatus=$defaultStatus, status=$status, topicId=$topicId, topicName=$topicName, customRouting=$customRouting, hasCustomRouting=$hasCustomRouting, additionalProperties=$additionalProperties}"
+        "TopicPreference{defaultStatus=$defaultStatus, status=$status, topicId=$topicId, topicName=$topicName, customRouting=$customRouting, hasCustomRouting=$hasCustomRouting, sectionId=$sectionId, sectionName=$sectionName, additionalProperties=$additionalProperties}"
 }

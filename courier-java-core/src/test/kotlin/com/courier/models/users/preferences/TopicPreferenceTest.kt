@@ -22,6 +22,8 @@ internal class TopicPreferenceTest {
                 .topicName("topic_name")
                 .addCustomRouting(ChannelClassification.DIRECT_MESSAGE)
                 .hasCustomRouting(true)
+                .sectionId("section_id")
+                .sectionName("section_name")
                 .build()
 
         assertThat(topicPreference.defaultStatus()).isEqualTo(PreferenceStatus.OPTED_IN)
@@ -31,6 +33,8 @@ internal class TopicPreferenceTest {
         assertThat(topicPreference.customRouting().getOrNull())
             .containsExactly(ChannelClassification.DIRECT_MESSAGE)
         assertThat(topicPreference.hasCustomRouting()).contains(true)
+        assertThat(topicPreference.sectionId()).contains("section_id")
+        assertThat(topicPreference.sectionName()).contains("section_name")
     }
 
     @Test
@@ -44,6 +48,8 @@ internal class TopicPreferenceTest {
                 .topicName("topic_name")
                 .addCustomRouting(ChannelClassification.DIRECT_MESSAGE)
                 .hasCustomRouting(true)
+                .sectionId("section_id")
+                .sectionName("section_name")
                 .build()
 
         val roundtrippedTopicPreference =
