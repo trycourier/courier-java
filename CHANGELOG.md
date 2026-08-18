@@ -1,5 +1,16 @@
 # Changelog
 
+## [6.0.0](https://github.com/trycourier/courier-java/compare/v5.0.0...v6.0.0) (2026-08-17)
+
+
+### ⚠ BREAKING CHANGES
+
+* **api:** match the spec to the backend — apn/expo token types and the phantom notifications.duplicate ([#138](https://github.com/trycourier/courier-java/issues/138))
+
+### Features
+
+* **api:** match the spec to the backend — apn/expo token types and the phantom notifications.duplicate ([#138](https://github.com/trycourier/courier-java/issues/138)) ([4667bed](https://github.com/trycourier/courier-java/commit/4667bed103dad44a4ce8b29432433926dab88cf8))
+
 ## [5.0.0](https://github.com/trycourier/courier-java/compare/v4.27.2...v5.0.0) (2026-08-17)
 
 
