@@ -19,27 +19,28 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Trigger fired by a segment event (`identify`, `group`, `track`, or `page`). A trigger with no
- * `event_id` fires on any event of its type — the only shape `identify` and `group` can take, and
- * the one that catches a stock `analytics.page()` call.
+ * Trigger fired when a user newly matches an Audience. Leaving and re-joining the Audience
+ * re-enters the Journey. Membership is new-members-only: users already in the Audience when the
+ * Journey is published do not enter. Unlike the v2 Automations audience trigger, there is no member
+ * scope, event type, or frequency mode to configure, and `audience_id` must name one Audience —
+ * wildcards are not supported.
  */
-class JourneySegmentTriggerNode
+class JourneyAudienceTriggerNode
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    private val requestType: JsonField<RequestType>,
+    private val audienceId: JsonField<String>,
     private val triggerType: JsonField<TriggerType>,
     private val type: JsonField<Type>,
     private val id: JsonField<String>,
     private val conditions: JsonField<JourneyConditionsField>,
-    private val eventId: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("request_type")
+        @JsonProperty("audience_id")
         @ExcludeMissing
-        requestType: JsonField<RequestType> = JsonMissing.of(),
+        audienceId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("trigger_type")
         @ExcludeMissing
         triggerType: JsonField<TriggerType> = JsonMissing.of(),
@@ -48,14 +49,15 @@ private constructor(
         @JsonProperty("conditions")
         @ExcludeMissing
         conditions: JsonField<JourneyConditionsField> = JsonMissing.of(),
-        @JsonProperty("event_id") @ExcludeMissing eventId: JsonField<String> = JsonMissing.of(),
-    ) : this(requestType, triggerType, type, id, conditions, eventId, mutableMapOf())
+    ) : this(audienceId, triggerType, type, id, conditions, mutableMapOf())
 
     /**
+     * The Audience to watch. Must name a single Audience; wildcards are not supported.
+     *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun requestType(): RequestType = requestType.getRequired("request_type")
+    fun audienceId(): String = audienceId.getRequired("audience_id")
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
@@ -85,19 +87,11 @@ private constructor(
     fun conditions(): Optional<JourneyConditionsField> = conditions.getOptional("conditions")
 
     /**
-     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
-    fun eventId(): Optional<String> = eventId.getOptional("event_id")
-
-    /**
-     * Returns the raw JSON value of [requestType].
+     * Returns the raw JSON value of [audienceId].
      *
-     * Unlike [requestType], this method doesn't throw if the JSON field has an unexpected type.
+     * Unlike [audienceId], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("request_type")
-    @ExcludeMissing
-    fun _requestType(): JsonField<RequestType> = requestType
+    @JsonProperty("audience_id") @ExcludeMissing fun _audienceId(): JsonField<String> = audienceId
 
     /**
      * Returns the raw JSON value of [triggerType].
@@ -131,13 +125,6 @@ private constructor(
     @ExcludeMissing
     fun _conditions(): JsonField<JourneyConditionsField> = conditions
 
-    /**
-     * Returns the raw JSON value of [eventId].
-     *
-     * Unlike [eventId], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("event_id") @ExcludeMissing fun _eventId(): JsonField<String> = eventId
-
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
@@ -153,11 +140,11 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [JourneySegmentTriggerNode].
+         * Returns a mutable builder for constructing an instance of [JourneyAudienceTriggerNode].
          *
          * The following fields are required:
          * ```java
-         * .requestType()
+         * .audienceId()
          * .triggerType()
          * .type()
          * ```
@@ -165,40 +152,37 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [JourneySegmentTriggerNode]. */
+    /** A builder for [JourneyAudienceTriggerNode]. */
     class Builder internal constructor() {
 
-        private var requestType: JsonField<RequestType>? = null
+        private var audienceId: JsonField<String>? = null
         private var triggerType: JsonField<TriggerType>? = null
         private var type: JsonField<Type>? = null
         private var id: JsonField<String> = JsonMissing.of()
         private var conditions: JsonField<JourneyConditionsField> = JsonMissing.of()
-        private var eventId: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(journeySegmentTriggerNode: JourneySegmentTriggerNode) = apply {
-            requestType = journeySegmentTriggerNode.requestType
-            triggerType = journeySegmentTriggerNode.triggerType
-            type = journeySegmentTriggerNode.type
-            id = journeySegmentTriggerNode.id
-            conditions = journeySegmentTriggerNode.conditions
-            eventId = journeySegmentTriggerNode.eventId
-            additionalProperties = journeySegmentTriggerNode.additionalProperties.toMutableMap()
+        internal fun from(journeyAudienceTriggerNode: JourneyAudienceTriggerNode) = apply {
+            audienceId = journeyAudienceTriggerNode.audienceId
+            triggerType = journeyAudienceTriggerNode.triggerType
+            type = journeyAudienceTriggerNode.type
+            id = journeyAudienceTriggerNode.id
+            conditions = journeyAudienceTriggerNode.conditions
+            additionalProperties = journeyAudienceTriggerNode.additionalProperties.toMutableMap()
         }
 
-        fun requestType(requestType: RequestType) = requestType(JsonField.of(requestType))
+        /** The Audience to watch. Must name a single Audience; wildcards are not supported. */
+        fun audienceId(audienceId: String) = audienceId(JsonField.of(audienceId))
 
         /**
-         * Sets [Builder.requestType] to an arbitrary JSON value.
+         * Sets [Builder.audienceId] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.requestType] with a well-typed [RequestType] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.audienceId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
-        fun requestType(requestType: JsonField<RequestType>) = apply {
-            this.requestType = requestType
-        }
+        fun audienceId(audienceId: JsonField<String>) = apply { this.audienceId = audienceId }
 
         fun triggerType(triggerType: TriggerType) = triggerType(JsonField.of(triggerType))
 
@@ -272,16 +256,6 @@ private constructor(
         fun conditions(conditionNestedGroup: JourneyConditionNestedGroup) =
             conditions(JourneyConditionsField.ofConditionNestedGroup(conditionNestedGroup))
 
-        fun eventId(eventId: String) = eventId(JsonField.of(eventId))
-
-        /**
-         * Sets [Builder.eventId] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.eventId] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun eventId(eventId: JsonField<String>) = apply { this.eventId = eventId }
-
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -302,27 +276,26 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [JourneySegmentTriggerNode].
+         * Returns an immutable instance of [JourneyAudienceTriggerNode].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
          * ```java
-         * .requestType()
+         * .audienceId()
          * .triggerType()
          * .type()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): JourneySegmentTriggerNode =
-            JourneySegmentTriggerNode(
-                checkRequired("requestType", requestType),
+        fun build(): JourneyAudienceTriggerNode =
+            JourneyAudienceTriggerNode(
+                checkRequired("audienceId", audienceId),
                 checkRequired("triggerType", triggerType),
                 checkRequired("type", type),
                 id,
                 conditions,
-                eventId,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -337,17 +310,16 @@ private constructor(
      * @throws CourierInvalidDataException if any value type in this object doesn't match its
      *   expected type.
      */
-    fun validate(): JourneySegmentTriggerNode = apply {
+    fun validate(): JourneyAudienceTriggerNode = apply {
         if (validated) {
             return@apply
         }
 
-        requestType().validate()
+        audienceId()
         triggerType().validate()
         type().validate()
         id()
         conditions().ifPresent { it.validate() }
-        eventId()
         validated = true
     }
 
@@ -366,161 +338,11 @@ private constructor(
      */
     @JvmSynthetic
     internal fun validity(): Int =
-        (requestType.asKnown().getOrNull()?.validity() ?: 0) +
+        (if (audienceId.asKnown().isPresent) 1 else 0) +
             (triggerType.asKnown().getOrNull()?.validity() ?: 0) +
             (type.asKnown().getOrNull()?.validity() ?: 0) +
             (if (id.asKnown().isPresent) 1 else 0) +
-            (conditions.asKnown().getOrNull()?.validity() ?: 0) +
-            (if (eventId.asKnown().isPresent) 1 else 0)
-
-    class RequestType @JsonCreator private constructor(private val value: JsonField<String>) :
-        Enum {
-
-        /**
-         * Returns this class instance's raw value.
-         *
-         * This is usually only useful if this instance was deserialized from data that doesn't
-         * match any known member, and you want to know that value. For example, if the SDK is on an
-         * older version than the API, then the API may respond with new members that the SDK is
-         * unaware of.
-         */
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-        companion object {
-
-            @JvmField val IDENTIFY = of("identify")
-
-            @JvmField val GROUP = of("group")
-
-            @JvmField val TRACK = of("track")
-
-            @JvmField val PAGE = of("page")
-
-            @JvmStatic fun of(value: String) = RequestType(JsonField.of(value))
-        }
-
-        /** An enum containing [RequestType]'s known values. */
-        enum class Known {
-            IDENTIFY,
-            GROUP,
-            TRACK,
-            PAGE,
-        }
-
-        /**
-         * An enum containing [RequestType]'s known values, as well as an [_UNKNOWN] member.
-         *
-         * An instance of [RequestType] can contain an unknown value in a couple of cases:
-         * - It was deserialized from data that doesn't match any known member. For example, if the
-         *   SDK is on an older version than the API, then the API may respond with new members that
-         *   the SDK is unaware of.
-         * - It was constructed with an arbitrary value using the [of] method.
-         */
-        enum class Value {
-            IDENTIFY,
-            GROUP,
-            TRACK,
-            PAGE,
-            /**
-             * An enum member indicating that [RequestType] was instantiated with an unknown value.
-             */
-            _UNKNOWN,
-        }
-
-        /**
-         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
-         * if the class was instantiated with an unknown value.
-         *
-         * Use the [known] method instead if you're certain the value is always known or if you want
-         * to throw for the unknown case.
-         */
-        fun value(): Value =
-            when (this) {
-                IDENTIFY -> Value.IDENTIFY
-                GROUP -> Value.GROUP
-                TRACK -> Value.TRACK
-                PAGE -> Value.PAGE
-                else -> Value._UNKNOWN
-            }
-
-        /**
-         * Returns an enum member corresponding to this class instance's value.
-         *
-         * Use the [value] method instead if you're uncertain the value is always known and don't
-         * want to throw for the unknown case.
-         *
-         * @throws CourierInvalidDataException if this class instance's value is a not a known
-         *   member.
-         */
-        fun known(): Known =
-            when (this) {
-                IDENTIFY -> Known.IDENTIFY
-                GROUP -> Known.GROUP
-                TRACK -> Known.TRACK
-                PAGE -> Known.PAGE
-                else -> throw CourierInvalidDataException("Unknown RequestType: $value")
-            }
-
-        /**
-         * Returns this class instance's primitive wire representation.
-         *
-         * This differs from the [toString] method because that method is primarily for debugging
-         * and generally doesn't throw.
-         *
-         * @throws CourierInvalidDataException if this class instance's value does not have the
-         *   expected primitive type.
-         */
-        fun asString(): String =
-            _value().asString().orElseThrow { CourierInvalidDataException("Value is not a String") }
-
-        private var validated: Boolean = false
-
-        /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
-         *
-         * This method is _not_ forwards compatible with new types from the API for existing fields.
-         *
-         * @throws CourierInvalidDataException if any value type in this object doesn't match its
-         *   expected type.
-         */
-        fun validate(): RequestType = apply {
-            if (validated) {
-                return@apply
-            }
-
-            known()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: CourierInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is RequestType && value == other.value
-        }
-
-        override fun hashCode() = value.hashCode()
-
-        override fun toString() = value.toString()
-    }
+            (conditions.asKnown().getOrNull()?.validity() ?: 0)
 
     class TriggerType @JsonCreator private constructor(private val value: JsonField<String>) :
         Enum {
@@ -537,14 +359,14 @@ private constructor(
 
         companion object {
 
-            @JvmField val SEGMENT = of("segment")
+            @JvmField val AUDIENCE = of("audience")
 
             @JvmStatic fun of(value: String) = TriggerType(JsonField.of(value))
         }
 
         /** An enum containing [TriggerType]'s known values. */
         enum class Known {
-            SEGMENT
+            AUDIENCE
         }
 
         /**
@@ -557,7 +379,7 @@ private constructor(
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
-            SEGMENT,
+            AUDIENCE,
             /**
              * An enum member indicating that [TriggerType] was instantiated with an unknown value.
              */
@@ -573,7 +395,7 @@ private constructor(
          */
         fun value(): Value =
             when (this) {
-                SEGMENT -> Value.SEGMENT
+                AUDIENCE -> Value.AUDIENCE
                 else -> Value._UNKNOWN
             }
 
@@ -588,7 +410,7 @@ private constructor(
          */
         fun known(): Known =
             when (this) {
-                SEGMENT -> Known.SEGMENT
+                AUDIENCE -> Known.AUDIENCE
                 else -> throw CourierInvalidDataException("Unknown TriggerType: $value")
             }
 
@@ -786,22 +608,21 @@ private constructor(
             return true
         }
 
-        return other is JourneySegmentTriggerNode &&
-            requestType == other.requestType &&
+        return other is JourneyAudienceTriggerNode &&
+            audienceId == other.audienceId &&
             triggerType == other.triggerType &&
             type == other.type &&
             id == other.id &&
             conditions == other.conditions &&
-            eventId == other.eventId &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(requestType, triggerType, type, id, conditions, eventId, additionalProperties)
+        Objects.hash(audienceId, triggerType, type, id, conditions, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "JourneySegmentTriggerNode{requestType=$requestType, triggerType=$triggerType, type=$type, id=$id, conditions=$conditions, eventId=$eventId, additionalProperties=$additionalProperties}"
+        "JourneyAudienceTriggerNode{audienceId=$audienceId, triggerType=$triggerType, type=$type, id=$id, conditions=$conditions, additionalProperties=$additionalProperties}"
 }

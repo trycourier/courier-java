@@ -33,6 +33,8 @@ internal class JourneyNodeTest {
 
         assertThat(journeyNode.apiInvokeTrigger()).contains(apiInvokeTrigger)
         assertThat(journeyNode.segmentTrigger()).isEmpty
+        assertThat(journeyNode.audienceTrigger()).isEmpty
+        assertThat(journeyNode.webhookTrigger()).isEmpty
         assertThat(journeyNode.send()).isEmpty
         assertThat(journeyNode.delayDuration()).isEmpty
         assertThat(journeyNode.delayUntil()).isEmpty
@@ -90,6 +92,8 @@ internal class JourneyNodeTest {
 
         assertThat(journeyNode.apiInvokeTrigger()).isEmpty
         assertThat(journeyNode.segmentTrigger()).contains(segmentTrigger)
+        assertThat(journeyNode.audienceTrigger()).isEmpty
+        assertThat(journeyNode.webhookTrigger()).isEmpty
         assertThat(journeyNode.send()).isEmpty
         assertThat(journeyNode.delayDuration()).isEmpty
         assertThat(journeyNode.delayUntil()).isEmpty
@@ -116,6 +120,116 @@ internal class JourneyNodeTest {
                     .id("x")
                     .conditionsOfConditionAtom(listOf("string", "string"))
                     .eventId("x")
+                    .build()
+            )
+
+        val roundtrippedJourneyNode =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(journeyNode),
+                jacksonTypeRef<JourneyNode>(),
+            )
+
+        assertThat(roundtrippedJourneyNode).isEqualTo(journeyNode)
+    }
+
+    @Test
+    fun ofAudienceTrigger() {
+        val audienceTrigger =
+            JourneyAudienceTriggerNode.builder()
+                .audienceId("x")
+                .triggerType(JourneyAudienceTriggerNode.TriggerType.AUDIENCE)
+                .type(JourneyAudienceTriggerNode.Type.TRIGGER)
+                .id("x")
+                .conditionsOfConditionAtom(listOf("string", "string"))
+                .build()
+
+        val journeyNode = JourneyNode.ofAudienceTrigger(audienceTrigger)
+
+        assertThat(journeyNode.apiInvokeTrigger()).isEmpty
+        assertThat(journeyNode.segmentTrigger()).isEmpty
+        assertThat(journeyNode.audienceTrigger()).contains(audienceTrigger)
+        assertThat(journeyNode.webhookTrigger()).isEmpty
+        assertThat(journeyNode.send()).isEmpty
+        assertThat(journeyNode.delayDuration()).isEmpty
+        assertThat(journeyNode.delayUntil()).isEmpty
+        assertThat(journeyNode.fetchGetDelete()).isEmpty
+        assertThat(journeyNode.fetchPostPut()).isEmpty
+        assertThat(journeyNode.ai()).isEmpty
+        assertThat(journeyNode.throttleStatic()).isEmpty
+        assertThat(journeyNode.throttleDynamic()).isEmpty
+        assertThat(journeyNode.batch()).isEmpty
+        assertThat(journeyNode.addToDigest()).isEmpty
+        assertThat(journeyNode.exit()).isEmpty
+        assertThat(journeyNode.branch()).isEmpty
+    }
+
+    @Test
+    fun ofAudienceTriggerRoundtrip() {
+        val jsonMapper = jsonMapper()
+        val journeyNode =
+            JourneyNode.ofAudienceTrigger(
+                JourneyAudienceTriggerNode.builder()
+                    .audienceId("x")
+                    .triggerType(JourneyAudienceTriggerNode.TriggerType.AUDIENCE)
+                    .type(JourneyAudienceTriggerNode.Type.TRIGGER)
+                    .id("x")
+                    .conditionsOfConditionAtom(listOf("string", "string"))
+                    .build()
+            )
+
+        val roundtrippedJourneyNode =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(journeyNode),
+                jacksonTypeRef<JourneyNode>(),
+            )
+
+        assertThat(roundtrippedJourneyNode).isEqualTo(journeyNode)
+    }
+
+    @Test
+    fun ofWebhookTrigger() {
+        val webhookTrigger =
+            JourneyWebhookTriggerNode.builder()
+                .eventSource("event_source")
+                .triggerType(JourneyWebhookTriggerNode.TriggerType.WEBHOOK)
+                .type(JourneyWebhookTriggerNode.Type.TRIGGER)
+                .id("x")
+                .conditionsOfConditionAtom(listOf("string", "string"))
+                .eventId("event_id")
+                .build()
+
+        val journeyNode = JourneyNode.ofWebhookTrigger(webhookTrigger)
+
+        assertThat(journeyNode.apiInvokeTrigger()).isEmpty
+        assertThat(journeyNode.segmentTrigger()).isEmpty
+        assertThat(journeyNode.audienceTrigger()).isEmpty
+        assertThat(journeyNode.webhookTrigger()).contains(webhookTrigger)
+        assertThat(journeyNode.send()).isEmpty
+        assertThat(journeyNode.delayDuration()).isEmpty
+        assertThat(journeyNode.delayUntil()).isEmpty
+        assertThat(journeyNode.fetchGetDelete()).isEmpty
+        assertThat(journeyNode.fetchPostPut()).isEmpty
+        assertThat(journeyNode.ai()).isEmpty
+        assertThat(journeyNode.throttleStatic()).isEmpty
+        assertThat(journeyNode.throttleDynamic()).isEmpty
+        assertThat(journeyNode.batch()).isEmpty
+        assertThat(journeyNode.addToDigest()).isEmpty
+        assertThat(journeyNode.exit()).isEmpty
+        assertThat(journeyNode.branch()).isEmpty
+    }
+
+    @Test
+    fun ofWebhookTriggerRoundtrip() {
+        val jsonMapper = jsonMapper()
+        val journeyNode =
+            JourneyNode.ofWebhookTrigger(
+                JourneyWebhookTriggerNode.builder()
+                    .eventSource("event_source")
+                    .triggerType(JourneyWebhookTriggerNode.TriggerType.WEBHOOK)
+                    .type(JourneyWebhookTriggerNode.Type.TRIGGER)
+                    .id("x")
+                    .conditionsOfConditionAtom(listOf("string", "string"))
+                    .eventId("event_id")
                     .build()
             )
 
@@ -185,6 +299,8 @@ internal class JourneyNodeTest {
 
         assertThat(journeyNode.apiInvokeTrigger()).isEmpty
         assertThat(journeyNode.segmentTrigger()).isEmpty
+        assertThat(journeyNode.audienceTrigger()).isEmpty
+        assertThat(journeyNode.webhookTrigger()).isEmpty
         assertThat(journeyNode.send()).contains(send)
         assertThat(journeyNode.delayDuration()).isEmpty
         assertThat(journeyNode.delayUntil()).isEmpty
@@ -284,6 +400,8 @@ internal class JourneyNodeTest {
 
         assertThat(journeyNode.apiInvokeTrigger()).isEmpty
         assertThat(journeyNode.segmentTrigger()).isEmpty
+        assertThat(journeyNode.audienceTrigger()).isEmpty
+        assertThat(journeyNode.webhookTrigger()).isEmpty
         assertThat(journeyNode.send()).isEmpty
         assertThat(journeyNode.delayDuration()).contains(delayDuration)
         assertThat(journeyNode.delayUntil()).isEmpty
@@ -336,6 +454,8 @@ internal class JourneyNodeTest {
 
         assertThat(journeyNode.apiInvokeTrigger()).isEmpty
         assertThat(journeyNode.segmentTrigger()).isEmpty
+        assertThat(journeyNode.audienceTrigger()).isEmpty
+        assertThat(journeyNode.webhookTrigger()).isEmpty
         assertThat(journeyNode.send()).isEmpty
         assertThat(journeyNode.delayDuration()).isEmpty
         assertThat(journeyNode.delayUntil()).contains(delayUntil)
@@ -404,6 +524,8 @@ internal class JourneyNodeTest {
 
         assertThat(journeyNode.apiInvokeTrigger()).isEmpty
         assertThat(journeyNode.segmentTrigger()).isEmpty
+        assertThat(journeyNode.audienceTrigger()).isEmpty
+        assertThat(journeyNode.webhookTrigger()).isEmpty
         assertThat(journeyNode.send()).isEmpty
         assertThat(journeyNode.delayDuration()).isEmpty
         assertThat(journeyNode.delayUntil()).isEmpty
@@ -489,6 +611,8 @@ internal class JourneyNodeTest {
 
         assertThat(journeyNode.apiInvokeTrigger()).isEmpty
         assertThat(journeyNode.segmentTrigger()).isEmpty
+        assertThat(journeyNode.audienceTrigger()).isEmpty
+        assertThat(journeyNode.webhookTrigger()).isEmpty
         assertThat(journeyNode.send()).isEmpty
         assertThat(journeyNode.delayDuration()).isEmpty
         assertThat(journeyNode.delayUntil()).isEmpty
@@ -564,6 +688,8 @@ internal class JourneyNodeTest {
 
         assertThat(journeyNode.apiInvokeTrigger()).isEmpty
         assertThat(journeyNode.segmentTrigger()).isEmpty
+        assertThat(journeyNode.audienceTrigger()).isEmpty
+        assertThat(journeyNode.webhookTrigger()).isEmpty
         assertThat(journeyNode.send()).isEmpty
         assertThat(journeyNode.delayDuration()).isEmpty
         assertThat(journeyNode.delayUntil()).isEmpty
@@ -623,6 +749,8 @@ internal class JourneyNodeTest {
 
         assertThat(journeyNode.apiInvokeTrigger()).isEmpty
         assertThat(journeyNode.segmentTrigger()).isEmpty
+        assertThat(journeyNode.audienceTrigger()).isEmpty
+        assertThat(journeyNode.webhookTrigger()).isEmpty
         assertThat(journeyNode.send()).isEmpty
         assertThat(journeyNode.delayDuration()).isEmpty
         assertThat(journeyNode.delayUntil()).isEmpty
@@ -678,6 +806,8 @@ internal class JourneyNodeTest {
 
         assertThat(journeyNode.apiInvokeTrigger()).isEmpty
         assertThat(journeyNode.segmentTrigger()).isEmpty
+        assertThat(journeyNode.audienceTrigger()).isEmpty
+        assertThat(journeyNode.webhookTrigger()).isEmpty
         assertThat(journeyNode.send()).isEmpty
         assertThat(journeyNode.delayDuration()).isEmpty
         assertThat(journeyNode.delayUntil()).isEmpty
@@ -742,6 +872,8 @@ internal class JourneyNodeTest {
 
         assertThat(journeyNode.apiInvokeTrigger()).isEmpty
         assertThat(journeyNode.segmentTrigger()).isEmpty
+        assertThat(journeyNode.audienceTrigger()).isEmpty
+        assertThat(journeyNode.webhookTrigger()).isEmpty
         assertThat(journeyNode.send()).isEmpty
         assertThat(journeyNode.delayDuration()).isEmpty
         assertThat(journeyNode.delayUntil()).isEmpty
@@ -803,6 +935,8 @@ internal class JourneyNodeTest {
 
         assertThat(journeyNode.apiInvokeTrigger()).isEmpty
         assertThat(journeyNode.segmentTrigger()).isEmpty
+        assertThat(journeyNode.audienceTrigger()).isEmpty
+        assertThat(journeyNode.webhookTrigger()).isEmpty
         assertThat(journeyNode.send()).isEmpty
         assertThat(journeyNode.delayDuration()).isEmpty
         assertThat(journeyNode.delayUntil()).isEmpty
@@ -847,6 +981,8 @@ internal class JourneyNodeTest {
 
         assertThat(journeyNode.apiInvokeTrigger()).isEmpty
         assertThat(journeyNode.segmentTrigger()).isEmpty
+        assertThat(journeyNode.audienceTrigger()).isEmpty
+        assertThat(journeyNode.webhookTrigger()).isEmpty
         assertThat(journeyNode.send()).isEmpty
         assertThat(journeyNode.delayDuration()).isEmpty
         assertThat(journeyNode.delayUntil()).isEmpty
@@ -915,6 +1051,8 @@ internal class JourneyNodeTest {
 
         assertThat(journeyNode.apiInvokeTrigger()).isEmpty
         assertThat(journeyNode.segmentTrigger()).isEmpty
+        assertThat(journeyNode.audienceTrigger()).isEmpty
+        assertThat(journeyNode.webhookTrigger()).isEmpty
         assertThat(journeyNode.send()).isEmpty
         assertThat(journeyNode.delayDuration()).isEmpty
         assertThat(journeyNode.delayUntil()).isEmpty

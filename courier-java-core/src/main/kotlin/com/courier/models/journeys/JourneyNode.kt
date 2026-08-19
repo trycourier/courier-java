@@ -42,6 +42,8 @@ class JourneyNode
 private constructor(
     private val apiInvokeTrigger: JourneyApiInvokeTriggerNode? = null,
     private val segmentTrigger: JourneySegmentTriggerNode? = null,
+    private val audienceTrigger: JourneyAudienceTriggerNode? = null,
+    private val webhookTrigger: JourneyWebhookTriggerNode? = null,
     private val send: JourneySendNode? = null,
     private val delayDuration: JourneyDelayDurationNode? = null,
     private val delayUntil: JourneyDelayUntilNode? = null,
@@ -64,8 +66,29 @@ private constructor(
     fun apiInvokeTrigger(): Optional<JourneyApiInvokeTriggerNode> =
         Optional.ofNullable(apiInvokeTrigger)
 
-    /** Trigger fired by a segment event (`identify`, `group`, or `track`). */
+    /**
+     * Trigger fired by a segment event (`identify`, `group`, `track`, or `page`). A trigger with no
+     * `event_id` fires on any event of its type — the only shape `identify` and `group` can take,
+     * and the one that catches a stock `analytics.page()` call.
+     */
     fun segmentTrigger(): Optional<JourneySegmentTriggerNode> = Optional.ofNullable(segmentTrigger)
+
+    /**
+     * Trigger fired when a user newly matches an Audience. Leaving and re-joining the Audience
+     * re-enters the Journey. Membership is new-members-only: users already in the Audience when the
+     * Journey is published do not enter. Unlike the v2 Automations audience trigger, there is no
+     * member scope, event type, or frequency mode to configure, and `audience_id` must name one
+     * Audience — wildcards are not supported.
+     */
+    fun audienceTrigger(): Optional<JourneyAudienceTriggerNode> =
+        Optional.ofNullable(audienceTrigger)
+
+    /**
+     * Trigger fired when an external system POSTs to the webhook URL minted for `event_source`.
+     * Narrow it to one event with `event_id`, or omit `event_id` to accept every event delivered to
+     * the URL.
+     */
+    fun webhookTrigger(): Optional<JourneyWebhookTriggerNode> = Optional.ofNullable(webhookTrigger)
 
     /**
      * Send to the recipient. A send node sources its content from EXACTLY ONE of `message.template`
@@ -139,6 +162,10 @@ private constructor(
 
     fun isSegmentTrigger(): Boolean = segmentTrigger != null
 
+    fun isAudienceTrigger(): Boolean = audienceTrigger != null
+
+    fun isWebhookTrigger(): Boolean = webhookTrigger != null
+
     fun isSend(): Boolean = send != null
 
     fun isDelayDuration(): Boolean = delayDuration != null
@@ -170,8 +197,29 @@ private constructor(
     fun asApiInvokeTrigger(): JourneyApiInvokeTriggerNode =
         apiInvokeTrigger.getOrThrow("apiInvokeTrigger")
 
-    /** Trigger fired by a segment event (`identify`, `group`, or `track`). */
+    /**
+     * Trigger fired by a segment event (`identify`, `group`, `track`, or `page`). A trigger with no
+     * `event_id` fires on any event of its type — the only shape `identify` and `group` can take,
+     * and the one that catches a stock `analytics.page()` call.
+     */
     fun asSegmentTrigger(): JourneySegmentTriggerNode = segmentTrigger.getOrThrow("segmentTrigger")
+
+    /**
+     * Trigger fired when a user newly matches an Audience. Leaving and re-joining the Audience
+     * re-enters the Journey. Membership is new-members-only: users already in the Audience when the
+     * Journey is published do not enter. Unlike the v2 Automations audience trigger, there is no
+     * member scope, event type, or frequency mode to configure, and `audience_id` must name one
+     * Audience — wildcards are not supported.
+     */
+    fun asAudienceTrigger(): JourneyAudienceTriggerNode =
+        audienceTrigger.getOrThrow("audienceTrigger")
+
+    /**
+     * Trigger fired when an external system POSTs to the webhook URL minted for `event_source`.
+     * Narrow it to one event with `event_id`, or omit `event_id` to accept every event delivered to
+     * the URL.
+     */
+    fun asWebhookTrigger(): JourneyWebhookTriggerNode = webhookTrigger.getOrThrow("webhookTrigger")
 
     /**
      * Send to the recipient. A send node sources its content from EXACTLY ONE of `message.template`
@@ -276,6 +324,8 @@ private constructor(
         when {
             apiInvokeTrigger != null -> visitor.visitApiInvokeTrigger(apiInvokeTrigger)
             segmentTrigger != null -> visitor.visitSegmentTrigger(segmentTrigger)
+            audienceTrigger != null -> visitor.visitAudienceTrigger(audienceTrigger)
+            webhookTrigger != null -> visitor.visitWebhookTrigger(webhookTrigger)
             send != null -> visitor.visitSend(send)
             delayDuration != null -> visitor.visitDelayDuration(delayDuration)
             delayUntil != null -> visitor.visitDelayUntil(delayUntil)
@@ -314,6 +364,14 @@ private constructor(
 
                 override fun visitSegmentTrigger(segmentTrigger: JourneySegmentTriggerNode) {
                     segmentTrigger.validate()
+                }
+
+                override fun visitAudienceTrigger(audienceTrigger: JourneyAudienceTriggerNode) {
+                    audienceTrigger.validate()
+                }
+
+                override fun visitWebhookTrigger(webhookTrigger: JourneyWebhookTriggerNode) {
+                    webhookTrigger.validate()
                 }
 
                 override fun visitSend(send: JourneySendNode) {
@@ -391,6 +449,12 @@ private constructor(
                 override fun visitSegmentTrigger(segmentTrigger: JourneySegmentTriggerNode) =
                     segmentTrigger.validity()
 
+                override fun visitAudienceTrigger(audienceTrigger: JourneyAudienceTriggerNode) =
+                    audienceTrigger.validity()
+
+                override fun visitWebhookTrigger(webhookTrigger: JourneyWebhookTriggerNode) =
+                    webhookTrigger.validity()
+
                 override fun visitSend(send: JourneySendNode) = send.validity()
 
                 override fun visitDelayDuration(delayDuration: JourneyDelayDurationNode) =
@@ -434,6 +498,8 @@ private constructor(
         return other is JourneyNode &&
             apiInvokeTrigger == other.apiInvokeTrigger &&
             segmentTrigger == other.segmentTrigger &&
+            audienceTrigger == other.audienceTrigger &&
+            webhookTrigger == other.webhookTrigger &&
             send == other.send &&
             delayDuration == other.delayDuration &&
             delayUntil == other.delayUntil &&
@@ -452,6 +518,8 @@ private constructor(
         Objects.hash(
             apiInvokeTrigger,
             segmentTrigger,
+            audienceTrigger,
+            webhookTrigger,
             send,
             delayDuration,
             delayUntil,
@@ -470,6 +538,8 @@ private constructor(
         when {
             apiInvokeTrigger != null -> "JourneyNode{apiInvokeTrigger=$apiInvokeTrigger}"
             segmentTrigger != null -> "JourneyNode{segmentTrigger=$segmentTrigger}"
+            audienceTrigger != null -> "JourneyNode{audienceTrigger=$audienceTrigger}"
+            webhookTrigger != null -> "JourneyNode{webhookTrigger=$webhookTrigger}"
             send != null -> "JourneyNode{send=$send}"
             delayDuration != null -> "JourneyNode{delayDuration=$delayDuration}"
             delayUntil != null -> "JourneyNode{delayUntil=$delayUntil}"
@@ -496,10 +566,34 @@ private constructor(
         fun ofApiInvokeTrigger(apiInvokeTrigger: JourneyApiInvokeTriggerNode) =
             JourneyNode(apiInvokeTrigger = apiInvokeTrigger)
 
-        /** Trigger fired by a segment event (`identify`, `group`, or `track`). */
+        /**
+         * Trigger fired by a segment event (`identify`, `group`, `track`, or `page`). A trigger
+         * with no `event_id` fires on any event of its type — the only shape `identify` and `group`
+         * can take, and the one that catches a stock `analytics.page()` call.
+         */
         @JvmStatic
         fun ofSegmentTrigger(segmentTrigger: JourneySegmentTriggerNode) =
             JourneyNode(segmentTrigger = segmentTrigger)
+
+        /**
+         * Trigger fired when a user newly matches an Audience. Leaving and re-joining the Audience
+         * re-enters the Journey. Membership is new-members-only: users already in the Audience when
+         * the Journey is published do not enter. Unlike the v2 Automations audience trigger, there
+         * is no member scope, event type, or frequency mode to configure, and `audience_id` must
+         * name one Audience — wildcards are not supported.
+         */
+        @JvmStatic
+        fun ofAudienceTrigger(audienceTrigger: JourneyAudienceTriggerNode) =
+            JourneyNode(audienceTrigger = audienceTrigger)
+
+        /**
+         * Trigger fired when an external system POSTs to the webhook URL minted for `event_source`.
+         * Narrow it to one event with `event_id`, or omit `event_id` to accept every event
+         * delivered to the URL.
+         */
+        @JvmStatic
+        fun ofWebhookTrigger(webhookTrigger: JourneyWebhookTriggerNode) =
+            JourneyNode(webhookTrigger = webhookTrigger)
 
         /**
          * Send to the recipient. A send node sources its content from EXACTLY ONE of
@@ -593,8 +687,28 @@ private constructor(
          */
         fun visitApiInvokeTrigger(apiInvokeTrigger: JourneyApiInvokeTriggerNode): T
 
-        /** Trigger fired by a segment event (`identify`, `group`, or `track`). */
+        /**
+         * Trigger fired by a segment event (`identify`, `group`, `track`, or `page`). A trigger
+         * with no `event_id` fires on any event of its type — the only shape `identify` and `group`
+         * can take, and the one that catches a stock `analytics.page()` call.
+         */
         fun visitSegmentTrigger(segmentTrigger: JourneySegmentTriggerNode): T
+
+        /**
+         * Trigger fired when a user newly matches an Audience. Leaving and re-joining the Audience
+         * re-enters the Journey. Membership is new-members-only: users already in the Audience when
+         * the Journey is published do not enter. Unlike the v2 Automations audience trigger, there
+         * is no member scope, event type, or frequency mode to configure, and `audience_id` must
+         * name one Audience — wildcards are not supported.
+         */
+        fun visitAudienceTrigger(audienceTrigger: JourneyAudienceTriggerNode): T
+
+        /**
+         * Trigger fired when an external system POSTs to the webhook URL minted for `event_source`.
+         * Narrow it to one event with `event_id`, or omit `event_id` to accept every event
+         * delivered to the URL.
+         */
+        fun visitWebhookTrigger(webhookTrigger: JourneyWebhookTriggerNode): T
 
         /**
          * Send to the recipient. A send node sources its content from EXACTLY ONE of
@@ -690,6 +804,12 @@ private constructor(
                         tryDeserialize(node, jacksonTypeRef<JourneySegmentTriggerNode>())?.let {
                             JourneyNode(segmentTrigger = it, _json = json)
                         },
+                        tryDeserialize(node, jacksonTypeRef<JourneyAudienceTriggerNode>())?.let {
+                            JourneyNode(audienceTrigger = it, _json = json)
+                        },
+                        tryDeserialize(node, jacksonTypeRef<JourneyWebhookTriggerNode>())?.let {
+                            JourneyNode(webhookTrigger = it, _json = json)
+                        },
                         tryDeserialize(node, jacksonTypeRef<JourneySendNode>())?.let {
                             JourneyNode(send = it, _json = json)
                         },
@@ -752,6 +872,8 @@ private constructor(
             when {
                 value.apiInvokeTrigger != null -> generator.writeObject(value.apiInvokeTrigger)
                 value.segmentTrigger != null -> generator.writeObject(value.segmentTrigger)
+                value.audienceTrigger != null -> generator.writeObject(value.audienceTrigger)
+                value.webhookTrigger != null -> generator.writeObject(value.webhookTrigger)
                 value.send != null -> generator.writeObject(value.send)
                 value.delayDuration != null -> generator.writeObject(value.delayDuration)
                 value.delayUntil != null -> generator.writeObject(value.delayUntil)
@@ -2824,6 +2946,19 @@ private constructor(
                 fun addNode(segmentTrigger: JourneySegmentTriggerNode) =
                     addNode(JourneyNode.ofSegmentTrigger(segmentTrigger))
 
+                /**
+                 * Alias for calling [addNode] with
+                 * `JourneyNode.ofAudienceTrigger(audienceTrigger)`.
+                 */
+                fun addNode(audienceTrigger: JourneyAudienceTriggerNode) =
+                    addNode(JourneyNode.ofAudienceTrigger(audienceTrigger))
+
+                /**
+                 * Alias for calling [addNode] with `JourneyNode.ofWebhookTrigger(webhookTrigger)`.
+                 */
+                fun addNode(webhookTrigger: JourneyWebhookTriggerNode) =
+                    addNode(JourneyNode.ofWebhookTrigger(webhookTrigger))
+
                 /** Alias for calling [addNode] with `JourneyNode.ofSend(send)`. */
                 fun addNode(send: JourneySendNode) = addNode(JourneyNode.ofSend(send))
 
@@ -3178,6 +3313,19 @@ private constructor(
                  */
                 fun addNode(segmentTrigger: JourneySegmentTriggerNode) =
                     addNode(JourneyNode.ofSegmentTrigger(segmentTrigger))
+
+                /**
+                 * Alias for calling [addNode] with
+                 * `JourneyNode.ofAudienceTrigger(audienceTrigger)`.
+                 */
+                fun addNode(audienceTrigger: JourneyAudienceTriggerNode) =
+                    addNode(JourneyNode.ofAudienceTrigger(audienceTrigger))
+
+                /**
+                 * Alias for calling [addNode] with `JourneyNode.ofWebhookTrigger(webhookTrigger)`.
+                 */
+                fun addNode(webhookTrigger: JourneyWebhookTriggerNode) =
+                    addNode(JourneyNode.ofWebhookTrigger(webhookTrigger))
 
                 /** Alias for calling [addNode] with `JourneyNode.ofSend(send)`. */
                 fun addNode(send: JourneySendNode) = addNode(JourneyNode.ofSend(send))

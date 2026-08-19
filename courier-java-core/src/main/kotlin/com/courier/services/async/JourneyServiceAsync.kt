@@ -22,6 +22,7 @@ import com.courier.models.journeys.JourneyRetrieveParams
 import com.courier.models.journeys.JourneyVersionsListResponse
 import com.courier.models.journeys.JourneysInvokeResponse
 import com.courier.models.journeys.JourneysListResponse
+import com.courier.services.async.journeys.RunServiceAsync
 import com.courier.services.async.journeys.TemplateServiceAsync
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
@@ -49,6 +50,12 @@ interface JourneyServiceAsync {
      * templates scoped to them.
      */
     fun templates(): TemplateServiceAsync
+
+    /**
+     * Build, version, publish, invoke, and cancel multi-step notification workflows, along with the
+     * templates scoped to them.
+     */
+    fun runs(): RunServiceAsync
 
     /**
      * Creates a journey from a set of nodes, in draft state unless you pass a published state. Send
@@ -374,6 +381,12 @@ interface JourneyServiceAsync {
          * the templates scoped to them.
          */
         fun templates(): TemplateServiceAsync.WithRawResponse
+
+        /**
+         * Build, version, publish, invoke, and cancel multi-step notification workflows, along with
+         * the templates scoped to them.
+         */
+        fun runs(): RunServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /journeys`, but is otherwise the same as
