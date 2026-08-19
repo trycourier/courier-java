@@ -1,5 +1,13 @@
 # Changelog
 
+## [6.1.0](https://github.com/trycourier/courier-java/compare/v6.0.0...v6.1.0) (2026-08-19)
+
+
+### Features
+
+* **api:** add automation and journey run log endpoints ([#142](https://github.com/trycourier/courier-java/issues/142)) ([4472e82](https://github.com/trycourier/courier-java/commit/4472e826cf2bb1c7cd52d0bd89933cbaa5e150f3))
+* **api:** document section_id and section_name on a user's topic preference ([#140](https://github.com/trycourier/courier-java/issues/140)) ([c19a905](https://github.com/trycourier/courier-java/commit/c19a905638da5fe8077849efc857b6c08a3f8df2))
+
 ## [6.0.0](https://github.com/trycourier/courier-java/compare/v5.0.0...v6.0.0) (2026-08-17)
 
 
