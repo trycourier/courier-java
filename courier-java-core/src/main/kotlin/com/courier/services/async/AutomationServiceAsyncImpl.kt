@@ -18,6 +18,8 @@ import com.courier.models.automations.AutomationListParams
 import com.courier.models.automations.AutomationTemplateListResponse
 import com.courier.services.async.automations.InvokeServiceAsync
 import com.courier.services.async.automations.InvokeServiceAsyncImpl
+import com.courier.services.async.automations.RunServiceAsync
+import com.courier.services.async.automations.RunServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
@@ -31,6 +33,8 @@ class AutomationServiceAsyncImpl internal constructor(private val clientOptions:
 
     private val invoke: InvokeServiceAsync by lazy { InvokeServiceAsyncImpl(clientOptions) }
 
+    private val runs: RunServiceAsync by lazy { RunServiceAsyncImpl(clientOptions) }
+
     override fun withRawResponse(): AutomationServiceAsync.WithRawResponse = withRawResponse
 
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): AutomationServiceAsync =
@@ -38,6 +42,9 @@ class AutomationServiceAsyncImpl internal constructor(private val clientOptions:
 
     /** Invoke a stored automation template or an ad hoc automation defined in the request. */
     override fun invoke(): InvokeServiceAsync = invoke
+
+    /** Invoke a stored automation template or an ad hoc automation defined in the request. */
+    override fun runs(): RunServiceAsync = runs
 
     override fun list(
         params: AutomationListParams,
@@ -56,6 +63,10 @@ class AutomationServiceAsyncImpl internal constructor(private val clientOptions:
             InvokeServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val runs: RunServiceAsync.WithRawResponse by lazy {
+            RunServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun withOptions(
             modifier: Consumer<ClientOptions.Builder>
         ): AutomationServiceAsync.WithRawResponse =
@@ -65,6 +76,9 @@ class AutomationServiceAsyncImpl internal constructor(private val clientOptions:
 
         /** Invoke a stored automation template or an ad hoc automation defined in the request. */
         override fun invoke(): InvokeServiceAsync.WithRawResponse = invoke
+
+        /** Invoke a stored automation template or an ad hoc automation defined in the request. */
+        override fun runs(): RunServiceAsync.WithRawResponse = runs
 
         private val listHandler: Handler<AutomationTemplateListResponse> =
             jsonHandler<AutomationTemplateListResponse>(clientOptions.jsonMapper)

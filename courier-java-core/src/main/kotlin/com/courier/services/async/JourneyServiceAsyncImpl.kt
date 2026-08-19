@@ -31,6 +31,8 @@ import com.courier.models.journeys.JourneyRetrieveParams
 import com.courier.models.journeys.JourneyVersionsListResponse
 import com.courier.models.journeys.JourneysInvokeResponse
 import com.courier.models.journeys.JourneysListResponse
+import com.courier.services.async.journeys.RunServiceAsync
+import com.courier.services.async.journeys.RunServiceAsyncImpl
 import com.courier.services.async.journeys.TemplateServiceAsync
 import com.courier.services.async.journeys.TemplateServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
@@ -50,6 +52,8 @@ class JourneyServiceAsyncImpl internal constructor(private val clientOptions: Cl
 
     private val templates: TemplateServiceAsync by lazy { TemplateServiceAsyncImpl(clientOptions) }
 
+    private val runs: RunServiceAsync by lazy { RunServiceAsyncImpl(clientOptions) }
+
     override fun withRawResponse(): JourneyServiceAsync.WithRawResponse = withRawResponse
 
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): JourneyServiceAsync =
@@ -60,6 +64,12 @@ class JourneyServiceAsyncImpl internal constructor(private val clientOptions: Cl
      * templates scoped to them.
      */
     override fun templates(): TemplateServiceAsync = templates
+
+    /**
+     * Build, version, publish, invoke, and cancel multi-step notification workflows, along with the
+     * templates scoped to them.
+     */
+    override fun runs(): RunServiceAsync = runs
 
     override fun create(
         params: JourneyCreateParams,
@@ -134,6 +144,10 @@ class JourneyServiceAsyncImpl internal constructor(private val clientOptions: Cl
             TemplateServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val runs: RunServiceAsync.WithRawResponse by lazy {
+            RunServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun withOptions(
             modifier: Consumer<ClientOptions.Builder>
         ): JourneyServiceAsync.WithRawResponse =
@@ -146,6 +160,12 @@ class JourneyServiceAsyncImpl internal constructor(private val clientOptions: Cl
          * the templates scoped to them.
          */
         override fun templates(): TemplateServiceAsync.WithRawResponse = templates
+
+        /**
+         * Build, version, publish, invoke, and cancel multi-step notification workflows, along with
+         * the templates scoped to them.
+         */
+        override fun runs(): RunServiceAsync.WithRawResponse = runs
 
         private val createHandler: Handler<JourneyResponse> =
             jsonHandler<JourneyResponse>(clientOptions.jsonMapper)

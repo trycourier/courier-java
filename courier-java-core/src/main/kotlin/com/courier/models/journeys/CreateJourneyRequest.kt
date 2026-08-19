@@ -179,6 +179,14 @@ private constructor(
         fun addNode(segmentTrigger: JourneySegmentTriggerNode) =
             addNode(JourneyNode.ofSegmentTrigger(segmentTrigger))
 
+        /** Alias for calling [addNode] with `JourneyNode.ofAudienceTrigger(audienceTrigger)`. */
+        fun addNode(audienceTrigger: JourneyAudienceTriggerNode) =
+            addNode(JourneyNode.ofAudienceTrigger(audienceTrigger))
+
+        /** Alias for calling [addNode] with `JourneyNode.ofWebhookTrigger(webhookTrigger)`. */
+        fun addNode(webhookTrigger: JourneyWebhookTriggerNode) =
+            addNode(JourneyNode.ofWebhookTrigger(webhookTrigger))
+
         /** Alias for calling [addNode] with `JourneyNode.ofSend(send)`. */
         fun addNode(send: JourneySendNode) = addNode(JourneyNode.ofSend(send))
 

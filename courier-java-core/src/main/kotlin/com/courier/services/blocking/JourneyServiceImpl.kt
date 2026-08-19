@@ -31,6 +31,8 @@ import com.courier.models.journeys.JourneyRetrieveParams
 import com.courier.models.journeys.JourneyVersionsListResponse
 import com.courier.models.journeys.JourneysInvokeResponse
 import com.courier.models.journeys.JourneysListResponse
+import com.courier.services.blocking.journeys.RunService
+import com.courier.services.blocking.journeys.RunServiceImpl
 import com.courier.services.blocking.journeys.TemplateService
 import com.courier.services.blocking.journeys.TemplateServiceImpl
 import java.util.function.Consumer
@@ -49,6 +51,8 @@ class JourneyServiceImpl internal constructor(private val clientOptions: ClientO
 
     private val templates: TemplateService by lazy { TemplateServiceImpl(clientOptions) }
 
+    private val runs: RunService by lazy { RunServiceImpl(clientOptions) }
+
     override fun withRawResponse(): JourneyService.WithRawResponse = withRawResponse
 
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): JourneyService =
@@ -59,6 +63,12 @@ class JourneyServiceImpl internal constructor(private val clientOptions: ClientO
      * templates scoped to them.
      */
     override fun templates(): TemplateService = templates
+
+    /**
+     * Build, version, publish, invoke, and cancel multi-step notification workflows, along with the
+     * templates scoped to them.
+     */
+    override fun runs(): RunService = runs
 
     override fun create(
         params: JourneyCreateParams,
@@ -131,6 +141,10 @@ class JourneyServiceImpl internal constructor(private val clientOptions: ClientO
             TemplateServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val runs: RunService.WithRawResponse by lazy {
+            RunServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun withOptions(
             modifier: Consumer<ClientOptions.Builder>
         ): JourneyService.WithRawResponse =
@@ -143,6 +157,12 @@ class JourneyServiceImpl internal constructor(private val clientOptions: ClientO
          * the templates scoped to them.
          */
         override fun templates(): TemplateService.WithRawResponse = templates
+
+        /**
+         * Build, version, publish, invoke, and cancel multi-step notification workflows, along with
+         * the templates scoped to them.
+         */
+        override fun runs(): RunService.WithRawResponse = runs
 
         private val createHandler: Handler<JourneyResponse> =
             jsonHandler<JourneyResponse>(clientOptions.jsonMapper)

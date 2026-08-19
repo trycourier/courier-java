@@ -8,6 +8,7 @@ import com.courier.core.http.HttpResponseFor
 import com.courier.models.automations.AutomationListParams
 import com.courier.models.automations.AutomationTemplateListResponse
 import com.courier.services.async.automations.InvokeServiceAsync
+import com.courier.services.async.automations.RunServiceAsync
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
@@ -28,6 +29,9 @@ interface AutomationServiceAsync {
 
     /** Invoke a stored automation template or an ad hoc automation defined in the request. */
     fun invoke(): InvokeServiceAsync
+
+    /** Invoke a stored automation template or an ad hoc automation defined in the request. */
+    fun runs(): RunServiceAsync
 
     /**
      * Lists the workspace's saved automation templates, each with its id and a cursor for paging to
@@ -68,6 +72,9 @@ interface AutomationServiceAsync {
 
         /** Invoke a stored automation template or an ad hoc automation defined in the request. */
         fun invoke(): InvokeServiceAsync.WithRawResponse
+
+        /** Invoke a stored automation template or an ad hoc automation defined in the request. */
+        fun runs(): RunServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `get /automations`, but is otherwise the same as
