@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.2.0](https://github.com/trycourier/courier-java/compare/v6.1.0...v6.2.0) (2026-08-26)
+
+
+### Features
+
+* **api:** document the template send metrics endpoint ([#143](https://github.com/trycourier/courier-java/issues/143)) ([fb952c1](https://github.com/trycourier/courier-java/commit/fb952c1f889bec09b15be0f1ff73c10149b52b8c))
+
 ## [6.1.0](https://github.com/trycourier/courier-java/compare/v6.0.0...v6.1.0) (2026-08-19)
 
 
