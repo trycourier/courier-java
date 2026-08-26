@@ -20,9 +20,11 @@ import com.courier.core.prepareAsync
 import com.courier.models.notifications.NotificationArchiveParams
 import com.courier.models.notifications.NotificationContentMutationResponse
 import com.courier.models.notifications.NotificationCreateParams
+import com.courier.models.notifications.NotificationGetMetricsParams
 import com.courier.models.notifications.NotificationListParams
 import com.courier.models.notifications.NotificationListResponse
 import com.courier.models.notifications.NotificationListVersionsParams
+import com.courier.models.notifications.NotificationMetricsResponse
 import com.courier.models.notifications.NotificationPublishParams
 import com.courier.models.notifications.NotificationPutContentParams
 import com.courier.models.notifications.NotificationPutElementParams
@@ -84,6 +86,13 @@ class NotificationServiceAsyncImpl internal constructor(private val clientOption
     ): CompletableFuture<Void?> =
         // delete /notifications/{id}
         withRawResponse().archive(params, requestOptions).thenAccept {}
+
+    override fun getMetrics(
+        params: NotificationGetMetricsParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<NotificationMetricsResponse> =
+        // get /notifications/{id}/metrics
+        withRawResponse().getMetrics(params, requestOptions).thenApply { it.parse() }
 
     override fun listVersions(
         params: NotificationListVersionsParams,
@@ -273,6 +282,39 @@ class NotificationServiceAsyncImpl internal constructor(private val clientOption
                 .thenApply { response ->
                     errorHandler.handle(response).parseable {
                         response.use { archiveHandler.handle(it) }
+                    }
+                }
+        }
+
+        private val getMetricsHandler: Handler<NotificationMetricsResponse> =
+            jsonHandler<NotificationMetricsResponse>(clientOptions.jsonMapper)
+
+        override fun getMetrics(
+            params: NotificationGetMetricsParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<NotificationMetricsResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("notifications", params._pathParam(0), "metrics")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { getMetricsHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
                     }
                 }
         }

@@ -9,9 +9,11 @@ import com.courier.core.http.HttpResponseFor
 import com.courier.models.notifications.NotificationArchiveParams
 import com.courier.models.notifications.NotificationContentMutationResponse
 import com.courier.models.notifications.NotificationCreateParams
+import com.courier.models.notifications.NotificationGetMetricsParams
 import com.courier.models.notifications.NotificationListParams
 import com.courier.models.notifications.NotificationListResponse
 import com.courier.models.notifications.NotificationListVersionsParams
+import com.courier.models.notifications.NotificationMetricsResponse
 import com.courier.models.notifications.NotificationPublishParams
 import com.courier.models.notifications.NotificationPutContentParams
 import com.courier.models.notifications.NotificationPutElementParams
@@ -169,6 +171,61 @@ interface NotificationServiceAsync {
     /** @see archive */
     fun archive(id: String, requestOptions: RequestOptions): CompletableFuture<Void?> =
         archive(id, NotificationArchiveParams.none(), requestOptions)
+
+    /**
+     * Fetch the delivery funnel for one Notification Template as a time series — sent, delivered,
+     * opened, clicked, errors, and undeliverable — broken out per provider and channel inside each
+     * bucket. Sum the entries in a bucket for its totals; there is no bucket-level total.
+     *
+     * Choose the window absolutely with `start` and `end`, or relatively with `lookback` (an ISO
+     * 8601 duration). `start` and `end` take precedence when both are supplied, and a request
+     * carrying neither defaults to `lookback=P30D`. The window is snapped outwards onto the
+     * `granularity` grid so every bucket it overlaps is returned whole, and the snapped boundaries
+     * come back as `start` and `end` — align a chart on those rather than on what was requested.
+     * Every boundary is UTC; there is no timezone support.
+     *
+     * Every bucket in the window is returned, including the quiet ones, whose `data` array is
+     * empty, so a series is directly plottable with no gap filling client-side. An unknown template
+     * id returns `200` with an all-empty series rather than `404`, and messages sent without a
+     * Notification Template never appear here.
+     *
+     * Available in the US region only.
+     */
+    fun getMetrics(id: String): CompletableFuture<NotificationMetricsResponse> =
+        getMetrics(id, NotificationGetMetricsParams.none())
+
+    /** @see getMetrics */
+    fun getMetrics(
+        id: String,
+        params: NotificationGetMetricsParams = NotificationGetMetricsParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<NotificationMetricsResponse> =
+        getMetrics(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see getMetrics */
+    fun getMetrics(
+        id: String,
+        params: NotificationGetMetricsParams = NotificationGetMetricsParams.none(),
+    ): CompletableFuture<NotificationMetricsResponse> =
+        getMetrics(id, params, RequestOptions.none())
+
+    /** @see getMetrics */
+    fun getMetrics(
+        params: NotificationGetMetricsParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<NotificationMetricsResponse>
+
+    /** @see getMetrics */
+    fun getMetrics(
+        params: NotificationGetMetricsParams
+    ): CompletableFuture<NotificationMetricsResponse> = getMetrics(params, RequestOptions.none())
+
+    /** @see getMetrics */
+    fun getMetrics(
+        id: String,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<NotificationMetricsResponse> =
+        getMetrics(id, NotificationGetMetricsParams.none(), requestOptions)
 
     /**
      * Returns a notification template's published versions, most recent first, for comparison or
@@ -557,6 +614,49 @@ interface NotificationServiceAsync {
         /** @see archive */
         fun archive(id: String, requestOptions: RequestOptions): CompletableFuture<HttpResponse> =
             archive(id, NotificationArchiveParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `get /notifications/{id}/metrics`, but is otherwise the
+         * same as [NotificationServiceAsync.getMetrics].
+         */
+        fun getMetrics(
+            id: String
+        ): CompletableFuture<HttpResponseFor<NotificationMetricsResponse>> =
+            getMetrics(id, NotificationGetMetricsParams.none())
+
+        /** @see getMetrics */
+        fun getMetrics(
+            id: String,
+            params: NotificationGetMetricsParams = NotificationGetMetricsParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<NotificationMetricsResponse>> =
+            getMetrics(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see getMetrics */
+        fun getMetrics(
+            id: String,
+            params: NotificationGetMetricsParams = NotificationGetMetricsParams.none(),
+        ): CompletableFuture<HttpResponseFor<NotificationMetricsResponse>> =
+            getMetrics(id, params, RequestOptions.none())
+
+        /** @see getMetrics */
+        fun getMetrics(
+            params: NotificationGetMetricsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<NotificationMetricsResponse>>
+
+        /** @see getMetrics */
+        fun getMetrics(
+            params: NotificationGetMetricsParams
+        ): CompletableFuture<HttpResponseFor<NotificationMetricsResponse>> =
+            getMetrics(params, RequestOptions.none())
+
+        /** @see getMetrics */
+        fun getMetrics(
+            id: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<NotificationMetricsResponse>> =
+            getMetrics(id, NotificationGetMetricsParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /notifications/{id}/versions`, but is otherwise the

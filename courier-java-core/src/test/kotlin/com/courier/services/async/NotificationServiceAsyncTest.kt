@@ -9,6 +9,7 @@ import com.courier.models.ElementalContent
 import com.courier.models.notifications.NotificationContentPutRequest
 import com.courier.models.notifications.NotificationCreateParams
 import com.courier.models.notifications.NotificationElementPutRequest
+import com.courier.models.notifications.NotificationGetMetricsParams
 import com.courier.models.notifications.NotificationListParams
 import com.courier.models.notifications.NotificationListVersionsParams
 import com.courier.models.notifications.NotificationLocalePutRequest
@@ -25,6 +26,7 @@ import com.courier.models.notifications.NotificationTemplatePublishRequest
 import com.courier.models.notifications.NotificationTemplateState
 import com.courier.models.notifications.NotificationTemplateUpdateRequest
 import com.courier.models.notifications.NotificationTemplateWritePayload
+import java.time.OffsetDateTime
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
@@ -129,6 +131,27 @@ internal class NotificationServiceAsyncTest {
         val future = notificationServiceAsync.archive("id")
 
         val response = future.get()
+    }
+
+    @Disabled("Mock server tests are disabled")
+    @Test
+    fun getMetrics() {
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val notificationServiceAsync = client.notifications()
+
+        val notificationMetricsResponseFuture =
+            notificationServiceAsync.getMetrics(
+                NotificationGetMetricsParams.builder()
+                    .id("x")
+                    .end(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .granularity(NotificationGetMetricsParams.Granularity.HOUR)
+                    .lookback("lookback")
+                    .start(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .build()
+            )
+
+        val notificationMetricsResponse = notificationMetricsResponseFuture.get()
+        notificationMetricsResponse.validate()
     }
 
     @Disabled("Mock server tests are disabled")
