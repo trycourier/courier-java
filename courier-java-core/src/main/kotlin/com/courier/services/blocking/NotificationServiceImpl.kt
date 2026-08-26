@@ -20,9 +20,11 @@ import com.courier.core.prepare
 import com.courier.models.notifications.NotificationArchiveParams
 import com.courier.models.notifications.NotificationContentMutationResponse
 import com.courier.models.notifications.NotificationCreateParams
+import com.courier.models.notifications.NotificationGetMetricsParams
 import com.courier.models.notifications.NotificationListParams
 import com.courier.models.notifications.NotificationListResponse
 import com.courier.models.notifications.NotificationListVersionsParams
+import com.courier.models.notifications.NotificationMetricsResponse
 import com.courier.models.notifications.NotificationPublishParams
 import com.courier.models.notifications.NotificationPutContentParams
 import com.courier.models.notifications.NotificationPutElementParams
@@ -81,6 +83,13 @@ class NotificationServiceImpl internal constructor(private val clientOptions: Cl
         // delete /notifications/{id}
         withRawResponse().archive(params, requestOptions)
     }
+
+    override fun getMetrics(
+        params: NotificationGetMetricsParams,
+        requestOptions: RequestOptions,
+    ): NotificationMetricsResponse =
+        // get /notifications/{id}/metrics
+        withRawResponse().getMetrics(params, requestOptions).parse()
 
     override fun listVersions(
         params: NotificationListVersionsParams,
@@ -257,6 +266,36 @@ class NotificationServiceImpl internal constructor(private val clientOptions: Cl
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return errorHandler.handle(response).parseable {
                 response.use { archiveHandler.handle(it) }
+            }
+        }
+
+        private val getMetricsHandler: Handler<NotificationMetricsResponse> =
+            jsonHandler<NotificationMetricsResponse>(clientOptions.jsonMapper)
+
+        override fun getMetrics(
+            params: NotificationGetMetricsParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<NotificationMetricsResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("notifications", params._pathParam(0), "metrics")
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { getMetricsHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
             }
         }
 
