@@ -14,7 +14,13 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Collections
 import java.util.Objects
+import java.util.Optional
 
+/**
+ * Sends directly to a Microsoft Teams channel by its Bot Framework ID. Still provide at least one
+ * of `tenant_id` or `service_url` — sends without either have failed Bot Framework authentication
+ * in testing.
+ */
 class SendToMsTeamsChannelId
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
@@ -40,16 +46,16 @@ private constructor(
     fun channelId(): String = channelId.getRequired("channel_id")
 
     /**
-     * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
-    fun serviceUrl(): String = serviceUrl.getRequired("service_url")
+    fun serviceUrl(): Optional<String> = serviceUrl.getOptional("service_url")
 
     /**
-     * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
-    fun tenantId(): String = tenantId.getRequired("tenant_id")
+    fun tenantId(): Optional<String> = tenantId.getOptional("tenant_id")
 
     /**
      * Returns the raw JSON value of [channelId].
@@ -92,8 +98,6 @@ private constructor(
          * The following fields are required:
          * ```java
          * .channelId()
-         * .serviceUrl()
-         * .tenantId()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -103,8 +107,8 @@ private constructor(
     class Builder internal constructor() {
 
         private var channelId: JsonField<String>? = null
-        private var serviceUrl: JsonField<String>? = null
-        private var tenantId: JsonField<String>? = null
+        private var serviceUrl: JsonField<String> = JsonMissing.of()
+        private var tenantId: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -174,8 +178,6 @@ private constructor(
          * The following fields are required:
          * ```java
          * .channelId()
-         * .serviceUrl()
-         * .tenantId()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
@@ -183,8 +185,8 @@ private constructor(
         fun build(): SendToMsTeamsChannelId =
             SendToMsTeamsChannelId(
                 checkRequired("channelId", channelId),
-                checkRequired("serviceUrl", serviceUrl),
-                checkRequired("tenantId", tenantId),
+                serviceUrl,
+                tenantId,
                 additionalProperties.toMutableMap(),
             )
     }

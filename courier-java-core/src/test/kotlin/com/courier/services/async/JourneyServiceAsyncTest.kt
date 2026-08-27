@@ -20,6 +20,8 @@ import com.courier.models.journeys.JourneyPublishRequest
 import com.courier.models.journeys.JourneyReplaceParams
 import com.courier.models.journeys.JourneyRetrieveParams
 import com.courier.models.journeys.JourneySendNode
+import com.courier.models.journeys.JourneySendNodeToMsTeams
+import com.courier.models.journeys.JourneySendNodeToSlackChannel
 import com.courier.models.journeys.JourneyState
 import com.courier.models.journeys.JourneysInvokeRequest
 import org.junit.jupiter.api.Disabled
@@ -88,7 +90,25 @@ internal class JourneyServiceAsyncTest {
                                                     .to(
                                                         JourneySendNode.Message.To.builder()
                                                             .emailOverride("x")
+                                                            .msTeams(
+                                                                JourneySendNodeToMsTeams.builder()
+                                                                    .channelId("x")
+                                                                    .channelName("x")
+                                                                    .email("x")
+                                                                    .serviceUrl("x")
+                                                                    .teamId("x")
+                                                                    .tenantId("x")
+                                                                    .userId("x")
+                                                                    .build()
+                                                            )
                                                             .phoneNumberOverride("x")
+                                                            .slack(
+                                                                JourneySendNodeToSlackChannel
+                                                                    .builder()
+                                                                    .channel("x")
+                                                                    .accessToken("x")
+                                                                    .build()
+                                                            )
                                                             .userIdOverride("x")
                                                             .build()
                                                     )

@@ -1,0 +1,265 @@
+// File generated from our OpenAPI spec by Stainless.
+
+package com.courier.models.journeys
+
+import com.courier.core.BaseDeserializer
+import com.courier.core.BaseSerializer
+import com.courier.core.JsonValue
+import com.courier.core.allMaxBy
+import com.courier.core.getOrThrow
+import com.courier.errors.CourierInvalidDataException
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.core.ObjectCodec
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import java.util.Objects
+import java.util.Optional
+
+/**
+ * Send to a Slack address directly, bypassing the recipient's stored profile. Requires exactly one
+ * of `channel`, `user_id`, or `email`.
+ */
+@JsonDeserialize(using = JourneySendNodeToSlack.Deserializer::class)
+@JsonSerialize(using = JourneySendNodeToSlack.Serializer::class)
+class JourneySendNodeToSlack
+private constructor(
+    private val channel: JourneySendNodeToSlackChannel? = null,
+    private val userId: JourneySendNodeToSlackUserId? = null,
+    private val email: JourneySendNodeToSlackEmail? = null,
+    private val _json: JsonValue? = null,
+) {
+
+    fun channel(): Optional<JourneySendNodeToSlackChannel> = Optional.ofNullable(channel)
+
+    fun userId(): Optional<JourneySendNodeToSlackUserId> = Optional.ofNullable(userId)
+
+    fun email(): Optional<JourneySendNodeToSlackEmail> = Optional.ofNullable(email)
+
+    fun isChannel(): Boolean = channel != null
+
+    fun isUserId(): Boolean = userId != null
+
+    fun isEmail(): Boolean = email != null
+
+    fun asChannel(): JourneySendNodeToSlackChannel = channel.getOrThrow("channel")
+
+    fun asUserId(): JourneySendNodeToSlackUserId = userId.getOrThrow("userId")
+
+    fun asEmail(): JourneySendNodeToSlackEmail = email.getOrThrow("email")
+
+    fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
+
+    /**
+     * Maps this instance's current variant to a value of type [T] using the given [visitor].
+     *
+     * Note that this method is _not_ forwards compatible with new variants from the API, unless
+     * [visitor] overrides [Visitor.unknown]. To handle variants not known to this version of the
+     * SDK gracefully, consider overriding [Visitor.unknown]:
+     * ```java
+     * import com.courier.core.JsonValue;
+     * import java.util.Optional;
+     *
+     * Optional<String> result = journeySendNodeToSlack.accept(new JourneySendNodeToSlack.Visitor<Optional<String>>() {
+     *     @Override
+     *     public Optional<String> visitChannel(JourneySendNodeToSlackChannel channel) {
+     *         return Optional.of(channel.toString());
+     *     }
+     *
+     *     // ...
+     *
+     *     @Override
+     *     public Optional<String> unknown(JsonValue json) {
+     *         // Or inspect the `json`.
+     *         return Optional.empty();
+     *     }
+     * });
+     * ```
+     *
+     * @throws CourierInvalidDataException if [Visitor.unknown] is not overridden in [visitor] and
+     *   the current variant is unknown.
+     */
+    fun <T> accept(visitor: Visitor<T>): T =
+        when {
+            channel != null -> visitor.visitChannel(channel)
+            userId != null -> visitor.visitUserId(userId)
+            email != null -> visitor.visitEmail(email)
+            else -> visitor.unknown(_json)
+        }
+
+    private var validated: Boolean = false
+
+    /**
+     * Validates that the types of all values in this object match their expected types recursively.
+     *
+     * This method is _not_ forwards compatible with new types from the API for existing fields.
+     *
+     * @throws CourierInvalidDataException if any value type in this object doesn't match its
+     *   expected type.
+     */
+    fun validate(): JourneySendNodeToSlack = apply {
+        if (validated) {
+            return@apply
+        }
+
+        accept(
+            object : Visitor<Unit> {
+                override fun visitChannel(channel: JourneySendNodeToSlackChannel) {
+                    channel.validate()
+                }
+
+                override fun visitUserId(userId: JourneySendNodeToSlackUserId) {
+                    userId.validate()
+                }
+
+                override fun visitEmail(email: JourneySendNodeToSlackEmail) {
+                    email.validate()
+                }
+            }
+        )
+        validated = true
+    }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: CourierInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic
+    internal fun validity(): Int =
+        accept(
+            object : Visitor<Int> {
+                override fun visitChannel(channel: JourneySendNodeToSlackChannel) =
+                    channel.validity()
+
+                override fun visitUserId(userId: JourneySendNodeToSlackUserId) = userId.validity()
+
+                override fun visitEmail(email: JourneySendNodeToSlackEmail) = email.validity()
+
+                override fun unknown(json: JsonValue?) = 0
+            }
+        )
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return other is JourneySendNodeToSlack &&
+            channel == other.channel &&
+            userId == other.userId &&
+            email == other.email
+    }
+
+    override fun hashCode(): Int = Objects.hash(channel, userId, email)
+
+    override fun toString(): String =
+        when {
+            channel != null -> "JourneySendNodeToSlack{channel=$channel}"
+            userId != null -> "JourneySendNodeToSlack{userId=$userId}"
+            email != null -> "JourneySendNodeToSlack{email=$email}"
+            _json != null -> "JourneySendNodeToSlack{_unknown=$_json}"
+            else -> throw IllegalStateException("Invalid JourneySendNodeToSlack")
+        }
+
+    companion object {
+
+        @JvmStatic
+        fun ofChannel(channel: JourneySendNodeToSlackChannel) =
+            JourneySendNodeToSlack(channel = channel)
+
+        @JvmStatic
+        fun ofUserId(userId: JourneySendNodeToSlackUserId) = JourneySendNodeToSlack(userId = userId)
+
+        @JvmStatic
+        fun ofEmail(email: JourneySendNodeToSlackEmail) = JourneySendNodeToSlack(email = email)
+    }
+
+    /**
+     * An interface that defines how to map each variant of [JourneySendNodeToSlack] to a value of
+     * type [T].
+     */
+    interface Visitor<out T> {
+
+        fun visitChannel(channel: JourneySendNodeToSlackChannel): T
+
+        fun visitUserId(userId: JourneySendNodeToSlackUserId): T
+
+        fun visitEmail(email: JourneySendNodeToSlackEmail): T
+
+        /**
+         * Maps an unknown variant of [JourneySendNodeToSlack] to a value of type [T].
+         *
+         * An instance of [JourneySendNodeToSlack] can contain an unknown variant if it was
+         * deserialized from data that doesn't match any known variant. For example, if the SDK is
+         * on an older version than the API, then the API may respond with new variants that the SDK
+         * is unaware of.
+         *
+         * @throws CourierInvalidDataException in the default implementation.
+         */
+        fun unknown(json: JsonValue?): T {
+            throw CourierInvalidDataException("Unknown JourneySendNodeToSlack: $json")
+        }
+    }
+
+    internal class Deserializer :
+        BaseDeserializer<JourneySendNodeToSlack>(JourneySendNodeToSlack::class) {
+
+        override fun ObjectCodec.deserialize(node: JsonNode): JourneySendNodeToSlack {
+            val json = JsonValue.fromJsonNode(node)
+
+            val bestMatches =
+                sequenceOf(
+                        tryDeserialize(node, jacksonTypeRef<JourneySendNodeToSlackChannel>())?.let {
+                            JourneySendNodeToSlack(channel = it, _json = json)
+                        },
+                        tryDeserialize(node, jacksonTypeRef<JourneySendNodeToSlackUserId>())?.let {
+                            JourneySendNodeToSlack(userId = it, _json = json)
+                        },
+                        tryDeserialize(node, jacksonTypeRef<JourneySendNodeToSlackEmail>())?.let {
+                            JourneySendNodeToSlack(email = it, _json = json)
+                        },
+                    )
+                    .filterNotNull()
+                    .allMaxBy { it.validity() }
+                    .toList()
+            return when (bestMatches.size) {
+                // This can happen if what we're deserializing is completely incompatible with all
+                // the possible variants (e.g. deserializing from boolean).
+                0 -> JourneySendNodeToSlack(_json = json)
+                1 -> bestMatches.single()
+                // If there's more than one match with the highest validity, then use the first
+                // completely valid match, or simply the first match if none are completely valid.
+                else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
+            }
+        }
+    }
+
+    internal class Serializer :
+        BaseSerializer<JourneySendNodeToSlack>(JourneySendNodeToSlack::class) {
+
+        override fun serialize(
+            value: JourneySendNodeToSlack,
+            generator: JsonGenerator,
+            provider: SerializerProvider,
+        ) {
+            when {
+                value.channel != null -> generator.writeObject(value.channel)
+                value.userId != null -> generator.writeObject(value.userId)
+                value.email != null -> generator.writeObject(value.email)
+                value._json != null -> generator.writeObject(value._json)
+                else -> throw IllegalStateException("Invalid JourneySendNodeToSlack")
+            }
+        }
+    }
+}

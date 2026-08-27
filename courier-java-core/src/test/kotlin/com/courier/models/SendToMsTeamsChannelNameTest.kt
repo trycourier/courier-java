@@ -14,15 +14,15 @@ internal class SendToMsTeamsChannelNameTest {
         val sendToMsTeamsChannelName =
             SendToMsTeamsChannelName.builder()
                 .channelName("channel_name")
-                .serviceUrl("service_url")
                 .teamId("team_id")
+                .serviceUrl("service_url")
                 .tenantId("tenant_id")
                 .build()
 
         assertThat(sendToMsTeamsChannelName.channelName()).isEqualTo("channel_name")
-        assertThat(sendToMsTeamsChannelName.serviceUrl()).isEqualTo("service_url")
         assertThat(sendToMsTeamsChannelName.teamId()).isEqualTo("team_id")
-        assertThat(sendToMsTeamsChannelName.tenantId()).isEqualTo("tenant_id")
+        assertThat(sendToMsTeamsChannelName.serviceUrl()).contains("service_url")
+        assertThat(sendToMsTeamsChannelName.tenantId()).contains("tenant_id")
     }
 
     @Test
@@ -31,8 +31,8 @@ internal class SendToMsTeamsChannelNameTest {
         val sendToMsTeamsChannelName =
             SendToMsTeamsChannelName.builder()
                 .channelName("channel_name")
-                .serviceUrl("service_url")
                 .teamId("team_id")
+                .serviceUrl("service_url")
                 .tenantId("tenant_id")
                 .build()
 

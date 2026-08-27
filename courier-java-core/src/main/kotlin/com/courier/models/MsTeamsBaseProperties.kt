@@ -6,7 +6,6 @@ import com.courier.core.ExcludeMissing
 import com.courier.core.JsonField
 import com.courier.core.JsonMissing
 import com.courier.core.JsonValue
-import com.courier.core.checkRequired
 import com.courier.errors.CourierInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -14,7 +13,13 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Collections
 import java.util.Objects
+import java.util.Optional
 
+/**
+ * Tenant context shared by every MS Teams send variant. Provide at least one of `tenant_id` or
+ * `service_url`. If you provide both, they must agree — a `service_url` pointing at a different
+ * Microsoft tenant than `tenant_id` is rejected.
+ */
 class MsTeamsBaseProperties
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
@@ -32,16 +37,16 @@ private constructor(
     ) : this(serviceUrl, tenantId, mutableMapOf())
 
     /**
-     * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
-    fun serviceUrl(): String = serviceUrl.getRequired("service_url")
+    fun serviceUrl(): Optional<String> = serviceUrl.getOptional("service_url")
 
     /**
-     * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
-    fun tenantId(): String = tenantId.getRequired("tenant_id")
+    fun tenantId(): Optional<String> = tenantId.getOptional("tenant_id")
 
     /**
      * Returns the raw JSON value of [serviceUrl].
@@ -71,23 +76,15 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [MsTeamsBaseProperties].
-         *
-         * The following fields are required:
-         * ```java
-         * .serviceUrl()
-         * .tenantId()
-         * ```
-         */
+        /** Returns a mutable builder for constructing an instance of [MsTeamsBaseProperties]. */
         @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [MsTeamsBaseProperties]. */
     class Builder internal constructor() {
 
-        private var serviceUrl: JsonField<String>? = null
-        private var tenantId: JsonField<String>? = null
+        private var serviceUrl: JsonField<String> = JsonMissing.of()
+        private var tenantId: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -141,21 +138,9 @@ private constructor(
          * Returns an immutable instance of [MsTeamsBaseProperties].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .serviceUrl()
-         * .tenantId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): MsTeamsBaseProperties =
-            MsTeamsBaseProperties(
-                checkRequired("serviceUrl", serviceUrl),
-                checkRequired("tenantId", tenantId),
-                additionalProperties.toMutableMap(),
-            )
+            MsTeamsBaseProperties(serviceUrl, tenantId, additionalProperties.toMutableMap())
     }
 
     private var validated: Boolean = false

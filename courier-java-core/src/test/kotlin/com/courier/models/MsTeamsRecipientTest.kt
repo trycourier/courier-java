@@ -15,9 +15,9 @@ internal class MsTeamsRecipientTest {
             MsTeamsRecipient.builder()
                 .msTeams(
                     SendToMsTeamsUserId.builder()
+                        .userId("user_id")
                         .serviceUrl("service_url")
                         .tenantId("tenant_id")
-                        .userId("user_id")
                         .build()
                 )
                 .build()
@@ -26,9 +26,9 @@ internal class MsTeamsRecipientTest {
             .isEqualTo(
                 MsTeams.ofSendToMsTeamsUserId(
                     SendToMsTeamsUserId.builder()
+                        .userId("user_id")
                         .serviceUrl("service_url")
                         .tenantId("tenant_id")
-                        .userId("user_id")
                         .build()
                 )
             )
@@ -41,9 +41,9 @@ internal class MsTeamsRecipientTest {
             MsTeamsRecipient.builder()
                 .msTeams(
                     SendToMsTeamsUserId.builder()
+                        .userId("user_id")
                         .serviceUrl("service_url")
                         .tenantId("tenant_id")
-                        .userId("user_id")
                         .build()
                 )
                 .build()

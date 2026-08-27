@@ -19,8 +19,8 @@ internal class SendToMsTeamsChannelIdTest {
                 .build()
 
         assertThat(sendToMsTeamsChannelId.channelId()).isEqualTo("channel_id")
-        assertThat(sendToMsTeamsChannelId.serviceUrl()).isEqualTo("service_url")
-        assertThat(sendToMsTeamsChannelId.tenantId()).isEqualTo("tenant_id")
+        assertThat(sendToMsTeamsChannelId.serviceUrl()).contains("service_url")
+        assertThat(sendToMsTeamsChannelId.tenantId()).contains("tenant_id")
     }
 
     @Test

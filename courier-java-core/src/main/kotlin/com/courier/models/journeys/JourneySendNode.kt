@@ -395,6 +395,9 @@ private constructor(
         fun template(): Optional<String> = template.getOptional("template")
 
         /**
+         * Recipient override for this send. Provide exactly one of `email_override`,
+         * `phone_number_override`, `user_id_override`, `slack`, or `ms_teams` — not a combination.
+         *
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
@@ -521,6 +524,11 @@ private constructor(
              */
             fun template(template: JsonField<String>) = apply { this.template = template }
 
+            /**
+             * Recipient override for this send. Provide exactly one of `email_override`,
+             * `phone_number_override`, `user_id_override`, `slack`, or `ms_teams` — not a
+             * combination.
+             */
             fun to(to: To) = to(JsonField.of(to))
 
             /**
@@ -1129,11 +1137,17 @@ private constructor(
                 "Delay{until=$until, timezone=$timezone, additionalProperties=$additionalProperties}"
         }
 
+        /**
+         * Recipient override for this send. Provide exactly one of `email_override`,
+         * `phone_number_override`, `user_id_override`, `slack`, or `ms_teams` — not a combination.
+         */
         class To
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val emailOverride: JsonField<String>,
+            private val msTeams: JsonField<JourneySendNodeToMsTeams>,
             private val phoneNumberOverride: JsonField<String>,
+            private val slack: JsonField<JourneySendNodeToSlack>,
             private val userIdOverride: JsonField<String>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
@@ -1143,13 +1157,26 @@ private constructor(
                 @JsonProperty("email_override")
                 @ExcludeMissing
                 emailOverride: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("ms_teams")
+                @ExcludeMissing
+                msTeams: JsonField<JourneySendNodeToMsTeams> = JsonMissing.of(),
                 @JsonProperty("phone_number_override")
                 @ExcludeMissing
                 phoneNumberOverride: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("slack")
+                @ExcludeMissing
+                slack: JsonField<JourneySendNodeToSlack> = JsonMissing.of(),
                 @JsonProperty("user_id_override")
                 @ExcludeMissing
                 userIdOverride: JsonField<String> = JsonMissing.of(),
-            ) : this(emailOverride, phoneNumberOverride, userIdOverride, mutableMapOf())
+            ) : this(
+                emailOverride,
+                msTeams,
+                phoneNumberOverride,
+                slack,
+                userIdOverride,
+                mutableMapOf(),
+            )
 
             /**
              * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -1158,11 +1185,35 @@ private constructor(
             fun emailOverride(): Optional<String> = emailOverride.getOptional("email_override")
 
             /**
+             * Send to a Microsoft Teams address directly, bypassing the recipient's stored profile.
+             * Requires exactly one target: `channel_id`, `channel_name` (with `team_id`),
+             * `user_id`, or `email`. `channel_name`, `user_id`, and `email` also need at least one
+             * of `service_url` or `tenant_id` — if you provide both, they must agree. `channel_id`
+             * doesn't require tenant context to publish, but provide `service_url` or `tenant_id`
+             * anyway: sends without either have failed at delivery in testing. `conversation_id`
+             * and `reply_to_activity_id`, available on the send API's `MsTeams` profile, aren't
+             * supported here yet.
+             *
+             * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
+            fun msTeams(): Optional<JourneySendNodeToMsTeams> = msTeams.getOptional("ms_teams")
+
+            /**
              * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if
              *   the server responded with an unexpected value).
              */
             fun phoneNumberOverride(): Optional<String> =
                 phoneNumberOverride.getOptional("phone_number_override")
+
+            /**
+             * Send to a Slack address directly, bypassing the recipient's stored profile. Requires
+             * exactly one of `channel`, `user_id`, or `email`.
+             *
+             * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
+            fun slack(): Optional<JourneySendNodeToSlack> = slack.getOptional("slack")
 
             /**
              * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -1181,6 +1232,15 @@ private constructor(
             fun _emailOverride(): JsonField<String> = emailOverride
 
             /**
+             * Returns the raw JSON value of [msTeams].
+             *
+             * Unlike [msTeams], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("ms_teams")
+            @ExcludeMissing
+            fun _msTeams(): JsonField<JourneySendNodeToMsTeams> = msTeams
+
+            /**
              * Returns the raw JSON value of [phoneNumberOverride].
              *
              * Unlike [phoneNumberOverride], this method doesn't throw if the JSON field has an
@@ -1189,6 +1249,15 @@ private constructor(
             @JsonProperty("phone_number_override")
             @ExcludeMissing
             fun _phoneNumberOverride(): JsonField<String> = phoneNumberOverride
+
+            /**
+             * Returns the raw JSON value of [slack].
+             *
+             * Unlike [slack], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("slack")
+            @ExcludeMissing
+            fun _slack(): JsonField<JourneySendNodeToSlack> = slack
 
             /**
              * Returns the raw JSON value of [userIdOverride].
@@ -1222,14 +1291,18 @@ private constructor(
             class Builder internal constructor() {
 
                 private var emailOverride: JsonField<String> = JsonMissing.of()
+                private var msTeams: JsonField<JourneySendNodeToMsTeams> = JsonMissing.of()
                 private var phoneNumberOverride: JsonField<String> = JsonMissing.of()
+                private var slack: JsonField<JourneySendNodeToSlack> = JsonMissing.of()
                 private var userIdOverride: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(to: To) = apply {
                     emailOverride = to.emailOverride
+                    msTeams = to.msTeams
                     phoneNumberOverride = to.phoneNumberOverride
+                    slack = to.slack
                     userIdOverride = to.userIdOverride
                     additionalProperties = to.additionalProperties.toMutableMap()
                 }
@@ -1248,6 +1321,29 @@ private constructor(
                     this.emailOverride = emailOverride
                 }
 
+                /**
+                 * Send to a Microsoft Teams address directly, bypassing the recipient's stored
+                 * profile. Requires exactly one target: `channel_id`, `channel_name` (with
+                 * `team_id`), `user_id`, or `email`. `channel_name`, `user_id`, and `email` also
+                 * need at least one of `service_url` or `tenant_id` — if you provide both, they
+                 * must agree. `channel_id` doesn't require tenant context to publish, but provide
+                 * `service_url` or `tenant_id` anyway: sends without either have failed at delivery
+                 * in testing. `conversation_id` and `reply_to_activity_id`, available on the send
+                 * API's `MsTeams` profile, aren't supported here yet.
+                 */
+                fun msTeams(msTeams: JourneySendNodeToMsTeams) = msTeams(JsonField.of(msTeams))
+
+                /**
+                 * Sets [Builder.msTeams] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.msTeams] with a well-typed
+                 * [JourneySendNodeToMsTeams] value instead. This method is primarily for setting
+                 * the field to an undocumented or not yet supported value.
+                 */
+                fun msTeams(msTeams: JsonField<JourneySendNodeToMsTeams>) = apply {
+                    this.msTeams = msTeams
+                }
+
                 fun phoneNumberOverride(phoneNumberOverride: String) =
                     phoneNumberOverride(JsonField.of(phoneNumberOverride))
 
@@ -1261,6 +1357,33 @@ private constructor(
                 fun phoneNumberOverride(phoneNumberOverride: JsonField<String>) = apply {
                     this.phoneNumberOverride = phoneNumberOverride
                 }
+
+                /**
+                 * Send to a Slack address directly, bypassing the recipient's stored profile.
+                 * Requires exactly one of `channel`, `user_id`, or `email`.
+                 */
+                fun slack(slack: JourneySendNodeToSlack) = slack(JsonField.of(slack))
+
+                /**
+                 * Sets [Builder.slack] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.slack] with a well-typed
+                 * [JourneySendNodeToSlack] value instead. This method is primarily for setting the
+                 * field to an undocumented or not yet supported value.
+                 */
+                fun slack(slack: JsonField<JourneySendNodeToSlack>) = apply { this.slack = slack }
+
+                /** Alias for calling [slack] with `JourneySendNodeToSlack.ofChannel(channel)`. */
+                fun slack(channel: JourneySendNodeToSlackChannel) =
+                    slack(JourneySendNodeToSlack.ofChannel(channel))
+
+                /** Alias for calling [slack] with `JourneySendNodeToSlack.ofUserId(userId)`. */
+                fun slack(userId: JourneySendNodeToSlackUserId) =
+                    slack(JourneySendNodeToSlack.ofUserId(userId))
+
+                /** Alias for calling [slack] with `JourneySendNodeToSlack.ofEmail(email)`. */
+                fun slack(email: JourneySendNodeToSlackEmail) =
+                    slack(JourneySendNodeToSlack.ofEmail(email))
 
                 fun userIdOverride(userIdOverride: String) =
                     userIdOverride(JsonField.of(userIdOverride))
@@ -1306,7 +1429,9 @@ private constructor(
                 fun build(): To =
                     To(
                         emailOverride,
+                        msTeams,
                         phoneNumberOverride,
+                        slack,
                         userIdOverride,
                         additionalProperties.toMutableMap(),
                     )
@@ -1330,7 +1455,9 @@ private constructor(
                 }
 
                 emailOverride()
+                msTeams().ifPresent { it.validate() }
                 phoneNumberOverride()
+                slack().ifPresent { it.validate() }
                 userIdOverride()
                 validated = true
             }
@@ -1352,7 +1479,9 @@ private constructor(
             @JvmSynthetic
             internal fun validity(): Int =
                 (if (emailOverride.asKnown().isPresent) 1 else 0) +
+                    (msTeams.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (phoneNumberOverride.asKnown().isPresent) 1 else 0) +
+                    (slack.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (userIdOverride.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
@@ -1362,7 +1491,9 @@ private constructor(
 
                 return other is To &&
                     emailOverride == other.emailOverride &&
+                    msTeams == other.msTeams &&
                     phoneNumberOverride == other.phoneNumberOverride &&
+                    slack == other.slack &&
                     userIdOverride == other.userIdOverride &&
                     additionalProperties == other.additionalProperties
             }
@@ -1370,7 +1501,9 @@ private constructor(
             private val hashCode: Int by lazy {
                 Objects.hash(
                     emailOverride,
+                    msTeams,
                     phoneNumberOverride,
+                    slack,
                     userIdOverride,
                     additionalProperties,
                 )
@@ -1379,7 +1512,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "To{emailOverride=$emailOverride, phoneNumberOverride=$phoneNumberOverride, userIdOverride=$userIdOverride, additionalProperties=$additionalProperties}"
+                "To{emailOverride=$emailOverride, msTeams=$msTeams, phoneNumberOverride=$phoneNumberOverride, slack=$slack, userIdOverride=$userIdOverride, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {
