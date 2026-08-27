@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.3.0](https://github.com/trycourier/courier-java/compare/v6.2.0...v6.3.0) (2026-08-27)
+
+
+### Features
+
+* **api:** document Slack and MS Teams on journey send nodes, and fix over-strict MsTeams tenant requirements [C-20302] ([#145](https://github.com/trycourier/courier-java/issues/145)) ([41e1f98](https://github.com/trycourier/courier-java/commit/41e1f98a116b21736f7f3e31b78afe17b9ba0754))
+
 ## [6.2.0](https://github.com/trycourier/courier-java/compare/v6.1.0...v6.2.0) (2026-08-26)
 
 
