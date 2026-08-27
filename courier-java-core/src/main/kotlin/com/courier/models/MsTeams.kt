@@ -18,6 +18,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.util.Objects
 import java.util.Optional
 
+/** Provide at least one of `tenant_id` or `service_url`. If you provide both, they must agree. */
 @JsonDeserialize(using = MsTeams.Deserializer::class)
 @JsonSerialize(using = MsTeams.Serializer::class)
 class MsTeams
@@ -30,17 +31,32 @@ private constructor(
     private val _json: JsonValue? = null,
 ) {
 
+    /**
+     * Provide at least one of `tenant_id` or `service_url`. If you provide both, they must agree.
+     */
     fun sendToMsTeamsUserId(): Optional<SendToMsTeamsUserId> =
         Optional.ofNullable(sendToMsTeamsUserId)
 
+    /**
+     * Provide at least one of `tenant_id` or `service_url`. If you provide both, they must agree.
+     */
     fun sendToMsTeamsEmail(): Optional<SendToMsTeamsEmail> = Optional.ofNullable(sendToMsTeamsEmail)
 
+    /**
+     * Sends directly to a Microsoft Teams channel by its Bot Framework ID. Still provide at least
+     * one of `tenant_id` or `service_url` — sends without either have failed Bot Framework
+     * authentication in testing.
+     */
     fun sendToMsTeamsChannelId(): Optional<SendToMsTeamsChannelId> =
         Optional.ofNullable(sendToMsTeamsChannelId)
 
     fun sendToMsTeamsConversationId(): Optional<SendToMsTeamsConversationId> =
         Optional.ofNullable(sendToMsTeamsConversationId)
 
+    /**
+     * `team_id` is required alongside `channel_name`. Also provide at least one of `tenant_id` or
+     * `service_url`; if you provide both, they must agree.
+     */
     fun sendToMsTeamsChannelName(): Optional<SendToMsTeamsChannelName> =
         Optional.ofNullable(sendToMsTeamsChannelName)
 
@@ -54,18 +70,33 @@ private constructor(
 
     fun isSendToMsTeamsChannelName(): Boolean = sendToMsTeamsChannelName != null
 
+    /**
+     * Provide at least one of `tenant_id` or `service_url`. If you provide both, they must agree.
+     */
     fun asSendToMsTeamsUserId(): SendToMsTeamsUserId =
         sendToMsTeamsUserId.getOrThrow("sendToMsTeamsUserId")
 
+    /**
+     * Provide at least one of `tenant_id` or `service_url`. If you provide both, they must agree.
+     */
     fun asSendToMsTeamsEmail(): SendToMsTeamsEmail =
         sendToMsTeamsEmail.getOrThrow("sendToMsTeamsEmail")
 
+    /**
+     * Sends directly to a Microsoft Teams channel by its Bot Framework ID. Still provide at least
+     * one of `tenant_id` or `service_url` — sends without either have failed Bot Framework
+     * authentication in testing.
+     */
     fun asSendToMsTeamsChannelId(): SendToMsTeamsChannelId =
         sendToMsTeamsChannelId.getOrThrow("sendToMsTeamsChannelId")
 
     fun asSendToMsTeamsConversationId(): SendToMsTeamsConversationId =
         sendToMsTeamsConversationId.getOrThrow("sendToMsTeamsConversationId")
 
+    /**
+     * `team_id` is required alongside `channel_name`. Also provide at least one of `tenant_id` or
+     * `service_url`; if you provide both, they must agree.
+     */
     fun asSendToMsTeamsChannelName(): SendToMsTeamsChannelName =
         sendToMsTeamsChannelName.getOrThrow("sendToMsTeamsChannelName")
 
@@ -237,14 +268,27 @@ private constructor(
 
     companion object {
 
+        /**
+         * Provide at least one of `tenant_id` or `service_url`. If you provide both, they must
+         * agree.
+         */
         @JvmStatic
         fun ofSendToMsTeamsUserId(sendToMsTeamsUserId: SendToMsTeamsUserId) =
             MsTeams(sendToMsTeamsUserId = sendToMsTeamsUserId)
 
+        /**
+         * Provide at least one of `tenant_id` or `service_url`. If you provide both, they must
+         * agree.
+         */
         @JvmStatic
         fun ofSendToMsTeamsEmail(sendToMsTeamsEmail: SendToMsTeamsEmail) =
             MsTeams(sendToMsTeamsEmail = sendToMsTeamsEmail)
 
+        /**
+         * Sends directly to a Microsoft Teams channel by its Bot Framework ID. Still provide at
+         * least one of `tenant_id` or `service_url` — sends without either have failed Bot
+         * Framework authentication in testing.
+         */
         @JvmStatic
         fun ofSendToMsTeamsChannelId(sendToMsTeamsChannelId: SendToMsTeamsChannelId) =
             MsTeams(sendToMsTeamsChannelId = sendToMsTeamsChannelId)
@@ -254,6 +298,10 @@ private constructor(
             sendToMsTeamsConversationId: SendToMsTeamsConversationId
         ) = MsTeams(sendToMsTeamsConversationId = sendToMsTeamsConversationId)
 
+        /**
+         * `team_id` is required alongside `channel_name`. Also provide at least one of `tenant_id`
+         * or `service_url`; if you provide both, they must agree.
+         */
         @JvmStatic
         fun ofSendToMsTeamsChannelName(sendToMsTeamsChannelName: SendToMsTeamsChannelName) =
             MsTeams(sendToMsTeamsChannelName = sendToMsTeamsChannelName)
@@ -262,16 +310,33 @@ private constructor(
     /** An interface that defines how to map each variant of [MsTeams] to a value of type [T]. */
     interface Visitor<out T> {
 
+        /**
+         * Provide at least one of `tenant_id` or `service_url`. If you provide both, they must
+         * agree.
+         */
         fun visitSendToMsTeamsUserId(sendToMsTeamsUserId: SendToMsTeamsUserId): T
 
+        /**
+         * Provide at least one of `tenant_id` or `service_url`. If you provide both, they must
+         * agree.
+         */
         fun visitSendToMsTeamsEmail(sendToMsTeamsEmail: SendToMsTeamsEmail): T
 
+        /**
+         * Sends directly to a Microsoft Teams channel by its Bot Framework ID. Still provide at
+         * least one of `tenant_id` or `service_url` — sends without either have failed Bot
+         * Framework authentication in testing.
+         */
         fun visitSendToMsTeamsChannelId(sendToMsTeamsChannelId: SendToMsTeamsChannelId): T
 
         fun visitSendToMsTeamsConversationId(
             sendToMsTeamsConversationId: SendToMsTeamsConversationId
         ): T
 
+        /**
+         * `team_id` is required alongside `channel_name`. Also provide at least one of `tenant_id`
+         * or `service_url`; if you provide both, they must agree.
+         */
         fun visitSendToMsTeamsChannelName(sendToMsTeamsChannelName: SendToMsTeamsChannelName): T
 
         /**

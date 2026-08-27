@@ -18,9 +18,9 @@ internal class MsTeamsTest {
     fun ofSendToMsTeamsUserId() {
         val sendToMsTeamsUserId =
             SendToMsTeamsUserId.builder()
+                .userId("user_id")
                 .serviceUrl("service_url")
                 .tenantId("tenant_id")
-                .userId("user_id")
                 .build()
 
         val msTeams = MsTeams.ofSendToMsTeamsUserId(sendToMsTeamsUserId)
@@ -38,9 +38,9 @@ internal class MsTeamsTest {
         val msTeams =
             MsTeams.ofSendToMsTeamsUserId(
                 SendToMsTeamsUserId.builder()
+                    .userId("user_id")
                     .serviceUrl("service_url")
                     .tenantId("tenant_id")
-                    .userId("user_id")
                     .build()
             )
 
@@ -163,8 +163,8 @@ internal class MsTeamsTest {
         val sendToMsTeamsChannelName =
             SendToMsTeamsChannelName.builder()
                 .channelName("channel_name")
-                .serviceUrl("service_url")
                 .teamId("team_id")
+                .serviceUrl("service_url")
                 .tenantId("tenant_id")
                 .build()
 
@@ -184,8 +184,8 @@ internal class MsTeamsTest {
             MsTeams.ofSendToMsTeamsChannelName(
                 SendToMsTeamsChannelName.builder()
                     .channelName("channel_name")
-                    .serviceUrl("service_url")
                     .teamId("team_id")
+                    .serviceUrl("service_url")
                     .tenantId("tenant_id")
                     .build()
             )

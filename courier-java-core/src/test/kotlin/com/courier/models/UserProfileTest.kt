@@ -57,9 +57,9 @@ internal class UserProfileTest {
                 .middleName("middle_name")
                 .msTeams(
                     SendToMsTeamsUserId.builder()
+                        .userId("user_id")
                         .serviceUrl("service_url")
                         .tenantId("tenant_id")
-                        .userId("user_id")
                         .build()
                 )
                 .name("name")
@@ -135,9 +135,9 @@ internal class UserProfileTest {
             .contains(
                 MsTeams.ofSendToMsTeamsUserId(
                     SendToMsTeamsUserId.builder()
+                        .userId("user_id")
                         .serviceUrl("service_url")
                         .tenantId("tenant_id")
-                        .userId("user_id")
                         .build()
                 )
             )
@@ -211,9 +211,9 @@ internal class UserProfileTest {
                 .middleName("middle_name")
                 .msTeams(
                     SendToMsTeamsUserId.builder()
+                        .userId("user_id")
                         .serviceUrl("service_url")
                         .tenantId("tenant_id")
-                        .userId("user_id")
                         .build()
                 )
                 .name("name")

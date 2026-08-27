@@ -19,8 +19,8 @@ internal class SendToMsTeamsEmailTest {
                 .build()
 
         assertThat(sendToMsTeamsEmail.email()).isEqualTo("email")
-        assertThat(sendToMsTeamsEmail.serviceUrl()).isEqualTo("service_url")
-        assertThat(sendToMsTeamsEmail.tenantId()).isEqualTo("tenant_id")
+        assertThat(sendToMsTeamsEmail.serviceUrl()).contains("service_url")
+        assertThat(sendToMsTeamsEmail.tenantId()).contains("tenant_id")
     }
 
     @Test

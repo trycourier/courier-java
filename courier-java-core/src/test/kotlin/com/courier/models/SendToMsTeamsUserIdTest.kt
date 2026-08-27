@@ -13,14 +13,14 @@ internal class SendToMsTeamsUserIdTest {
     fun create() {
         val sendToMsTeamsUserId =
             SendToMsTeamsUserId.builder()
+                .userId("user_id")
                 .serviceUrl("service_url")
                 .tenantId("tenant_id")
-                .userId("user_id")
                 .build()
 
-        assertThat(sendToMsTeamsUserId.serviceUrl()).isEqualTo("service_url")
-        assertThat(sendToMsTeamsUserId.tenantId()).isEqualTo("tenant_id")
         assertThat(sendToMsTeamsUserId.userId()).isEqualTo("user_id")
+        assertThat(sendToMsTeamsUserId.serviceUrl()).contains("service_url")
+        assertThat(sendToMsTeamsUserId.tenantId()).contains("tenant_id")
     }
 
     @Test
@@ -28,9 +28,9 @@ internal class SendToMsTeamsUserIdTest {
         val jsonMapper = jsonMapper()
         val sendToMsTeamsUserId =
             SendToMsTeamsUserId.builder()
+                .userId("user_id")
                 .serviceUrl("service_url")
                 .tenantId("tenant_id")
-                .userId("user_id")
                 .build()
 
         val roundtrippedSendToMsTeamsUserId =

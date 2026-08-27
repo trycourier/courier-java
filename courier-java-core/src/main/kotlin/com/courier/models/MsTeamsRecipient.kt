@@ -30,6 +30,8 @@ private constructor(
     ) : this(msTeams, mutableMapOf())
 
     /**
+     * Provide at least one of `tenant_id` or `service_url`. If you provide both, they must agree.
+     *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -79,6 +81,10 @@ private constructor(
             additionalProperties = msTeamsRecipient.additionalProperties.toMutableMap()
         }
 
+        /**
+         * Provide at least one of `tenant_id` or `service_url`. If you provide both, they must
+         * agree.
+         */
         fun msTeams(msTeams: MsTeams) = msTeams(JsonField.of(msTeams))
 
         /**

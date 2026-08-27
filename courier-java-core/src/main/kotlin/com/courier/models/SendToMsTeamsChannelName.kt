@@ -14,13 +14,18 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Collections
 import java.util.Objects
+import java.util.Optional
 
+/**
+ * `team_id` is required alongside `channel_name`. Also provide at least one of `tenant_id` or
+ * `service_url`; if you provide both, they must agree.
+ */
 class SendToMsTeamsChannelName
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val channelName: JsonField<String>,
-    private val serviceUrl: JsonField<String>,
     private val teamId: JsonField<String>,
+    private val serviceUrl: JsonField<String>,
     private val tenantId: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
@@ -30,12 +35,12 @@ private constructor(
         @JsonProperty("channel_name")
         @ExcludeMissing
         channelName: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("team_id") @ExcludeMissing teamId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("service_url")
         @ExcludeMissing
         serviceUrl: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("team_id") @ExcludeMissing teamId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("tenant_id") @ExcludeMissing tenantId: JsonField<String> = JsonMissing.of(),
-    ) : this(channelName, serviceUrl, teamId, tenantId, mutableMapOf())
+    ) : this(channelName, teamId, serviceUrl, tenantId, mutableMapOf())
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
@@ -47,19 +52,19 @@ private constructor(
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun serviceUrl(): String = serviceUrl.getRequired("service_url")
-
-    /**
-     * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
     fun teamId(): String = teamId.getRequired("team_id")
 
     /**
-     * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
-    fun tenantId(): String = tenantId.getRequired("tenant_id")
+    fun serviceUrl(): Optional<String> = serviceUrl.getOptional("service_url")
+
+    /**
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun tenantId(): Optional<String> = tenantId.getOptional("tenant_id")
 
     /**
      * Returns the raw JSON value of [channelName].
@@ -71,18 +76,18 @@ private constructor(
     fun _channelName(): JsonField<String> = channelName
 
     /**
-     * Returns the raw JSON value of [serviceUrl].
-     *
-     * Unlike [serviceUrl], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("service_url") @ExcludeMissing fun _serviceUrl(): JsonField<String> = serviceUrl
-
-    /**
      * Returns the raw JSON value of [teamId].
      *
      * Unlike [teamId], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("team_id") @ExcludeMissing fun _teamId(): JsonField<String> = teamId
+
+    /**
+     * Returns the raw JSON value of [serviceUrl].
+     *
+     * Unlike [serviceUrl], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("service_url") @ExcludeMissing fun _serviceUrl(): JsonField<String> = serviceUrl
 
     /**
      * Returns the raw JSON value of [tenantId].
@@ -111,9 +116,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .channelName()
-         * .serviceUrl()
          * .teamId()
-         * .tenantId()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -123,16 +126,16 @@ private constructor(
     class Builder internal constructor() {
 
         private var channelName: JsonField<String>? = null
-        private var serviceUrl: JsonField<String>? = null
         private var teamId: JsonField<String>? = null
-        private var tenantId: JsonField<String>? = null
+        private var serviceUrl: JsonField<String> = JsonMissing.of()
+        private var tenantId: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(sendToMsTeamsChannelName: SendToMsTeamsChannelName) = apply {
             channelName = sendToMsTeamsChannelName.channelName
-            serviceUrl = sendToMsTeamsChannelName.serviceUrl
             teamId = sendToMsTeamsChannelName.teamId
+            serviceUrl = sendToMsTeamsChannelName.serviceUrl
             tenantId = sendToMsTeamsChannelName.tenantId
             additionalProperties = sendToMsTeamsChannelName.additionalProperties.toMutableMap()
         }
@@ -148,6 +151,16 @@ private constructor(
          */
         fun channelName(channelName: JsonField<String>) = apply { this.channelName = channelName }
 
+        fun teamId(teamId: String) = teamId(JsonField.of(teamId))
+
+        /**
+         * Sets [Builder.teamId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.teamId] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun teamId(teamId: JsonField<String>) = apply { this.teamId = teamId }
+
         fun serviceUrl(serviceUrl: String) = serviceUrl(JsonField.of(serviceUrl))
 
         /**
@@ -158,16 +171,6 @@ private constructor(
          * value.
          */
         fun serviceUrl(serviceUrl: JsonField<String>) = apply { this.serviceUrl = serviceUrl }
-
-        fun teamId(teamId: String) = teamId(JsonField.of(teamId))
-
-        /**
-         * Sets [Builder.teamId] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.teamId] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun teamId(teamId: JsonField<String>) = apply { this.teamId = teamId }
 
         fun tenantId(tenantId: String) = tenantId(JsonField.of(tenantId))
 
@@ -206,9 +209,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .channelName()
-         * .serviceUrl()
          * .teamId()
-         * .tenantId()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
@@ -216,9 +217,9 @@ private constructor(
         fun build(): SendToMsTeamsChannelName =
             SendToMsTeamsChannelName(
                 checkRequired("channelName", channelName),
-                checkRequired("serviceUrl", serviceUrl),
                 checkRequired("teamId", teamId),
-                checkRequired("tenantId", tenantId),
+                serviceUrl,
+                tenantId,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -239,8 +240,8 @@ private constructor(
         }
 
         channelName()
-        serviceUrl()
         teamId()
+        serviceUrl()
         tenantId()
         validated = true
     }
@@ -261,8 +262,8 @@ private constructor(
     @JvmSynthetic
     internal fun validity(): Int =
         (if (channelName.asKnown().isPresent) 1 else 0) +
-            (if (serviceUrl.asKnown().isPresent) 1 else 0) +
             (if (teamId.asKnown().isPresent) 1 else 0) +
+            (if (serviceUrl.asKnown().isPresent) 1 else 0) +
             (if (tenantId.asKnown().isPresent) 1 else 0)
 
     override fun equals(other: Any?): Boolean {
@@ -272,18 +273,18 @@ private constructor(
 
         return other is SendToMsTeamsChannelName &&
             channelName == other.channelName &&
-            serviceUrl == other.serviceUrl &&
             teamId == other.teamId &&
+            serviceUrl == other.serviceUrl &&
             tenantId == other.tenantId &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(channelName, serviceUrl, teamId, tenantId, additionalProperties)
+        Objects.hash(channelName, teamId, serviceUrl, tenantId, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "SendToMsTeamsChannelName{channelName=$channelName, serviceUrl=$serviceUrl, teamId=$teamId, tenantId=$tenantId, additionalProperties=$additionalProperties}"
+        "SendToMsTeamsChannelName{channelName=$channelName, teamId=$teamId, serviceUrl=$serviceUrl, tenantId=$tenantId, additionalProperties=$additionalProperties}"
 }

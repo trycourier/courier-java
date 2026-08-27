@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.courier.models
+package com.courier.models.journeys
 
 import com.courier.core.ExcludeMissing
 import com.courier.core.JsonField
@@ -16,42 +16,39 @@ import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 
-/** Provide at least one of `tenant_id` or `service_url`. If you provide both, they must agree. */
-class SendToMsTeamsEmail
+class JourneySendNodeToSlackEmail
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val email: JsonField<String>,
-    private val serviceUrl: JsonField<String>,
-    private val tenantId: JsonField<String>,
+    private val accessToken: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
         @JsonProperty("email") @ExcludeMissing email: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("service_url")
+        @JsonProperty("access_token")
         @ExcludeMissing
-        serviceUrl: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("tenant_id") @ExcludeMissing tenantId: JsonField<String> = JsonMissing.of(),
-    ) : this(email, serviceUrl, tenantId, mutableMapOf())
+        accessToken: JsonField<String> = JsonMissing.of(),
+    ) : this(email, accessToken, mutableMapOf())
 
     /**
+     * Email address of the Slack user to send to, resolved via the workspace directory.
+     *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun email(): String = email.getRequired("email")
 
     /**
+     * A runtime reference to a Slack access token, such as `{{data.slack_token}}`. Literal values
+     * are rejected — they'd be stored permanently with no way to rotate them. Omit to use the token
+     * on the recipient's stored Slack profile.
+     *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun serviceUrl(): Optional<String> = serviceUrl.getOptional("service_url")
-
-    /**
-     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
-    fun tenantId(): Optional<String> = tenantId.getOptional("tenant_id")
+    fun accessToken(): Optional<String> = accessToken.getOptional("access_token")
 
     /**
      * Returns the raw JSON value of [email].
@@ -61,18 +58,13 @@ private constructor(
     @JsonProperty("email") @ExcludeMissing fun _email(): JsonField<String> = email
 
     /**
-     * Returns the raw JSON value of [serviceUrl].
+     * Returns the raw JSON value of [accessToken].
      *
-     * Unlike [serviceUrl], this method doesn't throw if the JSON field has an unexpected type.
+     * Unlike [accessToken], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("service_url") @ExcludeMissing fun _serviceUrl(): JsonField<String> = serviceUrl
-
-    /**
-     * Returns the raw JSON value of [tenantId].
-     *
-     * Unlike [tenantId], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("tenant_id") @ExcludeMissing fun _tenantId(): JsonField<String> = tenantId
+    @JsonProperty("access_token")
+    @ExcludeMissing
+    fun _accessToken(): JsonField<String> = accessToken
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -89,7 +81,7 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [SendToMsTeamsEmail].
+         * Returns a mutable builder for constructing an instance of [JourneySendNodeToSlackEmail].
          *
          * The following fields are required:
          * ```java
@@ -99,22 +91,21 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [SendToMsTeamsEmail]. */
+    /** A builder for [JourneySendNodeToSlackEmail]. */
     class Builder internal constructor() {
 
         private var email: JsonField<String>? = null
-        private var serviceUrl: JsonField<String> = JsonMissing.of()
-        private var tenantId: JsonField<String> = JsonMissing.of()
+        private var accessToken: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(sendToMsTeamsEmail: SendToMsTeamsEmail) = apply {
-            email = sendToMsTeamsEmail.email
-            serviceUrl = sendToMsTeamsEmail.serviceUrl
-            tenantId = sendToMsTeamsEmail.tenantId
-            additionalProperties = sendToMsTeamsEmail.additionalProperties.toMutableMap()
+        internal fun from(journeySendNodeToSlackEmail: JourneySendNodeToSlackEmail) = apply {
+            email = journeySendNodeToSlackEmail.email
+            accessToken = journeySendNodeToSlackEmail.accessToken
+            additionalProperties = journeySendNodeToSlackEmail.additionalProperties.toMutableMap()
         }
 
+        /** Email address of the Slack user to send to, resolved via the workspace directory. */
         fun email(email: String) = email(JsonField.of(email))
 
         /**
@@ -125,26 +116,21 @@ private constructor(
          */
         fun email(email: JsonField<String>) = apply { this.email = email }
 
-        fun serviceUrl(serviceUrl: String) = serviceUrl(JsonField.of(serviceUrl))
+        /**
+         * A runtime reference to a Slack access token, such as `{{data.slack_token}}`. Literal
+         * values are rejected — they'd be stored permanently with no way to rotate them. Omit to
+         * use the token on the recipient's stored Slack profile.
+         */
+        fun accessToken(accessToken: String) = accessToken(JsonField.of(accessToken))
 
         /**
-         * Sets [Builder.serviceUrl] to an arbitrary JSON value.
+         * Sets [Builder.accessToken] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.serviceUrl] with a well-typed [String] value instead.
+         * You should usually call [Builder.accessToken] with a well-typed [String] value instead.
          * This method is primarily for setting the field to an undocumented or not yet supported
          * value.
          */
-        fun serviceUrl(serviceUrl: JsonField<String>) = apply { this.serviceUrl = serviceUrl }
-
-        fun tenantId(tenantId: String) = tenantId(JsonField.of(tenantId))
-
-        /**
-         * Sets [Builder.tenantId] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.tenantId] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun tenantId(tenantId: JsonField<String>) = apply { this.tenantId = tenantId }
+        fun accessToken(accessToken: JsonField<String>) = apply { this.accessToken = accessToken }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -166,7 +152,7 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [SendToMsTeamsEmail].
+         * Returns an immutable instance of [JourneySendNodeToSlackEmail].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
@@ -177,11 +163,10 @@ private constructor(
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): SendToMsTeamsEmail =
-            SendToMsTeamsEmail(
+        fun build(): JourneySendNodeToSlackEmail =
+            JourneySendNodeToSlackEmail(
                 checkRequired("email", email),
-                serviceUrl,
-                tenantId,
+                accessToken,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -196,14 +181,13 @@ private constructor(
      * @throws CourierInvalidDataException if any value type in this object doesn't match its
      *   expected type.
      */
-    fun validate(): SendToMsTeamsEmail = apply {
+    fun validate(): JourneySendNodeToSlackEmail = apply {
         if (validated) {
             return@apply
         }
 
         email()
-        serviceUrl()
-        tenantId()
+        accessToken()
         validated = true
     }
 
@@ -222,28 +206,23 @@ private constructor(
      */
     @JvmSynthetic
     internal fun validity(): Int =
-        (if (email.asKnown().isPresent) 1 else 0) +
-            (if (serviceUrl.asKnown().isPresent) 1 else 0) +
-            (if (tenantId.asKnown().isPresent) 1 else 0)
+        (if (email.asKnown().isPresent) 1 else 0) + (if (accessToken.asKnown().isPresent) 1 else 0)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return other is SendToMsTeamsEmail &&
+        return other is JourneySendNodeToSlackEmail &&
             email == other.email &&
-            serviceUrl == other.serviceUrl &&
-            tenantId == other.tenantId &&
+            accessToken == other.accessToken &&
             additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy {
-        Objects.hash(email, serviceUrl, tenantId, additionalProperties)
-    }
+    private val hashCode: Int by lazy { Objects.hash(email, accessToken, additionalProperties) }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "SendToMsTeamsEmail{email=$email, serviceUrl=$serviceUrl, tenantId=$tenantId, additionalProperties=$additionalProperties}"
+        "JourneySendNodeToSlackEmail{email=$email, accessToken=$accessToken, additionalProperties=$additionalProperties}"
 }

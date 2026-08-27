@@ -14,8 +14,8 @@ internal class MsTeamsBasePropertiesTest {
         val msTeamsBaseProperties =
             MsTeamsBaseProperties.builder().serviceUrl("service_url").tenantId("tenant_id").build()
 
-        assertThat(msTeamsBaseProperties.serviceUrl()).isEqualTo("service_url")
-        assertThat(msTeamsBaseProperties.tenantId()).isEqualTo("tenant_id")
+        assertThat(msTeamsBaseProperties.serviceUrl()).contains("service_url")
+        assertThat(msTeamsBaseProperties.tenantId()).contains("tenant_id")
     }
 
     @Test

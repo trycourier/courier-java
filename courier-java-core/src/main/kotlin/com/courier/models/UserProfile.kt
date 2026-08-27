@@ -262,6 +262,8 @@ private constructor(
     fun middleName(): Optional<String> = middleName.getOptional("middle_name")
 
     /**
+     * Provide at least one of `tenant_id` or `service_url`. If you provide both, they must agree.
+     *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -960,6 +962,10 @@ private constructor(
          */
         fun middleName(middleName: JsonField<String>) = apply { this.middleName = middleName }
 
+        /**
+         * Provide at least one of `tenant_id` or `service_url`. If you provide both, they must
+         * agree.
+         */
         fun msTeams(msTeams: MsTeams?) = msTeams(JsonField.ofNullable(msTeams))
 
         /** Alias for calling [Builder.msTeams] with `msTeams.orElse(null)`. */
