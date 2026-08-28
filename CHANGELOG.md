@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.4.0](https://github.com/trycourier/courier-java/compare/v6.3.0...v6.4.0) (2026-08-28)
+
+
+### Features
+
+* **api:** document channel on journey send nodes [C-20309] ([#147](https://github.com/trycourier/courier-java/issues/147)) ([988f159](https://github.com/trycourier/courier-java/commit/988f159c81e19795fb526f035a88e17278095673))
+
 ## [6.3.0](https://github.com/trycourier/courier-java/compare/v6.2.0...v6.3.0) (2026-08-27)
 
 
