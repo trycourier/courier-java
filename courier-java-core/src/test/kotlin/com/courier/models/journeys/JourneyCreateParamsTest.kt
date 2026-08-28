@@ -84,6 +84,7 @@ internal class JourneyCreateParamsTest {
                                     )
                                     .type(JourneySendNode.Type.SEND)
                                     .id("send-1")
+                                    .channel(JourneySendNode.Channel.EMAIL)
                                     .conditionsOfConditionAtom(listOf("string", "string"))
                                     .experiment(
                                         JourneyExperiment.builder()
@@ -203,6 +204,7 @@ internal class JourneyCreateParamsTest {
                                         )
                                         .type(JourneySendNode.Type.SEND)
                                         .id("send-1")
+                                        .channel(JourneySendNode.Channel.EMAIL)
                                         .conditionsOfConditionAtom(listOf("string", "string"))
                                         .experiment(
                                             JourneyExperiment.builder()
@@ -371,6 +373,7 @@ internal class JourneyCreateParamsTest {
                                         )
                                         .type(JourneySendNode.Type.SEND)
                                         .id("send-1")
+                                        .channel(JourneySendNode.Channel.EMAIL)
                                         .conditionsOfConditionAtom(listOf("string", "string"))
                                         .experiment(
                                             JourneyExperiment.builder()
@@ -484,6 +487,7 @@ internal class JourneyCreateParamsTest {
                                     )
                                     .type(JourneySendNode.Type.SEND)
                                     .id("send-1")
+                                    .channel(JourneySendNode.Channel.EMAIL)
                                     .conditionsOfConditionAtom(listOf("string", "string"))
                                     .experiment(
                                         JourneyExperiment.builder()

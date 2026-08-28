@@ -31,6 +31,7 @@ private constructor(
     private val message: JsonField<Message>,
     private val type: JsonField<Type>,
     private val id: JsonField<String>,
+    private val channel: JsonField<Channel>,
     private val conditions: JsonField<JourneyConditionsField>,
     private val experiment: JsonField<JourneyExperiment>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -41,13 +42,14 @@ private constructor(
         @JsonProperty("message") @ExcludeMissing message: JsonField<Message> = JsonMissing.of(),
         @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
         @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("channel") @ExcludeMissing channel: JsonField<Channel> = JsonMissing.of(),
         @JsonProperty("conditions")
         @ExcludeMissing
         conditions: JsonField<JourneyConditionsField> = JsonMissing.of(),
         @JsonProperty("experiment")
         @ExcludeMissing
         experiment: JsonField<JourneyExperiment> = JsonMissing.of(),
-    ) : this(message, type, id, conditions, experiment, mutableMapOf())
+    ) : this(message, type, id, channel, conditions, experiment, mutableMapOf())
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
@@ -66,6 +68,16 @@ private constructor(
      *   server responded with an unexpected value).
      */
     fun id(): Optional<String> = id.getOptional("id")
+
+    /**
+     * The channel this node sends through. Optional — when omitted, the field is absent from the
+     * node, including on `GET`; nodes created before this field existed have it unset. Setting it
+     * makes the node's channel explicit to any client reading the journey.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun channel(): Optional<Channel> = channel.getOptional("channel")
 
     /**
      * Condition spec for a journey node. Accepts a single condition atom, an AND/OR group, or an
@@ -106,6 +118,13 @@ private constructor(
      * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+    /**
+     * Returns the raw JSON value of [channel].
+     *
+     * Unlike [channel], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("channel") @ExcludeMissing fun _channel(): JsonField<Channel> = channel
 
     /**
      * Returns the raw JSON value of [conditions].
@@ -157,6 +176,7 @@ private constructor(
         private var message: JsonField<Message>? = null
         private var type: JsonField<Type>? = null
         private var id: JsonField<String> = JsonMissing.of()
+        private var channel: JsonField<Channel> = JsonMissing.of()
         private var conditions: JsonField<JourneyConditionsField> = JsonMissing.of()
         private var experiment: JsonField<JourneyExperiment> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -166,6 +186,7 @@ private constructor(
             message = journeySendNode.message
             type = journeySendNode.type
             id = journeySendNode.id
+            channel = journeySendNode.channel
             conditions = journeySendNode.conditions
             experiment = journeySendNode.experiment
             additionalProperties = journeySendNode.additionalProperties.toMutableMap()
@@ -200,6 +221,21 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun id(id: JsonField<String>) = apply { this.id = id }
+
+        /**
+         * The channel this node sends through. Optional — when omitted, the field is absent from
+         * the node, including on `GET`; nodes created before this field existed have it unset.
+         * Setting it makes the node's channel explicit to any client reading the journey.
+         */
+        fun channel(channel: Channel) = channel(JsonField.of(channel))
+
+        /**
+         * Sets [Builder.channel] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.channel] with a well-typed [Channel] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun channel(channel: JsonField<Channel>) = apply { this.channel = channel }
 
         /**
          * Condition spec for a journey node. Accepts a single condition atom, an AND/OR group, or
@@ -295,6 +331,7 @@ private constructor(
                 checkRequired("message", message),
                 checkRequired("type", type),
                 id,
+                channel,
                 conditions,
                 experiment,
                 additionalProperties.toMutableMap(),
@@ -319,6 +356,7 @@ private constructor(
         message().validate()
         type().validate()
         id()
+        channel().ifPresent { it.validate() }
         conditions().ifPresent { it.validate() }
         experiment().ifPresent { it.validate() }
         validated = true
@@ -342,6 +380,7 @@ private constructor(
         (message.asKnown().getOrNull()?.validity() ?: 0) +
             (type.asKnown().getOrNull()?.validity() ?: 0) +
             (if (id.asKnown().isPresent) 1 else 0) +
+            (channel.asKnown().getOrNull()?.validity() ?: 0) +
             (conditions.asKnown().getOrNull()?.validity() ?: 0) +
             (experiment.asKnown().getOrNull()?.validity() ?: 0)
 
@@ -1667,6 +1706,169 @@ private constructor(
         override fun toString() = value.toString()
     }
 
+    /**
+     * The channel this node sends through. Optional — when omitted, the field is absent from the
+     * node, including on `GET`; nodes created before this field existed have it unset. Setting it
+     * makes the node's channel explicit to any client reading the journey.
+     */
+    class Channel @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+
+        /**
+         * Returns this class instance's raw value.
+         *
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
+         */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            @JvmField val EMAIL = of("email")
+
+            @JvmField val SMS = of("sms")
+
+            @JvmField val PUSH = of("push")
+
+            @JvmField val INBOX = of("inbox")
+
+            @JvmField val SLACK = of("slack")
+
+            @JvmField val MSTEAMS = of("msteams")
+
+            @JvmStatic fun of(value: String) = Channel(JsonField.of(value))
+        }
+
+        /** An enum containing [Channel]'s known values. */
+        enum class Known {
+            EMAIL,
+            SMS,
+            PUSH,
+            INBOX,
+            SLACK,
+            MSTEAMS,
+        }
+
+        /**
+         * An enum containing [Channel]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [Channel] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            EMAIL,
+            SMS,
+            PUSH,
+            INBOX,
+            SLACK,
+            MSTEAMS,
+            /** An enum member indicating that [Channel] was instantiated with an unknown value. */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         *
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
+         */
+        fun value(): Value =
+            when (this) {
+                EMAIL -> Value.EMAIL
+                SMS -> Value.SMS
+                PUSH -> Value.PUSH
+                INBOX -> Value.INBOX
+                SLACK -> Value.SLACK
+                MSTEAMS -> Value.MSTEAMS
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
+         *
+         * @throws CourierInvalidDataException if this class instance's value is a not a known
+         *   member.
+         */
+        fun known(): Known =
+            when (this) {
+                EMAIL -> Known.EMAIL
+                SMS -> Known.SMS
+                PUSH -> Known.PUSH
+                INBOX -> Known.INBOX
+                SLACK -> Known.SLACK
+                MSTEAMS -> Known.MSTEAMS
+                else -> throw CourierInvalidDataException("Unknown Channel: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws CourierInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow { CourierInvalidDataException("Value is not a String") }
+
+        private var validated: Boolean = false
+
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws CourierInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
+        fun validate(): Channel = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: CourierInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Channel && value == other.value
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
@@ -1676,17 +1878,18 @@ private constructor(
             message == other.message &&
             type == other.type &&
             id == other.id &&
+            channel == other.channel &&
             conditions == other.conditions &&
             experiment == other.experiment &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(message, type, id, conditions, experiment, additionalProperties)
+        Objects.hash(message, type, id, channel, conditions, experiment, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "JourneySendNode{message=$message, type=$type, id=$id, conditions=$conditions, experiment=$experiment, additionalProperties=$additionalProperties}"
+        "JourneySendNode{message=$message, type=$type, id=$id, channel=$channel, conditions=$conditions, experiment=$experiment, additionalProperties=$additionalProperties}"
 }

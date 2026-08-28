@@ -286,6 +286,7 @@ internal class JourneyNodeTest {
                 )
                 .type(JourneySendNode.Type.SEND)
                 .id("x")
+                .channel(JourneySendNode.Channel.EMAIL)
                 .conditionsOfConditionAtom(listOf("string", "string"))
                 .experiment(
                     JourneyExperiment.builder()
@@ -383,6 +384,7 @@ internal class JourneyNodeTest {
                     )
                     .type(JourneySendNode.Type.SEND)
                     .id("x")
+                    .channel(JourneySendNode.Channel.EMAIL)
                     .conditionsOfConditionAtom(listOf("string", "string"))
                     .experiment(
                         JourneyExperiment.builder()

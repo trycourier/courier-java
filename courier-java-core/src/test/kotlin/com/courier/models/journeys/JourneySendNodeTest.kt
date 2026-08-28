@@ -54,6 +54,7 @@ internal class JourneySendNodeTest {
                 )
                 .type(JourneySendNode.Type.SEND)
                 .id("x")
+                .channel(JourneySendNode.Channel.EMAIL)
                 .conditionsOfConditionAtom(listOf("string", "string"))
                 .experiment(
                     JourneyExperiment.builder()
@@ -119,6 +120,7 @@ internal class JourneySendNodeTest {
             )
         assertThat(journeySendNode.type()).isEqualTo(JourneySendNode.Type.SEND)
         assertThat(journeySendNode.id()).contains("x")
+        assertThat(journeySendNode.channel()).contains(JourneySendNode.Channel.EMAIL)
         assertThat(journeySendNode.conditions())
             .contains(JourneyConditionsField.ofConditionAtom(listOf("string", "string")))
         assertThat(journeySendNode.experiment())
@@ -192,6 +194,7 @@ internal class JourneySendNodeTest {
                 )
                 .type(JourneySendNode.Type.SEND)
                 .id("x")
+                .channel(JourneySendNode.Channel.EMAIL)
                 .conditionsOfConditionAtom(listOf("string", "string"))
                 .experiment(
                     JourneyExperiment.builder()

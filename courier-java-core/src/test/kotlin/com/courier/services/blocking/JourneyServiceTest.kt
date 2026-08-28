@@ -116,6 +116,7 @@ internal class JourneyServiceTest {
                                             )
                                             .type(JourneySendNode.Type.SEND)
                                             .id("send-1")
+                                            .channel(JourneySendNode.Channel.EMAIL)
                                             .conditionsOfConditionAtom(listOf("string", "string"))
                                             .experiment(
                                                 JourneyExperiment.builder()
