@@ -21,7 +21,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** Allows the user to execute an action. Can be a button or a link. */
-class ElementalActionNodeWithType
+class ElementalActionNode
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val channels: JsonField<List<String>>,
@@ -39,8 +39,7 @@ private constructor(
     private val fontSize: JsonField<String>,
     private val locales: JsonField<Locales>,
     private val padding: JsonField<String>,
-    private val style: JsonField<ElementalActionNode.Style>,
-    private val type: JsonField<Type>,
+    private val style: JsonField<Style>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -71,10 +70,7 @@ private constructor(
         @JsonProperty("font_size") @ExcludeMissing fontSize: JsonField<String> = JsonMissing.of(),
         @JsonProperty("locales") @ExcludeMissing locales: JsonField<Locales> = JsonMissing.of(),
         @JsonProperty("padding") @ExcludeMissing padding: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("style")
-        @ExcludeMissing
-        style: JsonField<ElementalActionNode.Style> = JsonMissing.of(),
-        @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
+        @JsonProperty("style") @ExcludeMissing style: JsonField<Style> = JsonMissing.of(),
     ) : this(
         channels,
         if_,
@@ -92,29 +88,11 @@ private constructor(
         locales,
         padding,
         style,
-        type,
         mutableMapOf(),
     )
 
-    fun toElementalActionNode(): ElementalActionNode =
-        ElementalActionNode.builder()
-            .channels(channels)
-            .if_(if_)
-            .loop(loop)
-            .ref(ref)
-            .content(content)
-            .href(href)
-            .actionId(actionId)
-            .align(align)
-            .backgroundColor(backgroundColor)
-            .borderRadius(borderRadius)
-            .borderSize(borderSize)
-            .disableTracking(disableTracking)
-            .fontSize(fontSize)
-            .locales(locales)
-            .padding(padding)
-            .style(style)
-            .build()
+    fun toElementalBaseNode(): ElementalBaseNode =
+        ElementalBaseNode.builder().channels(channels).if_(if_).loop(loop).ref(ref).build()
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -237,13 +215,7 @@ private constructor(
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun style(): Optional<ElementalActionNode.Style> = style.getOptional("style")
-
-    /**
-     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
-    fun type(): Optional<Type> = type.getOptional("type")
+    fun style(): Optional<Style> = style.getOptional("style")
 
     /**
      * Returns the raw JSON value of [channels].
@@ -361,16 +333,7 @@ private constructor(
      *
      * Unlike [style], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("style")
-    @ExcludeMissing
-    fun _style(): JsonField<ElementalActionNode.Style> = style
-
-    /**
-     * Returns the raw JSON value of [type].
-     *
-     * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
+    @JsonProperty("style") @ExcludeMissing fun _style(): JsonField<Style> = style
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -387,7 +350,7 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [ElementalActionNodeWithType].
+         * Returns a mutable builder for constructing an instance of [ElementalActionNode].
          *
          * The following fields are required:
          * ```java
@@ -398,7 +361,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [ElementalActionNodeWithType]. */
+    /** A builder for [ElementalActionNode]. */
     class Builder internal constructor() {
 
         private var channels: JsonField<MutableList<String>>? = null
@@ -416,30 +379,28 @@ private constructor(
         private var fontSize: JsonField<String> = JsonMissing.of()
         private var locales: JsonField<Locales> = JsonMissing.of()
         private var padding: JsonField<String> = JsonMissing.of()
-        private var style: JsonField<ElementalActionNode.Style> = JsonMissing.of()
-        private var type: JsonField<Type> = JsonMissing.of()
+        private var style: JsonField<Style> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(elementalActionNodeWithType: ElementalActionNodeWithType) = apply {
-            channels = elementalActionNodeWithType.channels.map { it.toMutableList() }
-            if_ = elementalActionNodeWithType.if_
-            loop = elementalActionNodeWithType.loop
-            ref = elementalActionNodeWithType.ref
-            content = elementalActionNodeWithType.content
-            href = elementalActionNodeWithType.href
-            actionId = elementalActionNodeWithType.actionId
-            align = elementalActionNodeWithType.align
-            backgroundColor = elementalActionNodeWithType.backgroundColor
-            borderRadius = elementalActionNodeWithType.borderRadius
-            borderSize = elementalActionNodeWithType.borderSize
-            disableTracking = elementalActionNodeWithType.disableTracking
-            fontSize = elementalActionNodeWithType.fontSize
-            locales = elementalActionNodeWithType.locales
-            padding = elementalActionNodeWithType.padding
-            style = elementalActionNodeWithType.style
-            type = elementalActionNodeWithType.type
-            additionalProperties = elementalActionNodeWithType.additionalProperties.toMutableMap()
+        internal fun from(elementalActionNode: ElementalActionNode) = apply {
+            channels = elementalActionNode.channels.map { it.toMutableList() }
+            if_ = elementalActionNode.if_
+            loop = elementalActionNode.loop
+            ref = elementalActionNode.ref
+            content = elementalActionNode.content
+            href = elementalActionNode.href
+            actionId = elementalActionNode.actionId
+            align = elementalActionNode.align
+            backgroundColor = elementalActionNode.backgroundColor
+            borderRadius = elementalActionNode.borderRadius
+            borderSize = elementalActionNode.borderSize
+            disableTracking = elementalActionNode.disableTracking
+            fontSize = elementalActionNode.fontSize
+            locales = elementalActionNode.locales
+            padding = elementalActionNode.padding
+            style = elementalActionNode.style
+            additionalProperties = elementalActionNode.additionalProperties.toMutableMap()
         }
 
         fun channels(channels: List<String>?) = channels(JsonField.ofNullable(channels))
@@ -686,29 +647,18 @@ private constructor(
         fun padding(padding: JsonField<String>) = apply { this.padding = padding }
 
         /** Defaults to `button`. */
-        fun style(style: ElementalActionNode.Style?) = style(JsonField.ofNullable(style))
+        fun style(style: Style?) = style(JsonField.ofNullable(style))
 
         /** Alias for calling [Builder.style] with `style.orElse(null)`. */
-        fun style(style: Optional<ElementalActionNode.Style>) = style(style.getOrNull())
+        fun style(style: Optional<Style>) = style(style.getOrNull())
 
         /**
          * Sets [Builder.style] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.style] with a well-typed [ElementalActionNode.Style]
-         * value instead. This method is primarily for setting the field to an undocumented or not
-         * yet supported value.
-         */
-        fun style(style: JsonField<ElementalActionNode.Style>) = apply { this.style = style }
-
-        fun type(type: Type) = type(JsonField.of(type))
-
-        /**
-         * Sets [Builder.type] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.type] with a well-typed [Type] value instead. This
+         * You should usually call [Builder.style] with a well-typed [Style] value instead. This
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun type(type: JsonField<Type>) = apply { this.type = type }
+        fun style(style: JsonField<Style>) = apply { this.style = style }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -730,7 +680,7 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [ElementalActionNodeWithType].
+         * Returns an immutable instance of [ElementalActionNode].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
@@ -742,8 +692,8 @@ private constructor(
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): ElementalActionNodeWithType =
-            ElementalActionNodeWithType(
+        fun build(): ElementalActionNode =
+            ElementalActionNode(
                 (channels ?: JsonMissing.of()).map { it.toImmutable() },
                 if_,
                 loop,
@@ -760,7 +710,6 @@ private constructor(
                 locales,
                 padding,
                 style,
-                type,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -775,7 +724,7 @@ private constructor(
      * @throws CourierInvalidDataException if any value type in this object doesn't match its
      *   expected type.
      */
-    fun validate(): ElementalActionNodeWithType = apply {
+    fun validate(): ElementalActionNode = apply {
         if (validated) {
             return@apply
         }
@@ -796,7 +745,6 @@ private constructor(
         locales().ifPresent { it.validate() }
         padding()
         style().ifPresent { it.validate() }
-        type().ifPresent { it.validate() }
         validated = true
     }
 
@@ -830,10 +778,10 @@ private constructor(
             (if (fontSize.asKnown().isPresent) 1 else 0) +
             (locales.asKnown().getOrNull()?.validity() ?: 0) +
             (if (padding.asKnown().isPresent) 1 else 0) +
-            (style.asKnown().getOrNull()?.validity() ?: 0) +
-            (type.asKnown().getOrNull()?.validity() ?: 0)
+            (style.asKnown().getOrNull()?.validity() ?: 0)
 
-    class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+    /** Defaults to `button`. */
+    class Style @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
          * Returns this class instance's raw value.
@@ -847,28 +795,32 @@ private constructor(
 
         companion object {
 
-            @JvmField val ACTION = of("action")
+            @JvmField val BUTTON = of("button")
 
-            @JvmStatic fun of(value: String) = Type(JsonField.of(value))
+            @JvmField val LINK = of("link")
+
+            @JvmStatic fun of(value: String) = Style(JsonField.of(value))
         }
 
-        /** An enum containing [Type]'s known values. */
+        /** An enum containing [Style]'s known values. */
         enum class Known {
-            ACTION
+            BUTTON,
+            LINK,
         }
 
         /**
-         * An enum containing [Type]'s known values, as well as an [_UNKNOWN] member.
+         * An enum containing [Style]'s known values, as well as an [_UNKNOWN] member.
          *
-         * An instance of [Type] can contain an unknown value in a couple of cases:
+         * An instance of [Style] can contain an unknown value in a couple of cases:
          * - It was deserialized from data that doesn't match any known member. For example, if the
          *   SDK is on an older version than the API, then the API may respond with new members that
          *   the SDK is unaware of.
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
-            ACTION,
-            /** An enum member indicating that [Type] was instantiated with an unknown value. */
+            BUTTON,
+            LINK,
+            /** An enum member indicating that [Style] was instantiated with an unknown value. */
             _UNKNOWN,
         }
 
@@ -881,7 +833,8 @@ private constructor(
          */
         fun value(): Value =
             when (this) {
-                ACTION -> Value.ACTION
+                BUTTON -> Value.BUTTON
+                LINK -> Value.LINK
                 else -> Value._UNKNOWN
             }
 
@@ -896,8 +849,9 @@ private constructor(
          */
         fun known(): Known =
             when (this) {
-                ACTION -> Known.ACTION
-                else -> throw CourierInvalidDataException("Unknown Type: $value")
+                BUTTON -> Known.BUTTON
+                LINK -> Known.LINK
+                else -> throw CourierInvalidDataException("Unknown Style: $value")
             }
 
         /**
@@ -923,7 +877,7 @@ private constructor(
          * @throws CourierInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): Type = apply {
+        fun validate(): Style = apply {
             if (validated) {
                 return@apply
             }
@@ -953,7 +907,7 @@ private constructor(
                 return true
             }
 
-            return other is Type && value == other.value
+            return other is Style && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -966,7 +920,7 @@ private constructor(
             return true
         }
 
-        return other is ElementalActionNodeWithType &&
+        return other is ElementalActionNode &&
             channels == other.channels &&
             if_ == other.if_ &&
             loop == other.loop &&
@@ -983,7 +937,6 @@ private constructor(
             locales == other.locales &&
             padding == other.padding &&
             style == other.style &&
-            type == other.type &&
             additionalProperties == other.additionalProperties
     }
 
@@ -1005,7 +958,6 @@ private constructor(
             locales,
             padding,
             style,
-            type,
             additionalProperties,
         )
     }
@@ -1013,5 +965,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ElementalActionNodeWithType{channels=$channels, if_=$if_, loop=$loop, ref=$ref, content=$content, href=$href, actionId=$actionId, align=$align, backgroundColor=$backgroundColor, borderRadius=$borderRadius, borderSize=$borderSize, disableTracking=$disableTracking, fontSize=$fontSize, locales=$locales, padding=$padding, style=$style, type=$type, additionalProperties=$additionalProperties}"
+        "ElementalActionNode{channels=$channels, if_=$if_, loop=$loop, ref=$ref, content=$content, href=$href, actionId=$actionId, align=$align, backgroundColor=$backgroundColor, borderRadius=$borderRadius, borderSize=$borderSize, disableTracking=$disableTracking, fontSize=$fontSize, locales=$locales, padding=$padding, style=$style, additionalProperties=$additionalProperties}"
 }

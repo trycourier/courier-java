@@ -4,7 +4,7 @@ package com.courier.models.notifications
 
 import com.courier.models.ElementalChannelNodeWithType
 import com.courier.models.ElementalContent
-import com.courier.models.ElementalTextNodeWithType
+import com.courier.models.ElementalMetaNodeWithType
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -62,7 +62,7 @@ internal class NotificationReplaceParamsTest {
                                 .brand(NotificationTemplatePayload.Brand.builder().id("id").build())
                                 .content(
                                     ElementalContent.builder()
-                                        .addElement(ElementalTextNodeWithType.builder().build())
+                                        .addElement(ElementalMetaNodeWithType.builder().build())
                                         .version("2022-01-01")
                                         .build()
                                 )
@@ -179,7 +179,7 @@ internal class NotificationReplaceParamsTest {
                                 .brand(NotificationTemplatePayload.Brand.builder().id("id").build())
                                 .content(
                                     ElementalContent.builder()
-                                        .addElement(ElementalTextNodeWithType.builder().build())
+                                        .addElement(ElementalMetaNodeWithType.builder().build())
                                         .version("2022-01-01")
                                         .build()
                                 )
@@ -211,7 +211,7 @@ internal class NotificationReplaceParamsTest {
                             .brand(NotificationTemplatePayload.Brand.builder().id("id").build())
                             .content(
                                 ElementalContent.builder()
-                                    .addElement(ElementalTextNodeWithType.builder().build())
+                                    .addElement(ElementalMetaNodeWithType.builder().build())
                                     .version("2022-01-01")
                                     .build()
                             )

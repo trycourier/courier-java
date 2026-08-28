@@ -25,10 +25,6 @@ internal class JourneyTemplateReplaceRequestTest {
                             JourneyTemplateReplaceRequest.Notification.Content.builder()
                                 .addElement(
                                     ElementalTextNodeWithType.builder()
-                                        .addChannel("string")
-                                        .if_("if")
-                                        .loop("loop")
-                                        .ref("ref")
                                         .type(ElementalTextNodeWithType.Type.TEXT)
                                         .build()
                                 )
@@ -63,10 +59,6 @@ internal class JourneyTemplateReplaceRequestTest {
                         JourneyTemplateReplaceRequest.Notification.Content.builder()
                             .addElement(
                                 ElementalTextNodeWithType.builder()
-                                    .addChannel("string")
-                                    .if_("if")
-                                    .loop("loop")
-                                    .ref("ref")
                                     .type(ElementalTextNodeWithType.Type.TEXT)
                                     .build()
                             )
@@ -105,10 +97,6 @@ internal class JourneyTemplateReplaceRequestTest {
                             JourneyTemplateReplaceRequest.Notification.Content.builder()
                                 .addElement(
                                     ElementalTextNodeWithType.builder()
-                                        .addChannel("string")
-                                        .if_("if")
-                                        .loop("loop")
-                                        .ref("ref")
                                         .type(ElementalTextNodeWithType.Type.TEXT)
                                         .build()
                                 )

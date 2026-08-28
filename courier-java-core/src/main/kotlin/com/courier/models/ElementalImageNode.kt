@@ -2,7 +2,6 @@
 
 package com.courier.models
 
-import com.courier.core.Enum
 import com.courier.core.ExcludeMissing
 import com.courier.core.JsonField
 import com.courier.core.JsonMissing
@@ -21,7 +20,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** Used to embed an image into the notification. */
-class ElementalImageNodeWithType
+class ElementalImageNode
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val channels: JsonField<List<String>>,
@@ -36,7 +35,6 @@ private constructor(
     private val href: JsonField<String>,
     private val padding: JsonField<String>,
     private val width: JsonField<String>,
-    private val type: JsonField<Type>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -60,7 +58,6 @@ private constructor(
         @JsonProperty("href") @ExcludeMissing href: JsonField<String> = JsonMissing.of(),
         @JsonProperty("padding") @ExcludeMissing padding: JsonField<String> = JsonMissing.of(),
         @JsonProperty("width") @ExcludeMissing width: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
     ) : this(
         channels,
         if_,
@@ -74,25 +71,11 @@ private constructor(
         href,
         padding,
         width,
-        type,
         mutableMapOf(),
     )
 
-    fun toElementalImageNode(): ElementalImageNode =
-        ElementalImageNode.builder()
-            .channels(channels)
-            .if_(if_)
-            .loop(loop)
-            .ref(ref)
-            .src(src)
-            .align(align)
-            .altText(altText)
-            .borderColor(borderColor)
-            .borderSize(borderSize)
-            .href(href)
-            .padding(padding)
-            .width(width)
-            .build()
+    fun toElementalBaseNode(): ElementalBaseNode =
+        ElementalBaseNode.builder().channels(channels).if_(if_).loop(loop).ref(ref).build()
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -183,12 +166,6 @@ private constructor(
     fun width(): Optional<String> = width.getOptional("width")
 
     /**
-     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
-    fun type(): Optional<Type> = type.getOptional("type")
-
-    /**
      * Returns the raw JSON value of [channels].
      *
      * Unlike [channels], this method doesn't throw if the JSON field has an unexpected type.
@@ -274,13 +251,6 @@ private constructor(
      */
     @JsonProperty("width") @ExcludeMissing fun _width(): JsonField<String> = width
 
-    /**
-     * Returns the raw JSON value of [type].
-     *
-     * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
-
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
@@ -296,7 +266,7 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [ElementalImageNodeWithType].
+         * Returns a mutable builder for constructing an instance of [ElementalImageNode].
          *
          * The following fields are required:
          * ```java
@@ -306,7 +276,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [ElementalImageNodeWithType]. */
+    /** A builder for [ElementalImageNode]. */
     class Builder internal constructor() {
 
         private var channels: JsonField<MutableList<String>>? = null
@@ -321,25 +291,23 @@ private constructor(
         private var href: JsonField<String> = JsonMissing.of()
         private var padding: JsonField<String> = JsonMissing.of()
         private var width: JsonField<String> = JsonMissing.of()
-        private var type: JsonField<Type> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(elementalImageNodeWithType: ElementalImageNodeWithType) = apply {
-            channels = elementalImageNodeWithType.channels.map { it.toMutableList() }
-            if_ = elementalImageNodeWithType.if_
-            loop = elementalImageNodeWithType.loop
-            ref = elementalImageNodeWithType.ref
-            src = elementalImageNodeWithType.src
-            align = elementalImageNodeWithType.align
-            altText = elementalImageNodeWithType.altText
-            borderColor = elementalImageNodeWithType.borderColor
-            borderSize = elementalImageNodeWithType.borderSize
-            href = elementalImageNodeWithType.href
-            padding = elementalImageNodeWithType.padding
-            width = elementalImageNodeWithType.width
-            type = elementalImageNodeWithType.type
-            additionalProperties = elementalImageNodeWithType.additionalProperties.toMutableMap()
+        internal fun from(elementalImageNode: ElementalImageNode) = apply {
+            channels = elementalImageNode.channels.map { it.toMutableList() }
+            if_ = elementalImageNode.if_
+            loop = elementalImageNode.loop
+            ref = elementalImageNode.ref
+            src = elementalImageNode.src
+            align = elementalImageNode.align
+            altText = elementalImageNode.altText
+            borderColor = elementalImageNode.borderColor
+            borderSize = elementalImageNode.borderSize
+            href = elementalImageNode.href
+            padding = elementalImageNode.padding
+            width = elementalImageNode.width
+            additionalProperties = elementalImageNode.additionalProperties.toMutableMap()
         }
 
         fun channels(channels: List<String>?) = channels(JsonField.ofNullable(channels))
@@ -520,16 +488,6 @@ private constructor(
          */
         fun width(width: JsonField<String>) = apply { this.width = width }
 
-        fun type(type: Type) = type(JsonField.of(type))
-
-        /**
-         * Sets [Builder.type] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.type] with a well-typed [Type] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun type(type: JsonField<Type>) = apply { this.type = type }
-
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -550,7 +508,7 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [ElementalImageNodeWithType].
+         * Returns an immutable instance of [ElementalImageNode].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
@@ -561,8 +519,8 @@ private constructor(
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): ElementalImageNodeWithType =
-            ElementalImageNodeWithType(
+        fun build(): ElementalImageNode =
+            ElementalImageNode(
                 (channels ?: JsonMissing.of()).map { it.toImmutable() },
                 if_,
                 loop,
@@ -575,7 +533,6 @@ private constructor(
                 href,
                 padding,
                 width,
-                type,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -590,7 +547,7 @@ private constructor(
      * @throws CourierInvalidDataException if any value type in this object doesn't match its
      *   expected type.
      */
-    fun validate(): ElementalImageNodeWithType = apply {
+    fun validate(): ElementalImageNode = apply {
         if (validated) {
             return@apply
         }
@@ -607,7 +564,6 @@ private constructor(
         href()
         padding()
         width()
-        type().ifPresent { it.validate() }
         validated = true
     }
 
@@ -637,143 +593,14 @@ private constructor(
             (if (borderSize.asKnown().isPresent) 1 else 0) +
             (if (href.asKnown().isPresent) 1 else 0) +
             (if (padding.asKnown().isPresent) 1 else 0) +
-            (if (width.asKnown().isPresent) 1 else 0) +
-            (type.asKnown().getOrNull()?.validity() ?: 0)
-
-    class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
-
-        /**
-         * Returns this class instance's raw value.
-         *
-         * This is usually only useful if this instance was deserialized from data that doesn't
-         * match any known member, and you want to know that value. For example, if the SDK is on an
-         * older version than the API, then the API may respond with new members that the SDK is
-         * unaware of.
-         */
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-        companion object {
-
-            @JvmField val IMAGE = of("image")
-
-            @JvmStatic fun of(value: String) = Type(JsonField.of(value))
-        }
-
-        /** An enum containing [Type]'s known values. */
-        enum class Known {
-            IMAGE
-        }
-
-        /**
-         * An enum containing [Type]'s known values, as well as an [_UNKNOWN] member.
-         *
-         * An instance of [Type] can contain an unknown value in a couple of cases:
-         * - It was deserialized from data that doesn't match any known member. For example, if the
-         *   SDK is on an older version than the API, then the API may respond with new members that
-         *   the SDK is unaware of.
-         * - It was constructed with an arbitrary value using the [of] method.
-         */
-        enum class Value {
-            IMAGE,
-            /** An enum member indicating that [Type] was instantiated with an unknown value. */
-            _UNKNOWN,
-        }
-
-        /**
-         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
-         * if the class was instantiated with an unknown value.
-         *
-         * Use the [known] method instead if you're certain the value is always known or if you want
-         * to throw for the unknown case.
-         */
-        fun value(): Value =
-            when (this) {
-                IMAGE -> Value.IMAGE
-                else -> Value._UNKNOWN
-            }
-
-        /**
-         * Returns an enum member corresponding to this class instance's value.
-         *
-         * Use the [value] method instead if you're uncertain the value is always known and don't
-         * want to throw for the unknown case.
-         *
-         * @throws CourierInvalidDataException if this class instance's value is a not a known
-         *   member.
-         */
-        fun known(): Known =
-            when (this) {
-                IMAGE -> Known.IMAGE
-                else -> throw CourierInvalidDataException("Unknown Type: $value")
-            }
-
-        /**
-         * Returns this class instance's primitive wire representation.
-         *
-         * This differs from the [toString] method because that method is primarily for debugging
-         * and generally doesn't throw.
-         *
-         * @throws CourierInvalidDataException if this class instance's value does not have the
-         *   expected primitive type.
-         */
-        fun asString(): String =
-            _value().asString().orElseThrow { CourierInvalidDataException("Value is not a String") }
-
-        private var validated: Boolean = false
-
-        /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
-         *
-         * This method is _not_ forwards compatible with new types from the API for existing fields.
-         *
-         * @throws CourierInvalidDataException if any value type in this object doesn't match its
-         *   expected type.
-         */
-        fun validate(): Type = apply {
-            if (validated) {
-                return@apply
-            }
-
-            known()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: CourierInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Type && value == other.value
-        }
-
-        override fun hashCode() = value.hashCode()
-
-        override fun toString() = value.toString()
-    }
+            (if (width.asKnown().isPresent) 1 else 0)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return other is ElementalImageNodeWithType &&
+        return other is ElementalImageNode &&
             channels == other.channels &&
             if_ == other.if_ &&
             loop == other.loop &&
@@ -786,7 +613,6 @@ private constructor(
             href == other.href &&
             padding == other.padding &&
             width == other.width &&
-            type == other.type &&
             additionalProperties == other.additionalProperties
     }
 
@@ -804,7 +630,6 @@ private constructor(
             href,
             padding,
             width,
-            type,
             additionalProperties,
         )
     }
@@ -812,5 +637,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ElementalImageNodeWithType{channels=$channels, if_=$if_, loop=$loop, ref=$ref, src=$src, align=$align, altText=$altText, borderColor=$borderColor, borderSize=$borderSize, href=$href, padding=$padding, width=$width, type=$type, additionalProperties=$additionalProperties}"
+        "ElementalImageNode{channels=$channels, if_=$if_, loop=$loop, ref=$ref, src=$src, align=$align, altText=$altText, borderColor=$borderColor, borderSize=$borderSize, href=$href, padding=$padding, width=$width, additionalProperties=$additionalProperties}"
 }

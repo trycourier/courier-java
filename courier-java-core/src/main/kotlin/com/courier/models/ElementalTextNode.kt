@@ -21,7 +21,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** Represents a body of text to be rendered inside of the notification. */
-class ElementalTextNodeWithType
+class ElementalTextNode
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val channels: JsonField<List<String>>,
@@ -29,18 +29,17 @@ private constructor(
     private val loop: JsonField<String>,
     private val ref: JsonField<String>,
     private val content: JsonField<String>,
-    private val align: JsonField<ElementalTextNode.Align>,
+    private val align: JsonField<Align>,
     private val bold: JsonField<String>,
     private val color: JsonField<String>,
     private val fontSize: JsonField<String>,
-    private val format: JsonField<ElementalTextNode.Format>,
+    private val format: JsonField<Format>,
     private val italic: JsonField<String>,
     private val lineHeight: JsonField<String>,
     private val locales: JsonField<Locales>,
     private val strikethrough: JsonField<String>,
     private val textStyle: JsonField<TextStyle>,
     private val underline: JsonField<String>,
-    private val type: JsonField<Type>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -53,15 +52,11 @@ private constructor(
         @JsonProperty("loop") @ExcludeMissing loop: JsonField<String> = JsonMissing.of(),
         @JsonProperty("ref") @ExcludeMissing ref: JsonField<String> = JsonMissing.of(),
         @JsonProperty("content") @ExcludeMissing content: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("align")
-        @ExcludeMissing
-        align: JsonField<ElementalTextNode.Align> = JsonMissing.of(),
+        @JsonProperty("align") @ExcludeMissing align: JsonField<Align> = JsonMissing.of(),
         @JsonProperty("bold") @ExcludeMissing bold: JsonField<String> = JsonMissing.of(),
         @JsonProperty("color") @ExcludeMissing color: JsonField<String> = JsonMissing.of(),
         @JsonProperty("font_size") @ExcludeMissing fontSize: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("format")
-        @ExcludeMissing
-        format: JsonField<ElementalTextNode.Format> = JsonMissing.of(),
+        @JsonProperty("format") @ExcludeMissing format: JsonField<Format> = JsonMissing.of(),
         @JsonProperty("italic") @ExcludeMissing italic: JsonField<String> = JsonMissing.of(),
         @JsonProperty("line_height")
         @ExcludeMissing
@@ -74,7 +69,6 @@ private constructor(
         @ExcludeMissing
         textStyle: JsonField<TextStyle> = JsonMissing.of(),
         @JsonProperty("underline") @ExcludeMissing underline: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
     ) : this(
         channels,
         if_,
@@ -92,29 +86,11 @@ private constructor(
         strikethrough,
         textStyle,
         underline,
-        type,
         mutableMapOf(),
     )
 
-    fun toElementalTextNode(): ElementalTextNode =
-        ElementalTextNode.builder()
-            .channels(channels)
-            .if_(if_)
-            .loop(loop)
-            .ref(ref)
-            .content(content)
-            .align(align)
-            .bold(bold)
-            .color(color)
-            .fontSize(fontSize)
-            .format(format)
-            .italic(italic)
-            .lineHeight(lineHeight)
-            .locales(locales)
-            .strikethrough(strikethrough)
-            .textStyle(textStyle)
-            .underline(underline)
-            .build()
+    fun toElementalBaseNode(): ElementalBaseNode =
+        ElementalBaseNode.builder().channels(channels).if_(if_).loop(loop).ref(ref).build()
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -155,7 +131,7 @@ private constructor(
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun align(): Optional<ElementalTextNode.Align> = align.getOptional("align")
+    fun align(): Optional<Align> = align.getOptional("align")
 
     /**
      * Apply bold to the text
@@ -186,7 +162,7 @@ private constructor(
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun format(): Optional<ElementalTextNode.Format> = format.getOptional("format")
+    fun format(): Optional<Format> = format.getOptional("format")
 
     /**
      * Apply italics to the text
@@ -240,12 +216,6 @@ private constructor(
     fun underline(): Optional<String> = underline.getOptional("underline")
 
     /**
-     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
-    fun type(): Optional<Type> = type.getOptional("type")
-
-    /**
      * Returns the raw JSON value of [channels].
      *
      * Unlike [channels], this method doesn't throw if the JSON field has an unexpected type.
@@ -285,7 +255,7 @@ private constructor(
      *
      * Unlike [align], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("align") @ExcludeMissing fun _align(): JsonField<ElementalTextNode.Align> = align
+    @JsonProperty("align") @ExcludeMissing fun _align(): JsonField<Align> = align
 
     /**
      * Returns the raw JSON value of [bold].
@@ -313,9 +283,7 @@ private constructor(
      *
      * Unlike [format], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("format")
-    @ExcludeMissing
-    fun _format(): JsonField<ElementalTextNode.Format> = format
+    @JsonProperty("format") @ExcludeMissing fun _format(): JsonField<Format> = format
 
     /**
      * Returns the raw JSON value of [italic].
@@ -361,13 +329,6 @@ private constructor(
      */
     @JsonProperty("underline") @ExcludeMissing fun _underline(): JsonField<String> = underline
 
-    /**
-     * Returns the raw JSON value of [type].
-     *
-     * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
-
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
@@ -383,7 +344,7 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [ElementalTextNodeWithType].
+         * Returns a mutable builder for constructing an instance of [ElementalTextNode].
          *
          * The following fields are required:
          * ```java
@@ -393,7 +354,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [ElementalTextNodeWithType]. */
+    /** A builder for [ElementalTextNode]. */
     class Builder internal constructor() {
 
         private var channels: JsonField<MutableList<String>>? = null
@@ -401,40 +362,38 @@ private constructor(
         private var loop: JsonField<String> = JsonMissing.of()
         private var ref: JsonField<String> = JsonMissing.of()
         private var content: JsonField<String>? = null
-        private var align: JsonField<ElementalTextNode.Align> = JsonMissing.of()
+        private var align: JsonField<Align> = JsonMissing.of()
         private var bold: JsonField<String> = JsonMissing.of()
         private var color: JsonField<String> = JsonMissing.of()
         private var fontSize: JsonField<String> = JsonMissing.of()
-        private var format: JsonField<ElementalTextNode.Format> = JsonMissing.of()
+        private var format: JsonField<Format> = JsonMissing.of()
         private var italic: JsonField<String> = JsonMissing.of()
         private var lineHeight: JsonField<String> = JsonMissing.of()
         private var locales: JsonField<Locales> = JsonMissing.of()
         private var strikethrough: JsonField<String> = JsonMissing.of()
         private var textStyle: JsonField<TextStyle> = JsonMissing.of()
         private var underline: JsonField<String> = JsonMissing.of()
-        private var type: JsonField<Type> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(elementalTextNodeWithType: ElementalTextNodeWithType) = apply {
-            channels = elementalTextNodeWithType.channels.map { it.toMutableList() }
-            if_ = elementalTextNodeWithType.if_
-            loop = elementalTextNodeWithType.loop
-            ref = elementalTextNodeWithType.ref
-            content = elementalTextNodeWithType.content
-            align = elementalTextNodeWithType.align
-            bold = elementalTextNodeWithType.bold
-            color = elementalTextNodeWithType.color
-            fontSize = elementalTextNodeWithType.fontSize
-            format = elementalTextNodeWithType.format
-            italic = elementalTextNodeWithType.italic
-            lineHeight = elementalTextNodeWithType.lineHeight
-            locales = elementalTextNodeWithType.locales
-            strikethrough = elementalTextNodeWithType.strikethrough
-            textStyle = elementalTextNodeWithType.textStyle
-            underline = elementalTextNodeWithType.underline
-            type = elementalTextNodeWithType.type
-            additionalProperties = elementalTextNodeWithType.additionalProperties.toMutableMap()
+        internal fun from(elementalTextNode: ElementalTextNode) = apply {
+            channels = elementalTextNode.channels.map { it.toMutableList() }
+            if_ = elementalTextNode.if_
+            loop = elementalTextNode.loop
+            ref = elementalTextNode.ref
+            content = elementalTextNode.content
+            align = elementalTextNode.align
+            bold = elementalTextNode.bold
+            color = elementalTextNode.color
+            fontSize = elementalTextNode.fontSize
+            format = elementalTextNode.format
+            italic = elementalTextNode.italic
+            lineHeight = elementalTextNode.lineHeight
+            locales = elementalTextNode.locales
+            strikethrough = elementalTextNode.strikethrough
+            textStyle = elementalTextNode.textStyle
+            underline = elementalTextNode.underline
+            additionalProperties = elementalTextNode.additionalProperties.toMutableMap()
         }
 
         fun channels(channels: List<String>?) = channels(JsonField.ofNullable(channels))
@@ -519,16 +478,15 @@ private constructor(
         fun content(content: JsonField<String>) = apply { this.content = content }
 
         /** Text alignment. */
-        fun align(align: ElementalTextNode.Align) = align(JsonField.of(align))
+        fun align(align: Align) = align(JsonField.of(align))
 
         /**
          * Sets [Builder.align] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.align] with a well-typed [ElementalTextNode.Align] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.align] with a well-typed [Align] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun align(align: JsonField<ElementalTextNode.Align>) = apply { this.align = align }
+        fun align(align: JsonField<Align>) = apply { this.align = align }
 
         /** Apply bold to the text */
         fun bold(bold: String?) = bold(JsonField.ofNullable(bold))
@@ -575,19 +533,18 @@ private constructor(
          */
         fun fontSize(fontSize: JsonField<String>) = apply { this.fontSize = fontSize }
 
-        fun format(format: ElementalTextNode.Format?) = format(JsonField.ofNullable(format))
+        fun format(format: Format?) = format(JsonField.ofNullable(format))
 
         /** Alias for calling [Builder.format] with `format.orElse(null)`. */
-        fun format(format: Optional<ElementalTextNode.Format>) = format(format.getOrNull())
+        fun format(format: Optional<Format>) = format(format.getOrNull())
 
         /**
          * Sets [Builder.format] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.format] with a well-typed [ElementalTextNode.Format]
-         * value instead. This method is primarily for setting the field to an undocumented or not
-         * yet supported value.
+         * You should usually call [Builder.format] with a well-typed [Format] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun format(format: JsonField<ElementalTextNode.Format>) = apply { this.format = format }
+        fun format(format: JsonField<Format>) = apply { this.format = format }
 
         /** Apply italics to the text */
         fun italic(italic: String?) = italic(JsonField.ofNullable(italic))
@@ -688,16 +645,6 @@ private constructor(
          */
         fun underline(underline: JsonField<String>) = apply { this.underline = underline }
 
-        fun type(type: Type) = type(JsonField.of(type))
-
-        /**
-         * Sets [Builder.type] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.type] with a well-typed [Type] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun type(type: JsonField<Type>) = apply { this.type = type }
-
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -718,7 +665,7 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [ElementalTextNodeWithType].
+         * Returns an immutable instance of [ElementalTextNode].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
@@ -729,8 +676,8 @@ private constructor(
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): ElementalTextNodeWithType =
-            ElementalTextNodeWithType(
+        fun build(): ElementalTextNode =
+            ElementalTextNode(
                 (channels ?: JsonMissing.of()).map { it.toImmutable() },
                 if_,
                 loop,
@@ -747,7 +694,6 @@ private constructor(
                 strikethrough,
                 textStyle,
                 underline,
-                type,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -762,7 +708,7 @@ private constructor(
      * @throws CourierInvalidDataException if any value type in this object doesn't match its
      *   expected type.
      */
-    fun validate(): ElementalTextNodeWithType = apply {
+    fun validate(): ElementalTextNode = apply {
         if (validated) {
             return@apply
         }
@@ -783,7 +729,6 @@ private constructor(
         strikethrough()
         textStyle().ifPresent { it.validate() }
         underline()
-        type().ifPresent { it.validate() }
         validated = true
     }
 
@@ -817,10 +762,10 @@ private constructor(
             (locales.asKnown().getOrNull()?.validity() ?: 0) +
             (if (strikethrough.asKnown().isPresent) 1 else 0) +
             (textStyle.asKnown().getOrNull()?.validity() ?: 0) +
-            (if (underline.asKnown().isPresent) 1 else 0) +
-            (type.asKnown().getOrNull()?.validity() ?: 0)
+            (if (underline.asKnown().isPresent) 1 else 0)
 
-    class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+    /** Text alignment. */
+    class Align @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
          * Returns this class instance's raw value.
@@ -834,28 +779,36 @@ private constructor(
 
         companion object {
 
-            @JvmField val TEXT = of("text")
+            @JvmField val LEFT = of("left")
 
-            @JvmStatic fun of(value: String) = Type(JsonField.of(value))
+            @JvmField val CENTER = of("center")
+
+            @JvmField val RIGHT = of("right")
+
+            @JvmStatic fun of(value: String) = Align(JsonField.of(value))
         }
 
-        /** An enum containing [Type]'s known values. */
+        /** An enum containing [Align]'s known values. */
         enum class Known {
-            TEXT
+            LEFT,
+            CENTER,
+            RIGHT,
         }
 
         /**
-         * An enum containing [Type]'s known values, as well as an [_UNKNOWN] member.
+         * An enum containing [Align]'s known values, as well as an [_UNKNOWN] member.
          *
-         * An instance of [Type] can contain an unknown value in a couple of cases:
+         * An instance of [Align] can contain an unknown value in a couple of cases:
          * - It was deserialized from data that doesn't match any known member. For example, if the
          *   SDK is on an older version than the API, then the API may respond with new members that
          *   the SDK is unaware of.
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
-            TEXT,
-            /** An enum member indicating that [Type] was instantiated with an unknown value. */
+            LEFT,
+            CENTER,
+            RIGHT,
+            /** An enum member indicating that [Align] was instantiated with an unknown value. */
             _UNKNOWN,
         }
 
@@ -868,7 +821,9 @@ private constructor(
          */
         fun value(): Value =
             when (this) {
-                TEXT -> Value.TEXT
+                LEFT -> Value.LEFT
+                CENTER -> Value.CENTER
+                RIGHT -> Value.RIGHT
                 else -> Value._UNKNOWN
             }
 
@@ -883,8 +838,10 @@ private constructor(
          */
         fun known(): Known =
             when (this) {
-                TEXT -> Known.TEXT
-                else -> throw CourierInvalidDataException("Unknown Type: $value")
+                LEFT -> Known.LEFT
+                CENTER -> Known.CENTER
+                RIGHT -> Known.RIGHT
+                else -> throw CourierInvalidDataException("Unknown Align: $value")
             }
 
         /**
@@ -910,7 +867,7 @@ private constructor(
          * @throws CourierInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): Type = apply {
+        fun validate(): Align = apply {
             if (validated) {
                 return@apply
             }
@@ -940,7 +897,135 @@ private constructor(
                 return true
             }
 
-            return other is Type && value == other.value
+            return other is Align && value == other.value
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+    }
+
+    class Format @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+
+        /**
+         * Returns this class instance's raw value.
+         *
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
+         */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            @JvmField val MARKDOWN = of("markdown")
+
+            @JvmStatic fun of(value: String) = Format(JsonField.of(value))
+        }
+
+        /** An enum containing [Format]'s known values. */
+        enum class Known {
+            MARKDOWN
+        }
+
+        /**
+         * An enum containing [Format]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [Format] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            MARKDOWN,
+            /** An enum member indicating that [Format] was instantiated with an unknown value. */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         *
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
+         */
+        fun value(): Value =
+            when (this) {
+                MARKDOWN -> Value.MARKDOWN
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
+         *
+         * @throws CourierInvalidDataException if this class instance's value is a not a known
+         *   member.
+         */
+        fun known(): Known =
+            when (this) {
+                MARKDOWN -> Known.MARKDOWN
+                else -> throw CourierInvalidDataException("Unknown Format: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws CourierInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow { CourierInvalidDataException("Value is not a String") }
+
+        private var validated: Boolean = false
+
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws CourierInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
+        fun validate(): Format = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: CourierInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Format && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -953,7 +1038,7 @@ private constructor(
             return true
         }
 
-        return other is ElementalTextNodeWithType &&
+        return other is ElementalTextNode &&
             channels == other.channels &&
             if_ == other.if_ &&
             loop == other.loop &&
@@ -970,7 +1055,6 @@ private constructor(
             strikethrough == other.strikethrough &&
             textStyle == other.textStyle &&
             underline == other.underline &&
-            type == other.type &&
             additionalProperties == other.additionalProperties
     }
 
@@ -992,7 +1076,6 @@ private constructor(
             strikethrough,
             textStyle,
             underline,
-            type,
             additionalProperties,
         )
     }
@@ -1000,5 +1083,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ElementalTextNodeWithType{channels=$channels, if_=$if_, loop=$loop, ref=$ref, content=$content, align=$align, bold=$bold, color=$color, fontSize=$fontSize, format=$format, italic=$italic, lineHeight=$lineHeight, locales=$locales, strikethrough=$strikethrough, textStyle=$textStyle, underline=$underline, type=$type, additionalProperties=$additionalProperties}"
+        "ElementalTextNode{channels=$channels, if_=$if_, loop=$loop, ref=$ref, content=$content, align=$align, bold=$bold, color=$color, fontSize=$fontSize, format=$format, italic=$italic, lineHeight=$lineHeight, locales=$locales, strikethrough=$strikethrough, textStyle=$textStyle, underline=$underline, additionalProperties=$additionalProperties}"
 }
