@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.4.1](https://github.com/trycourier/courier-java/compare/v6.4.0...v6.4.1) (2026-08-28)
+
+
+### Bug Fixes
+
+* **api:** give Elemental nodes their properties in every SDK ([#149](https://github.com/trycourier/courier-java/issues/149)) ([2bbe86f](https://github.com/trycourier/courier-java/commit/2bbe86f8438314c575663ac3a71e5f0b4dd723f5))
+
 ## [6.4.0](https://github.com/trycourier/courier-java/compare/v6.3.0...v6.4.0) (2026-08-28)
 
 
