@@ -8,6 +8,7 @@ import com.courier.core.JsonField
 import com.courier.core.JsonMissing
 import com.courier.core.JsonValue
 import com.courier.core.checkKnown
+import com.courier.core.checkRequired
 import com.courier.core.toImmutable
 import com.courier.errors.CourierInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -19,6 +20,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
+/**
+ * Raw HTML string inside an Elemental document. When rendering a message, this node is turned into
+ * output only for the email channel; for other channels it produces no blocks.
+ */
 class ElementalHtmlNodeWithType
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
@@ -26,6 +31,8 @@ private constructor(
     private val if_: JsonField<String>,
     private val loop: JsonField<String>,
     private val ref: JsonField<String>,
+    private val content: JsonField<String>,
+    private val locales: JsonField<Locales>,
     private val type: JsonField<Type>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
@@ -38,11 +45,20 @@ private constructor(
         @JsonProperty("if") @ExcludeMissing if_: JsonField<String> = JsonMissing.of(),
         @JsonProperty("loop") @ExcludeMissing loop: JsonField<String> = JsonMissing.of(),
         @JsonProperty("ref") @ExcludeMissing ref: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("content") @ExcludeMissing content: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("locales") @ExcludeMissing locales: JsonField<Locales> = JsonMissing.of(),
         @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
-    ) : this(channels, if_, loop, ref, type, mutableMapOf())
+    ) : this(channels, if_, loop, ref, content, locales, type, mutableMapOf())
 
-    fun toElementalBaseNode(): ElementalBaseNode =
-        ElementalBaseNode.builder().channels(channels).if_(if_).loop(loop).ref(ref).build()
+    fun toElementalHtmlNode(): ElementalHtmlNode =
+        ElementalHtmlNode.builder()
+            .channels(channels)
+            .if_(if_)
+            .loop(loop)
+            .ref(ref)
+            .content(content)
+            .locales(locales)
+            .build()
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -67,6 +83,24 @@ private constructor(
      *   server responded with an unexpected value).
      */
     fun ref(): Optional<String> = ref.getOptional("ref")
+
+    /**
+     * Raw HTML string to render inside the notification.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun content(): String = content.getRequired("content")
+
+    /**
+     * Region specific content. See
+     * [locales docs](https://www.courier.com/docs/platform/content/elemental/locales/) for more
+     * details.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun locales(): Optional<Locales> = locales.getOptional("locales")
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -103,6 +137,20 @@ private constructor(
     @JsonProperty("ref") @ExcludeMissing fun _ref(): JsonField<String> = ref
 
     /**
+     * Returns the raw JSON value of [content].
+     *
+     * Unlike [content], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("content") @ExcludeMissing fun _content(): JsonField<String> = content
+
+    /**
+     * Returns the raw JSON value of [locales].
+     *
+     * Unlike [locales], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("locales") @ExcludeMissing fun _locales(): JsonField<Locales> = locales
+
+    /**
      * Returns the raw JSON value of [type].
      *
      * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
@@ -125,6 +173,11 @@ private constructor(
 
         /**
          * Returns a mutable builder for constructing an instance of [ElementalHtmlNodeWithType].
+         *
+         * The following fields are required:
+         * ```java
+         * .content()
+         * ```
          */
         @JvmStatic fun builder() = Builder()
     }
@@ -136,6 +189,8 @@ private constructor(
         private var if_: JsonField<String> = JsonMissing.of()
         private var loop: JsonField<String> = JsonMissing.of()
         private var ref: JsonField<String> = JsonMissing.of()
+        private var content: JsonField<String>? = null
+        private var locales: JsonField<Locales> = JsonMissing.of()
         private var type: JsonField<Type> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -145,6 +200,8 @@ private constructor(
             if_ = elementalHtmlNodeWithType.if_
             loop = elementalHtmlNodeWithType.loop
             ref = elementalHtmlNodeWithType.ref
+            content = elementalHtmlNodeWithType.content
+            locales = elementalHtmlNodeWithType.locales
             type = elementalHtmlNodeWithType.type
             additionalProperties = elementalHtmlNodeWithType.additionalProperties.toMutableMap()
         }
@@ -216,6 +273,35 @@ private constructor(
          */
         fun ref(ref: JsonField<String>) = apply { this.ref = ref }
 
+        /** Raw HTML string to render inside the notification. */
+        fun content(content: String) = content(JsonField.of(content))
+
+        /**
+         * Sets [Builder.content] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.content] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun content(content: JsonField<String>) = apply { this.content = content }
+
+        /**
+         * Region specific content. See
+         * [locales docs](https://www.courier.com/docs/platform/content/elemental/locales/) for more
+         * details.
+         */
+        fun locales(locales: Locales?) = locales(JsonField.ofNullable(locales))
+
+        /** Alias for calling [Builder.locales] with `locales.orElse(null)`. */
+        fun locales(locales: Optional<Locales>) = locales(locales.getOrNull())
+
+        /**
+         * Sets [Builder.locales] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.locales] with a well-typed [Locales] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun locales(locales: JsonField<Locales>) = apply { this.locales = locales }
+
         fun type(type: Type) = type(JsonField.of(type))
 
         /**
@@ -249,6 +335,13 @@ private constructor(
          * Returns an immutable instance of [ElementalHtmlNodeWithType].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .content()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): ElementalHtmlNodeWithType =
             ElementalHtmlNodeWithType(
@@ -256,6 +349,8 @@ private constructor(
                 if_,
                 loop,
                 ref,
+                checkRequired("content", content),
+                locales,
                 type,
                 additionalProperties.toMutableMap(),
             )
@@ -280,6 +375,8 @@ private constructor(
         if_()
         loop()
         ref()
+        content()
+        locales().ifPresent { it.validate() }
         type().ifPresent { it.validate() }
         validated = true
     }
@@ -303,6 +400,8 @@ private constructor(
             (if (if_.asKnown().isPresent) 1 else 0) +
             (if (loop.asKnown().isPresent) 1 else 0) +
             (if (ref.asKnown().isPresent) 1 else 0) +
+            (if (content.asKnown().isPresent) 1 else 0) +
+            (locales.asKnown().getOrNull()?.validity() ?: 0) +
             (type.asKnown().getOrNull()?.validity() ?: 0)
 
     class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
@@ -443,16 +542,18 @@ private constructor(
             if_ == other.if_ &&
             loop == other.loop &&
             ref == other.ref &&
+            content == other.content &&
+            locales == other.locales &&
             type == other.type &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(channels, if_, loop, ref, type, additionalProperties)
+        Objects.hash(channels, if_, loop, ref, content, locales, type, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ElementalHtmlNodeWithType{channels=$channels, if_=$if_, loop=$loop, ref=$ref, type=$type, additionalProperties=$additionalProperties}"
+        "ElementalHtmlNodeWithType{channels=$channels, if_=$if_, loop=$loop, ref=$ref, content=$content, locales=$locales, type=$type, additionalProperties=$additionalProperties}"
 }

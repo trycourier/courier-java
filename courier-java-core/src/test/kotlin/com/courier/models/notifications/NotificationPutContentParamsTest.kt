@@ -3,7 +3,7 @@
 package com.courier.models.notifications
 
 import com.courier.models.ElementalChannelNodeWithType
-import com.courier.models.ElementalTextNodeWithType
+import com.courier.models.ElementalMetaNodeWithType
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -40,7 +40,7 @@ internal class NotificationPutContentParamsTest {
                     NotificationContentPutRequest.builder()
                         .content(
                             NotificationContentPutRequest.Content.builder()
-                                .addElement(ElementalTextNodeWithType.builder().build())
+                                .addElement(ElementalMetaNodeWithType.builder().build())
                                 .build()
                         )
                         .build()
@@ -103,7 +103,7 @@ internal class NotificationPutContentParamsTest {
                     NotificationContentPutRequest.builder()
                         .content(
                             NotificationContentPutRequest.Content.builder()
-                                .addElement(ElementalTextNodeWithType.builder().build())
+                                .addElement(ElementalMetaNodeWithType.builder().build())
                                 .build()
                         )
                         .build()
@@ -117,7 +117,7 @@ internal class NotificationPutContentParamsTest {
                 NotificationContentPutRequest.builder()
                     .content(
                         NotificationContentPutRequest.Content.builder()
-                            .addElement(ElementalTextNodeWithType.builder().build())
+                            .addElement(ElementalMetaNodeWithType.builder().build())
                             .build()
                     )
                     .build()

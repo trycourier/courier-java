@@ -18,17 +18,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.util.Objects
 import java.util.Optional
 
-/**
- * The channel element allows a notification to be customized based on which channel it is sent
- * through. For example, you may want to display a detailed message when the notification is sent
- * through email, and a more concise message in a push notification. Channel elements are only valid
- * as top-level elements; you cannot nest channel elements. If there is a channel element specified
- * at the top-level of the document, all sibling elements must be channel elements. Note: As an
- * alternative, most elements support a `channel` property. Which allows you to selectively display
- * an individual element on a per channel basis. See the
- * [control flow docs](https://www.courier.com/docs/platform/content/elemental/control-flow/) for
- * more details.
- */
+/** Represents a body of text to be rendered inside of the notification. */
 @JsonDeserialize(using = ElementalNode.Deserializer::class)
 @JsonSerialize(using = ElementalNode.Serializer::class)
 class ElementalNode
@@ -44,9 +34,15 @@ private constructor(
     private val _json: JsonValue? = null,
 ) {
 
+    /** Represents a body of text to be rendered inside of the notification. */
     fun textNodeWithType(): Optional<ElementalTextNodeWithType> =
         Optional.ofNullable(textNodeWithType)
 
+    /**
+     * The meta element contains information describing the notification that may be used by a
+     * particular channel or provider. One important field is the title field which will be used as
+     * the title for channels that support it.
+     */
     fun metaNodeWithType(): Optional<ElementalMetaNodeWithType> =
         Optional.ofNullable(metaNodeWithType)
 
@@ -64,18 +60,26 @@ private constructor(
     fun channelNodeWithType(): Optional<ElementalChannelNodeWithType> =
         Optional.ofNullable(channelNodeWithType)
 
+    /** Used to embed an image into the notification. */
     fun imageNodeWithType(): Optional<ElementalImageNodeWithType> =
         Optional.ofNullable(imageNodeWithType)
 
+    /** Allows the user to execute an action. Can be a button or a link. */
     fun actionNodeWithType(): Optional<ElementalActionNodeWithType> =
         Optional.ofNullable(actionNodeWithType)
 
+    /** Renders a dividing line between elements. */
     fun dividerNodeWithType(): Optional<ElementalDividerNodeWithType> =
         Optional.ofNullable(dividerNodeWithType)
 
+    /** Renders a quote block. */
     fun quoteNodeWithType(): Optional<ElementalQuoteNodeWithType> =
         Optional.ofNullable(quoteNodeWithType)
 
+    /**
+     * Raw HTML string inside an Elemental document. When rendering a message, this node is turned
+     * into output only for the email channel; for other channels it produces no blocks.
+     */
     fun htmlNodeWithType(): Optional<ElementalHtmlNodeWithType> =
         Optional.ofNullable(htmlNodeWithType)
 
@@ -95,9 +99,15 @@ private constructor(
 
     fun isHtmlNodeWithType(): Boolean = htmlNodeWithType != null
 
+    /** Represents a body of text to be rendered inside of the notification. */
     fun asTextNodeWithType(): ElementalTextNodeWithType =
         textNodeWithType.getOrThrow("textNodeWithType")
 
+    /**
+     * The meta element contains information describing the notification that may be used by a
+     * particular channel or provider. One important field is the title field which will be used as
+     * the title for channels that support it.
+     */
     fun asMetaNodeWithType(): ElementalMetaNodeWithType =
         metaNodeWithType.getOrThrow("metaNodeWithType")
 
@@ -115,18 +125,26 @@ private constructor(
     fun asChannelNodeWithType(): ElementalChannelNodeWithType =
         channelNodeWithType.getOrThrow("channelNodeWithType")
 
+    /** Used to embed an image into the notification. */
     fun asImageNodeWithType(): ElementalImageNodeWithType =
         imageNodeWithType.getOrThrow("imageNodeWithType")
 
+    /** Allows the user to execute an action. Can be a button or a link. */
     fun asActionNodeWithType(): ElementalActionNodeWithType =
         actionNodeWithType.getOrThrow("actionNodeWithType")
 
+    /** Renders a dividing line between elements. */
     fun asDividerNodeWithType(): ElementalDividerNodeWithType =
         dividerNodeWithType.getOrThrow("dividerNodeWithType")
 
+    /** Renders a quote block. */
     fun asQuoteNodeWithType(): ElementalQuoteNodeWithType =
         quoteNodeWithType.getOrThrow("quoteNodeWithType")
 
+    /**
+     * Raw HTML string inside an Elemental document. When rendering a message, this node is turned
+     * into output only for the email channel; for other channels it produces no blocks.
+     */
     fun asHtmlNodeWithType(): ElementalHtmlNodeWithType =
         htmlNodeWithType.getOrThrow("htmlNodeWithType")
 
@@ -325,10 +343,16 @@ private constructor(
 
     companion object {
 
+        /** Represents a body of text to be rendered inside of the notification. */
         @JvmStatic
         fun ofTextNodeWithType(textNodeWithType: ElementalTextNodeWithType) =
             ElementalNode(textNodeWithType = textNodeWithType)
 
+        /**
+         * The meta element contains information describing the notification that may be used by a
+         * particular channel or provider. One important field is the title field which will be used
+         * as the title for channels that support it.
+         */
         @JvmStatic
         fun ofMetaNodeWithType(metaNodeWithType: ElementalMetaNodeWithType) =
             ElementalNode(metaNodeWithType = metaNodeWithType)
@@ -349,22 +373,30 @@ private constructor(
         fun ofChannelNodeWithType(channelNodeWithType: ElementalChannelNodeWithType) =
             ElementalNode(channelNodeWithType = channelNodeWithType)
 
+        /** Used to embed an image into the notification. */
         @JvmStatic
         fun ofImageNodeWithType(imageNodeWithType: ElementalImageNodeWithType) =
             ElementalNode(imageNodeWithType = imageNodeWithType)
 
+        /** Allows the user to execute an action. Can be a button or a link. */
         @JvmStatic
         fun ofActionNodeWithType(actionNodeWithType: ElementalActionNodeWithType) =
             ElementalNode(actionNodeWithType = actionNodeWithType)
 
+        /** Renders a dividing line between elements. */
         @JvmStatic
         fun ofDividerNodeWithType(dividerNodeWithType: ElementalDividerNodeWithType) =
             ElementalNode(dividerNodeWithType = dividerNodeWithType)
 
+        /** Renders a quote block. */
         @JvmStatic
         fun ofQuoteNodeWithType(quoteNodeWithType: ElementalQuoteNodeWithType) =
             ElementalNode(quoteNodeWithType = quoteNodeWithType)
 
+        /**
+         * Raw HTML string inside an Elemental document. When rendering a message, this node is
+         * turned into output only for the email channel; for other channels it produces no blocks.
+         */
         @JvmStatic
         fun ofHtmlNodeWithType(htmlNodeWithType: ElementalHtmlNodeWithType) =
             ElementalNode(htmlNodeWithType = htmlNodeWithType)
@@ -375,8 +407,14 @@ private constructor(
      */
     interface Visitor<out T> {
 
+        /** Represents a body of text to be rendered inside of the notification. */
         fun visitTextNodeWithType(textNodeWithType: ElementalTextNodeWithType): T
 
+        /**
+         * The meta element contains information describing the notification that may be used by a
+         * particular channel or provider. One important field is the title field which will be used
+         * as the title for channels that support it.
+         */
         fun visitMetaNodeWithType(metaNodeWithType: ElementalMetaNodeWithType): T
 
         /**
@@ -393,14 +431,22 @@ private constructor(
          */
         fun visitChannelNodeWithType(channelNodeWithType: ElementalChannelNodeWithType): T
 
+        /** Used to embed an image into the notification. */
         fun visitImageNodeWithType(imageNodeWithType: ElementalImageNodeWithType): T
 
+        /** Allows the user to execute an action. Can be a button or a link. */
         fun visitActionNodeWithType(actionNodeWithType: ElementalActionNodeWithType): T
 
+        /** Renders a dividing line between elements. */
         fun visitDividerNodeWithType(dividerNodeWithType: ElementalDividerNodeWithType): T
 
+        /** Renders a quote block. */
         fun visitQuoteNodeWithType(quoteNodeWithType: ElementalQuoteNodeWithType): T
 
+        /**
+         * Raw HTML string inside an Elemental document. When rendering a message, this node is
+         * turned into output only for the email channel; for other channels it produces no blocks.
+         */
         fun visitHtmlNodeWithType(htmlNodeWithType: ElementalHtmlNodeWithType): T
 
         /**

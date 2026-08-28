@@ -19,6 +19,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
+/** Renders a dividing line between elements. */
 class ElementalDividerNodeWithType
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
@@ -26,6 +27,7 @@ private constructor(
     private val if_: JsonField<String>,
     private val loop: JsonField<String>,
     private val ref: JsonField<String>,
+    private val color: JsonField<String>,
     private val type: JsonField<Type>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
@@ -38,11 +40,18 @@ private constructor(
         @JsonProperty("if") @ExcludeMissing if_: JsonField<String> = JsonMissing.of(),
         @JsonProperty("loop") @ExcludeMissing loop: JsonField<String> = JsonMissing.of(),
         @JsonProperty("ref") @ExcludeMissing ref: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("color") @ExcludeMissing color: JsonField<String> = JsonMissing.of(),
         @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
-    ) : this(channels, if_, loop, ref, type, mutableMapOf())
+    ) : this(channels, if_, loop, ref, color, type, mutableMapOf())
 
-    fun toElementalBaseNode(): ElementalBaseNode =
-        ElementalBaseNode.builder().channels(channels).if_(if_).loop(loop).ref(ref).build()
+    fun toElementalDividerNode(): ElementalDividerNode =
+        ElementalDividerNode.builder()
+            .channels(channels)
+            .if_(if_)
+            .loop(loop)
+            .ref(ref)
+            .color(color)
+            .build()
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -67,6 +76,14 @@ private constructor(
      *   server responded with an unexpected value).
      */
     fun ref(): Optional<String> = ref.getOptional("ref")
+
+    /**
+     * The CSS color to render the line with. For example, `#fff`
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun color(): Optional<String> = color.getOptional("color")
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -103,6 +120,13 @@ private constructor(
     @JsonProperty("ref") @ExcludeMissing fun _ref(): JsonField<String> = ref
 
     /**
+     * Returns the raw JSON value of [color].
+     *
+     * Unlike [color], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("color") @ExcludeMissing fun _color(): JsonField<String> = color
+
+    /**
      * Returns the raw JSON value of [type].
      *
      * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
@@ -136,6 +160,7 @@ private constructor(
         private var if_: JsonField<String> = JsonMissing.of()
         private var loop: JsonField<String> = JsonMissing.of()
         private var ref: JsonField<String> = JsonMissing.of()
+        private var color: JsonField<String> = JsonMissing.of()
         private var type: JsonField<Type> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -145,6 +170,7 @@ private constructor(
             if_ = elementalDividerNodeWithType.if_
             loop = elementalDividerNodeWithType.loop
             ref = elementalDividerNodeWithType.ref
+            color = elementalDividerNodeWithType.color
             type = elementalDividerNodeWithType.type
             additionalProperties = elementalDividerNodeWithType.additionalProperties.toMutableMap()
         }
@@ -216,6 +242,20 @@ private constructor(
          */
         fun ref(ref: JsonField<String>) = apply { this.ref = ref }
 
+        /** The CSS color to render the line with. For example, `#fff` */
+        fun color(color: String?) = color(JsonField.ofNullable(color))
+
+        /** Alias for calling [Builder.color] with `color.orElse(null)`. */
+        fun color(color: Optional<String>) = color(color.getOrNull())
+
+        /**
+         * Sets [Builder.color] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.color] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun color(color: JsonField<String>) = apply { this.color = color }
+
         fun type(type: Type) = type(JsonField.of(type))
 
         /**
@@ -256,6 +296,7 @@ private constructor(
                 if_,
                 loop,
                 ref,
+                color,
                 type,
                 additionalProperties.toMutableMap(),
             )
@@ -280,6 +321,7 @@ private constructor(
         if_()
         loop()
         ref()
+        color()
         type().ifPresent { it.validate() }
         validated = true
     }
@@ -303,6 +345,7 @@ private constructor(
             (if (if_.asKnown().isPresent) 1 else 0) +
             (if (loop.asKnown().isPresent) 1 else 0) +
             (if (ref.asKnown().isPresent) 1 else 0) +
+            (if (color.asKnown().isPresent) 1 else 0) +
             (type.asKnown().getOrNull()?.validity() ?: 0)
 
     class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
@@ -443,16 +486,17 @@ private constructor(
             if_ == other.if_ &&
             loop == other.loop &&
             ref == other.ref &&
+            color == other.color &&
             type == other.type &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(channels, if_, loop, ref, type, additionalProperties)
+        Objects.hash(channels, if_, loop, ref, color, type, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ElementalDividerNodeWithType{channels=$channels, if_=$if_, loop=$loop, ref=$ref, type=$type, additionalProperties=$additionalProperties}"
+        "ElementalDividerNodeWithType{channels=$channels, if_=$if_, loop=$loop, ref=$ref, color=$color, type=$type, additionalProperties=$additionalProperties}"
 }

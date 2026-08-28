@@ -2,7 +2,6 @@
 
 package com.courier.models
 
-import com.courier.core.Enum
 import com.courier.core.ExcludeMissing
 import com.courier.core.JsonField
 import com.courier.core.JsonMissing
@@ -19,20 +18,15 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/**
- * The meta element contains information describing the notification that may be used by a
- * particular channel or provider. One important field is the title field which will be used as the
- * title for channels that support it.
- */
-class ElementalMetaNodeWithType
+/** Renders a dividing line between elements. */
+class ElementalDividerNode
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val channels: JsonField<List<String>>,
     private val if_: JsonField<String>,
     private val loop: JsonField<String>,
     private val ref: JsonField<String>,
-    private val title: JsonField<String>,
-    private val type: JsonField<Type>,
+    private val color: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -44,18 +38,11 @@ private constructor(
         @JsonProperty("if") @ExcludeMissing if_: JsonField<String> = JsonMissing.of(),
         @JsonProperty("loop") @ExcludeMissing loop: JsonField<String> = JsonMissing.of(),
         @JsonProperty("ref") @ExcludeMissing ref: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("title") @ExcludeMissing title: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
-    ) : this(channels, if_, loop, ref, title, type, mutableMapOf())
+        @JsonProperty("color") @ExcludeMissing color: JsonField<String> = JsonMissing.of(),
+    ) : this(channels, if_, loop, ref, color, mutableMapOf())
 
-    fun toElementalMetaNode(): ElementalMetaNode =
-        ElementalMetaNode.builder()
-            .channels(channels)
-            .if_(if_)
-            .loop(loop)
-            .ref(ref)
-            .title(title)
-            .build()
+    fun toElementalBaseNode(): ElementalBaseNode =
+        ElementalBaseNode.builder().channels(channels).if_(if_).loop(loop).ref(ref).build()
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -82,18 +69,12 @@ private constructor(
     fun ref(): Optional<String> = ref.getOptional("ref")
 
     /**
-     * The title to be displayed by supported channels. For example, the email subject.
+     * The CSS color to render the line with. For example, `#fff`
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun title(): Optional<String> = title.getOptional("title")
-
-    /**
-     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
-    fun type(): Optional<Type> = type.getOptional("type")
+    fun color(): Optional<String> = color.getOptional("color")
 
     /**
      * Returns the raw JSON value of [channels].
@@ -124,18 +105,11 @@ private constructor(
     @JsonProperty("ref") @ExcludeMissing fun _ref(): JsonField<String> = ref
 
     /**
-     * Returns the raw JSON value of [title].
+     * Returns the raw JSON value of [color].
      *
-     * Unlike [title], this method doesn't throw if the JSON field has an unexpected type.
+     * Unlike [color], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("title") @ExcludeMissing fun _title(): JsonField<String> = title
-
-    /**
-     * Returns the raw JSON value of [type].
-     *
-     * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
+    @JsonProperty("color") @ExcludeMissing fun _color(): JsonField<String> = color
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -151,32 +125,28 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [ElementalMetaNodeWithType].
-         */
+        /** Returns a mutable builder for constructing an instance of [ElementalDividerNode]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [ElementalMetaNodeWithType]. */
+    /** A builder for [ElementalDividerNode]. */
     class Builder internal constructor() {
 
         private var channels: JsonField<MutableList<String>>? = null
         private var if_: JsonField<String> = JsonMissing.of()
         private var loop: JsonField<String> = JsonMissing.of()
         private var ref: JsonField<String> = JsonMissing.of()
-        private var title: JsonField<String> = JsonMissing.of()
-        private var type: JsonField<Type> = JsonMissing.of()
+        private var color: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(elementalMetaNodeWithType: ElementalMetaNodeWithType) = apply {
-            channels = elementalMetaNodeWithType.channels.map { it.toMutableList() }
-            if_ = elementalMetaNodeWithType.if_
-            loop = elementalMetaNodeWithType.loop
-            ref = elementalMetaNodeWithType.ref
-            title = elementalMetaNodeWithType.title
-            type = elementalMetaNodeWithType.type
-            additionalProperties = elementalMetaNodeWithType.additionalProperties.toMutableMap()
+        internal fun from(elementalDividerNode: ElementalDividerNode) = apply {
+            channels = elementalDividerNode.channels.map { it.toMutableList() }
+            if_ = elementalDividerNode.if_
+            loop = elementalDividerNode.loop
+            ref = elementalDividerNode.ref
+            color = elementalDividerNode.color
+            additionalProperties = elementalDividerNode.additionalProperties.toMutableMap()
         }
 
         fun channels(channels: List<String>?) = channels(JsonField.ofNullable(channels))
@@ -246,29 +216,19 @@ private constructor(
          */
         fun ref(ref: JsonField<String>) = apply { this.ref = ref }
 
-        /** The title to be displayed by supported channels. For example, the email subject. */
-        fun title(title: String?) = title(JsonField.ofNullable(title))
+        /** The CSS color to render the line with. For example, `#fff` */
+        fun color(color: String?) = color(JsonField.ofNullable(color))
 
-        /** Alias for calling [Builder.title] with `title.orElse(null)`. */
-        fun title(title: Optional<String>) = title(title.getOrNull())
-
-        /**
-         * Sets [Builder.title] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.title] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun title(title: JsonField<String>) = apply { this.title = title }
-
-        fun type(type: Type) = type(JsonField.of(type))
+        /** Alias for calling [Builder.color] with `color.orElse(null)`. */
+        fun color(color: Optional<String>) = color(color.getOrNull())
 
         /**
-         * Sets [Builder.type] to an arbitrary JSON value.
+         * Sets [Builder.color] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.type] with a well-typed [Type] value instead. This
+         * You should usually call [Builder.color] with a well-typed [String] value instead. This
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun type(type: JsonField<Type>) = apply { this.type = type }
+        fun color(color: JsonField<String>) = apply { this.color = color }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -290,18 +250,17 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [ElementalMetaNodeWithType].
+         * Returns an immutable instance of [ElementalDividerNode].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          */
-        fun build(): ElementalMetaNodeWithType =
-            ElementalMetaNodeWithType(
+        fun build(): ElementalDividerNode =
+            ElementalDividerNode(
                 (channels ?: JsonMissing.of()).map { it.toImmutable() },
                 if_,
                 loop,
                 ref,
-                title,
-                type,
+                color,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -316,7 +275,7 @@ private constructor(
      * @throws CourierInvalidDataException if any value type in this object doesn't match its
      *   expected type.
      */
-    fun validate(): ElementalMetaNodeWithType = apply {
+    fun validate(): ElementalDividerNode = apply {
         if (validated) {
             return@apply
         }
@@ -325,8 +284,7 @@ private constructor(
         if_()
         loop()
         ref()
-        title()
-        type().ifPresent { it.validate() }
+        color()
         validated = true
     }
 
@@ -349,158 +307,28 @@ private constructor(
             (if (if_.asKnown().isPresent) 1 else 0) +
             (if (loop.asKnown().isPresent) 1 else 0) +
             (if (ref.asKnown().isPresent) 1 else 0) +
-            (if (title.asKnown().isPresent) 1 else 0) +
-            (type.asKnown().getOrNull()?.validity() ?: 0)
-
-    class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
-
-        /**
-         * Returns this class instance's raw value.
-         *
-         * This is usually only useful if this instance was deserialized from data that doesn't
-         * match any known member, and you want to know that value. For example, if the SDK is on an
-         * older version than the API, then the API may respond with new members that the SDK is
-         * unaware of.
-         */
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-        companion object {
-
-            @JvmField val META = of("meta")
-
-            @JvmStatic fun of(value: String) = Type(JsonField.of(value))
-        }
-
-        /** An enum containing [Type]'s known values. */
-        enum class Known {
-            META
-        }
-
-        /**
-         * An enum containing [Type]'s known values, as well as an [_UNKNOWN] member.
-         *
-         * An instance of [Type] can contain an unknown value in a couple of cases:
-         * - It was deserialized from data that doesn't match any known member. For example, if the
-         *   SDK is on an older version than the API, then the API may respond with new members that
-         *   the SDK is unaware of.
-         * - It was constructed with an arbitrary value using the [of] method.
-         */
-        enum class Value {
-            META,
-            /** An enum member indicating that [Type] was instantiated with an unknown value. */
-            _UNKNOWN,
-        }
-
-        /**
-         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
-         * if the class was instantiated with an unknown value.
-         *
-         * Use the [known] method instead if you're certain the value is always known or if you want
-         * to throw for the unknown case.
-         */
-        fun value(): Value =
-            when (this) {
-                META -> Value.META
-                else -> Value._UNKNOWN
-            }
-
-        /**
-         * Returns an enum member corresponding to this class instance's value.
-         *
-         * Use the [value] method instead if you're uncertain the value is always known and don't
-         * want to throw for the unknown case.
-         *
-         * @throws CourierInvalidDataException if this class instance's value is a not a known
-         *   member.
-         */
-        fun known(): Known =
-            when (this) {
-                META -> Known.META
-                else -> throw CourierInvalidDataException("Unknown Type: $value")
-            }
-
-        /**
-         * Returns this class instance's primitive wire representation.
-         *
-         * This differs from the [toString] method because that method is primarily for debugging
-         * and generally doesn't throw.
-         *
-         * @throws CourierInvalidDataException if this class instance's value does not have the
-         *   expected primitive type.
-         */
-        fun asString(): String =
-            _value().asString().orElseThrow { CourierInvalidDataException("Value is not a String") }
-
-        private var validated: Boolean = false
-
-        /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
-         *
-         * This method is _not_ forwards compatible with new types from the API for existing fields.
-         *
-         * @throws CourierInvalidDataException if any value type in this object doesn't match its
-         *   expected type.
-         */
-        fun validate(): Type = apply {
-            if (validated) {
-                return@apply
-            }
-
-            known()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: CourierInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Type && value == other.value
-        }
-
-        override fun hashCode() = value.hashCode()
-
-        override fun toString() = value.toString()
-    }
+            (if (color.asKnown().isPresent) 1 else 0)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return other is ElementalMetaNodeWithType &&
+        return other is ElementalDividerNode &&
             channels == other.channels &&
             if_ == other.if_ &&
             loop == other.loop &&
             ref == other.ref &&
-            title == other.title &&
-            type == other.type &&
+            color == other.color &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(channels, if_, loop, ref, title, type, additionalProperties)
+        Objects.hash(channels, if_, loop, ref, color, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ElementalMetaNodeWithType{channels=$channels, if_=$if_, loop=$loop, ref=$ref, title=$title, type=$type, additionalProperties=$additionalProperties}"
+        "ElementalDividerNode{channels=$channels, if_=$if_, loop=$loop, ref=$ref, color=$color, additionalProperties=$additionalProperties}"
 }

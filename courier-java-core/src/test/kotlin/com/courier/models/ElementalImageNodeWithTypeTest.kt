@@ -4,7 +4,6 @@ package com.courier.models
 
 import com.courier.core.jsonMapper
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
-import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -13,18 +12,8 @@ internal class ElementalImageNodeWithTypeTest {
     @Test
     fun create() {
         val elementalImageNodeWithType =
-            ElementalImageNodeWithType.builder()
-                .addChannel("string")
-                .if_("if")
-                .loop("loop")
-                .ref("ref")
-                .type(ElementalImageNodeWithType.Type.IMAGE)
-                .build()
+            ElementalImageNodeWithType.builder().type(ElementalImageNodeWithType.Type.IMAGE).build()
 
-        assertThat(elementalImageNodeWithType.channels().getOrNull()).containsExactly("string")
-        assertThat(elementalImageNodeWithType.if_()).contains("if")
-        assertThat(elementalImageNodeWithType.loop()).contains("loop")
-        assertThat(elementalImageNodeWithType.ref()).contains("ref")
         assertThat(elementalImageNodeWithType.type())
             .contains(ElementalImageNodeWithType.Type.IMAGE)
     }
@@ -33,13 +22,7 @@ internal class ElementalImageNodeWithTypeTest {
     fun roundtrip() {
         val jsonMapper = jsonMapper()
         val elementalImageNodeWithType =
-            ElementalImageNodeWithType.builder()
-                .addChannel("string")
-                .if_("if")
-                .loop("loop")
-                .ref("ref")
-                .type(ElementalImageNodeWithType.Type.IMAGE)
-                .build()
+            ElementalImageNodeWithType.builder().type(ElementalImageNodeWithType.Type.IMAGE).build()
 
         val roundtrippedElementalImageNodeWithType =
             jsonMapper.readValue(

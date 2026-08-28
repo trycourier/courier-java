@@ -17,13 +17,7 @@ internal class ElementalNodeTest {
     @Test
     fun ofTextNodeWithType() {
         val textNodeWithType =
-            ElementalTextNodeWithType.builder()
-                .addChannel("string")
-                .if_("if")
-                .loop("loop")
-                .ref("ref")
-                .type(ElementalTextNodeWithType.Type.TEXT)
-                .build()
+            ElementalTextNodeWithType.builder().type(ElementalTextNodeWithType.Type.TEXT).build()
 
         val elementalNode = ElementalNode.ofTextNodeWithType(textNodeWithType)
 
@@ -43,10 +37,6 @@ internal class ElementalNodeTest {
         val elementalNode =
             ElementalNode.ofTextNodeWithType(
                 ElementalTextNodeWithType.builder()
-                    .addChannel("string")
-                    .if_("if")
-                    .loop("loop")
-                    .ref("ref")
                     .type(ElementalTextNodeWithType.Type.TEXT)
                     .build()
             )
@@ -63,13 +53,7 @@ internal class ElementalNodeTest {
     @Test
     fun ofMetaNodeWithType() {
         val metaNodeWithType =
-            ElementalMetaNodeWithType.builder()
-                .addChannel("string")
-                .if_("if")
-                .loop("loop")
-                .ref("ref")
-                .type(ElementalMetaNodeWithType.Type.META)
-                .build()
+            ElementalMetaNodeWithType.builder().type(ElementalMetaNodeWithType.Type.META).build()
 
         val elementalNode = ElementalNode.ofMetaNodeWithType(metaNodeWithType)
 
@@ -89,10 +73,6 @@ internal class ElementalNodeTest {
         val elementalNode =
             ElementalNode.ofMetaNodeWithType(
                 ElementalMetaNodeWithType.builder()
-                    .addChannel("string")
-                    .if_("if")
-                    .loop("loop")
-                    .ref("ref")
                     .type(ElementalMetaNodeWithType.Type.META)
                     .build()
             )
@@ -147,13 +127,7 @@ internal class ElementalNodeTest {
     @Test
     fun ofImageNodeWithType() {
         val imageNodeWithType =
-            ElementalImageNodeWithType.builder()
-                .addChannel("string")
-                .if_("if")
-                .loop("loop")
-                .ref("ref")
-                .type(ElementalImageNodeWithType.Type.IMAGE)
-                .build()
+            ElementalImageNodeWithType.builder().type(ElementalImageNodeWithType.Type.IMAGE).build()
 
         val elementalNode = ElementalNode.ofImageNodeWithType(imageNodeWithType)
 
@@ -173,10 +147,6 @@ internal class ElementalNodeTest {
         val elementalNode =
             ElementalNode.ofImageNodeWithType(
                 ElementalImageNodeWithType.builder()
-                    .addChannel("string")
-                    .if_("if")
-                    .loop("loop")
-                    .ref("ref")
                     .type(ElementalImageNodeWithType.Type.IMAGE)
                     .build()
             )
@@ -194,10 +164,6 @@ internal class ElementalNodeTest {
     fun ofActionNodeWithType() {
         val actionNodeWithType =
             ElementalActionNodeWithType.builder()
-                .addChannel("string")
-                .if_("if")
-                .loop("loop")
-                .ref("ref")
                 .type(ElementalActionNodeWithType.Type.ACTION)
                 .build()
 
@@ -219,10 +185,6 @@ internal class ElementalNodeTest {
         val elementalNode =
             ElementalNode.ofActionNodeWithType(
                 ElementalActionNodeWithType.builder()
-                    .addChannel("string")
-                    .if_("if")
-                    .loop("loop")
-                    .ref("ref")
                     .type(ElementalActionNodeWithType.Type.ACTION)
                     .build()
             )
@@ -240,10 +202,6 @@ internal class ElementalNodeTest {
     fun ofDividerNodeWithType() {
         val dividerNodeWithType =
             ElementalDividerNodeWithType.builder()
-                .addChannel("string")
-                .if_("if")
-                .loop("loop")
-                .ref("ref")
                 .type(ElementalDividerNodeWithType.Type.DIVIDER)
                 .build()
 
@@ -265,10 +223,6 @@ internal class ElementalNodeTest {
         val elementalNode =
             ElementalNode.ofDividerNodeWithType(
                 ElementalDividerNodeWithType.builder()
-                    .addChannel("string")
-                    .if_("if")
-                    .loop("loop")
-                    .ref("ref")
                     .type(ElementalDividerNodeWithType.Type.DIVIDER)
                     .build()
             )
@@ -285,13 +239,7 @@ internal class ElementalNodeTest {
     @Test
     fun ofQuoteNodeWithType() {
         val quoteNodeWithType =
-            ElementalQuoteNodeWithType.builder()
-                .addChannel("string")
-                .if_("if")
-                .loop("loop")
-                .ref("ref")
-                .type(ElementalQuoteNodeWithType.Type.QUOTE)
-                .build()
+            ElementalQuoteNodeWithType.builder().type(ElementalQuoteNodeWithType.Type.QUOTE).build()
 
         val elementalNode = ElementalNode.ofQuoteNodeWithType(quoteNodeWithType)
 
@@ -311,10 +259,6 @@ internal class ElementalNodeTest {
         val elementalNode =
             ElementalNode.ofQuoteNodeWithType(
                 ElementalQuoteNodeWithType.builder()
-                    .addChannel("string")
-                    .if_("if")
-                    .loop("loop")
-                    .ref("ref")
                     .type(ElementalQuoteNodeWithType.Type.QUOTE)
                     .build()
             )
@@ -331,13 +275,7 @@ internal class ElementalNodeTest {
     @Test
     fun ofHtmlNodeWithType() {
         val htmlNodeWithType =
-            ElementalHtmlNodeWithType.builder()
-                .addChannel("string")
-                .if_("if")
-                .loop("loop")
-                .ref("ref")
-                .type(ElementalHtmlNodeWithType.Type.HTML)
-                .build()
+            ElementalHtmlNodeWithType.builder().type(ElementalHtmlNodeWithType.Type.HTML).build()
 
         val elementalNode = ElementalNode.ofHtmlNodeWithType(htmlNodeWithType)
 
@@ -357,10 +295,6 @@ internal class ElementalNodeTest {
         val elementalNode =
             ElementalNode.ofHtmlNodeWithType(
                 ElementalHtmlNodeWithType.builder()
-                    .addChannel("string")
-                    .if_("if")
-                    .loop("loop")
-                    .ref("ref")
                     .type(ElementalHtmlNodeWithType.Type.HTML)
                     .build()
             )

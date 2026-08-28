@@ -25,10 +25,6 @@ internal class PutTenantTemplateRequestTest {
                             ElementalContent.builder()
                                 .addElement(
                                     ElementalTextNodeWithType.builder()
-                                        .addChannel("string")
-                                        .if_("if")
-                                        .loop("loop")
-                                        .ref("ref")
                                         .type(ElementalTextNodeWithType.Type.TEXT)
                                         .build()
                                 )
@@ -106,10 +102,6 @@ internal class PutTenantTemplateRequestTest {
                         ElementalContent.builder()
                             .addElement(
                                 ElementalTextNodeWithType.builder()
-                                    .addChannel("string")
-                                    .if_("if")
-                                    .loop("loop")
-                                    .ref("ref")
                                     .type(ElementalTextNodeWithType.Type.TEXT)
                                     .build()
                             )
@@ -191,10 +183,6 @@ internal class PutTenantTemplateRequestTest {
                             ElementalContent.builder()
                                 .addElement(
                                     ElementalTextNodeWithType.builder()
-                                        .addChannel("string")
-                                        .if_("if")
-                                        .loop("loop")
-                                        .ref("ref")
                                         .type(ElementalTextNodeWithType.Type.TEXT)
                                         .build()
                                 )

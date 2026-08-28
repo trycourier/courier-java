@@ -4,7 +4,6 @@ package com.courier.models
 
 import com.courier.core.jsonMapper
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
-import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -14,17 +13,9 @@ internal class ElementalActionNodeWithTypeTest {
     fun create() {
         val elementalActionNodeWithType =
             ElementalActionNodeWithType.builder()
-                .addChannel("string")
-                .if_("if")
-                .loop("loop")
-                .ref("ref")
                 .type(ElementalActionNodeWithType.Type.ACTION)
                 .build()
 
-        assertThat(elementalActionNodeWithType.channels().getOrNull()).containsExactly("string")
-        assertThat(elementalActionNodeWithType.if_()).contains("if")
-        assertThat(elementalActionNodeWithType.loop()).contains("loop")
-        assertThat(elementalActionNodeWithType.ref()).contains("ref")
         assertThat(elementalActionNodeWithType.type())
             .contains(ElementalActionNodeWithType.Type.ACTION)
     }
@@ -34,10 +25,6 @@ internal class ElementalActionNodeWithTypeTest {
         val jsonMapper = jsonMapper()
         val elementalActionNodeWithType =
             ElementalActionNodeWithType.builder()
-                .addChannel("string")
-                .if_("if")
-                .loop("loop")
-                .ref("ref")
                 .type(ElementalActionNodeWithType.Type.ACTION)
                 .build()
 

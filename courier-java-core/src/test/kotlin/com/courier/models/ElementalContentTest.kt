@@ -15,10 +15,6 @@ internal class ElementalContentTest {
             ElementalContent.builder()
                 .addElement(
                     ElementalTextNodeWithType.builder()
-                        .addChannel("string")
-                        .if_("if")
-                        .loop("loop")
-                        .ref("ref")
                         .type(ElementalTextNodeWithType.Type.TEXT)
                         .build()
                 )
@@ -29,10 +25,6 @@ internal class ElementalContentTest {
             .containsExactly(
                 ElementalNode.ofTextNodeWithType(
                     ElementalTextNodeWithType.builder()
-                        .addChannel("string")
-                        .if_("if")
-                        .loop("loop")
-                        .ref("ref")
                         .type(ElementalTextNodeWithType.Type.TEXT)
                         .build()
                 )
@@ -47,10 +39,6 @@ internal class ElementalContentTest {
             ElementalContent.builder()
                 .addElement(
                     ElementalTextNodeWithType.builder()
-                        .addChannel("string")
-                        .if_("if")
-                        .loop("loop")
-                        .ref("ref")
                         .type(ElementalTextNodeWithType.Type.TEXT)
                         .build()
                 )

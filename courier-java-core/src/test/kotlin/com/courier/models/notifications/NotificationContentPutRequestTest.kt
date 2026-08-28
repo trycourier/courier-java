@@ -18,10 +18,6 @@ internal class NotificationContentPutRequestTest {
                     NotificationContentPutRequest.Content.builder()
                         .addElement(
                             ElementalTextNodeWithType.builder()
-                                .addChannel("string")
-                                .if_("if")
-                                .loop("loop")
-                                .ref("ref")
                                 .type(ElementalTextNodeWithType.Type.TEXT)
                                 .build()
                         )
@@ -36,10 +32,6 @@ internal class NotificationContentPutRequestTest {
                 NotificationContentPutRequest.Content.builder()
                     .addElement(
                         ElementalTextNodeWithType.builder()
-                            .addChannel("string")
-                            .if_("if")
-                            .loop("loop")
-                            .ref("ref")
                             .type(ElementalTextNodeWithType.Type.TEXT)
                             .build()
                     )
@@ -58,10 +50,6 @@ internal class NotificationContentPutRequestTest {
                     NotificationContentPutRequest.Content.builder()
                         .addElement(
                             ElementalTextNodeWithType.builder()
-                                .addChannel("string")
-                                .if_("if")
-                                .loop("loop")
-                                .ref("ref")
                                 .type(ElementalTextNodeWithType.Type.TEXT)
                                 .build()
                         )

@@ -3,7 +3,7 @@
 package com.courier.models.journeys.templates
 
 import com.courier.models.ElementalChannelNodeWithType
-import com.courier.models.ElementalTextNodeWithType
+import com.courier.models.ElementalMetaNodeWithType
 import com.courier.models.notifications.NotificationContentPutRequest
 import com.courier.models.notifications.NotificationTemplateState
 import org.assertj.core.api.Assertions.assertThat
@@ -44,7 +44,7 @@ internal class TemplatePutContentParamsTest {
                     NotificationContentPutRequest.builder()
                         .content(
                             NotificationContentPutRequest.Content.builder()
-                                .addElement(ElementalTextNodeWithType.builder().build())
+                                .addElement(ElementalMetaNodeWithType.builder().build())
                                 .build()
                         )
                         .build()
@@ -110,7 +110,7 @@ internal class TemplatePutContentParamsTest {
                     NotificationContentPutRequest.builder()
                         .content(
                             NotificationContentPutRequest.Content.builder()
-                                .addElement(ElementalTextNodeWithType.builder().build())
+                                .addElement(ElementalMetaNodeWithType.builder().build())
                                 .build()
                         )
                         .build()
@@ -124,7 +124,7 @@ internal class TemplatePutContentParamsTest {
                 NotificationContentPutRequest.builder()
                     .content(
                         NotificationContentPutRequest.Content.builder()
-                            .addElement(ElementalTextNodeWithType.builder().build())
+                            .addElement(ElementalMetaNodeWithType.builder().build())
                             .build()
                     )
                     .build()
