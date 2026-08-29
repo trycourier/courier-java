@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.4.3](https://github.com/trycourier/courier-java/compare/v6.4.2...v6.4.3) (2026-08-29)
+
+
+### Bug Fixes
+
+* **api:** text content is not required ([#153](https://github.com/trycourier/courier-java/issues/153)) ([d648e73](https://github.com/trycourier/courier-java/commit/d648e73f4af7aae8bf968690c75509cf24568190))
+
 ## [6.4.2](https://github.com/trycourier/courier-java/compare/v6.4.1...v6.4.2) (2026-08-29)
 
 
