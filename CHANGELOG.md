@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.4.2](https://github.com/trycourier/courier-java/compare/v6.4.1...v6.4.2) (2026-08-29)
+
+
+### Bug Fixes
+
+* **api:** correct two Elemental field names the REST API rejects ([#151](https://github.com/trycourier/courier-java/issues/151)) ([499f1f0](https://github.com/trycourier/courier-java/commit/499f1f086b4339fd0f4dd9a49d0d72ef3dae0c42))
+
 ## [6.4.1](https://github.com/trycourier/courier-java/compare/v6.4.0...v6.4.1) (2026-08-28)
 
 
