@@ -49,7 +49,7 @@ private constructor(
         @JsonProperty("ref") @ExcludeMissing ref: JsonField<String> = JsonMissing.of(),
         @JsonProperty("content") @ExcludeMissing content: JsonField<String> = JsonMissing.of(),
         @JsonProperty("align") @ExcludeMissing align: JsonField<Alignment> = JsonMissing.of(),
-        @JsonProperty("borderColor")
+        @JsonProperty("border_color")
         @ExcludeMissing
         borderColor: JsonField<String> = JsonMissing.of(),
         @JsonProperty("font_size") @ExcludeMissing fontSize: JsonField<String> = JsonMissing.of(),
@@ -138,7 +138,7 @@ private constructor(
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun borderColor(): Optional<String> = borderColor.getOptional("borderColor")
+    fun borderColor(): Optional<String> = borderColor.getOptional("border_color")
 
     /**
      * CSS px font size for this quote block, e.g. `16px`. Overrides the size of the `text_style`
@@ -227,7 +227,9 @@ private constructor(
      *
      * Unlike [borderColor], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("borderColor") @ExcludeMissing fun _borderColor(): JsonField<String> = borderColor
+    @JsonProperty("border_color")
+    @ExcludeMissing
+    fun _borderColor(): JsonField<String> = borderColor
 
     /**
      * Returns the raw JSON value of [fontSize].
