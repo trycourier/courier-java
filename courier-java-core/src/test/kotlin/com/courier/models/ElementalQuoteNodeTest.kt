@@ -21,7 +21,7 @@ internal class ElementalQuoteNodeTest {
                 .ref("ref")
                 .content("content")
                 .align(Alignment.CENTER)
-                .borderColor("borderColor")
+                .borderColor("border_color")
                 .fontSize("font_size")
                 .lineHeight("line_height")
                 .locales(
@@ -38,7 +38,7 @@ internal class ElementalQuoteNodeTest {
         assertThat(elementalQuoteNode.ref()).contains("ref")
         assertThat(elementalQuoteNode.content()).isEqualTo("content")
         assertThat(elementalQuoteNode.align()).contains(Alignment.CENTER)
-        assertThat(elementalQuoteNode.borderColor()).contains("borderColor")
+        assertThat(elementalQuoteNode.borderColor()).contains("border_color")
         assertThat(elementalQuoteNode.fontSize()).contains("font_size")
         assertThat(elementalQuoteNode.lineHeight()).contains("line_height")
         assertThat(elementalQuoteNode.locales())
@@ -61,7 +61,7 @@ internal class ElementalQuoteNodeTest {
                 .ref("ref")
                 .content("content")
                 .align(Alignment.CENTER)
-                .borderColor("borderColor")
+                .borderColor("border_color")
                 .fontSize("font_size")
                 .lineHeight("line_height")
                 .locales(

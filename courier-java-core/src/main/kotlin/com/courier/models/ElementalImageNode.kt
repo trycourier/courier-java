@@ -48,7 +48,7 @@ private constructor(
         @JsonProperty("ref") @ExcludeMissing ref: JsonField<String> = JsonMissing.of(),
         @JsonProperty("src") @ExcludeMissing src: JsonField<String> = JsonMissing.of(),
         @JsonProperty("align") @ExcludeMissing align: JsonField<Alignment> = JsonMissing.of(),
-        @JsonProperty("altText") @ExcludeMissing altText: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("alt_text") @ExcludeMissing altText: JsonField<String> = JsonMissing.of(),
         @JsonProperty("border_color")
         @ExcludeMissing
         borderColor: JsonField<String> = JsonMissing.of(),
@@ -123,7 +123,7 @@ private constructor(
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun altText(): Optional<String> = altText.getOptional("altText")
+    fun altText(): Optional<String> = altText.getOptional("alt_text")
 
     /**
      * CSS border color applied to the image. For example, `#ccc`
@@ -212,7 +212,7 @@ private constructor(
      *
      * Unlike [altText], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("altText") @ExcludeMissing fun _altText(): JsonField<String> = altText
+    @JsonProperty("alt_text") @ExcludeMissing fun _altText(): JsonField<String> = altText
 
     /**
      * Returns the raw JSON value of [borderColor].
