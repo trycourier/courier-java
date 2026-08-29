@@ -8,7 +8,6 @@ import com.courier.core.JsonField
 import com.courier.core.JsonMissing
 import com.courier.core.JsonValue
 import com.courier.core.checkKnown
-import com.courier.core.checkRequired
 import com.courier.core.toImmutable
 import com.courier.errors.CourierInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -28,10 +27,10 @@ private constructor(
     private val if_: JsonField<String>,
     private val loop: JsonField<String>,
     private val ref: JsonField<String>,
-    private val content: JsonField<String>,
     private val align: JsonField<ElementalTextNode.Align>,
     private val bold: JsonField<String>,
     private val color: JsonField<String>,
+    private val content: JsonField<String>,
     private val fontSize: JsonField<String>,
     private val format: JsonField<ElementalTextNode.Format>,
     private val italic: JsonField<String>,
@@ -52,12 +51,12 @@ private constructor(
         @JsonProperty("if") @ExcludeMissing if_: JsonField<String> = JsonMissing.of(),
         @JsonProperty("loop") @ExcludeMissing loop: JsonField<String> = JsonMissing.of(),
         @JsonProperty("ref") @ExcludeMissing ref: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("content") @ExcludeMissing content: JsonField<String> = JsonMissing.of(),
         @JsonProperty("align")
         @ExcludeMissing
         align: JsonField<ElementalTextNode.Align> = JsonMissing.of(),
         @JsonProperty("bold") @ExcludeMissing bold: JsonField<String> = JsonMissing.of(),
         @JsonProperty("color") @ExcludeMissing color: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("content") @ExcludeMissing content: JsonField<String> = JsonMissing.of(),
         @JsonProperty("font_size") @ExcludeMissing fontSize: JsonField<String> = JsonMissing.of(),
         @JsonProperty("format")
         @ExcludeMissing
@@ -80,10 +79,10 @@ private constructor(
         if_,
         loop,
         ref,
-        content,
         align,
         bold,
         color,
+        content,
         fontSize,
         format,
         italic,
@@ -102,10 +101,10 @@ private constructor(
             .if_(if_)
             .loop(loop)
             .ref(ref)
-            .content(content)
             .align(align)
             .bold(bold)
             .color(color)
+            .content(content)
             .fontSize(fontSize)
             .format(format)
             .italic(italic)
@@ -141,15 +140,6 @@ private constructor(
     fun ref(): Optional<String> = ref.getOptional("ref")
 
     /**
-     * The text content displayed in the notification. Either this field must be specified, or the
-     * elements field
-     *
-     * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
-    fun content(): String = content.getRequired("content")
-
-    /**
      * Text alignment.
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -172,6 +162,15 @@ private constructor(
      *   server responded with an unexpected value).
      */
     fun color(): Optional<String> = color.getOptional("color")
+
+    /**
+     * The text content displayed in the notification. Either this field must be specified, or the
+     * elements field
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun content(): Optional<String> = content.getOptional("content")
 
     /**
      * CSS px font size for this text block, e.g. `16px`. Overrides the size of the `text_style`
@@ -274,13 +273,6 @@ private constructor(
     @JsonProperty("ref") @ExcludeMissing fun _ref(): JsonField<String> = ref
 
     /**
-     * Returns the raw JSON value of [content].
-     *
-     * Unlike [content], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("content") @ExcludeMissing fun _content(): JsonField<String> = content
-
-    /**
      * Returns the raw JSON value of [align].
      *
      * Unlike [align], this method doesn't throw if the JSON field has an unexpected type.
@@ -300,6 +292,13 @@ private constructor(
      * Unlike [color], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("color") @ExcludeMissing fun _color(): JsonField<String> = color
+
+    /**
+     * Returns the raw JSON value of [content].
+     *
+     * Unlike [content], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("content") @ExcludeMissing fun _content(): JsonField<String> = content
 
     /**
      * Returns the raw JSON value of [fontSize].
@@ -384,11 +383,6 @@ private constructor(
 
         /**
          * Returns a mutable builder for constructing an instance of [ElementalTextNodeWithType].
-         *
-         * The following fields are required:
-         * ```java
-         * .content()
-         * ```
          */
         @JvmStatic fun builder() = Builder()
     }
@@ -400,10 +394,10 @@ private constructor(
         private var if_: JsonField<String> = JsonMissing.of()
         private var loop: JsonField<String> = JsonMissing.of()
         private var ref: JsonField<String> = JsonMissing.of()
-        private var content: JsonField<String>? = null
         private var align: JsonField<ElementalTextNode.Align> = JsonMissing.of()
         private var bold: JsonField<String> = JsonMissing.of()
         private var color: JsonField<String> = JsonMissing.of()
+        private var content: JsonField<String> = JsonMissing.of()
         private var fontSize: JsonField<String> = JsonMissing.of()
         private var format: JsonField<ElementalTextNode.Format> = JsonMissing.of()
         private var italic: JsonField<String> = JsonMissing.of()
@@ -421,10 +415,10 @@ private constructor(
             if_ = elementalTextNodeWithType.if_
             loop = elementalTextNodeWithType.loop
             ref = elementalTextNodeWithType.ref
-            content = elementalTextNodeWithType.content
             align = elementalTextNodeWithType.align
             bold = elementalTextNodeWithType.bold
             color = elementalTextNodeWithType.color
+            content = elementalTextNodeWithType.content
             fontSize = elementalTextNodeWithType.fontSize
             format = elementalTextNodeWithType.format
             italic = elementalTextNodeWithType.italic
@@ -504,20 +498,6 @@ private constructor(
          */
         fun ref(ref: JsonField<String>) = apply { this.ref = ref }
 
-        /**
-         * The text content displayed in the notification. Either this field must be specified, or
-         * the elements field
-         */
-        fun content(content: String) = content(JsonField.of(content))
-
-        /**
-         * Sets [Builder.content] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.content] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun content(content: JsonField<String>) = apply { this.content = content }
-
         /** Text alignment. */
         fun align(align: ElementalTextNode.Align) = align(JsonField.of(align))
 
@@ -557,6 +537,20 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun color(color: JsonField<String>) = apply { this.color = color }
+
+        /**
+         * The text content displayed in the notification. Either this field must be specified, or
+         * the elements field
+         */
+        fun content(content: String) = content(JsonField.of(content))
+
+        /**
+         * Sets [Builder.content] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.content] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun content(content: JsonField<String>) = apply { this.content = content }
 
         /**
          * CSS px font size for this text block, e.g. `16px`. Overrides the size of the `text_style`
@@ -721,13 +715,6 @@ private constructor(
          * Returns an immutable instance of [ElementalTextNodeWithType].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .content()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): ElementalTextNodeWithType =
             ElementalTextNodeWithType(
@@ -735,10 +722,10 @@ private constructor(
                 if_,
                 loop,
                 ref,
-                checkRequired("content", content),
                 align,
                 bold,
                 color,
+                content,
                 fontSize,
                 format,
                 italic,
@@ -771,10 +758,10 @@ private constructor(
         if_()
         loop()
         ref()
-        content()
         align().ifPresent { it.validate() }
         bold()
         color()
+        content()
         fontSize()
         format().ifPresent { it.validate() }
         italic()
@@ -806,10 +793,10 @@ private constructor(
             (if (if_.asKnown().isPresent) 1 else 0) +
             (if (loop.asKnown().isPresent) 1 else 0) +
             (if (ref.asKnown().isPresent) 1 else 0) +
-            (if (content.asKnown().isPresent) 1 else 0) +
             (align.asKnown().getOrNull()?.validity() ?: 0) +
             (if (bold.asKnown().isPresent) 1 else 0) +
             (if (color.asKnown().isPresent) 1 else 0) +
+            (if (content.asKnown().isPresent) 1 else 0) +
             (if (fontSize.asKnown().isPresent) 1 else 0) +
             (format.asKnown().getOrNull()?.validity() ?: 0) +
             (if (italic.asKnown().isPresent) 1 else 0) +
@@ -958,10 +945,10 @@ private constructor(
             if_ == other.if_ &&
             loop == other.loop &&
             ref == other.ref &&
-            content == other.content &&
             align == other.align &&
             bold == other.bold &&
             color == other.color &&
+            content == other.content &&
             fontSize == other.fontSize &&
             format == other.format &&
             italic == other.italic &&
@@ -980,10 +967,10 @@ private constructor(
             if_,
             loop,
             ref,
-            content,
             align,
             bold,
             color,
+            content,
             fontSize,
             format,
             italic,
@@ -1000,5 +987,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ElementalTextNodeWithType{channels=$channels, if_=$if_, loop=$loop, ref=$ref, content=$content, align=$align, bold=$bold, color=$color, fontSize=$fontSize, format=$format, italic=$italic, lineHeight=$lineHeight, locales=$locales, strikethrough=$strikethrough, textStyle=$textStyle, underline=$underline, type=$type, additionalProperties=$additionalProperties}"
+        "ElementalTextNodeWithType{channels=$channels, if_=$if_, loop=$loop, ref=$ref, align=$align, bold=$bold, color=$color, content=$content, fontSize=$fontSize, format=$format, italic=$italic, lineHeight=$lineHeight, locales=$locales, strikethrough=$strikethrough, textStyle=$textStyle, underline=$underline, type=$type, additionalProperties=$additionalProperties}"
 }
