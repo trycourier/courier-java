@@ -47,7 +47,7 @@ internal class BroadcastPutContentParamsTest {
                     NotificationContentPutRequest.builder()
                         .content(
                             NotificationContentPutRequest.Content.builder()
-                                .addElement(ElementalMetaNodeWithType.builder().build())
+                                .addElement(ElementalTextNodeWithType.builder().build())
                                 .addElement(ElementalTextNodeWithType.builder().build())
                                 .build()
                         )
@@ -121,7 +121,7 @@ internal class BroadcastPutContentParamsTest {
                     NotificationContentPutRequest.builder()
                         .content(
                             NotificationContentPutRequest.Content.builder()
-                                .addElement(ElementalMetaNodeWithType.builder().build())
+                                .addElement(ElementalTextNodeWithType.builder().build())
                                 .addElement(ElementalTextNodeWithType.builder().build())
                                 .build()
                         )
@@ -136,7 +136,7 @@ internal class BroadcastPutContentParamsTest {
                 NotificationContentPutRequest.builder()
                     .content(
                         NotificationContentPutRequest.Content.builder()
-                            .addElement(ElementalMetaNodeWithType.builder().build())
+                            .addElement(ElementalTextNodeWithType.builder().build())
                             .addElement(ElementalTextNodeWithType.builder().build())
                             .build()
                     )
