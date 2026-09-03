@@ -51,8 +51,8 @@ internal class TemplateServiceAsyncTest {
                                     .content(
                                         JourneyTemplateCreateRequest.Notification.Content.builder()
                                             .addElement(
-                                                ElementalTextNodeWithType.builder()
-                                                    .type(ElementalTextNodeWithType.Type.TEXT)
+                                                ElementalChannelNodeWithType.builder()
+                                                    .type(ElementalChannelNodeWithType.Type.CHANNEL)
                                                     .build()
                                             )
                                             .version(

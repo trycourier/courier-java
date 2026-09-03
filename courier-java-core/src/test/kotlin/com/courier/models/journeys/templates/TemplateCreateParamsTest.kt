@@ -3,6 +3,7 @@
 package com.courier.models.journeys.templates
 
 import com.courier.core.http.Headers
+import com.courier.models.ElementalChannelNodeWithType
 import com.courier.models.ElementalTextNodeWithType
 import com.courier.models.journeys.JourneyTemplateCreateRequest
 import org.assertj.core.api.Assertions.assertThat
@@ -29,8 +30,8 @@ internal class TemplateCreateParamsTest {
                             .content(
                                 JourneyTemplateCreateRequest.Notification.Content.builder()
                                     .addElement(
-                                        ElementalTextNodeWithType.builder()
-                                            .type(ElementalTextNodeWithType.Type.TEXT)
+                                        ElementalChannelNodeWithType.builder()
+                                            .type(ElementalChannelNodeWithType.Type.CHANNEL)
                                             .build()
                                     )
                                     .version(
@@ -122,8 +123,8 @@ internal class TemplateCreateParamsTest {
                                 .content(
                                     JourneyTemplateCreateRequest.Notification.Content.builder()
                                         .addElement(
-                                            ElementalTextNodeWithType.builder()
-                                                .type(ElementalTextNodeWithType.Type.TEXT)
+                                            ElementalChannelNodeWithType.builder()
+                                                .type(ElementalChannelNodeWithType.Type.CHANNEL)
                                                 .build()
                                         )
                                         .version(
@@ -226,8 +227,8 @@ internal class TemplateCreateParamsTest {
                                 .content(
                                     JourneyTemplateCreateRequest.Notification.Content.builder()
                                         .addElement(
-                                            ElementalTextNodeWithType.builder()
-                                                .type(ElementalTextNodeWithType.Type.TEXT)
+                                            ElementalChannelNodeWithType.builder()
+                                                .type(ElementalChannelNodeWithType.Type.CHANNEL)
                                                 .build()
                                         )
                                         .version(
@@ -272,8 +273,8 @@ internal class TemplateCreateParamsTest {
                             .content(
                                 JourneyTemplateCreateRequest.Notification.Content.builder()
                                     .addElement(
-                                        ElementalTextNodeWithType.builder()
-                                            .type(ElementalTextNodeWithType.Type.TEXT)
+                                        ElementalChannelNodeWithType.builder()
+                                            .type(ElementalChannelNodeWithType.Type.CHANNEL)
                                             .build()
                                     )
                                     .version(

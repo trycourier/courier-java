@@ -20,6 +20,11 @@ internal class ElementalChannelNodeTest {
                 .loop("loop")
                 .ref("ref")
                 .channel("email")
+                .addElement(
+                    ElementalNodeNonChannel.UnionMember0.builder()
+                        .type(ElementalNodeNonChannel.UnionMember0.Type.TEXT)
+                        .build()
+                )
                 .fontSize("font_size")
                 .lineHeight("line_height")
                 .padding("padding")
@@ -35,6 +40,14 @@ internal class ElementalChannelNodeTest {
         assertThat(elementalChannelNode.loop()).contains("loop")
         assertThat(elementalChannelNode.ref()).contains("ref")
         assertThat(elementalChannelNode.channel()).contains("email")
+        assertThat(elementalChannelNode.elements().getOrNull())
+            .containsExactly(
+                ElementalNodeNonChannel.ofUnionMember0(
+                    ElementalNodeNonChannel.UnionMember0.builder()
+                        .type(ElementalNodeNonChannel.UnionMember0.Type.TEXT)
+                        .build()
+                )
+            )
         assertThat(elementalChannelNode.fontSize()).contains("font_size")
         assertThat(elementalChannelNode.lineHeight()).contains("line_height")
         assertThat(elementalChannelNode.padding()).contains("padding")
@@ -56,6 +69,11 @@ internal class ElementalChannelNodeTest {
                 .loop("loop")
                 .ref("ref")
                 .channel("email")
+                .addElement(
+                    ElementalNodeNonChannel.UnionMember0.builder()
+                        .type(ElementalNodeNonChannel.UnionMember0.Type.TEXT)
+                        .build()
+                )
                 .fontSize("font_size")
                 .lineHeight("line_height")
                 .padding("padding")

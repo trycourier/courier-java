@@ -4,8 +4,8 @@ package com.courier.services.blocking.tenants
 
 import com.courier.client.okhttp.CourierOkHttpClient
 import com.courier.core.JsonValue
+import com.courier.models.ElementalChannelNodeWithType
 import com.courier.models.ElementalContent
-import com.courier.models.ElementalTextNodeWithType
 import com.courier.models.MessageChannels
 import com.courier.models.MessageProviders
 import com.courier.models.MessageRouting
@@ -106,8 +106,8 @@ internal class TemplateServiceTest {
                                     .content(
                                         ElementalContent.builder()
                                             .addElement(
-                                                ElementalTextNodeWithType.builder()
-                                                    .type(ElementalTextNodeWithType.Type.TEXT)
+                                                ElementalChannelNodeWithType.builder()
+                                                    .type(ElementalChannelNodeWithType.Type.CHANNEL)
                                                     .build()
                                             )
                                             .version("2022-01-01")
