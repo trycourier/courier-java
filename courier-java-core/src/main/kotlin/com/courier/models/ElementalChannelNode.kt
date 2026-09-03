@@ -37,6 +37,7 @@ private constructor(
     private val loop: JsonField<String>,
     private val ref: JsonField<String>,
     private val channel: JsonField<String>,
+    private val elements: JsonField<List<ElementalNodeNonChannel>>,
     private val fontSize: JsonField<String>,
     private val lineHeight: JsonField<String>,
     private val padding: JsonField<String>,
@@ -53,13 +54,28 @@ private constructor(
         @JsonProperty("loop") @ExcludeMissing loop: JsonField<String> = JsonMissing.of(),
         @JsonProperty("ref") @ExcludeMissing ref: JsonField<String> = JsonMissing.of(),
         @JsonProperty("channel") @ExcludeMissing channel: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("elements")
+        @ExcludeMissing
+        elements: JsonField<List<ElementalNodeNonChannel>> = JsonMissing.of(),
         @JsonProperty("font_size") @ExcludeMissing fontSize: JsonField<String> = JsonMissing.of(),
         @JsonProperty("line_height")
         @ExcludeMissing
         lineHeight: JsonField<String> = JsonMissing.of(),
         @JsonProperty("padding") @ExcludeMissing padding: JsonField<String> = JsonMissing.of(),
         @JsonProperty("raw") @ExcludeMissing raw: JsonField<Raw> = JsonMissing.of(),
-    ) : this(channels, if_, loop, ref, channel, fontSize, lineHeight, padding, raw, mutableMapOf())
+    ) : this(
+        channels,
+        if_,
+        loop,
+        ref,
+        channel,
+        elements,
+        fontSize,
+        lineHeight,
+        padding,
+        raw,
+        mutableMapOf(),
+    )
 
     fun toElementalBaseNode(): ElementalBaseNode =
         ElementalBaseNode.builder().channels(channels).if_(if_).loop(loop).ref(ref).build()
@@ -96,6 +112,15 @@ private constructor(
      *   server responded with an unexpected value).
      */
     fun channel(): Optional<String> = channel.getOptional("channel")
+
+    /**
+     * An array of elements to apply to the channel. If `raw` has not been specified, `elements` is
+     * `required`. Channel elements cannot nest, so these are any node except another channel block.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun elements(): Optional<List<ElementalNodeNonChannel>> = elements.getOptional("elements")
 
     /**
      * Email only. Document-level base font size (CSS px, e.g. `16px`) for body content — text,
@@ -169,6 +194,15 @@ private constructor(
     @JsonProperty("channel") @ExcludeMissing fun _channel(): JsonField<String> = channel
 
     /**
+     * Returns the raw JSON value of [elements].
+     *
+     * Unlike [elements], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("elements")
+    @ExcludeMissing
+    fun _elements(): JsonField<List<ElementalNodeNonChannel>> = elements
+
+    /**
      * Returns the raw JSON value of [fontSize].
      *
      * Unlike [fontSize], this method doesn't throw if the JSON field has an unexpected type.
@@ -222,6 +256,7 @@ private constructor(
         private var loop: JsonField<String> = JsonMissing.of()
         private var ref: JsonField<String> = JsonMissing.of()
         private var channel: JsonField<String> = JsonMissing.of()
+        private var elements: JsonField<MutableList<ElementalNodeNonChannel>>? = null
         private var fontSize: JsonField<String> = JsonMissing.of()
         private var lineHeight: JsonField<String> = JsonMissing.of()
         private var padding: JsonField<String> = JsonMissing.of()
@@ -235,6 +270,7 @@ private constructor(
             loop = elementalChannelNode.loop
             ref = elementalChannelNode.ref
             channel = elementalChannelNode.channel
+            elements = elementalChannelNode.elements.map { it.toMutableList() }
             fontSize = elementalChannelNode.fontSize
             lineHeight = elementalChannelNode.lineHeight
             padding = elementalChannelNode.padding
@@ -322,6 +358,90 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun channel(channel: JsonField<String>) = apply { this.channel = channel }
+
+        /**
+         * An array of elements to apply to the channel. If `raw` has not been specified, `elements`
+         * is `required`. Channel elements cannot nest, so these are any node except another channel
+         * block.
+         */
+        fun elements(elements: List<ElementalNodeNonChannel>?) =
+            elements(JsonField.ofNullable(elements))
+
+        /** Alias for calling [Builder.elements] with `elements.orElse(null)`. */
+        fun elements(elements: Optional<List<ElementalNodeNonChannel>>) =
+            elements(elements.getOrNull())
+
+        /**
+         * Sets [Builder.elements] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.elements] with a well-typed
+         * `List<ElementalNodeNonChannel>` value instead. This method is primarily for setting the
+         * field to an undocumented or not yet supported value.
+         */
+        fun elements(elements: JsonField<List<ElementalNodeNonChannel>>) = apply {
+            this.elements = elements.map { it.toMutableList() }
+        }
+
+        /**
+         * Adds a single [ElementalNodeNonChannel] to [elements].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addElement(element: ElementalNodeNonChannel) = apply {
+            elements =
+                (elements ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("elements", it).add(element)
+                }
+        }
+
+        /**
+         * Alias for calling [addElement] with
+         * `ElementalNodeNonChannel.ofUnionMember0(unionMember0)`.
+         */
+        fun addElement(unionMember0: ElementalNodeNonChannel.UnionMember0) =
+            addElement(ElementalNodeNonChannel.ofUnionMember0(unionMember0))
+
+        /**
+         * Alias for calling [addElement] with
+         * `ElementalNodeNonChannel.ofUnionMember1(unionMember1)`.
+         */
+        fun addElement(unionMember1: ElementalNodeNonChannel.UnionMember1) =
+            addElement(ElementalNodeNonChannel.ofUnionMember1(unionMember1))
+
+        /**
+         * Alias for calling [addElement] with
+         * `ElementalNodeNonChannel.ofUnionMember2(unionMember2)`.
+         */
+        fun addElement(unionMember2: ElementalNodeNonChannel.UnionMember2) =
+            addElement(ElementalNodeNonChannel.ofUnionMember2(unionMember2))
+
+        /**
+         * Alias for calling [addElement] with
+         * `ElementalNodeNonChannel.ofUnionMember3(unionMember3)`.
+         */
+        fun addElement(unionMember3: ElementalNodeNonChannel.UnionMember3) =
+            addElement(ElementalNodeNonChannel.ofUnionMember3(unionMember3))
+
+        /**
+         * Alias for calling [addElement] with
+         * `ElementalNodeNonChannel.ofUnionMember4(unionMember4)`.
+         */
+        fun addElement(unionMember4: ElementalNodeNonChannel.UnionMember4) =
+            addElement(ElementalNodeNonChannel.ofUnionMember4(unionMember4))
+
+        /**
+         * Alias for calling [addElement] with
+         * `ElementalNodeNonChannel.ofUnionMember5(unionMember5)`.
+         */
+        fun addElement(unionMember5: ElementalNodeNonChannel.UnionMember5) =
+            addElement(ElementalNodeNonChannel.ofUnionMember5(unionMember5))
+
+        /**
+         * Alias for calling [addElement] with
+         * `ElementalNodeNonChannel.ofUnionMember6(unionMember6)`.
+         */
+        fun addElement(unionMember6: ElementalNodeNonChannel.UnionMember6) =
+            addElement(ElementalNodeNonChannel.ofUnionMember6(unionMember6))
 
         /**
          * Email only. Document-level base font size (CSS px, e.g. `16px`) for body content — text,
@@ -424,6 +544,7 @@ private constructor(
                 loop,
                 ref,
                 channel,
+                (elements ?: JsonMissing.of()).map { it.toImmutable() },
                 fontSize,
                 lineHeight,
                 padding,
@@ -452,6 +573,7 @@ private constructor(
         loop()
         ref()
         channel()
+        elements().ifPresent { it.forEach { it.validate() } }
         fontSize()
         lineHeight()
         padding()
@@ -479,6 +601,7 @@ private constructor(
             (if (loop.asKnown().isPresent) 1 else 0) +
             (if (ref.asKnown().isPresent) 1 else 0) +
             (if (channel.asKnown().isPresent) 1 else 0) +
+            (elements.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
             (if (fontSize.asKnown().isPresent) 1 else 0) +
             (if (lineHeight.asKnown().isPresent) 1 else 0) +
             (if (padding.asKnown().isPresent) 1 else 0) +
@@ -606,6 +729,7 @@ private constructor(
             loop == other.loop &&
             ref == other.ref &&
             channel == other.channel &&
+            elements == other.elements &&
             fontSize == other.fontSize &&
             lineHeight == other.lineHeight &&
             padding == other.padding &&
@@ -620,6 +744,7 @@ private constructor(
             loop,
             ref,
             channel,
+            elements,
             fontSize,
             lineHeight,
             padding,
@@ -631,5 +756,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ElementalChannelNode{channels=$channels, if_=$if_, loop=$loop, ref=$ref, channel=$channel, fontSize=$fontSize, lineHeight=$lineHeight, padding=$padding, raw=$raw, additionalProperties=$additionalProperties}"
+        "ElementalChannelNode{channels=$channels, if_=$if_, loop=$loop, ref=$ref, channel=$channel, elements=$elements, fontSize=$fontSize, lineHeight=$lineHeight, padding=$padding, raw=$raw, additionalProperties=$additionalProperties}"
 }
