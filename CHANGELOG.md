@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.4.4](https://github.com/trycourier/courier-java/compare/v6.4.3...v6.4.4) (2026-09-03)
+
+
+### Documentation
+
+* **api:** document the channel-block requirement on template creation ([#155](https://github.com/trycourier/courier-java/issues/155)) ([43b1fef](https://github.com/trycourier/courier-java/commit/43b1fef5a5efc0045ea88e7df585ae2b310282dd))
+
 ## [6.4.3](https://github.com/trycourier/courier-java/compare/v6.4.2...v6.4.3) (2026-08-29)
 
 
