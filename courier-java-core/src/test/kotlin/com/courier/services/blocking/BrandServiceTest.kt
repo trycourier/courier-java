@@ -48,8 +48,37 @@ internal class BrandServiceTest {
                                 BrandSettingsEmail.builder()
                                     .footer(
                                         EmailFooter.builder()
-                                            .content("content")
                                             .inheritDefault(true)
+                                            .markdown("markdown")
+                                            .social(
+                                                EmailFooter.Social.builder()
+                                                    .facebook(
+                                                        EmailFooter.Social.Facebook.builder()
+                                                            .url("url")
+                                                            .build()
+                                                    )
+                                                    .instagram(
+                                                        EmailFooter.Social.Instagram.builder()
+                                                            .url("url")
+                                                            .build()
+                                                    )
+                                                    .linkedin(
+                                                        EmailFooter.Social.Linkedin.builder()
+                                                            .url("url")
+                                                            .build()
+                                                    )
+                                                    .medium(
+                                                        EmailFooter.Social.Medium.builder()
+                                                            .url("url")
+                                                            .build()
+                                                    )
+                                                    .twitter(
+                                                        EmailFooter.Social.Twitter.builder()
+                                                            .url("url")
+                                                            .build()
+                                                    )
+                                                    .build()
+                                            )
                                             .build()
                                     )
                                     .head(
@@ -162,8 +191,37 @@ internal class BrandServiceTest {
                                 BrandSettingsEmail.builder()
                                     .footer(
                                         EmailFooter.builder()
-                                            .content("content")
                                             .inheritDefault(true)
+                                            .markdown("markdown")
+                                            .social(
+                                                EmailFooter.Social.builder()
+                                                    .facebook(
+                                                        EmailFooter.Social.Facebook.builder()
+                                                            .url("url")
+                                                            .build()
+                                                    )
+                                                    .instagram(
+                                                        EmailFooter.Social.Instagram.builder()
+                                                            .url("url")
+                                                            .build()
+                                                    )
+                                                    .linkedin(
+                                                        EmailFooter.Social.Linkedin.builder()
+                                                            .url("url")
+                                                            .build()
+                                                    )
+                                                    .medium(
+                                                        EmailFooter.Social.Medium.builder()
+                                                            .url("url")
+                                                            .build()
+                                                    )
+                                                    .twitter(
+                                                        EmailFooter.Social.Twitter.builder()
+                                                            .url("url")
+                                                            .build()
+                                                    )
+                                                    .build()
+                                            )
                                             .build()
                                     )
                                     .head(
