@@ -64,8 +64,11 @@ private constructor(
     fun device(): Optional<Device> = body.device()
 
     /**
-     * ISO 8601 formatted date the token expires. Defaults to 2 months. Set to false to disable
-     * expiration.
+     * When the token expires. Accepts a date, or the boolean `false` to disable expiration
+     * entirely. ISO 8601 is recommended (for example `2026-10-25T00:00:00.000Z`). A value that
+     * cannot be parsed as a date is rejected; it is not treated as "no expiration" and does not
+     * fall back to the default. `true` is not a supported value. Omit the field to use the default,
+     * which expires a token that has not been re-registered for 60 days.
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -209,8 +212,11 @@ private constructor(
         fun device(device: JsonField<Device>) = apply { body.device(device) }
 
         /**
-         * ISO 8601 formatted date the token expires. Defaults to 2 months. Set to false to disable
-         * expiration.
+         * When the token expires. Accepts a date, or the boolean `false` to disable expiration
+         * entirely. ISO 8601 is recommended (for example `2026-10-25T00:00:00.000Z`). A value that
+         * cannot be parsed as a date is rejected; it is not treated as "no expiration" and does not
+         * fall back to the default. `true` is not a supported value. Omit the field to use the
+         * default, which expires a token that has not been re-registered for 60 days.
          */
         fun expiryDate(expiryDate: ExpiryDate?) = apply { body.expiryDate(expiryDate) }
 
@@ -448,8 +454,11 @@ private constructor(
         fun device(): Optional<Device> = device.getOptional("device")
 
         /**
-         * ISO 8601 formatted date the token expires. Defaults to 2 months. Set to false to disable
-         * expiration.
+         * When the token expires. Accepts a date, or the boolean `false` to disable expiration
+         * entirely. ISO 8601 is recommended (for example `2026-10-25T00:00:00.000Z`). A value that
+         * cannot be parsed as a date is rejected; it is not treated as "no expiration" and does not
+         * fall back to the default. `true` is not a supported value. Omit the field to use the
+         * default, which expires a token that has not been re-registered for 60 days.
          *
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -580,8 +589,11 @@ private constructor(
             fun device(device: JsonField<Device>) = apply { this.device = device }
 
             /**
-             * ISO 8601 formatted date the token expires. Defaults to 2 months. Set to false to
-             * disable expiration.
+             * When the token expires. Accepts a date, or the boolean `false` to disable expiration
+             * entirely. ISO 8601 is recommended (for example `2026-10-25T00:00:00.000Z`). A value
+             * that cannot be parsed as a date is rejected; it is not treated as "no expiration" and
+             * does not fall back to the default. `true` is not a supported value. Omit the field to
+             * use the default, which expires a token that has not been re-registered for 60 days.
              */
             fun expiryDate(expiryDate: ExpiryDate?) = expiryDate(JsonField.ofNullable(expiryDate))
 
@@ -1253,8 +1265,11 @@ private constructor(
     }
 
     /**
-     * ISO 8601 formatted date the token expires. Defaults to 2 months. Set to false to disable
-     * expiration.
+     * When the token expires. Accepts a date, or the boolean `false` to disable expiration
+     * entirely. ISO 8601 is recommended (for example `2026-10-25T00:00:00.000Z`). A value that
+     * cannot be parsed as a date is rejected; it is not treated as "no expiration" and does not
+     * fall back to the default. `true` is not a supported value. Omit the field to use the default,
+     * which expires a token that has not been re-registered for 60 days.
      */
     @JsonDeserialize(using = ExpiryDate.Deserializer::class)
     @JsonSerialize(using = ExpiryDate.Serializer::class)

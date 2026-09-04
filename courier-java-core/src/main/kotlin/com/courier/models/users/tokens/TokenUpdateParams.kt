@@ -2,13 +2,17 @@
 
 package com.courier.models.users.tokens
 
+import com.courier.core.BaseDeserializer
+import com.courier.core.BaseSerializer
 import com.courier.core.ExcludeMissing
 import com.courier.core.JsonField
 import com.courier.core.JsonMissing
 import com.courier.core.JsonValue
 import com.courier.core.Params
+import com.courier.core.allMaxBy
 import com.courier.core.checkKnown
 import com.courier.core.checkRequired
+import com.courier.core.getOrThrow
 import com.courier.core.http.Headers
 import com.courier.core.http.QueryParams
 import com.courier.core.toImmutable
@@ -17,6 +21,13 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.core.ObjectCodec
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.util.Collections
 import java.util.Objects
 import java.util.Optional
@@ -466,7 +477,7 @@ private constructor(
     private constructor(
         private val op: JsonField<String>,
         private val path: JsonField<String>,
-        private val value: JsonField<String>,
+        private val value: JsonField<Value>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -474,7 +485,7 @@ private constructor(
         private constructor(
             @JsonProperty("op") @ExcludeMissing op: JsonField<String> = JsonMissing.of(),
             @JsonProperty("path") @ExcludeMissing path: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("value") @ExcludeMissing value: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("value") @ExcludeMissing value: JsonField<Value> = JsonMissing.of(),
         ) : this(op, path, value, mutableMapOf())
 
         /**
@@ -494,12 +505,13 @@ private constructor(
         fun path(): String = path.getRequired("path")
 
         /**
-         * The value for the operation.
+         * The value for the operation. A string for most fields; boolean `false` when disabling
+         * token expiration via `expiry_date`, which cannot be expressed as a string.
          *
          * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun value(): Optional<String> = value.getOptional("value")
+        fun value(): Optional<Value> = value.getOptional("value")
 
         /**
          * Returns the raw JSON value of [op].
@@ -520,7 +532,7 @@ private constructor(
          *
          * Unlike [value], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<String> = value
+        @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<Value> = value
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -553,7 +565,7 @@ private constructor(
 
             private var op: JsonField<String>? = null
             private var path: JsonField<String>? = null
-            private var value: JsonField<String> = JsonMissing.of()
+            private var value: JsonField<Value> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -588,20 +600,32 @@ private constructor(
              */
             fun path(path: JsonField<String>) = apply { this.path = path }
 
-            /** The value for the operation. */
-            fun value(value: String?) = value(JsonField.ofNullable(value))
+            /**
+             * The value for the operation. A string for most fields; boolean `false` when disabling
+             * token expiration via `expiry_date`, which cannot be expressed as a string.
+             */
+            fun value(value: Value?) = value(JsonField.ofNullable(value))
 
             /** Alias for calling [Builder.value] with `value.orElse(null)`. */
-            fun value(value: Optional<String>) = value(value.getOrNull())
+            fun value(value: Optional<Value>) = value(value.getOrNull())
 
             /**
              * Sets [Builder.value] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.value] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.value] with a well-typed [Value] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
              */
-            fun value(value: JsonField<String>) = apply { this.value = value }
+            fun value(value: JsonField<Value>) = apply { this.value = value }
+
+            /** Alias for calling [value] with `Value.ofString(string)`. */
+            fun value(string: String) = value(Value.ofString(string))
+
+            /** Alias for calling [value] with `Value.ofBool(bool)`. */
+            fun value(bool: Boolean) = value(Value.ofBool(bool))
+
+            /** Alias for calling [value] with `Value.ofUnionMember2(unionMember2)`. */
+            fun value(unionMember2: Value.UnionMember2) = value(Value.ofUnionMember2(unionMember2))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -662,7 +686,7 @@ private constructor(
 
             op()
             path()
-            value()
+            value().ifPresent { it.validate() }
             validated = true
         }
 
@@ -684,7 +708,363 @@ private constructor(
         internal fun validity(): Int =
             (if (op.asKnown().isPresent) 1 else 0) +
                 (if (path.asKnown().isPresent) 1 else 0) +
-                (if (value.asKnown().isPresent) 1 else 0)
+                (value.asKnown().getOrNull()?.validity() ?: 0)
+
+        /**
+         * The value for the operation. A string for most fields; boolean `false` when disabling
+         * token expiration via `expiry_date`, which cannot be expressed as a string.
+         */
+        @JsonDeserialize(using = Value.Deserializer::class)
+        @JsonSerialize(using = Value.Serializer::class)
+        class Value
+        private constructor(
+            private val string: String? = null,
+            private val bool: Boolean? = null,
+            private val unionMember2: UnionMember2? = null,
+            private val _json: JsonValue? = null,
+        ) {
+
+            fun string(): Optional<String> = Optional.ofNullable(string)
+
+            fun bool(): Optional<Boolean> = Optional.ofNullable(bool)
+
+            fun unionMember2(): Optional<UnionMember2> = Optional.ofNullable(unionMember2)
+
+            fun isString(): Boolean = string != null
+
+            fun isBool(): Boolean = bool != null
+
+            fun isUnionMember2(): Boolean = unionMember2 != null
+
+            fun asString(): String = string.getOrThrow("string")
+
+            fun asBool(): Boolean = bool.getOrThrow("bool")
+
+            fun asUnionMember2(): UnionMember2 = unionMember2.getOrThrow("unionMember2")
+
+            fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
+
+            /**
+             * Maps this instance's current variant to a value of type [T] using the given
+             * [visitor].
+             *
+             * Note that this method is _not_ forwards compatible with new variants from the API,
+             * unless [visitor] overrides [Visitor.unknown]. To handle variants not known to this
+             * version of the SDK gracefully, consider overriding [Visitor.unknown]:
+             * ```java
+             * import com.courier.core.JsonValue;
+             * import java.util.Optional;
+             *
+             * Optional<String> result = value.accept(new Value.Visitor<Optional<String>>() {
+             *     @Override
+             *     public Optional<String> visitString(String string) {
+             *         return Optional.of(string.toString());
+             *     }
+             *
+             *     // ...
+             *
+             *     @Override
+             *     public Optional<String> unknown(JsonValue json) {
+             *         // Or inspect the `json`.
+             *         return Optional.empty();
+             *     }
+             * });
+             * ```
+             *
+             * @throws CourierInvalidDataException if [Visitor.unknown] is not overridden in
+             *   [visitor] and the current variant is unknown.
+             */
+            fun <T> accept(visitor: Visitor<T>): T =
+                when {
+                    string != null -> visitor.visitString(string)
+                    bool != null -> visitor.visitBool(bool)
+                    unionMember2 != null -> visitor.visitUnionMember2(unionMember2)
+                    else -> visitor.unknown(_json)
+                }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws CourierInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
+            fun validate(): Value = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                accept(
+                    object : Visitor<Unit> {
+                        override fun visitString(string: String) {}
+
+                        override fun visitBool(bool: Boolean) {}
+
+                        override fun visitUnionMember2(unionMember2: UnionMember2) {
+                            unionMember2.validate()
+                        }
+                    }
+                )
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: CourierInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                accept(
+                    object : Visitor<Int> {
+                        override fun visitString(string: String) = 1
+
+                        override fun visitBool(bool: Boolean) = 1
+
+                        override fun visitUnionMember2(unionMember2: UnionMember2) =
+                            unionMember2.validity()
+
+                        override fun unknown(json: JsonValue?) = 0
+                    }
+                )
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Value &&
+                    string == other.string &&
+                    bool == other.bool &&
+                    unionMember2 == other.unionMember2
+            }
+
+            override fun hashCode(): Int = Objects.hash(string, bool, unionMember2)
+
+            override fun toString(): String =
+                when {
+                    string != null -> "Value{string=$string}"
+                    bool != null -> "Value{bool=$bool}"
+                    unionMember2 != null -> "Value{unionMember2=$unionMember2}"
+                    _json != null -> "Value{_unknown=$_json}"
+                    else -> throw IllegalStateException("Invalid Value")
+                }
+
+            companion object {
+
+                @JvmStatic fun ofString(string: String) = Value(string = string)
+
+                @JvmStatic fun ofBool(bool: Boolean) = Value(bool = bool)
+
+                @JvmStatic
+                fun ofUnionMember2(unionMember2: UnionMember2) = Value(unionMember2 = unionMember2)
+            }
+
+            /**
+             * An interface that defines how to map each variant of [Value] to a value of type [T].
+             */
+            interface Visitor<out T> {
+
+                fun visitString(string: String): T
+
+                fun visitBool(bool: Boolean): T
+
+                fun visitUnionMember2(unionMember2: UnionMember2): T
+
+                /**
+                 * Maps an unknown variant of [Value] to a value of type [T].
+                 *
+                 * An instance of [Value] can contain an unknown variant if it was deserialized from
+                 * data that doesn't match any known variant. For example, if the SDK is on an older
+                 * version than the API, then the API may respond with new variants that the SDK is
+                 * unaware of.
+                 *
+                 * @throws CourierInvalidDataException in the default implementation.
+                 */
+                fun unknown(json: JsonValue?): T {
+                    throw CourierInvalidDataException("Unknown Value: $json")
+                }
+            }
+
+            internal class Deserializer : BaseDeserializer<Value>(Value::class) {
+
+                override fun ObjectCodec.deserialize(node: JsonNode): Value {
+                    val json = JsonValue.fromJsonNode(node)
+
+                    val bestMatches =
+                        sequenceOf(
+                                tryDeserialize(node, jacksonTypeRef<UnionMember2>())?.let {
+                                    Value(unionMember2 = it, _json = json)
+                                },
+                                tryDeserialize(node, jacksonTypeRef<String>())?.let {
+                                    Value(string = it, _json = json)
+                                },
+                                tryDeserialize(node, jacksonTypeRef<Boolean>())?.let {
+                                    Value(bool = it, _json = json)
+                                },
+                            )
+                            .filterNotNull()
+                            .allMaxBy { it.validity() }
+                            .toList()
+                    return when (bestMatches.size) {
+                        // This can happen if what we're deserializing is completely incompatible
+                        // with all the possible variants (e.g. deserializing from integer).
+                        0 -> Value(_json = json)
+                        1 -> bestMatches.single()
+                        // If there's more than one match with the highest validity, then use the
+                        // first completely valid match, or simply the first match if none are
+                        // completely valid.
+                        else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
+                    }
+                }
+            }
+
+            internal class Serializer : BaseSerializer<Value>(Value::class) {
+
+                override fun serialize(
+                    value: Value,
+                    generator: JsonGenerator,
+                    provider: SerializerProvider,
+                ) {
+                    when {
+                        value.string != null -> generator.writeObject(value.string)
+                        value.bool != null -> generator.writeObject(value.bool)
+                        value.unionMember2 != null -> generator.writeObject(value.unionMember2)
+                        value._json != null -> generator.writeObject(value._json)
+                        else -> throw IllegalStateException("Invalid Value")
+                    }
+                }
+            }
+
+            class UnionMember2
+            @JsonCreator
+            private constructor(
+                @com.fasterxml.jackson.annotation.JsonValue
+                private val additionalProperties: Map<String, JsonValue>
+            ) {
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+                fun toBuilder() = Builder().from(this)
+
+                companion object {
+
+                    /** Returns a mutable builder for constructing an instance of [UnionMember2]. */
+                    @JvmStatic fun builder() = Builder()
+                }
+
+                /** A builder for [UnionMember2]. */
+                class Builder internal constructor() {
+
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    @JvmSynthetic
+                    internal fun from(unionMember2: UnionMember2) = apply {
+                        additionalProperties = unionMember2.additionalProperties.toMutableMap()
+                    }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
+
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [UnionMember2].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     */
+                    fun build(): UnionMember2 = UnionMember2(additionalProperties.toImmutable())
+                }
+
+                private var validated: Boolean = false
+
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws CourierInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
+                fun validate(): UnionMember2 = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: CourierInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic
+                internal fun validity(): Int =
+                    additionalProperties.count { (_, value) ->
+                        !value.isNull() && !value.isMissing()
+                    }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is UnionMember2 &&
+                        additionalProperties == other.additionalProperties
+                }
+
+                private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+
+                override fun hashCode(): Int = hashCode
+
+                override fun toString() = "UnionMember2{additionalProperties=$additionalProperties}"
+            }
+        }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
