@@ -11,16 +11,52 @@ internal class EmailFooterTest {
 
     @Test
     fun create() {
-        val emailFooter = EmailFooter.builder().content("content").inheritDefault(true).build()
+        val emailFooter =
+            EmailFooter.builder()
+                .inheritDefault(true)
+                .markdown("markdown")
+                .social(
+                    EmailFooter.Social.builder()
+                        .facebook(EmailFooter.Social.Facebook.builder().url("url").build())
+                        .instagram(EmailFooter.Social.Instagram.builder().url("url").build())
+                        .linkedin(EmailFooter.Social.Linkedin.builder().url("url").build())
+                        .medium(EmailFooter.Social.Medium.builder().url("url").build())
+                        .twitter(EmailFooter.Social.Twitter.builder().url("url").build())
+                        .build()
+                )
+                .build()
 
-        assertThat(emailFooter.content()).contains("content")
         assertThat(emailFooter.inheritDefault()).contains(true)
+        assertThat(emailFooter.markdown()).contains("markdown")
+        assertThat(emailFooter.social())
+            .contains(
+                EmailFooter.Social.builder()
+                    .facebook(EmailFooter.Social.Facebook.builder().url("url").build())
+                    .instagram(EmailFooter.Social.Instagram.builder().url("url").build())
+                    .linkedin(EmailFooter.Social.Linkedin.builder().url("url").build())
+                    .medium(EmailFooter.Social.Medium.builder().url("url").build())
+                    .twitter(EmailFooter.Social.Twitter.builder().url("url").build())
+                    .build()
+            )
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val emailFooter = EmailFooter.builder().content("content").inheritDefault(true).build()
+        val emailFooter =
+            EmailFooter.builder()
+                .inheritDefault(true)
+                .markdown("markdown")
+                .social(
+                    EmailFooter.Social.builder()
+                        .facebook(EmailFooter.Social.Facebook.builder().url("url").build())
+                        .instagram(EmailFooter.Social.Instagram.builder().url("url").build())
+                        .linkedin(EmailFooter.Social.Linkedin.builder().url("url").build())
+                        .medium(EmailFooter.Social.Medium.builder().url("url").build())
+                        .twitter(EmailFooter.Social.Twitter.builder().url("url").build())
+                        .build()
+                )
+                .build()
 
         val roundtrippedEmailFooter =
             jsonMapper.readValue(
