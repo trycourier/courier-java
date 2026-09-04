@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.5.0](https://github.com/trycourier/courier-java/compare/v6.4.4...v6.5.0) (2026-09-04)
+
+
+### Features
+
+* **api:** document the expiry_date contract and allow boolean patch values ([#158](https://github.com/trycourier/courier-java/issues/158)) ([1d863a8](https://github.com/trycourier/courier-java/commit/1d863a8021930965a766a0676378dd2828ee3b18))
+
 ## [6.4.4](https://github.com/trycourier/courier-java/compare/v6.4.3...v6.4.4) (2026-09-03)
 
 
