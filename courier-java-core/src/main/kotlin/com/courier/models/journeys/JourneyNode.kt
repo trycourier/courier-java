@@ -145,7 +145,17 @@ private constructor(
 
     /**
      * Add the current event to a digest keyed by the given subscription topic. The digest
-     * accumulates events and releases them on the schedule configured for the topic.
+     * accumulates events and releases them on the schedule configured for the topic, using the
+     * notification template configured on that topic.
+     *
+     * **The topic must have a template configured.** If the topic has no template when the first
+     * event reaches this node, the journey run fails immediately: the run is marked `ERROR`, no
+     * digest instance is created, and the journey does not continue past this node. Configure the
+     * topic's template before using the topic in a journey.
+     *
+     * If the journey run is scoped to a tenant, digests are kept separate per tenant: two runs for
+     * the same user under different tenants accumulate and release as separate digests, even on the
+     * same topic.
      */
     fun addToDigest(): Optional<JourneyAddToDigestNode> = Optional.ofNullable(addToDigest)
 
@@ -276,7 +286,17 @@ private constructor(
 
     /**
      * Add the current event to a digest keyed by the given subscription topic. The digest
-     * accumulates events and releases them on the schedule configured for the topic.
+     * accumulates events and releases them on the schedule configured for the topic, using the
+     * notification template configured on that topic.
+     *
+     * **The topic must have a template configured.** If the topic has no template when the first
+     * event reaches this node, the journey run fails immediately: the run is marked `ERROR`, no
+     * digest instance is created, and the journey does not continue past this node. Configure the
+     * topic's template before using the topic in a journey.
+     *
+     * If the journey run is scoped to a tenant, digests are kept separate per tenant: two runs for
+     * the same user under different tenants accumulate and release as separate digests, even on the
+     * same topic.
      */
     fun asAddToDigest(): JourneyAddToDigestNode = addToDigest.getOrThrow("addToDigest")
 
@@ -660,7 +680,17 @@ private constructor(
 
         /**
          * Add the current event to a digest keyed by the given subscription topic. The digest
-         * accumulates events and releases them on the schedule configured for the topic.
+         * accumulates events and releases them on the schedule configured for the topic, using the
+         * notification template configured on that topic.
+         *
+         * **The topic must have a template configured.** If the topic has no template when the
+         * first event reaches this node, the journey run fails immediately: the run is marked
+         * `ERROR`, no digest instance is created, and the journey does not continue past this node.
+         * Configure the topic's template before using the topic in a journey.
+         *
+         * If the journey run is scoped to a tenant, digests are kept separate per tenant: two runs
+         * for the same user under different tenants accumulate and release as separate digests,
+         * even on the same topic.
          */
         @JvmStatic
         fun ofAddToDigest(addToDigest: JourneyAddToDigestNode) =
@@ -764,7 +794,17 @@ private constructor(
 
         /**
          * Add the current event to a digest keyed by the given subscription topic. The digest
-         * accumulates events and releases them on the schedule configured for the topic.
+         * accumulates events and releases them on the schedule configured for the topic, using the
+         * notification template configured on that topic.
+         *
+         * **The topic must have a template configured.** If the topic has no template when the
+         * first event reaches this node, the journey run fails immediately: the run is marked
+         * `ERROR`, no digest instance is created, and the journey does not continue past this node.
+         * Configure the topic's template before using the topic in a journey.
+         *
+         * If the journey run is scoped to a tenant, digests are kept separate per tenant: two runs
+         * for the same user under different tenants accumulate and release as separate digests,
+         * even on the same topic.
          */
         fun visitAddToDigest(addToDigest: JourneyAddToDigestNode): T
 
@@ -2110,7 +2150,17 @@ private constructor(
 
     /**
      * Add the current event to a digest keyed by the given subscription topic. The digest
-     * accumulates events and releases them on the schedule configured for the topic.
+     * accumulates events and releases them on the schedule configured for the topic, using the
+     * notification template configured on that topic.
+     *
+     * **The topic must have a template configured.** If the topic has no template when the first
+     * event reaches this node, the journey run fails immediately: the run is marked `ERROR`, no
+     * digest instance is created, and the journey does not continue past this node. Configure the
+     * topic's template before using the topic in a journey.
+     *
+     * If the journey run is scoped to a tenant, digests are kept separate per tenant: two runs for
+     * the same user under different tenants accumulate and release as separate digests, even on the
+     * same topic.
      */
     class JourneyAddToDigestNode
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
