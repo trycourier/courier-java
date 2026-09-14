@@ -13,7 +13,7 @@ internal class BroadcastScheduleParamsTest {
             .broadcastId("broadcastId")
             .scheduleBroadcastRequest(
                 ScheduleBroadcastRequest.builder()
-                    .recipientId("aud_01kx4h2jdafq8bk9amzvy6hbv0")
+                    .recipientId("active-business-users")
                     .recipientType(ScheduleBroadcastRequest.RecipientType.AUDIENCE)
                     .scheduledTo("2026-08-01T15:00:00")
                     .timezone("America/New_York")
@@ -29,7 +29,7 @@ internal class BroadcastScheduleParamsTest {
                 .broadcastId("broadcastId")
                 .scheduleBroadcastRequest(
                     ScheduleBroadcastRequest.builder()
-                        .recipientId("aud_01kx4h2jdafq8bk9amzvy6hbv0")
+                        .recipientId("active-business-users")
                         .recipientType(ScheduleBroadcastRequest.RecipientType.AUDIENCE)
                         .scheduledTo("2026-08-01T15:00:00")
                         .build()
@@ -48,7 +48,7 @@ internal class BroadcastScheduleParamsTest {
                 .broadcastId("broadcastId")
                 .scheduleBroadcastRequest(
                     ScheduleBroadcastRequest.builder()
-                        .recipientId("aud_01kx4h2jdafq8bk9amzvy6hbv0")
+                        .recipientId("active-business-users")
                         .recipientType(ScheduleBroadcastRequest.RecipientType.AUDIENCE)
                         .scheduledTo("2026-08-01T15:00:00")
                         .timezone("America/New_York")
@@ -61,7 +61,7 @@ internal class BroadcastScheduleParamsTest {
         assertThat(body)
             .isEqualTo(
                 ScheduleBroadcastRequest.builder()
-                    .recipientId("aud_01kx4h2jdafq8bk9amzvy6hbv0")
+                    .recipientId("active-business-users")
                     .recipientType(ScheduleBroadcastRequest.RecipientType.AUDIENCE)
                     .scheduledTo("2026-08-01T15:00:00")
                     .timezone("America/New_York")
@@ -76,7 +76,7 @@ internal class BroadcastScheduleParamsTest {
                 .broadcastId("broadcastId")
                 .scheduleBroadcastRequest(
                     ScheduleBroadcastRequest.builder()
-                        .recipientId("aud_01kx4h2jdafq8bk9amzvy6hbv0")
+                        .recipientId("active-business-users")
                         .recipientType(ScheduleBroadcastRequest.RecipientType.AUDIENCE)
                         .scheduledTo("2026-08-01T15:00:00")
                         .build()
@@ -88,7 +88,7 @@ internal class BroadcastScheduleParamsTest {
         assertThat(body)
             .isEqualTo(
                 ScheduleBroadcastRequest.builder()
-                    .recipientId("aud_01kx4h2jdafq8bk9amzvy6hbv0")
+                    .recipientId("active-business-users")
                     .recipientType(ScheduleBroadcastRequest.RecipientType.AUDIENCE)
                     .scheduledTo("2026-08-01T15:00:00")
                     .build()
