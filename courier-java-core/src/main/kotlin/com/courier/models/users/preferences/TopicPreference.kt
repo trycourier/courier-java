@@ -117,9 +117,9 @@ private constructor(
         customRouting.getOptional("custom_routing")
 
     /**
-     * The digest schedule this recipient is on for the topic. Omitted -- not null -- when they have
-     * not chosen one, in which case the topic's default schedule applies. Ids come from the topic's
-     * digest configuration or from `GET /digests/schedules`.
+     * The digest schedule this recipient is on for the topic. Omitted rather than null when they
+     * have not chosen one, in which case the topic's default schedule applies. Ids come from the
+     * topic's digest configuration or from `GET /digests/schedules`.
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -378,9 +378,9 @@ private constructor(
         }
 
         /**
-         * The digest schedule this recipient is on for the topic. Omitted -- not null -- when they
-         * have not chosen one, in which case the topic's default schedule applies. Ids come from
-         * the topic's digest configuration or from `GET /digests/schedules`.
+         * The digest schedule this recipient is on for the topic. Omitted rather than null when
+         * they have not chosen one, in which case the topic's default schedule applies. Ids come
+         * from the topic's digest configuration or from `GET /digests/schedules`.
          */
         fun digestScheduleId(digestScheduleId: String) =
             digestScheduleId(JsonField.of(digestScheduleId))
