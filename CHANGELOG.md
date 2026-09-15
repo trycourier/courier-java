@@ -1,5 +1,18 @@
 # Changelog
 
+## [6.6.0](https://github.com/trycourier/courier-java/compare/v6.5.0...v6.6.0) (2026-09-15)
+
+
+### Features
+
+* **api:** digest configuration, per-recipient schedules, and release ([#164](https://github.com/trycourier/courier-java/issues/164)) ([c8400c2](https://github.com/trycourier/courier-java/commit/c8400c23e9323db15f86e0a7b8576d308668ad5a))
+
+
+### Documentation
+
+* **api:** group the topic digest endpoints under Digests, and match the docs voice ([#165](https://github.com/trycourier/courier-java/issues/165)) ([8401bb9](https://github.com/trycourier/courier-java/commit/8401bb9f4c08cb05f23b4fa4c3bc14243eb27303))
+* **api:** stop teaching an aud_ prefix that Courier does not issue ([#162](https://github.com/trycourier/courier-java/issues/162)) ([9de16fc](https://github.com/trycourier/courier-java/commit/9de16fc06f81a88fd640b5355be204e291ffb0e9))
+
 ## [6.5.0](https://github.com/trycourier/courier-java/compare/v6.4.4...v6.5.0) (2026-09-04)
 
 
