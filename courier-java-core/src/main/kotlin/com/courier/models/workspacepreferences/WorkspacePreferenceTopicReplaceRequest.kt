@@ -113,8 +113,8 @@ private constructor(
      * and how collected events are retained.
      *
      * Send `null` for the whole object to turn a digest off, which unlinks the template and removes
-     * its schedules. There is no `enabled` flag, and `schedules: []` is rejected -- both states are
-     * un-deliverable rather than merely off.
+     * its schedules. There is no `enabled` flag, and `schedules: []` is rejected, because both
+     * states are un-deliverable rather than merely off.
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -352,8 +352,8 @@ private constructor(
          * on, and how collected events are retained.
          *
          * Send `null` for the whole object to turn a digest off, which unlinks the template and
-         * removes its schedules. There is no `enabled` flag, and `schedules: []` is rejected --
-         * both states are un-deliverable rather than merely off.
+         * removes its schedules. There is no `enabled` flag, and `schedules: []` is rejected,
+         * because both states are un-deliverable rather than merely off.
          */
         fun digest(digest: TopicDigestRequest?) = digest(JsonField.ofNullable(digest))
 
