@@ -21,16 +21,14 @@ import com.courier.models.workspacepreferences.WorkspacePreferenceTopicGetRespon
 import com.courier.models.workspacepreferences.WorkspacePreferenceTopicListResponse
 import com.courier.models.workspacepreferences.topics.TopicArchiveParams
 import com.courier.models.workspacepreferences.topics.TopicCreateParams
+import com.courier.models.workspacepreferences.topics.TopicDeleteDigestParams
 import com.courier.models.workspacepreferences.topics.TopicListParams
+import com.courier.models.workspacepreferences.topics.TopicReleaseDigestParams
 import com.courier.models.workspacepreferences.topics.TopicReplaceParams
 import com.courier.models.workspacepreferences.topics.TopicRetrieveParams
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
-/**
- * Manage the workspace catalog of subscription topics, the sections that group them, and publishing
- * the preference page.
- */
 class TopicServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     TopicService {
 
@@ -67,6 +65,16 @@ class TopicServiceImpl internal constructor(private val clientOptions: ClientOpt
     override fun archive(params: TopicArchiveParams, requestOptions: RequestOptions) {
         // delete /preferences/sections/{section_id}/topics/{topic_id}
         withRawResponse().archive(params, requestOptions)
+    }
+
+    override fun deleteDigest(params: TopicDeleteDigestParams, requestOptions: RequestOptions) {
+        // delete /preferences/sections/{section_id}/topics/{topic_id}/digest
+        withRawResponse().deleteDigest(params, requestOptions)
+    }
+
+    override fun releaseDigest(params: TopicReleaseDigestParams, requestOptions: RequestOptions) {
+        // post /preferences/sections/{section_id}/topics/{topic_id}/digest/release
+        withRawResponse().releaseDigest(params, requestOptions)
     }
 
     override fun replace(
@@ -213,6 +221,69 @@ class TopicServiceImpl internal constructor(private val clientOptions: ClientOpt
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return errorHandler.handle(response).parseable {
                 response.use { archiveHandler.handle(it) }
+            }
+        }
+
+        private val deleteDigestHandler: Handler<Void?> = emptyHandler()
+
+        override fun deleteDigest(
+            params: TopicDeleteDigestParams,
+            requestOptions: RequestOptions,
+        ): HttpResponse {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("topicId", params.topicId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.DELETE)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments(
+                        "preferences",
+                        "sections",
+                        params._pathParam(0),
+                        "topics",
+                        params._pathParam(1),
+                        "digest",
+                    )
+                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response.use { deleteDigestHandler.handle(it) }
+            }
+        }
+
+        private val releaseDigestHandler: Handler<Void?> = emptyHandler()
+
+        override fun releaseDigest(
+            params: TopicReleaseDigestParams,
+            requestOptions: RequestOptions,
+        ): HttpResponse {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("topicId", params.topicId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments(
+                        "preferences",
+                        "sections",
+                        params._pathParam(0),
+                        "topics",
+                        params._pathParam(1),
+                        "digest",
+                        "release",
+                    )
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response.use { releaseDigestHandler.handle(it) }
             }
         }
 

@@ -5,10 +5,18 @@ package com.courier.services.blocking.workspacepreferences
 import com.courier.client.okhttp.CourierOkHttpClient
 import com.courier.core.JsonValue
 import com.courier.models.ChannelClassification
+import com.courier.models.digests.DigestDayOfWeek
+import com.courier.models.digests.DigestFrequency
+import com.courier.models.workspacepreferences.TopicDigestCategory
+import com.courier.models.workspacepreferences.TopicDigestReleaseRequest
+import com.courier.models.workspacepreferences.TopicDigestRequest
+import com.courier.models.workspacepreferences.TopicDigestScheduleRequest
 import com.courier.models.workspacepreferences.WorkspacePreferenceTopicCreateRequest
 import com.courier.models.workspacepreferences.WorkspacePreferenceTopicReplaceRequest
 import com.courier.models.workspacepreferences.topics.TopicArchiveParams
 import com.courier.models.workspacepreferences.topics.TopicCreateParams
+import com.courier.models.workspacepreferences.topics.TopicDeleteDigestParams
+import com.courier.models.workspacepreferences.topics.TopicReleaseDigestParams
 import com.courier.models.workspacepreferences.topics.TopicReplaceParams
 import com.courier.models.workspacepreferences.topics.TopicRetrieveParams
 import org.junit.jupiter.api.Disabled
@@ -38,6 +46,34 @@ internal class TopicServiceTest {
                                 WorkspacePreferenceTopicCreateRequest.AllowedPreference.SNOOZE
                             )
                             .description("description")
+                            .digest(
+                                TopicDigestRequest.builder()
+                                    .addSchedule(
+                                        TopicDigestScheduleRequest.builder()
+                                            .frequency(DigestFrequency.INSTANT)
+                                            .dayOfMonth(1L)
+                                            .dayOfWeek(DigestDayOfWeek.SUNDAY)
+                                            .addDaysOfWeek(DigestDayOfWeek.SUNDAY)
+                                            .disabled(true)
+                                            .isDefault(true)
+                                            .scheduleId("schedule_id")
+                                            .time("time")
+                                            .timezone("timezone")
+                                            .build()
+                                    )
+                                    .templateId("template_id")
+                                    .audienceId("audience_id")
+                                    .addCategory(
+                                        TopicDigestCategory.builder()
+                                            .categoryKey("category_key")
+                                            .limit(1L)
+                                            .retain(TopicDigestCategory.Retain.FIRST)
+                                            .sortKey("sort_key")
+                                            .build()
+                                    )
+                                    .triggerEmpty(true)
+                                    .build()
+                            )
                             .includeUnsubscribeHeader(true)
                             .addRoutingOption(ChannelClassification.DIRECT_MESSAGE)
                             .topicData(
@@ -91,6 +127,37 @@ internal class TopicServiceTest {
 
     @Disabled("Mock server tests are disabled")
     @Test
+    fun deleteDigest() {
+        val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
+        val topicService = client.workspacePreferences().topics()
+
+        topicService.deleteDigest(
+            TopicDeleteDigestParams.builder().sectionId("section_id").topicId("topic_id").build()
+        )
+    }
+
+    @Disabled("Mock server tests are disabled")
+    @Test
+    fun releaseDigest() {
+        val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
+        val topicService = client.workspacePreferences().topics()
+
+        topicService.releaseDigest(
+            TopicReleaseDigestParams.builder()
+                .sectionId("section_id")
+                .topicId("topic_id")
+                .topicDigestReleaseRequest(
+                    TopicDigestReleaseRequest.builder()
+                        .userId("user_01h1p2c3d4e5f6g7h8")
+                        .tenantId("x")
+                        .build()
+                )
+                .build()
+        )
+    }
+
+    @Disabled("Mock server tests are disabled")
+    @Test
     fun replace() {
         val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
         val topicService = client.workspacePreferences().topics()
@@ -111,6 +178,34 @@ internal class TopicServiceTest {
                                     .CHANNEL_PREFERENCES
                             )
                             .description("description")
+                            .digest(
+                                TopicDigestRequest.builder()
+                                    .addSchedule(
+                                        TopicDigestScheduleRequest.builder()
+                                            .frequency(DigestFrequency.INSTANT)
+                                            .dayOfMonth(1L)
+                                            .dayOfWeek(DigestDayOfWeek.SUNDAY)
+                                            .addDaysOfWeek(DigestDayOfWeek.SUNDAY)
+                                            .disabled(true)
+                                            .isDefault(true)
+                                            .scheduleId("schedule_id")
+                                            .time("time")
+                                            .timezone("timezone")
+                                            .build()
+                                    )
+                                    .templateId("template_id")
+                                    .audienceId("audience_id")
+                                    .addCategory(
+                                        TopicDigestCategory.builder()
+                                            .categoryKey("category_key")
+                                            .limit(1L)
+                                            .retain(TopicDigestCategory.Retain.FIRST)
+                                            .sortKey("sort_key")
+                                            .build()
+                                    )
+                                    .triggerEmpty(true)
+                                    .build()
+                            )
                             .includeUnsubscribeHeader(true)
                             .addRoutingOption(ChannelClassification.EMAIL)
                             .addRoutingOption(ChannelClassification.INBOX)

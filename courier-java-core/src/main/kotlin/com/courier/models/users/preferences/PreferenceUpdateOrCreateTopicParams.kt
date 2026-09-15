@@ -464,6 +464,7 @@ private constructor(
     private constructor(
         private val status: JsonField<PreferenceStatus>,
         private val customRouting: JsonField<List<ChannelClassification>>,
+        private val digestScheduleId: JsonField<String>,
         private val hasCustomRouting: JsonField<Boolean>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -476,10 +477,13 @@ private constructor(
             @JsonProperty("custom_routing")
             @ExcludeMissing
             customRouting: JsonField<List<ChannelClassification>> = JsonMissing.of(),
+            @JsonProperty("digest_schedule_id")
+            @ExcludeMissing
+            digestScheduleId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("has_custom_routing")
             @ExcludeMissing
             hasCustomRouting: JsonField<Boolean> = JsonMissing.of(),
-        ) : this(status, customRouting, hasCustomRouting, mutableMapOf())
+        ) : this(status, customRouting, digestScheduleId, hasCustomRouting, mutableMapOf())
 
         /**
          * The subscription status to set: OPTED_IN or OPTED_OUT. REQUIRED is a topic-level default,
@@ -499,6 +503,18 @@ private constructor(
          */
         fun customRouting(): Optional<List<ChannelClassification>> =
             customRouting.getOptional("custom_routing")
+
+        /**
+         * Put this recipient on one of the topic's digest schedules. Send `null` to clear the
+         * choice and return them to the topic's default. Omit to leave an existing choice alone --
+         * unlike the routing fields, which this endpoint replaces. An id that is not an active
+         * schedule on the topic is rejected with a `400` before anything is written.
+         *
+         * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun digestScheduleId(): Optional<String> =
+            digestScheduleId.getOptional("digest_schedule_id")
 
         /**
          * Set to true to route this topic to the channels in custom_routing instead of the topic's
@@ -526,6 +542,16 @@ private constructor(
         @JsonProperty("custom_routing")
         @ExcludeMissing
         fun _customRouting(): JsonField<List<ChannelClassification>> = customRouting
+
+        /**
+         * Returns the raw JSON value of [digestScheduleId].
+         *
+         * Unlike [digestScheduleId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("digest_schedule_id")
+        @ExcludeMissing
+        fun _digestScheduleId(): JsonField<String> = digestScheduleId
 
         /**
          * Returns the raw JSON value of [hasCustomRouting].
@@ -567,6 +593,7 @@ private constructor(
 
             private var status: JsonField<PreferenceStatus>? = null
             private var customRouting: JsonField<MutableList<ChannelClassification>>? = null
+            private var digestScheduleId: JsonField<String> = JsonMissing.of()
             private var hasCustomRouting: JsonField<Boolean> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -574,6 +601,7 @@ private constructor(
             internal fun from(topic: Topic) = apply {
                 status = topic.status
                 customRouting = topic.customRouting.map { it.toMutableList() }
+                digestScheduleId = topic.digestScheduleId
                 hasCustomRouting = topic.hasCustomRouting
                 additionalProperties = topic.additionalProperties.toMutableMap()
             }
@@ -625,6 +653,32 @@ private constructor(
                     (this.customRouting ?: JsonField.of(mutableListOf())).also {
                         checkKnown("customRouting", it).add(customRouting)
                     }
+            }
+
+            /**
+             * Put this recipient on one of the topic's digest schedules. Send `null` to clear the
+             * choice and return them to the topic's default. Omit to leave an existing choice alone
+             * -- unlike the routing fields, which this endpoint replaces. An id that is not an
+             * active schedule on the topic is rejected with a `400` before anything is written.
+             */
+            fun digestScheduleId(digestScheduleId: String?) =
+                digestScheduleId(JsonField.ofNullable(digestScheduleId))
+
+            /**
+             * Alias for calling [Builder.digestScheduleId] with `digestScheduleId.orElse(null)`.
+             */
+            fun digestScheduleId(digestScheduleId: Optional<String>) =
+                digestScheduleId(digestScheduleId.getOrNull())
+
+            /**
+             * Sets [Builder.digestScheduleId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.digestScheduleId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun digestScheduleId(digestScheduleId: JsonField<String>) = apply {
+                this.digestScheduleId = digestScheduleId
             }
 
             /**
@@ -694,6 +748,7 @@ private constructor(
                 Topic(
                     checkRequired("status", status),
                     (customRouting ?: JsonMissing.of()).map { it.toImmutable() },
+                    digestScheduleId,
                     hasCustomRouting,
                     additionalProperties.toMutableMap(),
                 )
@@ -717,6 +772,7 @@ private constructor(
 
             status().validate()
             customRouting().ifPresent { it.forEach { it.validate() } }
+            digestScheduleId()
             hasCustomRouting()
             validated = true
         }
@@ -739,6 +795,7 @@ private constructor(
         internal fun validity(): Int =
             (status.asKnown().getOrNull()?.validity() ?: 0) +
                 (customRouting.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                (if (digestScheduleId.asKnown().isPresent) 1 else 0) +
                 (if (hasCustomRouting.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
@@ -749,18 +806,25 @@ private constructor(
             return other is Topic &&
                 status == other.status &&
                 customRouting == other.customRouting &&
+                digestScheduleId == other.digestScheduleId &&
                 hasCustomRouting == other.hasCustomRouting &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(status, customRouting, hasCustomRouting, additionalProperties)
+            Objects.hash(
+                status,
+                customRouting,
+                digestScheduleId,
+                hasCustomRouting,
+                additionalProperties,
+            )
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Topic{status=$status, customRouting=$customRouting, hasCustomRouting=$hasCustomRouting, additionalProperties=$additionalProperties}"
+            "Topic{status=$status, customRouting=$customRouting, digestScheduleId=$digestScheduleId, hasCustomRouting=$hasCustomRouting, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

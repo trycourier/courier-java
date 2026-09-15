@@ -21,17 +21,15 @@ import com.courier.models.workspacepreferences.WorkspacePreferenceTopicGetRespon
 import com.courier.models.workspacepreferences.WorkspacePreferenceTopicListResponse
 import com.courier.models.workspacepreferences.topics.TopicArchiveParams
 import com.courier.models.workspacepreferences.topics.TopicCreateParams
+import com.courier.models.workspacepreferences.topics.TopicDeleteDigestParams
 import com.courier.models.workspacepreferences.topics.TopicListParams
+import com.courier.models.workspacepreferences.topics.TopicReleaseDigestParams
 import com.courier.models.workspacepreferences.topics.TopicReplaceParams
 import com.courier.models.workspacepreferences.topics.TopicRetrieveParams
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
-/**
- * Manage the workspace catalog of subscription topics, the sections that group them, and publishing
- * the preference page.
- */
 class TopicServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     TopicServiceAsync {
 
@@ -71,6 +69,20 @@ class TopicServiceAsyncImpl internal constructor(private val clientOptions: Clie
     ): CompletableFuture<Void?> =
         // delete /preferences/sections/{section_id}/topics/{topic_id}
         withRawResponse().archive(params, requestOptions).thenAccept {}
+
+    override fun deleteDigest(
+        params: TopicDeleteDigestParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Void?> =
+        // delete /preferences/sections/{section_id}/topics/{topic_id}/digest
+        withRawResponse().deleteDigest(params, requestOptions).thenAccept {}
+
+    override fun releaseDigest(
+        params: TopicReleaseDigestParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Void?> =
+        // post /preferences/sections/{section_id}/topics/{topic_id}/digest/release
+        withRawResponse().releaseDigest(params, requestOptions).thenAccept {}
 
     override fun replace(
         params: TopicReplaceParams,
@@ -227,6 +239,75 @@ class TopicServiceAsyncImpl internal constructor(private val clientOptions: Clie
                 .thenApply { response ->
                     errorHandler.handle(response).parseable {
                         response.use { archiveHandler.handle(it) }
+                    }
+                }
+        }
+
+        private val deleteDigestHandler: Handler<Void?> = emptyHandler()
+
+        override fun deleteDigest(
+            params: TopicDeleteDigestParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("topicId", params.topicId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.DELETE)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments(
+                        "preferences",
+                        "sections",
+                        params._pathParam(0),
+                        "topics",
+                        params._pathParam(1),
+                        "digest",
+                    )
+                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response.use { deleteDigestHandler.handle(it) }
+                    }
+                }
+        }
+
+        private val releaseDigestHandler: Handler<Void?> = emptyHandler()
+
+        override fun releaseDigest(
+            params: TopicReleaseDigestParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("topicId", params.topicId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments(
+                        "preferences",
+                        "sections",
+                        params._pathParam(0),
+                        "topics",
+                        params._pathParam(1),
+                        "digest",
+                        "release",
+                    )
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response.use { releaseDigestHandler.handle(it) }
                     }
                 }
         }

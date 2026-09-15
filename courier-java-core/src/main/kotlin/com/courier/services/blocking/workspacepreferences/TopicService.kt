@@ -10,16 +10,14 @@ import com.courier.models.workspacepreferences.WorkspacePreferenceTopicGetRespon
 import com.courier.models.workspacepreferences.WorkspacePreferenceTopicListResponse
 import com.courier.models.workspacepreferences.topics.TopicArchiveParams
 import com.courier.models.workspacepreferences.topics.TopicCreateParams
+import com.courier.models.workspacepreferences.topics.TopicDeleteDigestParams
 import com.courier.models.workspacepreferences.topics.TopicListParams
+import com.courier.models.workspacepreferences.topics.TopicReleaseDigestParams
 import com.courier.models.workspacepreferences.topics.TopicReplaceParams
 import com.courier.models.workspacepreferences.topics.TopicRetrieveParams
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
-/**
- * Manage the workspace catalog of subscription topics, the sections that group them, and publishing
- * the preference page.
- */
 interface TopicService {
 
     /**
@@ -143,6 +141,58 @@ interface TopicService {
 
     /** @see archive */
     fun archive(params: TopicArchiveParams, requestOptions: RequestOptions = RequestOptions.none())
+
+    /**
+     * Turn off a topic's digest, leaving the topic itself in place. The template is unlinked and
+     * the digest's schedules are removed along with their delivery rules. Equivalent to sending
+     * `digest: null` on a topic replace.
+     */
+    fun deleteDigest(topicId: String, params: TopicDeleteDigestParams) =
+        deleteDigest(topicId, params, RequestOptions.none())
+
+    /** @see deleteDigest */
+    fun deleteDigest(
+        topicId: String,
+        params: TopicDeleteDigestParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ) = deleteDigest(params.toBuilder().topicId(topicId).build(), requestOptions)
+
+    /** @see deleteDigest */
+    fun deleteDigest(params: TopicDeleteDigestParams) = deleteDigest(params, RequestOptions.none())
+
+    /** @see deleteDigest */
+    fun deleteDigest(
+        params: TopicDeleteDigestParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    )
+
+    /**
+     * Send one recipient's held digest now, instead of waiting for its schedule. Use it to preview
+     * what a digest will look like, or to let someone flush their own.
+     *
+     * Keyed on the topic because that is how a held digest is stored: one per recipient per topic,
+     * with the schedule recorded on it rather than part of its identity. To flush every recipient
+     * on a schedule instead, use `POST /digests/schedules/{schedule_id}/trigger`.
+     */
+    fun releaseDigest(topicId: String, params: TopicReleaseDigestParams) =
+        releaseDigest(topicId, params, RequestOptions.none())
+
+    /** @see releaseDigest */
+    fun releaseDigest(
+        topicId: String,
+        params: TopicReleaseDigestParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ) = releaseDigest(params.toBuilder().topicId(topicId).build(), requestOptions)
+
+    /** @see releaseDigest */
+    fun releaseDigest(params: TopicReleaseDigestParams) =
+        releaseDigest(params, RequestOptions.none())
+
+    /** @see releaseDigest */
+    fun releaseDigest(
+        params: TopicReleaseDigestParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    )
 
     /**
      * Replace a topic within a workspace preference. Full document replacement; missing optional
@@ -319,6 +369,64 @@ interface TopicService {
         @MustBeClosed
         fun archive(
             params: TopicArchiveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse
+
+        /**
+         * Returns a raw HTTP response for `delete
+         * /preferences/sections/{section_id}/topics/{topic_id}/digest`, but is otherwise the same
+         * as [TopicService.deleteDigest].
+         */
+        @MustBeClosed
+        fun deleteDigest(topicId: String, params: TopicDeleteDigestParams): HttpResponse =
+            deleteDigest(topicId, params, RequestOptions.none())
+
+        /** @see deleteDigest */
+        @MustBeClosed
+        fun deleteDigest(
+            topicId: String,
+            params: TopicDeleteDigestParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse = deleteDigest(params.toBuilder().topicId(topicId).build(), requestOptions)
+
+        /** @see deleteDigest */
+        @MustBeClosed
+        fun deleteDigest(params: TopicDeleteDigestParams): HttpResponse =
+            deleteDigest(params, RequestOptions.none())
+
+        /** @see deleteDigest */
+        @MustBeClosed
+        fun deleteDigest(
+            params: TopicDeleteDigestParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse
+
+        /**
+         * Returns a raw HTTP response for `post
+         * /preferences/sections/{section_id}/topics/{topic_id}/digest/release`, but is otherwise
+         * the same as [TopicService.releaseDigest].
+         */
+        @MustBeClosed
+        fun releaseDigest(topicId: String, params: TopicReleaseDigestParams): HttpResponse =
+            releaseDigest(topicId, params, RequestOptions.none())
+
+        /** @see releaseDigest */
+        @MustBeClosed
+        fun releaseDigest(
+            topicId: String,
+            params: TopicReleaseDigestParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse = releaseDigest(params.toBuilder().topicId(topicId).build(), requestOptions)
+
+        /** @see releaseDigest */
+        @MustBeClosed
+        fun releaseDigest(params: TopicReleaseDigestParams): HttpResponse =
+            releaseDigest(params, RequestOptions.none())
+
+        /** @see releaseDigest */
+        @MustBeClosed
+        fun releaseDigest(
+            params: TopicReleaseDigestParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse
 
