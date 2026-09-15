@@ -32,6 +32,7 @@ private constructor(
     private val name: JsonField<String>,
     private val allowedPreferences: JsonField<List<AllowedPreference>>,
     private val description: JsonField<String>,
+    private val digest: JsonField<TopicDigestRequest>,
     private val includeUnsubscribeHeader: JsonField<Boolean>,
     private val routingOptions: JsonField<List<ChannelClassification>>,
     private val topicData: JsonField<TopicData>,
@@ -50,6 +51,9 @@ private constructor(
         @JsonProperty("description")
         @ExcludeMissing
         description: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("digest")
+        @ExcludeMissing
+        digest: JsonField<TopicDigestRequest> = JsonMissing.of(),
         @JsonProperty("include_unsubscribe_header")
         @ExcludeMissing
         includeUnsubscribeHeader: JsonField<Boolean> = JsonMissing.of(),
@@ -64,6 +68,7 @@ private constructor(
         name,
         allowedPreferences,
         description,
+        digest,
         includeUnsubscribeHeader,
         routingOptions,
         topicData,
@@ -102,6 +107,19 @@ private constructor(
      *   server responded with an unexpected value).
      */
     fun description(): Optional<String> = description.getOptional("description")
+
+    /**
+     * A topic's digest configuration: the template that renders it, the cadences it delivers on,
+     * and how collected events are retained.
+     *
+     * Send `null` for the whole object to turn a digest off, which unlinks the template and removes
+     * its schedules. There is no `enabled` flag, and `schedules: []` is rejected -- both states are
+     * un-deliverable rather than merely off.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun digest(): Optional<TopicDigestRequest> = digest.getOptional("digest")
 
     /**
      * Whether to include a list-unsubscribe header on emails for this topic.
@@ -163,6 +181,13 @@ private constructor(
     @JsonProperty("description") @ExcludeMissing fun _description(): JsonField<String> = description
 
     /**
+     * Returns the raw JSON value of [digest].
+     *
+     * Unlike [digest], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("digest") @ExcludeMissing fun _digest(): JsonField<TopicDigestRequest> = digest
+
+    /**
      * Returns the raw JSON value of [includeUnsubscribeHeader].
      *
      * Unlike [includeUnsubscribeHeader], this method doesn't throw if the JSON field has an
@@ -222,6 +247,7 @@ private constructor(
         private var name: JsonField<String>? = null
         private var allowedPreferences: JsonField<MutableList<AllowedPreference>>? = null
         private var description: JsonField<String> = JsonMissing.of()
+        private var digest: JsonField<TopicDigestRequest> = JsonMissing.of()
         private var includeUnsubscribeHeader: JsonField<Boolean> = JsonMissing.of()
         private var routingOptions: JsonField<MutableList<ChannelClassification>>? = null
         private var topicData: JsonField<TopicData> = JsonMissing.of()
@@ -236,6 +262,7 @@ private constructor(
             allowedPreferences =
                 workspacePreferenceTopicReplaceRequest.allowedPreferences.map { it.toMutableList() }
             description = workspacePreferenceTopicReplaceRequest.description
+            digest = workspacePreferenceTopicReplaceRequest.digest
             includeUnsubscribeHeader =
                 workspacePreferenceTopicReplaceRequest.includeUnsubscribeHeader
             routingOptions =
@@ -319,6 +346,28 @@ private constructor(
          * value.
          */
         fun description(description: JsonField<String>) = apply { this.description = description }
+
+        /**
+         * A topic's digest configuration: the template that renders it, the cadences it delivers
+         * on, and how collected events are retained.
+         *
+         * Send `null` for the whole object to turn a digest off, which unlinks the template and
+         * removes its schedules. There is no `enabled` flag, and `schedules: []` is rejected --
+         * both states are un-deliverable rather than merely off.
+         */
+        fun digest(digest: TopicDigestRequest?) = digest(JsonField.ofNullable(digest))
+
+        /** Alias for calling [Builder.digest] with `digest.orElse(null)`. */
+        fun digest(digest: Optional<TopicDigestRequest>) = digest(digest.getOrNull())
+
+        /**
+         * Sets [Builder.digest] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.digest] with a well-typed [TopicDigestRequest] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun digest(digest: JsonField<TopicDigestRequest>) = apply { this.digest = digest }
 
         /** Whether to include a list-unsubscribe header on emails for this topic. */
         fun includeUnsubscribeHeader(includeUnsubscribeHeader: Boolean?) =
@@ -434,6 +483,7 @@ private constructor(
                 checkRequired("name", name),
                 (allowedPreferences ?: JsonMissing.of()).map { it.toImmutable() },
                 description,
+                digest,
                 includeUnsubscribeHeader,
                 (routingOptions ?: JsonMissing.of()).map { it.toImmutable() },
                 topicData,
@@ -460,6 +510,7 @@ private constructor(
         name()
         allowedPreferences().ifPresent { it.forEach { it.validate() } }
         description()
+        digest().ifPresent { it.validate() }
         includeUnsubscribeHeader()
         routingOptions().ifPresent { it.forEach { it.validate() } }
         topicData().ifPresent { it.validate() }
@@ -485,6 +536,7 @@ private constructor(
             (if (name.asKnown().isPresent) 1 else 0) +
             (allowedPreferences.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
             (if (description.asKnown().isPresent) 1 else 0) +
+            (digest.asKnown().getOrNull()?.validity() ?: 0) +
             (if (includeUnsubscribeHeader.asKnown().isPresent) 1 else 0) +
             (routingOptions.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
             (topicData.asKnown().getOrNull()?.validity() ?: 0)
@@ -892,6 +944,7 @@ private constructor(
             name == other.name &&
             allowedPreferences == other.allowedPreferences &&
             description == other.description &&
+            digest == other.digest &&
             includeUnsubscribeHeader == other.includeUnsubscribeHeader &&
             routingOptions == other.routingOptions &&
             topicData == other.topicData &&
@@ -904,6 +957,7 @@ private constructor(
             name,
             allowedPreferences,
             description,
+            digest,
             includeUnsubscribeHeader,
             routingOptions,
             topicData,
@@ -914,5 +968,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "WorkspacePreferenceTopicReplaceRequest{defaultStatus=$defaultStatus, name=$name, allowedPreferences=$allowedPreferences, description=$description, includeUnsubscribeHeader=$includeUnsubscribeHeader, routingOptions=$routingOptions, topicData=$topicData, additionalProperties=$additionalProperties}"
+        "WorkspacePreferenceTopicReplaceRequest{defaultStatus=$defaultStatus, name=$name, allowedPreferences=$allowedPreferences, description=$description, digest=$digest, includeUnsubscribeHeader=$includeUnsubscribeHeader, routingOptions=$routingOptions, topicData=$topicData, additionalProperties=$additionalProperties}"
 }

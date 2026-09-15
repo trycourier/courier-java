@@ -142,6 +142,7 @@ internal class PreferenceServiceTest {
                             .status(PreferenceStatus.OPTED_IN)
                             .addCustomRouting(ChannelClassification.INBOX)
                             .addCustomRouting(ChannelClassification.EMAIL)
+                            .digestScheduleId("x")
                             .hasCustomRouting(true)
                             .build()
                     )

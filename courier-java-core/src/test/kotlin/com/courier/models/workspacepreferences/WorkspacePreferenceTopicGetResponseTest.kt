@@ -5,6 +5,9 @@ package com.courier.models.workspacepreferences
 import com.courier.core.JsonValue
 import com.courier.core.jsonMapper
 import com.courier.models.ChannelClassification
+import com.courier.models.digests.DigestDayOfWeek
+import com.courier.models.digests.DigestFrequency
+import com.courier.models.digests.TopicDigestScheduleResponse
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -30,6 +33,38 @@ internal class WorkspacePreferenceTopicGetResponseTest {
                 .updated("updated")
                 .creator("creator")
                 .description("description")
+                .digest(
+                    TopicDigestResponse.builder()
+                        .addCategory(
+                            TopicDigestCategory.builder()
+                                .categoryKey("category_key")
+                                .limit(1L)
+                                .retain(TopicDigestCategory.Retain.FIRST)
+                                .sortKey("sort_key")
+                                .build()
+                        )
+                        .addSchedule(
+                            TopicDigestScheduleResponse.builder()
+                                .scheduleId("schedule_id")
+                                .created("created")
+                                .dayOfMonth(0L)
+                                .dayOfWeek(DigestDayOfWeek.SUNDAY)
+                                .addDaysOfWeek(DigestDayOfWeek.SUNDAY)
+                                .disabled(true)
+                                .frequency(DigestFrequency.INSTANT)
+                                .isDefault(true)
+                                .time("time")
+                                .timezone("timezone")
+                                .updated("updated")
+                                .build()
+                        )
+                        .templateId("template_id")
+                        .audienceId("audience_id")
+                        .created("created")
+                        .triggerEmpty(true)
+                        .updated("updated")
+                        .build()
+                )
                 .updater("updater")
                 .build()
 
@@ -52,6 +87,39 @@ internal class WorkspacePreferenceTopicGetResponseTest {
         assertThat(workspacePreferenceTopicGetResponse.updated()).isEqualTo("updated")
         assertThat(workspacePreferenceTopicGetResponse.creator()).contains("creator")
         assertThat(workspacePreferenceTopicGetResponse.description()).contains("description")
+        assertThat(workspacePreferenceTopicGetResponse.digest())
+            .contains(
+                TopicDigestResponse.builder()
+                    .addCategory(
+                        TopicDigestCategory.builder()
+                            .categoryKey("category_key")
+                            .limit(1L)
+                            .retain(TopicDigestCategory.Retain.FIRST)
+                            .sortKey("sort_key")
+                            .build()
+                    )
+                    .addSchedule(
+                        TopicDigestScheduleResponse.builder()
+                            .scheduleId("schedule_id")
+                            .created("created")
+                            .dayOfMonth(0L)
+                            .dayOfWeek(DigestDayOfWeek.SUNDAY)
+                            .addDaysOfWeek(DigestDayOfWeek.SUNDAY)
+                            .disabled(true)
+                            .frequency(DigestFrequency.INSTANT)
+                            .isDefault(true)
+                            .time("time")
+                            .timezone("timezone")
+                            .updated("updated")
+                            .build()
+                    )
+                    .templateId("template_id")
+                    .audienceId("audience_id")
+                    .created("created")
+                    .triggerEmpty(true)
+                    .updated("updated")
+                    .build()
+            )
         assertThat(workspacePreferenceTopicGetResponse.updater()).contains("updater")
     }
 
@@ -75,6 +143,38 @@ internal class WorkspacePreferenceTopicGetResponseTest {
                 .updated("updated")
                 .creator("creator")
                 .description("description")
+                .digest(
+                    TopicDigestResponse.builder()
+                        .addCategory(
+                            TopicDigestCategory.builder()
+                                .categoryKey("category_key")
+                                .limit(1L)
+                                .retain(TopicDigestCategory.Retain.FIRST)
+                                .sortKey("sort_key")
+                                .build()
+                        )
+                        .addSchedule(
+                            TopicDigestScheduleResponse.builder()
+                                .scheduleId("schedule_id")
+                                .created("created")
+                                .dayOfMonth(0L)
+                                .dayOfWeek(DigestDayOfWeek.SUNDAY)
+                                .addDaysOfWeek(DigestDayOfWeek.SUNDAY)
+                                .disabled(true)
+                                .frequency(DigestFrequency.INSTANT)
+                                .isDefault(true)
+                                .time("time")
+                                .timezone("timezone")
+                                .updated("updated")
+                                .build()
+                        )
+                        .templateId("template_id")
+                        .audienceId("audience_id")
+                        .created("created")
+                        .triggerEmpty(true)
+                        .updated("updated")
+                        .build()
+                )
                 .updater("updater")
                 .build()
 

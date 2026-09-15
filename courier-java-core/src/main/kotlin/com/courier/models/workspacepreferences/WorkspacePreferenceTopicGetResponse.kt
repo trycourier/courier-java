@@ -36,6 +36,7 @@ private constructor(
     private val updated: JsonField<String>,
     private val creator: JsonField<String>,
     private val description: JsonField<String>,
+    private val digest: JsonField<TopicDigestResponse>,
     private val updater: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
@@ -65,6 +66,9 @@ private constructor(
         @JsonProperty("description")
         @ExcludeMissing
         description: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("digest")
+        @ExcludeMissing
+        digest: JsonField<TopicDigestResponse> = JsonMissing.of(),
         @JsonProperty("updater") @ExcludeMissing updater: JsonField<String> = JsonMissing.of(),
     ) : this(
         id,
@@ -78,6 +82,7 @@ private constructor(
         updated,
         creator,
         description,
+        digest,
         updater,
         mutableMapOf(),
     )
@@ -172,6 +177,14 @@ private constructor(
      *   server responded with an unexpected value).
      */
     fun description(): Optional<String> = description.getOptional("description")
+
+    /**
+     * A topic's digest configuration.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun digest(): Optional<TopicDigestResponse> = digest.getOptional("digest")
 
     /**
      * Id of the last updater.
@@ -269,6 +282,13 @@ private constructor(
     @JsonProperty("description") @ExcludeMissing fun _description(): JsonField<String> = description
 
     /**
+     * Returns the raw JSON value of [digest].
+     *
+     * Unlike [digest], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("digest") @ExcludeMissing fun _digest(): JsonField<TopicDigestResponse> = digest
+
+    /**
      * Returns the raw JSON value of [updater].
      *
      * Unlike [updater], this method doesn't throw if the JSON field has an unexpected type.
@@ -323,6 +343,7 @@ private constructor(
         private var updated: JsonField<String>? = null
         private var creator: JsonField<String> = JsonMissing.of()
         private var description: JsonField<String> = JsonMissing.of()
+        private var digest: JsonField<TopicDigestResponse> = JsonMissing.of()
         private var updater: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -343,6 +364,7 @@ private constructor(
             updated = workspacePreferenceTopicGetResponse.updated
             creator = workspacePreferenceTopicGetResponse.creator
             description = workspacePreferenceTopicGetResponse.description
+            digest = workspacePreferenceTopicGetResponse.digest
             updater = workspacePreferenceTopicGetResponse.updater
             additionalProperties =
                 workspacePreferenceTopicGetResponse.additionalProperties.toMutableMap()
@@ -516,6 +538,21 @@ private constructor(
          */
         fun description(description: JsonField<String>) = apply { this.description = description }
 
+        /** A topic's digest configuration. */
+        fun digest(digest: TopicDigestResponse?) = digest(JsonField.ofNullable(digest))
+
+        /** Alias for calling [Builder.digest] with `digest.orElse(null)`. */
+        fun digest(digest: Optional<TopicDigestResponse>) = digest(digest.getOrNull())
+
+        /**
+         * Sets [Builder.digest] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.digest] with a well-typed [TopicDigestResponse] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun digest(digest: JsonField<TopicDigestResponse>) = apply { this.digest = digest }
+
         /** Id of the last updater. */
         fun updater(updater: String?) = updater(JsonField.ofNullable(updater))
 
@@ -582,6 +619,7 @@ private constructor(
                 checkRequired("updated", updated),
                 creator,
                 description,
+                digest,
                 updater,
                 additionalProperties.toMutableMap(),
             )
@@ -613,6 +651,7 @@ private constructor(
         updated()
         creator()
         description()
+        digest().ifPresent { it.validate() }
         updater()
         validated = true
     }
@@ -643,6 +682,7 @@ private constructor(
             (if (updated.asKnown().isPresent) 1 else 0) +
             (if (creator.asKnown().isPresent) 1 else 0) +
             (if (description.asKnown().isPresent) 1 else 0) +
+            (digest.asKnown().getOrNull()?.validity() ?: 0) +
             (if (updater.asKnown().isPresent) 1 else 0)
 
     /** A preference control a recipient may customize for a topic. */
@@ -1055,6 +1095,7 @@ private constructor(
             updated == other.updated &&
             creator == other.creator &&
             description == other.description &&
+            digest == other.digest &&
             updater == other.updater &&
             additionalProperties == other.additionalProperties
     }
@@ -1072,6 +1113,7 @@ private constructor(
             updated,
             creator,
             description,
+            digest,
             updater,
             additionalProperties,
         )
@@ -1080,5 +1122,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "WorkspacePreferenceTopicGetResponse{id=$id, allowedPreferences=$allowedPreferences, created=$created, defaultStatus=$defaultStatus, includeUnsubscribeHeader=$includeUnsubscribeHeader, name=$name, routingOptions=$routingOptions, topicData=$topicData, updated=$updated, creator=$creator, description=$description, updater=$updater, additionalProperties=$additionalProperties}"
+        "WorkspacePreferenceTopicGetResponse{id=$id, allowedPreferences=$allowedPreferences, created=$created, defaultStatus=$defaultStatus, includeUnsubscribeHeader=$includeUnsubscribeHeader, name=$name, routingOptions=$routingOptions, topicData=$topicData, updated=$updated, creator=$creator, description=$description, digest=$digest, updater=$updater, additionalProperties=$additionalProperties}"
 }

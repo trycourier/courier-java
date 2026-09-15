@@ -51,10 +51,6 @@ internal constructor(private val clientOptions: ClientOptions) : WorkspacePrefer
     ): WorkspacePreferenceService =
         WorkspacePreferenceServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
-    /**
-     * Manage the workspace catalog of subscription topics, the sections that group them, and
-     * publishing the preference page.
-     */
     override fun topics(): TopicService = topics
 
     override fun create(
@@ -114,10 +110,6 @@ internal constructor(private val clientOptions: ClientOptions) : WorkspacePrefer
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
-        /**
-         * Manage the workspace catalog of subscription topics, the sections that group them, and
-         * publishing the preference page.
-         */
         override fun topics(): TopicService.WithRawResponse = topics
 
         private val createHandler: Handler<WorkspacePreferenceGetResponse> =

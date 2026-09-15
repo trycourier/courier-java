@@ -1,0 +1,172 @@
+// File generated from our OpenAPI spec by Stainless.
+
+package com.courier.models.digests
+
+import com.courier.core.Enum
+import com.courier.core.JsonField
+import com.courier.errors.CourierInvalidDataException
+import com.fasterxml.jackson.annotation.JsonCreator
+
+/** A day of the week. Accepted case-insensitively, returned lowercase. */
+class DigestDayOfWeek @JsonCreator private constructor(private val value: JsonField<String>) :
+    Enum {
+
+    /**
+     * Returns this class instance's raw value.
+     *
+     * This is usually only useful if this instance was deserialized from data that doesn't match
+     * any known member, and you want to know that value. For example, if the SDK is on an older
+     * version than the API, then the API may respond with new members that the SDK is unaware of.
+     */
+    @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+    companion object {
+
+        @JvmField val SUNDAY = of("sunday")
+
+        @JvmField val MONDAY = of("monday")
+
+        @JvmField val TUESDAY = of("tuesday")
+
+        @JvmField val WEDNESDAY = of("wednesday")
+
+        @JvmField val THURSDAY = of("thursday")
+
+        @JvmField val FRIDAY = of("friday")
+
+        @JvmField val SATURDAY = of("saturday")
+
+        @JvmStatic fun of(value: String) = DigestDayOfWeek(JsonField.of(value))
+    }
+
+    /** An enum containing [DigestDayOfWeek]'s known values. */
+    enum class Known {
+        SUNDAY,
+        MONDAY,
+        TUESDAY,
+        WEDNESDAY,
+        THURSDAY,
+        FRIDAY,
+        SATURDAY,
+    }
+
+    /**
+     * An enum containing [DigestDayOfWeek]'s known values, as well as an [_UNKNOWN] member.
+     *
+     * An instance of [DigestDayOfWeek] can contain an unknown value in a couple of cases:
+     * - It was deserialized from data that doesn't match any known member. For example, if the SDK
+     *   is on an older version than the API, then the API may respond with new members that the SDK
+     *   is unaware of.
+     * - It was constructed with an arbitrary value using the [of] method.
+     */
+    enum class Value {
+        SUNDAY,
+        MONDAY,
+        TUESDAY,
+        WEDNESDAY,
+        THURSDAY,
+        FRIDAY,
+        SATURDAY,
+        /**
+         * An enum member indicating that [DigestDayOfWeek] was instantiated with an unknown value.
+         */
+        _UNKNOWN,
+    }
+
+    /**
+     * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN] if
+     * the class was instantiated with an unknown value.
+     *
+     * Use the [known] method instead if you're certain the value is always known or if you want to
+     * throw for the unknown case.
+     */
+    fun value(): Value =
+        when (this) {
+            SUNDAY -> Value.SUNDAY
+            MONDAY -> Value.MONDAY
+            TUESDAY -> Value.TUESDAY
+            WEDNESDAY -> Value.WEDNESDAY
+            THURSDAY -> Value.THURSDAY
+            FRIDAY -> Value.FRIDAY
+            SATURDAY -> Value.SATURDAY
+            else -> Value._UNKNOWN
+        }
+
+    /**
+     * Returns an enum member corresponding to this class instance's value.
+     *
+     * Use the [value] method instead if you're uncertain the value is always known and don't want
+     * to throw for the unknown case.
+     *
+     * @throws CourierInvalidDataException if this class instance's value is a not a known member.
+     */
+    fun known(): Known =
+        when (this) {
+            SUNDAY -> Known.SUNDAY
+            MONDAY -> Known.MONDAY
+            TUESDAY -> Known.TUESDAY
+            WEDNESDAY -> Known.WEDNESDAY
+            THURSDAY -> Known.THURSDAY
+            FRIDAY -> Known.FRIDAY
+            SATURDAY -> Known.SATURDAY
+            else -> throw CourierInvalidDataException("Unknown DigestDayOfWeek: $value")
+        }
+
+    /**
+     * Returns this class instance's primitive wire representation.
+     *
+     * This differs from the [toString] method because that method is primarily for debugging and
+     * generally doesn't throw.
+     *
+     * @throws CourierInvalidDataException if this class instance's value does not have the expected
+     *   primitive type.
+     */
+    fun asString(): String =
+        _value().asString().orElseThrow { CourierInvalidDataException("Value is not a String") }
+
+    private var validated: Boolean = false
+
+    /**
+     * Validates that the types of all values in this object match their expected types recursively.
+     *
+     * This method is _not_ forwards compatible with new types from the API for existing fields.
+     *
+     * @throws CourierInvalidDataException if any value type in this object doesn't match its
+     *   expected type.
+     */
+    fun validate(): DigestDayOfWeek = apply {
+        if (validated) {
+            return@apply
+        }
+
+        known()
+        validated = true
+    }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: CourierInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return other is DigestDayOfWeek && value == other.value
+    }
+
+    override fun hashCode() = value.hashCode()
+
+    override fun toString() = value.toString()
+}

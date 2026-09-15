@@ -39,10 +39,6 @@ interface WorkspacePreferenceService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): WorkspacePreferenceService
 
-    /**
-     * Manage the workspace catalog of subscription topics, the sections that group them, and
-     * publishing the preference page.
-     */
     fun topics(): TopicService
 
     /**
@@ -246,10 +242,6 @@ interface WorkspacePreferenceService {
             modifier: Consumer<ClientOptions.Builder>
         ): WorkspacePreferenceService.WithRawResponse
 
-        /**
-         * Manage the workspace catalog of subscription topics, the sections that group them, and
-         * publishing the preference page.
-         */
         fun topics(): TopicService.WithRawResponse
 
         /**

@@ -29,6 +29,7 @@ private constructor(
     private val topicId: JsonField<String>,
     private val topicName: JsonField<String>,
     private val customRouting: JsonField<List<ChannelClassification>>,
+    private val digestScheduleId: JsonField<String>,
     private val hasCustomRouting: JsonField<Boolean>,
     private val sectionId: JsonField<String>,
     private val sectionName: JsonField<String>,
@@ -48,6 +49,9 @@ private constructor(
         @JsonProperty("custom_routing")
         @ExcludeMissing
         customRouting: JsonField<List<ChannelClassification>> = JsonMissing.of(),
+        @JsonProperty("digest_schedule_id")
+        @ExcludeMissing
+        digestScheduleId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("has_custom_routing")
         @ExcludeMissing
         hasCustomRouting: JsonField<Boolean> = JsonMissing.of(),
@@ -61,6 +65,7 @@ private constructor(
         topicId,
         topicName,
         customRouting,
+        digestScheduleId,
         hasCustomRouting,
         sectionId,
         sectionName,
@@ -110,6 +115,16 @@ private constructor(
      */
     fun customRouting(): Optional<List<ChannelClassification>> =
         customRouting.getOptional("custom_routing")
+
+    /**
+     * The digest schedule this recipient is on for the topic. Omitted -- not null -- when they have
+     * not chosen one, in which case the topic's default schedule applies. Ids come from the topic's
+     * digest configuration or from `GET /digests/schedules`.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun digestScheduleId(): Optional<String> = digestScheduleId.getOptional("digest_schedule_id")
 
     /**
      * Whether the user has chosen specific delivery channels for this topic (listed in
@@ -179,6 +194,16 @@ private constructor(
     fun _customRouting(): JsonField<List<ChannelClassification>> = customRouting
 
     /**
+     * Returns the raw JSON value of [digestScheduleId].
+     *
+     * Unlike [digestScheduleId], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("digest_schedule_id")
+    @ExcludeMissing
+    fun _digestScheduleId(): JsonField<String> = digestScheduleId
+
+    /**
      * Returns the raw JSON value of [hasCustomRouting].
      *
      * Unlike [hasCustomRouting], this method doesn't throw if the JSON field has an unexpected
@@ -240,6 +265,7 @@ private constructor(
         private var topicId: JsonField<String>? = null
         private var topicName: JsonField<String>? = null
         private var customRouting: JsonField<MutableList<ChannelClassification>>? = null
+        private var digestScheduleId: JsonField<String> = JsonMissing.of()
         private var hasCustomRouting: JsonField<Boolean> = JsonMissing.of()
         private var sectionId: JsonField<String> = JsonMissing.of()
         private var sectionName: JsonField<String> = JsonMissing.of()
@@ -252,6 +278,7 @@ private constructor(
             topicId = topicPreference.topicId
             topicName = topicPreference.topicName
             customRouting = topicPreference.customRouting.map { it.toMutableList() }
+            digestScheduleId = topicPreference.digestScheduleId
             hasCustomRouting = topicPreference.hasCustomRouting
             sectionId = topicPreference.sectionId
             sectionName = topicPreference.sectionName
@@ -348,6 +375,25 @@ private constructor(
                 (this.customRouting ?: JsonField.of(mutableListOf())).also {
                     checkKnown("customRouting", it).add(customRouting)
                 }
+        }
+
+        /**
+         * The digest schedule this recipient is on for the topic. Omitted -- not null -- when they
+         * have not chosen one, in which case the topic's default schedule applies. Ids come from
+         * the topic's digest configuration or from `GET /digests/schedules`.
+         */
+        fun digestScheduleId(digestScheduleId: String) =
+            digestScheduleId(JsonField.of(digestScheduleId))
+
+        /**
+         * Sets [Builder.digestScheduleId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.digestScheduleId] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun digestScheduleId(digestScheduleId: JsonField<String>) = apply {
+            this.digestScheduleId = digestScheduleId
         }
 
         /**
@@ -453,6 +499,7 @@ private constructor(
                 checkRequired("topicId", topicId),
                 checkRequired("topicName", topicName),
                 (customRouting ?: JsonMissing.of()).map { it.toImmutable() },
+                digestScheduleId,
                 hasCustomRouting,
                 sectionId,
                 sectionName,
@@ -480,6 +527,7 @@ private constructor(
         topicId()
         topicName()
         customRouting().ifPresent { it.forEach { it.validate() } }
+        digestScheduleId()
         hasCustomRouting()
         sectionId()
         sectionName()
@@ -506,6 +554,7 @@ private constructor(
             (if (topicId.asKnown().isPresent) 1 else 0) +
             (if (topicName.asKnown().isPresent) 1 else 0) +
             (customRouting.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+            (if (digestScheduleId.asKnown().isPresent) 1 else 0) +
             (if (hasCustomRouting.asKnown().isPresent) 1 else 0) +
             (if (sectionId.asKnown().isPresent) 1 else 0) +
             (if (sectionName.asKnown().isPresent) 1 else 0)
@@ -521,6 +570,7 @@ private constructor(
             topicId == other.topicId &&
             topicName == other.topicName &&
             customRouting == other.customRouting &&
+            digestScheduleId == other.digestScheduleId &&
             hasCustomRouting == other.hasCustomRouting &&
             sectionId == other.sectionId &&
             sectionName == other.sectionName &&
@@ -534,6 +584,7 @@ private constructor(
             topicId,
             topicName,
             customRouting,
+            digestScheduleId,
             hasCustomRouting,
             sectionId,
             sectionName,
@@ -544,5 +595,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "TopicPreference{defaultStatus=$defaultStatus, status=$status, topicId=$topicId, topicName=$topicName, customRouting=$customRouting, hasCustomRouting=$hasCustomRouting, sectionId=$sectionId, sectionName=$sectionName, additionalProperties=$additionalProperties}"
+        "TopicPreference{defaultStatus=$defaultStatus, status=$status, topicId=$topicId, topicName=$topicName, customRouting=$customRouting, digestScheduleId=$digestScheduleId, hasCustomRouting=$hasCustomRouting, sectionId=$sectionId, sectionName=$sectionName, additionalProperties=$additionalProperties}"
 }
