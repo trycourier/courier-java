@@ -47,7 +47,7 @@ internal class TopicServiceAsyncTest {
                             )
                             .description("description")
                             .digest(
-                                TopicDigestRequest.builder()
+                                WorkspacePreferenceTopicCreateRequest.Digest.builder()
                                     .addSchedule(
                                         TopicDigestScheduleRequest.builder()
                                             .frequency(DigestFrequency.INSTANT)
@@ -195,6 +195,16 @@ internal class TopicServiceAsyncTest {
                             .description("description")
                             .digest(
                                 TopicDigestRequest.builder()
+                                    .templateId("template_id")
+                                    .audienceId("audience_id")
+                                    .addCategory(
+                                        TopicDigestCategory.builder()
+                                            .categoryKey("category_key")
+                                            .limit(1L)
+                                            .retain(TopicDigestCategory.Retain.FIRST)
+                                            .sortKey("sort_key")
+                                            .build()
+                                    )
                                     .addSchedule(
                                         TopicDigestScheduleRequest.builder()
                                             .frequency(DigestFrequency.INSTANT)
@@ -206,16 +216,6 @@ internal class TopicServiceAsyncTest {
                                             .scheduleId("schedule_id")
                                             .time("time")
                                             .timezone("timezone")
-                                            .build()
-                                    )
-                                    .templateId("template_id")
-                                    .audienceId("audience_id")
-                                    .addCategory(
-                                        TopicDigestCategory.builder()
-                                            .categoryKey("category_key")
-                                            .limit(1L)
-                                            .retain(TopicDigestCategory.Retain.FIRST)
-                                            .sortKey("sort_key")
                                             .build()
                                     )
                                     .triggerEmpty(true)
