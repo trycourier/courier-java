@@ -25,7 +25,7 @@ internal class WorkspacePreferenceTopicCreateRequestTest {
                 )
                 .description("description")
                 .digest(
-                    TopicDigestRequest.builder()
+                    WorkspacePreferenceTopicCreateRequest.Digest.builder()
                         .addSchedule(
                             TopicDigestScheduleRequest.builder()
                                 .frequency(DigestFrequency.INSTANT)
@@ -69,7 +69,7 @@ internal class WorkspacePreferenceTopicCreateRequestTest {
         assertThat(workspacePreferenceTopicCreateRequest.description()).contains("description")
         assertThat(workspacePreferenceTopicCreateRequest.digest())
             .contains(
-                TopicDigestRequest.builder()
+                WorkspacePreferenceTopicCreateRequest.Digest.builder()
                     .addSchedule(
                         TopicDigestScheduleRequest.builder()
                             .frequency(DigestFrequency.INSTANT)
@@ -119,7 +119,7 @@ internal class WorkspacePreferenceTopicCreateRequestTest {
                 )
                 .description("description")
                 .digest(
-                    TopicDigestRequest.builder()
+                    WorkspacePreferenceTopicCreateRequest.Digest.builder()
                         .addSchedule(
                             TopicDigestScheduleRequest.builder()
                                 .frequency(DigestFrequency.INSTANT)

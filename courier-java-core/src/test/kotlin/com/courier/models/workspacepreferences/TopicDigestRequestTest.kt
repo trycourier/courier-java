@@ -16,6 +16,16 @@ internal class TopicDigestRequestTest {
     fun create() {
         val topicDigestRequest =
             TopicDigestRequest.builder()
+                .templateId("template_id")
+                .audienceId("audience_id")
+                .addCategory(
+                    TopicDigestCategory.builder()
+                        .categoryKey("category_key")
+                        .limit(1L)
+                        .retain(TopicDigestCategory.Retain.FIRST)
+                        .sortKey("sort_key")
+                        .build()
+                )
                 .addSchedule(
                     TopicDigestScheduleRequest.builder()
                         .frequency(DigestFrequency.INSTANT)
@@ -29,20 +39,21 @@ internal class TopicDigestRequestTest {
                         .timezone("timezone")
                         .build()
                 )
-                .templateId("template_id")
-                .audienceId("audience_id")
-                .addCategory(
-                    TopicDigestCategory.builder()
-                        .categoryKey("category_key")
-                        .limit(1L)
-                        .retain(TopicDigestCategory.Retain.FIRST)
-                        .sortKey("sort_key")
-                        .build()
-                )
                 .triggerEmpty(true)
                 .build()
 
-        assertThat(topicDigestRequest.schedules())
+        assertThat(topicDigestRequest.templateId()).isEqualTo("template_id")
+        assertThat(topicDigestRequest.audienceId()).contains("audience_id")
+        assertThat(topicDigestRequest.categories().getOrNull())
+            .containsExactly(
+                TopicDigestCategory.builder()
+                    .categoryKey("category_key")
+                    .limit(1L)
+                    .retain(TopicDigestCategory.Retain.FIRST)
+                    .sortKey("sort_key")
+                    .build()
+            )
+        assertThat(topicDigestRequest.schedules().getOrNull())
             .containsExactly(
                 TopicDigestScheduleRequest.builder()
                     .frequency(DigestFrequency.INSTANT)
@@ -56,17 +67,6 @@ internal class TopicDigestRequestTest {
                     .timezone("timezone")
                     .build()
             )
-        assertThat(topicDigestRequest.templateId()).isEqualTo("template_id")
-        assertThat(topicDigestRequest.audienceId()).contains("audience_id")
-        assertThat(topicDigestRequest.categories().getOrNull())
-            .containsExactly(
-                TopicDigestCategory.builder()
-                    .categoryKey("category_key")
-                    .limit(1L)
-                    .retain(TopicDigestCategory.Retain.FIRST)
-                    .sortKey("sort_key")
-                    .build()
-            )
         assertThat(topicDigestRequest.triggerEmpty()).contains(true)
     }
 
@@ -75,6 +75,16 @@ internal class TopicDigestRequestTest {
         val jsonMapper = jsonMapper()
         val topicDigestRequest =
             TopicDigestRequest.builder()
+                .templateId("template_id")
+                .audienceId("audience_id")
+                .addCategory(
+                    TopicDigestCategory.builder()
+                        .categoryKey("category_key")
+                        .limit(1L)
+                        .retain(TopicDigestCategory.Retain.FIRST)
+                        .sortKey("sort_key")
+                        .build()
+                )
                 .addSchedule(
                     TopicDigestScheduleRequest.builder()
                         .frequency(DigestFrequency.INSTANT)
@@ -86,16 +96,6 @@ internal class TopicDigestRequestTest {
                         .scheduleId("schedule_id")
                         .time("time")
                         .timezone("timezone")
-                        .build()
-                )
-                .templateId("template_id")
-                .audienceId("audience_id")
-                .addCategory(
-                    TopicDigestCategory.builder()
-                        .categoryKey("category_key")
-                        .limit(1L)
-                        .retain(TopicDigestCategory.Retain.FIRST)
-                        .sortKey("sort_key")
                         .build()
                 )
                 .triggerEmpty(true)

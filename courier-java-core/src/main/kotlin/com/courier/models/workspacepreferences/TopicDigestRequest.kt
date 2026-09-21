@@ -30,19 +30,16 @@ import kotlin.jvm.optionals.getOrNull
 class TopicDigestRequest
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    private val schedules: JsonField<List<TopicDigestScheduleRequest>>,
     private val templateId: JsonField<String>,
     private val audienceId: JsonField<String>,
     private val categories: JsonField<List<TopicDigestCategory>>,
+    private val schedules: JsonField<List<TopicDigestScheduleRequest>>,
     private val triggerEmpty: JsonField<Boolean>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("schedules")
-        @ExcludeMissing
-        schedules: JsonField<List<TopicDigestScheduleRequest>> = JsonMissing.of(),
         @JsonProperty("template_id")
         @ExcludeMissing
         templateId: JsonField<String> = JsonMissing.of(),
@@ -52,20 +49,13 @@ private constructor(
         @JsonProperty("categories")
         @ExcludeMissing
         categories: JsonField<List<TopicDigestCategory>> = JsonMissing.of(),
+        @JsonProperty("schedules")
+        @ExcludeMissing
+        schedules: JsonField<List<TopicDigestScheduleRequest>> = JsonMissing.of(),
         @JsonProperty("trigger_empty")
         @ExcludeMissing
         triggerEmpty: JsonField<Boolean> = JsonMissing.of(),
-    ) : this(schedules, templateId, audienceId, categories, triggerEmpty, mutableMapOf())
-
-    /**
-     * The cadences this digest delivers on. At least one is required: a digest with no schedule
-     * collects events into an instance that can never fire. Omitting the key on a replace leaves
-     * stored schedules untouched; sending `[]` is a `400`.
-     *
-     * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
-    fun schedules(): List<TopicDigestScheduleRequest> = schedules.getRequired("schedules")
+    ) : this(templateId, audienceId, categories, schedules, triggerEmpty, mutableMapOf())
 
     /**
      * The notification template that renders the digest. A digest with no template collects
@@ -93,21 +83,33 @@ private constructor(
     fun categories(): Optional<List<TopicDigestCategory>> = categories.getOptional("categories")
 
     /**
+     * The cadences this digest delivers on.
+     *
+     * The array replaces the stored schedules wholesale, so a schedule you leave out of it is
+     * deleted along with its delivery rule. Omit the key entirely to leave the stored schedules
+     * untouched — useful for changing `template_id` or `categories` without restating every
+     * schedule.
+     *
+     * A digest must end up with at least one schedule, because one with none collects events into
+     * an instance that can never fire. So sending `[]` is always a `400`, and so is omitting the
+     * key on a topic that has no schedules stored yet.
+     *
+     * On **create** the key is required outright: a topic being created has nothing stored to leave
+     * alone, and the topic row is written before its digest, so rejecting it any later would leave
+     * the topic behind and let a retry duplicate it.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun schedules(): Optional<List<TopicDigestScheduleRequest>> = schedules.getOptional("schedules")
+
+    /**
      * Whether to deliver the digest even when nothing was collected.
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun triggerEmpty(): Optional<Boolean> = triggerEmpty.getOptional("trigger_empty")
-
-    /**
-     * Returns the raw JSON value of [schedules].
-     *
-     * Unlike [schedules], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("schedules")
-    @ExcludeMissing
-    fun _schedules(): JsonField<List<TopicDigestScheduleRequest>> = schedules
 
     /**
      * Returns the raw JSON value of [templateId].
@@ -131,6 +133,15 @@ private constructor(
     @JsonProperty("categories")
     @ExcludeMissing
     fun _categories(): JsonField<List<TopicDigestCategory>> = categories
+
+    /**
+     * Returns the raw JSON value of [schedules].
+     *
+     * Unlike [schedules], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("schedules")
+    @ExcludeMissing
+    fun _schedules(): JsonField<List<TopicDigestScheduleRequest>> = schedules
 
     /**
      * Returns the raw JSON value of [triggerEmpty].
@@ -160,7 +171,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .schedules()
          * .templateId()
          * ```
          */
@@ -170,52 +180,21 @@ private constructor(
     /** A builder for [TopicDigestRequest]. */
     class Builder internal constructor() {
 
-        private var schedules: JsonField<MutableList<TopicDigestScheduleRequest>>? = null
         private var templateId: JsonField<String>? = null
         private var audienceId: JsonField<String> = JsonMissing.of()
         private var categories: JsonField<MutableList<TopicDigestCategory>>? = null
+        private var schedules: JsonField<MutableList<TopicDigestScheduleRequest>>? = null
         private var triggerEmpty: JsonField<Boolean> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(topicDigestRequest: TopicDigestRequest) = apply {
-            schedules = topicDigestRequest.schedules.map { it.toMutableList() }
             templateId = topicDigestRequest.templateId
             audienceId = topicDigestRequest.audienceId
             categories = topicDigestRequest.categories.map { it.toMutableList() }
+            schedules = topicDigestRequest.schedules.map { it.toMutableList() }
             triggerEmpty = topicDigestRequest.triggerEmpty
             additionalProperties = topicDigestRequest.additionalProperties.toMutableMap()
-        }
-
-        /**
-         * The cadences this digest delivers on. At least one is required: a digest with no schedule
-         * collects events into an instance that can never fire. Omitting the key on a replace
-         * leaves stored schedules untouched; sending `[]` is a `400`.
-         */
-        fun schedules(schedules: List<TopicDigestScheduleRequest>) =
-            schedules(JsonField.of(schedules))
-
-        /**
-         * Sets [Builder.schedules] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.schedules] with a well-typed
-         * `List<TopicDigestScheduleRequest>` value instead. This method is primarily for setting
-         * the field to an undocumented or not yet supported value.
-         */
-        fun schedules(schedules: JsonField<List<TopicDigestScheduleRequest>>) = apply {
-            this.schedules = schedules.map { it.toMutableList() }
-        }
-
-        /**
-         * Adds a single [TopicDigestScheduleRequest] to [schedules].
-         *
-         * @throws IllegalStateException if the field was previously set to a non-list.
-         */
-        fun addSchedule(schedule: TopicDigestScheduleRequest) = apply {
-            schedules =
-                (schedules ?: JsonField.of(mutableListOf())).also {
-                    checkKnown("schedules", it).add(schedule)
-                }
         }
 
         /**
@@ -274,6 +253,48 @@ private constructor(
                 }
         }
 
+        /**
+         * The cadences this digest delivers on.
+         *
+         * The array replaces the stored schedules wholesale, so a schedule you leave out of it is
+         * deleted along with its delivery rule. Omit the key entirely to leave the stored schedules
+         * untouched — useful for changing `template_id` or `categories` without restating every
+         * schedule.
+         *
+         * A digest must end up with at least one schedule, because one with none collects events
+         * into an instance that can never fire. So sending `[]` is always a `400`, and so is
+         * omitting the key on a topic that has no schedules stored yet.
+         *
+         * On **create** the key is required outright: a topic being created has nothing stored to
+         * leave alone, and the topic row is written before its digest, so rejecting it any later
+         * would leave the topic behind and let a retry duplicate it.
+         */
+        fun schedules(schedules: List<TopicDigestScheduleRequest>) =
+            schedules(JsonField.of(schedules))
+
+        /**
+         * Sets [Builder.schedules] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.schedules] with a well-typed
+         * `List<TopicDigestScheduleRequest>` value instead. This method is primarily for setting
+         * the field to an undocumented or not yet supported value.
+         */
+        fun schedules(schedules: JsonField<List<TopicDigestScheduleRequest>>) = apply {
+            this.schedules = schedules.map { it.toMutableList() }
+        }
+
+        /**
+         * Adds a single [TopicDigestScheduleRequest] to [schedules].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addSchedule(schedule: TopicDigestScheduleRequest) = apply {
+            schedules =
+                (schedules ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("schedules", it).add(schedule)
+                }
+        }
+
         /** Whether to deliver the digest even when nothing was collected. */
         fun triggerEmpty(triggerEmpty: Boolean) = triggerEmpty(JsonField.of(triggerEmpty))
 
@@ -314,7 +335,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .schedules()
          * .templateId()
          * ```
          *
@@ -322,10 +342,10 @@ private constructor(
          */
         fun build(): TopicDigestRequest =
             TopicDigestRequest(
-                checkRequired("schedules", schedules).map { it.toImmutable() },
                 checkRequired("templateId", templateId),
                 audienceId,
                 (categories ?: JsonMissing.of()).map { it.toImmutable() },
+                (schedules ?: JsonMissing.of()).map { it.toImmutable() },
                 triggerEmpty,
                 additionalProperties.toMutableMap(),
             )
@@ -346,10 +366,10 @@ private constructor(
             return@apply
         }
 
-        schedules().forEach { it.validate() }
         templateId()
         audienceId()
         categories().ifPresent { it.forEach { it.validate() } }
+        schedules().ifPresent { it.forEach { it.validate() } }
         triggerEmpty()
         validated = true
     }
@@ -369,10 +389,10 @@ private constructor(
      */
     @JvmSynthetic
     internal fun validity(): Int =
-        (schedules.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
-            (if (templateId.asKnown().isPresent) 1 else 0) +
+        (if (templateId.asKnown().isPresent) 1 else 0) +
             (if (audienceId.asKnown().isPresent) 1 else 0) +
             (categories.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+            (schedules.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
             (if (triggerEmpty.asKnown().isPresent) 1 else 0)
 
     override fun equals(other: Any?): Boolean {
@@ -381,20 +401,20 @@ private constructor(
         }
 
         return other is TopicDigestRequest &&
-            schedules == other.schedules &&
             templateId == other.templateId &&
             audienceId == other.audienceId &&
             categories == other.categories &&
+            schedules == other.schedules &&
             triggerEmpty == other.triggerEmpty &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
         Objects.hash(
-            schedules,
             templateId,
             audienceId,
             categories,
+            schedules,
             triggerEmpty,
             additionalProperties,
         )
@@ -403,5 +423,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "TopicDigestRequest{schedules=$schedules, templateId=$templateId, audienceId=$audienceId, categories=$categories, triggerEmpty=$triggerEmpty, additionalProperties=$additionalProperties}"
+        "TopicDigestRequest{templateId=$templateId, audienceId=$audienceId, categories=$categories, schedules=$schedules, triggerEmpty=$triggerEmpty, additionalProperties=$additionalProperties}"
 }

@@ -8,7 +8,6 @@ import com.courier.models.ChannelClassification
 import com.courier.models.digests.DigestDayOfWeek
 import com.courier.models.digests.DigestFrequency
 import com.courier.models.workspacepreferences.TopicDigestCategory
-import com.courier.models.workspacepreferences.TopicDigestRequest
 import com.courier.models.workspacepreferences.TopicDigestScheduleRequest
 import com.courier.models.workspacepreferences.WorkspacePreferenceTopicCreateRequest
 import org.assertj.core.api.Assertions.assertThat
@@ -31,7 +30,7 @@ internal class TopicCreateParamsTest {
                     )
                     .description("description")
                     .digest(
-                        TopicDigestRequest.builder()
+                        WorkspacePreferenceTopicCreateRequest.Digest.builder()
                             .addSchedule(
                                 TopicDigestScheduleRequest.builder()
                                     .frequency(DigestFrequency.INSTANT)
@@ -108,7 +107,7 @@ internal class TopicCreateParamsTest {
                         )
                         .description("description")
                         .digest(
-                            TopicDigestRequest.builder()
+                            WorkspacePreferenceTopicCreateRequest.Digest.builder()
                                 .addSchedule(
                                     TopicDigestScheduleRequest.builder()
                                         .frequency(DigestFrequency.INSTANT)
@@ -195,7 +194,7 @@ internal class TopicCreateParamsTest {
                         )
                         .description("description")
                         .digest(
-                            TopicDigestRequest.builder()
+                            WorkspacePreferenceTopicCreateRequest.Digest.builder()
                                 .addSchedule(
                                     TopicDigestScheduleRequest.builder()
                                         .frequency(DigestFrequency.INSTANT)
@@ -245,7 +244,7 @@ internal class TopicCreateParamsTest {
                     )
                     .description("description")
                     .digest(
-                        TopicDigestRequest.builder()
+                        WorkspacePreferenceTopicCreateRequest.Digest.builder()
                             .addSchedule(
                                 TopicDigestScheduleRequest.builder()
                                     .frequency(DigestFrequency.INSTANT)
