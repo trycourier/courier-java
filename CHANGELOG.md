@@ -1,5 +1,17 @@
 # Changelog
 
+## [6.7.0](https://github.com/trycourier/courier-java/compare/v6.6.0...v6.7.0) (2026-09-22)
+
+
+### Features
+
+* **api:** add cancelation_token to journey create, replace, and get ([#168](https://github.com/trycourier/courier-java/issues/168)) ([e24c6c5](https://github.com/trycourier/courier-java/commit/e24c6c5841126752f01240e5dc58499514483a97))
+
+
+### Documentation
+
+* **api:** correct the digest schedule contract, and make `schedules` optional ([#166](https://github.com/trycourier/courier-java/issues/166)) ([10367ad](https://github.com/trycourier/courier-java/commit/10367ad1166dd8e6cf4e8f6880f5bd278152426b))
+
 ## [6.6.0](https://github.com/trycourier/courier-java/compare/v6.5.0...v6.6.0) (2026-09-15)
 
 
