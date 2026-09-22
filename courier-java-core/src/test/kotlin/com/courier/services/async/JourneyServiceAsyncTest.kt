@@ -151,6 +151,7 @@ internal class JourneyServiceAsyncTest {
                                     ),
                                 )
                             )
+                            .cancelationToken("order-{{data.order_id}}")
                             .enabled(true)
                             .state(JourneyState.DRAFT)
                             .build()
@@ -324,6 +325,7 @@ internal class JourneyServiceAsyncTest {
                                     )
                                     .build()
                             )
+                            .cancelationToken("order-{{data.order_id}}")
                             .enabled(true)
                             .state(JourneyState.DRAFT)
                             .build()

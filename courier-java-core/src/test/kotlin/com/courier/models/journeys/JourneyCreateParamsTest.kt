@@ -119,6 +119,7 @@ internal class JourneyCreateParamsTest {
                             ),
                         )
                     )
+                    .cancelationToken("order-{{data.order_id}}")
                     .enabled(true)
                     .state(JourneyState.DRAFT)
                     .build()
@@ -239,6 +240,7 @@ internal class JourneyCreateParamsTest {
                                 ),
                             )
                         )
+                        .cancelationToken("order-{{data.order_id}}")
                         .enabled(true)
                         .state(JourneyState.DRAFT)
                         .build()
@@ -408,6 +410,7 @@ internal class JourneyCreateParamsTest {
                                 ),
                             )
                         )
+                        .cancelationToken("order-{{data.order_id}}")
                         .enabled(true)
                         .state(JourneyState.DRAFT)
                         .build()
@@ -522,6 +525,7 @@ internal class JourneyCreateParamsTest {
                             ),
                         )
                     )
+                    .cancelationToken("order-{{data.order_id}}")
                     .enabled(true)
                     .state(JourneyState.DRAFT)
                     .build()

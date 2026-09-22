@@ -28,6 +28,7 @@ internal class CreateJourneyRequestTest {
                         )
                         .build()
                 )
+                .cancelationToken("order-{{data.order_id}}")
                 .enabled(true)
                 .state(JourneyState.DRAFT)
                 .build()
@@ -49,6 +50,7 @@ internal class CreateJourneyRequestTest {
                         .build()
                 )
             )
+        assertThat(createJourneyRequest.cancelationToken()).contains("order-{{data.order_id}}")
         assertThat(createJourneyRequest.enabled()).contains(true)
         assertThat(createJourneyRequest.state()).contains(JourneyState.DRAFT)
     }
@@ -72,6 +74,7 @@ internal class CreateJourneyRequestTest {
                         )
                         .build()
                 )
+                .cancelationToken("order-{{data.order_id}}")
                 .enabled(true)
                 .state(JourneyState.DRAFT)
                 .build()
