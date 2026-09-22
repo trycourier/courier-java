@@ -25,6 +25,7 @@ class CreateJourneyRequest
 private constructor(
     private val name: JsonField<String>,
     private val nodes: JsonField<List<JourneyNode>>,
+    private val cancelationToken: JsonField<String>,
     private val enabled: JsonField<Boolean>,
     private val state: JsonField<JourneyState>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -36,9 +37,12 @@ private constructor(
         @JsonProperty("nodes")
         @ExcludeMissing
         nodes: JsonField<List<JourneyNode>> = JsonMissing.of(),
+        @JsonProperty("cancelation_token")
+        @ExcludeMissing
+        cancelationToken: JsonField<String> = JsonMissing.of(),
         @JsonProperty("enabled") @ExcludeMissing enabled: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("state") @ExcludeMissing state: JsonField<JourneyState> = JsonMissing.of(),
-    ) : this(name, nodes, enabled, state, mutableMapOf())
+    ) : this(name, nodes, cancelationToken, enabled, state, mutableMapOf())
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
@@ -51,6 +55,17 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun nodes(): List<JourneyNode> = nodes.getRequired("nodes")
+
+    /**
+     * Cancelation token stored on the journey definition. It tags every run the journey creates so
+     * that `POST /journeys/cancel` can later cancel those runs by token. Accepts a templated string
+     * such as `order-{{data.order_id}}`, which is resolved per run when the journey is invoked. On
+     * a replace, omitting this field preserves any existing token and sending a value replaces it.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun cancelationToken(): Optional<String> = cancelationToken.getOptional("cancelation_token")
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -79,6 +94,16 @@ private constructor(
      * Unlike [nodes], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("nodes") @ExcludeMissing fun _nodes(): JsonField<List<JourneyNode>> = nodes
+
+    /**
+     * Returns the raw JSON value of [cancelationToken].
+     *
+     * Unlike [cancelationToken], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("cancelation_token")
+    @ExcludeMissing
+    fun _cancelationToken(): JsonField<String> = cancelationToken
 
     /**
      * Returns the raw JSON value of [enabled].
@@ -125,6 +150,7 @@ private constructor(
 
         private var name: JsonField<String>? = null
         private var nodes: JsonField<MutableList<JourneyNode>>? = null
+        private var cancelationToken: JsonField<String> = JsonMissing.of()
         private var enabled: JsonField<Boolean> = JsonMissing.of()
         private var state: JsonField<JourneyState> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -133,6 +159,7 @@ private constructor(
         internal fun from(createJourneyRequest: CreateJourneyRequest) = apply {
             name = createJourneyRequest.name
             nodes = createJourneyRequest.nodes.map { it.toMutableList() }
+            cancelationToken = createJourneyRequest.cancelationToken
             enabled = createJourneyRequest.enabled
             state = createJourneyRequest.state
             additionalProperties = createJourneyRequest.additionalProperties.toMutableMap()
@@ -230,6 +257,27 @@ private constructor(
         /** Alias for calling [addNode] with `JourneyNode.ofBranch(branch)`. */
         fun addNode(branch: JourneyNode.JourneyBranchNode) = addNode(JourneyNode.ofBranch(branch))
 
+        /**
+         * Cancelation token stored on the journey definition. It tags every run the journey creates
+         * so that `POST /journeys/cancel` can later cancel those runs by token. Accepts a templated
+         * string such as `order-{{data.order_id}}`, which is resolved per run when the journey is
+         * invoked. On a replace, omitting this field preserves any existing token and sending a
+         * value replaces it.
+         */
+        fun cancelationToken(cancelationToken: String) =
+            cancelationToken(JsonField.of(cancelationToken))
+
+        /**
+         * Sets [Builder.cancelationToken] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.cancelationToken] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun cancelationToken(cancelationToken: JsonField<String>) = apply {
+            this.cancelationToken = cancelationToken
+        }
+
         fun enabled(enabled: Boolean) = enabled(JsonField.of(enabled))
 
         /**
@@ -288,6 +336,7 @@ private constructor(
             CreateJourneyRequest(
                 checkRequired("name", name),
                 checkRequired("nodes", nodes).map { it.toImmutable() },
+                cancelationToken,
                 enabled,
                 state,
                 additionalProperties.toMutableMap(),
@@ -311,6 +360,7 @@ private constructor(
 
         name()
         nodes().forEach { it.validate() }
+        cancelationToken()
         enabled()
         state().ifPresent { it.validate() }
         validated = true
@@ -333,6 +383,7 @@ private constructor(
     internal fun validity(): Int =
         (if (name.asKnown().isPresent) 1 else 0) +
             (nodes.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+            (if (cancelationToken.asKnown().isPresent) 1 else 0) +
             (if (enabled.asKnown().isPresent) 1 else 0) +
             (state.asKnown().getOrNull()?.validity() ?: 0)
 
@@ -344,17 +395,18 @@ private constructor(
         return other is CreateJourneyRequest &&
             name == other.name &&
             nodes == other.nodes &&
+            cancelationToken == other.cancelationToken &&
             enabled == other.enabled &&
             state == other.state &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(name, nodes, enabled, state, additionalProperties)
+        Objects.hash(name, nodes, cancelationToken, enabled, state, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "CreateJourneyRequest{name=$name, nodes=$nodes, enabled=$enabled, state=$state, additionalProperties=$additionalProperties}"
+        "CreateJourneyRequest{name=$name, nodes=$nodes, cancelationToken=$cancelationToken, enabled=$enabled, state=$state, additionalProperties=$additionalProperties}"
 }

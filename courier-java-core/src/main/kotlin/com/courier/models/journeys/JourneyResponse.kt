@@ -24,6 +24,7 @@ class JourneyResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
+    private val cancelationToken: JsonField<String>,
     private val created: JsonField<Long>,
     private val creator: JsonField<String>,
     private val enabled: JsonField<Boolean>,
@@ -39,6 +40,9 @@ private constructor(
     @JsonCreator
     private constructor(
         @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("cancelation_token")
+        @ExcludeMissing
+        cancelationToken: JsonField<String> = JsonMissing.of(),
         @JsonProperty("created") @ExcludeMissing created: JsonField<Long> = JsonMissing.of(),
         @JsonProperty("creator") @ExcludeMissing creator: JsonField<String> = JsonMissing.of(),
         @JsonProperty("enabled") @ExcludeMissing enabled: JsonField<Boolean> = JsonMissing.of(),
@@ -52,6 +56,7 @@ private constructor(
         @JsonProperty("updater") @ExcludeMissing updater: JsonField<String> = JsonMissing.of(),
     ) : this(
         id,
+        cancelationToken,
         created,
         creator,
         enabled,
@@ -69,6 +74,16 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun id(): String = id.getRequired("id")
+
+    /**
+     * The journey cancelation token, or null when none is set. A token authored in the dashboard is
+     * returned in its raw templated form, such as `order-{{data.order_id}}`, so it can be read back
+     * and asserted.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun cancelationToken(): Optional<String> = cancelationToken.getOptional("cancelation_token")
 
     /**
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -132,6 +147,16 @@ private constructor(
      * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+    /**
+     * Returns the raw JSON value of [cancelationToken].
+     *
+     * Unlike [cancelationToken], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("cancelation_token")
+    @ExcludeMissing
+    fun _cancelationToken(): JsonField<String> = cancelationToken
 
     /**
      * Returns the raw JSON value of [created].
@@ -216,6 +241,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .id()
+         * .cancelationToken()
          * .created()
          * .creator()
          * .enabled()
@@ -234,6 +260,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var id: JsonField<String>? = null
+        private var cancelationToken: JsonField<String>? = null
         private var created: JsonField<Long>? = null
         private var creator: JsonField<String>? = null
         private var enabled: JsonField<Boolean>? = null
@@ -248,6 +275,7 @@ private constructor(
         @JvmSynthetic
         internal fun from(journeyResponse: JourneyResponse) = apply {
             id = journeyResponse.id
+            cancelationToken = journeyResponse.cancelationToken
             created = journeyResponse.created
             creator = journeyResponse.creator
             enabled = journeyResponse.enabled
@@ -269,6 +297,29 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun id(id: JsonField<String>) = apply { this.id = id }
+
+        /**
+         * The journey cancelation token, or null when none is set. A token authored in the
+         * dashboard is returned in its raw templated form, such as `order-{{data.order_id}}`, so it
+         * can be read back and asserted.
+         */
+        fun cancelationToken(cancelationToken: String?) =
+            cancelationToken(JsonField.ofNullable(cancelationToken))
+
+        /** Alias for calling [Builder.cancelationToken] with `cancelationToken.orElse(null)`. */
+        fun cancelationToken(cancelationToken: Optional<String>) =
+            cancelationToken(cancelationToken.getOrNull())
+
+        /**
+         * Sets [Builder.cancelationToken] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.cancelationToken] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun cancelationToken(cancelationToken: JsonField<String>) = apply {
+            this.cancelationToken = cancelationToken
+        }
 
         fun created(created: Long?) = created(JsonField.ofNullable(created))
 
@@ -497,6 +548,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .id()
+         * .cancelationToken()
          * .created()
          * .creator()
          * .enabled()
@@ -513,6 +565,7 @@ private constructor(
         fun build(): JourneyResponse =
             JourneyResponse(
                 checkRequired("id", id),
+                checkRequired("cancelationToken", cancelationToken),
                 checkRequired("created", created),
                 checkRequired("creator", creator),
                 checkRequired("enabled", enabled),
@@ -542,6 +595,7 @@ private constructor(
         }
 
         id()
+        cancelationToken()
         created()
         creator()
         enabled()
@@ -570,6 +624,7 @@ private constructor(
     @JvmSynthetic
     internal fun validity(): Int =
         (if (id.asKnown().isPresent) 1 else 0) +
+            (if (cancelationToken.asKnown().isPresent) 1 else 0) +
             (if (created.asKnown().isPresent) 1 else 0) +
             (if (creator.asKnown().isPresent) 1 else 0) +
             (if (enabled.asKnown().isPresent) 1 else 0) +
@@ -587,6 +642,7 @@ private constructor(
 
         return other is JourneyResponse &&
             id == other.id &&
+            cancelationToken == other.cancelationToken &&
             created == other.created &&
             creator == other.creator &&
             enabled == other.enabled &&
@@ -602,6 +658,7 @@ private constructor(
     private val hashCode: Int by lazy {
         Objects.hash(
             id,
+            cancelationToken,
             created,
             creator,
             enabled,
@@ -618,5 +675,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "JourneyResponse{id=$id, created=$created, creator=$creator, enabled=$enabled, name=$name, nodes=$nodes, published=$published, state=$state, updated=$updated, updater=$updater, additionalProperties=$additionalProperties}"
+        "JourneyResponse{id=$id, cancelationToken=$cancelationToken, created=$created, creator=$creator, enabled=$enabled, name=$name, nodes=$nodes, published=$published, state=$state, updated=$updated, updater=$updater, additionalProperties=$additionalProperties}"
 }

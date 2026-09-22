@@ -15,6 +15,7 @@ internal class JourneyResponseTest {
         val journeyResponse =
             JourneyResponse.builder()
                 .id("id")
+                .cancelationToken("order-{{data.order_id}}")
                 .created(0L)
                 .creator("creator")
                 .enabled(true)
@@ -39,6 +40,7 @@ internal class JourneyResponseTest {
                 .build()
 
         assertThat(journeyResponse.id()).isEqualTo("id")
+        assertThat(journeyResponse.cancelationToken()).contains("order-{{data.order_id}}")
         assertThat(journeyResponse.created()).contains(0L)
         assertThat(journeyResponse.creator()).contains("creator")
         assertThat(journeyResponse.enabled()).isEqualTo(true)
@@ -71,6 +73,7 @@ internal class JourneyResponseTest {
         val journeyResponse =
             JourneyResponse.builder()
                 .id("id")
+                .cancelationToken("order-{{data.order_id}}")
                 .created(0L)
                 .creator("creator")
                 .enabled(true)
