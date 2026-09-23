@@ -210,7 +210,18 @@ private constructor(
     fun padding(): Optional<String> = padding.getOptional("padding")
 
     /**
-     * Defaults to `button`.
+     * How prominent the action should be. `button` is the default, `secondary` and `tertiary` are
+     * the other two button styles, and `link` renders as inline text rather than a button.
+     *
+     * Each channel draws these as closely as its medium allows. Email fills `button`, outlines
+     * `secondary`, and underlines `tertiary`. The in-app Inbox fills `button`, outlines
+     * `secondary`, and draws `tertiary` as a solid button. Slack renders all three as Block Kit
+     * buttons, with `secondary` in Slack's `primary` style and `tertiary` in its `danger` style.
+     *
+     * `background_color` is the fill for `button`, and the border and label color for `secondary`.
+     * For `tertiary` it colors the underline and label in email and the fill in the Inbox. It does
+     * not apply to `link`. An Inbox theme that sets its own action colors takes precedence over the
+     * template.
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -646,7 +657,21 @@ private constructor(
          */
         fun padding(padding: JsonField<String>) = apply { this.padding = padding }
 
-        /** Defaults to `button`. */
+        /**
+         * How prominent the action should be. `button` is the default, `secondary` and `tertiary`
+         * are the other two button styles, and `link` renders as inline text rather than a button.
+         *
+         * Each channel draws these as closely as its medium allows. Email fills `button`, outlines
+         * `secondary`, and underlines `tertiary`. The in-app Inbox fills `button`, outlines
+         * `secondary`, and draws `tertiary` as a solid button. Slack renders all three as Block Kit
+         * buttons, with `secondary` in Slack's `primary` style and `tertiary` in its `danger`
+         * style.
+         *
+         * `background_color` is the fill for `button`, and the border and label color for
+         * `secondary`. For `tertiary` it colors the underline and label in email and the fill in
+         * the Inbox. It does not apply to `link`. An Inbox theme that sets its own action colors
+         * takes precedence over the template.
+         */
         fun style(style: Style?) = style(JsonField.ofNullable(style))
 
         /** Alias for calling [Builder.style] with `style.orElse(null)`. */
@@ -780,7 +805,20 @@ private constructor(
             (if (padding.asKnown().isPresent) 1 else 0) +
             (style.asKnown().getOrNull()?.validity() ?: 0)
 
-    /** Defaults to `button`. */
+    /**
+     * How prominent the action should be. `button` is the default, `secondary` and `tertiary` are
+     * the other two button styles, and `link` renders as inline text rather than a button.
+     *
+     * Each channel draws these as closely as its medium allows. Email fills `button`, outlines
+     * `secondary`, and underlines `tertiary`. The in-app Inbox fills `button`, outlines
+     * `secondary`, and draws `tertiary` as a solid button. Slack renders all three as Block Kit
+     * buttons, with `secondary` in Slack's `primary` style and `tertiary` in its `danger` style.
+     *
+     * `background_color` is the fill for `button`, and the border and label color for `secondary`.
+     * For `tertiary` it colors the underline and label in email and the fill in the Inbox. It does
+     * not apply to `link`. An Inbox theme that sets its own action colors takes precedence over the
+     * template.
+     */
     class Style @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
@@ -797,6 +835,10 @@ private constructor(
 
             @JvmField val BUTTON = of("button")
 
+            @JvmField val SECONDARY = of("secondary")
+
+            @JvmField val TERTIARY = of("tertiary")
+
             @JvmField val LINK = of("link")
 
             @JvmStatic fun of(value: String) = Style(JsonField.of(value))
@@ -805,6 +847,8 @@ private constructor(
         /** An enum containing [Style]'s known values. */
         enum class Known {
             BUTTON,
+            SECONDARY,
+            TERTIARY,
             LINK,
         }
 
@@ -819,6 +863,8 @@ private constructor(
          */
         enum class Value {
             BUTTON,
+            SECONDARY,
+            TERTIARY,
             LINK,
             /** An enum member indicating that [Style] was instantiated with an unknown value. */
             _UNKNOWN,
@@ -834,6 +880,8 @@ private constructor(
         fun value(): Value =
             when (this) {
                 BUTTON -> Value.BUTTON
+                SECONDARY -> Value.SECONDARY
+                TERTIARY -> Value.TERTIARY
                 LINK -> Value.LINK
                 else -> Value._UNKNOWN
             }
@@ -850,6 +898,8 @@ private constructor(
         fun known(): Known =
             when (this) {
                 BUTTON -> Known.BUTTON
+                SECONDARY -> Known.SECONDARY
+                TERTIARY -> Known.TERTIARY
                 LINK -> Known.LINK
                 else -> throw CourierInvalidDataException("Unknown Style: $value")
             }
