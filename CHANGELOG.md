@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.8.0](https://github.com/trycourier/courier-java/compare/v6.7.0...v6.8.0) (2026-09-23)
+
+
+### Features
+
+* **api:** publish the secondary and tertiary action styles [C-19961] ([#169](https://github.com/trycourier/courier-java/issues/169)) ([d43fb01](https://github.com/trycourier/courier-java/commit/d43fb010b06e22dd5d895d220b6283af05b21465))
+
 ## [6.7.0](https://github.com/trycourier/courier-java/compare/v6.6.0...v6.7.0) (2026-09-22)
 
 
