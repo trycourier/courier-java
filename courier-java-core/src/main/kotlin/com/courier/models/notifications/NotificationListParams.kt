@@ -18,6 +18,7 @@ private constructor(
     private val cursor: String?,
     private val eventId: String?,
     private val notes: Boolean?,
+    private val tags: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -30,6 +31,12 @@ private constructor(
 
     /** Include template notes in the response. Only applies to legacy templates. */
     fun notes(): Optional<Boolean> = Optional.ofNullable(notes)
+
+    /**
+     * Comma-delimited list of tag names. Only templates carrying all of the listed tags are
+     * returned. Matching is case-insensitive. Filtering is applied before pagination.
+     */
+    fun tags(): Optional<String> = Optional.ofNullable(tags)
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -53,6 +60,7 @@ private constructor(
         private var cursor: String? = null
         private var eventId: String? = null
         private var notes: Boolean? = null
+        private var tags: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -61,6 +69,7 @@ private constructor(
             cursor = notificationListParams.cursor
             eventId = notificationListParams.eventId
             notes = notificationListParams.notes
+            tags = notificationListParams.tags
             additionalHeaders = notificationListParams.additionalHeaders.toBuilder()
             additionalQueryParams = notificationListParams.additionalQueryParams.toBuilder()
         }
@@ -89,6 +98,15 @@ private constructor(
 
         /** Alias for calling [Builder.notes] with `notes.orElse(null)`. */
         fun notes(notes: Optional<Boolean>) = notes(notes.getOrNull())
+
+        /**
+         * Comma-delimited list of tag names. Only templates carrying all of the listed tags are
+         * returned. Matching is case-insensitive. Filtering is applied before pagination.
+         */
+        fun tags(tags: String?) = apply { this.tags = tags }
+
+        /** Alias for calling [Builder.tags] with `tags.orElse(null)`. */
+        fun tags(tags: Optional<String>) = tags(tags.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -198,6 +216,7 @@ private constructor(
                 cursor,
                 eventId,
                 notes,
+                tags,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -211,6 +230,7 @@ private constructor(
                 cursor?.let { put("cursor", it) }
                 eventId?.let { put("event_id", it) }
                 notes?.let { put("notes", it.toString()) }
+                tags?.let { put("tags", it) }
                 putAll(additionalQueryParams)
             }
             .build()
@@ -224,13 +244,14 @@ private constructor(
             cursor == other.cursor &&
             eventId == other.eventId &&
             notes == other.notes &&
+            tags == other.tags &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(cursor, eventId, notes, additionalHeaders, additionalQueryParams)
+        Objects.hash(cursor, eventId, notes, tags, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "NotificationListParams{cursor=$cursor, eventId=$eventId, notes=$notes, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "NotificationListParams{cursor=$cursor, eventId=$eventId, notes=$notes, tags=$tags, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

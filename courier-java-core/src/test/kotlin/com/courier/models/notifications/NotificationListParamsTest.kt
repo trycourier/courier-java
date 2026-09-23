@@ -10,7 +10,12 @@ internal class NotificationListParamsTest {
 
     @Test
     fun create() {
-        NotificationListParams.builder().cursor("cursor").eventId("event_id").notes(true).build()
+        NotificationListParams.builder()
+            .cursor("cursor")
+            .eventId("event_id")
+            .notes(true)
+            .tags("tags")
+            .build()
     }
 
     @Test
@@ -20,6 +25,7 @@ internal class NotificationListParamsTest {
                 .cursor("cursor")
                 .eventId("event_id")
                 .notes(true)
+                .tags("tags")
                 .build()
 
         val queryParams = params._queryParams()
@@ -30,6 +36,7 @@ internal class NotificationListParamsTest {
                     .put("cursor", "cursor")
                     .put("event_id", "event_id")
                     .put("notes", "true")
+                    .put("tags", "tags")
                     .build()
             )
     }

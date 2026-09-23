@@ -115,6 +115,7 @@ internal class NotificationServiceAsyncTest {
                     .cursor("cursor")
                     .eventId("event_id")
                     .notes(true)
+                    .tags("tags")
                     .build()
             )
 
