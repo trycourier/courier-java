@@ -26,6 +26,7 @@ import com.courier.models.notifications.NotificationTemplateCreateRequest
 import com.courier.models.notifications.NotificationTemplateResponse
 import com.courier.models.notifications.NotificationTemplateVersionListResponse
 import com.courier.services.blocking.notifications.CheckService
+import com.courier.services.blocking.notifications.PreviewService
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.function.Consumer
 
@@ -46,6 +47,8 @@ interface NotificationService {
 
     /** Create, update, version, publish, and localize notification templates and their content. */
     fun checks(): CheckService
+
+    fun previews(): PreviewService
 
     /**
      * Create a notification template. Requires all fields in the notification object. Templates are
@@ -451,6 +454,8 @@ interface NotificationService {
          * Create, update, version, publish, and localize notification templates and their content.
          */
         fun checks(): CheckService.WithRawResponse
+
+        fun previews(): PreviewService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /notifications`, but is otherwise the same as
