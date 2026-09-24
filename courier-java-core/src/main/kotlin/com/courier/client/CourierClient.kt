@@ -16,6 +16,7 @@ import com.courier.services.blocking.JourneyService
 import com.courier.services.blocking.ListService
 import com.courier.services.blocking.MessageService
 import com.courier.services.blocking.NotificationService
+import com.courier.services.blocking.PreviewService
 import com.courier.services.blocking.ProfileService
 import com.courier.services.blocking.ProviderService
 import com.courier.services.blocking.RequestService
@@ -102,6 +103,12 @@ interface CourierClient {
      * schedule it for later.
      */
     fun broadcasts(): BroadcastService
+
+    /**
+     * Render a template's email content on real email clients and read back the screenshots, so you
+     * can check how it looks before you send it.
+     */
+    fun previews(): PreviewService
 
     fun bulk(): BulkService
 
@@ -228,6 +235,12 @@ interface CourierClient {
          * or schedule it for later.
          */
         fun broadcasts(): BroadcastService.WithRawResponse
+
+        /**
+         * Render a template's email content on real email clients and read back the screenshots, so
+         * you can check how it looks before you send it.
+         */
+        fun previews(): PreviewService.WithRawResponse
 
         fun bulk(): BulkService.WithRawResponse
 

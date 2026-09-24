@@ -37,6 +37,8 @@ import com.courier.models.notifications.NotificationTemplateResponse
 import com.courier.models.notifications.NotificationTemplateVersionListResponse
 import com.courier.services.blocking.notifications.CheckService
 import com.courier.services.blocking.notifications.CheckServiceImpl
+import com.courier.services.blocking.notifications.PreviewService
+import com.courier.services.blocking.notifications.PreviewServiceImpl
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
@@ -50,6 +52,8 @@ class NotificationServiceImpl internal constructor(private val clientOptions: Cl
 
     private val checks: CheckService by lazy { CheckServiceImpl(clientOptions) }
 
+    private val previews: PreviewService by lazy { PreviewServiceImpl(clientOptions) }
+
     override fun withRawResponse(): NotificationService.WithRawResponse = withRawResponse
 
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): NotificationService =
@@ -57,6 +61,8 @@ class NotificationServiceImpl internal constructor(private val clientOptions: Cl
 
     /** Create, update, version, publish, and localize notification templates and their content. */
     override fun checks(): CheckService = checks
+
+    override fun previews(): PreviewService = previews
 
     override fun create(
         params: NotificationCreateParams,
@@ -148,6 +154,10 @@ class NotificationServiceImpl internal constructor(private val clientOptions: Cl
             CheckServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val previews: PreviewService.WithRawResponse by lazy {
+            PreviewServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun withOptions(
             modifier: Consumer<ClientOptions.Builder>
         ): NotificationService.WithRawResponse =
@@ -159,6 +169,8 @@ class NotificationServiceImpl internal constructor(private val clientOptions: Cl
          * Create, update, version, publish, and localize notification templates and their content.
          */
         override fun checks(): CheckService.WithRawResponse = checks
+
+        override fun previews(): PreviewService.WithRawResponse = previews
 
         private val createHandler: Handler<NotificationTemplateResponse> =
             jsonHandler<NotificationTemplateResponse>(clientOptions.jsonMapper)

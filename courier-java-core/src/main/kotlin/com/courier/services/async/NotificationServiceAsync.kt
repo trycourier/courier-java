@@ -26,6 +26,7 @@ import com.courier.models.notifications.NotificationTemplateCreateRequest
 import com.courier.models.notifications.NotificationTemplateResponse
 import com.courier.models.notifications.NotificationTemplateVersionListResponse
 import com.courier.services.async.notifications.CheckServiceAsync
+import com.courier.services.async.notifications.PreviewServiceAsync
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
@@ -46,6 +47,8 @@ interface NotificationServiceAsync {
 
     /** Create, update, version, publish, and localize notification templates and their content. */
     fun checks(): CheckServiceAsync
+
+    fun previews(): PreviewServiceAsync
 
     /**
      * Create a notification template. Requires all fields in the notification object. Templates are
@@ -488,6 +491,8 @@ interface NotificationServiceAsync {
          * Create, update, version, publish, and localize notification templates and their content.
          */
         fun checks(): CheckServiceAsync.WithRawResponse
+
+        fun previews(): PreviewServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /notifications`, but is otherwise the same as

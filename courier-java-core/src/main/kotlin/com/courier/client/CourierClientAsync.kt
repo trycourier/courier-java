@@ -16,6 +16,7 @@ import com.courier.services.async.JourneyServiceAsync
 import com.courier.services.async.ListServiceAsync
 import com.courier.services.async.MessageServiceAsync
 import com.courier.services.async.NotificationServiceAsync
+import com.courier.services.async.PreviewServiceAsync
 import com.courier.services.async.ProfileServiceAsync
 import com.courier.services.async.ProviderServiceAsync
 import com.courier.services.async.RequestServiceAsync
@@ -102,6 +103,12 @@ interface CourierClientAsync {
      * schedule it for later.
      */
     fun broadcasts(): BroadcastServiceAsync
+
+    /**
+     * Render a template's email content on real email clients and read back the screenshots, so you
+     * can check how it looks before you send it.
+     */
+    fun previews(): PreviewServiceAsync
 
     fun bulk(): BulkServiceAsync
 
@@ -232,6 +239,12 @@ interface CourierClientAsync {
          * or schedule it for later.
          */
         fun broadcasts(): BroadcastServiceAsync.WithRawResponse
+
+        /**
+         * Render a template's email content on real email clients and read back the screenshots, so
+         * you can check how it looks before you send it.
+         */
+        fun previews(): PreviewServiceAsync.WithRawResponse
 
         fun bulk(): BulkServiceAsync.WithRawResponse
 

@@ -37,6 +37,8 @@ import com.courier.models.notifications.NotificationTemplateResponse
 import com.courier.models.notifications.NotificationTemplateVersionListResponse
 import com.courier.services.async.notifications.CheckServiceAsync
 import com.courier.services.async.notifications.CheckServiceAsyncImpl
+import com.courier.services.async.notifications.PreviewServiceAsync
+import com.courier.services.async.notifications.PreviewServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
@@ -51,6 +53,8 @@ class NotificationServiceAsyncImpl internal constructor(private val clientOption
 
     private val checks: CheckServiceAsync by lazy { CheckServiceAsyncImpl(clientOptions) }
 
+    private val previews: PreviewServiceAsync by lazy { PreviewServiceAsyncImpl(clientOptions) }
+
     override fun withRawResponse(): NotificationServiceAsync.WithRawResponse = withRawResponse
 
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): NotificationServiceAsync =
@@ -58,6 +62,8 @@ class NotificationServiceAsyncImpl internal constructor(private val clientOption
 
     /** Create, update, version, publish, and localize notification templates and their content. */
     override fun checks(): CheckServiceAsync = checks
+
+    override fun previews(): PreviewServiceAsync = previews
 
     override fun create(
         params: NotificationCreateParams,
@@ -153,6 +159,10 @@ class NotificationServiceAsyncImpl internal constructor(private val clientOption
             CheckServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val previews: PreviewServiceAsync.WithRawResponse by lazy {
+            PreviewServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun withOptions(
             modifier: Consumer<ClientOptions.Builder>
         ): NotificationServiceAsync.WithRawResponse =
@@ -164,6 +174,8 @@ class NotificationServiceAsyncImpl internal constructor(private val clientOption
          * Create, update, version, publish, and localize notification templates and their content.
          */
         override fun checks(): CheckServiceAsync.WithRawResponse = checks
+
+        override fun previews(): PreviewServiceAsync.WithRawResponse = previews
 
         private val createHandler: Handler<NotificationTemplateResponse> =
             jsonHandler<NotificationTemplateResponse>(clientOptions.jsonMapper)

@@ -30,6 +30,8 @@ import com.courier.services.async.MessageServiceAsync
 import com.courier.services.async.MessageServiceAsyncImpl
 import com.courier.services.async.NotificationServiceAsync
 import com.courier.services.async.NotificationServiceAsyncImpl
+import com.courier.services.async.PreviewServiceAsync
+import com.courier.services.async.PreviewServiceAsyncImpl
 import com.courier.services.async.ProfileServiceAsync
 import com.courier.services.async.ProfileServiceAsyncImpl
 import com.courier.services.async.ProviderServiceAsync
@@ -93,6 +95,10 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
 
     private val broadcasts: BroadcastServiceAsync by lazy {
         BroadcastServiceAsyncImpl(clientOptionsWithUserAgent)
+    }
+
+    private val previews: PreviewServiceAsync by lazy {
+        PreviewServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
     private val bulk: BulkServiceAsync by lazy { BulkServiceAsyncImpl(clientOptionsWithUserAgent) }
@@ -192,6 +198,12 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
      */
     override fun broadcasts(): BroadcastServiceAsync = broadcasts
 
+    /**
+     * Render a template's email content on real email clients and read back the screenshots, so you
+     * can check how it looks before you send it.
+     */
+    override fun previews(): PreviewServiceAsync = previews
+
     override fun bulk(): BulkServiceAsync = bulk
 
     /** Manage the logos, colors, and layout that give the templates you send a consistent look. */
@@ -288,6 +300,10 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
 
         private val broadcasts: BroadcastServiceAsync.WithRawResponse by lazy {
             BroadcastServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val previews: PreviewServiceAsync.WithRawResponse by lazy {
+            PreviewServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
         private val bulk: BulkServiceAsync.WithRawResponse by lazy {
@@ -394,6 +410,12 @@ class CourierClientAsyncImpl(private val clientOptions: ClientOptions) : Courier
          * or schedule it for later.
          */
         override fun broadcasts(): BroadcastServiceAsync.WithRawResponse = broadcasts
+
+        /**
+         * Render a template's email content on real email clients and read back the screenshots, so
+         * you can check how it looks before you send it.
+         */
+        override fun previews(): PreviewServiceAsync.WithRawResponse = previews
 
         override fun bulk(): BulkServiceAsync.WithRawResponse = bulk
 

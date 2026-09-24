@@ -30,6 +30,8 @@ import com.courier.services.blocking.MessageService
 import com.courier.services.blocking.MessageServiceImpl
 import com.courier.services.blocking.NotificationService
 import com.courier.services.blocking.NotificationServiceImpl
+import com.courier.services.blocking.PreviewService
+import com.courier.services.blocking.PreviewServiceImpl
 import com.courier.services.blocking.ProfileService
 import com.courier.services.blocking.ProfileServiceImpl
 import com.courier.services.blocking.ProviderService
@@ -92,6 +94,8 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
     private val broadcasts: BroadcastService by lazy {
         BroadcastServiceImpl(clientOptionsWithUserAgent)
     }
+
+    private val previews: PreviewService by lazy { PreviewServiceImpl(clientOptionsWithUserAgent) }
 
     private val bulk: BulkService by lazy { BulkServiceImpl(clientOptionsWithUserAgent) }
 
@@ -175,6 +179,12 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
      * schedule it for later.
      */
     override fun broadcasts(): BroadcastService = broadcasts
+
+    /**
+     * Render a template's email content on real email clients and read back the screenshots, so you
+     * can check how it looks before you send it.
+     */
+    override fun previews(): PreviewService = previews
 
     override fun bulk(): BulkService = bulk
 
@@ -272,6 +282,10 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
 
         private val broadcasts: BroadcastService.WithRawResponse by lazy {
             BroadcastServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val previews: PreviewService.WithRawResponse by lazy {
+            PreviewServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
         private val bulk: BulkService.WithRawResponse by lazy {
@@ -378,6 +392,12 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
          * or schedule it for later.
          */
         override fun broadcasts(): BroadcastService.WithRawResponse = broadcasts
+
+        /**
+         * Render a template's email content on real email clients and read back the screenshots, so
+         * you can check how it looks before you send it.
+         */
+        override fun previews(): PreviewService.WithRawResponse = previews
 
         override fun bulk(): BulkService.WithRawResponse = bulk
 
