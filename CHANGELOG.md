@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.9.0](https://github.com/trycourier/courier-java/compare/v6.8.0...v6.9.0) (2026-09-23)
+
+
+### Features
+
+* **api:** filter notification templates by tag [C-21172] ([#171](https://github.com/trycourier/courier-java/issues/171)) ([cfbaa26](https://github.com/trycourier/courier-java/commit/cfbaa26b1dcbf16a2065920547eb935b73327083))
+
 ## [6.8.0](https://github.com/trycourier/courier-java/compare/v6.7.0...v6.8.0) (2026-09-23)
 
 
