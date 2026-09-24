@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.11.0](https://github.com/trycourier/courier-java/compare/v6.10.0...v6.11.0) (2026-09-24)
+
+
+### Features
+
+* **api:** cross-client previews endpoints ([#175](https://github.com/trycourier/courier-java/issues/175)) ([797c6ee](https://github.com/trycourier/courier-java/commit/797c6eea96153c6877117b34b0e56d23ddb47028))
+
 ## [6.10.0](https://github.com/trycourier/courier-java/compare/v6.9.0...v6.10.0) (2026-09-24)
 
 
