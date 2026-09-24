@@ -7,6 +7,7 @@ import com.courier.models.ChannelClassification
 import com.courier.models.workspacepreferences.PublishPreferencesRequest
 import com.courier.models.workspacepreferences.WorkspacePreferenceCreateParams
 import com.courier.models.workspacepreferences.WorkspacePreferenceCreateRequest
+import com.courier.models.workspacepreferences.WorkspacePreferenceListLogsParams
 import com.courier.models.workspacepreferences.WorkspacePreferencePublishParams
 import com.courier.models.workspacepreferences.WorkspacePreferenceReplaceParams
 import com.courier.models.workspacepreferences.WorkspacePreferenceReplaceRequest
@@ -75,6 +76,27 @@ internal class WorkspacePreferenceServiceAsyncTest {
         val future = workspacePreferenceServiceAsync.archive("section_id")
 
         val response = future.get()
+    }
+
+    @Disabled("Mock server tests are disabled")
+    @Test
+    fun listLogs() {
+        val client = CourierOkHttpClientAsync.builder().apiKey("My API Key").build()
+        val workspacePreferenceServiceAsync = client.workspacePreferences()
+
+        val preferenceLogsListResponseFuture =
+            workspacePreferenceServiceAsync.listLogs(
+                WorkspacePreferenceListLogsParams.builder()
+                    .cursor("cursor")
+                    .limit(1L)
+                    .since("since")
+                    .tenantId("tenant_id")
+                    .userId("user_id")
+                    .build()
+            )
+
+        val preferenceLogsListResponse = preferenceLogsListResponseFuture.get()
+        preferenceLogsListResponse.validate()
     }
 
     @Disabled("Mock server tests are disabled")

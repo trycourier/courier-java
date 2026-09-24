@@ -6,12 +6,14 @@ import com.courier.core.ClientOptions
 import com.courier.core.RequestOptions
 import com.courier.core.http.HttpResponse
 import com.courier.core.http.HttpResponseFor
+import com.courier.models.workspacepreferences.PreferenceLogsListResponse
 import com.courier.models.workspacepreferences.PublishPreferencesRequest
 import com.courier.models.workspacepreferences.PublishPreferencesResponse
 import com.courier.models.workspacepreferences.WorkspacePreferenceArchiveParams
 import com.courier.models.workspacepreferences.WorkspacePreferenceCreateParams
 import com.courier.models.workspacepreferences.WorkspacePreferenceCreateRequest
 import com.courier.models.workspacepreferences.WorkspacePreferenceGetResponse
+import com.courier.models.workspacepreferences.WorkspacePreferenceListLogsParams
 import com.courier.models.workspacepreferences.WorkspacePreferenceListParams
 import com.courier.models.workspacepreferences.WorkspacePreferenceListResponse
 import com.courier.models.workspacepreferences.WorkspacePreferencePublishParams
@@ -162,6 +164,29 @@ interface WorkspacePreferenceService {
     /** @see archive */
     fun archive(sectionId: String, requestOptions: RequestOptions) =
         archive(sectionId, WorkspacePreferenceArchiveParams.none(), requestOptions)
+
+    /**
+     * Returns the history of preference changes in this environment, newest first. Each entry
+     * records one change a user made to one subscription topic, and carries the value before it
+     * where there was one. Supply user_id to read a single user's history instead of the whole
+     * environment.
+     */
+    fun listLogs(): PreferenceLogsListResponse = listLogs(WorkspacePreferenceListLogsParams.none())
+
+    /** @see listLogs */
+    fun listLogs(
+        params: WorkspacePreferenceListLogsParams = WorkspacePreferenceListLogsParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): PreferenceLogsListResponse
+
+    /** @see listLogs */
+    fun listLogs(
+        params: WorkspacePreferenceListLogsParams = WorkspacePreferenceListLogsParams.none()
+    ): PreferenceLogsListResponse = listLogs(params, RequestOptions.none())
+
+    /** @see listLogs */
+    fun listLogs(requestOptions: RequestOptions): PreferenceLogsListResponse =
+        listLogs(WorkspacePreferenceListLogsParams.none(), requestOptions)
 
     /**
      * Publishes the workspace preference page, snapshotting every preference and topic, and returns
@@ -391,6 +416,32 @@ interface WorkspacePreferenceService {
         @MustBeClosed
         fun archive(sectionId: String, requestOptions: RequestOptions): HttpResponse =
             archive(sectionId, WorkspacePreferenceArchiveParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `get /preferences/logs`, but is otherwise the same as
+         * [WorkspacePreferenceService.listLogs].
+         */
+        @MustBeClosed
+        fun listLogs(): HttpResponseFor<PreferenceLogsListResponse> =
+            listLogs(WorkspacePreferenceListLogsParams.none())
+
+        /** @see listLogs */
+        @MustBeClosed
+        fun listLogs(
+            params: WorkspacePreferenceListLogsParams = WorkspacePreferenceListLogsParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<PreferenceLogsListResponse>
+
+        /** @see listLogs */
+        @MustBeClosed
+        fun listLogs(
+            params: WorkspacePreferenceListLogsParams = WorkspacePreferenceListLogsParams.none()
+        ): HttpResponseFor<PreferenceLogsListResponse> = listLogs(params, RequestOptions.none())
+
+        /** @see listLogs */
+        @MustBeClosed
+        fun listLogs(requestOptions: RequestOptions): HttpResponseFor<PreferenceLogsListResponse> =
+            listLogs(WorkspacePreferenceListLogsParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `post /preferences/publish`, but is otherwise the same as
