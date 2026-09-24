@@ -17,10 +17,12 @@ import com.courier.core.http.HttpResponseFor
 import com.courier.core.http.json
 import com.courier.core.http.parseable
 import com.courier.core.prepare
+import com.courier.models.workspacepreferences.PreferenceLogsListResponse
 import com.courier.models.workspacepreferences.PublishPreferencesResponse
 import com.courier.models.workspacepreferences.WorkspacePreferenceArchiveParams
 import com.courier.models.workspacepreferences.WorkspacePreferenceCreateParams
 import com.courier.models.workspacepreferences.WorkspacePreferenceGetResponse
+import com.courier.models.workspacepreferences.WorkspacePreferenceListLogsParams
 import com.courier.models.workspacepreferences.WorkspacePreferenceListParams
 import com.courier.models.workspacepreferences.WorkspacePreferenceListResponse
 import com.courier.models.workspacepreferences.WorkspacePreferencePublishParams
@@ -78,6 +80,13 @@ internal constructor(private val clientOptions: ClientOptions) : WorkspacePrefer
         // delete /preferences/sections/{section_id}
         withRawResponse().archive(params, requestOptions)
     }
+
+    override fun listLogs(
+        params: WorkspacePreferenceListLogsParams,
+        requestOptions: RequestOptions,
+    ): PreferenceLogsListResponse =
+        // get /preferences/logs
+        withRawResponse().listLogs(params, requestOptions).parse()
 
     override fun publish(
         params: WorkspacePreferencePublishParams,
@@ -218,6 +227,33 @@ internal constructor(private val clientOptions: ClientOptions) : WorkspacePrefer
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return errorHandler.handle(response).parseable {
                 response.use { archiveHandler.handle(it) }
+            }
+        }
+
+        private val listLogsHandler: Handler<PreferenceLogsListResponse> =
+            jsonHandler<PreferenceLogsListResponse>(clientOptions.jsonMapper)
+
+        override fun listLogs(
+            params: WorkspacePreferenceListLogsParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<PreferenceLogsListResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("preferences", "logs")
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { listLogsHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
             }
         }
 

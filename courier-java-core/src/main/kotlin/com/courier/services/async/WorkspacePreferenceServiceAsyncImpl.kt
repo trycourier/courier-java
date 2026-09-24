@@ -17,10 +17,12 @@ import com.courier.core.http.HttpResponseFor
 import com.courier.core.http.json
 import com.courier.core.http.parseable
 import com.courier.core.prepareAsync
+import com.courier.models.workspacepreferences.PreferenceLogsListResponse
 import com.courier.models.workspacepreferences.PublishPreferencesResponse
 import com.courier.models.workspacepreferences.WorkspacePreferenceArchiveParams
 import com.courier.models.workspacepreferences.WorkspacePreferenceCreateParams
 import com.courier.models.workspacepreferences.WorkspacePreferenceGetResponse
+import com.courier.models.workspacepreferences.WorkspacePreferenceListLogsParams
 import com.courier.models.workspacepreferences.WorkspacePreferenceListParams
 import com.courier.models.workspacepreferences.WorkspacePreferenceListResponse
 import com.courier.models.workspacepreferences.WorkspacePreferencePublishParams
@@ -84,6 +86,13 @@ internal constructor(private val clientOptions: ClientOptions) : WorkspacePrefer
     ): CompletableFuture<Void?> =
         // delete /preferences/sections/{section_id}
         withRawResponse().archive(params, requestOptions).thenAccept {}
+
+    override fun listLogs(
+        params: WorkspacePreferenceListLogsParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<PreferenceLogsListResponse> =
+        // get /preferences/logs
+        withRawResponse().listLogs(params, requestOptions).thenApply { it.parse() }
 
     override fun publish(
         params: WorkspacePreferencePublishParams,
@@ -235,6 +244,36 @@ internal constructor(private val clientOptions: ClientOptions) : WorkspacePrefer
                 .thenApply { response ->
                     errorHandler.handle(response).parseable {
                         response.use { archiveHandler.handle(it) }
+                    }
+                }
+        }
+
+        private val listLogsHandler: Handler<PreferenceLogsListResponse> =
+            jsonHandler<PreferenceLogsListResponse>(clientOptions.jsonMapper)
+
+        override fun listLogs(
+            params: WorkspacePreferenceListLogsParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<PreferenceLogsListResponse>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("preferences", "logs")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { listLogsHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
                     }
                 }
         }
