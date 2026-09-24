@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.10.0](https://github.com/trycourier/courier-java/compare/v6.9.0...v6.10.0) (2026-09-24)
+
+
+### Features
+
+* **api:** add GET /preferences/logs [C-21018] ([12b9e81](https://github.com/trycourier/courier-java/commit/12b9e81f7619cb8ad6685f19e1fc12a0b2b2f31d))
+
 ## [6.9.0](https://github.com/trycourier/courier-java/compare/v6.8.0...v6.9.0) (2026-09-23)
 
 
