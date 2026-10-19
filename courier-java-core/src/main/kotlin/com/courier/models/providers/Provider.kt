@@ -68,7 +68,9 @@ private constructor(
     fun provider(): String = provider.getRequired("provider")
 
     /**
-     * Provider-specific settings (snake_case keys on the wire).
+     * Provider-specific settings (snake_case keys on the wire). `rate_limit` is this
+     * configuration's send rate limit, `{ "rate": number, "period": "second" | "minute" | "hour"
+     * }`, or null for no limit.
      *
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -234,7 +236,11 @@ private constructor(
          */
         fun provider(provider: JsonField<String>) = apply { this.provider = provider }
 
-        /** Provider-specific settings (snake_case keys on the wire). */
+        /**
+         * Provider-specific settings (snake_case keys on the wire). `rate_limit` is this
+         * configuration's send rate limit, `{ "rate": number, "period": "second" | "minute" |
+         * "hour" }`, or null for no limit.
+         */
         fun settings(settings: Settings) = settings(JsonField.of(settings))
 
         /**
@@ -385,7 +391,11 @@ private constructor(
             (if (alias.asKnown().isPresent) 1 else 0) +
             (if (updated.asKnown().isPresent) 1 else 0)
 
-    /** Provider-specific settings (snake_case keys on the wire). */
+    /**
+     * Provider-specific settings (snake_case keys on the wire). `rate_limit` is this
+     * configuration's send rate limit, `{ "rate": number, "period": "second" | "minute" | "hour"
+     * }`, or null for no limit.
+     */
     class Settings
     @JsonCreator
     private constructor(
