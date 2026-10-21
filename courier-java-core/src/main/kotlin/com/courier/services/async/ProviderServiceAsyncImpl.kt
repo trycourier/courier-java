@@ -22,6 +22,7 @@ import com.courier.models.providers.ProviderCreateParams
 import com.courier.models.providers.ProviderDeleteParams
 import com.courier.models.providers.ProviderListParams
 import com.courier.models.providers.ProviderListResponse
+import com.courier.models.providers.ProviderPatchParams
 import com.courier.models.providers.ProviderRetrieveParams
 import com.courier.models.providers.ProviderUpdateParams
 import com.courier.services.async.providers.CatalogServiceAsync
@@ -88,6 +89,13 @@ class ProviderServiceAsyncImpl internal constructor(private val clientOptions: C
     ): CompletableFuture<Void?> =
         // delete /providers/{id}
         withRawResponse().delete(params, requestOptions).thenAccept {}
+
+    override fun patch(
+        params: ProviderPatchParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Provider> =
+        // patch /providers/{id}
+        withRawResponse().patch(params, requestOptions).thenApply { it.parse() }
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         ProviderServiceAsync.WithRawResponse {
@@ -263,6 +271,40 @@ class ProviderServiceAsyncImpl internal constructor(private val clientOptions: C
                 .thenApply { response ->
                     errorHandler.handle(response).parseable {
                         response.use { deleteHandler.handle(it) }
+                    }
+                }
+        }
+
+        private val patchHandler: Handler<Provider> =
+            jsonHandler<Provider>(clientOptions.jsonMapper)
+
+        override fun patch(
+            params: ProviderPatchParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Provider>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PATCH)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("providers", params._pathParam(0))
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { patchHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
                     }
                 }
         }
