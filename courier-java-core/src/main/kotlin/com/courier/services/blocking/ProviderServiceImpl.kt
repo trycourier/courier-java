@@ -22,6 +22,7 @@ import com.courier.models.providers.ProviderCreateParams
 import com.courier.models.providers.ProviderDeleteParams
 import com.courier.models.providers.ProviderListParams
 import com.courier.models.providers.ProviderListResponse
+import com.courier.models.providers.ProviderPatchParams
 import com.courier.models.providers.ProviderRetrieveParams
 import com.courier.models.providers.ProviderUpdateParams
 import com.courier.services.blocking.providers.CatalogService
@@ -79,6 +80,10 @@ class ProviderServiceImpl internal constructor(private val clientOptions: Client
         // delete /providers/{id}
         withRawResponse().delete(params, requestOptions)
     }
+
+    override fun patch(params: ProviderPatchParams, requestOptions: RequestOptions): Provider =
+        // patch /providers/{id}
+        withRawResponse().patch(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         ProviderService.WithRawResponse {
@@ -240,6 +245,37 @@ class ProviderServiceImpl internal constructor(private val clientOptions: Client
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return errorHandler.handle(response).parseable {
                 response.use { deleteHandler.handle(it) }
+            }
+        }
+
+        private val patchHandler: Handler<Provider> =
+            jsonHandler<Provider>(clientOptions.jsonMapper)
+
+        override fun patch(
+            params: ProviderPatchParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<Provider> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PATCH)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("providers", params._pathParam(0))
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { patchHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
             }
         }
     }

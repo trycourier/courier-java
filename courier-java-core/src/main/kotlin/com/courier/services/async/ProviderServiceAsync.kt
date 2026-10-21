@@ -11,6 +11,7 @@ import com.courier.models.providers.ProviderCreateParams
 import com.courier.models.providers.ProviderDeleteParams
 import com.courier.models.providers.ProviderListParams
 import com.courier.models.providers.ProviderListResponse
+import com.courier.models.providers.ProviderPatchParams
 import com.courier.models.providers.ProviderRetrieveParams
 import com.courier.models.providers.ProviderUpdateParams
 import com.courier.services.async.providers.CatalogServiceAsync
@@ -165,6 +166,39 @@ interface ProviderServiceAsync {
     /** @see delete */
     fun delete(id: String, requestOptions: RequestOptions): CompletableFuture<Void?> =
         delete(id, ProviderDeleteParams.none(), requestOptions)
+
+    /**
+     * Updates part of a provider's configuration and keeps every field you omit. Settings merge
+     * into the stored settings key by key, and a setting sent as null is removed.
+     */
+    fun patch(id: String): CompletableFuture<Provider> = patch(id, ProviderPatchParams.none())
+
+    /** @see patch */
+    fun patch(
+        id: String,
+        params: ProviderPatchParams = ProviderPatchParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Provider> = patch(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see patch */
+    fun patch(
+        id: String,
+        params: ProviderPatchParams = ProviderPatchParams.none(),
+    ): CompletableFuture<Provider> = patch(id, params, RequestOptions.none())
+
+    /** @see patch */
+    fun patch(
+        params: ProviderPatchParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Provider>
+
+    /** @see patch */
+    fun patch(params: ProviderPatchParams): CompletableFuture<Provider> =
+        patch(params, RequestOptions.none())
+
+    /** @see patch */
+    fun patch(id: String, requestOptions: RequestOptions): CompletableFuture<Provider> =
+        patch(id, ProviderPatchParams.none(), requestOptions)
 
     /**
      * A view of [ProviderServiceAsync] that provides access to raw HTTP responses for each method.
@@ -324,5 +358,43 @@ interface ProviderServiceAsync {
         /** @see delete */
         fun delete(id: String, requestOptions: RequestOptions): CompletableFuture<HttpResponse> =
             delete(id, ProviderDeleteParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `patch /providers/{id}`, but is otherwise the same as
+         * [ProviderServiceAsync.patch].
+         */
+        fun patch(id: String): CompletableFuture<HttpResponseFor<Provider>> =
+            patch(id, ProviderPatchParams.none())
+
+        /** @see patch */
+        fun patch(
+            id: String,
+            params: ProviderPatchParams = ProviderPatchParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Provider>> =
+            patch(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see patch */
+        fun patch(
+            id: String,
+            params: ProviderPatchParams = ProviderPatchParams.none(),
+        ): CompletableFuture<HttpResponseFor<Provider>> = patch(id, params, RequestOptions.none())
+
+        /** @see patch */
+        fun patch(
+            params: ProviderPatchParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Provider>>
+
+        /** @see patch */
+        fun patch(params: ProviderPatchParams): CompletableFuture<HttpResponseFor<Provider>> =
+            patch(params, RequestOptions.none())
+
+        /** @see patch */
+        fun patch(
+            id: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<Provider>> =
+            patch(id, ProviderPatchParams.none(), requestOptions)
     }
 }

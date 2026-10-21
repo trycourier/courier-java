@@ -6,6 +6,7 @@ import com.courier.client.okhttp.CourierOkHttpClient
 import com.courier.core.JsonValue
 import com.courier.models.providers.ProviderCreateParams
 import com.courier.models.providers.ProviderListParams
+import com.courier.models.providers.ProviderPatchParams
 import com.courier.models.providers.ProviderUpdateParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -90,5 +91,29 @@ internal class ProviderServiceTest {
         val providerService = client.providers()
 
         providerService.delete("id")
+    }
+
+    @Disabled("Mock server tests are disabled")
+    @Test
+    fun patch() {
+        val client = CourierOkHttpClient.builder().apiKey("My API Key").build()
+        val providerService = client.providers()
+
+        val provider =
+            providerService.patch(
+                ProviderPatchParams.builder()
+                    .id("id")
+                    .alias("alias")
+                    .provider("provider")
+                    .settings(
+                        ProviderPatchParams.Settings.builder()
+                            .putAdditionalProperty("api_key", JsonValue.from("bar"))
+                            .build()
+                    )
+                    .title("Production SendGrid")
+                    .build()
+            )
+
+        provider.validate()
     }
 }

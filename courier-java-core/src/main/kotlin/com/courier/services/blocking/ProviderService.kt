@@ -11,6 +11,7 @@ import com.courier.models.providers.ProviderCreateParams
 import com.courier.models.providers.ProviderDeleteParams
 import com.courier.models.providers.ProviderListParams
 import com.courier.models.providers.ProviderListResponse
+import com.courier.models.providers.ProviderPatchParams
 import com.courier.models.providers.ProviderRetrieveParams
 import com.courier.models.providers.ProviderUpdateParams
 import com.courier.services.blocking.providers.CatalogService
@@ -154,6 +155,36 @@ interface ProviderService {
     /** @see delete */
     fun delete(id: String, requestOptions: RequestOptions) =
         delete(id, ProviderDeleteParams.none(), requestOptions)
+
+    /**
+     * Updates part of a provider's configuration and keeps every field you omit. Settings merge
+     * into the stored settings key by key, and a setting sent as null is removed.
+     */
+    fun patch(id: String): Provider = patch(id, ProviderPatchParams.none())
+
+    /** @see patch */
+    fun patch(
+        id: String,
+        params: ProviderPatchParams = ProviderPatchParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Provider = patch(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see patch */
+    fun patch(id: String, params: ProviderPatchParams = ProviderPatchParams.none()): Provider =
+        patch(id, params, RequestOptions.none())
+
+    /** @see patch */
+    fun patch(
+        params: ProviderPatchParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Provider
+
+    /** @see patch */
+    fun patch(params: ProviderPatchParams): Provider = patch(params, RequestOptions.none())
+
+    /** @see patch */
+    fun patch(id: String, requestOptions: RequestOptions): Provider =
+        patch(id, ProviderPatchParams.none(), requestOptions)
 
     /** A view of [ProviderService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -316,5 +347,44 @@ interface ProviderService {
         @MustBeClosed
         fun delete(id: String, requestOptions: RequestOptions): HttpResponse =
             delete(id, ProviderDeleteParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `patch /providers/{id}`, but is otherwise the same as
+         * [ProviderService.patch].
+         */
+        @MustBeClosed
+        fun patch(id: String): HttpResponseFor<Provider> = patch(id, ProviderPatchParams.none())
+
+        /** @see patch */
+        @MustBeClosed
+        fun patch(
+            id: String,
+            params: ProviderPatchParams = ProviderPatchParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Provider> = patch(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see patch */
+        @MustBeClosed
+        fun patch(
+            id: String,
+            params: ProviderPatchParams = ProviderPatchParams.none(),
+        ): HttpResponseFor<Provider> = patch(id, params, RequestOptions.none())
+
+        /** @see patch */
+        @MustBeClosed
+        fun patch(
+            params: ProviderPatchParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Provider>
+
+        /** @see patch */
+        @MustBeClosed
+        fun patch(params: ProviderPatchParams): HttpResponseFor<Provider> =
+            patch(params, RequestOptions.none())
+
+        /** @see patch */
+        @MustBeClosed
+        fun patch(id: String, requestOptions: RequestOptions): HttpResponseFor<Provider> =
+            patch(id, ProviderPatchParams.none(), requestOptions)
     }
 }
