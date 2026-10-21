@@ -1,5 +1,24 @@
 # Changelog
 
+## [6.12.0](https://github.com/trycourier/courier-java/compare/v6.11.0...v6.12.0) (2026-10-21)
+
+
+### Features
+
+* **api:** add PATCH /providers/{id} for partial provider updates [C-21790] ([#182](https://github.com/trycourier/courier-java/issues/182)) ([4f915a1](https://github.com/trycourier/courier-java/commit/4f915a1e80faee1c9ea9d8fd7760f9c5b237eb9a))
+* **api:** expose email From, Reply-to, CC and BCC on notification templates [C-21709] ([#180](https://github.com/trycourier/courier-java/issues/180)) ([b316c55](https://github.com/trycourier/courier-java/commit/b316c55a67f2c1dbcba320ffcef6677b8a4303ff))
+
+
+### Chores
+
+* **api:** regenerate SDK ([#181](https://github.com/trycourier/courier-java/issues/181)) ([d308fb1](https://github.com/trycourier/courier-java/commit/d308fb1eb09e73166d0ec421e42d56561d1c183c))
+
+
+### Documentation
+
+* **api:** describe the AI node model constraint [C-21614] ([#177](https://github.com/trycourier/courier-java/issues/177)) ([352bbd3](https://github.com/trycourier/courier-java/commit/352bbd35583b0575040ad707f7e4f0830f7fff92))
+* **api:** document provider settings.rate_limit [C-21732] ([#179](https://github.com/trycourier/courier-java/issues/179)) ([669b752](https://github.com/trycourier/courier-java/commit/669b752135aae9bdf4f9d6a996154b546ac836f4))
+
 ## [6.11.0](https://github.com/trycourier/courier-java/compare/v6.10.0...v6.11.0) (2026-09-24)
 
 
