@@ -22,6 +22,29 @@ internal class ElementalChannelNodeTest {
                 .channel("email")
                 .addElement(
                     ElementalNodeNonChannel.UnionMember0.builder()
+                        .addChannel("string")
+                        .if_("if")
+                        .loop("loop")
+                        .ref("ref")
+                        .align(ElementalTextNode.Align.LEFT)
+                        .bold("bold")
+                        .color("color")
+                        .content("content")
+                        .fontSize("font_size")
+                        .format(ElementalTextNode.Format.MARKDOWN)
+                        .italic("italic")
+                        .lineHeight("line_height")
+                        .locales(
+                            Locales.builder()
+                                .putAdditionalProperty(
+                                    "foo",
+                                    JsonValue.from(mapOf("content" to "content")),
+                                )
+                                .build()
+                        )
+                        .strikethrough("strikethrough")
+                        .textStyle(TextStyle.TEXT)
+                        .underline("underline")
                         .type(ElementalNodeNonChannel.UnionMember0.Type.TEXT)
                         .build()
                 )
@@ -44,6 +67,29 @@ internal class ElementalChannelNodeTest {
             .containsExactly(
                 ElementalNodeNonChannel.ofUnionMember0(
                     ElementalNodeNonChannel.UnionMember0.builder()
+                        .addChannel("string")
+                        .if_("if")
+                        .loop("loop")
+                        .ref("ref")
+                        .align(ElementalTextNode.Align.LEFT)
+                        .bold("bold")
+                        .color("color")
+                        .content("content")
+                        .fontSize("font_size")
+                        .format(ElementalTextNode.Format.MARKDOWN)
+                        .italic("italic")
+                        .lineHeight("line_height")
+                        .locales(
+                            Locales.builder()
+                                .putAdditionalProperty(
+                                    "foo",
+                                    JsonValue.from(mapOf("content" to "content")),
+                                )
+                                .build()
+                        )
+                        .strikethrough("strikethrough")
+                        .textStyle(TextStyle.TEXT)
+                        .underline("underline")
                         .type(ElementalNodeNonChannel.UnionMember0.Type.TEXT)
                         .build()
                 )
@@ -71,6 +117,29 @@ internal class ElementalChannelNodeTest {
                 .channel("email")
                 .addElement(
                     ElementalNodeNonChannel.UnionMember0.builder()
+                        .addChannel("string")
+                        .if_("if")
+                        .loop("loop")
+                        .ref("ref")
+                        .align(ElementalTextNode.Align.LEFT)
+                        .bold("bold")
+                        .color("color")
+                        .content("content")
+                        .fontSize("font_size")
+                        .format(ElementalTextNode.Format.MARKDOWN)
+                        .italic("italic")
+                        .lineHeight("line_height")
+                        .locales(
+                            Locales.builder()
+                                .putAdditionalProperty(
+                                    "foo",
+                                    JsonValue.from(mapOf("content" to "content")),
+                                )
+                                .build()
+                        )
+                        .strikethrough("strikethrough")
+                        .textStyle(TextStyle.TEXT)
+                        .underline("underline")
                         .type(ElementalNodeNonChannel.UnionMember0.Type.TEXT)
                         .build()
                 )

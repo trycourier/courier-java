@@ -17,7 +17,29 @@ internal class ElementalNodeTest {
     @Test
     fun ofTextNodeWithType() {
         val textNodeWithType =
-            ElementalTextNodeWithType.builder().type(ElementalTextNodeWithType.Type.TEXT).build()
+            ElementalTextNodeWithType.builder()
+                .addChannel("string")
+                .if_("if")
+                .loop("loop")
+                .ref("ref")
+                .align(ElementalTextNode.Align.LEFT)
+                .bold("bold")
+                .color("color")
+                .content("content")
+                .fontSize("font_size")
+                .format(ElementalTextNode.Format.MARKDOWN)
+                .italic("italic")
+                .lineHeight("line_height")
+                .locales(
+                    Locales.builder()
+                        .putAdditionalProperty("foo", JsonValue.from(mapOf("content" to "content")))
+                        .build()
+                )
+                .strikethrough("strikethrough")
+                .textStyle(TextStyle.TEXT)
+                .underline("underline")
+                .type(ElementalTextNodeWithType.Type.TEXT)
+                .build()
 
         val elementalNode = ElementalNode.ofTextNodeWithType(textNodeWithType)
 
@@ -37,6 +59,29 @@ internal class ElementalNodeTest {
         val elementalNode =
             ElementalNode.ofTextNodeWithType(
                 ElementalTextNodeWithType.builder()
+                    .addChannel("string")
+                    .if_("if")
+                    .loop("loop")
+                    .ref("ref")
+                    .align(ElementalTextNode.Align.LEFT)
+                    .bold("bold")
+                    .color("color")
+                    .content("content")
+                    .fontSize("font_size")
+                    .format(ElementalTextNode.Format.MARKDOWN)
+                    .italic("italic")
+                    .lineHeight("line_height")
+                    .locales(
+                        Locales.builder()
+                            .putAdditionalProperty(
+                                "foo",
+                                JsonValue.from(mapOf("content" to "content")),
+                            )
+                            .build()
+                    )
+                    .strikethrough("strikethrough")
+                    .textStyle(TextStyle.TEXT)
+                    .underline("underline")
                     .type(ElementalTextNodeWithType.Type.TEXT)
                     .build()
             )
@@ -53,7 +98,14 @@ internal class ElementalNodeTest {
     @Test
     fun ofMetaNodeWithType() {
         val metaNodeWithType =
-            ElementalMetaNodeWithType.builder().type(ElementalMetaNodeWithType.Type.META).build()
+            ElementalMetaNodeWithType.builder()
+                .addChannel("string")
+                .if_("if")
+                .loop("loop")
+                .ref("ref")
+                .title("title")
+                .type(ElementalMetaNodeWithType.Type.META)
+                .build()
 
         val elementalNode = ElementalNode.ofMetaNodeWithType(metaNodeWithType)
 
@@ -73,6 +125,11 @@ internal class ElementalNodeTest {
         val elementalNode =
             ElementalNode.ofMetaNodeWithType(
                 ElementalMetaNodeWithType.builder()
+                    .addChannel("string")
+                    .if_("if")
+                    .loop("loop")
+                    .ref("ref")
+                    .title("title")
                     .type(ElementalMetaNodeWithType.Type.META)
                     .build()
             )
@@ -90,6 +147,47 @@ internal class ElementalNodeTest {
     fun ofChannelNodeWithType() {
         val channelNodeWithType =
             ElementalChannelNodeWithType.builder()
+                .addChannel("string")
+                .if_("if")
+                .loop("loop")
+                .ref("ref")
+                .channel("email")
+                .addElement(
+                    ElementalNodeNonChannel.UnionMember0.builder()
+                        .addChannel("string")
+                        .if_("if")
+                        .loop("loop")
+                        .ref("ref")
+                        .align(ElementalTextNode.Align.LEFT)
+                        .bold("bold")
+                        .color("color")
+                        .content("content")
+                        .fontSize("font_size")
+                        .format(ElementalTextNode.Format.MARKDOWN)
+                        .italic("italic")
+                        .lineHeight("line_height")
+                        .locales(
+                            Locales.builder()
+                                .putAdditionalProperty(
+                                    "foo",
+                                    JsonValue.from(mapOf("content" to "content")),
+                                )
+                                .build()
+                        )
+                        .strikethrough("strikethrough")
+                        .textStyle(TextStyle.TEXT)
+                        .underline("underline")
+                        .type(ElementalNodeNonChannel.UnionMember0.Type.TEXT)
+                        .build()
+                )
+                .fontSize("font_size")
+                .lineHeight("line_height")
+                .padding("padding")
+                .raw(
+                    ElementalChannelNode.Raw.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .build()
+                )
                 .type(ElementalChannelNodeWithType.Type.CHANNEL)
                 .build()
 
@@ -111,6 +209,47 @@ internal class ElementalNodeTest {
         val elementalNode =
             ElementalNode.ofChannelNodeWithType(
                 ElementalChannelNodeWithType.builder()
+                    .addChannel("string")
+                    .if_("if")
+                    .loop("loop")
+                    .ref("ref")
+                    .channel("email")
+                    .addElement(
+                        ElementalNodeNonChannel.UnionMember0.builder()
+                            .addChannel("string")
+                            .if_("if")
+                            .loop("loop")
+                            .ref("ref")
+                            .align(ElementalTextNode.Align.LEFT)
+                            .bold("bold")
+                            .color("color")
+                            .content("content")
+                            .fontSize("font_size")
+                            .format(ElementalTextNode.Format.MARKDOWN)
+                            .italic("italic")
+                            .lineHeight("line_height")
+                            .locales(
+                                Locales.builder()
+                                    .putAdditionalProperty(
+                                        "foo",
+                                        JsonValue.from(mapOf("content" to "content")),
+                                    )
+                                    .build()
+                            )
+                            .strikethrough("strikethrough")
+                            .textStyle(TextStyle.TEXT)
+                            .underline("underline")
+                            .type(ElementalNodeNonChannel.UnionMember0.Type.TEXT)
+                            .build()
+                    )
+                    .fontSize("font_size")
+                    .lineHeight("line_height")
+                    .padding("padding")
+                    .raw(
+                        ElementalChannelNode.Raw.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
                     .type(ElementalChannelNodeWithType.Type.CHANNEL)
                     .build()
             )
@@ -127,7 +266,21 @@ internal class ElementalNodeTest {
     @Test
     fun ofImageNodeWithType() {
         val imageNodeWithType =
-            ElementalImageNodeWithType.builder().type(ElementalImageNodeWithType.Type.IMAGE).build()
+            ElementalImageNodeWithType.builder()
+                .addChannel("string")
+                .if_("if")
+                .loop("loop")
+                .ref("ref")
+                .src("src")
+                .align(Alignment.CENTER)
+                .altText("alt_text")
+                .borderColor("border_color")
+                .borderSize("border_size")
+                .href("href")
+                .padding("padding")
+                .width("width")
+                .type(ElementalImageNodeWithType.Type.IMAGE)
+                .build()
 
         val elementalNode = ElementalNode.ofImageNodeWithType(imageNodeWithType)
 
@@ -147,6 +300,18 @@ internal class ElementalNodeTest {
         val elementalNode =
             ElementalNode.ofImageNodeWithType(
                 ElementalImageNodeWithType.builder()
+                    .addChannel("string")
+                    .if_("if")
+                    .loop("loop")
+                    .ref("ref")
+                    .src("src")
+                    .align(Alignment.CENTER)
+                    .altText("alt_text")
+                    .borderColor("border_color")
+                    .borderSize("border_size")
+                    .href("href")
+                    .padding("padding")
+                    .width("width")
                     .type(ElementalImageNodeWithType.Type.IMAGE)
                     .build()
             )
@@ -164,6 +329,26 @@ internal class ElementalNodeTest {
     fun ofActionNodeWithType() {
         val actionNodeWithType =
             ElementalActionNodeWithType.builder()
+                .addChannel("string")
+                .if_("if")
+                .loop("loop")
+                .ref("ref")
+                .content("content")
+                .href("href")
+                .actionId("action_id")
+                .align(Alignment.CENTER)
+                .backgroundColor("background_color")
+                .borderRadius("border_radius")
+                .borderSize("border_size")
+                .disableTracking(true)
+                .fontSize("font_size")
+                .locales(
+                    Locales.builder()
+                        .putAdditionalProperty("foo", JsonValue.from(mapOf("content" to "content")))
+                        .build()
+                )
+                .padding("padding")
+                .style(ElementalActionNode.Style.BUTTON)
                 .type(ElementalActionNodeWithType.Type.ACTION)
                 .build()
 
@@ -185,6 +370,29 @@ internal class ElementalNodeTest {
         val elementalNode =
             ElementalNode.ofActionNodeWithType(
                 ElementalActionNodeWithType.builder()
+                    .addChannel("string")
+                    .if_("if")
+                    .loop("loop")
+                    .ref("ref")
+                    .content("content")
+                    .href("href")
+                    .actionId("action_id")
+                    .align(Alignment.CENTER)
+                    .backgroundColor("background_color")
+                    .borderRadius("border_radius")
+                    .borderSize("border_size")
+                    .disableTracking(true)
+                    .fontSize("font_size")
+                    .locales(
+                        Locales.builder()
+                            .putAdditionalProperty(
+                                "foo",
+                                JsonValue.from(mapOf("content" to "content")),
+                            )
+                            .build()
+                    )
+                    .padding("padding")
+                    .style(ElementalActionNode.Style.BUTTON)
                     .type(ElementalActionNodeWithType.Type.ACTION)
                     .build()
             )
@@ -202,6 +410,11 @@ internal class ElementalNodeTest {
     fun ofDividerNodeWithType() {
         val dividerNodeWithType =
             ElementalDividerNodeWithType.builder()
+                .addChannel("string")
+                .if_("if")
+                .loop("loop")
+                .ref("ref")
+                .color("color")
                 .type(ElementalDividerNodeWithType.Type.DIVIDER)
                 .build()
 
@@ -223,6 +436,11 @@ internal class ElementalNodeTest {
         val elementalNode =
             ElementalNode.ofDividerNodeWithType(
                 ElementalDividerNodeWithType.builder()
+                    .addChannel("string")
+                    .if_("if")
+                    .loop("loop")
+                    .ref("ref")
+                    .color("color")
                     .type(ElementalDividerNodeWithType.Type.DIVIDER)
                     .build()
             )
@@ -239,7 +457,24 @@ internal class ElementalNodeTest {
     @Test
     fun ofQuoteNodeWithType() {
         val quoteNodeWithType =
-            ElementalQuoteNodeWithType.builder().type(ElementalQuoteNodeWithType.Type.QUOTE).build()
+            ElementalQuoteNodeWithType.builder()
+                .addChannel("string")
+                .if_("if")
+                .loop("loop")
+                .ref("ref")
+                .content("content")
+                .align(Alignment.CENTER)
+                .borderColor("border_color")
+                .fontSize("font_size")
+                .lineHeight("line_height")
+                .locales(
+                    Locales.builder()
+                        .putAdditionalProperty("foo", JsonValue.from(mapOf("content" to "content")))
+                        .build()
+                )
+                .textStyle(TextStyle.TEXT)
+                .type(ElementalQuoteNodeWithType.Type.QUOTE)
+                .build()
 
         val elementalNode = ElementalNode.ofQuoteNodeWithType(quoteNodeWithType)
 
@@ -259,6 +494,24 @@ internal class ElementalNodeTest {
         val elementalNode =
             ElementalNode.ofQuoteNodeWithType(
                 ElementalQuoteNodeWithType.builder()
+                    .addChannel("string")
+                    .if_("if")
+                    .loop("loop")
+                    .ref("ref")
+                    .content("content")
+                    .align(Alignment.CENTER)
+                    .borderColor("border_color")
+                    .fontSize("font_size")
+                    .lineHeight("line_height")
+                    .locales(
+                        Locales.builder()
+                            .putAdditionalProperty(
+                                "foo",
+                                JsonValue.from(mapOf("content" to "content")),
+                            )
+                            .build()
+                    )
+                    .textStyle(TextStyle.TEXT)
                     .type(ElementalQuoteNodeWithType.Type.QUOTE)
                     .build()
             )
@@ -275,7 +528,19 @@ internal class ElementalNodeTest {
     @Test
     fun ofHtmlNodeWithType() {
         val htmlNodeWithType =
-            ElementalHtmlNodeWithType.builder().type(ElementalHtmlNodeWithType.Type.HTML).build()
+            ElementalHtmlNodeWithType.builder()
+                .addChannel("string")
+                .if_("if")
+                .loop("loop")
+                .ref("ref")
+                .content("content")
+                .locales(
+                    Locales.builder()
+                        .putAdditionalProperty("foo", JsonValue.from(mapOf("content" to "content")))
+                        .build()
+                )
+                .type(ElementalHtmlNodeWithType.Type.HTML)
+                .build()
 
         val elementalNode = ElementalNode.ofHtmlNodeWithType(htmlNodeWithType)
 
@@ -295,6 +560,19 @@ internal class ElementalNodeTest {
         val elementalNode =
             ElementalNode.ofHtmlNodeWithType(
                 ElementalHtmlNodeWithType.builder()
+                    .addChannel("string")
+                    .if_("if")
+                    .loop("loop")
+                    .ref("ref")
+                    .content("content")
+                    .locales(
+                        Locales.builder()
+                            .putAdditionalProperty(
+                                "foo",
+                                JsonValue.from(mapOf("content" to "content")),
+                            )
+                            .build()
+                    )
                     .type(ElementalHtmlNodeWithType.Type.HTML)
                     .build()
             )

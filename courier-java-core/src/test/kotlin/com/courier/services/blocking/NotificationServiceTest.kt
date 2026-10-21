@@ -4,8 +4,13 @@ package com.courier.services.blocking
 
 import com.courier.client.okhttp.CourierOkHttpClient
 import com.courier.core.JsonValue
+import com.courier.models.ElementalChannelNode
 import com.courier.models.ElementalChannelNodeWithType
 import com.courier.models.ElementalContent
+import com.courier.models.ElementalNodeNonChannel
+import com.courier.models.ElementalTextNode
+import com.courier.models.Locales
+import com.courier.models.TextStyle
 import com.courier.models.notifications.NotificationContentPutRequest
 import com.courier.models.notifications.NotificationCreateParams
 import com.courier.models.notifications.NotificationElementPutRequest
@@ -57,6 +62,77 @@ internal class NotificationServiceTest {
                                         ElementalContent.builder()
                                             .addElement(
                                                 ElementalChannelNodeWithType.builder()
+                                                    .addChannel("string")
+                                                    .if_("if")
+                                                    .loop("loop")
+                                                    .ref("ref")
+                                                    .channel("email")
+                                                    .addElement(
+                                                        ElementalNodeNonChannel.UnionMember1
+                                                            .builder()
+                                                            .addChannel("string")
+                                                            .if_("if")
+                                                            .loop("loop")
+                                                            .ref("ref")
+                                                            .title("Welcome!")
+                                                            .type(
+                                                                ElementalNodeNonChannel.UnionMember1
+                                                                    .Type
+                                                                    .META
+                                                            )
+                                                            .build()
+                                                    )
+                                                    .addElement(
+                                                        ElementalNodeNonChannel.UnionMember0
+                                                            .builder()
+                                                            .addChannel("string")
+                                                            .if_("if")
+                                                            .loop("loop")
+                                                            .ref("ref")
+                                                            .align(ElementalTextNode.Align.LEFT)
+                                                            .bold("bold")
+                                                            .color("color")
+                                                            .content("Hello {{data.name}}.")
+                                                            .fontSize("font_size")
+                                                            .format(
+                                                                ElementalTextNode.Format.MARKDOWN
+                                                            )
+                                                            .italic("italic")
+                                                            .lineHeight("line_height")
+                                                            .locales(
+                                                                Locales.builder()
+                                                                    .putAdditionalProperty(
+                                                                        "foo",
+                                                                        JsonValue.from(
+                                                                            mapOf(
+                                                                                "content" to
+                                                                                    "content"
+                                                                            )
+                                                                        ),
+                                                                    )
+                                                                    .build()
+                                                            )
+                                                            .strikethrough("strikethrough")
+                                                            .textStyle(TextStyle.TEXT)
+                                                            .underline("underline")
+                                                            .type(
+                                                                ElementalNodeNonChannel.UnionMember0
+                                                                    .Type
+                                                                    .TEXT
+                                                            )
+                                                            .build()
+                                                    )
+                                                    .fontSize("font_size")
+                                                    .lineHeight("line_height")
+                                                    .padding("padding")
+                                                    .raw(
+                                                        ElementalChannelNode.Raw.builder()
+                                                            .putAdditionalProperty(
+                                                                "foo",
+                                                                JsonValue.from("bar"),
+                                                            )
+                                                            .build()
+                                                    )
                                                     .type(ElementalChannelNodeWithType.Type.CHANNEL)
                                                     .build()
                                             )
@@ -210,6 +286,68 @@ internal class NotificationServiceTest {
                                 NotificationContentPutRequest.Content.builder()
                                     .addElement(
                                         ElementalChannelNodeWithType.builder()
+                                            .addChannel("string")
+                                            .if_("if")
+                                            .loop("loop")
+                                            .ref("ref")
+                                            .channel("email")
+                                            .addElement(
+                                                ElementalNodeNonChannel.UnionMember1.builder()
+                                                    .addChannel("string")
+                                                    .if_("if")
+                                                    .loop("loop")
+                                                    .ref("ref")
+                                                    .title("Welcome!")
+                                                    .type(
+                                                        ElementalNodeNonChannel.UnionMember1.Type
+                                                            .META
+                                                    )
+                                                    .build()
+                                            )
+                                            .addElement(
+                                                ElementalNodeNonChannel.UnionMember0.builder()
+                                                    .addChannel("string")
+                                                    .if_("if")
+                                                    .loop("loop")
+                                                    .ref("ref")
+                                                    .align(ElementalTextNode.Align.LEFT)
+                                                    .bold("bold")
+                                                    .color("color")
+                                                    .content("Hello {{data.name}}.")
+                                                    .fontSize("font_size")
+                                                    .format(ElementalTextNode.Format.MARKDOWN)
+                                                    .italic("italic")
+                                                    .lineHeight("line_height")
+                                                    .locales(
+                                                        Locales.builder()
+                                                            .putAdditionalProperty(
+                                                                "foo",
+                                                                JsonValue.from(
+                                                                    mapOf("content" to "content")
+                                                                ),
+                                                            )
+                                                            .build()
+                                                    )
+                                                    .strikethrough("strikethrough")
+                                                    .textStyle(TextStyle.TEXT)
+                                                    .underline("underline")
+                                                    .type(
+                                                        ElementalNodeNonChannel.UnionMember0.Type
+                                                            .TEXT
+                                                    )
+                                                    .build()
+                                            )
+                                            .fontSize("font_size")
+                                            .lineHeight("line_height")
+                                            .padding("padding")
+                                            .raw(
+                                                ElementalChannelNode.Raw.builder()
+                                                    .putAdditionalProperty(
+                                                        "foo",
+                                                        JsonValue.from("bar"),
+                                                    )
+                                                    .build()
+                                            )
                                             .type(ElementalChannelNodeWithType.Type.CHANNEL)
                                             .build()
                                     )
@@ -306,6 +444,77 @@ internal class NotificationServiceTest {
                                         ElementalContent.builder()
                                             .addElement(
                                                 ElementalChannelNodeWithType.builder()
+                                                    .addChannel("string")
+                                                    .if_("if")
+                                                    .loop("loop")
+                                                    .ref("ref")
+                                                    .channel("email")
+                                                    .addElement(
+                                                        ElementalNodeNonChannel.UnionMember1
+                                                            .builder()
+                                                            .addChannel("string")
+                                                            .if_("if")
+                                                            .loop("loop")
+                                                            .ref("ref")
+                                                            .title("Updated")
+                                                            .type(
+                                                                ElementalNodeNonChannel.UnionMember1
+                                                                    .Type
+                                                                    .META
+                                                            )
+                                                            .build()
+                                                    )
+                                                    .addElement(
+                                                        ElementalNodeNonChannel.UnionMember0
+                                                            .builder()
+                                                            .addChannel("string")
+                                                            .if_("if")
+                                                            .loop("loop")
+                                                            .ref("ref")
+                                                            .align(ElementalTextNode.Align.LEFT)
+                                                            .bold("bold")
+                                                            .color("color")
+                                                            .content("Updated content.")
+                                                            .fontSize("font_size")
+                                                            .format(
+                                                                ElementalTextNode.Format.MARKDOWN
+                                                            )
+                                                            .italic("italic")
+                                                            .lineHeight("line_height")
+                                                            .locales(
+                                                                Locales.builder()
+                                                                    .putAdditionalProperty(
+                                                                        "foo",
+                                                                        JsonValue.from(
+                                                                            mapOf(
+                                                                                "content" to
+                                                                                    "content"
+                                                                            )
+                                                                        ),
+                                                                    )
+                                                                    .build()
+                                                            )
+                                                            .strikethrough("strikethrough")
+                                                            .textStyle(TextStyle.TEXT)
+                                                            .underline("underline")
+                                                            .type(
+                                                                ElementalNodeNonChannel.UnionMember0
+                                                                    .Type
+                                                                    .TEXT
+                                                            )
+                                                            .build()
+                                                    )
+                                                    .fontSize("font_size")
+                                                    .lineHeight("line_height")
+                                                    .padding("padding")
+                                                    .raw(
+                                                        ElementalChannelNode.Raw.builder()
+                                                            .putAdditionalProperty(
+                                                                "foo",
+                                                                JsonValue.from("bar"),
+                                                            )
+                                                            .build()
+                                                    )
                                                     .type(ElementalChannelNodeWithType.Type.CHANNEL)
                                                     .build()
                                             )
