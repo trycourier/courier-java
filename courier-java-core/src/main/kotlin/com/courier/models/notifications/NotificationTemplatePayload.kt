@@ -33,6 +33,7 @@ private constructor(
     private val routing: JsonField<Routing>,
     private val subscription: JsonField<Subscription>,
     private val tags: JsonField<List<String>>,
+    private val email: JsonField<NotificationTemplateEmail>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -48,7 +49,10 @@ private constructor(
         @ExcludeMissing
         subscription: JsonField<Subscription> = JsonMissing.of(),
         @JsonProperty("tags") @ExcludeMissing tags: JsonField<List<String>> = JsonMissing.of(),
-    ) : this(brand, content, name, routing, subscription, tags, mutableMapOf())
+        @JsonProperty("email")
+        @ExcludeMissing
+        email: JsonField<NotificationTemplateEmail> = JsonMissing.of(),
+    ) : this(brand, content, name, routing, subscription, tags, email, mutableMapOf())
 
     /**
      * Brand reference, or null for no brand.
@@ -99,6 +103,21 @@ private constructor(
     fun tags(): List<String> = tags.getRequired("tags")
 
     /**
+     * Email header fields for the template's email channel: the From, Reply-to, CC and BCC values
+     * set in the Studio email channel settings. Each value may use template variables, such as
+     * `{{data.cc}}`, which are resolved at send time. Reads omit `email` when no header is set, and
+     * omit each unset field. Writes treat it as optional, with three meanings. Omit it to keep the
+     * stored headers. Send null to clear all four. Send an object to replace all four: a field the
+     * object leaves out is cleared. Other email channel settings, such as the subject, are kept
+     * either way. Headers only apply while `content` has an email channel; with no email channel
+     * they are not stored.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun email(): Optional<NotificationTemplateEmail> = email.getOptional("email")
+
+    /**
      * Returns the raw JSON value of [brand].
      *
      * Unlike [brand], this method doesn't throw if the JSON field has an unexpected type.
@@ -142,6 +161,15 @@ private constructor(
      */
     @JsonProperty("tags") @ExcludeMissing fun _tags(): JsonField<List<String>> = tags
 
+    /**
+     * Returns the raw JSON value of [email].
+     *
+     * Unlike [email], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("email")
+    @ExcludeMissing
+    fun _email(): JsonField<NotificationTemplateEmail> = email
+
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
@@ -181,6 +209,7 @@ private constructor(
         private var routing: JsonField<Routing>? = null
         private var subscription: JsonField<Subscription>? = null
         private var tags: JsonField<MutableList<String>>? = null
+        private var email: JsonField<NotificationTemplateEmail> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -191,6 +220,7 @@ private constructor(
             routing = notificationTemplatePayload.routing
             subscription = notificationTemplatePayload.subscription
             tags = notificationTemplatePayload.tags.map { it.toMutableList() }
+            email = notificationTemplatePayload.email
             additionalProperties = notificationTemplatePayload.additionalProperties.toMutableMap()
         }
 
@@ -287,6 +317,30 @@ private constructor(
             tags = (tags ?: JsonField.of(mutableListOf())).also { checkKnown("tags", it).add(tag) }
         }
 
+        /**
+         * Email header fields for the template's email channel: the From, Reply-to, CC and BCC
+         * values set in the Studio email channel settings. Each value may use template variables,
+         * such as `{{data.cc}}`, which are resolved at send time. Reads omit `email` when no header
+         * is set, and omit each unset field. Writes treat it as optional, with three meanings. Omit
+         * it to keep the stored headers. Send null to clear all four. Send an object to replace all
+         * four: a field the object leaves out is cleared. Other email channel settings, such as the
+         * subject, are kept either way. Headers only apply while `content` has an email channel;
+         * with no email channel they are not stored.
+         */
+        fun email(email: NotificationTemplateEmail?) = email(JsonField.ofNullable(email))
+
+        /** Alias for calling [Builder.email] with `email.orElse(null)`. */
+        fun email(email: Optional<NotificationTemplateEmail>) = email(email.getOrNull())
+
+        /**
+         * Sets [Builder.email] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.email] with a well-typed [NotificationTemplateEmail]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
+        fun email(email: JsonField<NotificationTemplateEmail>) = apply { this.email = email }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -331,6 +385,7 @@ private constructor(
                 checkRequired("routing", routing),
                 checkRequired("subscription", subscription),
                 checkRequired("tags", tags).map { it.toImmutable() },
+                email,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -356,6 +411,7 @@ private constructor(
         routing().ifPresent { it.validate() }
         subscription().ifPresent { it.validate() }
         tags()
+        email().ifPresent { it.validate() }
         validated = true
     }
 
@@ -379,7 +435,8 @@ private constructor(
             (if (name.asKnown().isPresent) 1 else 0) +
             (routing.asKnown().getOrNull()?.validity() ?: 0) +
             (subscription.asKnown().getOrNull()?.validity() ?: 0) +
-            (tags.asKnown().getOrNull()?.size ?: 0)
+            (tags.asKnown().getOrNull()?.size ?: 0) +
+            (email.asKnown().getOrNull()?.validity() ?: 0)
 
     /** Brand reference, or null for no brand. */
     class Brand
@@ -887,15 +944,16 @@ private constructor(
             routing == other.routing &&
             subscription == other.subscription &&
             tags == other.tags &&
+            email == other.email &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(brand, content, name, routing, subscription, tags, additionalProperties)
+        Objects.hash(brand, content, name, routing, subscription, tags, email, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "NotificationTemplatePayload{brand=$brand, content=$content, name=$name, routing=$routing, subscription=$subscription, tags=$tags, additionalProperties=$additionalProperties}"
+        "NotificationTemplatePayload{brand=$brand, content=$content, name=$name, routing=$routing, subscription=$subscription, tags=$tags, email=$email, additionalProperties=$additionalProperties}"
 }

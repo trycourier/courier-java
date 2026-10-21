@@ -34,6 +34,7 @@ private constructor(
     private val routing: JsonField<NotificationTemplatePayload.Routing>,
     private val subscription: JsonField<NotificationTemplatePayload.Subscription>,
     private val tags: JsonField<List<String>>,
+    private val email: JsonField<NotificationTemplateEmail>,
     private val id: JsonField<String>,
     private val created: JsonField<Long>,
     private val creator: JsonField<String>,
@@ -60,6 +61,9 @@ private constructor(
         @ExcludeMissing
         subscription: JsonField<NotificationTemplatePayload.Subscription> = JsonMissing.of(),
         @JsonProperty("tags") @ExcludeMissing tags: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("email")
+        @ExcludeMissing
+        email: JsonField<NotificationTemplateEmail> = JsonMissing.of(),
         @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
         @JsonProperty("created") @ExcludeMissing created: JsonField<Long> = JsonMissing.of(),
         @JsonProperty("creator") @ExcludeMissing creator: JsonField<String> = JsonMissing.of(),
@@ -76,6 +80,7 @@ private constructor(
         routing,
         subscription,
         tags,
+        email,
         id,
         created,
         creator,
@@ -94,6 +99,7 @@ private constructor(
             .routing(routing)
             .subscription(subscription)
             .tags(tags)
+            .email(email)
             .build()
 
     /**
@@ -144,6 +150,21 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun tags(): List<String> = tags.getRequired("tags")
+
+    /**
+     * Email header fields for the template's email channel: the From, Reply-to, CC and BCC values
+     * set in the Studio email channel settings. Each value may use template variables, such as
+     * `{{data.cc}}`, which are resolved at send time. Reads omit `email` when no header is set, and
+     * omit each unset field. Writes treat it as optional, with three meanings. Omit it to keep the
+     * stored headers. Send null to clear all four. Send an object to replace all four: a field the
+     * object leaves out is cleared. Other email channel settings, such as the subject, are kept
+     * either way. Headers only apply while `content` has an email channel; with no email channel
+     * they are not stored.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun email(): Optional<NotificationTemplateEmail> = email.getOptional("email")
 
     /**
      * The template ID.
@@ -253,6 +274,15 @@ private constructor(
     @JsonProperty("tags") @ExcludeMissing fun _tags(): JsonField<List<String>> = tags
 
     /**
+     * Returns the raw JSON value of [email].
+     *
+     * Unlike [email], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("email")
+    @ExcludeMissing
+    fun _email(): JsonField<NotificationTemplateEmail> = email
+
+    /**
      * Returns the raw JSON value of [id].
      *
      * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
@@ -346,6 +376,7 @@ private constructor(
         private var routing: JsonField<NotificationTemplatePayload.Routing>? = null
         private var subscription: JsonField<NotificationTemplatePayload.Subscription>? = null
         private var tags: JsonField<MutableList<String>>? = null
+        private var email: JsonField<NotificationTemplateEmail> = JsonMissing.of()
         private var id: JsonField<String>? = null
         private var created: JsonField<Long>? = null
         private var creator: JsonField<String>? = null
@@ -363,6 +394,7 @@ private constructor(
             routing = notificationTemplateResponse.routing
             subscription = notificationTemplateResponse.subscription
             tags = notificationTemplateResponse.tags.map { it.toMutableList() }
+            email = notificationTemplateResponse.email
             id = notificationTemplateResponse.id
             created = notificationTemplateResponse.created
             creator = notificationTemplateResponse.creator
@@ -474,6 +506,30 @@ private constructor(
         fun addTag(tag: String) = apply {
             tags = (tags ?: JsonField.of(mutableListOf())).also { checkKnown("tags", it).add(tag) }
         }
+
+        /**
+         * Email header fields for the template's email channel: the From, Reply-to, CC and BCC
+         * values set in the Studio email channel settings. Each value may use template variables,
+         * such as `{{data.cc}}`, which are resolved at send time. Reads omit `email` when no header
+         * is set, and omit each unset field. Writes treat it as optional, with three meanings. Omit
+         * it to keep the stored headers. Send null to clear all four. Send an object to replace all
+         * four: a field the object leaves out is cleared. Other email channel settings, such as the
+         * subject, are kept either way. Headers only apply while `content` has an email channel;
+         * with no email channel they are not stored.
+         */
+        fun email(email: NotificationTemplateEmail?) = email(JsonField.ofNullable(email))
+
+        /** Alias for calling [Builder.email] with `email.orElse(null)`. */
+        fun email(email: Optional<NotificationTemplateEmail>) = email(email.getOrNull())
+
+        /**
+         * Sets [Builder.email] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.email] with a well-typed [NotificationTemplateEmail]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
+        fun email(email: JsonField<NotificationTemplateEmail>) = apply { this.email = email }
 
         /** The template ID. */
         fun id(id: String) = id(JsonField.of(id))
@@ -613,6 +669,7 @@ private constructor(
                 checkRequired("routing", routing),
                 checkRequired("subscription", subscription),
                 checkRequired("tags", tags).map { it.toImmutable() },
+                email,
                 checkRequired("id", id),
                 checkRequired("created", created),
                 checkRequired("creator", creator),
@@ -645,6 +702,7 @@ private constructor(
         routing().ifPresent { it.validate() }
         subscription().ifPresent { it.validate() }
         tags()
+        email().ifPresent { it.validate() }
         id()
         created()
         creator()
@@ -676,6 +734,7 @@ private constructor(
             (routing.asKnown().getOrNull()?.validity() ?: 0) +
             (subscription.asKnown().getOrNull()?.validity() ?: 0) +
             (tags.asKnown().getOrNull()?.size ?: 0) +
+            (email.asKnown().getOrNull()?.validity() ?: 0) +
             (if (id.asKnown().isPresent) 1 else 0) +
             (if (created.asKnown().isPresent) 1 else 0) +
             (if (creator.asKnown().isPresent) 1 else 0) +
@@ -831,6 +890,7 @@ private constructor(
             routing == other.routing &&
             subscription == other.subscription &&
             tags == other.tags &&
+            email == other.email &&
             id == other.id &&
             created == other.created &&
             creator == other.creator &&
@@ -849,6 +909,7 @@ private constructor(
             routing,
             subscription,
             tags,
+            email,
             id,
             created,
             creator,
@@ -863,5 +924,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "NotificationTemplateResponse{brand=$brand, content=$content, name=$name, routing=$routing, subscription=$subscription, tags=$tags, id=$id, created=$created, creator=$creator, state=$state, alias=$alias, updated=$updated, updater=$updater, additionalProperties=$additionalProperties}"
+        "NotificationTemplateResponse{brand=$brand, content=$content, name=$name, routing=$routing, subscription=$subscription, tags=$tags, email=$email, id=$id, created=$created, creator=$creator, state=$state, alias=$alias, updated=$updated, updater=$updater, additionalProperties=$additionalProperties}"
 }

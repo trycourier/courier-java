@@ -34,6 +34,14 @@ internal class NotificationTemplatePayloadTest {
                     NotificationTemplatePayload.Subscription.builder().topicId("topic_id").build()
                 )
                 .addTag("string")
+                .email(
+                    NotificationTemplateEmail.builder()
+                        .addBcc("string")
+                        .addCc("string")
+                        .from("from")
+                        .replyTo("reply_to")
+                        .build()
+                )
                 .build()
 
         assertThat(notificationTemplatePayload.brand())
@@ -59,6 +67,15 @@ internal class NotificationTemplatePayloadTest {
                 NotificationTemplatePayload.Subscription.builder().topicId("topic_id").build()
             )
         assertThat(notificationTemplatePayload.tags()).containsExactly("string")
+        assertThat(notificationTemplatePayload.email())
+            .contains(
+                NotificationTemplateEmail.builder()
+                    .addBcc("string")
+                    .addCc("string")
+                    .from("from")
+                    .replyTo("reply_to")
+                    .build()
+            )
     }
 
     @Test
@@ -85,6 +102,14 @@ internal class NotificationTemplatePayloadTest {
                     NotificationTemplatePayload.Subscription.builder().topicId("topic_id").build()
                 )
                 .addTag("string")
+                .email(
+                    NotificationTemplateEmail.builder()
+                        .addBcc("string")
+                        .addCc("string")
+                        .from("from")
+                        .replyTo("reply_to")
+                        .build()
+                )
                 .build()
 
         val roundtrippedNotificationTemplatePayload =
