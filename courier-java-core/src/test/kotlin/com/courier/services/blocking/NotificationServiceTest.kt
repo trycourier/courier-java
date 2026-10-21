@@ -21,6 +21,7 @@ import com.courier.models.notifications.NotificationReplaceParams
 import com.courier.models.notifications.NotificationRetrieveContentParams
 import com.courier.models.notifications.NotificationRetrieveParams
 import com.courier.models.notifications.NotificationTemplateCreateRequest
+import com.courier.models.notifications.NotificationTemplateEmail
 import com.courier.models.notifications.NotificationTemplatePayload
 import com.courier.models.notifications.NotificationTemplatePublishRequest
 import com.courier.models.notifications.NotificationTemplateState
@@ -75,6 +76,14 @@ internal class NotificationServiceTest {
                                     )
                                     .addTag("onboarding")
                                     .addTag("welcome")
+                                    .email(
+                                        NotificationTemplateEmail.builder()
+                                            .addBcc("string")
+                                            .addCc("string")
+                                            .from("from")
+                                            .replyTo("reply_to")
+                                            .build()
+                                    )
                                     .alias("welcome")
                                     .build()
                             )
@@ -315,6 +324,14 @@ internal class NotificationServiceTest {
                                             .build()
                                     )
                                     .addTag("updated")
+                                    .email(
+                                        NotificationTemplateEmail.builder()
+                                            .addBcc("string")
+                                            .addCc("string")
+                                            .from("from")
+                                            .replyTo("reply_to")
+                                            .build()
+                                    )
                                     .alias("alias")
                                     .build()
                             )

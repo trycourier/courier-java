@@ -30,6 +30,7 @@ private constructor(
     private val routing: JsonField<NotificationTemplatePayload.Routing>,
     private val subscription: JsonField<NotificationTemplatePayload.Subscription>,
     private val tags: JsonField<List<String>>,
+    private val email: JsonField<NotificationTemplateEmail>,
     private val alias: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
@@ -50,8 +51,11 @@ private constructor(
         @ExcludeMissing
         subscription: JsonField<NotificationTemplatePayload.Subscription> = JsonMissing.of(),
         @JsonProperty("tags") @ExcludeMissing tags: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("email")
+        @ExcludeMissing
+        email: JsonField<NotificationTemplateEmail> = JsonMissing.of(),
         @JsonProperty("alias") @ExcludeMissing alias: JsonField<String> = JsonMissing.of(),
-    ) : this(brand, content, name, routing, subscription, tags, alias, mutableMapOf())
+    ) : this(brand, content, name, routing, subscription, tags, email, alias, mutableMapOf())
 
     fun toNotificationTemplatePayload(): NotificationTemplatePayload =
         NotificationTemplatePayload.builder()
@@ -61,6 +65,7 @@ private constructor(
             .routing(routing)
             .subscription(subscription)
             .tags(tags)
+            .email(email)
             .build()
 
     /**
@@ -111,6 +116,21 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun tags(): List<String> = tags.getRequired("tags")
+
+    /**
+     * Email header fields for the template's email channel: the From, Reply-to, CC and BCC values
+     * set in the Studio email channel settings. Each value may use template variables, such as
+     * `{{data.cc}}`, which are resolved at send time. Reads omit `email` when no header is set, and
+     * omit each unset field. Writes treat it as optional, with three meanings. Omit it to keep the
+     * stored headers. Send null to clear all four. Send an object to replace all four: a field the
+     * object leaves out is cleared. Other email channel settings, such as the subject, are kept
+     * either way. Headers only apply while `content` has an email channel; with no email channel
+     * they are not stored.
+     *
+     * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun email(): Optional<NotificationTemplateEmail> = email.getOptional("email")
 
     /**
      * Send-time alias for this template — the value you pass as `event` to POST /send. Writes
@@ -174,6 +194,15 @@ private constructor(
     @JsonProperty("tags") @ExcludeMissing fun _tags(): JsonField<List<String>> = tags
 
     /**
+     * Returns the raw JSON value of [email].
+     *
+     * Unlike [email], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("email")
+    @ExcludeMissing
+    fun _email(): JsonField<NotificationTemplateEmail> = email
+
+    /**
      * Returns the raw JSON value of [alias].
      *
      * Unlike [alias], this method doesn't throw if the JSON field has an unexpected type.
@@ -220,6 +249,7 @@ private constructor(
         private var routing: JsonField<NotificationTemplatePayload.Routing>? = null
         private var subscription: JsonField<NotificationTemplatePayload.Subscription>? = null
         private var tags: JsonField<MutableList<String>>? = null
+        private var email: JsonField<NotificationTemplateEmail> = JsonMissing.of()
         private var alias: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -232,6 +262,7 @@ private constructor(
                 routing = notificationTemplateWritePayload.routing
                 subscription = notificationTemplateWritePayload.subscription
                 tags = notificationTemplateWritePayload.tags.map { it.toMutableList() }
+                email = notificationTemplateWritePayload.email
                 alias = notificationTemplateWritePayload.alias
                 additionalProperties =
                     notificationTemplateWritePayload.additionalProperties.toMutableMap()
@@ -340,6 +371,30 @@ private constructor(
         }
 
         /**
+         * Email header fields for the template's email channel: the From, Reply-to, CC and BCC
+         * values set in the Studio email channel settings. Each value may use template variables,
+         * such as `{{data.cc}}`, which are resolved at send time. Reads omit `email` when no header
+         * is set, and omit each unset field. Writes treat it as optional, with three meanings. Omit
+         * it to keep the stored headers. Send null to clear all four. Send an object to replace all
+         * four: a field the object leaves out is cleared. Other email channel settings, such as the
+         * subject, are kept either way. Headers only apply while `content` has an email channel;
+         * with no email channel they are not stored.
+         */
+        fun email(email: NotificationTemplateEmail?) = email(JsonField.ofNullable(email))
+
+        /** Alias for calling [Builder.email] with `email.orElse(null)`. */
+        fun email(email: Optional<NotificationTemplateEmail>) = email(email.getOrNull())
+
+        /**
+         * Sets [Builder.email] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.email] with a well-typed [NotificationTemplateEmail]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
+        fun email(email: JsonField<NotificationTemplateEmail>) = apply { this.email = email }
+
+        /**
          * Send-time alias for this template — the value you pass as `event` to POST /send. Writes
          * accept a single alias only. Optional, with three distinct meanings. Omit it to leave any
          * existing aliases untouched. Send a string to make this the template's only alias — a
@@ -404,6 +459,7 @@ private constructor(
                 checkRequired("routing", routing),
                 checkRequired("subscription", subscription),
                 checkRequired("tags", tags).map { it.toImmutable() },
+                email,
                 alias,
                 additionalProperties.toMutableMap(),
             )
@@ -430,6 +486,7 @@ private constructor(
         routing().ifPresent { it.validate() }
         subscription().ifPresent { it.validate() }
         tags()
+        email().ifPresent { it.validate() }
         alias()
         validated = true
     }
@@ -455,6 +512,7 @@ private constructor(
             (routing.asKnown().getOrNull()?.validity() ?: 0) +
             (subscription.asKnown().getOrNull()?.validity() ?: 0) +
             (tags.asKnown().getOrNull()?.size ?: 0) +
+            (email.asKnown().getOrNull()?.validity() ?: 0) +
             (if (alias.asKnown().isPresent) 1 else 0)
 
     override fun equals(other: Any?): Boolean {
@@ -469,16 +527,27 @@ private constructor(
             routing == other.routing &&
             subscription == other.subscription &&
             tags == other.tags &&
+            email == other.email &&
             alias == other.alias &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(brand, content, name, routing, subscription, tags, alias, additionalProperties)
+        Objects.hash(
+            brand,
+            content,
+            name,
+            routing,
+            subscription,
+            tags,
+            email,
+            alias,
+            additionalProperties,
+        )
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "NotificationTemplateWritePayload{brand=$brand, content=$content, name=$name, routing=$routing, subscription=$subscription, tags=$tags, alias=$alias, additionalProperties=$additionalProperties}"
+        "NotificationTemplateWritePayload{brand=$brand, content=$content, name=$name, routing=$routing, subscription=$subscription, tags=$tags, email=$email, alias=$alias, additionalProperties=$additionalProperties}"
 }

@@ -34,6 +34,14 @@ internal class NotificationTemplateWritePayloadTest {
                     NotificationTemplatePayload.Subscription.builder().topicId("topic_id").build()
                 )
                 .addTag("string")
+                .email(
+                    NotificationTemplateEmail.builder()
+                        .addBcc("string")
+                        .addCc("string")
+                        .from("from")
+                        .replyTo("reply_to")
+                        .build()
+                )
                 .alias("alias")
                 .build()
 
@@ -60,6 +68,15 @@ internal class NotificationTemplateWritePayloadTest {
                 NotificationTemplatePayload.Subscription.builder().topicId("topic_id").build()
             )
         assertThat(notificationTemplateWritePayload.tags()).containsExactly("string")
+        assertThat(notificationTemplateWritePayload.email())
+            .contains(
+                NotificationTemplateEmail.builder()
+                    .addBcc("string")
+                    .addCc("string")
+                    .from("from")
+                    .replyTo("reply_to")
+                    .build()
+            )
         assertThat(notificationTemplateWritePayload.alias()).contains("alias")
     }
 
@@ -87,6 +104,14 @@ internal class NotificationTemplateWritePayloadTest {
                     NotificationTemplatePayload.Subscription.builder().topicId("topic_id").build()
                 )
                 .addTag("string")
+                .email(
+                    NotificationTemplateEmail.builder()
+                        .addBcc("string")
+                        .addCc("string")
+                        .from("from")
+                        .replyTo("reply_to")
+                        .build()
+                )
                 .alias("alias")
                 .build()
 
