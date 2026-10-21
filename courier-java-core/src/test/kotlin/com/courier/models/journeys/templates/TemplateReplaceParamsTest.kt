@@ -2,7 +2,11 @@
 
 package com.courier.models.journeys.templates
 
+import com.courier.core.JsonValue
+import com.courier.models.ElementalTextNode
 import com.courier.models.ElementalTextNodeWithType
+import com.courier.models.Locales
+import com.courier.models.TextStyle
 import com.courier.models.journeys.JourneyTemplateReplaceRequest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -27,6 +31,31 @@ internal class TemplateReplaceParamsTest {
                                 JourneyTemplateReplaceRequest.Notification.Content.builder()
                                     .addElement(
                                         ElementalTextNodeWithType.builder()
+                                            .addChannel("string")
+                                            .if_("if")
+                                            .loop("loop")
+                                            .ref("ref")
+                                            .align(ElementalTextNode.Align.LEFT)
+                                            .bold("bold")
+                                            .color("color")
+                                            .content("content")
+                                            .fontSize("font_size")
+                                            .format(ElementalTextNode.Format.MARKDOWN)
+                                            .italic("italic")
+                                            .lineHeight("line_height")
+                                            .locales(
+                                                Locales.builder()
+                                                    .putAdditionalProperty(
+                                                        "foo",
+                                                        JsonValue.from(
+                                                            mapOf("content" to "content")
+                                                        ),
+                                                    )
+                                                    .build()
+                                            )
+                                            .strikethrough("strikethrough")
+                                            .textStyle(TextStyle.TEXT)
+                                            .underline("underline")
                                             .type(ElementalTextNodeWithType.Type.TEXT)
                                             .build()
                                     )
@@ -119,6 +148,31 @@ internal class TemplateReplaceParamsTest {
                                     JourneyTemplateReplaceRequest.Notification.Content.builder()
                                         .addElement(
                                             ElementalTextNodeWithType.builder()
+                                                .addChannel("string")
+                                                .if_("if")
+                                                .loop("loop")
+                                                .ref("ref")
+                                                .align(ElementalTextNode.Align.LEFT)
+                                                .bold("bold")
+                                                .color("color")
+                                                .content("content")
+                                                .fontSize("font_size")
+                                                .format(ElementalTextNode.Format.MARKDOWN)
+                                                .italic("italic")
+                                                .lineHeight("line_height")
+                                                .locales(
+                                                    Locales.builder()
+                                                        .putAdditionalProperty(
+                                                            "foo",
+                                                            JsonValue.from(
+                                                                mapOf("content" to "content")
+                                                            ),
+                                                        )
+                                                        .build()
+                                                )
+                                                .strikethrough("strikethrough")
+                                                .textStyle(TextStyle.TEXT)
+                                                .underline("underline")
                                                 .type(ElementalTextNodeWithType.Type.TEXT)
                                                 .build()
                                         )
@@ -164,6 +218,31 @@ internal class TemplateReplaceParamsTest {
                                 JourneyTemplateReplaceRequest.Notification.Content.builder()
                                     .addElement(
                                         ElementalTextNodeWithType.builder()
+                                            .addChannel("string")
+                                            .if_("if")
+                                            .loop("loop")
+                                            .ref("ref")
+                                            .align(ElementalTextNode.Align.LEFT)
+                                            .bold("bold")
+                                            .color("color")
+                                            .content("content")
+                                            .fontSize("font_size")
+                                            .format(ElementalTextNode.Format.MARKDOWN)
+                                            .italic("italic")
+                                            .lineHeight("line_height")
+                                            .locales(
+                                                Locales.builder()
+                                                    .putAdditionalProperty(
+                                                        "foo",
+                                                        JsonValue.from(
+                                                            mapOf("content" to "content")
+                                                        ),
+                                                    )
+                                                    .build()
+                                            )
+                                            .strikethrough("strikethrough")
+                                            .textStyle(TextStyle.TEXT)
+                                            .underline("underline")
                                             .type(ElementalTextNodeWithType.Type.TEXT)
                                             .build()
                                     )

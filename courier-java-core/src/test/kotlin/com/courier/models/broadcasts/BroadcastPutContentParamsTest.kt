@@ -2,8 +2,12 @@
 
 package com.courier.models.broadcasts
 
+import com.courier.core.JsonValue
 import com.courier.models.ElementalMetaNodeWithType
+import com.courier.models.ElementalTextNode
 import com.courier.models.ElementalTextNodeWithType
+import com.courier.models.Locales
+import com.courier.models.TextStyle
 import com.courier.models.notifications.NotificationContentPutRequest
 import com.courier.models.notifications.NotificationTemplateState
 import org.assertj.core.api.Assertions.assertThat
@@ -21,11 +25,39 @@ internal class BroadcastPutContentParamsTest {
                         NotificationContentPutRequest.Content.builder()
                             .addElement(
                                 ElementalMetaNodeWithType.builder()
+                                    .addChannel("string")
+                                    .if_("if")
+                                    .loop("loop")
+                                    .ref("ref")
+                                    .title("Spring Sale is here")
                                     .type(ElementalMetaNodeWithType.Type.META)
                                     .build()
                             )
                             .addElement(
                                 ElementalTextNodeWithType.builder()
+                                    .addChannel("string")
+                                    .if_("if")
+                                    .loop("loop")
+                                    .ref("ref")
+                                    .align(ElementalTextNode.Align.LEFT)
+                                    .bold("bold")
+                                    .color("color")
+                                    .content("Hello! Check out our spring sale.")
+                                    .fontSize("font_size")
+                                    .format(ElementalTextNode.Format.MARKDOWN)
+                                    .italic("italic")
+                                    .lineHeight("line_height")
+                                    .locales(
+                                        Locales.builder()
+                                            .putAdditionalProperty(
+                                                "foo",
+                                                JsonValue.from(mapOf("content" to "content")),
+                                            )
+                                            .build()
+                                    )
+                                    .strikethrough("strikethrough")
+                                    .textStyle(TextStyle.TEXT)
+                                    .underline("underline")
                                     .type(ElementalTextNodeWithType.Type.TEXT)
                                     .build()
                             )
@@ -71,11 +103,39 @@ internal class BroadcastPutContentParamsTest {
                             NotificationContentPutRequest.Content.builder()
                                 .addElement(
                                     ElementalMetaNodeWithType.builder()
+                                        .addChannel("string")
+                                        .if_("if")
+                                        .loop("loop")
+                                        .ref("ref")
+                                        .title("Spring Sale is here")
                                         .type(ElementalMetaNodeWithType.Type.META)
                                         .build()
                                 )
                                 .addElement(
                                     ElementalTextNodeWithType.builder()
+                                        .addChannel("string")
+                                        .if_("if")
+                                        .loop("loop")
+                                        .ref("ref")
+                                        .align(ElementalTextNode.Align.LEFT)
+                                        .bold("bold")
+                                        .color("color")
+                                        .content("Hello! Check out our spring sale.")
+                                        .fontSize("font_size")
+                                        .format(ElementalTextNode.Format.MARKDOWN)
+                                        .italic("italic")
+                                        .lineHeight("line_height")
+                                        .locales(
+                                            Locales.builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from(mapOf("content" to "content")),
+                                                )
+                                                .build()
+                                        )
+                                        .strikethrough("strikethrough")
+                                        .textStyle(TextStyle.TEXT)
+                                        .underline("underline")
                                         .type(ElementalTextNodeWithType.Type.TEXT)
                                         .build()
                                 )
@@ -96,11 +156,39 @@ internal class BroadcastPutContentParamsTest {
                         NotificationContentPutRequest.Content.builder()
                             .addElement(
                                 ElementalMetaNodeWithType.builder()
+                                    .addChannel("string")
+                                    .if_("if")
+                                    .loop("loop")
+                                    .ref("ref")
+                                    .title("Spring Sale is here")
                                     .type(ElementalMetaNodeWithType.Type.META)
                                     .build()
                             )
                             .addElement(
                                 ElementalTextNodeWithType.builder()
+                                    .addChannel("string")
+                                    .if_("if")
+                                    .loop("loop")
+                                    .ref("ref")
+                                    .align(ElementalTextNode.Align.LEFT)
+                                    .bold("bold")
+                                    .color("color")
+                                    .content("Hello! Check out our spring sale.")
+                                    .fontSize("font_size")
+                                    .format(ElementalTextNode.Format.MARKDOWN)
+                                    .italic("italic")
+                                    .lineHeight("line_height")
+                                    .locales(
+                                        Locales.builder()
+                                            .putAdditionalProperty(
+                                                "foo",
+                                                JsonValue.from(mapOf("content" to "content")),
+                                            )
+                                            .build()
+                                    )
+                                    .strikethrough("strikethrough")
+                                    .textStyle(TextStyle.TEXT)
+                                    .underline("underline")
                                     .type(ElementalTextNodeWithType.Type.TEXT)
                                     .build()
                             )

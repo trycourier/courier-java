@@ -18,6 +18,26 @@ internal class ElementalNodeNonChannelTest {
     fun ofUnionMember0() {
         val unionMember0 =
             ElementalNodeNonChannel.UnionMember0.builder()
+                .addChannel("string")
+                .if_("if")
+                .loop("loop")
+                .ref("ref")
+                .align(ElementalTextNode.Align.LEFT)
+                .bold("bold")
+                .color("color")
+                .content("content")
+                .fontSize("font_size")
+                .format(ElementalTextNode.Format.MARKDOWN)
+                .italic("italic")
+                .lineHeight("line_height")
+                .locales(
+                    Locales.builder()
+                        .putAdditionalProperty("foo", JsonValue.from(mapOf("content" to "content")))
+                        .build()
+                )
+                .strikethrough("strikethrough")
+                .textStyle(TextStyle.TEXT)
+                .underline("underline")
                 .type(ElementalNodeNonChannel.UnionMember0.Type.TEXT)
                 .build()
 
@@ -38,6 +58,29 @@ internal class ElementalNodeNonChannelTest {
         val elementalNodeNonChannel =
             ElementalNodeNonChannel.ofUnionMember0(
                 ElementalNodeNonChannel.UnionMember0.builder()
+                    .addChannel("string")
+                    .if_("if")
+                    .loop("loop")
+                    .ref("ref")
+                    .align(ElementalTextNode.Align.LEFT)
+                    .bold("bold")
+                    .color("color")
+                    .content("content")
+                    .fontSize("font_size")
+                    .format(ElementalTextNode.Format.MARKDOWN)
+                    .italic("italic")
+                    .lineHeight("line_height")
+                    .locales(
+                        Locales.builder()
+                            .putAdditionalProperty(
+                                "foo",
+                                JsonValue.from(mapOf("content" to "content")),
+                            )
+                            .build()
+                    )
+                    .strikethrough("strikethrough")
+                    .textStyle(TextStyle.TEXT)
+                    .underline("underline")
                     .type(ElementalNodeNonChannel.UnionMember0.Type.TEXT)
                     .build()
             )
@@ -55,6 +98,11 @@ internal class ElementalNodeNonChannelTest {
     fun ofUnionMember1() {
         val unionMember1 =
             ElementalNodeNonChannel.UnionMember1.builder()
+                .addChannel("string")
+                .if_("if")
+                .loop("loop")
+                .ref("ref")
+                .title("title")
                 .type(ElementalNodeNonChannel.UnionMember1.Type.META)
                 .build()
 
@@ -75,6 +123,11 @@ internal class ElementalNodeNonChannelTest {
         val elementalNodeNonChannel =
             ElementalNodeNonChannel.ofUnionMember1(
                 ElementalNodeNonChannel.UnionMember1.builder()
+                    .addChannel("string")
+                    .if_("if")
+                    .loop("loop")
+                    .ref("ref")
+                    .title("title")
                     .type(ElementalNodeNonChannel.UnionMember1.Type.META)
                     .build()
             )
@@ -92,6 +145,18 @@ internal class ElementalNodeNonChannelTest {
     fun ofUnionMember2() {
         val unionMember2 =
             ElementalNodeNonChannel.UnionMember2.builder()
+                .addChannel("string")
+                .if_("if")
+                .loop("loop")
+                .ref("ref")
+                .src("src")
+                .align(Alignment.CENTER)
+                .altText("alt_text")
+                .borderColor("border_color")
+                .borderSize("border_size")
+                .href("href")
+                .padding("padding")
+                .width("width")
                 .type(ElementalNodeNonChannel.UnionMember2.Type.IMAGE)
                 .build()
 
@@ -112,6 +177,18 @@ internal class ElementalNodeNonChannelTest {
         val elementalNodeNonChannel =
             ElementalNodeNonChannel.ofUnionMember2(
                 ElementalNodeNonChannel.UnionMember2.builder()
+                    .addChannel("string")
+                    .if_("if")
+                    .loop("loop")
+                    .ref("ref")
+                    .src("src")
+                    .align(Alignment.CENTER)
+                    .altText("alt_text")
+                    .borderColor("border_color")
+                    .borderSize("border_size")
+                    .href("href")
+                    .padding("padding")
+                    .width("width")
                     .type(ElementalNodeNonChannel.UnionMember2.Type.IMAGE)
                     .build()
             )
@@ -129,6 +206,26 @@ internal class ElementalNodeNonChannelTest {
     fun ofUnionMember3() {
         val unionMember3 =
             ElementalNodeNonChannel.UnionMember3.builder()
+                .addChannel("string")
+                .if_("if")
+                .loop("loop")
+                .ref("ref")
+                .content("content")
+                .href("href")
+                .actionId("action_id")
+                .align(Alignment.CENTER)
+                .backgroundColor("background_color")
+                .borderRadius("border_radius")
+                .borderSize("border_size")
+                .disableTracking(true)
+                .fontSize("font_size")
+                .locales(
+                    Locales.builder()
+                        .putAdditionalProperty("foo", JsonValue.from(mapOf("content" to "content")))
+                        .build()
+                )
+                .padding("padding")
+                .style(ElementalActionNode.Style.BUTTON)
                 .type(ElementalNodeNonChannel.UnionMember3.Type.ACTION)
                 .build()
 
@@ -149,6 +246,29 @@ internal class ElementalNodeNonChannelTest {
         val elementalNodeNonChannel =
             ElementalNodeNonChannel.ofUnionMember3(
                 ElementalNodeNonChannel.UnionMember3.builder()
+                    .addChannel("string")
+                    .if_("if")
+                    .loop("loop")
+                    .ref("ref")
+                    .content("content")
+                    .href("href")
+                    .actionId("action_id")
+                    .align(Alignment.CENTER)
+                    .backgroundColor("background_color")
+                    .borderRadius("border_radius")
+                    .borderSize("border_size")
+                    .disableTracking(true)
+                    .fontSize("font_size")
+                    .locales(
+                        Locales.builder()
+                            .putAdditionalProperty(
+                                "foo",
+                                JsonValue.from(mapOf("content" to "content")),
+                            )
+                            .build()
+                    )
+                    .padding("padding")
+                    .style(ElementalActionNode.Style.BUTTON)
                     .type(ElementalNodeNonChannel.UnionMember3.Type.ACTION)
                     .build()
             )
@@ -166,6 +286,11 @@ internal class ElementalNodeNonChannelTest {
     fun ofUnionMember4() {
         val unionMember4 =
             ElementalNodeNonChannel.UnionMember4.builder()
+                .addChannel("string")
+                .if_("if")
+                .loop("loop")
+                .ref("ref")
+                .color("color")
                 .type(ElementalNodeNonChannel.UnionMember4.Type.DIVIDER)
                 .build()
 
@@ -186,6 +311,11 @@ internal class ElementalNodeNonChannelTest {
         val elementalNodeNonChannel =
             ElementalNodeNonChannel.ofUnionMember4(
                 ElementalNodeNonChannel.UnionMember4.builder()
+                    .addChannel("string")
+                    .if_("if")
+                    .loop("loop")
+                    .ref("ref")
+                    .color("color")
                     .type(ElementalNodeNonChannel.UnionMember4.Type.DIVIDER)
                     .build()
             )
@@ -203,6 +333,21 @@ internal class ElementalNodeNonChannelTest {
     fun ofUnionMember5() {
         val unionMember5 =
             ElementalNodeNonChannel.UnionMember5.builder()
+                .addChannel("string")
+                .if_("if")
+                .loop("loop")
+                .ref("ref")
+                .content("content")
+                .align(Alignment.CENTER)
+                .borderColor("border_color")
+                .fontSize("font_size")
+                .lineHeight("line_height")
+                .locales(
+                    Locales.builder()
+                        .putAdditionalProperty("foo", JsonValue.from(mapOf("content" to "content")))
+                        .build()
+                )
+                .textStyle(TextStyle.TEXT)
                 .type(ElementalNodeNonChannel.UnionMember5.Type.QUOTE)
                 .build()
 
@@ -223,6 +368,24 @@ internal class ElementalNodeNonChannelTest {
         val elementalNodeNonChannel =
             ElementalNodeNonChannel.ofUnionMember5(
                 ElementalNodeNonChannel.UnionMember5.builder()
+                    .addChannel("string")
+                    .if_("if")
+                    .loop("loop")
+                    .ref("ref")
+                    .content("content")
+                    .align(Alignment.CENTER)
+                    .borderColor("border_color")
+                    .fontSize("font_size")
+                    .lineHeight("line_height")
+                    .locales(
+                        Locales.builder()
+                            .putAdditionalProperty(
+                                "foo",
+                                JsonValue.from(mapOf("content" to "content")),
+                            )
+                            .build()
+                    )
+                    .textStyle(TextStyle.TEXT)
                     .type(ElementalNodeNonChannel.UnionMember5.Type.QUOTE)
                     .build()
             )
@@ -240,6 +403,16 @@ internal class ElementalNodeNonChannelTest {
     fun ofUnionMember6() {
         val unionMember6 =
             ElementalNodeNonChannel.UnionMember6.builder()
+                .addChannel("string")
+                .if_("if")
+                .loop("loop")
+                .ref("ref")
+                .content("content")
+                .locales(
+                    Locales.builder()
+                        .putAdditionalProperty("foo", JsonValue.from(mapOf("content" to "content")))
+                        .build()
+                )
                 .type(ElementalNodeNonChannel.UnionMember6.Type.HTML)
                 .build()
 
@@ -260,6 +433,19 @@ internal class ElementalNodeNonChannelTest {
         val elementalNodeNonChannel =
             ElementalNodeNonChannel.ofUnionMember6(
                 ElementalNodeNonChannel.UnionMember6.builder()
+                    .addChannel("string")
+                    .if_("if")
+                    .loop("loop")
+                    .ref("ref")
+                    .content("content")
+                    .locales(
+                        Locales.builder()
+                            .putAdditionalProperty(
+                                "foo",
+                                JsonValue.from(mapOf("content" to "content")),
+                            )
+                            .build()
+                    )
                     .type(ElementalNodeNonChannel.UnionMember6.Type.HTML)
                     .build()
             )

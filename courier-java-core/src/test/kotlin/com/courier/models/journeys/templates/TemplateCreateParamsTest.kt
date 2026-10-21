@@ -2,9 +2,15 @@
 
 package com.courier.models.journeys.templates
 
+import com.courier.core.JsonValue
 import com.courier.core.http.Headers
+import com.courier.models.ElementalChannelNode
 import com.courier.models.ElementalChannelNodeWithType
+import com.courier.models.ElementalNodeNonChannel
+import com.courier.models.ElementalTextNode
 import com.courier.models.ElementalTextNodeWithType
+import com.courier.models.Locales
+import com.courier.models.TextStyle
 import com.courier.models.journeys.JourneyTemplateCreateRequest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -31,6 +37,55 @@ internal class TemplateCreateParamsTest {
                                 JourneyTemplateCreateRequest.Notification.Content.builder()
                                     .addElement(
                                         ElementalChannelNodeWithType.builder()
+                                            .addChannel("string")
+                                            .if_("if")
+                                            .loop("loop")
+                                            .ref("ref")
+                                            .channel("email")
+                                            .addElement(
+                                                ElementalNodeNonChannel.UnionMember0.builder()
+                                                    .addChannel("string")
+                                                    .if_("if")
+                                                    .loop("loop")
+                                                    .ref("ref")
+                                                    .align(ElementalTextNode.Align.LEFT)
+                                                    .bold("bold")
+                                                    .color("color")
+                                                    .content("Welcome!")
+                                                    .fontSize("font_size")
+                                                    .format(ElementalTextNode.Format.MARKDOWN)
+                                                    .italic("italic")
+                                                    .lineHeight("line_height")
+                                                    .locales(
+                                                        Locales.builder()
+                                                            .putAdditionalProperty(
+                                                                "foo",
+                                                                JsonValue.from(
+                                                                    mapOf("content" to "content")
+                                                                ),
+                                                            )
+                                                            .build()
+                                                    )
+                                                    .strikethrough("strikethrough")
+                                                    .textStyle(TextStyle.TEXT)
+                                                    .underline("underline")
+                                                    .type(
+                                                        ElementalNodeNonChannel.UnionMember0.Type
+                                                            .TEXT
+                                                    )
+                                                    .build()
+                                            )
+                                            .fontSize("font_size")
+                                            .lineHeight("line_height")
+                                            .padding("padding")
+                                            .raw(
+                                                ElementalChannelNode.Raw.builder()
+                                                    .putAdditionalProperty(
+                                                        "foo",
+                                                        JsonValue.from("bar"),
+                                                    )
+                                                    .build()
+                                            )
                                             .type(ElementalChannelNodeWithType.Type.CHANNEL)
                                             .build()
                                     )
@@ -124,6 +179,58 @@ internal class TemplateCreateParamsTest {
                                     JourneyTemplateCreateRequest.Notification.Content.builder()
                                         .addElement(
                                             ElementalChannelNodeWithType.builder()
+                                                .addChannel("string")
+                                                .if_("if")
+                                                .loop("loop")
+                                                .ref("ref")
+                                                .channel("email")
+                                                .addElement(
+                                                    ElementalNodeNonChannel.UnionMember0.builder()
+                                                        .addChannel("string")
+                                                        .if_("if")
+                                                        .loop("loop")
+                                                        .ref("ref")
+                                                        .align(ElementalTextNode.Align.LEFT)
+                                                        .bold("bold")
+                                                        .color("color")
+                                                        .content("Welcome!")
+                                                        .fontSize("font_size")
+                                                        .format(ElementalTextNode.Format.MARKDOWN)
+                                                        .italic("italic")
+                                                        .lineHeight("line_height")
+                                                        .locales(
+                                                            Locales.builder()
+                                                                .putAdditionalProperty(
+                                                                    "foo",
+                                                                    JsonValue.from(
+                                                                        mapOf(
+                                                                            "content" to "content"
+                                                                        )
+                                                                    ),
+                                                                )
+                                                                .build()
+                                                        )
+                                                        .strikethrough("strikethrough")
+                                                        .textStyle(TextStyle.TEXT)
+                                                        .underline("underline")
+                                                        .type(
+                                                            ElementalNodeNonChannel.UnionMember0
+                                                                .Type
+                                                                .TEXT
+                                                        )
+                                                        .build()
+                                                )
+                                                .fontSize("font_size")
+                                                .lineHeight("line_height")
+                                                .padding("padding")
+                                                .raw(
+                                                    ElementalChannelNode.Raw.builder()
+                                                        .putAdditionalProperty(
+                                                            "foo",
+                                                            JsonValue.from("bar"),
+                                                        )
+                                                        .build()
+                                                )
                                                 .type(ElementalChannelNodeWithType.Type.CHANNEL)
                                                 .build()
                                         )
@@ -228,6 +335,58 @@ internal class TemplateCreateParamsTest {
                                     JourneyTemplateCreateRequest.Notification.Content.builder()
                                         .addElement(
                                             ElementalChannelNodeWithType.builder()
+                                                .addChannel("string")
+                                                .if_("if")
+                                                .loop("loop")
+                                                .ref("ref")
+                                                .channel("email")
+                                                .addElement(
+                                                    ElementalNodeNonChannel.UnionMember0.builder()
+                                                        .addChannel("string")
+                                                        .if_("if")
+                                                        .loop("loop")
+                                                        .ref("ref")
+                                                        .align(ElementalTextNode.Align.LEFT)
+                                                        .bold("bold")
+                                                        .color("color")
+                                                        .content("Welcome!")
+                                                        .fontSize("font_size")
+                                                        .format(ElementalTextNode.Format.MARKDOWN)
+                                                        .italic("italic")
+                                                        .lineHeight("line_height")
+                                                        .locales(
+                                                            Locales.builder()
+                                                                .putAdditionalProperty(
+                                                                    "foo",
+                                                                    JsonValue.from(
+                                                                        mapOf(
+                                                                            "content" to "content"
+                                                                        )
+                                                                    ),
+                                                                )
+                                                                .build()
+                                                        )
+                                                        .strikethrough("strikethrough")
+                                                        .textStyle(TextStyle.TEXT)
+                                                        .underline("underline")
+                                                        .type(
+                                                            ElementalNodeNonChannel.UnionMember0
+                                                                .Type
+                                                                .TEXT
+                                                        )
+                                                        .build()
+                                                )
+                                                .fontSize("font_size")
+                                                .lineHeight("line_height")
+                                                .padding("padding")
+                                                .raw(
+                                                    ElementalChannelNode.Raw.builder()
+                                                        .putAdditionalProperty(
+                                                            "foo",
+                                                            JsonValue.from("bar"),
+                                                        )
+                                                        .build()
+                                                )
                                                 .type(ElementalChannelNodeWithType.Type.CHANNEL)
                                                 .build()
                                         )
@@ -274,6 +433,55 @@ internal class TemplateCreateParamsTest {
                                 JourneyTemplateCreateRequest.Notification.Content.builder()
                                     .addElement(
                                         ElementalChannelNodeWithType.builder()
+                                            .addChannel("string")
+                                            .if_("if")
+                                            .loop("loop")
+                                            .ref("ref")
+                                            .channel("email")
+                                            .addElement(
+                                                ElementalNodeNonChannel.UnionMember0.builder()
+                                                    .addChannel("string")
+                                                    .if_("if")
+                                                    .loop("loop")
+                                                    .ref("ref")
+                                                    .align(ElementalTextNode.Align.LEFT)
+                                                    .bold("bold")
+                                                    .color("color")
+                                                    .content("Welcome!")
+                                                    .fontSize("font_size")
+                                                    .format(ElementalTextNode.Format.MARKDOWN)
+                                                    .italic("italic")
+                                                    .lineHeight("line_height")
+                                                    .locales(
+                                                        Locales.builder()
+                                                            .putAdditionalProperty(
+                                                                "foo",
+                                                                JsonValue.from(
+                                                                    mapOf("content" to "content")
+                                                                ),
+                                                            )
+                                                            .build()
+                                                    )
+                                                    .strikethrough("strikethrough")
+                                                    .textStyle(TextStyle.TEXT)
+                                                    .underline("underline")
+                                                    .type(
+                                                        ElementalNodeNonChannel.UnionMember0.Type
+                                                            .TEXT
+                                                    )
+                                                    .build()
+                                            )
+                                            .fontSize("font_size")
+                                            .lineHeight("line_height")
+                                            .padding("padding")
+                                            .raw(
+                                                ElementalChannelNode.Raw.builder()
+                                                    .putAdditionalProperty(
+                                                        "foo",
+                                                        JsonValue.from("bar"),
+                                                    )
+                                                    .build()
+                                            )
                                             .type(ElementalChannelNodeWithType.Type.CHANNEL)
                                             .build()
                                     )
