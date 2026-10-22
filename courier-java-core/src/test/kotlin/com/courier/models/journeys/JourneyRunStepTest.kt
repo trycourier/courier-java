@@ -14,6 +14,8 @@ internal class JourneyRunStepTest {
         val journeyRunStep =
             JourneyRunStep.builder()
                 .action("action")
+                .error(JourneyRunStep.Error.builder().message("message").build())
+                .skipReason("skip_reason")
                 .status("status")
                 .createdAt("created_at")
                 .messageId("message_id")
@@ -22,6 +24,9 @@ internal class JourneyRunStepTest {
                 .build()
 
         assertThat(journeyRunStep.action()).isEqualTo("action")
+        assertThat(journeyRunStep.error())
+            .contains(JourneyRunStep.Error.builder().message("message").build())
+        assertThat(journeyRunStep.skipReason()).contains("skip_reason")
         assertThat(journeyRunStep.status()).isEqualTo("status")
         assertThat(journeyRunStep.createdAt()).contains("created_at")
         assertThat(journeyRunStep.messageId()).contains("message_id")
@@ -35,6 +40,8 @@ internal class JourneyRunStepTest {
         val journeyRunStep =
             JourneyRunStep.builder()
                 .action("action")
+                .error(JourneyRunStep.Error.builder().message("message").build())
+                .skipReason("skip_reason")
                 .status("status")
                 .createdAt("created_at")
                 .messageId("message_id")
