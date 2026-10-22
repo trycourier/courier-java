@@ -16,6 +16,8 @@ internal class JourneyRunStepsResponseTest {
                 .addStep(
                     JourneyRunStep.builder()
                         .action("action")
+                        .error(JourneyRunStep.Error.builder().message("message").build())
+                        .skipReason("skip_reason")
                         .status("status")
                         .createdAt("created_at")
                         .messageId("message_id")
@@ -29,6 +31,8 @@ internal class JourneyRunStepsResponseTest {
             .containsExactly(
                 JourneyRunStep.builder()
                     .action("action")
+                    .error(JourneyRunStep.Error.builder().message("message").build())
+                    .skipReason("skip_reason")
                     .status("status")
                     .createdAt("created_at")
                     .messageId("message_id")
@@ -46,6 +50,8 @@ internal class JourneyRunStepsResponseTest {
                 .addStep(
                     JourneyRunStep.builder()
                         .action("action")
+                        .error(JourneyRunStep.Error.builder().message("message").build())
+                        .skipReason("skip_reason")
                         .status("status")
                         .createdAt("created_at")
                         .messageId("message_id")
