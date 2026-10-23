@@ -1,5 +1,17 @@
 # Changelog
 
+## [6.13.0](https://github.com/trycourier/courier-java/compare/v6.12.0...v6.13.0) (2026-10-23)
+
+
+### Features
+
+* **api:** journey run steps return error and skip_reason ([#183](https://github.com/trycourier/courier-java/issues/183)) ([026b2d0](https://github.com/trycourier/courier-java/commit/026b2d0c625ef2b0eba82d99ea339967cde80a91))
+
+
+### Chores
+
+* **api:** regenerate SDK ([#185](https://github.com/trycourier/courier-java/issues/185)) ([733ae5d](https://github.com/trycourier/courier-java/commit/733ae5d96172d98a6f8939ba4fe0c4e48cb24bc4))
+
 ## [6.12.0](https://github.com/trycourier/courier-java/compare/v6.11.0...v6.12.0) (2026-10-21)
 
 
