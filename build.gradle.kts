@@ -8,7 +8,7 @@ repositories {
 
 allprojects {
     group = "com.courier"
-    version = "6.13.0" // x-release-please-version
+    version = "7.0.0" // x-release-please-version
 }
 
 subprojects {

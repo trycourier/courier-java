@@ -1,5 +1,16 @@
 # Changelog
 
+## [7.0.0](https://github.com/trycourier/courier-java/compare/v6.13.0...v7.0.0) (2026-10-29)
+
+
+### ⚠ BREAKING CHANGES
+
+* **api:** PATCH /providers/{id} takes JSON Patch operations [C-22022] ([#186](https://github.com/trycourier/courier-java/issues/186))
+
+### Features
+
+* **api:** PATCH /providers/{id} takes JSON Patch operations [C-22022] ([#186](https://github.com/trycourier/courier-java/issues/186)) ([28a1814](https://github.com/trycourier/courier-java/commit/28a1814d7f4cd459f3f4a878484c35771d3fa5ef))
+
 ## [6.13.0](https://github.com/trycourier/courier-java/compare/v6.12.0...v6.13.0) (2026-10-23)
 
 
