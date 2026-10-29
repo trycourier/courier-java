@@ -12,20 +12,43 @@ internal class ProviderPatchParamsTest {
     fun create() {
         ProviderPatchParams.builder()
             .id("id")
-            .alias("alias")
-            .provider("provider")
-            .settings(
-                ProviderPatchParams.Settings.builder()
-                    .putAdditionalProperty("api_key", JsonValue.from("bar"))
+            .addPatch(
+                ProviderPatchParams.Patch.builder()
+                    .op(ProviderPatchParams.Patch.Op.REPLACE)
+                    .path("/title")
+                    .from("from")
+                    .value(JsonValue.from("Production SendGrid"))
                     .build()
             )
-            .title("Production SendGrid")
+            .addPatch(
+                ProviderPatchParams.Patch.builder()
+                    .op(ProviderPatchParams.Patch.Op.REPLACE)
+                    .path("/settings/api_key")
+                    .from("from")
+                    .value(JsonValue.from("SG.xxxxxxxx"))
+                    .build()
+            )
             .build()
     }
 
     @Test
     fun pathParams() {
-        val params = ProviderPatchParams.builder().id("id").build()
+        val params =
+            ProviderPatchParams.builder()
+                .id("id")
+                .addPatch(
+                    ProviderPatchParams.Patch.builder()
+                        .op(ProviderPatchParams.Patch.Op.REPLACE)
+                        .path("/title")
+                        .build()
+                )
+                .addPatch(
+                    ProviderPatchParams.Patch.builder()
+                        .op(ProviderPatchParams.Patch.Op.REPLACE)
+                        .path("/settings/api_key")
+                        .build()
+                )
+                .build()
 
         assertThat(params._pathParam(0)).isEqualTo("id")
         // out-of-bound path param
@@ -37,33 +60,74 @@ internal class ProviderPatchParamsTest {
         val params =
             ProviderPatchParams.builder()
                 .id("id")
-                .alias("alias")
-                .provider("provider")
-                .settings(
-                    ProviderPatchParams.Settings.builder()
-                        .putAdditionalProperty("api_key", JsonValue.from("bar"))
+                .addPatch(
+                    ProviderPatchParams.Patch.builder()
+                        .op(ProviderPatchParams.Patch.Op.REPLACE)
+                        .path("/title")
+                        .from("from")
+                        .value(JsonValue.from("Production SendGrid"))
                         .build()
                 )
-                .title("Production SendGrid")
+                .addPatch(
+                    ProviderPatchParams.Patch.builder()
+                        .op(ProviderPatchParams.Patch.Op.REPLACE)
+                        .path("/settings/api_key")
+                        .from("from")
+                        .value(JsonValue.from("SG.xxxxxxxx"))
+                        .build()
+                )
                 .build()
 
         val body = params._body()
 
-        assertThat(body.alias()).contains("alias")
-        assertThat(body.provider()).contains("provider")
-        assertThat(body.settings())
-            .contains(
-                ProviderPatchParams.Settings.builder()
-                    .putAdditionalProperty("api_key", JsonValue.from("bar"))
-                    .build()
+        assertThat(body.patch())
+            .containsExactly(
+                ProviderPatchParams.Patch.builder()
+                    .op(ProviderPatchParams.Patch.Op.REPLACE)
+                    .path("/title")
+                    .from("from")
+                    .value(JsonValue.from("Production SendGrid"))
+                    .build(),
+                ProviderPatchParams.Patch.builder()
+                    .op(ProviderPatchParams.Patch.Op.REPLACE)
+                    .path("/settings/api_key")
+                    .from("from")
+                    .value(JsonValue.from("SG.xxxxxxxx"))
+                    .build(),
             )
-        assertThat(body.title()).contains("Production SendGrid")
     }
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = ProviderPatchParams.builder().id("id").build()
+        val params =
+            ProviderPatchParams.builder()
+                .id("id")
+                .addPatch(
+                    ProviderPatchParams.Patch.builder()
+                        .op(ProviderPatchParams.Patch.Op.REPLACE)
+                        .path("/title")
+                        .build()
+                )
+                .addPatch(
+                    ProviderPatchParams.Patch.builder()
+                        .op(ProviderPatchParams.Patch.Op.REPLACE)
+                        .path("/settings/api_key")
+                        .build()
+                )
+                .build()
 
         val body = params._body()
+
+        assertThat(body.patch())
+            .containsExactly(
+                ProviderPatchParams.Patch.builder()
+                    .op(ProviderPatchParams.Patch.Op.REPLACE)
+                    .path("/title")
+                    .build(),
+                ProviderPatchParams.Patch.builder()
+                    .op(ProviderPatchParams.Patch.Op.REPLACE)
+                    .path("/settings/api_key")
+                    .build(),
+            )
     }
 }

@@ -168,37 +168,29 @@ interface ProviderServiceAsync {
         delete(id, ProviderDeleteParams.none(), requestOptions)
 
     /**
-     * Updates part of a provider's configuration and keeps every field you omit. Settings merge
-     * into the stored settings key by key, and a setting sent as null is removed.
+     * Applies JSON Patch (RFC 6902) operations to a provider configuration and keeps every field
+     * the operations don't touch. Paths address the provider as it is returned: /title, /alias and
+     * /settings/<key>. The operations apply in order, and if one fails, nothing is saved.
      */
-    fun patch(id: String): CompletableFuture<Provider> = patch(id, ProviderPatchParams.none())
+    fun patch(id: String, params: ProviderPatchParams): CompletableFuture<Provider> =
+        patch(id, params, RequestOptions.none())
 
     /** @see patch */
     fun patch(
         id: String,
-        params: ProviderPatchParams = ProviderPatchParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<Provider> = patch(params.toBuilder().id(id).build(), requestOptions)
-
-    /** @see patch */
-    fun patch(
-        id: String,
-        params: ProviderPatchParams = ProviderPatchParams.none(),
-    ): CompletableFuture<Provider> = patch(id, params, RequestOptions.none())
-
-    /** @see patch */
-    fun patch(
         params: ProviderPatchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<Provider>
+    ): CompletableFuture<Provider> = patch(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see patch */
     fun patch(params: ProviderPatchParams): CompletableFuture<Provider> =
         patch(params, RequestOptions.none())
 
     /** @see patch */
-    fun patch(id: String, requestOptions: RequestOptions): CompletableFuture<Provider> =
-        patch(id, ProviderPatchParams.none(), requestOptions)
+    fun patch(
+        params: ProviderPatchParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Provider>
 
     /**
      * A view of [ProviderServiceAsync] that provides access to raw HTTP responses for each method.
@@ -363,28 +355,18 @@ interface ProviderServiceAsync {
          * Returns a raw HTTP response for `patch /providers/{id}`, but is otherwise the same as
          * [ProviderServiceAsync.patch].
          */
-        fun patch(id: String): CompletableFuture<HttpResponseFor<Provider>> =
-            patch(id, ProviderPatchParams.none())
-
-        /** @see patch */
         fun patch(
             id: String,
-            params: ProviderPatchParams = ProviderPatchParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<Provider>> =
-            patch(params.toBuilder().id(id).build(), requestOptions)
-
-        /** @see patch */
-        fun patch(
-            id: String,
-            params: ProviderPatchParams = ProviderPatchParams.none(),
+            params: ProviderPatchParams,
         ): CompletableFuture<HttpResponseFor<Provider>> = patch(id, params, RequestOptions.none())
 
         /** @see patch */
         fun patch(
+            id: String,
             params: ProviderPatchParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<Provider>>
+        ): CompletableFuture<HttpResponseFor<Provider>> =
+            patch(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see patch */
         fun patch(params: ProviderPatchParams): CompletableFuture<HttpResponseFor<Provider>> =
@@ -392,9 +374,8 @@ interface ProviderServiceAsync {
 
         /** @see patch */
         fun patch(
-            id: String,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<Provider>> =
-            patch(id, ProviderPatchParams.none(), requestOptions)
+            params: ProviderPatchParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<Provider>>
     }
 }
