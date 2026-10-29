@@ -103,14 +103,22 @@ internal class ProviderServiceTest {
             providerService.patch(
                 ProviderPatchParams.builder()
                     .id("id")
-                    .alias("alias")
-                    .provider("provider")
-                    .settings(
-                        ProviderPatchParams.Settings.builder()
-                            .putAdditionalProperty("api_key", JsonValue.from("bar"))
+                    .addPatch(
+                        ProviderPatchParams.Patch.builder()
+                            .op(ProviderPatchParams.Patch.Op.REPLACE)
+                            .path("/title")
+                            .from("from")
+                            .value(JsonValue.from("Production SendGrid"))
                             .build()
                     )
-                    .title("Production SendGrid")
+                    .addPatch(
+                        ProviderPatchParams.Patch.builder()
+                            .op(ProviderPatchParams.Patch.Op.REPLACE)
+                            .path("/settings/api_key")
+                            .from("from")
+                            .value(JsonValue.from("SG.xxxxxxxx"))
+                            .build()
+                    )
                     .build()
             )
 
