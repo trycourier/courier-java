@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.0.1](https://github.com/trycourier/courier-java/compare/v7.0.0...v7.0.1) (2026-10-29)
+
+
+### Documentation
+
+* **api:** add gpt-6.1-terra to AI node model ids [C-22053] ([#188](https://github.com/trycourier/courier-java/issues/188)) ([de4a32d](https://github.com/trycourier/courier-java/commit/de4a32d657856f1282fb6fd4fbcf4b6475ca61bd))
+
 ## [7.0.0](https://github.com/trycourier/courier-java/compare/v6.13.0...v7.0.0) (2026-10-29)
 
 
