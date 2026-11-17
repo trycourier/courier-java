@@ -1,5 +1,18 @@
 # Changelog
 
+## [7.0.1](https://github.com/trycourier/courier-java/compare/v7.0.0...v7.0.1) (2026-11-17)
+
+
+### Chores
+
+* **api:** regenerate SDK ([#190](https://github.com/trycourier/courier-java/issues/190)) ([34dec72](https://github.com/trycourier/courier-java/commit/34dec7290e468120c779e93812ee30df86cdc149))
+
+
+### Documentation
+
+* **api:** add gpt-6.1-terra to AI node model ids [C-22053] ([#188](https://github.com/trycourier/courier-java/issues/188)) ([de4a32d](https://github.com/trycourier/courier-java/commit/de4a32d657856f1282fb6fd4fbcf4b6475ca61bd))
+* **api:** list Claude Fable 5.2 as a JourneyAINode model [C-22567] ([#191](https://github.com/trycourier/courier-java/issues/191)) ([b9e0a02](https://github.com/trycourier/courier-java/commit/b9e0a022cc5598988c60f276dc0563f505ee5d37))
+
 ## [7.0.0](https://github.com/trycourier/courier-java/compare/v6.13.0...v7.0.0) (2026-10-29)
 
 
