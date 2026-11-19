@@ -1,5 +1,17 @@
 # Changelog
 
+## [7.1.0](https://github.com/trycourier/courier-java/compare/v7.0.1...v7.1.0) (2026-11-19)
+
+
+### Features
+
+* **api:** add POST /feedback for agent and tool feedback [C-22903] ([#194](https://github.com/trycourier/courier-java/issues/194)) ([c962f24](https://github.com/trycourier/courier-java/commit/c962f24e96eec8ca94c0d1e7fb08832c96d57d4f))
+
+
+### Documentation
+
+* **api:** list GPT-6.2 Astra and Sol as JourneyAINode models [C-22881] ([#192](https://github.com/trycourier/courier-java/issues/192)) ([8491965](https://github.com/trycourier/courier-java/commit/8491965c71283a42b9c9356b79204793781d6071))
+
 ## [7.0.1](https://github.com/trycourier/courier-java/compare/v7.0.0...v7.0.1) (2026-11-17)
 
 
