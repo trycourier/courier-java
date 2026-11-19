@@ -20,6 +20,8 @@ import com.courier.services.blocking.BulkService
 import com.courier.services.blocking.BulkServiceImpl
 import com.courier.services.blocking.DigestService
 import com.courier.services.blocking.DigestServiceImpl
+import com.courier.services.blocking.FeedbackService
+import com.courier.services.blocking.FeedbackServiceImpl
 import com.courier.services.blocking.InboundService
 import com.courier.services.blocking.InboundServiceImpl
 import com.courier.services.blocking.JourneyService
@@ -102,6 +104,10 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
     private val brands: BrandService by lazy { BrandServiceImpl(clientOptionsWithUserAgent) }
 
     private val digests: DigestService by lazy { DigestServiceImpl(clientOptionsWithUserAgent) }
+
+    private val feedback: FeedbackService by lazy {
+        FeedbackServiceImpl(clientOptionsWithUserAgent)
+    }
 
     private val inbound: InboundService by lazy { InboundServiceImpl(clientOptionsWithUserAgent) }
 
@@ -192,6 +198,12 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
     override fun brands(): BrandService = brands
 
     override fun digests(): DigestService = digests
+
+    /**
+     * Report suspected bugs, confusing behavior and missing features in Courier, from an AI agent,
+     * a developer tool or by hand.
+     */
+    override fun feedback(): FeedbackService = feedback
 
     /** Record an inbound event that triggers the journeys and automations mapped to it. */
     override fun inbound(): InboundService = inbound
@@ -298,6 +310,10 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
 
         private val digests: DigestService.WithRawResponse by lazy {
             DigestServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val feedback: FeedbackService.WithRawResponse by lazy {
+            FeedbackServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
         private val inbound: InboundService.WithRawResponse by lazy {
@@ -407,6 +423,12 @@ class CourierClientImpl(private val clientOptions: ClientOptions) : CourierClien
         override fun brands(): BrandService.WithRawResponse = brands
 
         override fun digests(): DigestService.WithRawResponse = digests
+
+        /**
+         * Report suspected bugs, confusing behavior and missing features in Courier, from an AI
+         * agent, a developer tool or by hand.
+         */
+        override fun feedback(): FeedbackService.WithRawResponse = feedback
 
         /** Record an inbound event that triggers the journeys and automations mapped to it. */
         override fun inbound(): InboundService.WithRawResponse = inbound

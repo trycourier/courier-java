@@ -11,6 +11,7 @@ import com.courier.services.async.BrandServiceAsync
 import com.courier.services.async.BroadcastServiceAsync
 import com.courier.services.async.BulkServiceAsync
 import com.courier.services.async.DigestServiceAsync
+import com.courier.services.async.FeedbackServiceAsync
 import com.courier.services.async.InboundServiceAsync
 import com.courier.services.async.JourneyServiceAsync
 import com.courier.services.async.ListServiceAsync
@@ -116,6 +117,12 @@ interface CourierClientAsync {
     fun brands(): BrandServiceAsync
 
     fun digests(): DigestServiceAsync
+
+    /**
+     * Report suspected bugs, confusing behavior and missing features in Courier, from an AI agent,
+     * a developer tool or by hand.
+     */
+    fun feedback(): FeedbackServiceAsync
 
     /** Record an inbound event that triggers the journeys and automations mapped to it. */
     fun inbound(): InboundServiceAsync
@@ -254,6 +261,12 @@ interface CourierClientAsync {
         fun brands(): BrandServiceAsync.WithRawResponse
 
         fun digests(): DigestServiceAsync.WithRawResponse
+
+        /**
+         * Report suspected bugs, confusing behavior and missing features in Courier, from an AI
+         * agent, a developer tool or by hand.
+         */
+        fun feedback(): FeedbackServiceAsync.WithRawResponse
 
         /** Record an inbound event that triggers the journeys and automations mapped to it. */
         fun inbound(): InboundServiceAsync.WithRawResponse
