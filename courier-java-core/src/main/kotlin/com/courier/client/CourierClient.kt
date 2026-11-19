@@ -11,6 +11,7 @@ import com.courier.services.blocking.BrandService
 import com.courier.services.blocking.BroadcastService
 import com.courier.services.blocking.BulkService
 import com.courier.services.blocking.DigestService
+import com.courier.services.blocking.FeedbackService
 import com.courier.services.blocking.InboundService
 import com.courier.services.blocking.JourneyService
 import com.courier.services.blocking.ListService
@@ -116,6 +117,12 @@ interface CourierClient {
     fun brands(): BrandService
 
     fun digests(): DigestService
+
+    /**
+     * Report suspected bugs, confusing behavior and missing features in Courier, from an AI agent,
+     * a developer tool or by hand.
+     */
+    fun feedback(): FeedbackService
 
     /** Record an inbound event that triggers the journeys and automations mapped to it. */
     fun inbound(): InboundService
@@ -250,6 +257,12 @@ interface CourierClient {
         fun brands(): BrandService.WithRawResponse
 
         fun digests(): DigestService.WithRawResponse
+
+        /**
+         * Report suspected bugs, confusing behavior and missing features in Courier, from an AI
+         * agent, a developer tool or by hand.
+         */
+        fun feedback(): FeedbackService.WithRawResponse
 
         /** Record an inbound event that triggers the journeys and automations mapped to it. */
         fun inbound(): InboundService.WithRawResponse
