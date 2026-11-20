@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.1.1](https://github.com/trycourier/courier-java/compare/v7.1.0...v7.1.1) (2026-11-20)
+
+
+### Chores
+
+* add context7.json to claim the Context7 library ([#195](https://github.com/trycourier/courier-java/issues/195)) ([eacea08](https://github.com/trycourier/courier-java/commit/eacea082fb0aab0522d9f0b8edf2cd48fac3217f))
+
 ## [7.1.0](https://github.com/trycourier/courier-java/compare/v7.0.1...v7.1.0) (2026-11-19)
 
 
