@@ -43,6 +43,7 @@ internal class ElementalContentTest {
                         .build()
                 )
                 .version("version")
+                .scope(ElementalContent.Scope.DEFAULT)
                 .build()
 
         assertThat(elementalContent.elements())
@@ -77,6 +78,7 @@ internal class ElementalContentTest {
                 )
             )
         assertThat(elementalContent.version()).isEqualTo("version")
+        assertThat(elementalContent.scope()).contains(ElementalContent.Scope.DEFAULT)
     }
 
     @Test
@@ -113,6 +115,7 @@ internal class ElementalContentTest {
                         .build()
                 )
                 .version("version")
+                .scope(ElementalContent.Scope.DEFAULT)
                 .build()
 
         val roundtrippedElementalContent =

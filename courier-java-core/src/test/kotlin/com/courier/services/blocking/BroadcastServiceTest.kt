@@ -174,6 +174,7 @@ internal class BroadcastServiceTest {
                                             .type(ElementalTextNodeWithType.Type.TEXT)
                                             .build()
                                     )
+                                    .scope(NotificationContentPutRequest.Content.Scope.DEFAULT)
                                     .version("2022-01-01")
                                     .build()
                             )

@@ -181,6 +181,7 @@ internal class TemplateServiceAsyncTest {
                                                     .build()
                                             )
                                             .version("2022-01-01")
+                                            .scope(ElementalContent.Scope.DEFAULT)
                                             .build()
                                     )
                                     .channels(

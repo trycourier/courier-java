@@ -314,6 +314,7 @@ internal class TemplateServiceAsyncTest {
                                             .type(ElementalChannelNodeWithType.Type.CHANNEL)
                                             .build()
                                     )
+                                    .scope(NotificationContentPutRequest.Content.Scope.DEFAULT)
                                     .version("2022-01-01")
                                     .build()
                             )
