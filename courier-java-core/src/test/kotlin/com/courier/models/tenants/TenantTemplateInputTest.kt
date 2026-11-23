@@ -53,6 +53,7 @@ internal class TenantTemplateInputTest {
                                 .build()
                         )
                         .version("version")
+                        .scope(ElementalContent.Scope.DEFAULT)
                         .build()
                 )
                 .channels(
@@ -148,6 +149,7 @@ internal class TenantTemplateInputTest {
                             .build()
                     )
                     .version("version")
+                    .scope(ElementalContent.Scope.DEFAULT)
                     .build()
             )
         assertThat(tenantTemplateInput.channels())
@@ -250,6 +252,7 @@ internal class TenantTemplateInputTest {
                                 .build()
                         )
                         .version("version")
+                        .scope(ElementalContent.Scope.DEFAULT)
                         .build()
                 )
                 .channels(

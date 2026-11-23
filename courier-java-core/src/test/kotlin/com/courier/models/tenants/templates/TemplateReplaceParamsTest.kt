@@ -87,6 +87,7 @@ internal class TemplateReplaceParamsTest {
                                             .build()
                                     )
                                     .version("2022-01-01")
+                                    .scope(ElementalContent.Scope.DEFAULT)
                                     .build()
                             )
                             .channels(
@@ -254,6 +255,7 @@ internal class TemplateReplaceParamsTest {
                                                 .build()
                                         )
                                         .version("2022-01-01")
+                                        .scope(ElementalContent.Scope.DEFAULT)
                                         .build()
                                 )
                                 .channels(
@@ -387,6 +389,7 @@ internal class TemplateReplaceParamsTest {
                                             .build()
                                     )
                                     .version("2022-01-01")
+                                    .scope(ElementalContent.Scope.DEFAULT)
                                     .build()
                             )
                             .channels(

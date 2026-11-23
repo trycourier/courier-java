@@ -55,6 +55,7 @@ internal class PutTenantTemplateRequestTest {
                                         .build()
                                 )
                                 .version("version")
+                                .scope(ElementalContent.Scope.DEFAULT)
                                 .build()
                         )
                         .channels(
@@ -155,6 +156,7 @@ internal class PutTenantTemplateRequestTest {
                                     .build()
                             )
                             .version("version")
+                            .scope(ElementalContent.Scope.DEFAULT)
                             .build()
                     )
                     .channels(
@@ -259,6 +261,7 @@ internal class PutTenantTemplateRequestTest {
                                         .build()
                                 )
                                 .version("version")
+                                .scope(ElementalContent.Scope.DEFAULT)
                                 .build()
                         )
                         .channels(
