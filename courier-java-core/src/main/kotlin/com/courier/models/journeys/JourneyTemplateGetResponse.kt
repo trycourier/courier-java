@@ -697,7 +697,6 @@ private constructor(
     private constructor(
         private val elements: JsonField<List<ElementalNode>>,
         private val version: JsonField<Version>,
-        private val scope: JsonField<Scope>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -707,8 +706,7 @@ private constructor(
             @ExcludeMissing
             elements: JsonField<List<ElementalNode>> = JsonMissing.of(),
             @JsonProperty("version") @ExcludeMissing version: JsonField<Version> = JsonMissing.of(),
-            @JsonProperty("scope") @ExcludeMissing scope: JsonField<Scope> = JsonMissing.of(),
-        ) : this(elements, version, scope, mutableMapOf())
+        ) : this(elements, version, mutableMapOf())
 
         /**
          * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
@@ -721,12 +719,6 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun version(): Version = version.getRequired("version")
-
-        /**
-         * @throws CourierInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun scope(): Optional<Scope> = scope.getOptional("scope")
 
         /**
          * Returns the raw JSON value of [elements].
@@ -743,13 +735,6 @@ private constructor(
          * Unlike [version], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("version") @ExcludeMissing fun _version(): JsonField<Version> = version
-
-        /**
-         * Returns the raw JSON value of [scope].
-         *
-         * Unlike [scope], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("scope") @ExcludeMissing fun _scope(): JsonField<Scope> = scope
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -782,14 +767,12 @@ private constructor(
 
             private var elements: JsonField<MutableList<ElementalNode>>? = null
             private var version: JsonField<Version>? = null
-            private var scope: JsonField<Scope> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(content: Content) = apply {
                 elements = content.elements.map { it.toMutableList() }
                 version = content.version
-                scope = content.scope
                 additionalProperties = content.additionalProperties.toMutableMap()
             }
 
@@ -885,17 +868,6 @@ private constructor(
              */
             fun version(version: JsonField<Version>) = apply { this.version = version }
 
-            fun scope(scope: Scope) = scope(JsonField.of(scope))
-
-            /**
-             * Sets [Builder.scope] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.scope] with a well-typed [Scope] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
-            fun scope(scope: JsonField<Scope>) = apply { this.scope = scope }
-
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -932,7 +904,6 @@ private constructor(
                 Content(
                     checkRequired("elements", elements).map { it.toImmutable() },
                     checkRequired("version", version),
-                    scope,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -955,7 +926,6 @@ private constructor(
 
             elements().forEach { it.validate() }
             version().validate()
-            scope().ifPresent { it.validate() }
             validated = true
         }
 
@@ -976,8 +946,7 @@ private constructor(
         @JvmSynthetic
         internal fun validity(): Int =
             (elements.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
-                (version.asKnown().getOrNull()?.validity() ?: 0) +
-                (scope.asKnown().getOrNull()?.validity() ?: 0)
+                (version.asKnown().getOrNull()?.validity() ?: 0)
 
         class Version @JsonCreator private constructor(private val value: JsonField<String>) :
             Enum {
@@ -1113,145 +1082,6 @@ private constructor(
             override fun toString() = value.toString()
         }
 
-        class Scope @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
-
-            /**
-             * Returns this class instance's raw value.
-             *
-             * This is usually only useful if this instance was deserialized from data that doesn't
-             * match any known member, and you want to know that value. For example, if the SDK is
-             * on an older version than the API, then the API may respond with new members that the
-             * SDK is unaware of.
-             */
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-            companion object {
-
-                @JvmField val DEFAULT = of("default")
-
-                @JvmField val STRICT = of("strict")
-
-                @JvmStatic fun of(value: String) = Scope(JsonField.of(value))
-            }
-
-            /** An enum containing [Scope]'s known values. */
-            enum class Known {
-                DEFAULT,
-                STRICT,
-            }
-
-            /**
-             * An enum containing [Scope]'s known values, as well as an [_UNKNOWN] member.
-             *
-             * An instance of [Scope] can contain an unknown value in a couple of cases:
-             * - It was deserialized from data that doesn't match any known member. For example, if
-             *   the SDK is on an older version than the API, then the API may respond with new
-             *   members that the SDK is unaware of.
-             * - It was constructed with an arbitrary value using the [of] method.
-             */
-            enum class Value {
-                DEFAULT,
-                STRICT,
-                /**
-                 * An enum member indicating that [Scope] was instantiated with an unknown value.
-                 */
-                _UNKNOWN,
-            }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value, or
-             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-             *
-             * Use the [known] method instead if you're certain the value is always known or if you
-             * want to throw for the unknown case.
-             */
-            fun value(): Value =
-                when (this) {
-                    DEFAULT -> Value.DEFAULT
-                    STRICT -> Value.STRICT
-                    else -> Value._UNKNOWN
-                }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value.
-             *
-             * Use the [value] method instead if you're uncertain the value is always known and
-             * don't want to throw for the unknown case.
-             *
-             * @throws CourierInvalidDataException if this class instance's value is a not a known
-             *   member.
-             */
-            fun known(): Known =
-                when (this) {
-                    DEFAULT -> Known.DEFAULT
-                    STRICT -> Known.STRICT
-                    else -> throw CourierInvalidDataException("Unknown Scope: $value")
-                }
-
-            /**
-             * Returns this class instance's primitive wire representation.
-             *
-             * This differs from the [toString] method because that method is primarily for
-             * debugging and generally doesn't throw.
-             *
-             * @throws CourierInvalidDataException if this class instance's value does not have the
-             *   expected primitive type.
-             */
-            fun asString(): String =
-                _value().asString().orElseThrow {
-                    CourierInvalidDataException("Value is not a String")
-                }
-
-            private var validated: Boolean = false
-
-            /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
-             *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
-             *
-             * @throws CourierInvalidDataException if any value type in this object doesn't match
-             *   its expected type.
-             */
-            fun validate(): Scope = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                known()
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: CourierInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is Scope && value == other.value
-            }
-
-            override fun hashCode() = value.hashCode()
-
-            override fun toString() = value.toString()
-        }
-
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
@@ -1260,18 +1090,15 @@ private constructor(
             return other is Content &&
                 elements == other.elements &&
                 version == other.version &&
-                scope == other.scope &&
                 additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy {
-            Objects.hash(elements, version, scope, additionalProperties)
-        }
+        private val hashCode: Int by lazy { Objects.hash(elements, version, additionalProperties) }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Content{elements=$elements, version=$version, scope=$scope, additionalProperties=$additionalProperties}"
+            "Content{elements=$elements, version=$version, additionalProperties=$additionalProperties}"
     }
 
     class State @JsonCreator private constructor(private val value: JsonField<String>) : Enum {

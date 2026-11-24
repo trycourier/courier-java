@@ -93,10 +93,6 @@ internal class TemplateCreateParamsTest {
                                         JourneyTemplateCreateRequest.Notification.Content.Version
                                             ._2022_01_01
                                     )
-                                    .scope(
-                                        JourneyTemplateCreateRequest.Notification.Content.Scope
-                                            .DEFAULT
-                                    )
                                     .build()
                             )
                             .name("Welcome email")
@@ -238,10 +234,6 @@ internal class TemplateCreateParamsTest {
                                             JourneyTemplateCreateRequest.Notification.Content
                                                 .Version
                                                 ._2022_01_01
-                                        )
-                                        .scope(
-                                            JourneyTemplateCreateRequest.Notification.Content.Scope
-                                                .DEFAULT
                                         )
                                         .build()
                                 )
@@ -395,10 +387,6 @@ internal class TemplateCreateParamsTest {
                                                 .Version
                                                 ._2022_01_01
                                         )
-                                        .scope(
-                                            JourneyTemplateCreateRequest.Notification.Content.Scope
-                                                .DEFAULT
-                                        )
                                         .build()
                                 )
                                 .name("Welcome email")
@@ -488,10 +476,6 @@ internal class TemplateCreateParamsTest {
                                     .version(
                                         JourneyTemplateCreateRequest.Notification.Content.Version
                                             ._2022_01_01
-                                    )
-                                    .scope(
-                                        JourneyTemplateCreateRequest.Notification.Content.Scope
-                                            .DEFAULT
                                     )
                                     .build()
                             )

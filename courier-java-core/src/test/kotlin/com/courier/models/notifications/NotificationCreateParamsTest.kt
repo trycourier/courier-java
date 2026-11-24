@@ -6,7 +6,6 @@ import com.courier.core.JsonValue
 import com.courier.core.http.Headers
 import com.courier.models.ElementalChannelNode
 import com.courier.models.ElementalChannelNodeWithType
-import com.courier.models.ElementalContent
 import com.courier.models.ElementalNodeNonChannel
 import com.courier.models.ElementalTextNode
 import com.courier.models.ElementalTextNodeWithType
@@ -32,7 +31,7 @@ internal class NotificationCreateParamsTest {
                                     .build()
                             )
                             .content(
-                                ElementalContent.builder()
+                                NotificationTemplateContent.builder()
                                     .addElement(
                                         ElementalChannelNodeWithType.builder()
                                             .addChannel("string")
@@ -101,7 +100,6 @@ internal class NotificationCreateParamsTest {
                                             .build()
                                     )
                                     .version("2022-01-01")
-                                    .scope(ElementalContent.Scope.DEFAULT)
                                     .build()
                             )
                             .name("Welcome Email")
@@ -150,7 +148,7 @@ internal class NotificationCreateParamsTest {
                                         .build()
                                 )
                                 .content(
-                                    ElementalContent.builder()
+                                    NotificationTemplateContent.builder()
                                         .addElement(
                                             ElementalChannelNodeWithType.builder()
                                                 .addChannel("string")
@@ -223,7 +221,6 @@ internal class NotificationCreateParamsTest {
                                                 .build()
                                         )
                                         .version("2022-01-01")
-                                        .scope(ElementalContent.Scope.DEFAULT)
                                         .build()
                                 )
                                 .name("Welcome Email")
@@ -280,7 +277,7 @@ internal class NotificationCreateParamsTest {
                                         .build()
                                 )
                                 .content(
-                                    ElementalContent.builder()
+                                    NotificationTemplateContent.builder()
                                         .addElement(ElementalTextNodeWithType.builder().build())
                                         .version("2022-01-01")
                                         .build()
@@ -325,7 +322,7 @@ internal class NotificationCreateParamsTest {
                                         .build()
                                 )
                                 .content(
-                                    ElementalContent.builder()
+                                    NotificationTemplateContent.builder()
                                         .addElement(
                                             ElementalChannelNodeWithType.builder()
                                                 .addChannel("string")
@@ -398,7 +395,6 @@ internal class NotificationCreateParamsTest {
                                                 .build()
                                         )
                                         .version("2022-01-01")
-                                        .scope(ElementalContent.Scope.DEFAULT)
                                         .build()
                                 )
                                 .name("Welcome Email")
@@ -443,7 +439,7 @@ internal class NotificationCreateParamsTest {
                                     .build()
                             )
                             .content(
-                                ElementalContent.builder()
+                                NotificationTemplateContent.builder()
                                     .addElement(
                                         ElementalChannelNodeWithType.builder()
                                             .addChannel("string")
@@ -512,7 +508,6 @@ internal class NotificationCreateParamsTest {
                                             .build()
                                     )
                                     .version("2022-01-01")
-                                    .scope(ElementalContent.Scope.DEFAULT)
                                     .build()
                             )
                             .name("Welcome Email")
@@ -558,7 +553,7 @@ internal class NotificationCreateParamsTest {
                                         .build()
                                 )
                                 .content(
-                                    ElementalContent.builder()
+                                    NotificationTemplateContent.builder()
                                         .addElement(ElementalTextNodeWithType.builder().build())
                                         .version("2022-01-01")
                                         .build()
@@ -595,7 +590,7 @@ internal class NotificationCreateParamsTest {
                                     .build()
                             )
                             .content(
-                                ElementalContent.builder()
+                                NotificationTemplateContent.builder()
                                     .addElement(ElementalTextNodeWithType.builder().build())
                                     .version("2022-01-01")
                                     .build()
