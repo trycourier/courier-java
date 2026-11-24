@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.3.0](https://github.com/trycourier/courier-java/compare/v7.2.0...v7.3.0) (2026-11-24)
+
+
+### Features
+
+* **api:** remove `scope` from v2 notification, journey and broadcast template content ([#198](https://github.com/trycourier/courier-java/issues/198)) ([50f05aa](https://github.com/trycourier/courier-java/commit/50f05aa459db47637c7213cc09db170b96877f48))
+
 ## [7.2.0](https://github.com/trycourier/courier-java/compare/v7.1.0...v7.2.0) (2026-11-23)
 
 
