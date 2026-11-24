@@ -10,7 +10,6 @@ import com.courier.core.checkKnown
 import com.courier.core.checkRequired
 import com.courier.core.toImmutable
 import com.courier.errors.CourierInvalidDataException
-import com.courier.models.ElementalContent
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -25,7 +24,7 @@ class NotificationTemplateWritePayload
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val brand: JsonField<NotificationTemplatePayload.Brand>,
-    private val content: JsonField<ElementalContent>,
+    private val content: JsonField<NotificationTemplateContent>,
     private val name: JsonField<String>,
     private val routing: JsonField<NotificationTemplatePayload.Routing>,
     private val subscription: JsonField<NotificationTemplatePayload.Subscription>,
@@ -42,7 +41,7 @@ private constructor(
         brand: JsonField<NotificationTemplatePayload.Brand> = JsonMissing.of(),
         @JsonProperty("content")
         @ExcludeMissing
-        content: JsonField<ElementalContent> = JsonMissing.of(),
+        content: JsonField<NotificationTemplateContent> = JsonMissing.of(),
         @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
         @JsonProperty("routing")
         @ExcludeMissing
@@ -82,7 +81,7 @@ private constructor(
      * @throws CourierInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun content(): ElementalContent = content.getRequired("content")
+    fun content(): NotificationTemplateContent = content.getRequired("content")
 
     /**
      * Display name for the template.
@@ -159,7 +158,9 @@ private constructor(
      *
      * Unlike [content], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("content") @ExcludeMissing fun _content(): JsonField<ElementalContent> = content
+    @JsonProperty("content")
+    @ExcludeMissing
+    fun _content(): JsonField<NotificationTemplateContent> = content
 
     /**
      * Returns the raw JSON value of [name].
@@ -244,7 +245,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var brand: JsonField<NotificationTemplatePayload.Brand>? = null
-        private var content: JsonField<ElementalContent>? = null
+        private var content: JsonField<NotificationTemplateContent>? = null
         private var name: JsonField<String>? = null
         private var routing: JsonField<NotificationTemplatePayload.Routing>? = null
         private var subscription: JsonField<NotificationTemplatePayload.Subscription>? = null
@@ -286,16 +287,18 @@ private constructor(
         }
 
         /** Elemental content definition. */
-        fun content(content: ElementalContent) = content(JsonField.of(content))
+        fun content(content: NotificationTemplateContent) = content(JsonField.of(content))
 
         /**
          * Sets [Builder.content] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.content] with a well-typed [ElementalContent] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.content] with a well-typed [NotificationTemplateContent]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
          */
-        fun content(content: JsonField<ElementalContent>) = apply { this.content = content }
+        fun content(content: JsonField<NotificationTemplateContent>) = apply {
+            this.content = content
+        }
 
         /** Display name for the template. */
         fun name(name: String) = name(JsonField.of(name))

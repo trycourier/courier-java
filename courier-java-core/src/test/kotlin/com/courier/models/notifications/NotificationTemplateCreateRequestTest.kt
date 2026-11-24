@@ -4,7 +4,6 @@ package com.courier.models.notifications
 
 import com.courier.core.JsonValue
 import com.courier.core.jsonMapper
-import com.courier.models.ElementalContent
 import com.courier.models.ElementalTextNode
 import com.courier.models.ElementalTextNodeWithType
 import com.courier.models.Locales
@@ -23,7 +22,7 @@ internal class NotificationTemplateCreateRequestTest {
                     NotificationTemplateWritePayload.builder()
                         .brand(NotificationTemplatePayload.Brand.builder().id("id").build())
                         .content(
-                            ElementalContent.builder()
+                            NotificationTemplateContent.builder()
                                 .addElement(
                                     ElementalTextNodeWithType.builder()
                                         .addChannel("string")
@@ -53,7 +52,6 @@ internal class NotificationTemplateCreateRequestTest {
                                         .build()
                                 )
                                 .version("version")
-                                .scope(ElementalContent.Scope.DEFAULT)
                                 .build()
                         )
                         .name("name")
@@ -87,7 +85,7 @@ internal class NotificationTemplateCreateRequestTest {
                 NotificationTemplateWritePayload.builder()
                     .brand(NotificationTemplatePayload.Brand.builder().id("id").build())
                     .content(
-                        ElementalContent.builder()
+                        NotificationTemplateContent.builder()
                             .addElement(
                                 ElementalTextNodeWithType.builder()
                                     .addChannel("string")
@@ -117,7 +115,6 @@ internal class NotificationTemplateCreateRequestTest {
                                     .build()
                             )
                             .version("version")
-                            .scope(ElementalContent.Scope.DEFAULT)
                             .build()
                     )
                     .name("name")
@@ -156,7 +153,7 @@ internal class NotificationTemplateCreateRequestTest {
                     NotificationTemplateWritePayload.builder()
                         .brand(NotificationTemplatePayload.Brand.builder().id("id").build())
                         .content(
-                            ElementalContent.builder()
+                            NotificationTemplateContent.builder()
                                 .addElement(
                                     ElementalTextNodeWithType.builder()
                                         .addChannel("string")
@@ -186,7 +183,6 @@ internal class NotificationTemplateCreateRequestTest {
                                         .build()
                                 )
                                 .version("version")
-                                .scope(ElementalContent.Scope.DEFAULT)
                                 .build()
                         )
                         .name("name")

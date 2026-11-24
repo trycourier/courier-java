@@ -60,9 +60,6 @@ internal class JourneyTemplateCreateRequestTest {
                                     JourneyTemplateCreateRequest.Notification.Content.Version
                                         ._2022_01_01
                                 )
-                                .scope(
-                                    JourneyTemplateCreateRequest.Notification.Content.Scope.DEFAULT
-                                )
                                 .build()
                         )
                         .name("name")
@@ -119,7 +116,6 @@ internal class JourneyTemplateCreateRequestTest {
                                 JourneyTemplateCreateRequest.Notification.Content.Version
                                     ._2022_01_01
                             )
-                            .scope(JourneyTemplateCreateRequest.Notification.Content.Scope.DEFAULT)
                             .build()
                     )
                     .name("name")
@@ -181,9 +177,6 @@ internal class JourneyTemplateCreateRequestTest {
                                 .version(
                                     JourneyTemplateCreateRequest.Notification.Content.Version
                                         ._2022_01_01
-                                )
-                                .scope(
-                                    JourneyTemplateCreateRequest.Notification.Content.Scope.DEFAULT
                                 )
                                 .build()
                         )

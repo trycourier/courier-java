@@ -6,7 +6,6 @@ import com.courier.client.okhttp.CourierOkHttpClientAsync
 import com.courier.core.JsonValue
 import com.courier.models.ElementalChannelNode
 import com.courier.models.ElementalChannelNodeWithType
-import com.courier.models.ElementalContent
 import com.courier.models.ElementalNodeNonChannel
 import com.courier.models.ElementalTextNode
 import com.courier.models.Locales
@@ -25,6 +24,7 @@ import com.courier.models.notifications.NotificationPutLocaleParams
 import com.courier.models.notifications.NotificationReplaceParams
 import com.courier.models.notifications.NotificationRetrieveContentParams
 import com.courier.models.notifications.NotificationRetrieveParams
+import com.courier.models.notifications.NotificationTemplateContent
 import com.courier.models.notifications.NotificationTemplateCreateRequest
 import com.courier.models.notifications.NotificationTemplateEmail
 import com.courier.models.notifications.NotificationTemplatePayload
@@ -59,7 +59,7 @@ internal class NotificationServiceAsyncTest {
                                             .build()
                                     )
                                     .content(
-                                        ElementalContent.builder()
+                                        NotificationTemplateContent.builder()
                                             .addElement(
                                                 ElementalChannelNodeWithType.builder()
                                                     .addChannel("string")
@@ -137,7 +137,6 @@ internal class NotificationServiceAsyncTest {
                                                     .build()
                                             )
                                             .version("2022-01-01")
-                                            .scope(ElementalContent.Scope.DEFAULT)
                                             .build()
                                     )
                                     .name("Welcome Email")
@@ -365,7 +364,6 @@ internal class NotificationServiceAsyncTest {
                                             .type(ElementalChannelNodeWithType.Type.CHANNEL)
                                             .build()
                                     )
-                                    .scope(NotificationContentPutRequest.Content.Scope.DEFAULT)
                                     .version("2022-01-01")
                                     .build()
                             )
@@ -459,7 +457,7 @@ internal class NotificationServiceAsyncTest {
                                         NotificationTemplatePayload.Brand.builder().id("id").build()
                                     )
                                     .content(
-                                        ElementalContent.builder()
+                                        NotificationTemplateContent.builder()
                                             .addElement(
                                                 ElementalChannelNodeWithType.builder()
                                                     .addChannel("string")
@@ -537,7 +535,6 @@ internal class NotificationServiceAsyncTest {
                                                     .build()
                                             )
                                             .version("2022-01-01")
-                                            .scope(ElementalContent.Scope.DEFAULT)
                                             .build()
                                     )
                                     .name("Updated Name")

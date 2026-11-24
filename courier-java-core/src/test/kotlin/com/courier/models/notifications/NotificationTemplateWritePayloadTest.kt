@@ -4,7 +4,6 @@ package com.courier.models.notifications
 
 import com.courier.core.JsonValue
 import com.courier.core.jsonMapper
-import com.courier.models.ElementalContent
 import com.courier.models.ElementalTextNode
 import com.courier.models.ElementalTextNodeWithType
 import com.courier.models.Locales
@@ -21,7 +20,7 @@ internal class NotificationTemplateWritePayloadTest {
             NotificationTemplateWritePayload.builder()
                 .brand(NotificationTemplatePayload.Brand.builder().id("id").build())
                 .content(
-                    ElementalContent.builder()
+                    NotificationTemplateContent.builder()
                         .addElement(
                             ElementalTextNodeWithType.builder()
                                 .addChannel("string")
@@ -51,7 +50,6 @@ internal class NotificationTemplateWritePayloadTest {
                                 .build()
                         )
                         .version("version")
-                        .scope(ElementalContent.Scope.DEFAULT)
                         .build()
                 )
                 .name("name")
@@ -77,7 +75,7 @@ internal class NotificationTemplateWritePayloadTest {
             .contains(NotificationTemplatePayload.Brand.builder().id("id").build())
         assertThat(notificationTemplateWritePayload.content())
             .isEqualTo(
-                ElementalContent.builder()
+                NotificationTemplateContent.builder()
                     .addElement(
                         ElementalTextNodeWithType.builder()
                             .addChannel("string")
@@ -107,7 +105,6 @@ internal class NotificationTemplateWritePayloadTest {
                             .build()
                     )
                     .version("version")
-                    .scope(ElementalContent.Scope.DEFAULT)
                     .build()
             )
         assertThat(notificationTemplateWritePayload.name()).isEqualTo("name")
@@ -139,7 +136,7 @@ internal class NotificationTemplateWritePayloadTest {
             NotificationTemplateWritePayload.builder()
                 .brand(NotificationTemplatePayload.Brand.builder().id("id").build())
                 .content(
-                    ElementalContent.builder()
+                    NotificationTemplateContent.builder()
                         .addElement(
                             ElementalTextNodeWithType.builder()
                                 .addChannel("string")
@@ -169,7 +166,6 @@ internal class NotificationTemplateWritePayloadTest {
                                 .build()
                         )
                         .version("version")
-                        .scope(ElementalContent.Scope.DEFAULT)
                         .build()
                 )
                 .name("name")

@@ -63,10 +63,6 @@ internal class TemplateReplaceParamsTest {
                                         JourneyTemplateReplaceRequest.Notification.Content.Version
                                             ._2022_01_01
                                     )
-                                    .scope(
-                                        JourneyTemplateReplaceRequest.Notification.Content.Scope
-                                            .DEFAULT
-                                    )
                                     .build()
                             )
                             .name("name")
@@ -181,10 +177,6 @@ internal class TemplateReplaceParamsTest {
                                                 .Version
                                                 ._2022_01_01
                                         )
-                                        .scope(
-                                            JourneyTemplateReplaceRequest.Notification.Content.Scope
-                                                .DEFAULT
-                                        )
                                         .build()
                                 )
                                 .name("name")
@@ -249,10 +241,6 @@ internal class TemplateReplaceParamsTest {
                                     .version(
                                         JourneyTemplateReplaceRequest.Notification.Content.Version
                                             ._2022_01_01
-                                    )
-                                    .scope(
-                                        JourneyTemplateReplaceRequest.Notification.Content.Scope
-                                            .DEFAULT
                                     )
                                     .build()
                             )

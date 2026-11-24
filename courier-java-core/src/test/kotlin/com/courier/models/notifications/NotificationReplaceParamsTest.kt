@@ -5,7 +5,6 @@ package com.courier.models.notifications
 import com.courier.core.JsonValue
 import com.courier.models.ElementalChannelNode
 import com.courier.models.ElementalChannelNodeWithType
-import com.courier.models.ElementalContent
 import com.courier.models.ElementalNodeNonChannel
 import com.courier.models.ElementalTextNode
 import com.courier.models.ElementalTextNodeWithType
@@ -26,7 +25,7 @@ internal class NotificationReplaceParamsTest {
                         NotificationTemplateWritePayload.builder()
                             .brand(NotificationTemplatePayload.Brand.builder().id("id").build())
                             .content(
-                                ElementalContent.builder()
+                                NotificationTemplateContent.builder()
                                     .addElement(
                                         ElementalChannelNodeWithType.builder()
                                             .addChannel("string")
@@ -95,7 +94,6 @@ internal class NotificationReplaceParamsTest {
                                             .build()
                                     )
                                     .version("2022-01-01")
-                                    .scope(ElementalContent.Scope.DEFAULT)
                                     .build()
                             )
                             .name("Updated Name")
@@ -138,7 +136,7 @@ internal class NotificationReplaceParamsTest {
                             NotificationTemplateWritePayload.builder()
                                 .brand(NotificationTemplatePayload.Brand.builder().id("id").build())
                                 .content(
-                                    ElementalContent.builder()
+                                    NotificationTemplateContent.builder()
                                         .addElement(ElementalTextNodeWithType.builder().build())
                                         .version("2022-01-01")
                                         .build()
@@ -177,7 +175,7 @@ internal class NotificationReplaceParamsTest {
                             NotificationTemplateWritePayload.builder()
                                 .brand(NotificationTemplatePayload.Brand.builder().id("id").build())
                                 .content(
-                                    ElementalContent.builder()
+                                    NotificationTemplateContent.builder()
                                         .addElement(
                                             ElementalChannelNodeWithType.builder()
                                                 .addChannel("string")
@@ -250,7 +248,6 @@ internal class NotificationReplaceParamsTest {
                                                 .build()
                                         )
                                         .version("2022-01-01")
-                                        .scope(ElementalContent.Scope.DEFAULT)
                                         .build()
                                 )
                                 .name("Updated Name")
@@ -290,7 +287,7 @@ internal class NotificationReplaceParamsTest {
                         NotificationTemplateWritePayload.builder()
                             .brand(NotificationTemplatePayload.Brand.builder().id("id").build())
                             .content(
-                                ElementalContent.builder()
+                                NotificationTemplateContent.builder()
                                     .addElement(
                                         ElementalChannelNodeWithType.builder()
                                             .addChannel("string")
@@ -359,7 +356,6 @@ internal class NotificationReplaceParamsTest {
                                             .build()
                                     )
                                     .version("2022-01-01")
-                                    .scope(ElementalContent.Scope.DEFAULT)
                                     .build()
                             )
                             .name("Updated Name")
@@ -401,7 +397,7 @@ internal class NotificationReplaceParamsTest {
                             NotificationTemplateWritePayload.builder()
                                 .brand(NotificationTemplatePayload.Brand.builder().id("id").build())
                                 .content(
-                                    ElementalContent.builder()
+                                    NotificationTemplateContent.builder()
                                         .addElement(ElementalTextNodeWithType.builder().build())
                                         .version("2022-01-01")
                                         .build()
@@ -433,7 +429,7 @@ internal class NotificationReplaceParamsTest {
                         NotificationTemplateWritePayload.builder()
                             .brand(NotificationTemplatePayload.Brand.builder().id("id").build())
                             .content(
-                                ElementalContent.builder()
+                                NotificationTemplateContent.builder()
                                     .addElement(ElementalTextNodeWithType.builder().build())
                                     .version("2022-01-01")
                                     .build()

@@ -122,11 +122,6 @@ internal class TemplateServiceAsyncTest {
                                                     .Version
                                                     ._2022_01_01
                                             )
-                                            .scope(
-                                                JourneyTemplateCreateRequest.Notification.Content
-                                                    .Scope
-                                                    .DEFAULT
-                                            )
                                             .build()
                                     )
                                     .name("Welcome email")
@@ -314,7 +309,6 @@ internal class TemplateServiceAsyncTest {
                                             .type(ElementalChannelNodeWithType.Type.CHANNEL)
                                             .build()
                                     )
-                                    .scope(NotificationContentPutRequest.Content.Scope.DEFAULT)
                                     .version("2022-01-01")
                                     .build()
                             )
@@ -414,11 +408,6 @@ internal class TemplateServiceAsyncTest {
                                                 JourneyTemplateReplaceRequest.Notification.Content
                                                     .Version
                                                     ._2022_01_01
-                                            )
-                                            .scope(
-                                                JourneyTemplateReplaceRequest.Notification.Content
-                                                    .Scope
-                                                    .DEFAULT
                                             )
                                             .build()
                                     )
